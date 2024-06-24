@@ -4,5 +4,6 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class ControllerJH {
-	// 준혁컨트롤러
+	//안녕하세요~
+	
 }
