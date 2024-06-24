@@ -19,7 +19,7 @@ public class ControllerNR {
 		@GetMapping("/")
 		public ModelAndView home(ModelAndView mav) {
 			
-			mav.setViewName("redirect:/index.action");
+			mav.setViewName("redirect:/index.do");
 			return mav;
 		}
 		
@@ -31,5 +31,11 @@ public class ControllerNR {
 			return mav;
 		}	
 		
+		@GetMapping("/testNR.do")
+		public ModelAndView testNR(ModelAndView mav) {
+			
+			mav.setViewName("testNR");
+			return mav;
+		}
 		
 }
