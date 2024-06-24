@@ -9,7 +9,7 @@ import com.spring.app.service.AmadoService_NR;
 
 @Controller
 public class ControllerNR {
-// 나래컨트롤러
+// 나래컨트롤러 메롱
 
 	@Autowired
 	private AmadoService_NR service;
