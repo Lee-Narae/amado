@@ -10,13 +10,34 @@
 *{font-family: 'MYArirang_gothic';}
 
 
-#myheader		{ display: flex; min-height:65px;}
-#mycontent		{ min-height:1200px; position: relative; top:60px; padding-top: 40px; background-color:#F5F5F5;
-                  float:right; width:90%; }
+#mycontainer{
+}
 
-#mysidebar		{ min-height:1200px; position: relative; top:60px; padding-top: 40px; background-color:#F0FFFF;
-                  float:left; width:10%; }
+#myheader{
+border: solid 1px red;
+position: fixed;
+width: 100%;
+}
 
-#myfooter		{ display: flex; min-height:120px; position: relative; top:60px; background-color:#555555; margin-bottom: 70px; 
-	              clear:both; }
- 
+#mysidebar{
+margin-top: 95px;
+position: fixed;
+border: solid 1px red;
+height: 858px;
+width: 5%;
+}
+
+#mycontent{
+margin-top: 95px;
+margin-left: 5%;
+border: solid 1px red;
+min-height: 1000px;
+width: 95%;
+}
+
+#myfooter{
+}
+
+#side_content {
+	display: flex;
+}

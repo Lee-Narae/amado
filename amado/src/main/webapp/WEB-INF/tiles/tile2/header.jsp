@@ -13,17 +13,15 @@
 #login {
 border: solid 1.5px #254179;
 height: 40px;
-width: 80px;
+width: 100px;
 text-align: center;
 border-radius: 50px;
-padding-top: 0.45%;
-position: relative;
-left: 77%;
-top: 22%;
+padding-top: 2.5%;
+margin-right: 7%;
 }
 
 #logo{
-width: 10%;
+width: 22%;
 padding-left: 2%;
 }
 
@@ -31,35 +29,50 @@ padding-left: 2%;
 background-color: #254179;
 color: white;
 height: 40px;
-width: 100px;
+width: 110px;
 text-align: center;
 margin-left: 1%;
 border-radius: 50px;
-padding-top: 0.45%;
-position: relative;
-left: 77%;
-top: 22%;
+padding-top: 2.5%;
 }
 
 .nav{
 font-size: 15pt;
-margin-right: 5%;
-width: 50% !important;
+margin-right: 20%;
 color: #254179;
-padding-top: 1.5%;
+margin-top: 6.5%;
 }
+
+/*.tabs {
+border: solid 1px white;
+width: 15%;
+}*/
 </style>
 
-<div id="header" style="border:solid 1px red; width: 100%; display: flex;">
-
+<div id="header" style="width: 100%; display: flex; background-color: white;">
 	<div id="logo"><img src="<%=ctxPath %>/resources/images/logo.png" style="width: 100%;"/></div>
-	<div style="margin-left: 3%; display: flex; width: 50%; border: solid 1px red;">
-		<div class="nav" style="border: solid 1px red; margin-left: 15%;">Home</div>
-		<div class="nav" style="border: solid 1px red;">Club ∨</div>
-		<div class="nav" style="border: solid 1px red;">Gym ∨</div>
-		<div class="nav" style="border: solid 1px red;">Notice</div>
+	<div style="margin-left: 3%; display: flex; width: 50%;">
+		<div class="nav" style=" margin-left: 10%;">Home</div>
+		<div class="nav">Club&nbsp;&nbsp;∨</div>
+		<div class="nav">Gym&nbsp;&nbsp;∨</div>
+		<div class="nav">Notice</div>
 	</div>
-	<div id="login">로그인</div>
-	<div id="signup">회원가입</div>
+	<div style="display: flex; margin-left: 45%; width: 30%; margin-top: 1.4%;">
+		<div id="login">로그인</div>
+		<div id="signup">회원가입</div>
+	</div>
 </div>
+<%-- <div id="tab" style="display: flex; width: 100%; height: 300px; background-color: #254179;">
+	<div id="random" style="width: 8%; margin: 4% 0 0 3%;"><img src="<%= ctxPath %>/resources/images/casual-life-3d-pink-basketball.png" style="width: 100%;"/></div>
+	<div style="display: flex; border: solid 1px red; width: 50%; margin-left: 5%;">
+		<div class="tabs" style="margin-right: 1%;">
+			<div>Home</div>
+		</div>
+		<div class="tabs" style="margin-right: 2%;">
+			
+		</div>
+		<div class="tabs" style="margin-right: 2%;"></div>
+		<div class="tabs"></div>
+	</div>
+</div> --%>
 	    

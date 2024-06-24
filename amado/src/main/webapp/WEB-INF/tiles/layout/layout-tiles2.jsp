@@ -45,14 +45,15 @@
 			<tiles:insertAttribute name="header" />
 		</div>
 		
-		<div id="mycontent">
-			<tiles:insertAttribute name="content" />
-		</div>
-		
+		<div id="side_content">
 		<div id="mysidebar">
 			<tiles:insertAttribute name="sidebar" />
 		</div>
 		
+		<div id="mycontent">
+			<tiles:insertAttribute name="content" />
+		</div>
+		</div>
 		<div id="myfooter">
 			<tiles:insertAttribute name="footer" />
 		</div>
