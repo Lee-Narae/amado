@@ -33,8 +33,8 @@
 		        <a class="nav-link dropdown-toggle text-info" href="#" id="navbarDropdown" data-toggle="dropdown">로그인</a>  
 		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 		           <c:if test="${empty sessionScope.loginuser}">
-			           <a class="dropdown-item" href="#">회원가입</a>
-			           <a class="dropdown-item" href="<%=ctxPath%>/login.action">로그인</a>
+			           <a class="dropdown-item" href="<%=ctxPath%>/memberRegister.do">회원가입</a>
+			           <a class="dropdown-item" href="<%=ctxPath%>/login.do">로그인</a>
 		           </c:if>
 		           				
 				   <c:if test="${not empty sessionScope.loginuser}">

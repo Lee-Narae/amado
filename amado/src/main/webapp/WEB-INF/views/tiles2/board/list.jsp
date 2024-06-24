@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%
    String ctxPath = request.getContextPath();
@@ -32,14 +33,18 @@ $(document).ready(function() {
 	
 }); // end of $(document).ready(function() -------
 			
+		
+	function goAdd() {
+		location.href = "<%=ctxPath%>/add.do";
+	}
 </script>
 
 
 
 <div style="display: flex;">
-	<div style="margin: auto; padding-left: 3%;">
+	<div style="width: 1024px; margin: auto; padding-left: 3%;">
 
-		<h2 style="text-align:center; margin-bottom: 30px;">글목록</h2>
+		<h2 style="text-align:center; margin-bottom: 30px;">OOO 게시판</h2>
 		
 		<form name="searchFrm" class="float-right" style="text-align:right; margin-top: 20px;">
 	    	<select name="searchType" style="height: 26px;">
@@ -56,7 +61,7 @@ $(document).ready(function() {
 			
 		</div> -->
 
-		<table style="width: 1024px" class="table table-bordered">
+		<table class="table table-bordered">
 			<thead>
 				<tr>
 					<th style="width: 70px; text-align: center;">글번호</th>
@@ -68,24 +73,29 @@ $(document).ready(function() {
 			</thead>
 
 			<tbody>
-
+			
+				<c:if test="${not empty requestScope.paraMap}">
 						<tr>
-							<td align="center">글번호</td>
+							<td align="center" onclick="goView()">글번호</td>
 							<td>
-								<span class="subject" onclick="goView()">번호</span>
+								<span class="subject" onclick="goView()">${paraMap.content}</span>
 							</td>
-							<td align="center">이름</td>
+							<td align="center">${paraMap.name}</td>
 							<td align="center">날짜</td>
 							<td align="center">조회수</td>
 						</tr>
+				</c:if>
+				<c:if test="${empty requestScope.paraMap}">					
 					<tr>
 						<td colspan="5">데이터가 없습니다.</td>
 					</tr>
+				</c:if>
+
 			</tbody>
 		</table>
 		
 		<div style="display: flex;"  class="float-right">
-			<button type="button" class="btn btn-secondary btn-sm" style="margin: auto 0 auto auto;" onclick="goSearch()">글쓰기</button>
+			<button type="button" class="btn btn-secondary btn-sm" style="margin: auto 0 auto auto;" onclick="goAdd()">글쓰기</button>
 		</div>
 	</div>
 </div>
