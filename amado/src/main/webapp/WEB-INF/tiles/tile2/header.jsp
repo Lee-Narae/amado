@@ -55,9 +55,9 @@
 		     </li>
 		     
   			 <li class="nav-item dropdown">
-		        <a class="nav-link dropdown-toggle text-info" href="#" id="navbarDropdown" data-toggle="dropdown">제품정보</a>  
+		        <a class="nav-link dropdown-toggle text-info" href="#" id="navbarDropdown" data-toggle="dropdown">게시판</a>  
 		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		           <a class="dropdown-item" href="#">제품목록</a>
+		           <a class="dropdown-item" href="<%=ctxPath%>/list.do">게시판목록</a>
 		        </div>
 		     </li>
 	 	    
