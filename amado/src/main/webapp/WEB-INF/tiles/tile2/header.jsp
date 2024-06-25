@@ -58,8 +58,8 @@ cursor: pointer;
 
 .tabs {
 color: white;
-width: 15%;
-padding-top: 5%;
+width: 7%;
+padding-top: 3%;
 }
 
 .tabs > div {
@@ -80,7 +80,7 @@ $(document).ready(function(){
 	$("div#tab").hide();
 	
 	$("div.nav").hover(function(){
-		$("div#tab").fadeIn();
+		$("div#tab").slideDown();
 	}, function(){
 		$("div#tab").hide();
 	});
@@ -108,18 +108,18 @@ $(document).ready(function(){
 		<div id="signup" onclick="location.href='#'">회원가입</div>
 	</div>
 </div>
-<div id="tab" style="display: flex; width: 40%; height: 270px; background-color: #254179; margin-left: 12%;">
+<div id="tab" style="display: flex; width: 95%; height: 270px; background-color: #254179; margin-left: 5%;">
 	<div style="display: flex; width: 100%;">
-		<div class="tabs" style="margin-right: 4%; margin-left: 13%;">
+		<div class="tabs" style="margin-right: 1%; margin-left: 13%;">
 			<div onclick="location.href='<%=ctxPath%>/index.do'">Home</div>
 		</div>
-		<div class="tabs" style="margin-right: 6%;">
+		<div class="tabs" style="margin-right: 2%;">
 			<div onclick="location.href='#'">동호회 찾기</div>
-			<div onclick="location.href='#'">My 동호회</div>
+			<div onclick="location.href='<%=ctxPath%>/club/myClub.do'">My 동호회</div>
 			<div onclick="location.href='#'">동호회 등록하기</div>
 			<div onclick="location.href='#'">매치 등록하기</div>
 		</div>
-		<div class="tabs" style="margin-right: 7%;">
+		<div class="tabs" style="margin-right: 2%;">
 			<div onclick="location.href='#'">체육관 찾기</div>
 			<div onclick="location.href='#'">My 예약 조회</div>
 			<div onclick="location.href='#'">1:1 문의하기</div>

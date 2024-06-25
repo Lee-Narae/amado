@@ -11,10 +11,13 @@
 
 #myheader{
 position: fixed;
+top: 0px;
 width: 100%;
+z-index: 1000;
 }
 
 #mycontent{
+margin-top: 5%;
 min-height: 1000px;
 width: 100%;
 }
