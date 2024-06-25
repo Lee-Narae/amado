@@ -7,7 +7,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ControllerJH {
 	
-	
 	@GetMapping("/saleview/sale.do")
 	public ModelAndView index(ModelAndView mav) {
 
