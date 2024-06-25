@@ -31,15 +31,6 @@ public class ControllerNR {
 		return mav;
 	}	
 	
-	@GetMapping("/test.do")
-	public ModelAndView test(ModelAndView mav) {
-		
-		
-		mav.setViewName("test.tiles1");
-		// /WEB-INF/views/tiles1/test.jsp
-		return mav;
-	}
-	
 	@GetMapping("/club/myClub.do")
 	public ModelAndView myClub(ModelAndView mav) {
 		
