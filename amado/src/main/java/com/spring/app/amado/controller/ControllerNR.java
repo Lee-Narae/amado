@@ -38,4 +38,12 @@ public class ControllerNR {
 			return mav;
 		}
 		
+		@GetMapping("/testNR2.do")
+		public ModelAndView testNR2(ModelAndView mav) {
+			
+			mav.setViewName("testNR.tiles1");
+			// /WEB-INF/views/tiles1/testNR.jsp
+			return mav;
+		}
+		
 }

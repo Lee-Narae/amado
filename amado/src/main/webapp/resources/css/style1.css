@@ -9,9 +9,12 @@
 
 *{font-family: 'MYArirang_gothic';}
 
-#mycontainer	{ padding:20px; }
-#myheader		{ display: flex; min-height:100px; position: relative; top: 60px;}
-#mycontent		{ min-height:900px; position: relative; top:60px; padding-top: 40px; background-color:#F5F5F5;}
-#myfooter		{ display: flex; min-height:120px; position: relative; top:60px; background-color:#555555; margin-bottom: 70px;}
-	
-#myheader a {text-decoration:none;}
+#myheader{
+position: fixed;
+width: 100%;
+}
+
+#mycontent{
+min-height: 1000px;
+width: 100%;
+}
