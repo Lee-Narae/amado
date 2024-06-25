@@ -46,7 +46,7 @@ $(document).ready(function() {
 
 		<h2 style="text-align:center; margin-bottom: 30px;">OOO 게시판</h2>
 		
-		<form name="searchFrm" class="float-right" style="text-align:right; margin-top: 20px;">
+		<form name="searchFrm" class="float-right" style="text-align:right; margin-bottom: 20px; margin-top: 20px;">
 	    	<select name="searchType" style="height: 26px;">
 	    		<option value="subject">글제목</option>
 		        <option value="content">글내용</option>

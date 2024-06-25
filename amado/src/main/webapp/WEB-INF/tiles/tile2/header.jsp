@@ -50,10 +50,26 @@ width: 15%;
 }*/
 </style>
 
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		
+	});
+	
+	function goSignup() {
+		location.href = "<%=ctxPath%>/member/memberRegister.do";
+	}
+
+	function goHome() {
+		location.href = "<%=ctxPath%>/index.do";
+	}
+	
+</script>
+
 <div id="header" style="width: 100%; display: flex; background-color: white;">
-	<div id="logo"><img src="<%=ctxPath %>/resources/images/logo.png" style="width: 100%;"/></div>
+	<div id="logo"><a class="navbar-brand" href="<%= ctxPath %>/index.do" style="margin-right: 10%;"><img src="<%=ctxPath %>/resources/images/logo.png" style="width: 100%;"/></a></div>
 	<div style="margin-left: 3%; display: flex; width: 50%;">
-		<div class="nav" style=" margin-left: 10%;" href="<%= ctxPath %>/index.do">Home</div>
+		<div class="nav" style=" margin-left: 10%;" onclick="goHome()">Home</div>
 		<div class="nav">Club&nbsp;&nbsp;∨</div>
         <a class="nav" href="#" id="navbarDropdown" data-toggle="dropdown">board&nbsp;&nbsp;∨</a>  
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -64,7 +80,7 @@ width: 15%;
 	</div>
 	<div style="display: flex; margin-left: 45%; width: 30%; margin-top: 1.4%;">
 		<div id="login">로그인</div>
-		<div id="signup">회원가입</div>
+		<div id="signup" onclick="goSignup()">회원가입</a></div>
 	</div>
 </div>
 <%-- <div id="tab" style="display: flex; width: 100%; height: 300px; background-color: #254179;">

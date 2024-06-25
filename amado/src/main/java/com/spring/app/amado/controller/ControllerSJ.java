@@ -39,15 +39,15 @@ public class ControllerSJ {
 	// 회원가입
 	@GetMapping("/add.do")
 	public ModelAndView add(ModelAndView mav) {
-		mav.setViewName("user/add.tiles1");
+		mav.setViewName("member/add.tiles1");
 		return mav;
 	}
 	
 	
 	// 회원가입
-	@GetMapping("/memberRegister.do")
+	@GetMapping("/member/memberRegister.do")
 	public ModelAndView memberRegister(ModelAndView mav) {
-		mav.setViewName("user/memberRegister.tiles1");
+		mav.setViewName("member/memberRegister.tiles1");
 		return mav;
 	}	
 }
