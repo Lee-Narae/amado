@@ -624,7 +624,7 @@ function goReset() {
       <form name="registerFrm">
           <table id="tblMemberRegister">
              <thead>
-                <tr>
+                <tr align="center">
                    <th colspan="2">::: 회원가입 <span style="font-size: 10pt; font-style: italic;">(<span class="star">*</span>표시는 필수입력사항)</span> :::</th>
                 </tr>
              </thead>
