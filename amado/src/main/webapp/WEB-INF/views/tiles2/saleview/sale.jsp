@@ -15,6 +15,23 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 
 <style type="text/css">
+
+@font-face {
+    font-family: 'Volt110';
+    src: url('path/to/volt110.woff2') format('woff2'),
+         url('path/to/volt110.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Volt220';
+    src: url('path/to/volt220.woff2') format('woff2'),
+         url('path/to/volt220.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
 li {
 	margin-bottom: 10px;
 }
@@ -52,76 +69,7 @@ div.commentDel:hover {
 	color: white;
 }
 
-/* ~~~~ 일반적으로 태블릿 PC 가로 및 일반적으로 데스크탑 PC 에서만 CSS transform 을 사용하여 3D 효과를 주는 flip-card 를 만들어 보기 시작 ~~~~ */
-@media screen and (min-width:1024px) {
-	.flip-card {
-		background-color: transparent; /* 투명 */
-		perspective: 2000px;
-		/* perspective는 3D 환경을 만들때 사용하는 것으로서 원근감을 주는 것이다. 
-			                      이 값이 작으면 작을 수록 보고있는 사람의 위치를 더 가까이에서 보는 것으로 처리하므로 엘리먼트(요소)가 커 보이게 된다.  
-			                      이 값이 크면 클수록 보고있는 사람의 위치를 더 멀리 떨어져서 보는 것으로 처리하므로 엘리먼트(요소)가 작게 보이게 된다. */
-	}
-	.flip-card-inner {
-		position: relative;
-		width: 100%;
-		height: 100%;
-		text-align: center;
-		/* transition: transform 2.6s; */
-		/* 요소(엘리먼트)를 transform(변형) 시키는데 걸리는 시간(단위는 초) 2.6초 */
-		transition: transform 0.6s;
-		/* 요소(엘리먼트)를 transform(변형) 시키는데 걸리는 시간(단위는 초) 0.6초 */
-		transform-style: preserve-3d;
-		/* 요소(엘리먼트)의 자식요소들(엘리먼트들)을 3D 공간에 배치 시킨다. */
-		/* box-shadow: 0 4px 8px 0 rgba(0,0,0,1.0); */
-		/* rgba(빨강, 초록, 파랑, 투명도) */
-		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-	}
-	.flip-card:hover .flip-card-inner {
-		/* transform: rotateX(540deg); */ /* transform 은 요소(엘리먼트)를 변형시키는 것이다.
-		                                                                           요소를 회전(rotate), 확대 또는 축소(scale), 기울이기(skew), 이동(translate) 효과를 부여할 수 있다. 
-		                                                                           이를 통해 CSS 시각적 서식 모델의 좌표 공간을 변경한다.
-		                                        transform 이 지원되는 웹브라우저는 IE는 버전 10 이상부터 지원한다.
-		                                        
-		                                        rotateX는 x축을 기준으로 요소(엘리먼트)를 회전시키는 것이다. 
-		                                        1회전이 360deg 이므로 540deg 는 1바퀴 반을 회전시키는 것이다.*/
-		transform: rotateY(180deg);
-		/* rotateY는 y축을 기준으로 회전한다. 180deg 반바퀴를 도는 것이다.*/
-	}
-	.flip-card-front, .flip-card-back {
-		/* position: static; */
-		/* position: relative;*/
-		position: absolute;
-		/* .flip-card-front 엘리먼트(앞면)와  .flip-card-back 엘리먼트(뒷면)가 서로 겹쳐야 하므로 
-		                             position 을 반드시 absolute; 로  주어야 한다. */
-		width: 100%;
-		height: 100%;
-		/* backface-visibility: visible; */
-		/* backface-visibility 을 생략하더라도 기본값은 visible 이다. */
-		backface-visibility: hidden; /* 3D Transform에서 요소의 뒷면을 숨기는 역할을 한다.
-		                                                                             이것을 hidden 처리하지 않으면 앞면/뒷면이 함께 보이기 때문에 이상하게 나오게 된다. */
-	}
-	.flip-card-front {
-		background-color: #bbb;
-		color: black;
-		z-index: 2; /* position 속성을 이용하다 보면 엘리먼트(요소)를 겹치게 놓게될 수 있다. 
-			                                이때 엘리먼트(요소)들의 수직 위치(쌓이는 순서)를 z-index 속성으로 정한다. 
-			                                값은 정수이며, 숫자가 클 수록 위로 올라오고, 숫자가 작을 수록 아래로 내려간다. */
-	}
-	.flip-card-back {
-		/* background-color: #2980b9; 파랑 */
-		background-color: #ff8080; /* 빨강 */
-		color: white;
-		/* transform: rotateX(540deg); */ /* transform 은 IE는 버전 10 이상부터 지원한다.
-		                                         rotateX는 x축을 기준으로 요소(엘리먼트)를 회전시킨다. 
-		                                         1회전이 360deg 이므로 540deg 는 1바퀴 반을 회전시키는 것이다.*/
-		transform: rotateY(180deg); /* rotateY는 y축을 기준으로 요소(엘리먼트)를 회전시킨다. 
-		                                         180deg 반바퀴를 회전시키는 것이다.*/
-		z-index: 1; /* position 속성을 이용하다 보면 엘리먼트(요소)를 겹치게 놓게될 수 있다. 
-		                                     이때 엘리먼트(요소)들의 수직 위치(쌓이는 순서)를 z-index 속성으로 정한다. 
-		                                     값은 정수이며, 숫자가 클 수록 위로 올라오고, 숫자가 작을 수록 아래로 내려간다. */
-	}
-}
-/* ~~~~ 일반적으로 태블릿 PC 가로 및 일반적으로 데스크탑 PC 에서만 CSS transform 을 사용하여 3D 효과를 주는 flip-card 를 만들어 보기 끝 ~~~~ */
+
 
 /* ==== 추가이미지 캐러젤로 보여주기 시작 ==== */
 .carousel-inner .carousel-item.active, .carousel-inner .carousel-item-next,
@@ -205,10 +153,6 @@ rotate(
 
 <script type="text/javascript">
 
-	let isOrderOK = false;
-	// 로그인한 사용자가 해당 제품을 구매한 상태인지 구매하지 않은 상태인지 알아오는 용도.
-	// isOrderOK 값이 true 이면  로그인한 사용자가 해당 제품을 구매한 상태이고,
-	// isOrderOK 값이 false 이면 로그인한 사용자가 해당 제품을 구매하지 않은 상태로 할 것임.
 
 	$(document).ready(function(){
 		
@@ -304,131 +248,8 @@ rotate(
 		   } );// end of $("input#spinner").spinner({});----------------
 	        
 	       
-		// === 주문개수가 변경되어지면 총주문액 변경해주기 시작 === //
-		 let jumun_cnt = Number($("input#spinner").val()); 
-		 let totalSaleprice = Number(${requestScope.pvo.saleprice}) * jumun_cnt; 
-		 $("span#totalSaleprice").html(totalSaleprice.toLocaleString('en')+"원");
-		
-		 $(document).on("spinstop", $("input#spinner"), function(){
-			 jumun_cnt = Number($("input#spinner").val());
-			 totalSaleprice = Number(${requestScope.pvo.saleprice}) * jumun_cnt; 
-			 $("span#totalSaleprice").html(totalSaleprice.toLocaleString('en')+"원"); 
-		 });
-	    // === 주문개수가 변경되어지면 총주문액 변경해주기 끝 === //    
-	    
-	    
-	    $("p#order_error_msg").css('display','none'); // 코인잔액 부족시 주문이 안된다는 표시해주는 곳.
 	    
 	    $("div.loader").hide(); // CSS 로딩화면 감추기 
-	    
-	    goLikeDislikeCount();   // 좋아요, 싫어요 갯수를 보여주도록 하는 것이다.
-	    
-	    goReviewListView();     // 제품 구매후기를 보여주는 것.
-	    
-        /////////////////////////////////////////////////////////////////////////
-	    // === 로그인한 사용자가 해당 제품을 구매한 상태인지 구매하지 않은 상태인지 먼저 알아온다 === // 
-	    $.ajax({
-	  		url:"<%=ctxPath%>/shop/isOrder.up",
-	   		type:"get",
-	   		data:{"fk_pnum":"${requestScope.pvo.pnum}"
-	        	 ,"fk_userid":"${sessionScope.loginuser.userid}"},
-	   		dataType:"json",
-	   	
-	   		async:false,   // 동기처리
-		 // async:true,    // 비동기처리(기본값임) 
-	   	
-		 	success:function(json){
-		 	//	console.log("~~ 확인용 : " + JSON.stringify(json));
-		 		// ~~ 확인용 : {"isOrder":true}   해당제품을 구매한 경우
-		 		// ~~ 확인용 : {"isOrder":false}  해당제품을 구매하지 않은 경우
-		 		
-		 		isOrderOK = json.isOrder;
-		   		// json.isOrder 값이 true  이면 로그인한 사용자가 해당 제품을 구매한 경우이고
-		   		// json.isOrder 값이 false 이면 로그인한 사용자가 해당 제품을 구매하지 않은 경우이다.
-		   	},
-	        error: function(request, status, error){
-				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-	   		}
-	  });
-	  //////////////////////////////////////////////////////////////////////////  
-	  
-	  
-	  // **** 제품후기 쓰기(로그인하여 실제 해당 제품을 구매했을 때만 딱 1번만 작성할 수 있는 것. 제품후기를 삭제했을 경우에는 다시 작성할 수 있는 것임.) ****// 
-	  $("button#btnCommentOK").click(function(){
-		 
-		  if(${empty sessionScope.loginuser}) {
-			   alert("제품사용 후기를 작성하시려면 먼저 로그인 하셔야 합니다.");
-			   return; // 종료
-		  }
-		   
-		  if(!isOrderOK) { // 해당 제품을 구매하지 않은 경우이라면
-			   alert("${requestScope.pvo.pname} 제품을 구매하셔만 후기작성이 가능합니다."); 
-		  }
-		  else { // 해당 제품을 구매한 경우이라면
-			  const review_contents = $("textarea[name='contents']").val().trim(); 
-			   
-			  if(review_contents == "") {
-				  alert("제품후기 내용을 입력하세요!!");
-				  $("textarea[name='contents']").val(""); // 공백제거
-				  return; // 종료
-			  } 
-			  
-			  
-			// >>> 보내야할 데이터를 선정하는 첫번째 방법 <<<
-			<%--  
-				   const queryString = {"fk_userid":"${sessionScope.loginuser.userid}"
-						               ,"fk_pnum":"${requestScope.pvo.pnum}"
-						               ,"contents":$("textarea[name='contents']").val()};
-			--%>  
-			  
-			// >>> 보내야할 데이터를 선정하는 두번째 방법 <<< 
-			// jQuery 에서 사용하는 것으로써,
-			// form태그의 선택자.serialize(); 을 해주면 form 태그내의 모든 값들을 name 속성값을 키값으로 만들어서 보내준다. 
-			   const queryString = $("form[name='commentFrm']").serialize();
-			   /*
-			       queryString 은 아래와 같이 되어진다.
-			       
-			       {"contents":$("textarea[name='contents']").val(),
-				    "fk_userid":$("input[name='fk_userid']").val(),
-				    "fk_pnum":$(input[name='fk_pnum']).val()}
-			   */
-			
-			  $.ajax({
-				   url:"<%=ctxPath%>/shop/reviewRegister.up",
-				   type:"post",
-				   data:queryString,
-				   dataType:"json",
-				   success:function(json){ 
-					   console.log(JSON.stringify(json));
-					   /*
-					      {"n":1} 또는 {"n":-1} 또는 {"n":0}
-					   */
-					   
-					   if(json.n == 1) {
-	  					  // 제품후기 등록(insert)이 성공했으므로 제품후기글을 새로이 보여줘야(select) 한다.
-	  					  goReviewListView(); // 제품후기글을 보여주는 함수 호출하기 
-		  			   }
-		  			   else if(json.n == -1)  {
-						// 동일한 제품에 대하여 동일한 회원이 제품후기를 2번 쓰려고 경우 unique 제약에 위배됨 
-						// alert("이미 후기를 작성하셨습니다.\n작성하시려면 기존의 제품후기를\n삭제하시고 다시 쓰세요.");
-						   swal("이미 후기를 작성하셨습니다.\n작성하시려면 기존의 제품후기를\n삭제하시고 다시 쓰세요.");
-					   }
-		  			   else  {
-		  				   // 제품후기 등록(insert)이 실패한 경우 
-		  				   alert("제품후기 글쓰기가 실패했습니다.");
-		  			   }
-					   
-					   $("textarea[name='contents']").val("").focus();
-				   },
-				   error: function(request, status, error){
-						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-				   }
-			   });
-			  
-		  }
-		  
-	  });// end of $("button#btnCommentOK").click(function(){})-----------
-	  
 	    
 	});// end of $(document).ready(function(){})-----------------
 
@@ -471,364 +292,22 @@ rotate(
    }// end of function modal_content(img)------
    
    
-   // *** 장바구니 담기 ***//
-   function goCart(){
-	   
-	   // === 주문량에 대한 유효성 검사하기 === //
-	   const frm = document.cartOrderFrm;
-	   
-	   const regExp = /^[1-9][0-9]*$/; // 숫자만 체크하는 정규표현식
-	   let oqty = frm.oqty.value;
-	   const bool = regExp.test(oqty);
-	   
-	   if(!bool){
-		   // 숫자 이외의 값이 들어오거나 첫번째 숫자가 0 인 경우
-		   alert("주문개수는 1개 이상이어야 합니다.");
-		   frm.oqty.value = "1";
-		   frm.oqty.focus();
-		   return; // 종료
-	   }
-	       
-	   if( Number(oqty) > Number(${requestScope.pvo.pqty}) ) {
-		   // 주문개수가 잔고개수 보다 클 경우
-		   alert("주문개수가 잔고개수 보다 더 커서 진행할 수 없습니다.");
-		   frm.oqty.value = "1";
-		   frm.oqty.focus();
-		   return; // 종료
-	   }
-	   
-	   // 주문개수가 1개 이상인 경우
-	   frm.method = "POST";
-	   frm.action = "<%=ctxPath%>/shop/cartAdd.up";
-	   frm.submit();
-	   
-   }// end of function goCart()-----------------
    
    
-   // *** 바로주문하기 (form 태그를 사용하지 않고 Ajax 를 사용하여 처리해 보겠습니다.) ***//
-   function goOrder() {
-	   
-	   if( ${not empty sessionScope.loginuser} ){
-		   
-		   const currentCoin = Number("${sessionScope.loginuser.coin}"); // 현재코인액 
-		   
-		   let str_totalSaleprice = $("span#totalSaleprice").text();
-		   str_totalSaleprice = str_totalSaleprice.substring(0, str_totalSaleprice.length-1); // 제품총판매가 
-		   const totalSaleprice = Number(str_totalSaleprice.split(",").join("")); // 제품총판매가 
-		   
-		   if(currentCoin < totalSaleprice){
-			   $("p#order_error_msg").html("코인잔액이 부족하므로 주문이 불가합니다.<br>총주문액 : " + totalSaleprice.toLocaleString('en')+"원, 현재코인액 : " + currentCoin.toLocaleString('en')+"원").css('display','');
-			   return; // 종료 
-		   }
-		   
-		   else {
-			   $("p#order_error_msg").css('display','none');
-			   
-			   if(confirm("총주문액 : "+ totalSaleprice.toLocaleString('en') + "원 주문하시겠습니까?" )) { 
-			      
-				   $("div.loader").show(); // CSS 로딩화면 보여주기 
-				   
-				   $.ajax({
-        			   url:"<%=ctxPath%>/shop/orderAdd.up",
-        			   type:"post",
-        			   data:{"n_sum_totalPrice":totalSaleprice,
-        				     "n_sum_totalPoint":Number("${requestScope.pvo.point}")*Number($("input#spinner").val()),
-        				     "str_pnum_join":"${requestScope.pvo.pnum}",
-           				     "str_oqty_join":$("input#spinner").val(),
-           				     "str_totalPrice_join":totalSaleprice
-           				    },
-        			   dataType:"json",
-        			   success:function(json){ // json ==> {"isSuccess":1} 또는 {"isSuccess":0}
-        				   if(json.isSuccess == 1){
-        					   location.href="<%=ctxPath%>/shop/orderList.up"; 
-        				   }
-        				   else {
-								location.href="<%=ctxPath%>/shop/orderError.up";
-						   }
-        			   },
-        			   error: function(request, status, error){
-        			         alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-        		       }
-        		   });
-				   
-			   }// end of if(confirm("총주문액 : "+ totalSaleprice.toLocaleString('en') + "원 주문하시겠습니까?" ))--------------
-		   }
-		   
-	   }
-	   else {
-		   alert("주문을 하시려면 먼저 로그인 하세요!!");
-	       // 만약에 로그인을 해주는 페이지가 따로 존재한다라면 로그인을 해주는 페이지로 이동시켜줘야 한다.
-	   }
-	   
-   }// end of function goOrder()-------------------------------
-   
-   
-   // **** 특정제품에 대한 좋아요 등록하기 **** //
-   function golikeAdd(pnum) {
-	   
-	   if(${empty sessionScope.loginuser}) {
-		   alert("좋아요 하시려면 먼저 로그인 하셔야 합니다.");
-		   return; // 종료
-	   }
-	   
-	   if(!isOrderOK) { // 해당 제품을 구매하지 않은 경우이라면
-		   alert("${requestScope.pvo.pname} 제품을 구매하셔만 좋아요 투표가 가능합니다."); 
-	   }
-	   else { // 해당 제품을 구매한 경우이라면
-		   $.ajax({
-			   url:"<%=ctxPath%>/shop/likeAdd.up",
-			   type:"post",
-			   data:{"pnum":pnum,
-				     "userid":"${sessionScope.loginuser.userid}"},
-			   dataType:"json", 
-			   success:function(json) {
-				// console.log(JSON.stringify(json));
-			    	// {"msg":"해당제품에\n 좋아요를 클릭하셨습니다."}
-			   		// 또는
-			   		// {"msg":"이미 좋아요를 클릭하셨기에\n 두번 이상 좋아요는 불가합니다."}
-			   		
-				   //  alert(json.msg);
-				       swal(json.msg);
-				       goLikeDislikeCount();
-			   },
-			   error: function(request, status, error){
-					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-			   }
-		   });
-	   }
-	   
-   }// end of function golikeAdd(pnum)-----------
-   
-   
-   // **** 특정제품에 대한 싫어요 등록하기 **** //
-   function godisLikeAdd(pnum){
-	   
-	   if(${empty sessionScope.loginuser}) {
-		   alert("싫어요 하시려면 먼저 로그인 하셔야 합니다.");
-		   return; // 종료
-	   }
-	   
-	   if(!isOrderOK) { // 해당 제품을 구매하지 않은 경우이라면
-		   alert("${requestScope.pvo.pname} 제품을 구매하셔만 싫어요 투표가 가능합니다."); 
-	   }
-	   else { // 해당 제품을 구매한 경우이라면
-		   $.ajax({
-			   url:"<%=ctxPath%>/shop/dislikeAdd.up",
-			   type:"post",
-			   data:{"pnum":pnum,
-				     "userid":"${sessionScope.loginuser.userid}"},
-			   dataType:"json", 
-			   success:function(json) {
-				// console.log(JSON.stringify(json));
-			    	// {"msg":"해당제품에\n 싫어요를 클릭하셨습니다."}
-			   		// 또는
-			   		// {"msg":"이미 싫어요를 클릭하셨기에\n 두번 이상 싫어요는 불가합니다."}
-			   		
-				   //  alert(json.msg);
-				       swal(json.msg);
-				       goLikeDislikeCount();
-			   },
-			   error: function(request, status, error){
-					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-			   }
-		   });
-	   }
-	   
-   }// end of function godisLikeAdd(pnum)---------------
-   
-   
-   // **** 특정 제품에 대한 좋아요, 싫어요 갯수를 보여주기 **** //
-   function goLikeDislikeCount() {
-
-	   $.ajax({
-		   url:"<%=ctxPath%>/shop/likeDislikeCount.up",
-		// type:"get",
-		   data:{"pnum":"${requestScope.pvo.pnum}"},
-		   dataType:"json", 
-		   success:function(json) {
-			   console.log(JSON.stringify(json));
-	    	   // {"likecnt":1, "dislikecnt":0}
-	    	   
-			   $("span#likeCnt").html(json.likecnt);
-			   $("span#dislikeCnt").html(json.dislikecnt);
-		   },
-		   error: function(request, status, error){
-				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-		   }
-	   });	 	   
-	   
-   }// end of function goLikeDislikeCount()---------------
-   
-   
-   // 특정 제품의 제품후기글들을 보여주는 함수
-   function goReviewListView(){
-	   
-	   $.ajax({
-		   url:"<%=ctxPath%>/shop/reviewList.up",
-		   type:"get",
-		   data:{"fk_pnum":"${requestScope.pvo.pnum}"},
-		   dataType:"json",
-		   success:function(json){
-		    // console.log(JSON.stringify(json));
-			  /*
-			   [{"contents":"엄정화가 너무너무 좋아해요~~^^","name":"엄정화","writeDate":"2024-06-05 12:47:32","review_seq":3,"userid":"eomjh"}
-			   ,{"contents":"옷이 너무너무 맘에 들어요~~ ㅎㅎ","name":"서영학","writeDate":"2024-06-05 12:45:37","review_seq":1,"userid":"seoyh"}]
-			  
-			   또는
-			   
-			   []
-			  */
-			  
-			   let v_html = "";
-				
-			   if (json.length > 0) {    
-					$.each(json, function(index, item){ 
-						let writeuserid = item.userid;
-						let loginuserid = "${sessionScope.loginuser.userid}";
-											
-					    v_html += "<div id='review"+index+"'><span class='markColor'>▶</span>&nbsp;"+item.contents+"</div>"
-					            + "<div class='customDisplay'>"+item.name+"</div>"      
-					            + "<div class='customDisplay'>"+item.writeDate+"</div>";
-					    
-					    if( loginuserid == "") { 
-					    	// 로그인을 안한 경우 
-					    	v_html += "<div class='customDisplay spacediv'>&nbsp;</div>";
-					    }      
-					    else if( loginuserid != "" && writeuserid != loginuserid ) { 
-					    	// 로그인을 했으나 후기글이 로그인한 사용자 쓴 글이 아니라 다른 사용자 쓴 후기글 이라면  
-					    	v_html += "<div class='customDisplay spacediv'>&nbsp;</div>";
-					    }    
-					    else if( loginuserid != "" && writeuserid == loginuserid ) {
-					    	// 로그인을 했고 후기글이 로그인한 사용자 쓴 글 이라면
-					    	v_html += "<div class='customDisplay spacediv commentDel' onclick='delMyReview("+item.review_seq+")'>후기삭제</div>"; 
-					    	v_html += "<div class='customDisplay spacediv commentDel commentUpdate' onclick='updateMyReview("+index+","+item.review_seq+")'>후기수정</div>"; 
-					    }
-					} ); 
-				}// end of if -----------------------
-				
-				else {
-					v_html += "<div>등록된 상품후기가 없습니다.</div>";
-				}// end of else ---------------------
-				
-				$("div#viewComments").html(v_html);
-			  
-		   },
-		   error: function(request, status, error){
-				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-		   }
-	   });
-	   
-   }// end of function goReviewListView()---------------------
-   
-   
-   // 특정 제품의 제품후기를 삭제하는 함수
-   function delMyReview(review_seq){
-	 
-	   if(confirm("정말로 제품후기를 삭제하시겠습니까?")) {
-		   $.ajax({
-			   url:"<%=ctxPath%>/shop/reviewDel.up",
-			   type:"post",
-			   data:{"review_seq":review_seq},
-			   dataType:"json",
-			   success:function(json){
-				// console.log(JSON.stringify(json));
-				// {"n":1} 또는 {"n":0}
-				
-				   if(json.n == 1) {
-					   alert("제품후기 삭제가 성공되었습니다.");
-					   goReviewListView(); // 특정 제품의 제품후기글들을 보여주는 함수 호출하기 
-				   } 
-				   else {
-					   alert("제품후기 삭제가 실패했습니다.");
-				   }
-				
-			   },
-			   error: function(request, status, error){
-					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-			   }
-		   });
-	   }  	   
-	   
-   }// end of function delMyReview(review_seq)----------------
-   
-   
-   // 특정 제품의 제품후기를 수정하는 함수
-   function updateMyReview(index, review_seq) {
-	   
-	    const origin_elmt = $("div#review"+index).html();  // 원래의 제품후기 엘리먼트 
-	//  alert(origin_elmt);
-	//  <span class="markColor">▶</span>&nbsp;옷이 너덜너덜 하네요!! ㅎㅎㅎ
-	  
-	//  alert($("div#review"+index).text());
-	//  ▶ 옷이 너덜너덜 하네요!! ㅎㅎㅎ
-	
-	    const review_contents = $("div#review"+index).text().substring(2); // 원래의 제품후기 내용 
-	//  alert(review_contents);
-	//  옷이 너덜너덜 하네요!! ㅎㅎㅎ
-	  
-	    $("div.commentUpdate").hide(); // "후기수정" 글자 감추기
-	    
-	 // "후기수정" 을 위한 엘리먼트 만들기 
-	    let v_html = "<textarea id='edit_textarea' style='font-size: 12pt; width: 40%; height: 50px;'>"+review_contents+"</textarea>";
-	    v_html += "<div style='display: inline-block; position: relative; top: -20px; left: 10px;'><button type='button' class='btn btn-sm btn-outline-secondary' id='btnReviewUpdate_OK'>수정완료</button></div>"; 
-	    v_html += "<div style='display: inline-block; position: relative; top: -20px; left: 20px;'><button type='button' class='btn btn-sm btn-outline-secondary' id='btnReviewUpdate_NO'>수정취소</button></div>";
-	
-	 // 원래의 제품후기 엘리먼트에 위에서 만든 "후기수정" 을 위한 엘리먼트로 교체하기  
-	    $("div#review"+index).html(v_html);
-	    
-	 // 수정취소 버튼 클릭시  
-	    $(document).on("click", "button#btnReviewUpdate_NO", function(){
-	    	$("div#review"+index).html(origin_elmt); // 원래의 제품후기 엘리먼트로 복원하기
-	    	$("div.commentUpdate").show(); // "후기수정" 글자 보여주기
-	    });
-	 
-	 // 수정완료 버튼 클릭시 
-	    $(document).on("click", "button#btnReviewUpdate_OK", function(){
-	    	
-	    	$.ajax({
-				   url:"<%=ctxPath%>/shop/reviewUpdate.up",
-				   type:"post",
-				   data:{"review_seq":review_seq
-					    ,"contents":$("textarea#edit_textarea").val()},
-				   dataType:"json",
-				   success:function(json){
-					// console.log(JSON.stringify(json));
-					// {"n":1} 또는 {"n":0}
-					
-					   if(json.n == 1) {
-						   goReviewListView(); // 특정 제품의 제품후기글들을 보여주는 함수 호출하기 
-					   } 
-					   else {
-						   alert("제품후기 수정이 실패했습니다.");
-						   goReviewListView(); // 특정 제품의 제품후기글들을 보여주는 함수 호출하기 
-					   }
-					
-				   },
-				   error: function(request, status, error){
-						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-				   }
-			   });
-	    	
-	    });
-	 
-	 
-   }// end of function updateMyReview(index, review_seq)----------
    
 </script>
 
-<div>홈</div>
+<div >홈</div>
 <hr>
 <div style="width: 70%; margin: 0 auto;">
 
 	<div class="row my-3 text-left">
 		<div class="col-md-6">
-			<div class="flip-card">
+			<div>
 				<div>
-					<div style="width: 50%; margin-left: 40%;">
-						<img src="<%=ctxPath%>/resources/images/다운로드.jpg"
-							class="img-fluid" style="width: 100%;" />
+					<div style="width: 60%; margin-left: 40%;">
+						<img src="<%=ctxPath%>/resources/images/다운로드.jpg" style="width: 100%;" />
 					</div>
-
 				</div>
 			</div>
 		</div>
@@ -837,12 +316,19 @@ rotate(
 			<ul class="list-unstyled">
 				<li><span
 					style="color: red; font-size: 12pt; font-weight: bold;">${requestScope.pvo.spvo.sname}</span></li>
-				<li>호날두가 신었던 축구화 팝니다!!</li>
-				<li>50,000,000 원</li>
+				<li style="font-size: 25px; font-family: 'Volt110', sans-serif; font-weight: 700;">호날두가 신었던 축구화 팝니다!!</li>
+				<li style="font-size: 32px; font-family: 'Roboto', sans-serif; font-weight: 1000;">50,000,000 원</li>
 				<hr>
-				<li>조회수 | 올린시간</li>
-				<li>거래방법: 직거래</li>
-				<li>직거래 지역: 우리집 앞까지 오셔요</li>
+				<li style="color: #bfbfbf; ">👀 조회수  |  🕓 올린시간</li>
+				<br>
+				<li>
+					<span style="font-size: 14px; color: #8c8c8c;" >거래방법</span>
+					<span style="font-size: 14px; margin-left: 4%; font-family: 'Volt220', sans-serif; font-weight: 700; ">직거래</span>
+				</li>
+				<li>
+					<span style="font-size: 14px; color: #8c8c8c;" >직거래 지역</span>
+					<span style="font-size: 14px; margin-left: 4%; font-family: 'Volt220', sans-serif; font-weight: 700; ">우리집 앞까지 오셔요</span>
+				</li>
 			</ul>
 
 		</div>
@@ -852,7 +338,7 @@ rotate(
 	</div>
 	<hr>
 	
-	<div style="width: 30%; margin: 5% auto;">
+	<div style="width: 50%; margin: 5% auto;">
 			<img src="<%=ctxPath%>/resources/images/다운로드1.jpg" class="img-fluid"
 				style="width: 100%;" /> 제가 직접 신었답니다ㅎㅎ
 				
