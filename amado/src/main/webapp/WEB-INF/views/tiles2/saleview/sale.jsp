@@ -145,6 +145,12 @@ rotate(
 );
 }
 }
+
+
+#mycontent{
+	width: 60%;
+	margin: 5% auto;
+}
 /* -- CSS 로딩화면 구현 끝(bootstrap 에서 가져옴) 끝 -- */
 </style>
 
@@ -256,7 +262,7 @@ rotate(
 	
    let popup; // 추가이미지 파일을 클릭했을때 기존에 띄어진 팝업창에 추가이미지가 또 추가되지 않도록 하기 위해 밖으로 뺌.   
 	   
-   function openPopup(src) {
+   function openPopup() {
 	   
 	 // alert(src);
 	 
@@ -276,7 +282,7 @@ rotate(
 	    popup.document.writeln("<html>");
 	    popup.document.writeln("<head><title>제품이미지 확대보기</title></head>");
 	    popup.document.writeln("<body align='center'>");
-	    popup.document.writeln("<img src='"+src+"' />");
+	    popup.document.writeln("<img src='<%=ctxPath%>/resources/images/다운로드.jpg' />");
 	    popup.document.writeln("<br><br><br>");
 	    popup.document.writeln("<button type='button' onclick='window.close()'>팝업창닫기</button>");
 	    popup.document.writeln("</body>");
@@ -285,10 +291,10 @@ rotate(
    }// end of function openPopup(src)-------------------
 
    
-   function modal_content(img){
+   function modal_content(){
 	 // alert("모달창속에 이미지를 넣어주어야 합니다.ㅎㅎㅎ");
 	 // alert(img.src);
-	 $("div#add_image_modal-body").html("<img class='d-block img-fluid' src='"+img.src+"' />"); 
+	 $("div#add_image_modal-body").html("<img class='d-block img-fluid' src='<%=ctxPath%>/resources/images/다운로드.jpg' />"); 
    }// end of function modal_content(img)------
    
    
@@ -302,11 +308,14 @@ rotate(
 <div style="width: 70%; margin: 0 auto;">
 
 	<div class="row my-3 text-left">
+		
+	
 		<div class="col-md-6">
 			<div>
 				<div>
 					<div style="width: 60%; margin-left: 40%;">
-						<img src="<%=ctxPath%>/resources/images/다운로드.jpg" style="width: 100%;" />
+						<%-- <img src="<%=ctxPath%>/resources/images/다운로드.jpg" style="width: 100%;" /> --%>
+						<img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/다운로드.jpg" style="width: 100%; cursor: pointer;" onclick="openPopup()" />
 					</div>
 				</div>
 			</div>
@@ -314,8 +323,6 @@ rotate(
 
 		<div class="col-md-6 pl-5">
 			<ul class="list-unstyled">
-				<li><span
-					style="color: red; font-size: 12pt; font-weight: bold;">${requestScope.pvo.spvo.sname}</span></li>
 				<li style="font-size: 25px; font-family: 'Volt110', sans-serif; font-weight: 700;">호날두가 신었던 축구화 팝니다!!</li>
 				<li style="font-size: 32px; font-family: 'Roboto', sans-serif; font-weight: 1000;">50,000,000 원</li>
 				<hr>
@@ -346,6 +353,51 @@ rotate(
 			style="width: 100%;" /> 내가 바로 크리스티아누 호우~
 	</div>
 	<hr>
+	
+	
+	<div class="text-left">
+		<p class="h4 text-muted">댓글</p>
+
+	<div class="row">
+		<div class="col-lg-10">
+			<form name="commentFrm">
+				<textarea name="contents"
+					style="font-size: 12pt; width: 100%; height: 150px;"></textarea>
+				<input type="hidden" name="fk_userid"
+					value="${sessionScope.loginuser.userid}" /> <input type="hidden"
+					name="fk_pnum" value="${requestScope.pvo.pnum}" />
+			</form>
+		</div>
+		<div class="col-lg-2" style="display: flex;">
+			<button type="button" class="btn btn-outline-secondary w-100 h-100"
+				id="btnCommentOK" style="margin: auto;">
+				<span class="h5">등록</span>
+			</button>
+		</div>
+	</div>
+
+		<%-- === #94. 댓글 내용 보여주기 === --%>
+      <h3 style="margin-top: 50px;">댓글내용</h3>
+      <div>
+	      <table class="table" style="font-size: 12px;">
+	         <thead>
+	         	<tr>
+	         		<th style="twidth: 6%;">순번</th>
+		            <th style="text-align: center;">내용</th>
+		            <th style="width: 8%; text-align: center;">작성자</th>
+		            <th style="width: 12%; text-align: center;">작성일자</th>
+		            <th style="width: 12%; text-align: center;">수정/삭제</th>
+	         	</tr>
+	         </thead>
+	         <tbody id="commentDisplay"></tbody>
+	      </table>
+      </div>
+      
+      <%-- #155. 댓글페이지바가 보여지는 곳 === --%>
+      <div style="display: flex; margin-bottom: 50px;">
+          <div id="pageBar" style="margin: auto; text-align: center;"></div>
+       </div>
+	</div>
 	
 	
 	<%-- CSS 로딩화면 구현한것--%>
@@ -424,49 +476,7 @@ rotate(
 
 
 
-	<div class="text-left">
-		<p class="h4 text-muted">댓글</p>
-
-	<div class="row">
-		<div class="col-lg-10">
-			<form name="commentFrm">
-				<textarea name="contents"
-					style="font-size: 12pt; width: 100%; height: 150px;"></textarea>
-				<input type="hidden" name="fk_userid"
-					value="${sessionScope.loginuser.userid}" /> <input type="hidden"
-					name="fk_pnum" value="${requestScope.pvo.pnum}" />
-			</form>
-		</div>
-		<div class="col-lg-2" style="display: flex;">
-			<button type="button" class="btn btn-outline-secondary w-100 h-100"
-				id="btnCommentOK" style="margin: auto;">
-				<span class="h5">등록</span>
-			</button>
-		</div>
-	</div>
-
-		<%-- === #94. 댓글 내용 보여주기 === --%>
-      <h3 style="margin-top: 50px;">댓글내용</h3>
-      <div style="margin: 0 auto">
-	      <table class="table" style="width: 1024px; margin-top: 2%; margin-bottom: 3%;">
-	         <thead>
-	         	<tr>
-	         		<th style="twidth: 6%;">순번</th>
-		            <th style="text-align: center;">내용</th>
-		            <th style="width: 8%; text-align: center;">작성자</th>
-		            <th style="width: 12%; text-align: center;">작성일자</th>
-		            <th style="width: 12%; text-align: center;">수정/삭제</th>
-	         	</tr>
-	         </thead>
-	         <tbody id="commentDisplay"></tbody>
-	      </table>
-      </div>
-      
-      <%-- #155. 댓글페이지바가 보여지는 곳 === --%>
-      <div style="display: flex; margin-bottom: 50px;">
-          <div id="pageBar" style="margin: auto; text-align: center;"></div>
-       </div>
-	</div>
+	
 
 	
 
