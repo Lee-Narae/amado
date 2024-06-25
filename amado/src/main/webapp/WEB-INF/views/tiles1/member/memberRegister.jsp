@@ -522,7 +522,7 @@ $(document).ready(function () {
         */
 
         $.ajax({
-            url: "idDuplicateCheck.up",
+            url: "<%=ctxPath%>/idDuplicateCheck.do",
             data: {"userid":$("input#userid").val()}, // data 속성은 http://localhost:9090/MyMVC/member/idDuplicateCheck.up 로 전송해야 할 데이터를 말한다.
             type: "post",   // type을 생략하면 type : "get" 이다.
            
@@ -542,15 +542,14 @@ $(document).ready(function () {
                 // console.log("~~~~ json 의 데이터타입 : ", typeof json);
                 // ~~~~ json 의 데이터타입 :  object
 
-                if(json.isExist) {
-                    // 입력한 userid가 이미 사용중이라면
-                    $("span#idcheckResult").html($("input#userid").val()  + " 은(는) 이미 사용중이므로 다른 아이디를 입력하세요.").css({"color":"red"});
-                    $("input#userid").val("");
-                }
-                else {
+                if(json.mvo == 0) {
                     // 입력한 userid가 존재하지 않는 경우
                     $("span#idcheckResult").html($("input#userid").val()  + " 은(는) 사용 가능한 아이디입니다.").css({"color":"blue"});
-                    
+                }
+                else {
+                	// 입력한 userid가 이미 사용중이라면
+                    $("span#idcheckResult").html($("input#userid").val()  + " 은(는) 이미 사용중이므로 다른 아이디를 입력하세요.").css({"color":"red"});
+                    $("input#userid").val("");
                 }
             },
             
@@ -573,7 +572,7 @@ $(document).ready(function () {
         // 입력하고자 하는 이메일이 데이터베이스 테이블에 존재하는지, 존재하지 않는지 알아와야 한다.
 
         $.ajax({
-            url: "emailDuplicateCheck.up",
+            url: "<%=ctxPath%>/emailDuplicateCheck.do",
             data: {"email":$("input#email").val()}, // data 속성은 http://localhost:9090/MyMVC/member/emailDuplicateCheck.up 로 전송해야할 데이터를 말한다.
             type: "post",   // type을 생략하면 type : "get" 이다.
            

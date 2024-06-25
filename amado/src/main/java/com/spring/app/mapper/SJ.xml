@@ -4,5 +4,12 @@
 
 <mapper namespace="SJ">
 
+	<select id="idDuplicateCheck" parameterType="String">
+		select userid    
+		from tbl_member 
+		where userid = #{userid}
+	</select>
+
+
 
 </mapper>

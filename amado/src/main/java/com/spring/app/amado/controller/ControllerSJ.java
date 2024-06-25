@@ -2,11 +2,18 @@ package com.spring.app.amado.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.spring.app.domain.MemberVO;
 import com.spring.app.service.AmadoService_SJ;
 
 @Controller
@@ -36,7 +43,7 @@ public class ControllerSJ {
 	}	
 	
 	
-	// 회원가입
+	// 글쓰기
 	@GetMapping("/add.do")
 	public ModelAndView add(ModelAndView mav) {
 		mav.setViewName("member/add.tiles1");
@@ -50,4 +57,30 @@ public class ControllerSJ {
 		mav.setViewName("member/memberRegister.tiles1");
 		return mav;
 	}	
+	
+	@ResponseBody
+	@PostMapping(value="/idDuplicateCheck.do", produces = "text/plain;charset=UTF-8")
+	public String idDuplicateCheck(HttpServletRequest request) {
+		
+		System.out.println("왔다~~~~~~~~~");
+		String userid = request.getParameter("userid");
+		
+		// 아이디 중복 체크
+		int n = service.idDuplicateCheck(userid);
+		
+		JSONObject jsonObj = new JSONObject(); // {}
+		
+		if(Objects.nonNull(n)) {
+			jsonObj.put("n", 1);
+		}
+		else {
+			jsonObj.put("n", 0);
+		}
+		
+		return jsonObj.toString();
+	}
+	
+	
+	
+	
 }

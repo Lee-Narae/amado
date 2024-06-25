@@ -2,6 +2,7 @@
 show user;
 -- USER이(가) "FINAL_ORAUSER4"입니다.
 
+
 create table tbl_member    
 (userid                          nvarchar2(20)   not null         -- 회원아이디
 ,password                        nvarchar2(20)   not null         -- 비밀번호 (SHA-256 암호화 대상)
