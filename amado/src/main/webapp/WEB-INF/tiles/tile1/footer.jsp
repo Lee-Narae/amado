@@ -67,7 +67,7 @@ function goYoutube(){
 </script>
 
 <footer>
-	<div id="footer" style="height: 350px; display: flex;">
+	<div id="footer" style="height: 350px; display: flex; width: 100%;">
 		<div id="wrap">
 			<div id="logo" style="height: 150px;"><img style="width: 90%; margin: 13% 0% 0% 40%;" src="<%=ctxPath%>/resources/images/logo.png"/></div>
 			<div id="info">

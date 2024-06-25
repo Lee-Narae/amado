@@ -14,7 +14,6 @@
 }
 
 #myheader{
-border: solid 1px red;
 position: fixed;
 width: 100%;
 }
@@ -22,7 +21,6 @@ width: 100%;
 #mysidebar{
 margin-top: 95px;
 position: fixed;
-border: solid 1px red;
 height: 858px;
 width: 5%;
 }
@@ -30,7 +28,6 @@ width: 5%;
 #mycontent{
 margin-top: 95px;
 margin-left: 5%;
-border: solid 1px red;
 min-height: 1000px;
 width: 95%;
 }
@@ -39,5 +36,5 @@ width: 95%;
 }
 
 #side_content {
-	display: flex;
+display: flex;
 }
