@@ -4,59 +4,31 @@ $(document).ready(function(){
    $("span#totalHITCount").hide();
    $("span#countHIT").hide();
    
-
-  let start = 1;
-  let lenHIT = 8;
-   // HIT 상품 "스크롤"을 할 때 보여줄 상품의 개수(단위)크기 
-
-    // HIT상품 게시물을 더보기 위하여 "스크롤..." 이벤트에 대한 초기값 호출하기 
-  // 즉, 맨처음에는 "스크롤" 을 하지 않더라도 클릭한 것 처럼 8개의 HIT상품을 게시해주어야 한다는 말이다.
-  displayHIT(start);
-  // === 스크롤 이벤트 발생시키기 시작 ==== // 
-  $(window).scroll(function(){
- 
-  
-  // 스크롤탑의 위치값
-   //console.log("$(window).scrollTop() => ", $(window).scrollTop() );
-
-  // 보여주어야할 문서의 높이값(더보기를 해주므로 append 되어져서 높이가 계속 증가 될것이다)
-  // console.log("$(document).scrollTop() => ", $(document).scrollTop() );
+    // HIT상품 게시물을 더보기 위하여 "더보기..." 버튼 클릭액션에 대한 초기값 호출하기 
+  // 즉, 맨처음에는 "더보기..." 버튼을 클릭하지 않더라도 클릭한 것 처럼 8개의 HIT상품을 게시해주어야 한다는 말이다.
+  displayHIT("1");
    
-   // 웹브라우저창의 높이값(디바이스마다 다르게 표현되는 고정값) 
-    // console.log("$(window).height() => ", $(window).height() );
-
-    // 아래는 스크롤되어진 스크롤탑의 위치값이 웹브라우저창의 높이만큼 내려갔을 경우를 알아보는 것이다.
-    console.log( "$(window).scrollTop() => ", $(window).scrollTop() );
-    console.log( "$(document).height() - $(window).height() => ", ( $(document).height() - $(window).height() ) );
-
-    // 아래는 만약에 위의 값이 제대로 안나오는 경우 이벤트가 발생되는 숫자를 만들기 위해서 스크롤탑의 위치값에 +1 을 더해서 보정해준 것이다. 
-      // console.log( "$(window).scrollTop() + 1  => " + ( $(window).scrollTop() + 1  ) );
-      // console.log( "$(document).height() - $(window).height() => " + ( $(document).height() - $(window).height() ) );
-
-      if( $(window).scrollTop()  == $(document).height() - $(window).height() ) {
-      // 만약에 위의 값대로 잘 안되면 아래의 것을 하도록 한다.     
-      // if( $(window).scrollTop() + 1 >= $(document).height() - $(window).height() ) {
-      // alert("기존 문서내용을 끝까지 봤습니다. 이제 새로운 내용을 읽어다가 보여드리겠습니다.");
-      
-      if($("span#totalHITCount").text() != $("span#countHIT").text() ) {
-
-        start += lenHIT
-        displayHIT(start);
-        }
-      }
-
-      if( $(window).scrollTop() ==0 ) {
-        //다시 처음으로 시작하려고 한다
+  // HIT 상품 게시물을 더보기 위하여 "더보기..." 버튼 클릭액션 이벤트 등록하기   $(this)더보기 버튼
+  $("button#btnMoreHIT").click(function(){
+     
+    if($(this).text() =='처음으로') {
         $("div#displayHIT").empty();
         $("span#end").empty();
-        $("span#countHIT").text("0");
+        displayHIT("1");
+        $(this).text("더보기...");
+      }
+      else {
+        displayHIT($(this).val());  
+        // displayHIT("9");   첫번째로 더보기를 클릭한 경우
+        // displayHIT("17");  두번째로 더보기를 클릭한 경우
+        // displayHIT("25");  세번째로 더보기를 클릭한 경우
+        // displayHIT("33");  네번째로 더보기를 클릭한 경우 
 
-        start =1;
-        displayHIT(start);
       }
 
+     
+
   });
-  // === 스크롤 이벤트 발생시키기 끝  ==== // 
 
 }); // end of $(document).ready(function(){})-------------------
 
@@ -73,7 +45,7 @@ function displayHIT(start) { // start가  1 이라면   1~ 8  까지 상품 8개
               // start가 33 이라면  33~36  까지 상품 4개를 보여준다.(마지막 상품)
               
  $.ajax({
-  // url:"mallDisplayJSON.up",
+   url:"mallDisplayJSON.up",
    //  type:"get",
        data:{"sname":"HIT", 
              "start":start,  //  "1"  "9"  "17"  "25"  "33"
@@ -160,11 +132,19 @@ function displayHIT(start) { // start가  1 이라면   1~ 8  까지 상품 8개
                 // HIT 상품 결과를 출력하기
                 $("div#displayHIT").append(v_html);
 
-             
+
+                // !!!!! 중요 !!!!!
+                  // 더보기... 버튼의 value 속성에 값을 지정하기
+                $("button#btnMoreHIT").val(Number(start)+ lenHIT);
+                // 더보기... 버튼의 value 값이  "9" 로 변경된다.
+
+                // span#countHIT 에 지금까지 출력된 상품의 개수를 누적해서 기록한다.
+                $("span#countHIT").text(Number($("span#countHIT").text()) + json.length );
 
                 // 더보기... 버튼을 계속해서 클릭하여 countHIT 값과 totalHITCount 값이 일치하는 경우 
                 if(  $("span#countHIT").text() == $("span#totalHITCount").text() ) {
-                      $("span#end").html("더이상 조회할 제품이 없습니다.")
+                      $("span#end").html("더이상 조회할 제품이 없습니다.");
+                      $("button#btnMoreHIT").text("처음으로");
                       $("span#countHIT").text("0");
                 }
 
@@ -178,6 +158,3 @@ function displayHIT(start) { // start가  1 이라면   1~ 8  까지 상품 8개
  
 }// end of function displayHIT(start)------------------
 
-function goTop() {
-  $(window).scrollTop(0);
-}

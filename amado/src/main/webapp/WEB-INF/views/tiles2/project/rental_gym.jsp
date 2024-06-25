@@ -7,16 +7,6 @@
 <html lang="ko">
 
 <style type="text/css">
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-header {
-    padding: 10px 0;
-    text-align: center;
-}
 
 nav ul {
     list-style: none;
@@ -71,8 +61,12 @@ nav ul li button {
     flex: 1;
 }
 </style>
+<script type="text/javascript" src="<%= ctxPath%>/resources/js/jquery-3.7.1.min.js"></script>
+  <script type="text/javascript" src="<%= ctxPath%>/resources/bootstrap-4.6.2-dist/js/bootstrap.bundle.min.js" ></script>
+  <script type="text/javascript" src="<%= ctxPath%>/resources/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/myshop/moreHomeScroll.js"></script>
+<%-- <script type="text/javascript" src="<%= ctxPath%>/resources/js/myshop/categoryListJSON.js"></script> 
+<script type="text/javascript" src="<%= ctxPath%>/resources/js/myshop/moreHomeScroll.js"></script> --%>
 <script type="text/javascript">
 document.addEventListener("DOMContentLoaded", function() {
     const indoorBtn = document.getElementById('indoorBtn');
@@ -106,8 +100,10 @@ document.addEventListener("DOMContentLoaded", function() {
 	            <button id="outdoorBtn" class="btn btn-secondary mx-2">실외 </button>
 	        </nav>
 	 <div class="search-box">
-            <input type="text" class="form-control" placeholder="검색">
-            <button class="btn btn-primary ml-2">검색</button>
+            <input type="text" class="form-control" placeholder="검색">	
+            <button class="btn btn-primary btn-circle">
+  			<i class="fa-solid fa-magnifying-glass"></i>
+ 				 </button>
         </div>
 	   
 	    <br><br>
@@ -288,14 +284,14 @@ document.addEventListener("DOMContentLoaded", function() {
 	        
 	        
 	        <%-- === HIT 상품을 모두 가져와서 디스플레이(더보기 방식으로 페이징 처리한 것) === --%>
-	   <div>
+	<%--    <div>
 	      <p class="h3 my-3 text-center">- HIT 상품(스크롤) -</p>
 		
-		<div class="row" id="displayHIT" style="text-align: left;"></div> <%--더보기할때 들어오는곳 --%>
+		<div class="row" id="displayHIT" style="text-align: left;"></div> 더보기할때 들어오는곳
 	      
 	      <div>
 	         <p class="text-center">
-	              <span id="end" style="display:block; margin:20px; font-size: 14pt; font-weight: bold; color: red;"></span>  <%-- 글씨가 들어오는곳 --%>
+	              <span id="end" style="display:block; margin:20px; font-size: 14pt; font-weight: bold; color: red;"></span>  글씨가 들어오는곳
 	          	  <span id="totalHITCount">${requestScope.totalHITCount}</span>   
 	           	  <span id="countHIT">0</span>
 	         </p>
@@ -306,22 +302,17 @@ document.addEventListener("DOMContentLoaded", function() {
 	            <button class="btn btn-info" onclick="goTop()">맨위로가기(scrollTop 1로 설정함)</button>
 	         </div>
 	      </div>	
-	
-	
-	
 	   </div>
 	        
-	        
+	         --%>
 	    </section>
 	    
-	    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-	    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-	    <script src="script.js"></script>
-	</body>
-	</html>
+	    
+</body>
+</html>
+	
+	
+
 	
 	 
-	</body>
-	</html>
     
