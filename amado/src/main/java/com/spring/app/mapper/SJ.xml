@@ -4,5 +4,12 @@
 
 <mapper namespace="SJ">
 
+	<select id="idDuplicateCheck" parameterType="String" resultType="int">
+		select count(*) AS n
+		from tbl_member 
+		where userid = #{userid}
+	</select>
+
+
 
 </mapper>
