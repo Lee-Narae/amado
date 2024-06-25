@@ -20,9 +20,16 @@ padding-top: 2.5%;
 margin-right: 7%;
 }
 
+#login:hover {
+background-color: #f0f8ff;
+font-weight: bold;
+cursor: pointer;
+}
+
 #logo{
 width: 22%;
 padding-left: 2%;
+cursor: pointer;
 }
 
 #signup {
@@ -36,63 +43,94 @@ border-radius: 50px;
 padding-top: 2.5%;
 }
 
+#signup:hover {
+background-color: #30549c;
+font-weight: bold;
+cursor: pointer;
+}
 .nav{
 font-size: 15pt;
 margin-right: 20%;
 color: #254179;
 margin-top: 6.5%;
+cursor: pointer;
 }
 
-/*.tabs {
-border: solid 1px white;
+.tabs {
+color: white;
 width: 15%;
-}*/
+padding-top: 5%;
+}
+
+.tabs > div {
+font-size: 11pt;
+margin-bottom: 10%;
+}
+
+.tabs > div:hover {
+cursor: pointer;
+font-weight: bold;
+}
+
 </style>
 
 <script type="text/javascript">
-
-	$(document).ready(function(){
-		
-	}); // end of $(document).ready
+$(document).ready(function(){
+	
+	$("div#tab").hide();
+	
+	$("div.nav").hover(function(){
+		$("div#tab").fadeIn();
+	}, function(){
+		$("div#tab").hide();
+	});
+	
+	$("div#tab").hover(function(){
+		$("div#tab").show();
+	}, function(){
+		$("div#tab").hide();
+	});
 	
 	function goSignup() {
 		location.href = "<%=ctxPath%>/member/memberRegister.do";
-	}
-
-	function goHome() {
-		location.href = "<%=ctxPath%>/index.do";
-	}
+	}	
 	
+});
 </script>
 
 <div id="header" style="width: 100%; display: flex; background-color: white;">
-	<div id="logo"><a class="navbar-brand" href="<%= ctxPath %>/index.do" style="margin-right: 10%;"><img src="<%=ctxPath %>/resources/images/logo.png" style="width: 100%;"/></a></div>
+	<div id="logo" onclick="location.href='<%=ctxPath%>/index.do'"><img src="<%=ctxPath %>/resources/images/logo.png" style="width: 100%;"/></div>
 	<div style="margin-left: 3%; display: flex; width: 50%;">
-		<div class="nav" style=" margin-left: 10%;" onclick="goHome()">Home</div>
+		<div class="nav" style=" margin-left: 10%;">Home</div>
 		<div class="nav">Club&nbsp;&nbsp;∨</div>
-        <a class="nav" href="#" id="navbarDropdown" data-toggle="dropdown">board&nbsp;&nbsp;∨</a>  
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-           <a class="dropdown-item" href="<%=ctxPath%>/list.do">게시판목록</a>
-        </div>		
 		<div class="nav">Gym&nbsp;&nbsp;∨</div>
-		<div class="nav">Notice</div>
+		<div class="nav">Community&nbsp;&nbsp;∨</div>
 	</div>
 	<div style="display: flex; margin-left: 45%; width: 30%; margin-top: 1.4%;">
-		<div id="login">로그인</div>
+		<div id="login" onclick="location.href='#'">로그인</div>
 		<div id="signup" onclick="goSignup()">회원가입</a></div>
 	</div>
 </div>
-<%-- <div id="tab" style="display: flex; width: 100%; height: 300px; background-color: #254179;">
-	<div id="random" style="width: 8%; margin: 4% 0 0 3%;"><img src="<%= ctxPath %>/resources/images/casual-life-3d-pink-basketball.png" style="width: 100%;"/></div>
-	<div style="display: flex; border: solid 1px red; width: 50%; margin-left: 5%;">
-		<div class="tabs" style="margin-right: 1%;">
-			<div>Home</div>
+<div id="tab" style="display: flex; width: 40%; height: 270px; background-color: #254179; margin-left: 12%;">
+	<div style="display: flex; width: 100%;">
+		<div class="tabs" style="margin-right: 4%; margin-left: 13%;">
+			<div onclick="location.href='<%=ctxPath%>/index.do'">Home</div>
 		</div>
-		<div class="tabs" style="margin-right: 2%;">
-			
+		<div class="tabs" style="margin-right: 6%;">
+			<div onclick="location.href='#'">동호회 찾기</div>
+			<div onclick="location.href='#'">My 동호회</div>
+			<div onclick="location.href='#'">동호회 등록하기</div>
+			<div onclick="location.href='#'">매치 등록하기</div>
 		</div>
-		<div class="tabs" style="margin-right: 2%;"></div>
-		<div class="tabs"></div>
+		<div class="tabs" style="margin-right: 7%;">
+			<div onclick="location.href='#'">체육관 찾기</div>
+			<div onclick="location.href='#'">My 예약 조회</div>
+			<div onclick="location.href='#'">1:1 문의하기</div>
+		</div>
+		<div class="tabs">
+			<div onclick="location.href='#'">공지사항</div>
+			<div onclick="location.href='<%=ctxPath%>/list.do'">게시판</div>
+		</div>
 	</div>
-</div> --%>
+</div>
 	    
