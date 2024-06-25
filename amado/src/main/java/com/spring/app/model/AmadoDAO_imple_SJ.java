@@ -14,7 +14,8 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 	
 	@Override
 	public int idDuplicateCheck(String userid) {
-		int n = sqlsession.selectOne("SJ.idDuplicateCheck", userid);
+		int n = 0;
+		n = sqlsession.selectOne("SJ.idDuplicateCheck", userid);
 		return n;
 	}
 

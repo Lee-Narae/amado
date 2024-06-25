@@ -91,10 +91,6 @@ $(document).ready(function(){
 		$("div#tab").hide();
 	});
 	
-	function goSignup() {
-		location.href = "<%=ctxPath%>/member/memberRegister.do";
-	}
-	
 });
 </script>
 
@@ -108,7 +104,7 @@ $(document).ready(function(){
 	</div>
 	<div style="display: flex; margin-left: 45%; width: 30%; margin-top: 1.4%;">
 		<div id="login" onclick="location.href='#'">로그인</div>
-		<div id="signup" onclick="goSignup()">회원가입</a></div>
+		<div id="signup" onclick="location.href='<%=ctxPath%>/member/memberRegister.do'">회원가입</div>
 	</div>
 </div>
 <div id="tab" style="display: flex; width: 40%; height: 270px; background-color: #254179; margin-left: 12%;">

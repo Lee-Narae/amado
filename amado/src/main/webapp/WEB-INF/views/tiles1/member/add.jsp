@@ -101,7 +101,7 @@
 
 
 <div style="display: flex;">
-  <div style="margin: auto; padding-left: 3%;">
+  <div style="margin: auto; padding-top: 3%; padding-left: 3%;">
      
      
         <h2 style="margin-bottom: 30px;">글쓰기</h2>

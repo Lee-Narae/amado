@@ -10,6 +10,7 @@ import com.spring.app.model.AmadoDAO_SJ;
 @Service
 public class AmadoService_imple_SJ implements AmadoService_SJ {
 
+	@Autowired
 	private AmadoDAO_SJ dao;  
 	
     @Autowired
@@ -18,7 +19,8 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
     // 아이디 중복 체크
 	@Override
 	public int idDuplicateCheck(String userid) {
-		int n = dao.idDuplicateCheck(userid);
+		int n = 0;
+		n = dao.idDuplicateCheck(userid);
 		
 		return n;
 	}

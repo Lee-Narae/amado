@@ -54,7 +54,9 @@ img#idcheck, img#zipcodeSearch {
 	cursor: pointer;
 }
 
-span#emailcheck {
+span#emailcheck,
+span#phonecheck,
+span#phoneCheckResult {
 	border: solid 1px gray;
 	border-radius: 5px;
 	font-size: 8pt;
@@ -65,6 +67,7 @@ span#emailcheck {
 	margin-left: 10px;
 	cursor: pointer;
 }
+
 
 </style>
 
@@ -96,24 +99,11 @@ $(document).ready(function () {
         const name = $(e.target).val().trim();
         if (name == "") {
             // 입력하지 않거나 공백만 입력했을 경우
-            /*   
-                >>>> .prop() 와 .attr() 의 차이 <<<<            
-                     .prop() ==> form 태그 내에 사용되는 엘리먼트의 disabled, selected, checked 의 속성값 확인 또는 변경하는 경우에 사용함. 
-                     .attr() ==> 그 나머지 엘리먼트의 속성값 확인 또는 변경하는 경우에 사용함.
-            */
-
-            $("button#rightPopover").show();
-            // $(e.target).next().show();
-            // 또는
-
+            $(e.target).parent().find("span.error").show();
         } else {
             // 공백이 아닌 글자를 입력했을 경우
-
             $("table#tblMemberRegister :input").prop("disabled", false);
-
-            // $(e.target).next().hide();
-            // 또는
-            $("button#rightPopover").hide();
+            $(e.target).parent().find("span.error").hide();
         }
     }); // 아이디가 name 인 것은 포커스를 잃어버렸을 경우(blur) 이벤트를 처리해주는 것이다.
 
@@ -124,209 +114,104 @@ $(document).ready(function () {
         const userid = $(e.target).val().trim();
         if (userid == "") {
             // 입력하지 않거나 공백만 입력했을 경우
-            /*   
-                >>>> .prop() 와 .attr() 의 차이 <<<<            
-                     .prop() ==> form 태그 내에 사용되는 엘리먼트의 disabled, selected, checked 의 속성값 확인 또는 변경하는 경우에 사용함. 
-                     .attr() ==> 그 나머지 엘리먼트의 속성값 확인 또는 변경하는 경우에 사용함.
-            */
-
-            // 값을 안넣었을 때 아이디 값 제외하고 다 안보임 아이디칸에만 focus 되게하는 것 안함
-            // $("table#tblMemberRegister :input").prop("disabled", true);
-            // $(e.target).prop("disabled", false);
-            // $(e.target).val("").focus();
-
-            // $(e.target).next().show();
-            // 또는
             $(e.target).parent().find("span.error").show();
-
         } else {
             // 공백이 아닌 글자를 입력했을 경우
-
             $("table#tblMemberRegister :input").prop("disabled", false);
-
-            // $(e.target).next().hide();
-            // 또는
             $(e.target).parent().find("span.error").hide();
         }
     }); // 아이디가 userid 인 것은 포커스를 잃어버렸을 경우(blur) 이벤트를 처리해주는 것이다.
 
 
-
-
     $("input#pwd").blur((e) => {
 
-        // const regExp_pwd = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).*$/g;
-        // 또는
         const regExp_pwd = new RegExp(/^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).*$/g);
         // 숫자/문자/특수문자 포함 형태의 8~15자리 이내의 암호 정규표현식 객체 생성
-
         const bool = regExp_pwd.test($(e.target).val());
-
         if (!bool) {
             // 암호가 정규표현식에 위배된 경우
-
-
-            // $(e.target).next().show();
-            // 또는
             $(e.target).parent().find("span.error").show();
-
         } else {
             // 암호가 정규표현식에 맞는 경우
-
             $("table#tblMemberRegister :input").prop("disabled", false);
-
-            // $(e.target).next().hide();
-            // 또는
             $(e.target).parent().find("span.error").hide();
         }
     }); // 아이디가 pwd 인 것은 포커스를 잃어버렸을 경우(blur) 이벤트를 처리해주는 것이다.
-
-
 
 
     $("input#pwdcheck").blur((e) => {
 
         if ($("input#pwd").val() != $(e.target).val()) {
             // 암호와 암호 확인 값이 일치하지 않는 경우
-
-
-            // $(e.target).next().show();
-            // 또는
             $(e.target).parent().find("span.error").show();
-
         } else {
             // 암호와 암호 확인 값이 같은 경우
-
             $("table#tblMemberRegister :input").prop("disabled", false);
-
-            // $(e.target).next().hide();
-            // 또는
             $(e.target).parent().find("span.error").hide();
         }
     }); // 아이디가 pwdcheck 인 것은 포커스를 잃어버렸을 경우(blur) 이벤트를 처리해주는 것이다.
 
 
 
-
     $("input#email").blur((e) => {
-
-        // const regExp_email = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;  
-        // 또는
         const regExp_email = new RegExp(/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i);
         // 이메일 정규표현식 객체 생성 
-
         const bool = regExp_email.test($(e.target).val());
-
         if (!bool) {
             // 이메일이 정규표현식에 위배된 경우
-
-
-            // $(e.target).next().show();
-            // 또는
             $(e.target).parent().find("span.error").show();
-
         } else {
             // 이메일이 정규표현식에 맞는 경우
-
             $("table#tblMemberRegister :input").prop("disabled", false);
-
-            // $(e.target).next().hide();
-            // 또는
             $(e.target).parent().find("span.error").hide();
         }
     }); // 아이디가 email 인 것은 포커스를 잃어버렸을 경우(blur) 이벤트를 처리해주는 것이다.
 
 
 
-
     $("input#hp2").blur((e) => {
-
-        // const regExp_hp2 = /^[1-9][0-9]{3}$/;  
-        // 또는
         const regExp_hp2 = new RegExp(/^[1-9][0-9]{3}$/);
         // 연락처 국번( 숫자 4자리인데 첫번째 숫자는 1-9 이고 나머지는 0-9) 정규표현식 객체 생성 
-
         const bool = regExp_hp2.test($(e.target).val());
-
         if (!bool) {
             // 연락처 국번이 정규표현식에 위배된 경우 
-
-  
-            // $(e.target).next().next().show();
-            // 또는
             $(e.target).parent().find("span.error").show();
-
-
         } else {
             // 연락처 국번이 정규표현식에 맞는 경우 
             $("table#tblMemberRegister :input").prop("disabled", false);
-
-            // $(e.target).next().next().hide();
-            // 또는
             $(e.target).parent().find("span.error").hide();
         }
-
     }); // 아이디가 hp2 인 것은 포커스를 잃어버렸을 경우(blur) 이벤트를 처리해주는 것이다.
 
 
     $("input#hp3").blur((e) => {
-
-        // const regExp_hp3 = /^[0-9]{4}$/;  
-        // 또는
-        // const regExp_hp3 = /^\d{4}$/;   // D => 숫자가 아닌 것, d => 숫자인 것
         const regExp_hp3 = new RegExp(/^\d{4}$/);
         // 숫자 4자리만 들어오도록 검사해주는 정규표현식 객체 생성 
-
         const bool = regExp_hp3.test($(e.target).val());
-
         if (!bool) {
             // 마지막 전화번호 4자리가 정규표현식에 위배된 경우 
-
-            // $(e.target).next().show();
-            // 또는
             $(e.target).parent().find("span.error").show();
-
         } else {
             // 마지막 전화번호 4자리가 정규표현식에 맞는 경우 
             $("table#tblMemberRegister :input").prop("disabled", false);
-
-            // $(e.target).next().hide();
-            // 또는
             $(e.target).parent().find("span.error").hide();
         }
-
     }); // 아이디가 hp3 인 것은 포커스를 잃어버렸을 경우(blur) 이벤트를 처리해주는 것이다.
 
 
 
-
     $("input#postcode").blur((e) => {
-
-        // const regExp_postcode = /^[0-9]{5}$/;  
-        // 또는
-        // const regExp_postcode = /^\d{5}$/;
         const regExp_postcode = new RegExp(/^\d{5}$/);
         // 숫자 5자리만 들어오도록 검사해주는 정규표현식 객체 생성 
-
         const bool = regExp_postcode.test($(e.target).val());
-
         if (!bool) {
             // 우편번호가 정규표현식에 위배된 경우 
-
-            //  $(e.target).next().next().show();
-            //  또는
             $(e.target).parent().find("span.error").show();
-
-
         } else {
             // 우편번호가 정규표현식에 맞는 경우 
             $("table#tblMemberRegister :input").prop("disabled", false);
-
-            // $(e.target).next().next().hide();
-            // 또는
             $(e.target).parent().find("span.error").hide();
         }
-
     }); // 아이디가 postcode 인 것은 포커스를 잃어버렸을 경우(blur) 이벤트를 처리해주는 것이다.
 
 
@@ -520,6 +405,13 @@ $(document).ready(function () {
                 그리고, 비동기식이란 어떤 하나의 웹페이지에서 여러가지 서로 다른 다양한 일처리가 개별적으로 발생한다는 뜻으로서, 
                 어떤 하나의 웹페이지에서 서버와 통신하는 그 일처리가 발생하는 동안 일처리가 마무리 되기전에 또 다른 작업을 할 수 있다는 의미이다.
         */
+        
+        
+        alert($("input#name").text());
+        if($("input#name").val() == "") {
+        	$("span#idcheckResult").html("아이디를 입력하세요.").css({"color":"red"});
+			return false;        	
+        }
 
         $.ajax({
             url: "<%=ctxPath%>/idDuplicateCheck.do",
@@ -542,7 +434,7 @@ $(document).ready(function () {
                 // console.log("~~~~ json 의 데이터타입 : ", typeof json);
                 // ~~~~ json 의 데이터타입 :  object
 
-                if(json.mvo == 0) {
+                if(json.n == 0) {
                     // 입력한 userid가 존재하지 않는 경우
                     $("span#idcheckResult").html($("input#userid").val()  + " 은(는) 사용 가능한 아이디입니다.").css({"color":"blue"});
                 }
@@ -721,11 +613,6 @@ function goReset() {
 
 } // function goReset() ---------------------
 
-
-
-function goGaib() {
-    alert("회원가입에 대한 유효성검사를 한 후에 통과되면 submit 하려고 함");
-}
 	
 </script>
 
@@ -760,7 +647,7 @@ function goGaib() {
                     <td>
                        <input type="text" name="userid" id="userid" maxlength="40" class="requiredInfo" />&nbsp;&nbsp;  
                        <%-- 아이디중복체크 --%>
-                       <img src="<%= ctxPath%>/images/b_id_check.gif" id="idcheck" />
+                       <img src="<%= ctxPath%>/resources/images/id_check.png" id="idcheck" class="rounded" alt="round" width="25" />
                        <span id="idcheckResult"></span>
                        <span class="error">아이디는 필수입력 사항입니다.</span>
                     </td>
@@ -786,10 +673,10 @@ function goGaib() {
                     <td>이메일&nbsp;<span class="star">*</span></td>
                     <td>
                        <input type="text" name="email" id="email" maxlength="60" class="requiredInfo" />
-                       <span class="error">이메일 형식에 맞지 않습니다.</span>
                        <%-- 이메일중복체크 --%>
                        <span id="emailcheck">이메일중복확인</span>
                        <span id="emailCheckResult"></span>
+                       <span class="error">이메일 형식에 맞지 않습니다.</span>
                     </td>
                 </tr>
                 
@@ -799,7 +686,16 @@ function goGaib() {
                        <input type="text" name="hp1" id="hp1" size="6" maxlength="3" value="010" readonly />&nbsp;-&nbsp; 
                        <input type="text" name="hp2" id="hp2" size="6" maxlength="4" />&nbsp;-&nbsp;
                        <input type="text" name="hp3" id="hp3" size="6" maxlength="4" />    
+                       <span id="phonecheck">휴대폰확인</span>
                        <span class="error">휴대폰 형식이 아닙니다.</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>연락처확인&nbsp;</td>
+                    <td>
+						<input type="text" name="phoneCheckResultVal" id="phoneCheckResultVal" size="10" maxlength="10" />
+						<span id="phoneCheckResult">인증번호확인</span>
+						<span class="error">올바른 인증번호가 아닙니다.</span>
                     </td>
                 </tr>
                 
@@ -869,16 +765,7 @@ function goGaib() {
                  
              </tbody>
           </table>
-       
-       <%--    
-          <div>
-              <button onclick="goGaib()">type이 없으면 submit 임</button>&nbsp; 
-              <button type="button" onclick="goGaib()">type이 button 인것</button>&nbsp;
-              <button type="submit">type이 submit 인 것</button>
-          </div>
-          // goGaib() 함수를 호출하고 싶을 때 type="button" 이 없으면 submit 되어버리기 때문에
-       --%>
-          
+
       </form>
    </div>
 </div>
