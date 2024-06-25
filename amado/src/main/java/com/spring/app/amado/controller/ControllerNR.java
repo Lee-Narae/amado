@@ -16,34 +16,37 @@ public class ControllerNR {
 	
 	
 	// 먼저 com.spring.app.HomeController에 가서 @Controller를 주석처리해야 한다.(스프링 기본 제공)
-		@GetMapping("/")
-		public ModelAndView home(ModelAndView mav) {
-			
-			mav.setViewName("redirect:/index.do");
-			return mav;
-		}
+	@GetMapping("/")
+	public ModelAndView home(ModelAndView mav) {
 		
-		@GetMapping("/index.do")
-		public ModelAndView index(ModelAndView mav) {
+		mav.setViewName("redirect:/index.do");
+		return mav;
+	}
+	
+	@GetMapping("/index.do")
+	public ModelAndView index(ModelAndView mav) {
 
-			mav = service.index(mav);
-			
-			return mav;
-		}	
+		mav = service.index(mav);
 		
-		@GetMapping("/testNR.do")
-		public ModelAndView testNR(ModelAndView mav) {
-			
-			mav.setViewName("testNR");
-			return mav;
-		}
+		return mav;
+	}	
+	
+	@GetMapping("/test.do")
+	public ModelAndView test(ModelAndView mav) {
 		
-		@GetMapping("/testNR2.do")
-		public ModelAndView testNR2(ModelAndView mav) {
-			
-			mav.setViewName("testNR.tiles1");
-			// /WEB-INF/views/tiles1/testNR.jsp
-			return mav;
-		}
+		
+		mav.setViewName("test.tiles1");
+		// /WEB-INF/views/tiles1/test.jsp
+		return mav;
+	}
+	
+	@GetMapping("/club/myClub.do")
+	public ModelAndView myClub(ModelAndView mav) {
+		
+		
+		mav.setViewName("club/myClub.tiles2");
+		// /WEB-INF/views/tiles2/club/myClub.jsp
+		return mav;
+	}
 		
 }
