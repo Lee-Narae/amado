@@ -13,10 +13,20 @@ public class ControllerJY {
 	@RequestMapping(value="/club/oldshop.do")
 	public ModelAndView oldshop(ModelAndView mav) {
 		mav.setViewName("club/oldshop.tiles2");
-		//    /WEB-INF/views/oldshop.jsp
+		//    /WEB-INF/views/club/oldshop.jsp
 		return mav;
 		
 	}
+	
+	
+	@RequestMapping(value="/club/viewclub.do")
+	public ModelAndView viewclub(ModelAndView mav) {
+		mav.setViewName("club/viewclub.tiles2");
+		//    /WEB-INF/views/club/viewclub.jsp
+		return mav;
+		
+	}
+
 	
 	
 }
