@@ -23,7 +23,7 @@ public class ControllerSJ {
 	private AmadoService_SJ service;
 	
 	// 게시판 목록보기
-	@GetMapping("/list.do")
+	@GetMapping("/community/list.do")
 	public ModelAndView index(ModelAndView mav) {
 		
 		String content = "제목";
@@ -38,7 +38,7 @@ public class ControllerSJ {
 		paraMap.put("readCount", readCount);
 		mav.addObject("paraMap", paraMap);	
 		
-		mav.setViewName("board/list.tiles2");
+		mav.setViewName("community/list.tiles2");
 		return mav;
 	}	
 	
