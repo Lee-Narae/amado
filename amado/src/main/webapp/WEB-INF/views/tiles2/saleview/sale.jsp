@@ -313,9 +313,9 @@ rotate(
 		<div class="col-md-6">
 			<div>
 				<div>
-					<div style="width: 60%; margin-left: 40%;">
+					<div style="width: 400%;">
 						<%-- <img src="<%=ctxPath%>/resources/images/다운로드.jpg" style="width: 100%;" /> --%>
-						<img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/다운로드.jpg" style="width: 100%; cursor: pointer;" onclick="openPopup()" />
+						<img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/다운로드.jpg" style="cursor: pointer;" onclick="openPopup()" />
 					</div>
 				</div>
 			</div>
