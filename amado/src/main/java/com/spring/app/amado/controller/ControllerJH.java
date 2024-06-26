@@ -7,10 +7,10 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ControllerJH {
 	
-	@GetMapping("/saleview/sale.do")
+	@GetMapping("/club/sale.do")
 	public ModelAndView index(ModelAndView mav) {
 
-		mav.setViewName("saleview/sale.tiles2");
+		mav.setViewName("club/sale.tiles2");
 		// /WEB-INF/views/tiles2/main/index.jsp
 		
 		return mav;
