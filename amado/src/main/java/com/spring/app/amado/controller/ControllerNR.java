@@ -40,4 +40,12 @@ public class ControllerNR {
 		return mav;
 	}
 		
+	
+	@GetMapping("/club/matchRegister.do")
+	public ModelAndView matchRegister(ModelAndView mav) {
+		
+		mav.setViewName("club/matchRegister.tiles2");
+		return mav;
+	}
+	
 }
