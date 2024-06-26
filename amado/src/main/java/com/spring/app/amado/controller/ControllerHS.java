@@ -9,12 +9,12 @@ public class ControllerHS {
 	// 한솔 컨트롤러
 	
 	
-	@GetMapping(value="/project/rental_gym.do")
+	@GetMapping(value="/gym/rental_gym.do")
 	   public ModelAndView rental_gym(ModelAndView mav) {
 	      
 		
 		
-		mav.setViewName("/project/rental_gym.tiles2");
+		mav.setViewName("/gym/rental_gym.tiles2");
 		
 		
 	      return mav;

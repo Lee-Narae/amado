@@ -13,7 +13,7 @@ nav ul {
     padding: 0;
     display: flex;
     justify-content: flex-end;
-    margin: 0 20px;
+    margin: 0 20px; 
 }
 
 nav ul li {
@@ -162,7 +162,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	                </div>
 	            </div>
 	             <div class="col-md-3 mb-4">
-	                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/list.action'">
+	                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/index.do'">
 	                    <img src="<%=ctxPath%>/resources/images/1/체육관6.jpg" class="card-img-top" alt="실내 상품 6">
 	                    <div class="card-body">
 	                        <h5 class="card-title">인천</h5>
