@@ -77,7 +77,17 @@ public class ControllerSJ {
 	
 	
 	
-	// 
+	// 동호회 찾가
+	@GetMapping("/club/findClub.do")
+	public ModelAndView findClub(ModelAndView mav) {
+
+
+		mav.setViewName("/club/findClub.tiles2");
+		// /WEB-INF/views/test/modelandview_select.jsp 페이지를 만들어야 한다.
+
+		return mav;
+	}
+	
 	
 	
 }
