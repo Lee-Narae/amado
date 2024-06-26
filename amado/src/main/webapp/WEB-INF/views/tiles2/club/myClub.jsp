@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% String ctxPath = request.getContextPath(); %>
-
+<link rel="stylesheet" href="<%=ctxPath%>/resources/bootstrap-4.6.2-dist/css/bootstrap.min.css" type="text/css">
 <style type="text/css">
 
 .title {
@@ -68,6 +68,19 @@ td{
   border-bottom: solid 1px rgba(255,255,255,0.1);
 }
 
+#help {
+font-size: 18pt;
+}
+
+#forhover2 {
+display: inline-block;
+background-color: #c6f0a3;
+border-radius: 10px;
+font-size: 10pt;
+text-align: center;
+margin-left: 2%;
+}
+
 </style>
 
 <script type="text/javascript">
@@ -86,7 +99,7 @@ $(document).ready(function(){
 </script>
 
 <div id="container">
-
+	<div id="clubTitle" style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">💌 My 동호회 💌</div>
 	<div id="top2" style="display: flex; height: 500px;">
 		<!-- 동호회 여러개 가입시 캐러셀 적용 -->
 		<div id="myclub" style="width: 43%; margin: 2% 0 0 5%; border-radius: 70px; background-color: #e6f7ff; box-shadow: 0px 0px 10px #9ac5db;">
@@ -97,7 +110,7 @@ $(document).ready(function(){
 				<div style="width: 75%;">
 					<div id="clubboss" style="width: 100%; margin-bottom: 2%;">
 						<span class="title">동호회 회장</span>
-						<span class="detail" id="bossname">이나래</span><span id="forhover">클릭하여 정보보기</span>
+						<span class="detail" id="bossname">이나래</span><span id="forhover">◁ 클릭하여 정보보기</span>
 					</div>
 					<div id="tel" style="width: 100%; margin-bottom: 2%;">
 						<span class="title">연락처</span>
@@ -166,10 +179,52 @@ $(document).ready(function(){
 		</div>
 	</div>
 
-	<div id="clubTitle" style="text-align: center; margin-top: 5%; font-size: 30pt; font-weight: bolder;">팀 커뮤니티 최신글</div>
-	<div id="clubboard" style="width: 88%; padding: 5%; margin: 2% 0 5% 5%; border-radius: 70px; background-color: #e6f7ff; box-shadow: 0px 0px 10px #9ac5db;">
-	곧 생깁니다.
-	
+	<div id="clubTitle" style="text-align: center; margin: 5% 0 0 0; font-size: 30pt; font-weight: bolder;">팀 커뮤니티 최신글</div>
+	<div id="clubboard" style="width: 88%; padding: 5% 3% 1% 3%; margin: 2% 0 5% 5%; border-radius: 70px; background-color: #e6f7ff; box-shadow: 0px 0px 10px #9ac5db;">
+		<div style="margin: 1% 0 1% 5%; font-size: 10pt;">※ 팀 커뮤니티 최신글은 최근 일주일간 작성된 팀 커뮤니티의 게시글만 노출됩니다.</div>
+		<div id="table" style="width: 90%; margin-left: 5%;">
+			<div class="tbl-header">
+			  <table cellpadding="0" cellspacing="0" border="0">
+			    <thead>
+			      <tr>
+			        <th style="width: 7%;">글번호</th>
+					<th style="width: 41%;">제목</th>
+					<th style="width: 20%;">작성자</th>
+					<th style="width: 25%;">작성일자</th>
+					<th style="width: 7%;">조회수</th>
+			      </tr>
+			    </thead>
+			  </table>
+			</div>
+			<div class="tbl-content">
+			  <table cellpadding="0" cellspacing="0" border="0">
+			    <tbody>
+			      <tr>
+					<td style="width: 7%;">1</td>
+					<td style="width: 41%;">제목</td>
+					<td style="width: 20%;">작성자</td>
+					<td style="width: 25%;">작성일자</td>
+					<td style="width: 7%;">조회수</td>
+				</tr>
+				<tr>
+					<td style="width: 7%;">2</td>
+					<td style="width: 41%;">제목</td>
+					<td style="width: 20%;">작성자</td>
+					<td style="width: 25%;">작성일자</td>
+					<td style="width: 7%;">조회수</td>
+				</tr>
+				<tr>
+					<td style="width: 7%;">3</td>
+					<td style="width: 41%;">제목</td>
+					<td style="width: 20%;">작성자</td>
+					<td style="width: 25%;">작성일자</td>
+					<td style="width: 7%;">조회수</td>
+				</tr>
+			    </tbody>
+			  </table>
+			</div>
+		</div>
+		<div id="more" style="text-align: right; margin: 5% 5% 2% 0; color: #8a8a8a;">게시판 바로가기 ▶</div>
 	</div>
 
 </div>
