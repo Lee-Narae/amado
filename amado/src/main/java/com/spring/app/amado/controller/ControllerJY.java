@@ -10,9 +10,9 @@ public class ControllerJY {
 	
 	//dkdkkkk지윤이다
 	///////////////////////////////////////////////////////////////////////////
-	@RequestMapping(value="/main/oldshop.do")
+	@RequestMapping(value="/club/oldshop.do")
 	public ModelAndView oldshop(ModelAndView mav) {
-		mav.setViewName("main/oldshop.tiles2");
+		mav.setViewName("club/oldshop.tiles2");
 		//    /WEB-INF/views/oldshop.jsp
 		return mav;
 		
