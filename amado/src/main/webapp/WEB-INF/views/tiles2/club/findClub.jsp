@@ -75,13 +75,13 @@
 	                    <option value="jeolla">전라도</option>
 	                </select> 
 	            </div>
-	
 	            <div class="float-right" style="margin-bottom: 20px;">
 	                <input type="text" name="searchWord" size="30" placeholder="동호회명을 검색하세요" class="search-input" autocomplete="off" />
 	                <input type="text" style="display: none;" />
 	                <%-- form 태그내에 input 태그가 오로지 1개 뿐일 경우에는 엔터를 했을 경우 검색이 되어지므로 이것을 방지하고자 만든것이다. --%>
 	                <button type="button" class="btn btn-secondary btn-sm" onclick="goSearch()">검색</button>
 	            </div>
+	            
             </form>
 
             <table class="table table-bordered" style="margin-bottom: 10%;">
