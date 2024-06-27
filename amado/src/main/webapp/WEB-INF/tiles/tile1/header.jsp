@@ -107,7 +107,7 @@ $(document).ready(function(){
 		<div class="nav">Community&nbsp;&nbsp;∨</div>
 	</div>
 	<div style="display: flex; margin-left: 45%; width: 30%; margin-top: 1.4%;">
-		<div id="login" onclick="location.href='#'">로그인</div>
+		<div id="login" onclick="location.href='<%=ctxPath%>/member/login.do'">로그인</div>
 		<div id="signup" onclick="location.href='<%=ctxPath%>/member/memberRegister.do'">회원가입</div>
 	</div>
 </div>
