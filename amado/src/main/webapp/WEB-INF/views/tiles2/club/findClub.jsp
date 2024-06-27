@@ -15,7 +15,9 @@
     }
     .image-container {
         position: relative;
-        width: 72%; /* Adjust the width as needed */
+        width: 72%;
+        min-height: 300px; /* 예시에서는 300px로 설정 */
+        overflow: hidden; /* 이미지가 컨테이너를 넘어갈 경우 숨김 처리 */
     }
     .image-container img {
         width: 100%;
@@ -61,9 +63,8 @@
         <div class="text text-c">3등<img src="<%=ctxPath %>/resources/images/다운로드2.jpg" class="rounded img img-c" alt="round" alt="Podium" /></div>
     </div>
 </div>
-
             <form name="searchFrm" style="margin-bottom: 40px; margin-top: 5px;">
-	            <div class="float-left">
+	            <div style="display: flex;" class="float-left">
 	                <select name="searchType-a" style="height: 26px;">
 	                    <option value="Ranking">랭킹순</option>
 	                    <option value="name">이름순</option>
@@ -101,13 +102,12 @@
 	                    <option value="Badminton">배드민턴</option>
 	                </select> 
 	            </div>
-	            <div class="float-right" style="margin-bottom: 20px;">
+	            <div class="float-right" style="display: flex; margin-bottom: 20px;">
 	                <input type="text" name="searchWord" size="30" placeholder="동호회명을 검색하세요" class="search-input" autocomplete="off" />
 	                <input type="text" style="display: none;" />
 	                <%-- form 태그내에 input 태그가 오로지 1개 뿐일 경우에는 엔터를 했을 경우 검색이 되어지므로 이것을 방지하고자 만든것이다. --%>
 	                <button type="button" class="btn btn-secondary btn-sm" onclick="goSearch()">검색</button>
 	            </div>
-	            
             </form>
 
             <table class="table table-bordered" style="margin-bottom: 10%;">
