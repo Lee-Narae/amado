@@ -27,6 +27,14 @@ public class ControllerJY {
 		
 	}
 
+	@RequestMapping(value="/club/registerclub.do")
+	public ModelAndView registerclub(ModelAndView mav) {
+		mav.setViewName("club/registerclub.tiles2");
+		//    /WEB-INF/views/club/viewclub.jsp
+		return mav;
+		
+	}
+	
 	
 	
 }
