@@ -76,6 +76,24 @@ public class ControllerSJ {
 	}
 	
 	
+	@ResponseBody
+	@PostMapping(value="/emailDuplicateCheck.do", produces = "text/plain;charset=UTF-8")
+	public String emailDuplicateCheck(HttpServletRequest request) {
+		
+		String email = request.getParameter("email");
+		
+		int n = 0;
+		// 이메일 중복 체크
+		n = service.emailDuplicateCheck(email);
+		
+		JSONObject jsonObj = new JSONObject(); // {}
+		
+		jsonObj.put("n", n); // {"n":1} 또는 {"n":0}
+		
+		return jsonObj.toString();
+	}
+	
+	
 	
 	// 동호회 찾가
 	@GetMapping("/club/findClub.do")

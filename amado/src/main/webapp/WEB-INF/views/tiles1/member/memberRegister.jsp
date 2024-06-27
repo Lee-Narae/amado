@@ -67,7 +67,21 @@ span#phoneCheckResult {
 	margin-left: 10px;
 	cursor: pointer;
 }
+/*  변경한 곳
+    .input-form { 
+      max-width: 680px;
 
+      margin-top: 80px;
+      padding: 32px;
+
+      -webkit-border-radius: 10px;
+      -moz-border-radius: 10px;
+      border-radius: 10px;
+      -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+      -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+      box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15)
+    }
+*/
 
 </style>
 
@@ -619,8 +633,10 @@ function goReset() {
 
 
 
-<div class="row" style="display: flex;">
-   <div style="margin: auto; padding-left: 3%;">
+<div class="row" style="display: flex; margin-bottom: 2%; margin-top: 2%;">
+<%-- 변경한 곳 아래 --%>
+   <div class="input-form col-md-12 mx-auto" style="margin: auto; padding-left: 3%;">
+<%-- 변경한 곳 위 --%>   
       <form name="registerFrm">
           <table id="tblMemberRegister">
              <thead>
@@ -691,7 +707,7 @@ function goReset() {
                     </td>
                 </tr>
                 <tr>
-                    <td>연락처확인&nbsp;</td>
+                    <td>인증번호확인&nbsp;</td>
                     <td>
 						<input type="text" name="phoneCheckResultVal" id="phoneCheckResultVal" size="10" maxlength="10" />
 						<span id="phoneCheckResult">인증번호확인</span>
@@ -704,7 +720,7 @@ function goReset() {
                     <td>
                        <input type="text" name="postcode" id="postcode" size="6" maxlength="5" />&nbsp;&nbsp;
                        <%-- 우편번호 찾기 --%>
-                       <img src="<%= ctxPath%>/images/b_zipcode.gif" id="zipcodeSearch" />
+                       <img src="<%= ctxPath%>/resources/images/address.png" id="zipcodeSearch" class="rounded" alt="round" width="25" />
                        <span class="error">우편번호 형식에 맞지 않습니다.</span>
                     </td>
                 </tr>

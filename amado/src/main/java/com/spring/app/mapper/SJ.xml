@@ -4,10 +4,18 @@
 
 <mapper namespace="SJ">
 
+	<!-- 아이디 중복 체크 -->
 	<select id="idDuplicateCheck" parameterType="String" resultType="int">
 		select count(*) AS n
 		from tbl_member 
 		where userid = #{userid}
+	</select>
+
+	<!-- 메일 중복 체크 -->
+	<select id="emailDuplicateCheck" parameterType="String" resultType="int">
+		select count(*) AS n
+		from tbl_member 
+		where email = #{email}
 	</select>
 
 
