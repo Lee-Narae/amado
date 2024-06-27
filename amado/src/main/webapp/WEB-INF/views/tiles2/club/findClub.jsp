@@ -11,13 +11,10 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh; /* Viewport height to center the image vertically */
     }
     .image-container {
         position: relative;
-        width: 72%;
-        min-height: 300px; /* 예시에서는 300px로 설정 */
-        overflow: hidden; /* 이미지가 컨테이너를 넘어갈 경우 숨김 처리 */
+        width: 68%;
     }
     .image-container img {
         width: 100%;
@@ -52,6 +49,7 @@
     }
 </style>
 
+
 <div style="width: 60%; margin: auto; margin-top: 5%;">
    <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">동호회 찾기</div>
 
@@ -63,14 +61,14 @@
         <div class="text text-c">3등<img src="<%=ctxPath %>/resources/images/다운로드2.jpg" class="rounded img img-c" alt="round" alt="Podium" /></div>
     </div>
 </div>
-            <form name="searchFrm" style="margin-bottom: 40px; margin-top: 5px;">
+            <form name="searchFrm" style="margin-bottom: 40px; margin-top: 20px;">
 	            <div style="display: flex;" class="float-left">
 	                <select name="searchType-a" style="height: 26px;">
 	                    <option value="Ranking">랭킹순</option>
 	                    <option value="name">이름순</option>
 	                    <option value="Member">멤버수순</option>
 	                </select>
-	                <select name="searchType-b" style="height: 26px;">
+	                <select name="searchType-b" style="height: 26px; margin-left: 2%;">
 	                    <option value="none" selected="selected">== 지역선택 ==</option>
 	                    <option value="seoul">서울특별시</option>
 	                    <option value="busan">부산광역시</option>
@@ -90,7 +88,7 @@
 	                    <option value="gyeongnam">경상남도</option>
 	                    <option value="jeju">제주특별자치도</option>
 	                </select> 
-	                <select name="searchType-c" style="height: 26px;">
+	                <select name="searchType-c" style="height: 26px; margin-left: 2%;">
 	                	<option value="none" selected="selected">== 카테고리선택 ==</option>
 	                    <option value="soccer">축구</option>
 	                    <option value="baseball">야구</option>
