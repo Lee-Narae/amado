@@ -8,9 +8,18 @@ import org.springframework.web.servlet.ModelAndView;
 public class ControllerJH {
 	
 	@GetMapping("/club/sale.do")
-	public ModelAndView index(ModelAndView mav) {
+	public ModelAndView sale(ModelAndView mav) {
 
 		mav.setViewName("club/sale.tiles2");
+		// /WEB-INF/views/tiles2/main/index.jsp
+		
+		return mav;
+	}	
+	
+	@GetMapping("/club/myClub_plus.do")
+	public ModelAndView myClub_plus(ModelAndView mav) {
+
+		mav.setViewName("club/myClub_plus.tiles2");
 		// /WEB-INF/views/tiles2/main/index.jsp
 		
 		return mav;
