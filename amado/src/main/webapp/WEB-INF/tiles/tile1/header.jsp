@@ -130,7 +130,7 @@ $(document).ready(function(){
 		</div>
 		<div class="tabs">
 			<div onclick="location.href='#'">공지사항</div>
-			<div onclick="location.href='<%=ctxPath%>/list.do'">게시판</div>
+			<div onclick="location.href='<%=ctxPath%>/community/list.do'">게시판</div>
 		</div>
 	</div>
 </div>
