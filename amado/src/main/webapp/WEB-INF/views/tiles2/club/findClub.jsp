@@ -50,7 +50,7 @@
 <div style="width: 87%; margin: auto; margin-top: 5%; padding-left: 3%;">
    <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">동호회 찾기</div>
 
-<div class="container" style="margin-bottom: 5%;">
+<div class="container" style="margin-bottom: 40px;">
     <div class="image-container">
         <img src="<%=ctxPath %>/resources/images/podium.png" alt="Podium" />
         <div class="text text-a">1등</div>
@@ -61,26 +61,27 @@
 
             
             <form name="searchFrm" style="margin-bottom: 40px; margin-top: 20px;">
-                <div class="float-left">
-                    <select name="searchType" style="height: 26px;">
-                        <option value="Ranking">랭킹순</option>
-                        <option value="name">이름순</option>
-                        <option value="Member">회원순</option>
-                    </select>
-                    <select name="searchType" style="height: 26px;">
-                        <option value="gyeonggi-do">경기도</option>
-                        <option value="gangwon-do">강원도</option>
-                        <option value="Chungcheong">충청도</option>
-                        <option value="gyeongsang">경상도</option>
-                        <option value="jeolla">전라도</option>
-                    </select> 
-                </div>
-                <div class="float-right" style="margin-bottom: 20px;">
-                    <input type="text" name="searchWord" size="30" placeholder="동호회명을 검색하세요" class="search-input" autocomplete="off" />
-                    <input type="text" style="display: none;" />
-                    <%-- form 태그내에 input 태그가 오로지 1개 뿐일 경우에는 엔터를 했을 경우 검색이 되어지므로 이것을 방지하고자 만든것이다. --%>
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="goSearch()">검색</button>
-                </div>
+	            <div class="float-left">
+	                <select name="searchType" style="height: 26px;">
+	                    <option value="Ranking">랭킹순</option>
+	                    <option value="name">이름순</option>
+	                    <option value="Member">회원순</option>
+	                </select>
+	                <select name="searchType" style="height: 26px;">
+	                    <option value="gyeonggi-do">경기도</option>
+	                    <option value="gangwon-do">강원도</option>
+	                    <option value="Chungcheong">충청도</option>
+	                    <option value="gyeongsang">경상도</option>
+	                    <option value="jeolla">전라도</option>
+	                </select> 
+	            </div>
+	
+	            <div class="float-right" style="margin-bottom: 20px;">
+	                <input type="text" name="searchWord" size="30" placeholder="동호회명을 검색하세요" class="search-input" autocomplete="off" />
+	                <input type="text" style="display: none;" />
+	                <%-- form 태그내에 input 태그가 오로지 1개 뿐일 경우에는 엔터를 했을 경우 검색이 되어지므로 이것을 방지하고자 만든것이다. --%>
+	                <button type="button" class="btn btn-secondary btn-sm" onclick="goSearch()">검색</button>
+	            </div>
             </form>
 
             <table class="table table-bordered" style="margin-bottom: 10%;">
