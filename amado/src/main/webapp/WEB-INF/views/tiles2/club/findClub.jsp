@@ -52,7 +52,7 @@
 </style>
 
 
-<div style="width: 60%; margin: auto; margin-top: 5%;">
+<div style="width: 1024px; margin: auto; margin-top: 5%;">
    <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">동호회 찾기</div>
 
 <div class="container" style="border: solid 1px; border-radius: 30px;">
