@@ -15,7 +15,7 @@
     }
     .image-container {
         position: relative;
-        width: 80%; /* Adjust the width as needed */
+        width: 72%; /* Adjust the width as needed */
     }
     .image-container img {
         width: 100%;
@@ -26,6 +26,9 @@
         color: black; /* Text color */
         font-size: 24px; /* Adjust the font size as needed */
         font-weight: bold;
+    }
+    .image-container .img {
+        position: absolute;
     }
     .text-a {
         top: 33.5%;
@@ -47,32 +50,54 @@
     }
 </style>
 
-<div style="width: 87%; margin: auto; margin-top: 5%; padding-left: 3%;">
+<div style="width: 60%; margin: auto; margin-top: 5%; padding-left: 3%;">
    <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">동호회 찾기</div>
 
 <div class="container" style="margin-bottom: 40px;">
     <div class="image-container">
         <img src="<%=ctxPath %>/resources/images/podium.png" alt="Podium" />
-        <div class="text text-a">1등</div>
-        <div class="text text-b">2등</div>
-        <div class="text text-c">3등</div>
+        <div class="text text-a">1등<img src="<%=ctxPath %>/resources/images/다운로드1.jpg" class="rounded img img-a" alt="round" alt="Podium" /></div>
+        <div class="text text-b">2등<img src="<%=ctxPath %>/resources/images/다운로드.jpg" class="rounded img img-b" alt="round" alt="Podium" /></div>
+        <div class="text text-c">3등<img src="<%=ctxPath %>/resources/images/다운로드2.jpg" class="rounded img img-c" alt="round" alt="Podium" /></div>
     </div>
 </div>
 
             
             <form name="searchFrm" style="margin-bottom: 40px; margin-top: 20px;">
 	            <div class="float-left">
-	                <select name="searchType" style="height: 26px;">
+	                <select name="searchType-a" style="height: 26px;">
 	                    <option value="Ranking">랭킹순</option>
 	                    <option value="name">이름순</option>
-	                    <option value="Member">회원순</option>
+	                    <option value="Member">멤버수순</option>
 	                </select>
-	                <select name="searchType" style="height: 26px;">
-	                    <option value="gyeonggi-do">경기도</option>
-	                    <option value="gangwon-do">강원도</option>
-	                    <option value="Chungcheong">충청도</option>
-	                    <option value="gyeongsang">경상도</option>
-	                    <option value="jeolla">전라도</option>
+	                <select name="searchType-b" style="height: 26px;">
+	                    <option value="seoul">서울특별시</option>
+	                    <option value="busan">부산광역시</option>
+	                    <option value="daegu">대구광역시</option>
+	                    <option value="incheon">인천광역시</option>
+	                    <option value="gwangju">광주광역시</option>
+	                    <option value="daejeon">대전광역시</option>
+	                    <option value="ulsan">울산광역시</option>
+	                    <option value="sejong">세종특별자치시</option>
+	                    <option value="gyeonggi">경기도</option>
+	                    <option value="gangwon">강원특별자치시</option>
+	                    <option value="chung-cheong_bukdo">충청북도</option>
+	                    <option value="chung-cheong_namdo">충청남도</option>
+	                    <option value="jeonbuk">전북특별자치시</option>
+	                    <option value="jeonnam">전라남도</option>
+	                    <option value="gyeongbuk">경상북도</option>
+	                    <option value="gyeongnam">경상남도</option>
+	                    <option value="jeju">제주특별자치도</option>
+	                </select> 
+	                <select name="searchType-c" style="height: 26px;">
+	                    <option value="soccer">축구</option>
+	                    <option value="baseball">야구</option>
+	                    <option value="volleyball">배구</option>
+	                    <option value="basketball">농구</option>
+	                    <option value="tennis">테니스</option>
+	                    <option value="Bowling">볼링</option>
+	                    <option value="foot_volleyball">족구</option>
+	                    <option value="Badminton">배드민턴</option>
 	                </select> 
 	            </div>
 	            <div class="float-right" style="margin-bottom: 20px;">
@@ -87,20 +112,42 @@
             <table class="table table-bordered" style="margin-bottom: 10%;">
                 <thead>
                     <tr>
-                        <th style="width: 70px; text-align: center;">글번호</th>
-                        <th style="width: 300px; text-align: center;">제목</th>
-                        <th style="width: 70px; text-align: center;">작성자</th>
-                        <th style="width: 150px; text-align: center;">작성일자</th>
-                        <th style="width: 60px; text-align: center;">조회수</th>
+                        <th style="width: 70px; text-align: center;">랭킹</th>
+                        <th style="width: 70px; text-align: center;">대표이미지</th>
+                        <th style="width: 300px; text-align: center;">동호회명</th>
+                        <th style="width: 300px; text-align: center;">소개글</th>
+                        <th style="width: 100px; text-align: center;">카테고리</th>
+                        <th style="width: 100px; text-align: center;">지역</th>
+                        <th style="width: 100px; text-align: center;">멤버수</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td align="center" onclick="goView()">글번호</td>
-                        <td><span class="subject" onclick="goView()">제목</span></td>
-                        <td align="center">작성자</td>
-                        <td align="center">날짜</td>
-                        <td align="center">조회수</td>
+                        <td align="center" onclick="goView()">1</td>
+                        <td><img src="<%=ctxPath %>/resources/images/다운로드1.jpg" class="rounded" alt="round" width="80"alt="Podium" /></td>
+                        <td align="center">동호회명</td>
+                        <td align="center">소개글</td>
+                        <td align="center">카테고리</td>
+                        <td align="center">지역</td>
+                        <td align="center">멤버수</td>
+                    </tr>
+                    <tr>
+                        <td align="center" onclick="goView()">2</td>
+                        <td><img src="<%=ctxPath %>/resources/images/다운로드.jpg" class="rounded" alt="round" width="80" alt="Podium" /></td>
+                        <td align="center">동호회명2</td>
+                        <td align="center">소개글2</td>
+                        <td align="center">카테고리2</td>
+                        <td align="center">지역2</td>
+                        <td align="center">멤버수2</td>
+                    </tr>
+                    <tr>
+                        <td align="center" onclick="goView()">3</td>
+                        <td><img src="<%=ctxPath %>/resources/images/다운로드2.jpg" class="rounded" alt="round" width="80" alt="Podium" /></td>
+                        <td align="center">동호회명3</td>
+                        <td align="center">소개글3</td>
+                        <td align="center">카테고리3</td>
+                        <td align="center">지역3</td>
+                        <td align="center">멤버수3</td>
                     </tr>
                 </tbody>
             </table>
