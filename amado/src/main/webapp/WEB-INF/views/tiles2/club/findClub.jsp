@@ -23,18 +23,20 @@
     .image-container .text {
         position: absolute;
         color: black; /* Text color */
-        font-size: 24px; /* Adjust the font size as needed */
+        font-size: 28px; /* Adjust the font size as needed */
         font-weight: bold;
     }
     .image-container .img {
         position: absolute;
+        width: 100%; 
+        height: 100%;
     }
     .text-a {
-        top: 33.5%;
-        left: 47.6%;
+        top: 33%;
+        left: 47%;
     }
     .text-b {
-        top: 45%;
+        top: 43%;
         left: 27%;
     }
     .text-c {
@@ -53,7 +55,7 @@
 <div style="width: 60%; margin: auto; margin-top: 5%;">
    <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">동호회 찾기</div>
 
-<div class="container">
+<div class="container" style="border: solid 1px; border-radius: 30px;">
     <div class="image-container">
         <img src="<%=ctxPath %>/resources/images/podium.png" alt="Podium" />
         <div class="text text-a">1등<img src="<%=ctxPath %>/resources/images/다운로드1.jpg" class="rounded img img-a" alt="round" alt="Podium" /></div>
@@ -88,7 +90,7 @@
 	                    <option value="gyeongnam">경상남도</option>
 	                    <option value="jeju">제주특별자치도</option>
 	                </select> 
-	                <select name="searchType-c" style="height: 26px; margin-left: 2%;">
+	                <select name="searchType-c" style="height: 26px; margin-left: 2%; margin-right: 5px;">
 	                	<option value="none" selected="selected">== 카테고리선택 ==</option>
 	                    <option value="soccer">축구</option>
 	                    <option value="baseball">야구</option>
@@ -104,7 +106,7 @@
 	                <input type="text" name="searchWord" size="30" placeholder="동호회명을 검색하세요" class="search-input" autocomplete="off" />
 	                <input type="text" style="display: none;" />
 	                <%-- form 태그내에 input 태그가 오로지 1개 뿐일 경우에는 엔터를 했을 경우 검색이 되어지므로 이것을 방지하고자 만든것이다. --%>
-	                <button type="button" class="btn btn-secondary btn-sm" onclick="goSearch()">검색</button>
+	                <button style="margin-left: 5px;" type="button" class="btn btn-secondary btn-sm" onclick="goSearch()">검색</button>
 	            </div>
             </form>
 
