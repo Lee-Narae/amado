@@ -50,10 +50,10 @@
     }
 </style>
 
-<div style="width: 60%; margin: auto; margin-top: 5%; padding-left: 3%;">
+<div style="width: 60%; margin: auto; margin-top: 5%;">
    <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">동호회 찾기</div>
 
-<div class="container" style="margin-bottom: 40px;">
+<div class="container">
     <div class="image-container">
         <img src="<%=ctxPath %>/resources/images/podium.png" alt="Podium" />
         <div class="text text-a">1등<img src="<%=ctxPath %>/resources/images/다운로드1.jpg" class="rounded img img-a" alt="round" alt="Podium" /></div>
@@ -62,8 +62,7 @@
     </div>
 </div>
 
-            
-            <form name="searchFrm" style="margin-bottom: 40px; margin-top: 20px;">
+            <form name="searchFrm" style="margin-bottom: 40px; margin-top: 5px;">
 	            <div class="float-left">
 	                <select name="searchType-a" style="height: 26px;">
 	                    <option value="Ranking">랭킹순</option>
@@ -71,6 +70,7 @@
 	                    <option value="Member">멤버수순</option>
 	                </select>
 	                <select name="searchType-b" style="height: 26px;">
+	                    <option value="none" selected="selected">== 지역선택 ==</option>
 	                    <option value="seoul">서울특별시</option>
 	                    <option value="busan">부산광역시</option>
 	                    <option value="daegu">대구광역시</option>
@@ -90,6 +90,7 @@
 	                    <option value="jeju">제주특별자치도</option>
 	                </select> 
 	                <select name="searchType-c" style="height: 26px;">
+	                	<option value="none" selected="selected">== 카테고리선택 ==</option>
 	                    <option value="soccer">축구</option>
 	                    <option value="baseball">야구</option>
 	                    <option value="volleyball">배구</option>
