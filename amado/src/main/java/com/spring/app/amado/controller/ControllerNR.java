@@ -55,5 +55,25 @@ public class ControllerNR {
 		return mav;
 	}
 	
+	@GetMapping("/admin")
+	public ModelAndView admin(ModelAndView mav) {
+		
+		mav.setViewName("admin_login");
+		return mav;
+	}
+	
+	@GetMapping("/admin/main")
+	public ModelAndView admin_main(ModelAndView mav) {
+		
+		mav.setViewName("admin_main.tiles3");
+		return mav;
+	}
+	
+	@GetMapping("/tiles3.do")
+	public ModelAndView test(ModelAndView mav) {
+		
+		mav.setViewName("test.tiles3");
+		return mav;
+	}
 	
 }

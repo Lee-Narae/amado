@@ -67,6 +67,20 @@ span#phoneCheckResult {
 	margin-left: 10px;
 	cursor: pointer;
 }
+/*  변경한 곳 */
+    .input-form { 
+      max-width: 680px;
+
+      margin-top: 80px;
+      padding: 32px;
+
+      -webkit-border-radius: 10px;
+      -moz-border-radius: 10px;
+      border-radius: 10px;
+      -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+      -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+      box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15)
+    }
 
 
 </style>
@@ -77,9 +91,11 @@ span#phoneCheckResult {
 
 
 
+let b_idcheck = false;
 let b_idcheck_click = false;
 // "아이디중복확인" 을 클릭했는지 클릭을 안했는지 여부를 알아오기 위한 용도
 
+let b_emailcheck = false;
 let b_emailcheck_click = false;
 // "이메일중복확인" 을 클릭했는지 클릭을 안했는지 여부를 알아오기 위한 용도
 
@@ -111,14 +127,17 @@ $(document).ready(function () {
 
 
     $("input#userid").blur((e) => {
-        const userid = $(e.target).val().trim();
-        if (userid == "") {
-            // 입력하지 않거나 공백만 입력했을 경우
+        const regExp_userid = new RegExp(/^[a-z]+[a-z0-9]{4,19}$/g);
+        const bool = regExp_userid.test($(e.target).val());
+        if (!bool) {
+            // 아이디가 정규표현식에 위배된 경우
             $(e.target).parent().find("span.error").show();
+            b_idcheck = false;
         } else {
-            // 공백이 아닌 글자를 입력했을 경우
+            // 아이디가 정규표현식에 위배된 경우
             $("table#tblMemberRegister :input").prop("disabled", false);
             $(e.target).parent().find("span.error").hide();
+            b_idcheck = true;
         }
     }); // 아이디가 userid 인 것은 포커스를 잃어버렸을 경우(blur) 이벤트를 처리해주는 것이다.
 
@@ -160,10 +179,12 @@ $(document).ready(function () {
         if (!bool) {
             // 이메일이 정규표현식에 위배된 경우
             $(e.target).parent().find("span.error").show();
+            b_emailcheck = false;
         } else {
             // 이메일이 정규표현식에 맞는 경우
             $("table#tblMemberRegister :input").prop("disabled", false);
             $(e.target).parent().find("span.error").hide();
+            b_emailcheck = true;
         }
     }); // 아이디가 email 인 것은 포커스를 잃어버렸을 경우(blur) 이벤트를 처리해주는 것이다.
 
@@ -407,10 +428,15 @@ $(document).ready(function () {
         */
         
         
-        alert($("input#name").text());
-        if($("input#name").val() == "") {
+        if($("input#userid").val().trim() == "" && b_idcheck == false) {
+        	$("span#idcheckResult").html("");
         	$("span#idcheckResult").html("아이디를 입력하세요.").css({"color":"red"});
 			return false;        	
+        }
+            
+        if(b_idcheck == false) {
+        	$("span#idcheckResult").html("");
+        	return false;
         }
 
         $.ajax({
@@ -463,6 +489,17 @@ $(document).ready(function () {
         // "이메일중복확인" 을 클릭했는지 클릭을 안했는지 여부를 알아오기 위한 용도
         // 입력하고자 하는 이메일이 데이터베이스 테이블에 존재하는지, 존재하지 않는지 알아와야 한다.
 
+        if($("input#email").val().trim() == "" && b_emailcheck == false) {
+        	$("span#emailCheckResult").html("");
+        	$("span#emailcheckResult").html("이메일을 입력하세요.").css({"color":"red"});
+			return false;        	
+        }
+            
+        if(b_emailcheck == false) {
+        	$("span#emailCheckResult").html("");
+        	return false;
+        }
+        
         $.ajax({
             url: "<%=ctxPath%>/emailDuplicateCheck.do",
             data: {"email":$("input#email").val()}, // data 속성은 http://localhost:9090/MyMVC/member/emailDuplicateCheck.up 로 전송해야할 데이터를 말한다.
@@ -619,8 +656,10 @@ function goReset() {
 
 
 
-<div class="row" style="display: flex;">
-   <div style="margin: auto; padding-left: 3%;">
+<div class="row" style="display: flex; margin-bottom: 2%; margin-top: 2%;">
+<%-- 변경한 곳 아래 --%>
+   <div class="input-form col-md-12 mx-auto" style="margin: auto; padding-left: 3%;">
+<%-- 변경한 곳 위 --%>   
       <form name="registerFrm">
           <table id="tblMemberRegister">
              <thead>
@@ -649,7 +688,7 @@ function goReset() {
                        <%-- 아이디중복체크 --%>
                        <img src="<%= ctxPath%>/resources/images/id_check.png" id="idcheck" class="rounded" alt="round" width="25" />
                        <span id="idcheckResult"></span>
-                       <span class="error">아이디는 필수입력 사항입니다.</span>
+                       <span class="error">아이디는 영문자,숫자가 혼합된 5~20 글자로 입력하세요.</span>
                     </td>
                 </tr>
                 
@@ -691,7 +730,7 @@ function goReset() {
                     </td>
                 </tr>
                 <tr>
-                    <td>연락처확인&nbsp;</td>
+                    <td>인증번호확인&nbsp;</td>
                     <td>
 						<input type="text" name="phoneCheckResultVal" id="phoneCheckResultVal" size="10" maxlength="10" />
 						<span id="phoneCheckResult">인증번호확인</span>
@@ -704,7 +743,7 @@ function goReset() {
                     <td>
                        <input type="text" name="postcode" id="postcode" size="6" maxlength="5" />&nbsp;&nbsp;
                        <%-- 우편번호 찾기 --%>
-                       <img src="<%= ctxPath%>/images/b_zipcode.gif" id="zipcodeSearch" />
+                       <img src="<%= ctxPath%>/resources/images/address.png" id="zipcodeSearch" class="rounded" alt="round" width="25" />
                        <span class="error">우편번호 형식에 맞지 않습니다.</span>
                     </td>
                 </tr>
