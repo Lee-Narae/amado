@@ -1,11 +1,8 @@
 
 show user;
 -- USER이(가) "FINAL_ORAUSER4"입니다.
-				select userid, password, name, email, postcode, address, detailaddress, extraaddress
-			 , mobile, gender, birthday, registerday, lastpwdchangedate, status
-			 , memberrank, gymregisterstatus
-		from tbl_member 
-		where userid = 'd';
+		
+ 
         
 create table tbl_member    
 (userid                          nvarchar2(20)   not null         -- 회원아이디

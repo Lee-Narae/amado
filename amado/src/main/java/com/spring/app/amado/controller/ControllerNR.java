@@ -48,4 +48,12 @@ public class ControllerNR {
 		return mav;
 	}
 	
+	@GetMapping("/member/login.do")
+	public ModelAndView login(ModelAndView mav) {
+		
+		mav.setViewName("member/login.tiles1");
+		return mav;
+	}
+	
+	
 }

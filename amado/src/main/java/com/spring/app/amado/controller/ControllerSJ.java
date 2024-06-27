@@ -23,7 +23,7 @@ public class ControllerSJ {
 	private AmadoService_SJ service;
 	
 	// 게시판 목록보기
-	@GetMapping("/list.do")
+	@GetMapping("/community/list.do")
 	public ModelAndView index(ModelAndView mav) {
 		
 		String content = "제목";
@@ -38,7 +38,7 @@ public class ControllerSJ {
 		paraMap.put("readCount", readCount);
 		mav.addObject("paraMap", paraMap);	
 		
-		mav.setViewName("board/list.tiles2");
+		mav.setViewName("community/list.tiles2");
 		return mav;
 	}	
 	
@@ -75,6 +75,18 @@ public class ControllerSJ {
 		return jsonObj.toString();
 	}
 	
+	
+	
+	// 동호회 찾가
+	@GetMapping("/club/findClub.do")
+	public ModelAndView findClub(ModelAndView mav) {
+
+
+		mav.setViewName("/club/findClub.tiles2");
+		// /WEB-INF/views/test/modelandview_select.jsp 페이지를 만들어야 한다.
+
+		return mav;
+	}
 	
 	
 	

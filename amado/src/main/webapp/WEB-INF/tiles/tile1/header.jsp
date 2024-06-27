@@ -107,7 +107,7 @@ $(document).ready(function(){
 		<div class="nav">Community&nbsp;&nbsp;∨</div>
 	</div>
 	<div style="display: flex; margin-left: 45%; width: 30%; margin-top: 1.4%;">
-		<div id="login" onclick="location.href='#'">로그인</div>
+		<div id="login" onclick="location.href='<%=ctxPath%>/member/login.do'">로그인</div>
 		<div id="signup" onclick="location.href='<%=ctxPath%>/member/memberRegister.do'">회원가입</div>
 	</div>
 </div>
@@ -117,7 +117,7 @@ $(document).ready(function(){
 			<div onclick="location.href='<%=ctxPath%>/index.do'">Home</div>
 		</div>
 		<div class="tabs" style="margin-right: 2%;">
-			<div onclick="location.href='#'">동호회 찾기</div>
+			<div onclick="location.href='<%=ctxPath%>/club/findClub.do'">동호회 찾기</div>
 			<div onclick="location.href='<%=ctxPath%>/club/myClub.do'">My 동호회</div>
 			<div onclick="location.href='#'">동호회 등록하기</div>
 			<div onclick="location.href='<%=ctxPath%>/club/matchRegister.do'">매치 등록하기</div>
