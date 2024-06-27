@@ -124,7 +124,7 @@ $(document).ready(function(){
 			<div onclick="location.href='<%=ctxPath%>/club/oldshop.do'">플리마켓</div>
 		</div>
 		<div class="tabs" style="margin-right: 2%;">
-			<div onclick="location.href='<%=ctxPath%>/project/rental_gym.do'">체육관 찾기</div>
+			<div onclick="location.href='<%=ctxPath%>/gym/rental_gym.do'">체육관 찾기</div>
 			<div onclick="location.href='#'">My 예약 조회</div>
 			<div onclick="location.href='#'">1:1 문의하기</div>
 		</div>
