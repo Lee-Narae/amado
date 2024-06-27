@@ -11,14 +11,13 @@ public class MemberVO {
 	private String detailaddress;		// 상세주소
 	private String extraaddress;		// 참고항목
 	private String mobile;				// 연락처 (AES-256 암호화/복호화 대상) 
-	private int gender;					// 성별   남자:1  / 여자:2
+	private String gender;					// 성별   남자:1  / 여자:2
 	private String birthday;			// 생년월일  
 	private String registerday;			// 가입일자 
 	private String lastpwdchangedate;	// 마지막으로 암호를 변경한 날짜 
-	private int status;					// 회원탈퇴유무   1: 사용가능(가입중) / 0:사용불능(탈퇴)
-	private int memberrank;				// 회원직급
-	private int gymregisterstatus;		// 체육관등록여부
-	
+	private String status;					// 회원탈퇴유무   1: 사용가능(가입중) / 0:사용불능(탈퇴)
+	private String memberrank;				// 회원직급
+	private String gymregisterstatus;		// 체육관등록여부
 	
 	
 	public String getUserid() {
@@ -75,10 +74,10 @@ public class MemberVO {
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-	public int getGender() {
+	public String getGender() {
 		return gender;
 	}
-	public void setGender(int gender) {
+	public void setGender(String gender) {
 		this.gender = gender;
 	}
 	public String getBirthday() {
@@ -99,28 +98,23 @@ public class MemberVO {
 	public void setLastpwdchangedate(String lastpwdchangedate) {
 		this.lastpwdchangedate = lastpwdchangedate;
 	}
-	public int getStatus() {
+	public String getStatus() {
 		return status;
 	}
-	public void setStatus(int status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
-	public int getMemberrank() {
+	public String getMemberrank() {
 		return memberrank;
 	}
-	public void setMemberrank(int memberrank) {
+	public void setMemberrank(String memberrank) {
 		this.memberrank = memberrank;
 	}
-	public int getGymregisterstatus() {
+	public String getGymregisterstatus() {
 		return gymregisterstatus;
 	}
-	public void setGymregisterstatus(int gymregisterstatus) {
+	public void setGymregisterstatus(String gymregisterstatus) {
 		this.gymregisterstatus = gymregisterstatus;
 	}
 	
-	
-	
-	
-	
-
 }

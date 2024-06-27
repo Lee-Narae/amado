@@ -363,7 +363,7 @@
          <version>0.2.7</version>
       </dependency>
       
-      <!-- ==== #165. 이미지 썸네일 생성 라이브러리인 Thumbnailator 라이브러리 추가하기 ==== -->
+      <!-- ==== #165-2. 이미지 썸네일 생성 라이브러리인 Thumbnailator 라이브러리 추가하기 ==== -->
       <dependency>
           <groupId>net.coobird</groupId>
           <artifactId>thumbnailator</artifactId>
