@@ -67,7 +67,7 @@ span#phoneCheckResult {
 	margin-left: 10px;
 	cursor: pointer;
 }
-/*  변경한 곳
+/*  변경한 곳 */
     .input-form { 
       max-width: 680px;
 
@@ -81,7 +81,7 @@ span#phoneCheckResult {
       -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
       box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15)
     }
-*/
+
 
 </style>
 
@@ -435,7 +435,7 @@ $(document).ready(function () {
         }
             
         if(b_idcheck == false) {
-        	$("span#idcheckResult").html("").css({"color":"red"});
+        	$("span#idcheckResult").html("");
         	return false;
         }
 
@@ -490,13 +490,13 @@ $(document).ready(function () {
         // 입력하고자 하는 이메일이 데이터베이스 테이블에 존재하는지, 존재하지 않는지 알아와야 한다.
 
         if($("input#email").val().trim() == "" && b_emailcheck == false) {
-        	$("span#emailcheckResult").html("");
+        	$("span#emailCheckResult").html("");
         	$("span#emailcheckResult").html("이메일을 입력하세요.").css({"color":"red"});
 			return false;        	
         }
             
         if(b_emailcheck == false) {
-        	$("span#emailCheckResult").html("").css({"color":"red"});
+        	$("span#emailCheckResult").html("");
         	return false;
         }
         
