@@ -52,4 +52,23 @@
 
     <!-- ==== tiles 를 사용하는 레이아웃(header,content,sideinfo,footer) 설정 끝 ==== -->
     
+    
+    
+    <definition name="layout-tiles3"  template="/WEB-INF/tiles/layout/layout-tiles3.jsp"> 
+      <put-attribute name="header"  value="/WEB-INF/tiles/tile3/header.jsp" />
+      <put-attribute name="content" value="" />
+      <put-attribute name="sidebar"  value="/WEB-INF/tiles/tile3/sidebar.jsp" />
+   </definition>
+
+   <definition name="*/*/*.tiles3" extends="layout-tiles3">
+      <put-attribute name="content" value="/WEB-INF/views/tiles3/{1}/{2}/{3}.jsp"/>
+   </definition>
+   
+   <definition name="*/*.tiles3" extends="layout-tiles3">
+      <put-attribute name="content" value="/WEB-INF/views/tiles3/{1}/{2}.jsp"/>
+   </definition>
+   
+   <definition name="*.tiles3" extends="layout-tiles3">
+      <put-attribute name="content" value="/WEB-INF/views/tiles3/{1}.jsp"/>
+   </definition>
 </tiles-definitions>
