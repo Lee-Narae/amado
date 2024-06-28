@@ -6,26 +6,62 @@
 %>
 
 <style type="text/css">
+.text {
+width: 90%;
+height: 50px;
+text-align: left;
+font-size: 13pt;
+align-content: center;
+margin: 1% 0 1% 0;
+padding-left: 20%;
+}
 
+.minitext {
+font-size: 10pt;
+font-weight: bold;
+text-align: left;
+margin: 0 0 5% 10%;
+color: #969696;
+}
+
+hr {
+width: 85%;
+}
+
+.text:hover {
+background-color: #247AFB; border-radius: 10px; font-weight: bold; color: white; cursor: pointer;
+}
+
+.hover {
+background-color: #247AFB; border-radius: 10px; font-weight: bold; color: white; cursor: pointer;
+}
 
 </style>
 
-<div style="border: solid 1px red;">
+<div>
 
-<div id="logo" style="border: solid 1px red; height: 100px;">
-
+<div id="logo" style="height: 100px;" align="center">
+<img src="<%=ctxPath %>/resources/images/logo.png" style="width: 70%;"/>
 </div>
-<div id="top" style="border: solid 1px red; height: 300px;">
-
-
-</div>
-<hr>
-<div id="middle" style="border: solid 1px red; height: 200px;">
-
+<div id="top" style="height: 50px;" align="center">
+	<div class="text" onclick="location.href='#'" id="dashboard" style="margin-top: 15%;">대시보드</div>
 </div>
 <hr>
-<div id="bottom" style="border: solid 1px red; height: 200px;">
-
+<div id="middle" style="height: 200px;" align="center">
+	<div class="minitext">관리</div>
+	<div class="text" onclick="location.href='#'" id="memberM">회원 관리</div>
+	<div class="text" onclick="location.href='#'" id="clubM">동호회 관리</div>
+	<div class="text" onclick="location.href='#'" id="gymM">대관 관리</div>
+</div>
+<hr>
+<div id="middle2" style="height: 150px;" align="center">
+<div class="minitext">등록</div>
+	<div class="text" onclick="location.href='#'" id="noticeR">공지사항 등록</div>
+	<div class="text" onclick="location.href='#'" id="gymR">체육관 등록</div>
+</div>
+<hr>
+<div id="bottom" style="height: 100px;" align="center">
+	<div class="text" onclick="location.href='#'" id="logout">로그아웃</div>
 </div>
 
 </div>
