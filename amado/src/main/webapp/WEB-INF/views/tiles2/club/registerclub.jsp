@@ -107,10 +107,11 @@ select{
 	
 	<span style="font-weight: bolder;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;활동 구장</span>
 	<select class="form-select form-select-lg mb-3" aria-label="Large select example">
-	  <option selected>구</option>
-	  <option value="1">One</option>
-	  <option value="2">Two</option>
-	  <option value="3">Three</option>
+	  <option selected>구장</option>
+	  <option value="1">나래집</option>
+	  <option value="2">준혁집마당</option>
+	  <option value="3">한솔집안방 </option>
+	  <option value="4">승진집다락방</option>
 	</select>
 	
 	<br><br><br><br>
