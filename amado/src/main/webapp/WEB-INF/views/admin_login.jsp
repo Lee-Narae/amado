@@ -103,7 +103,6 @@
   position: absolute;
   top: 0;
   left: 0;
-  font-family: "Poppins-Regular", Helvetica;
   font-weight: 400;
   color: #000000;
   font-size: 20px;
@@ -123,7 +122,6 @@
   position: absolute;
   top: -3px;
   left: 0;
-  font-family: "Poppins-Regular", Helvetica;
   font-weight: 400;
   color: #000000;
   font-size: 16px;
@@ -148,7 +146,6 @@
   width: 302px;
   top: 17px;
   left: 24px;
-  font-family: "Poppins-Light", Helvetica;
   font-weight: 300;
   color: #7f7f7f;
   font-size: 14px;
@@ -206,7 +203,6 @@
   font-size: 16px;
   text-align: center;
   position: absolute;
-  font-family: "Poppins-Bold", Helvetica;
   font-weight: 700;
   letter-spacing: 0;
   line-height: normal;
@@ -218,7 +214,6 @@
   color: #000000;
   font-size: 40px;
   position: absolute;
-  font-family: "Poppins-Bold", Helvetica;
   font-weight: 700;
   letter-spacing: 0;
   line-height: normal;
