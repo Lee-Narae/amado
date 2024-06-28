@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	        <div class="row">
 	            <!-- 실내 상품 카드들 -->
 	            <div class="col-md-3 mb-4">
-	                <div class="card">
+	                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/gym/detail_gym.do'">
 	                    <img src="<%=ctxPath%>/resources/images/1/체육관.jpg" class="card-img-top" alt="실내 상품 1">
 	                    <div class="card-body">
 	                        <h5 class="card-title">광주</h5>
@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	                </div>
 	            </div>
 	             <div class="col-md-3 mb-4">
-	                <div class="card">
+	                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/gym/detail_gym.do'">
 	                    <img src="<%=ctxPath%>/resources/images/1/체육관2.jpg" class="card-img-top" alt="실내 상품 2">
 	                    <div class="card-body">
 	                        <h5 class="card-title">부산</h5>
@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	                </div>
 	            </div>
 	             <div class="col-md-3 mb-4">
-	                <div class="card">
+	                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/gym/detail_gym.do'">
 	                    <img src="<%=ctxPath%>/resources/images/1/체육관3.jpg" class="card-img-top" alt="실내 상품 3">
 	                    <div class="card-body">
 	                        <h5 class="card-title">서울 강남</h5>
@@ -142,7 +142,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	                </div>
 	            </div>
 	             <div class="col-md-3 mb-4">
-	                <div class="card">
+	                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/gym/detail_gym.do'">
 	                    <img src="<%=ctxPath%>/resources/images/1/체육관4.jpg" class="card-img-top" alt="실내 상품 4">
 	                    <div class="card-body">
 	                        <h5 class="card-title">서울 목동</h5>
@@ -152,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	                </div>
 	            </div>
 	             <div class="col-md-3 mb-4">
-	                <div class="card">
+	                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/gym/detail_gym.do'">
 	                    <img src="<%=ctxPath%>/resources/images/1/체육관5.jpg" class="card-img-top" alt="실내 상품 5">
 	                    <div class="card-body">
 	                        <h5 class="card-title">서울 강서</h5>
@@ -162,7 +162,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	                </div>
 	            </div>
 	             <div class="col-md-3 mb-4">
-	                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/index.do'">
+	                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/gym/detail_gym.do'">
 	                    <img src="<%=ctxPath%>/resources/images/1/체육관6.jpg" class="card-img-top" alt="실내 상품 6">
 	                    <div class="card-body">
 	                        <h5 class="card-title">인천</h5>
@@ -172,7 +172,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	                </div>
 	            </div>
 	             <div class="col-md-3 mb-4">
-	                <div class="card">
+	                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/gym/detail_gym.do'">
 	                    <img src="<%=ctxPath%>/resources/images/1/체육관7.jpg" class="card-img-top" alt="실내 상품 7">
 	                    <div class="card-body">
 	                        <h5 class="card-title">대구</h5>
@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	                </div>
 	            </div>
 	               <div class="col-md-3 mb-4">
-	                <div class="card">
+	                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/gym/detail_gym.do'">
 	                    <img src="<%=ctxPath%>/resources/images/1/체육관8.jpg" class="card-img-top" alt="실내 상품8">
 	                    <div class="card-body">
 	                        <h5 class="card-title">대전</h5>
