@@ -258,6 +258,13 @@ rotate(
             margin-bottom: 10px; /* 작은 사진 영역 내부 각 사진의 간격 조정 */
         }
     /* 추가적인 스타일링이 필요하다면 여기에 추가하세요 */
+    .img-fluid {
+        width: 100%;
+        height: auto;
+    }
+    .col-lg-4, .col-6 {
+        padding-bottom: 10px;
+    }
     .container {
       margin-top: 50px;
     }
@@ -754,7 +761,7 @@ $(function(){
       <div class="row">
         <div class="col-6 mb-3">
           <a href="#" data-toggle="modal" data-target="#myModal">
-            <img src="<%=ctxPath%>/resources/images/체육관2.jpg"  class="img-fluid" alt="작은 사진 1">
+            <img src="<%=ctxPath%>/resources/images/체육관1.jpg"  class="img-fluid" alt="작은 사진 1">
           </a>
         </div>
         <div class="col-6 mb-3">
@@ -764,12 +771,12 @@ $(function(){
         </div>
         <div class="col-6 mb-3">
           <a href="#" data-toggle="modal" data-target="#myModal">
-            <img src="<%=ctxPath%>/resources/images/체육관2.jpg"  class="img-fluid" alt="작은 사진 3">
+            <img src="<%=ctxPath%>/resources/images/체육관3.jpg"  class="img-fluid" alt="작은 사진 3">
           </a>
         </div>
         <div class="col-6 mb-3">
           <a href="#" data-toggle="modal" data-target="#myModal">
-            <img src="<%=ctxPath%>/resources/images/체육관2.jpg"  class="img-fluid" alt="작은 사진 4">
+            <img src="<%=ctxPath%>/resources/images/체육관4.jpg"  class="img-fluid" alt="작은 사진 4">
           </a>
         </div>
       </div>
@@ -777,21 +784,54 @@ $(function(){
   </div>
 </div>
 
-<!-- 모달 창 -->
+<!-- 모달 -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">사진 보기</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <img src="<%=ctxPath%>/resources/images/체육관2.jpg" id="modalImage" class="img-fluid" alt="팝업 이미지">
+        <!-- 카루젤 시작 -->
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+          <ol class="carousel-indicators">
+            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+          </ol>
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img class="d-block w-100" src="<%=ctxPath%>/resources/images/체육관3.jpg" alt="첫 번째 사진">
+            </div>
+            <div class="carousel-item">
+              <img class="d-block w-100" src="<%=ctxPath%>/resources/images/체육관2.jpg" alt="두 번째 사진">
+            </div>
+            <div class="carousel-item">
+              <img class="d-block w-100" src="<%=ctxPath%>/resources/images/체육관3.jpg" alt="세 번째 사진">
+            </div>
+            <div class="carousel-item">
+              <img class="d-block w-100" src="<%=ctxPath%>/resources/images/체육관2.jpg" alt="네 번째 사진">
+            </div>
+          </div>
+          <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">이전</span>
+          </a>
+          <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">다음</span>
+          </a>
+        </div>
+        <!-- 카루젤 끝 -->
       </div>
     </div>
   </div>
 </div>
+
 		
 <div class="container">
   <div class="row">
