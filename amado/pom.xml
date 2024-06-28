@@ -54,6 +54,13 @@
 			<version>${org.aspectj-version}</version>
 		</dependency>	
 		
+		<!-- coolsms -->
+		<dependency>
+		    <groupId>net.nurigo</groupId>
+		    <artifactId>javaSDK</artifactId>
+		    <version>2.2</version>
+ 		</dependency> 
+		
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
