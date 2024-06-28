@@ -11,14 +11,17 @@ public class ControllerHS {
 	
 	@GetMapping(value="/gym/rental_gym.do")
 	   public ModelAndView rental_gym(ModelAndView mav) {
-	      
-		
-		
 		mav.setViewName("/gym/rental_gym.tiles2");
-		
-		
 	      return mav;
 	       //  /WEB-INF/views/tiles1/opendata/korea_tour_api.jsp 페이지를 만들어야 한다.
 	   }  
+	
+	@GetMapping(value="/gym/detail_gym.do")
+	   public ModelAndView detail_gym(ModelAndView mav) {
+		mav.setViewName("/gym/detail_gym.tiles2");
+	      return mav;
+	       //  /WEB-INF/views/tiles1/opendata/korea_tour_api.jsp 페이지를 만들어야 한다.
+	   }  
+
 
 }

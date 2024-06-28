@@ -130,7 +130,7 @@ $(document).ready(function(){
 					</div>
 				</div>
 			</div>
-			<div id="more" style="text-align: right; margin: 3% 8% 0 0; color: #8a8a8a;">동호회 정보 더보기 ▶</div>
+			<div id="more" style="text-align: right; margin: 3% 8% 0 0; color: #8a8a8a;"><a href="<%= ctxPath%>/club/myClub_plus.do">동호회 정보 더보기 ▶</a></div>
 		</div>
 		
 		
