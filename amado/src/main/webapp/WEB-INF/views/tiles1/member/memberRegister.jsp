@@ -773,15 +773,6 @@ function goReset() {
                     </td>
                 </tr>
                 
-           <%--      
-              <tr>
-               <td>투숙기간</td>
-               <td>
-                  시작일자: <input type="text" id="fromDate">&nbsp;&nbsp; 
-                  종료일자: <input type="text" id="toDate">
-               </td>
-            </tr>
-           --%>
                 
                 <tr>
                     <td colspan="2">
@@ -794,7 +785,7 @@ function goReset() {
                        <iframe src="<%= ctxPath%>/iframe_agree/agree.html" width="100%" height="150px" style="border: solid 1px navy;"></iframe>
                     </td>
                 </tr>
-                
+
                 <tr>
                     <td colspan="2" class="text-center">
                        <input type="button" class="btn btn-success btn-lg mr-5" value="가입하기" onclick="goRegister()" />

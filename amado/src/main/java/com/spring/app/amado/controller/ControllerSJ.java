@@ -44,9 +44,9 @@ public class ControllerSJ {
 	
 	
 	// 글쓰기
-	@GetMapping("/add.do")
+	@GetMapping("/community/add.do")
 	public ModelAndView add(ModelAndView mav) {
-		mav.setViewName("member/add.tiles1");
+		mav.setViewName("community/add.tiles2");
 		return mav;
 	}
 	
