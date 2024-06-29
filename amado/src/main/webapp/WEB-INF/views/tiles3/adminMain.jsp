@@ -146,8 +146,16 @@ $(document).ready(function(){
 	</div>
 	<div class="verticalLine"></div>
 	<div id="alert" style="width: 30%; height: 400px; padding: 2%;">
-		<div style="margin-bottom: 1%; font-weight: bold; color: #6B6B6B;">알림</div>
-		<div style="background-color: white; width: 100%; height: 300px; border-radius: 20px;"></div>
+		<div style="margin-bottom: 5%; font-weight: bold; color: #6B6B6B;">알림</div>
+		<div style="background-color: white; width: 100%; height: 300px; border-radius: 20px; padding-top: 3%; overflow: auto;" align="center">
+			<div style="width: 95%; height: 50px; margin-top: 5%; text-align: left; align-content: center; padding-left: 5%;">💌 ㅇㅇㅇ 님의 체육관 등록 신청</div>
+			<hr>
+			<div style="width: 95%; height: 50px; margin-top: 5%; text-align: left; align-content: center; padding-left: 5%;">💌 ㅇㅇㅇ 님의 체육관 등록 신청</div>
+			<hr>
+			<div style="width: 95%; height: 50px; margin-top: 5%; text-align: left; align-content: center; padding-left: 5%;">💌 ㅇㅇㅇ 님의 체육관 등록 신청</div>
+			<hr>
+			<div style="width: 95%; height: 50px; margin-top: 5%; text-align: left; align-content: center; padding-left: 5%;">💌 ㅇㅇㅇ 님의 체육관 등록 신청</div>
+		</div>
 	</div>
 	
 </div>
