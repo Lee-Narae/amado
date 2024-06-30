@@ -4,5 +4,29 @@
 
 <mapper namespace="NR">
 
+	<select id="getLoginMember" resultType="MemberVO" parameterType="HashMap">
+		select userid, name, email, postcode, address, detailaddress, extraaddress, mobile, gender, birthday,
+		       memberrank, speed, quick, power, earth, stretch, pwdchangegap, NVL( lastlogingap, trunc( months_between(sysdate, registerday) ) ) AS lastlogingap
+		from
+		(select userid, password, name, email, postcode, address, detailaddress, extraaddress, mobile, gender,
+		       birthday, registerday, status, memberrank, gymregisterstatus, speed, quick,
+		       power, earth, stretch, idle, trunc( months_between(sysdate, lastpwdchangedate) ) AS pwdchangegap
+		 from tbl_member
+		 where status = 1 and userid = #{userid} and password = #{password}) A
+		cross join
+		(select trunc(months_between(sysdate, max(logindate))) as lastlogingap
+		 from tbl_loginhistory
+		 where fk_userid = #{userid}) B
+	</select>
+	
+    <update id="updateIdle" parameterType="String">
+	   	update tbl_member set idle = 1
+	   	where userid = #{userid}
+    </update>
+    
+    <insert id="insert_tbl_loginhistory">
+        insert into tbl_loginhistory(loginseq, fk_userid, logindate, clientip)
+        values (seq_loginhistory.nextval, #{userid}, sysdate, #{clientip})
+    </insert>
 
 </mapper>
