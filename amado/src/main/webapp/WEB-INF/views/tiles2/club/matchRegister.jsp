@@ -100,6 +100,21 @@ $( function() {
 	$.datepicker.setDefaults($.datepicker.regional['ko']);
     $( "#datepicker" ).datepicker({dateFormat: 'yy-mm-dd', minDate: 0});
     
+    
+    // 전체 매칭 경기 불러오기
+    $.ajax({
+    	url: "<%=ctxPath%>/searchAllMatching.do",
+    	dataType: "json",
+    	success: function(json){
+    		console.log(JSON.stringify(json));
+    	},
+        error: function(request, status, error){
+			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		} 
+
+    });
+    
+    
   } );
 </script>
 

@@ -64,4 +64,9 @@
 		where clubseq = #{clubseq}
 	</select>
 
+
+	<select id="searchAllMatching">
+		
+	</select>
+
 </mapper>

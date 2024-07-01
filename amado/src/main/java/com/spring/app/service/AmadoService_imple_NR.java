@@ -2,6 +2,7 @@ package com.spring.app.service;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.app.common.AES256;
-import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.model.AmadoDAO_NR;
 
@@ -156,6 +156,15 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		Map<String, String> club = dao.getClubInfo(clubseq);
 		
 		return club;
+	}
+
+	// 모든 매칭정보 불러오기
+	@Override
+	public List<Map<String, String>> searchAllMatching() {
+
+		List<Map<String, String>> matchList = dao.searchAllMatching();
+		
+		return matchList;
 	}
 	
 }

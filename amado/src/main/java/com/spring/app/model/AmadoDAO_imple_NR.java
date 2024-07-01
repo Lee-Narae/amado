@@ -1,5 +1,6 @@
 package com.spring.app.model;
 
+import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -7,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.MemberVO;
 
 @Repository
@@ -52,6 +52,15 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 	public Map<String, String> getClubInfo(String clubseq) {
 		Map<String, String> club = sqlsession.selectOne("NR.getClubInfo", clubseq);
 		return club;
+	}
+
+	// 모든 매칭정보 불러오기
+	@Override
+	public List<Map<String, String>> searchAllMatching() {
+
+		List<Map<String, String>> matchList = sqlsession.selectList("NR.searchAllMatching");
+		
+		return matchList;
 	}
 
 }

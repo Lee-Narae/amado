@@ -1,12 +1,12 @@
 package com.spring.app.service;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.servlet.ModelAndView;
 
-import com.spring.app.domain.ClubVO;
 
 public interface AmadoService_NR {
 
@@ -21,5 +21,8 @@ public interface AmadoService_NR {
 
 	// 가입한 동호회 정보 불러오기
 	Map<String, String> getClubInfo(String clubseq);
+
+	// 모든 매칭정보 불러오기
+	List<Map<String, String>> searchAllMatching();
 
 }
