@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,9 +41,15 @@ public class ControllerNR {
 	}	
 	
 	@GetMapping("/club/myClub.do")
-	public ModelAndView myClub(ModelAndView mav) {
+	public ModelAndView requiredLogin_myClub(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
 		
+		HttpSession session = request.getSession();
+		session.getAttribute("loginuser");
 		
+		String sportseq = request.getParameter("sportseq");
+		// System.out.println("sportseq: "+sportseq); 확인 완료
+		
+		// = service.getClubseq(sportseq);
 		
 		mav.setViewName("club/myClub.tiles2");
 		// /WEB-INF/views/tiles2/club/myClub.jsp
