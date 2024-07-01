@@ -20,6 +20,6 @@ public interface AmadoDAO_NR {
 	String getClubseq(Map<String, String> paramap);
 
 	// 가입한 동호회 정보 불러오기
-	ClubVO getClubInfo(String clubseq);
+	Map<String, String> getClubInfo(String clubseq);
 
 }
