@@ -4,12 +4,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.spring.app.service.AmadoService_JH;
+
+
 @Controller
 public class ControllerJH {
 	
 	@GetMapping("/club/sale.do")
 	public ModelAndView sale(ModelAndView mav) {
 
+		//AmadoService_JH.sale();
+		
 		mav.setViewName("club/sale.tiles2");
 		// /WEB-INF/views/tiles2/main/index.jsp
 		
