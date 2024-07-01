@@ -18,7 +18,19 @@ public class MemberVO {
 	private String status;					// 회원탈퇴유무   1: 사용가능(가입중) / 0:사용불능(탈퇴)
 	private String memberrank;				// 회원직급
 	private String gymregisterstatus;		// 체육관등록여부
+	private String speed;			
+	private String quick;
+	private String power;
+	private String earth;
+	private String stretch;
+	private int idle;
 	
+	private int pwdchangegap;          // select 용. 지금으로 부터 마지막으로 암호를 변경한지가 몇개월인지 알려주는 개월수(3개월 동안 암호를 변경 안 했을시 암호를 변경하라는 메시지를 보여주기 위함)
+	private int lastlogingap;          // select 용. 지금으로 부터 마지막으로 로그인한지가 몇개월인지 알려주는 개월수(12개월 동안 로그인을 안 했을 경우 해당 로그인 계정을 비활성화 시키려고 함)
+
+	private boolean requirePwdChange = false;
+	// 마지막으로 암호를 변경한 날짜가 현재시각으로 부터 3개월이 지났으면 true
+	// 마지막으로 암호를 변경한 날짜가 현재시각으로 부터 3개월이 지나지 않았으면 false
 	
 	public String getUserid() {
 		return userid;
@@ -115,6 +127,60 @@ public class MemberVO {
 	}
 	public void setGymregisterstatus(String gymregisterstatus) {
 		this.gymregisterstatus = gymregisterstatus;
+	}
+	public String getSpeed() {
+		return speed;
+	}
+	public void setSpeed(String speed) {
+		this.speed = speed;
+	}
+	public String getQuick() {
+		return quick;
+	}
+	public void setQuick(String quick) {
+		this.quick = quick;
+	}
+	public String getPower() {
+		return power;
+	}
+	public void setPower(String power) {
+		this.power = power;
+	}
+	public String getEarth() {
+		return earth;
+	}
+	public void setEarth(String earth) {
+		this.earth = earth;
+	}
+	public String getStretch() {
+		return stretch;
+	}
+	public void setStretch(String stretch) {
+		this.stretch = stretch;
+	}
+	public int getIdle() {
+		return idle;
+	}
+	public void setIdle(int idle) {
+		this.idle = idle;
+	}
+	public int getPwdchangegap() {
+		return pwdchangegap;
+	}
+	public void setPwdchangegap(int pwdchangegap) {
+		this.pwdchangegap = pwdchangegap;
+	}
+	public int getLastlogingap() {
+		return lastlogingap;
+	}
+	public void setLastlogingap(int lastlogingap) {
+		this.lastlogingap = lastlogingap;
+	}
+	public boolean isRequirePwdChange() {
+		return requirePwdChange;
+	}
+	public void setRequirePwdChange(boolean requirePwdChange) {
+		this.requirePwdChange = requirePwdChange;
 	}
 	
 }

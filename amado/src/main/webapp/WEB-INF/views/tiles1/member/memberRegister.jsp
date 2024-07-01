@@ -67,6 +67,7 @@ span#phoneCheckResult {
 	margin-left: 10px;
 	cursor: pointer;
 }
+
 /*  변경한 곳 */
     .input-form { 
       max-width: 680px;
@@ -98,6 +99,12 @@ let b_idcheck_click = false;
 let b_emailcheck = false;
 let b_emailcheck_click = false;
 // "이메일중복확인" 을 클릭했는지 클릭을 안했는지 여부를 알아오기 위한 용도
+
+let hp2 = false;
+let hp3 = false;
+let b_phonecheck = false;
+let b_phonecheck_click = false;
+// "휴대폰확인" 을 클릭했는지 클릭을 안했늕 여부를 알아오기 위한 용도
 
 let b_zipcodeSearch_click = false;
 // "우편번호찾기" 를 클릭했는지 클릭을 안했는지 여부를 알아오기 위한 용도
@@ -197,10 +204,12 @@ $(document).ready(function () {
         if (!bool) {
             // 연락처 국번이 정규표현식에 위배된 경우 
             $(e.target).parent().find("span.error").show();
+            hp2 = false;
         } else {
             // 연락처 국번이 정규표현식에 맞는 경우 
             $("table#tblMemberRegister :input").prop("disabled", false);
             $(e.target).parent().find("span.error").hide();
+            hp2 = true;
         }
     }); // 아이디가 hp2 인 것은 포커스를 잃어버렸을 경우(blur) 이벤트를 처리해주는 것이다.
 
@@ -212,13 +221,14 @@ $(document).ready(function () {
         if (!bool) {
             // 마지막 전화번호 4자리가 정규표현식에 위배된 경우 
             $(e.target).parent().find("span.error").show();
+            hp3 = false;
         } else {
             // 마지막 전화번호 4자리가 정규표현식에 맞는 경우 
             $("table#tblMemberRegister :input").prop("disabled", false);
             $(e.target).parent().find("span.error").hide();
+            hp3 = true;
         }
     }); // 아이디가 hp3 인 것은 포커스를 잃어버렸을 경우(blur) 이벤트를 처리해주는 것이다.
-
 
 
     $("input#postcode").blur((e) => {
@@ -431,11 +441,13 @@ $(document).ready(function () {
         if($("input#userid").val().trim() == "" && b_idcheck == false) {
         	$("span#idcheckResult").html("");
         	$("span#idcheckResult").html("아이디를 입력하세요.").css({"color":"red"});
+        	b_idcheck_click = false;
 			return false;        	
         }
             
         if(b_idcheck == false) {
         	$("span#idcheckResult").html("");
+        	b_idcheck_click = false;
         	return false;
         }
 
@@ -492,11 +504,13 @@ $(document).ready(function () {
         if($("input#email").val().trim() == "" && b_emailcheck == false) {
         	$("span#emailCheckResult").html("");
         	$("span#emailcheckResult").html("이메일을 입력하세요.").css({"color":"red"});
+        	b_emailcheck_click = false;
 			return false;        	
         }
             
         if(b_emailcheck == false) {
         	$("span#emailCheckResult").html("");
+        	b_emailcheck_click = false;
         	return false;
         }
         
@@ -532,6 +546,65 @@ $(document).ready(function () {
     });
     // "이메일중복확인" 을 클릭했을 때 이벤트 처리하기 끝 //
 
+    
+    // "휴대폰확인" 을 클릭했을 때 이벤트 처리하기 시작 //
+    $("span#phonecheck").click(function() {
+
+    	b_phonecheck_click = true;
+        // "이메일중복확인" 을 클릭했는지 클릭을 안했는지 여부를 알아오기 위한 용도
+        // 입력하고자 하는 이메일이 데이터베이스 테이블에 존재하는지, 존재하지 않는지 알아와야 한다.
+
+        if(hp2 == true && hp3 == true) {
+        	b_phonecheck = true;
+        }
+        
+        /* 
+        alert("hp2 = " + hp2);
+        alert("hp3 = " + hp3);
+    	alert("b_phonecheck = " + b_phonecheck);
+        */
+        
+        if(b_phonecheck == false) {
+			alert("휴대폰 번호를 다시 한 번 확인해주세요!"); 	        	
+        	$("span#phonecheckResult").html("");
+        	b_phonecheck_click = false;
+			return false;        	
+        }
+
+        
+        $.ajax({
+            url: "<%=ctxPath%>/phonecheck.do",
+            data: {"hp2":$("input#hp2").val(),
+            	   "hp3":$("input#hp3").val()}, // data 속성은 http://localhost:9090/MyMVC/member/emailDuplicateCheck.up 로 전송해야할 데이터를 말한다.
+            type: "post",   // type을 생략하면 type : "get" 이다.
+           
+            async : true,   // async:true 가 비동기 방식을 말한다. async 을 생략하면 기본값이 비동기 방식인 async:true 이다.
+                            // async:false 가 동기 방식이다. 지도를 할때는 반드시 동기방식인 async:false 을 사용해야만 지도가 올바르게 나온다.
+
+            dataType : "json",                 
+
+            success : function(json) {
+                
+                if(json.isExist) {
+                    // 입력한 email이 이미 사용중이라면
+                    $("span#phonecheckResult").html("010 - " + $("input#hp2").val() + " - " + $("input#hp3").val()  + " 은(는) 이미 사용중이므로 다른 연락처를 입력하세요.").css({"color":"red"});
+                    $("input#email").val("");
+                    
+                }
+                else {
+                    // 입력한 email이 존재하지 않는 경우
+                    $("span#emailCheckResult").html($("input#email").val()  + " 은(는) 사용 가능한 이메일입니다.").css({"color":"blue"});
+                }
+            },
+            
+            error: function(request, status, error) {
+                alert("code: " + request.status + "\n" + "message: " + request.responseText + "\n" + "error: " + error);
+           }
+        });
+         
+    });
+    // "이메일중복확인" 을 클릭했을 때 이벤트 처리하기 끝 //
+
     // 아이디 값이 변경되면 가입하기 버튼을 클릭 시 "아이디중복확인" 을 클릭했는지 클릭안했는지를 알아보기위한 용도 초기화 시키기
     $("input#userid").bind("change", function() {
         b_idcheck_click = false;
@@ -541,6 +614,14 @@ $(document).ready(function () {
     // 이메일 값이 변경되면 가입하기 버튼을 클릭 시 "이메일중복확인" 을 클릭했는지 클릭안했는지를 알아보기위한 용도 초기화 시키기
     $("input#email").bind("change", function() {
         b_emailcheck_click = false;
+    });
+
+    // 휴대폰 번호가 변경되면 가입하기 버튼을 클릭 시 "휴대폰확인" 을 클릭했는지 클릭안했는지를 알아보기위한 용도 초기화 시키기
+    $("input#hp2").bind("change", function() {
+        b_phonecheck_click = false;
+    });
+    $("input#hp3").bind("change", function() {
+        b_phonecheck_click = false;
     });
 
 
@@ -733,7 +814,8 @@ function goReset() {
                     <td>인증번호확인&nbsp;</td>
                     <td>
 						<input type="text" name="phoneCheckResultVal" id="phoneCheckResultVal" size="10" maxlength="10" />
-						<span id="phoneCheckResult">인증번호확인</span>
+						<span id="phoneCheck">인증번호확인</span>
+						<span id="phoneCheckResult"></span>
 						<span class="error">올바른 인증번호가 아닙니다.</span>
                     </td>
                 </tr>
@@ -773,15 +855,6 @@ function goReset() {
                     </td>
                 </tr>
                 
-           <%--      
-              <tr>
-               <td>투숙기간</td>
-               <td>
-                  시작일자: <input type="text" id="fromDate">&nbsp;&nbsp; 
-                  종료일자: <input type="text" id="toDate">
-               </td>
-            </tr>
-           --%>
                 
                 <tr>
                     <td colspan="2">
@@ -794,7 +867,7 @@ function goReset() {
                        <iframe src="<%= ctxPath%>/iframe_agree/agree.html" width="100%" height="150px" style="border: solid 1px navy;"></iframe>
                     </td>
                 </tr>
-                
+
                 <tr>
                     <td colspan="2" class="text-center">
                        <input type="button" class="btn btn-success btn-lg mr-5" value="가입하기" onclick="goRegister()" />

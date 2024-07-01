@@ -72,6 +72,31 @@ cursor: pointer;
 font-weight: bold;
 }
 
+#logout {
+background-color: #d6d6d6;
+height: 40px;
+width: 110px;
+text-align: center;
+margin-left: 1%;
+border-radius: 50px;
+padding-top: 2.5%;
+}
+
+#username {
+font-weight: bold;
+}
+
+#username:hover {
+color: blue;
+text-decoration: underline;
+cursor: pointer;
+}
+
+#logout:hover {
+background-color: #bfbfbf;
+cursor: pointer;
+font-weight: bold;
+}
 </style>
 
 <script type="text/javascript">
@@ -103,8 +128,14 @@ $(document).ready(function(){
 		<div class="nav">Community&nbsp;&nbsp;∨</div>
 	</div>
 	<div style="display: flex; margin-left: 45%; width: 30%; margin-top: 1.4%;">
-		<div id="login" onclick="location.href='<%=ctxPath%>/member/login.do'">로그인</div>
-		<div id="signup" onclick="location.href='<%=ctxPath%>/member/memberRegister.do'">회원가입</div>
+		<c:if test="${empty sessionScope.loginuser }">
+			<div id="login" onclick="location.href='<%=ctxPath%>/member/login.do'">로그인</div>
+			<div id="signup" onclick="location.href='<%=ctxPath%>/member/memberRegister.do'">회원가입</div>
+		</c:if>
+		<c:if test="${not empty sessionScope.loginuser }">
+			<div style="margin-top: 3%; margin-right: 7%;"><span id="username">${sessionScope.loginuser.name }</span> 님</div>
+			<div id="logout" onclick="location.href='<%=ctxPath%>/member/logout.do'">로그아웃</div>
+		</c:if>		
 	</div>
 </div>
 <div id="tab" style="display: flex; width: 95%; height: 270px; background-color: #254179; margin-left: 5%;">

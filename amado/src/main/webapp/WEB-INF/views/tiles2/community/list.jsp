@@ -35,7 +35,7 @@ $(document).ready(function() {
 			
 		
 	function goAdd() {
-		location.href = "<%=ctxPath%>/add.do";
+		location.href = "<%=ctxPath%>/community/add.do";
 	}
 </script>
 

@@ -288,6 +288,43 @@ background-color: #bfbfbf;
 
 </style>
 
+<script type="text/javascript">
+$(document).ready(function(){
+	
+	$("input:password[name='password']").keyup(function(e){
+		if(e.keyCode == 13){
+			goLogin();
+		}
+	});
+	
+});
+
+
+// 로그인 메소드
+function goLogin(){
+	
+	const id = $("input:text[name='userid']").val().trim();
+	if(id == ''){
+		alert("아이디를 입력하세요.");
+		$("input:text[name='userid']").focus();
+		return;
+	}
+	
+	const pwd = $("input:password[name='password']").val().trim();
+	if(pwd == ''){
+		alert("비밀번호를 입력하세요.");
+		$("input:password[name='password']").focus();
+		return;
+	}
+	
+	const frm = document.loginFrm;
+	frm.action = "<%= ctxPath%>/member/loginEnd.do";
+	frm.method= "post";
+	frm.submit();
+	
+	
+}
+</script>
 
 <div class="login">
   <div class="div">
@@ -301,19 +338,19 @@ background-color: #bfbfbf;
             <div class="div-wrapper"><div class="text-wrapper">Welcome to AmaDo</div></div>
             <div class="group-2">
               <div class="text-wrapper-2">ID</div>
-              <input class="username-or-email-wrapper" type="text" maxlength="20" placeholder="아이디를 입력하세요"/>
+              <input class="username-or-email-wrapper" name="userid" type="text" maxlength="20" placeholder="아이디를 입력하세요"/>
             </div>
             <div class="group-3">
               <div class="group-4">
                 <div class="text-wrapper-2">Password</div>
-                <input class="password-wrapper" type="password" maxlength="20" placeholder="비밀번호를 입력하세요"/>
+                <input class="password-wrapper" name="password" type="password" maxlength="20" placeholder="비밀번호를 입력하세요"/>
               </div>
               <div class="text-wrapper-4" id="idFind">아이디 찾기</div>
               <div class="text-wrapper-5" id="pwdFind">비밀번호 찾기</div>
               <div class="text-wrapper-6">/</div>
             </div>
             <div class="group-5">
-              <div class="overlap-2"><div class="text-wrapper-7">로그인</div></div>
+              <div class="overlap-2" onclick="goLogin()"><div class="text-wrapper-7">로그인</div></div>
               <div class="overlap-3"><div class="text-wrapper-8" onclick="location.href='<%=ctxPath%>/member/memberRegister.do'">회원가입</div></div>
             </div>
             </form>

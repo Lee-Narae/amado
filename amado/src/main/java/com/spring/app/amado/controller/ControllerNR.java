@@ -1,10 +1,17 @@
 package com.spring.app.amado.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.spring.app.common.Sha256;
 import com.spring.app.service.AmadoService_NR;
 
 @Controller
@@ -55,6 +62,27 @@ public class ControllerNR {
 		return mav;
 	}
 	
+	@PostMapping("/member/loginEnd.do")
+	public ModelAndView loginEnd(ModelAndView mav, HttpServletRequest request) {
+		
+		String userid = request.getParameter("userid");
+		String password = request.getParameter("password");
+		
+		// === 클라이언트의 IP 주소를 알아오는 것 === //
+		String clientip = request.getRemoteAddr();
+		
+		Map<String, String> paramap = new HashMap<>();
+		paramap.put("userid", userid);
+		paramap.put("password", Sha256.encrypt(password));
+		paramap.put("clientip", clientip);
+		
+		mav = service.loginEnd(paramap, mav, request);
+		
+		return mav;
+	}
+	
+	
+	
 	@GetMapping("/admin")
 	public ModelAndView admin(ModelAndView mav) {
 		
@@ -63,17 +91,11 @@ public class ControllerNR {
 	}
 	
 	@GetMapping("/admin/main")
-	public ModelAndView admin_main(ModelAndView mav) {
+	public ModelAndView test(ModelAndView mav) {
 		
-		mav.setViewName("admin_main.tiles3");
+		mav.setViewName("adminMain.tiles3");
 		return mav;
 	}
 	
-	@GetMapping("/tiles3.do")
-	public ModelAndView test(ModelAndView mav) {
-		
-		mav.setViewName("test.tiles3");
-		return mav;
-	}
 	
 }

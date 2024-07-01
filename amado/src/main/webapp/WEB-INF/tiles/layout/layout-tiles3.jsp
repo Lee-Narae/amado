@@ -46,32 +46,29 @@
 *{font-family: 'MYArirang_gothic';}
 
 #side {
-border: solid 1px red;
-width: 15%;
+width: 14%;
 position: fixed;
-height: 950px;
+height: auto;
 }
 #main {
-margin-left: 15%;
-border: solid 1px red;
-width: 85%;
-min-height: 950px;
+margin-left: 14%;
+width: 86%;
+min-height: auto;
 }
 
 #header{
-border: solid 1px blue;
-height: 80px;
+height: 100px;
 }
 
 #content{
-border: solid 1px blue;
-min-height: 870px;
+min-height: auto;
+background-color: #F0F6FF;
 }
 </style>
 
 </head>
 <body>
-	<div id="container" style="display: flex;">
+	<div id="container" style="display: flex; height: auto;">
 		<div id="side">
 			<tiles:insertAttribute name="sidebar" />
 		</div>
