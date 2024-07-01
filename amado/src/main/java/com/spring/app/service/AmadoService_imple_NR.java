@@ -151,9 +151,9 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 
 	// 가입한 동호회 정보 불러오기
 	@Override
-	public ClubVO getClubInfo(String clubseq) {
+	public Map<String, String> getClubInfo(String clubseq) {
 		
-		ClubVO club = dao.getClubInfo(clubseq);
+		Map<String, String> club = dao.getClubInfo(clubseq);
 		
 		return club;
 	}

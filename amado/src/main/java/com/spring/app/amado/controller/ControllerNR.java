@@ -58,9 +58,10 @@ public class ControllerNR {
 		String clubseq = service.getClubseq(paramap);
 		// System.out.println("clubseq: "+clubseq); 확인 완료
 		
-		ClubVO club = service.getClubInfo(clubseq);
-		
-		mav.addObject("club", club);
+		if(clubseq != null) {
+			Map<String, String> club = service.getClubInfo(clubseq);
+			mav.addObject("club", club);
+		}
 		
 		mav.setViewName("club/myClub.tiles2");
 		// /WEB-INF/views/tiles2/club/myClub.jsp
@@ -101,6 +102,25 @@ public class ControllerNR {
 		return mav;
 	}
 	
+	
+	@GetMapping("/member/logout.do")
+	public ModelAndView logout(ModelAndView mav, HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();
+		
+		session.invalidate();
+		
+		String message = "로그아웃되었습니다.";
+		String loc = request.getContextPath()+"/index.do";
+		
+		mav.addObject("message", message);
+		mav.addObject("loc", loc);
+		
+		mav.setViewName("msg");
+		// /WEB-INF/views/msg.jsp
+		
+		return mav;
+	}
 	
 	
 	@GetMapping("/admin")
