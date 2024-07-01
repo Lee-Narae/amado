@@ -3,6 +3,7 @@ package com.spring.app.service;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,12 +75,21 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		List<BoardVO> boardList = dao.boardListNoSearch();
 		return boardList;
 	}
+	
+	// 글목록 보기(검색가능)	
+	@Override
+	public List<BoardVO> boardListSearch(Map<String, String> paraMap) {
+		List<BoardVO> boardList = dao.boardListSearch(paraMap);
+		return boardList;
+	}
 
+	// 글쓰기
 	@Override
 	public int add(BoardVO boardvo) {
-		
 		int n = dao.add(boardvo);
 		return n;
 	}
+
+
 	
 }

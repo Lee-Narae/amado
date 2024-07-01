@@ -59,6 +59,13 @@ create table tbl_member
 		select boardseq, title, content, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
 			 , password, commentcount, viewcount, status
 			 , orgfilename, filename, filesize
+		where status = 1 
+				and lower(title) like '%'||lower('제목')||'%'
+		order by boardseq desc
+
+		select boardseq, title, content, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
+			 , password, commentcount, viewcount, status
+			 , orgfilename, filename, filesize
 		from tbl_board
 		where status = 1
 		order by boardseq desc

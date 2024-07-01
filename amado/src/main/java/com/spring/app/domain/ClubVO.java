@@ -36,6 +36,8 @@ public class ClubVO {
 	private String clubscore;		// 점수
 	
 	
+	// select 용
+	
 	
 	
 	

@@ -1,6 +1,7 @@
 package com.spring.app.model;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,12 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 		List<BoardVO> boardList = sqlsession.selectList("SJ.boardListNoSearch");
 		return boardList;
 	}
+	
+	@Override
+	public List<BoardVO> boardListSearch(Map<String, String> paraMap) {
+		List<BoardVO> boardList = sqlsession.selectList("SJ.boardListSearch", paraMap);
+		return boardList;
+	}
 
 	// 글쓰기
 	@Override
@@ -54,5 +61,7 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 		int n = sqlsession.insert("SJ.add", boardvo);
 		return n;
 	}
+
+
 
 }

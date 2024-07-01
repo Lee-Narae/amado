@@ -1,6 +1,7 @@
 package com.spring.app.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.MemberVO;
@@ -20,7 +21,12 @@ public interface AmadoService_SJ {
 	// 글목록 보기(페이지바 없음)
 	List<BoardVO> boardListNoSearch();
 
+	// 글목록 보기(검색가능)(페이지바 없음)
+	List<BoardVO> boardListSearch(Map<String, String> paraMap);
+
+	
 	// 글쓰기
 	int add(BoardVO boardvo);
+
 
 }

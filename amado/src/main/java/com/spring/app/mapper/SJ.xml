@@ -34,6 +34,31 @@
 		order by boardseq desc
     </select>
     
+	<select id="boardListSearch" resultType="BoardVO" parameterType="HashMap">
+		select boardseq, title, content, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
+			 , password, commentcount, viewcount, status
+			 , orgfilename, filename, filesize
+	    from tbl_board
+		where status = 1 
+		<choose>
+			<when test='searchType == "title" and searchWord != "" '>
+				and lower(title) like '%'||lower(#{searchWord})||'%'
+			</when>
+			<when test='searchType == "content" and searchWord != "" '>
+				and lower(content) like '%'||lower(#{searchWord})||'%'
+			</when>
+			<when test='searchType == "title_content" and searchWord != "" '>
+				and ( lower(title) like '%'||lower(#{searchWord})||'%'
+				or    lower(content) like '%'||lower(#{searchWord})||'%' )
+			</when>
+			<when test='searchType == "fk_userid" and searchWord != "" '>
+				and lower(fk_userid) like '%'||lower(#{searchWord})||'%'
+			</when>
+			<otherwise></otherwise>
+		</choose>
+		order by boardseq desc
+	</select>    
+    
     <!-- 글쓰기 -->
    	<insert id="add" parameterType="BoardVO">
 		insert into tbl_board(boardseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status, orgfilename, filename, filesize)

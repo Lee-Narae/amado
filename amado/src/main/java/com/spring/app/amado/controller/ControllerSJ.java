@@ -1,6 +1,8 @@
 package com.spring.app.amado.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,28 +27,36 @@ public class ControllerSJ {
 
 	// 게시판 목록보기
 	@GetMapping("/community/list.do")
-	public ModelAndView index(ModelAndView mav) {
+	public ModelAndView index(ModelAndView mav, HttpServletRequest request) {
 
-		/*
-		 * String content = "제목"; String name = "김승진"; String regDate = "2024-06-24";
-		 * String readCount = "20";
-		 * 
-		 * Map<String, String> paraMap = new HashMap<>(); paraMap.put("content",
-		 * content); paraMap.put("name", name); paraMap.put("regDate", regDate);
-		 * paraMap.put("readCount", readCount); mav.addObject("paraMap", paraMap);
-		 */
-		
 		List<BoardVO> boardList = null;
-		
+
 		// === 페이징 처리를 안한 검색어가 없는 전체 글목록 보여주기 === //
-		boardList = service.boardListNoSearch();
-		
-		for(BoardVO boardvo : boardList) {
-			System.out.println(boardvo.getViewcount());
+//		boardList = service.boardListNoSearch();
+
+		// === #110. 페이징 처리를 안한 검색어가 있는 전체 글목록 보여주기 === //
+		String searchType = request.getParameter("searchType");
+		String searchWord = request.getParameter("searchWord");
+
+		if (searchType == null) {
+			searchType = "title";
 		}
-		
-		System.out.println(boardList);
+		if (searchWord == null) {
+			searchWord = "";
+		}
+
+		if (searchWord != null) {
+			searchWord = searchWord.trim();
+		}
+
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("searchType", searchType);
+		paraMap.put("searchWord", searchWord);
+
+		boardList = service.boardListSearch(paraMap);
+
 		mav.addObject("boardList", boardList);
+		mav.addObject("paraMap", paraMap);
 
 		mav.setViewName("community/list.tiles2");
 		return mav;
@@ -59,17 +69,16 @@ public class ControllerSJ {
 		return mav;
 	}
 
-	// 게시판 글쓰기 완료 요청 
+	// 게시판 글쓰기 완료 요청
 	@PostMapping("/community/addEnd.do")
-	public ModelAndView addEnd(ModelAndView mav, BoardVO boardvo) { // <== After Advice 를 사용하기 전 
-	/*
-	    form 태그의 name 명과  BoardVO 의 필드명이 같다라면 
-	    request.getParameter("form 태그의 name명"); 을 사용하지 않더라도
-	        자동적으로 BoardVO boardvo 에 set 되어진다.
-	*/	
-		
+	public ModelAndView addEnd(ModelAndView mav, BoardVO boardvo) { // <== After Advice 를 사용하기 전
+		/*
+		 * form 태그의 name 명과 BoardVO 의 필드명이 같다라면 request.getParameter("form 태그의 name명");
+		 * 을 사용하지 않더라도 자동적으로 BoardVO boardvo 에 set 되어진다.
+		 */
+
 		String filename = boardvo.getFilename();
-		if(filename == null) {
+		if (filename == null) {
 			boardvo.setOrgfilename("");
 			boardvo.setFilename("");
 			boardvo.setFilesize("0");
@@ -86,21 +95,20 @@ public class ControllerSJ {
 		System.out.println(boardvo.getOrgfilename());
 		System.out.println(boardvo.getFilename());
 		System.out.println(boardvo.getFilesize());
-		
-		int n = service.add(boardvo); // <== 파일첨부가 없는 글쓰기 
-		
-		if(n==1) {
+
+		int n = service.add(boardvo); // <== 파일첨부가 없는 글쓰기
+
+		if (n == 1) {
 			mav.setViewName("community/list.tiles2");
-		    //  /list.do 페이지로 redirect(페이지이동)해라는 말이다.
-		}
-		else {
+			// /list.do 페이지로 redirect(페이지이동)해라는 말이다.
+		} else {
 			mav.setViewName("community/add.tiles2");
-			//  /WEB-INF/views/tiles1/board/error/add_error.jsp 파일을 생성한다.
+			// /WEB-INF/views/tiles1/board/error/add_error.jsp 파일을 생성한다.
 		}
-		
+
 		return mav;
 	}
-	
+
 	// 회원가입
 	@GetMapping("/member/memberRegister.do")
 	public ModelAndView memberRegister(ModelAndView mav) {
@@ -111,15 +119,15 @@ public class ControllerSJ {
 	// 회원가입
 	@PostMapping("/member/memberRegister.do")
 	public ModelAndView memberRegisterEnd(HttpServletRequest request, MemberVO membervo, ModelAndView mav) {
-		
+
 		String hp2 = request.getParameter("hp2");
 		String hp3 = request.getParameter("hp3");
 		String password = request.getParameter("pwd");
-		
-		String mobile = "010"+hp2+hp3;
+
+		String mobile = "010" + hp2 + hp3;
 		membervo.setMobile(mobile);
 		membervo.setPassword(password);
-		
+
 //		System.out.println(membervo.getMobile());
 //		System.out.println(membervo.getBirthday());
 //		System.out.println(membervo.getPassword());
@@ -130,16 +138,15 @@ public class ControllerSJ {
 //		System.out.println(membervo.getDetailaddress());
 //		System.out.println(membervo.getExtraaddress());
 //		System.out.println(membervo.getGender());
-		
+
 		int n = service.memberRegisterEnd(membervo);
-		
-		if(n == 1) {
+
+		if (n == 1) {
 			mav.setViewName("main/index.tiles2");
-		}
-		else {
+		} else {
 			mav.setViewName("member/memberRegister.tiles1");
 		}
-		
+
 		return mav;
 	}
 
