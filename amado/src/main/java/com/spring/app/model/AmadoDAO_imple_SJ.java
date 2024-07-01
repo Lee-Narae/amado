@@ -30,11 +30,12 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 		return n;
 	}
 
-	/*
-	 * // 회원가입
-	 * 
-	 * @Override public int memberRegisterEnd(MemberVO membervo) { int n = 0; n =
-	 * sqlsession.insert("SJ.memberRegisterEnd", membervo); return n; }
-	 */
+	// 회원가입
+	@Override
+	public int memberRegisterEnd(MemberVO membervo) {
+		int n = 0;
+		n = sqlsession.insert("SJ.memberRegisterEnd", membervo);
+		return n;
+	}
 
 }
