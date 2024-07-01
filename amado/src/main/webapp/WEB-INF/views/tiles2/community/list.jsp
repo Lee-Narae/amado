@@ -66,7 +66,7 @@ $(document).ready(function() {
 				<tr>
 					<th style="width: 70px; text-align: center;">글번호</th>
 					<th style="width: 300px; text-align: center;">제목</th>
-					<th style="width: 70px; text-align: center;">작성자</th>
+					<th style="width: 70px; text-align: center;">작성자아이디</th>
 					<th style="width: 150px; text-align: center;">작성일자</th>
 					<th style="width: 60px; text-align: center;">조회수</th>
 				</tr>
@@ -79,7 +79,7 @@ $(document).ready(function() {
 						<tr>
 							<td align="center">${boardvo.boardseq}</td>
 							<td>
-								<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.subject}</span>
+								<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
 							</td>
 							<td align="center">${boardvo.fk_userid}</td>
 							<td align="center">${boardvo.registerdate}</td>

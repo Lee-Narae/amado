@@ -74,11 +74,23 @@ public class ControllerSJ {
 			boardvo.setFilename("");
 			boardvo.setFilesize("0");
 		}
+		System.out.println(boardvo.getBoardseq());
+		System.out.println(boardvo.getTitle());
+		System.out.println(boardvo.getContent());
+		System.out.println(boardvo.getFk_userid());
+		System.out.println(boardvo.getRegisterdate());
+		System.out.println(boardvo.getPassword());
+		System.out.println(boardvo.getCommentcount());
+		System.out.println(boardvo.getViewcount());
+		System.out.println(boardvo.getStatus());
+		System.out.println(boardvo.getOrgfilename());
+		System.out.println(boardvo.getFilename());
+		System.out.println(boardvo.getFilesize());
 		
 		int n = service.add(boardvo); // <== 파일첨부가 없는 글쓰기 
 		
 		if(n==1) {
-			mav.setViewName("redirect:/list.do");
+			mav.setViewName("community/list.tiles2");
 		    //  /list.do 페이지로 redirect(페이지이동)해라는 말이다.
 		}
 		else {

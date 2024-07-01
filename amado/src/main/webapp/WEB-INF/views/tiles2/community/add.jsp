@@ -80,10 +80,10 @@
     	 }
     	 
     	// 글암호 유효성 검사
-    	 const pw = $("input:password[name='pw']").val().trim();
-    	 if(pw == "") {
+    	 const password = $("input:password[name='password']").val().trim();
+    	 if(password == "") {
     		 alert("글암호를 입력하세요!!");
-    		 $("input:text[name='pw']").val("");
+    		 $("input:text[name='password']").val("");
     		 return; // 종료
     	 }
     	 
@@ -134,7 +134,7 @@
          <tr>
             <th style="width: 15%; background-color: #DDDDDD;">글암호</th> 
             <td>
-                <input type="password" name="pw" maxlength="20" />
+                <input type="password" name="password" maxlength="20" />
             </td>
          </tr>   
         </table>
