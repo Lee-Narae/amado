@@ -172,10 +172,11 @@ $(document).ready(function(){
 
 	<div id="top2" style="display: flex; height: 500px;">
 		<div id="myclub" style="width: 43%; margin: 2% 0 0 5%; border-radius: 70px; background-color: #e6f7ff; box-shadow: 0px 0px 10px #9ac5db;">
-			<div id="clubTitle" style="text-align: center; margin-top: 5%; font-size: 30pt; font-weight: bolder;">쌍용불주먹</div>
-			<div id="sport" style="text-align: center;">배구</div>
+			<div id="clubTitle" style="text-align: center; margin-top: 5%; font-size: 30pt; font-weight: bolder;">${requestScope.club.clubname }</div>
 			<div id="info" style="background-color: transparent; display: flex; margin: 5% 0 0 0; width: 100%; opacity: 1; height: auto;">
-				<div id="clubimg" style="border: solid 1px grey; width: 25%; height: 200px; margin-left: 5%; background: linear-gradient(to top right, #fff calc(50% - 1px), black , #fff calc(50% + 1px) )"></div>
+				<div id="clubimg" style="border: solid 1px grey; width: 25%; height: 200px; margin-left: 5%; overflow: hidden;">
+					<img src="" />
+				</div>
 				<div style="width: 75%;">
 					<div id="clubboss" style="width: 100%; margin-bottom: 2%;">
 						<span class="title">동호회 회장</span>
@@ -199,7 +200,7 @@ $(document).ready(function(){
 					</div>
 				</div>
 			</div>
-			<div id="more" style="text-align: right; margin: 3% 8% 0 0; color: #8a8a8a;"><a href="<%= ctxPath%>/club/myClub_plus.do">동호회 정보 더보기 ▶</a></div>
+			<div id="more" style="text-align: right; margin: 6% 8% 0 0; color: #8a8a8a;"><a href="<%= ctxPath%>/club/myClub_plus.do">동호회 정보 더보기 ▶</a></div>
 		</div>
 		
 		

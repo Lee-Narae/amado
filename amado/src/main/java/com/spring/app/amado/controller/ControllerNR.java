@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.app.common.Sha256;
+import com.spring.app.domain.ClubVO;
+import com.spring.app.domain.MemberVO;
 import com.spring.app.service.AmadoService_NR;
 
 @Controller
@@ -44,12 +46,21 @@ public class ControllerNR {
 	public ModelAndView requiredLogin_myClub(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
 		
 		HttpSession session = request.getSession();
-		session.getAttribute("loginuser");
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("userid", loginuser.getUserid());
 		
 		String sportseq = request.getParameter("sportseq");
 		// System.out.println("sportseq: "+sportseq); 확인 완료
+		paramap.put("sportseq", sportseq);
 		
-		// = service.getClubseq(sportseq);
+		String clubseq = service.getClubseq(paramap);
+		// System.out.println("clubseq: "+clubseq); 확인 완료
+		
+		ClubVO club = service.getClubInfo(clubseq);
+		
+		mav.addObject("club", club);
 		
 		mav.setViewName("club/myClub.tiles2");
 		// /WEB-INF/views/tiles2/club/myClub.jsp
