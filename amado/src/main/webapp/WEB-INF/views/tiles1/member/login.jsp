@@ -291,6 +291,8 @@ background-color: #bfbfbf;
 <script type="text/javascript">
 $(document).ready(function(){
 	
+	$("input:text[name='userid']").focus();
+	
 	$("input:password[name='password']").keyup(function(e){
 		if(e.keyCode == 13){
 			goLogin();

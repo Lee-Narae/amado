@@ -81,22 +81,8 @@ text-align: center;
 margin-left: 2%;
 }
 
+
 </style>
-
-<script type="text/javascript">
-$(document).ready(function(){
-	
-	$("span#forhover").hide();
-	
-	$("span#bossname").hover(function(){
-		$("span#forhover").fadeIn(100);
-	}, function(){
-		$("span#forhover").hide();
-	});
-	
-});
-
-</script>
 
 <div id="container">
 <div  style="background-color: #4040bf">
@@ -304,8 +290,26 @@ $(document).ready(function(){
 		<div id="more" style="text-align: right; margin: 5% 5% 2% 0; color: #8a8a8a;">게시판 바로가기 ▶</div>
 	</div>
 	
-	
 
 
 </div>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+	
+	$("span#forhover").hide();
+	
+	$("span#bossname").hover(function(){
+		$("span#forhover").fadeIn(100);
+	}, function(){
+		$("span#forhover").hide();
+	});
+	
+	
+});
+
+</script>
+
+
     

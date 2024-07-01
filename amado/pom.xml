@@ -54,6 +54,13 @@
 			<version>${org.aspectj-version}</version>
 		</dependency>	
 		
+		<!-- coolsms -->
+		<dependency>
+		    <groupId>net.nurigo</groupId>
+		    <artifactId>javaSDK</artifactId>
+		    <version>2.2</version>
+ 		</dependency> 
+		
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -371,7 +378,7 @@
       </dependency>
       
       
-      <!-- === #191. Spring websocket dependency를 에 추가(웹채팅관련1) === -->
+      <!-- === #191-2. Spring websocket dependency를 에 추가(웹채팅관련1) === -->
       <dependency>
            <groupId>org.springframework</groupId>
            <artifactId>spring-websocket</artifactId>
@@ -379,7 +386,7 @@
       </dependency>
       
       
-      <!-- === #192. (웹채팅관련2) Gson 은 Java 객체를 JSON 표현식으로 변환할 수 있게 해주는 Java 라이브러리임. 
+      <!-- === #192-2. (웹채팅관련2) Gson 은 Java 객체를 JSON 표현식으로 변환할 수 있게 해주는 Java 라이브러리임. 
                또한 거꾸로 JSON 표현식 형태의 String 을 Java 객체로 변환도 가능하게 해주는 라이브러리임.
       === -->
       <dependency>

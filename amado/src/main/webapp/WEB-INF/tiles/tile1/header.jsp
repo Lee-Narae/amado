@@ -131,7 +131,7 @@ $(document).ready(function(){
 		<div class="nav">Gym&nbsp;&nbsp;∨</div>
 		<div class="nav">Community&nbsp;&nbsp;∨</div>
 	</div>
-	<div style="display: flex; margin-left: 45%; width: 30%; margin-top: 1.4%; border: solid 1px red;">
+	<div style="display: flex; margin-left: 45%; width: 30%; margin-top: 1.4%;">
 		<c:if test="${empty sessionScope.loginuser }">
 			<div id="login" onclick="location.href='<%=ctxPath%>/member/login.do'">로그인</div>
 			<div id="signup" onclick="location.href='<%=ctxPath%>/member/memberRegister.do'">회원가입</div>
@@ -142,17 +142,17 @@ $(document).ready(function(){
 		</c:if>		
 	</div>
 </div>
-<div id="tab" style="display: flex; width: 100%; height: 270px; background-color: #254179;">
+<div id="tab" style="display: flex; width: 100%; height: 330px; background-color: #254179;">
 	<div style="display: flex; width: 100%;">
 		<div class="tabs" style="margin-right: 1%; margin-left: 17%;">
 			<div onclick="location.href='<%=ctxPath%>/index.do'">Home</div>
 		</div>
 		<div class="tabs" style="margin-right: 2%;">
-			<div onclick="location.href='<%=ctxPath%>/club/findClub.do'">동호회 찾기</div>
-			<div onclick="location.href='<%=ctxPath%>/club/myClub.do'">My 동호회</div>
+			<div onclick="location.href='<%=ctxPath%>/club/viewClub.do'">동호회 찾기</div>
+			<div onclick="location.href='<%=ctxPath%>/club/myClub.do?sportseq=1'">My 동호회</div>
 			<div onclick="location.href='#'">동호회 등록하기</div>
 			<div onclick="location.href='<%=ctxPath%>/club/matchRegister.do'">매치 등록하기</div>
-			<div onclick="location.href='<%=ctxPath%>/club/oldshop.do'">플리마켓</div>
+			<div onclick="location.href='<%=ctxPath%>/club/fleamarket.do'">플리마켓</div>
 		</div>
 		<div class="tabs" style="margin-right: 2%;">
 			<div onclick="location.href='<%=ctxPath%>/gym/rental_gym.do'">체육관 찾기</div>

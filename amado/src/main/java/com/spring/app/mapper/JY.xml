@@ -4,5 +4,12 @@
 
 <mapper namespace="JY">
 
+	<!-- 동호회명 중복 체크 -->
+	<select id="clubnameDuplicateCheck" parameterType="String" resultType="int">
+		select count(*)
+		from tbl_member 
+		where clubname = #{clubname}
+	</select>
+	
 
 </mapper>

@@ -138,17 +138,19 @@ $(document).ready(function(){
 		</c:if>		
 	</div>
 </div>
-<div id="tab" style="display: flex; width: 95%; height: 270px; background-color: #254179; margin-left: 5%;">
+<div id="tab" style="display: flex; width: 95%; height: 330px; background-color: #254179; margin-left: 5%;">
 	<div style="display: flex; width: 100%;">
 		<div class="tabs" style="margin-right: 1%; margin-left: 13%;">
 			<div onclick="location.href='<%=ctxPath%>/index.do'">Home</div>
 		</div>
 		<div class="tabs" style="margin-right: 2%;">
 			<div onclick="location.href='<%=ctxPath%>/club/findClub.do'">동호회 찾기</div>
+			<div onclick="location.href='<%=ctxPath%>/club/myClub.do?sportseq=1'">My 동호회</div>
+			<div onclick="location.href='<%=ctxPath%>/club/viewClub.do'">동호회 찾기</div>
 			<div onclick="location.href='<%=ctxPath%>/club/myClub.do'">My 동호회</div>
 			<div onclick="location.href='#'">동호회 등록하기</div>
 			<div onclick="location.href='<%=ctxPath%>/club/matchRegister.do'">매치 등록하기</div>
-			<div onclick="location.href='<%=ctxPath%>/club/oldshop.do'">플리마켓</div>
+			<div onclick="location.href='<%=ctxPath%>/club/fleamarket.do'">플리마켓</div>
 		</div>
 		<div class="tabs" style="margin-right: 2%;">
 			<div onclick="location.href='<%=ctxPath%>/gym/rental_gym.do'">체육관 찾기</div>

@@ -2,11 +2,16 @@ package com.spring.app.service;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.app.common.AES256;
+import com.spring.app.common.Sha256;
+import com.spring.app.domain.BoardVO;
+import com.spring.app.domain.MemberVO;
 import com.spring.app.model.AmadoDAO_SJ;
 
 // 승진 서비스 임플
@@ -41,5 +46,49 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		
 		return n;
 	}
+
+	// 회원가입
+	@Override
+	public int memberRegisterEnd(MemberVO membervo) {
+		String password = membervo.getPassword();
+		String email = membervo.getEmail();
+		String mobile = membervo.getMobile();
+		
+		int n = 0;
+		try {
+			membervo.setPassword(Sha256.encrypt(password));
+			membervo.setEmail(aES256.encrypt(email));
+			membervo.setMobile(aES256.encrypt(mobile));
+			
+			n = dao.memberRegisterEnd(membervo);
+		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+			e.printStackTrace();
+		}
+		
+		return n;
+	}
+
+	// 글목록 보기
+	@Override
+	public List<BoardVO> boardListNoSearch() {
+		List<BoardVO> boardList = dao.boardListNoSearch();
+		return boardList;
+	}
+	
+	// 글목록 보기(검색가능)	
+	@Override
+	public List<BoardVO> boardListSearch(Map<String, String> paraMap) {
+		List<BoardVO> boardList = dao.boardListSearch(paraMap);
+		return boardList;
+	}
+
+	// 글쓰기
+	@Override
+	public int add(BoardVO boardvo) {
+		int n = dao.add(boardvo);
+		return n;
+	}
+
+
 	
 }

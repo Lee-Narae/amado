@@ -22,6 +22,13 @@ public class ControllerHS {
 	      return mav;
 	       //  /WEB-INF/views/tiles1/opendata/korea_tour_api.jsp 페이지를 만들어야 한다.
 	   }  
+	
+	@GetMapping(value="/gym/registerGym.do")
+	   public ModelAndView registerGym(ModelAndView mav) {
+		mav.setViewName("/gym/registerGym.tiles2");
+	      return mav;
+	       //  /WEB-INF/views/tiles1/opendata/korea_tour_api.jsp 페이지를 만들어야 한다.
+	   }  
 
 
 }

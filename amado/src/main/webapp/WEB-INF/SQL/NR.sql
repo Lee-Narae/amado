@@ -44,3 +44,36 @@ commit;
 
 
 select * from tbl_loginhistory;
+
+select * from tbl_club;
+
+ALTER TABLE tbl_club RENAME COLUMN SPORTSEQ TO fk_sportseq;
+
+desc tbl_sport;
+
+select clubseq
+from tbl_clubmember
+where fk_userid = 'leenr' and sportseq = 1;
+
+select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, local, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, name, sportname
+from tbl_club A join tbl_member B
+on A.fk_userid = B.userid
+join tbl_sport C
+on A.fk_sportseq = C.sportseq
+where clubseq = 2;
+
+select * from tab;
+
+select * from tbl_club;
+
+desc TBL_MATCHINGREG;
+
+insert into tbl_matchingreg(matchingregseq, clubseq, sportseq, membercount, matchdate, city, local, area, status)
+values(SEQ_MATCHINGREG.nextval, 5, 4, 17, '2024-07-21', '서울시', '노원구', '노원운동장', 0);
+
+commit;
+
+select * from tbl_matchingreg;
+
+update tbl_matchingreg set sportseq=2 where clubseq = 3;
+commit;

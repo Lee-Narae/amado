@@ -1,5 +1,6 @@
 package com.spring.app.model;
 
+import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -35,6 +36,31 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 	@Override
 	public void insert_tbl_loginhistory(Map<String, String> paramap) {
 		sqlsession.insert("NR.insert_tbl_loginhistory", paramap);
+	}
+
+	// loginuser의 종목별 동호회 번호 얻어오기
+	@Override
+	public String getClubseq(Map<String, String> paramap) {
+
+		String clubseq = sqlsession.selectOne("NR.getClubseq", paramap);
+		
+		return clubseq;
+	}
+
+	// 가입한 동호회 정보 불러오기
+	@Override
+	public Map<String, String> getClubInfo(String clubseq) {
+		Map<String, String> club = sqlsession.selectOne("NR.getClubInfo", clubseq);
+		return club;
+	}
+
+	// 모든 매칭정보 불러오기
+	@Override
+	public List<Map<String, String>> searchAllMatching() {
+
+		List<Map<String, String>> matchList = sqlsession.selectList("NR.searchAllMatching");
+		
+		return matchList;
 	}
 
 }

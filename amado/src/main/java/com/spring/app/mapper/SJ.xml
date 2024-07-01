@@ -17,7 +17,53 @@
 		from tbl_member 
 		where email = #{email}
 	</select>
+	
+	<!-- 회원가입 -->
+	<insert id="memberRegisterEnd" parameterType="MemberVO">
+		insert into tbl_member(userid, password, name, email, postcode, address, detailaddress, extraaddress, mobile, gender, birthday, registerday, lastpwdchangedate, status, memberrank, gymregisterstatus, speed, quick, power, earth, stretch, idle) 
+		values(#{userid}, #{password}, #{name}, #{email}, #{postcode}, #{address}, #{detailaddress}, #{extraaddress}, #{mobile}, to_number(#{gender}), #{birthday}, default, default, default, default, default, default, default, default, default, default, default)
+	</insert>
 
+    <!-- 페이징 처리를 안한 검색어가 없는 전체 글목록 보여주기 -->
+    <select id="boardListNoSearch" resultType="BoardVO">
+		select boardseq, title, content, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
+			 , password, commentcount, viewcount, status
+			 , orgfilename, filename, filesize
+		from tbl_board
+		where status = 1
+		order by boardseq desc
+    </select>
+    
+	<select id="boardListSearch" resultType="BoardVO" parameterType="HashMap">
+		select boardseq, title, content, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
+			 , password, commentcount, viewcount, status
+			 , orgfilename, filename, filesize
+	    from tbl_board
+		where status = 1 
+		<choose>
+			<when test='searchType == "title" and searchWord != "" '>
+				and lower(title) like '%'||lower(#{searchWord})||'%'
+			</when>
+			<when test='searchType == "content" and searchWord != "" '>
+				and lower(content) like '%'||lower(#{searchWord})||'%'
+			</when>
+			<when test='searchType == "title_content" and searchWord != "" '>
+				and ( lower(title) like '%'||lower(#{searchWord})||'%'
+				or    lower(content) like '%'||lower(#{searchWord})||'%' )
+			</when>
+			<when test='searchType == "fk_userid" and searchWord != "" '>
+				and lower(fk_userid) like '%'||lower(#{searchWord})||'%'
+			</when>
+			<otherwise></otherwise>
+		</choose>
+		order by boardseq desc
+	</select>    
+    
+    <!-- 글쓰기 -->
+   	<insert id="add" parameterType="BoardVO">
+		insert into tbl_board(boardseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status, orgfilename, filename, filesize)
+		values(seq_board.nextval, #{title}, #{content}, #{fk_userid}, default, #{password}, 0, 0, default, #{orgfilename}, #{filename} , to_number(#{filesize}))
+	</insert>
 
 
 </mapper>

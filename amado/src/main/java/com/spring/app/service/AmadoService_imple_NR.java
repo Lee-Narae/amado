@@ -2,6 +2,7 @@ package com.spring.app.service;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -121,13 +122,49 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 				}
 				else { // 암호를 마지막으로 변경한 것이 3개월 이내인 경우
 					
-					mav.setViewName("redirect:/index.do"); // 시작페이지로 이동
+					String goBackURL = (String)session.getAttribute("goBackURL");
+					
+					if(goBackURL != null) {
+						mav.setViewName("redirect:"+goBackURL); // 시작 페이지로 이동
+						session.removeAttribute("goBackURL");
+					}
+					
+					else {
+						mav.setViewName("redirect:/index.do");
+					}
 
 				}
 			}
 		}
 		
 		return mav;
+	}
+
+	// loginuser의 종목별 동호회 번호 얻어오기
+	@Override
+	public String getClubseq(Map<String, String> paramap) {
+
+		String clubseq = dao.getClubseq(paramap);
+		
+		return clubseq;
+	}
+
+	// 가입한 동호회 정보 불러오기
+	@Override
+	public Map<String, String> getClubInfo(String clubseq) {
+		
+		Map<String, String> club = dao.getClubInfo(clubseq);
+		
+		return club;
+	}
+
+	// 모든 매칭정보 불러오기
+	@Override
+	public List<Map<String, String>> searchAllMatching() {
+
+		List<Map<String, String>> matchList = dao.searchAllMatching();
+		
+		return matchList;
 	}
 	
 }

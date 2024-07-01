@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% String ctxPath = request.getContextPath(); %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <link rel="stylesheet" href="<%=ctxPath%>/resources/bootstrap-4.6.2-dist/css/bootstrap.min.css" type="text/css">
 <style type="text/css">
 
@@ -81,6 +83,20 @@ text-align: center;
 margin-left: 2%;
 }
 
+.cards:hover {
+box-shadow: 0px 0px 15px #cccccc;
+cursor: pointer;
+}
+
+.cardsclick {
+box-shadow: 0px 0px 15px #cccccc;
+cursor: pointer;
+}
+
+.cardsunclick {
+opacity: 0.5;
+}
+
 </style>
 
 <script type="text/javascript">
@@ -94,39 +110,98 @@ $(document).ready(function(){
 		$("span#forhover").hide();
 	});
 	
+	
+	const page_url = window.location.href;
+
+	const url = new URL(page_url);
+	const urlParams = url.searchParams;
+	const seq = urlParams.get('sportseq');
+	// console.log("seq: "+seq); 확인 완료
+
+	
+	for(let i=1; i<9; i++){
+		if(seq == i){
+			$("div.cards").addClass("cardsunclick");
+			$(`div#\${seq}`).removeClass("cardsunclick");
+			$(`div#\${seq}`).addClass("cardsclick");
+		}
+	}
+	
+	
 });
 
 </script>
 
 <div id="container">
-	<div id="clubTitle" style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">💌 My 동호회 💌</div>
+	<div id="clubTitle" style="text-align: center; margin: 5% 0 2% 0; font-size: 30pt; font-weight: bolder;">💌 My 동호회 💌</div>
+
+	<div style="width: 100%; height: 200px; margin-bottom: 3%;" align="center">
+		<div style="background-color: #f2f2f2; width: 80%; height: 200px; border-radius: 15px; display: flex; justify-content: space-between; padding: 1.3%;">
+			<div class="cards" id="1" onclick="location.href='<%=ctxPath %>/club/myClub.do?sportseq=1'" style="width: 10%; height: 150px; background-color: white; border-radius: 15px; padding-top: 1%;">
+				<img width="70%" height="70%" src="https://img.icons8.com/emoji/96/soccer-ball-emoji.png" alt="soccer-ball-emoji"/>
+				<div style="font-weight: bold;">축구</div>
+			</div>
+			<div class="cards" id="2" onclick="location.href='<%=ctxPath %>/club/myClub.do?sportseq=2'" style="width: 10%; height: 150px; background-color: white; border-radius: 15px; padding-top: 1%;">
+				<img width="70%" height="70%" src="https://img.icons8.com/emoji/96/baseball-emoji.png" alt="baseball-emoji"/>
+				<div style="font-weight: bold;">야구</div>
+			</div>
+			<div class="cards" id="3" onclick="location.href='<%=ctxPath %>/club/myClub.do?sportseq=3'" style="width: 10%; height: 150px; background-color: white; border-radius: 15px; padding-top: 1%;">
+				<img width="70%" height="70%" src="https://img.icons8.com/emoji/96/volleyball-emoji.png" alt="volleyball-emoji"/>
+				<div style="font-weight: bold;">배구</div>
+			</div>
+			<div class="cards" id="4" onclick="location.href='<%=ctxPath %>/club/myClub.do?sportseq=4'" style="width: 10%; height: 150px; background-color: white; border-radius: 15px; padding-top: 1%;">
+				<img width="70%" height="70%" src="https://img.icons8.com/emoji/96/basketball-emoji.png" alt="basketball-emoji"/>
+				<div style="font-weight: bold;">농구</div>
+			</div>
+			<div class="cards" id="6" onclick="location.href='<%=ctxPath %>/club/myClub.do?sportseq=6'" style="width: 10%; height: 150px; background-color: white; border-radius: 15px; padding-top: 1%;">
+				<img width="70%" height="70%" src="https://img.icons8.com/emoji/96/tennis-emoji.png" alt="tennis-emoji"/>
+				<div style="font-weight: bold;">테니스</div>
+			</div>
+			<div class="cards" id="7" onclick="location.href='<%=ctxPath %>/club/myClub.do?sportseq=7'" style="width: 10%; height: 150px; background-color: white; border-radius: 15px; padding-top: 1%;">
+				<img style="margin: 6% 0;" width="57%" height="57%" src="https://img.icons8.com/external-smashingstocks-flat-smashing-stocks/96/external-Bowling-casino-smashingstocks-flat-smashing-stocks-3.png" alt="external-Bowling-casino-smashingstocks-flat-smashing-stocks-3"/>
+				<div style="font-weight: bold;">볼링</div>
+			</div>
+			<div class="cards" id="5" onclick="location.href='<%=ctxPath %>/club/myClub.do?sportseq=5'" style="width: 10%; height: 150px; background-color: white; border-radius: 15px; padding-top: 1%;">
+				<img style="margin: 7% 0;" width="53%" height="53%" src="https://img.icons8.com/office/96/beach-ball.png" alt="beach-ball"/>
+				<div style="font-weight: bold;">족구</div>
+			</div>
+			<div class="cards" id="8" onclick="location.href='<%=ctxPath %>/club/myClub.do?sportseq=8'" style="width: 10%; height: 150px; background-color: white; border-radius: 15px; padding-top: 1%;">
+				<img style="margin: 5% 0;" width="55%" height="55%" src="https://img.icons8.com/3d-fluency/96/shuttercock.png" alt="shuttercock"/>
+				<div style="font-weight: bold;">배드민턴</div>
+			</div>
+		</div>
+	</div>
+
+<c:if test="${not empty requestScope.club}">
+<div style="margin-left: 2.2%;">
 	<div id="top2" style="display: flex; height: 500px;">
-		<!-- 동호회 여러개 가입시 캐러셀 적용 -->
 		<div id="myclub" style="width: 43%; margin: 2% 0 0 5%; border-radius: 70px; background-color: #e6f7ff; box-shadow: 0px 0px 10px #9ac5db;">
-			<div id="clubTitle" style="text-align: center; margin-top: 5%; font-size: 30pt; font-weight: bolder;">쌍용불주먹</div>
-			<div id="sport" style="text-align: center;">배구</div>
+			<div id="clubTitle" style="text-align: center; margin-top: 5%; font-size: 30pt; font-weight: bolder;">${requestScope.club.clubname}</div>
+			<div id="sport" style="text-align: center;">${requestScope.club.sportname}</div>
 			<div id="info" style="background-color: transparent; display: flex; margin: 5% 0 0 0; width: 100%; opacity: 1; height: auto;">
-				<div id="clubimg" style="border: solid 1px grey; width: 25%; height: 200px; margin-left: 5%; background: linear-gradient(to top right, #fff calc(50% - 1px), black , #fff calc(50% + 1px) )"></div>
+				<div id="clubimg" style="border: solid 1px grey; width: 25%; height: 200px; margin-left: 5%; overflow: hidden;">
+					<img width="100%" src="<%=ctxPath %>/resources/images/zee/${requestScope.club.clubimg}" />
+				</div>
 				<div style="width: 75%;">
 					<div id="clubboss" style="width: 100%; margin-bottom: 2%;">
 						<span class="title">동호회 회장</span>
-						<span class="detail" id="bossname">이나래</span><span id="forhover">◁ 클릭하여 정보보기</span>
+						<span class="detail" id="bossname">${requestScope.club.name}</span><span id="forhover">◁ 클릭하여 정보보기</span>
 					</div>
 					<div id="tel" style="width: 100%; margin-bottom: 2%;">
 						<span class="title">연락처</span>
-						<span class="detail">010-1234-1234</span>
+						<span class="detail">${requestScope.club.clubtel}</span>
 					</div>
 					<div id="area" style="width: 100%; margin-bottom: 2%;">
 						<span class="title">지역</span>
-						<span class="detail">서울시 중랑구</span>
+						<span class="detail">${requestScope.club.city} > ${requestScope.club.local}</span>
 					</div>
 					<div id="gym" style="width: 100%; margin-bottom: 2%;">
 						<span class="title">활동구장</span>
-						<span class="detail">쌍용초등학교 체육관</span>
+						<span class="detail">${requestScope.club.clubgym}</span>
 					</div>
 					<div id="time" style="width: 100%; margin-bottom: 2%;">
 						<span class="title">운영시간</span>
-						<span class="detail">매주 일요일 오후 1시~6시</span>
+						<span class="detail">${requestScope.club.clubtime}</span>
 					</div>
 				</div>
 			</div>
@@ -226,5 +301,99 @@ $(document).ready(function(){
 		</div>
 		<div id="more" style="text-align: right; margin: 5% 5% 2% 0; color: #8a8a8a;">게시판 바로가기 ▶</div>
 	</div>
+</div>
+</c:if>
+
+<c:if test="${empty requestScope.club}">
+<div style="margin-left: 2.2%;">
+	<div id="top2" style="display: flex; height: 500px; margin-bottom: 5%; filter: blur(7px);">
+		<div id="myclub" style="width: 43%; margin: 2% 0 0 5%; border-radius: 70px; background-color: #e6f7ff; box-shadow: 0px 0px 10px #9ac5db;">
+			<div id="clubTitle" style="text-align: center; margin-top: 5%; font-size: 30pt; font-weight: bolder;">동호회 이름</div>
+			<div id="sport" style="text-align: center;">종목</div>
+			<div id="info" style="background-color: transparent; display: flex; margin: 5% 0 0 0; width: 100%; opacity: 1; height: auto;">
+				<div id="clubimg" style="border: solid 1px grey; width: 25%; height: 200px; margin-left: 5%; overflow: hidden;">
+					<img width="100%" src="<%=ctxPath %>/resources/images/logo.png" />
+				</div>
+				<div style="width: 75%;">
+					<div id="clubboss" style="width: 100%; margin-bottom: 2%;">
+						<span class="title">동호회 회장</span>
+						<span class="detail" id="bossname">아마두</span><span id="forhover">◁ 클릭하여 정보보기</span>
+					</div>
+					<div id="tel" style="width: 100%; margin-bottom: 2%;">
+						<span class="title">연락처</span>
+						<span class="detail">010-1234-1234</span>
+					</div>
+					<div id="area" style="width: 100%; margin-bottom: 2%;">
+						<span class="title">지역</span>
+						<span class="detail">서울시 > 쌍용구</span>
+					</div>
+					<div id="gym" style="width: 100%; margin-bottom: 2%;">
+						<span class="title">활동구장</span>
+						<span class="detail">쌍용강북체육센터</span>
+					</div>
+					<div id="time" style="width: 100%; margin-bottom: 2%;">
+						<span class="title">운영시간</span>
+						<span class="detail">평일 09:00 ~ 18:00</span>
+					</div>
+				</div>
+			</div>
+			<div id="more" style="text-align: right; margin: 3% 8% 0 0; color: #8a8a8a;"><a href="<%= ctxPath%>/club/myClub_plus.do">동호회 정보 더보기 ▶</a></div>
+		</div>
+		
+		
+		<div id="clubmatch" style="width: 43%; margin: 2% 0 0 2%; border-radius: 70px; background-color: #e6f7ff; box-shadow: 0px 0px 10px #9ac5db;">
+			<div id="clubTitle" style="text-align: center; margin-top: 5%; font-size: 30pt; font-weight: bolder;">우리 팀 매치 일정</div>
+			<div style="margin: 5% 0 1% 5%; font-size: 10pt;">※ 팀 매치 일정은 상위 3개까지 노출됩니다.</div>
+			<div id="table" style="width: 90%; margin-left: 5%;">
+				<div class="tbl-header">
+				  <table cellpadding="0" cellspacing="0" border="0">
+				    <thead>
+				      <tr>
+				        <th style="width: 10%;">순번</th>
+						<th style="width: 20%;">날짜</th>
+						<th style="width: 35%;">상대팀</th>
+						<th style="width: 35%;">장소</th>
+				      </tr>
+				    </thead>
+				  </table>
+				</div>
+				<div class="tbl-content">
+				  <table cellpadding="0" cellspacing="0" border="0">
+				    <tbody>
+				      <tr>
+						<td style="width: 10%;">-</td>
+						<td style="width: 20%;">-</td>
+						<td style="width: 35%;">-</td>
+						<td style="width: 35%;">-</td>
+					</tr>
+					<tr>
+						<td style="width: 10%;">-</td>
+						<td style="width: 20%;">-</td>
+						<td style="width: 35%;">-</td>
+						<td style="width: 35%;">-</td>
+					</tr>
+					<tr>
+						<td style="width: 10%;">-</td>
+						<td style="width: 20%;">-</td>
+						<td style="width: 35%;">-</td>
+						<td style="width: 35%;">-</td>
+					</tr>
+				    </tbody>
+				  </table>
+				</div>
+			</div>
+			<div id="more" style="text-align: right; margin: 3.5% 8% 0 0; color: #8a8a8a;">우리 팀 매치 일정 더보기 ▶</div>
+		</div>
+	</div>
+	
+	<div align="center" style="position: absolute; top: 72%; left: 3%; width: 100%;">
+		<div style="z-index: 100; width: 50%; height: 300px; align-content: center;">
+			<div style="font-size: 25pt; line-height: 200%; font-weight: bold;">아직 가입된 동호회가 없습니다.<br>동호회 찾기 버튼을 눌러 마음에 드는 동호회에 가입하세요!</div>
+			<div class="btn btn-primary btn-lg" style="margin-top: 3%;" onclick="location.href='<%=ctxPath%>/club/findClub.do'">동호회 찾기</div>
+		</div>
+	</div>
+	
+</div>	
+</c:if>
 
 </div>
