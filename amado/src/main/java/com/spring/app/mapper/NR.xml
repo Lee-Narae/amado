@@ -28,5 +28,17 @@
         insert into tbl_loginhistory(loginseq, fk_userid, logindate, clientip)
         values (seq_loginhistory.nextval, #{userid}, sysdate, #{clientip})
     </insert>
+    
+    <select id="getClubseq" parameterType="HashMap" resultType="String">
+    	select clubseq
+		from tbl_clubmember
+		where fk_userid = #{userid} and sportseq = #{sportseq}
+    </select>
+
+	<select id="getClubInfo" parameterType="String" resultType="ClubVO">
+		select *
+		from tbl_club
+		where clubseq = #{clubseq}
+	</select>
 
 </mapper>
