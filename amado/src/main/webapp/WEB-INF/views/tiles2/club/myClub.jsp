@@ -100,8 +100,10 @@ $(document).ready(function(){
 
 <div id="container">
 	<div id="clubTitle" style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">💌 My 동호회 💌</div>
+
+	<div style="border: solid 1px red; width: 80%; height: 300px;"></div>
+
 	<div id="top2" style="display: flex; height: 500px;">
-		<!-- 동호회 여러개 가입시 캐러셀 적용 -->
 		<div id="myclub" style="width: 43%; margin: 2% 0 0 5%; border-radius: 70px; background-color: #e6f7ff; box-shadow: 0px 0px 10px #9ac5db;">
 			<div id="clubTitle" style="text-align: center; margin-top: 5%; font-size: 30pt; font-weight: bolder;">쌍용불주먹</div>
 			<div id="sport" style="text-align: center;">배구</div>
