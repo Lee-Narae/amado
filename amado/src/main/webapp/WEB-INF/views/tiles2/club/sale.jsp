@@ -152,6 +152,27 @@ rotate(
 	margin: 5% auto;
 }
 /* -- CSS 로딩화면 구현 끝(bootstrap 에서 가져옴) 끝 -- */
+
+.carousel-inner .carousel-item.active,
+		.carousel-inner .carousel-item-next,
+		.carousel-inner .carousel-item-prev {
+		  display: flex;
+		}
+		
+		.carousel-inner .carousel-item-right.active,
+		.carousel-inner .carousel-item-next {
+		  transform: translateX(25%);
+		}
+		
+		.carousel-inner .carousel-item-left.active, 
+		.carousel-inner .carousel-item-prev {
+		  transform: translateX(-25%);
+		}
+		  
+		.carousel-inner .carousel-item-right,
+		.carousel-inner .carousel-item-left{ 
+		  transform: translateX(0);
+		}
 </style>
 
 <script type="text/javascript"
@@ -257,6 +278,27 @@ rotate(
 	    
 	    $("div.loader").hide(); // CSS 로딩화면 감추기 
 	    
+	    
+	    $('#recipeCarousel').carousel({
+        	  interval :2000
+        	});
+
+        	$('.carousel .carousel-item').each(function(){
+        	    var next = $(this).next();
+        	    if (!next.length) {
+        	        next = $(this).siblings(':first');
+        	    }
+        	    next.children(':first-child').clone().appendTo($(this));
+        	    
+        	    for (var i=0;i<2;i++) {
+        	        next=next.next();
+        	        if (!next.length) {
+        	        	next = $(this).siblings(':first');
+        	      	}
+        	        
+        	        next.children(':first-child').clone().appendTo($(this));
+        	      }
+        	});
 	});// end of $(document).ready(function(){})-----------------
 
 	
@@ -303,11 +345,14 @@ rotate(
    
 </script>
 
-<div >홈</div>
+<div style="font-weight: bolder; font-size: 10pt;">
+	<img style="width: 1.2%; margin-bottom: 0.2%;" src="<%=ctxPath%>/resources/images/홈.png">
+	<a style="text-decoration: none; color: black;" href="<%=ctxPath%>/club/oldshop.do">&nbsp;플리마켓 홈</a>
+</div>
 <hr>
 <div style="width: 70%; margin: 0 auto;">
 
-	<div class="row my-3 text-left">
+	<div class="row my-5 text-left">
 		
 	
 		<div class="col-md-6">
@@ -323,7 +368,7 @@ rotate(
 
 		<div class="col-md-6 pl-5">
 			<ul class="list-unstyled">
-				<li style="font-size: 25px; font-family: 'Volt110', sans-serif; font-weight: 700;">호날두가 신었던 축구화 팝니다!!</li>
+				<li style="font-size: 25px; font-family: 'Roboto', sans-serif; font-weight: 700;">호날두가 신었던 축구화 팝니다!!</li>
 				<li style="font-size: 32px; font-family: 'Roboto', sans-serif; font-weight: 1000;">50,000,000 원</li>
 				<hr>
 				<li style="color: #bfbfbf; ">👀 조회수  |  🕓 올린시간</li>
@@ -341,57 +386,107 @@ rotate(
 		</div>
 		
 		
-		
 	</div>
 	<hr>
+	<div style="font-weight: bold">
+		연관상품
+		<img style="width: 3%;" src="<%=ctxPath%>/resources/images/추천.png">
+	</div>
 	
-	<div style="width: 50%; margin: 5% auto;">
+	<div class="container text-center my-4">
+	    <div class="row mx-auto my-auto">
+	        <div id="recipeCarousel" class="carousel slide w-100" data-ride="carousel">
+	            <div class="carousel-inner w-100" role="listbox">
+	                <div class="carousel-item active">
+	                    <img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/다운로드.jpg">
+	                </div>
+	                <div class="carousel-item">
+	                    <img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/다운로드.jpg">
+	                </div>
+	                <div class="carousel-item">
+	                    <img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/다운로드.jpg">
+	                </div>
+	                <div class="carousel-item">
+	                    <img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/다운로드.jpg">
+	                </div>
+	                <div class="carousel-item">
+	                    <img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/다운로드.jpg">
+	                </div>
+	                <div class="carousel-item">
+	                    <img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/다운로드.jpg">
+	                </div>
+	                <div class="carousel-item">
+	                    <img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/다운로드.jpg">
+	                </div>
+	                <div class="carousel-item">
+	                    <img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/다운로드.jpg">
+	                </div>
+	            </div>
+	            <a class="carousel-control-prev" href="#recipeCarousel" role="button" data-slide="prev">
+	                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+	                <span class="sr-only">Previous</span>
+	            </a>
+	            <a class="carousel-control-next" href="#recipeCarousel" role="button" data-slide="next">
+	                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+	                <span class="sr-only">Next</span>
+	            </a>
+	        </div>
+	    </div>
+	</div>
+		
+	
+	<hr>
+	
+	<div style="width: 50%; margin: 10% auto 15% auto;">
 			<img src="<%=ctxPath%>/resources/images/다운로드1.jpg" class="img-fluid"
 				style="width: 100%;" /> 제가 직접 신었답니다ㅎㅎ
 				
 			<img src="<%=ctxPath%>/resources/images/다운로드2.jpg" class="img-fluid"
 			style="width: 100%;" /> 내가 바로 크리스티아누 호우~
 	</div>
+	
+	<div style="font-size: 11pt;">
+		<img style="width: 3%; margin-bottom: 0.2%;" src="<%=ctxPath%>/resources/images/댓글.png">
+		댓글
+	</div>
+	
 	<hr>
 	
 	
 	<div class="text-left">
-		<p class="h4 text-muted">댓글</p>
+	
+	<%-- === #94. 댓글 내용 보여주기 === --%>
+     
+    <div style="display: flex; margin: 5% 0;">
+    	
+		  <img style="width: 8%; height: 3%;" src="<%=ctxPath%>/resources/images/real_madrid.png">
+		
+		  <div>
+     		 <div style="font-size:12pt; font-weight: bold; margin-bottom: 3%;">호우마드리드</div>
+     		 <div>안녕하세요! 혹시 발냄새는 안나나요?</div>
+     		 <div style="color:#999999; font-size:10pt; margin-top: 3%;">2024.07.01. 14:57 &nbsp;&nbsp;<a>답글쓰기</a></div>
+     	  </div>
+    </div>
 
-	<div class="row">
-		<div class="col-lg-10">
+	<div>
+		<div>
 			<form name="commentFrm">
 				<textarea name="contents"
-					style="font-size: 12pt; width: 100%; height: 150px;"></textarea>
+					style="font-size: 12pt; width: 100%; height: 100px;"></textarea>
 				<input type="hidden" name="fk_userid"
 					value="${sessionScope.loginuser.userid}" /> <input type="hidden"
 					name="fk_pnum" value="${requestScope.pvo.pnum}" />
 			</form>
 		</div>
-		<div class="col-lg-2" style="display: flex;">
-			<button type="button" class="btn btn-outline-secondary w-100 h-100"
+		<div style="text-align: right; font-size: 12pt;">
+			<button type="button" class="btn btn-outline-secondary"
 				id="btnCommentOK" style="margin: auto;">
-				<span class="h5">등록</span>
+				<span style="font-size: 10pt;">등록</span>
 			</button>
 		</div>
 	</div>
 
-		<%-- === #94. 댓글 내용 보여주기 === --%>
-      <h3 style="margin-top: 50px;">댓글내용</h3>
-      <div>
-	      <table class="table" style="font-size: 12px;">
-	         <thead>
-	         	<tr>
-	         		<th style="twidth: 6%;">순번</th>
-		            <th style="text-align: center;">내용</th>
-		            <th style="width: 8%; text-align: center;">작성자</th>
-		            <th style="width: 12%; text-align: center;">작성일자</th>
-		            <th style="width: 12%; text-align: center;">수정/삭제</th>
-	         	</tr>
-	         </thead>
-	         <tbody id="commentDisplay"></tbody>
-	      </table>
-      </div>
+	
       
       <%-- #155. 댓글페이지바가 보여지는 곳 === --%>
       <div style="display: flex; margin-bottom: 50px;">
