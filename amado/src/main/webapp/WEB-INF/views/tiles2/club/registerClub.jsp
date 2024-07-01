@@ -41,13 +41,13 @@ select{
  
 <script type="text/javascript">
 
+
 $(document).ready(function(){
 	
     // 글쓰기 버튼
     $("button#btnRegister").click(function(){
   	 
-  	  // 글제목 유효성 검사
-  	  const clubName = $("input:text[name='clubName']").val().trim();
+  	  const clubname = $("input:text[name='clubname']").val().trim();
   	  const cost = $("input:text[name='cost']").val().trim();
   	  const headImg = $("input:file[name='headImg']").val().trim();
   	  const sportType = $("select[name='sportType']").val();
@@ -57,8 +57,7 @@ $(document).ready(function(){
   	  const time = $("select[name='time']").val();
   	  const memberCnt = $("input:range[name='memberCnt']").val();
   	  
-  	  if(clubName == "" || cost=="" ||
-  		 headImg == "" ){
+  	  if(cost=="" || headImg == "" ){
   		  
   		  alert("필수사항을 입력하세요!!");
   		  return; // 종료
@@ -75,7 +74,33 @@ $(document).ready(function(){
   		  return;
   	  }
   	  
-  	  // 동호회명이 존재하는 경우 
+  	  // 동호회명 중복검사
+      $('#clubname').on('blur', function() {
+         
+          if (clubname == "") {
+              $('#clubnamecheckResult').html("동호회명을 입력하세요!").css({"color":"red"});
+              return;
+          }
+
+          $.ajax({
+              url: "<%=ctxPath%>/clubnameDuplicateCheck.do",
+              data: {"clubname": clubname},
+              type: "post",
+              dataType: "json",
+              success: function(json) {
+                  if(json.n == 0) {
+                      $('#clubnamecheckResult').html(clubname + " 은(는) 사용 가능한 동호회명입니다.").css({"color":"blue"});
+                  } else {
+                      $('#clubnamecheckResult').html(clubname + " 은(는) 이미 사용중이므로 다른 동호회명을 입력하세요.").css({"color":"red"});
+                      $('#clubname').val("").focus();
+                  }
+              },
+              error: function(request, status, error) {
+                  alert("code: " + request.status + "\n" + "message: " + request.responseText + "\n" + "error: " + error);
+              }
+          });
+      });
+ 
   	  
   	  // 글내용 유효성 검사()
   	  
@@ -84,7 +109,7 @@ $(document).ready(function(){
    	  // 폼(form)을 전송(submit)
    	  const frm = document.registerClubFrm;
    	  frm.method = "post";
-   	  frm.action = "<%= ctxPath%>/registerClub.action";
+   	  <%-- frm.action = "<%= ctxPath%>/registerClub.action"; --%>
    	  frm.submit();
    	  
     });
@@ -137,9 +162,9 @@ $(document).ready(function(){
 		      <!-- 동호회명 -->
 				<h3 id="simple-list-item-2" style="font-weight: bolder;">동호회명<span style="color: red;">*</span></h3>
 				<hr>
-				<input name="clubName" id="form-control-lg" type="text" placeholder="동호회 이름을 입력하세요. " aria-label="">
-			
-				<br><br><br><br>
+				<input name="clubname" id="clubname form-control-lg" type="text" placeholder="동호회 이름을 입력하세요. " aria-label="">
+				<span id="clubnamecheckResult"></span>
+				<br><br><br><br> 
 		
 		      
 		      <!-- 지역 -->
