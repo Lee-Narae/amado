@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.app.common.AES256;
+import com.spring.app.common.Sha256;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.model.AmadoDAO_SJ;
@@ -55,12 +56,10 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		
 		int n = 0;
 		try {
-			membervo.setPassword(aES256.encrypt(password));
+			membervo.setPassword(Sha256.encrypt(password));
 			membervo.setEmail(aES256.encrypt(email));
 			membervo.setMobile(aES256.encrypt(mobile));
 			
-//			System.out.println(membervo.getMobile());
-
 			n = dao.memberRegisterEnd(membervo);
 		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
 			e.printStackTrace();
