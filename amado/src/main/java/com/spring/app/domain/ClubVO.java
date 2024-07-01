@@ -36,9 +36,7 @@ public class ClubVO {
 	private String clubscore;		// 점수
 	
 	
-	
-	
-	
+
 	public String getClubseq() {
 		return clubseq;
 	}

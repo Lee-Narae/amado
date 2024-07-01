@@ -2,6 +2,7 @@ package com.spring.app.model;
 
 import java.util.Map;
 
+import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.MemberVO;
 
 public interface AmadoDAO_NR {
@@ -14,5 +15,11 @@ public interface AmadoDAO_NR {
 
 	// loginhistory insert
 	void insert_tbl_loginhistory(Map<String, String> paramap);
+
+	// loginuser의 종목별 동호회 번호 얻어오기
+	String getClubseq(Map<String, String> paramap);
+
+	// 가입한 동호회 정보 불러오기
+	Map<String, String> getClubInfo(String clubseq);
 
 }

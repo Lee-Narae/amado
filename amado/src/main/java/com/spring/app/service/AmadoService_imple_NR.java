@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.app.common.AES256;
+import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.model.AmadoDAO_NR;
 
@@ -137,6 +138,24 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		}
 		
 		return mav;
+	}
+
+	// loginuser의 종목별 동호회 번호 얻어오기
+	@Override
+	public String getClubseq(Map<String, String> paramap) {
+
+		String clubseq = dao.getClubseq(paramap);
+		
+		return clubseq;
+	}
+
+	// 가입한 동호회 정보 불러오기
+	@Override
+	public Map<String, String> getClubInfo(String clubseq) {
+		
+		Map<String, String> club = dao.getClubInfo(clubseq);
+		
+		return club;
 	}
 	
 }

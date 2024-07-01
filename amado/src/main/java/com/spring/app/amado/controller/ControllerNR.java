@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.app.common.Sha256;
+import com.spring.app.domain.ClubVO;
+import com.spring.app.domain.MemberVO;
 import com.spring.app.service.AmadoService_NR;
 
 @Controller
@@ -44,12 +46,22 @@ public class ControllerNR {
 	public ModelAndView requiredLogin_myClub(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
 		
 		HttpSession session = request.getSession();
-		session.getAttribute("loginuser");
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("userid", loginuser.getUserid());
 		
 		String sportseq = request.getParameter("sportseq");
 		// System.out.println("sportseq: "+sportseq); 확인 완료
+		paramap.put("sportseq", sportseq);
 		
-		// = service.getClubseq(sportseq);
+		String clubseq = service.getClubseq(paramap);
+		// System.out.println("clubseq: "+clubseq); 확인 완료
+		
+		if(clubseq != null) {
+			Map<String, String> club = service.getClubInfo(clubseq);
+			mav.addObject("club", club);
+		}
 		
 		mav.setViewName("club/myClub.tiles2");
 		// /WEB-INF/views/tiles2/club/myClub.jsp
@@ -90,6 +102,25 @@ public class ControllerNR {
 		return mav;
 	}
 	
+	
+	@GetMapping("/member/logout.do")
+	public ModelAndView logout(ModelAndView mav, HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();
+		
+		session.invalidate();
+		
+		String message = "로그아웃되었습니다.";
+		String loc = request.getContextPath()+"/index.do";
+		
+		mav.addObject("message", message);
+		mav.addObject("loc", loc);
+		
+		mav.setViewName("msg");
+		// /WEB-INF/views/msg.jsp
+		
+		return mav;
+	}
 	
 	
 	@GetMapping("/admin")
