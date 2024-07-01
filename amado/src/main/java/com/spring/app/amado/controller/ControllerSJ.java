@@ -59,11 +59,36 @@ public class ControllerSJ {
 
 	// 회원가입
 	@PostMapping("/member/memberRegister.do")
-	public ModelAndView memberRegisterEnd(MemberVO membervo, ModelAndView mav) {
+	public ModelAndView memberRegisterEnd(HttpServletRequest request, MemberVO membervo, ModelAndView mav) {
 		
-//		int n = service.memberRegisterEnd(membervo);
+		String hp2 = request.getParameter("hp2");
+		String hp3 = request.getParameter("hp3");
+		String password = request.getParameter("pwd");
 		
-		mav.setViewName("member/memberRegister.tiles1");
+		String mobile = "010"+hp2+hp3;
+		membervo.setMobile(mobile);
+		membervo.setPassword(password);
+		
+//		System.out.println(membervo.getMobile());
+//		System.out.println(membervo.getBirthday());
+//		System.out.println(membervo.getPassword());
+//		System.out.println(membervo.getUserid());
+//		System.out.println(membervo.getEmail());
+//		System.out.println(membervo.getPostcode());
+//		System.out.println(membervo.getAddress());
+//		System.out.println(membervo.getDetailaddress());
+//		System.out.println(membervo.getExtraaddress());
+//		System.out.println(membervo.getGender());
+		
+		int n = service.memberRegisterEnd(membervo);
+		
+		if(n == 1) {
+			mav.setViewName("main/index.tiles2");
+		}
+		else {
+			mav.setViewName("member/memberRegister.tiles1");
+		}
+		
 		return mav;
 	}
 

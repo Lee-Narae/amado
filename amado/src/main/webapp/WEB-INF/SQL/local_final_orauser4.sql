@@ -571,4 +571,6 @@ from tbl_member
 
 
 insert into tbl_member(USERID, PASSWORD, NAME, EMAIL, POSTCODE, ADDRESS, DETAILADDRESS, EXTRAADDRESS, MOBILE, GENDER, BIRTHDAY, REGISTERDAY, LASTPWDCHANGEDATE, STATUS, MEMBERRANK, GYMREGISTERSTATUS, SPEED, QUICK, POWER, EARTH, STRETCH, IDLE) 
-values(seq_yeyakno_1.nextval, '첫번째 글입니다.');
+values('ksj1024sj', '9695b88a59a1610320897fa84cb7e144cc51f2984520efb77111d94b402a8382', '김승진', 'Nb/STO9Z4GBQrKkY9koq/+g0lS1PgGRg/D4VpulV8QY=', '05237', '서울 강동구 아리수로 46', '201동 101호', ' (암사동)', 'L+bSt7E1AXYJSyebi4fSKA==', 1, '1995-10-24', default, default, default, default, default, default, default, default, default, default, default);
+
+commit;

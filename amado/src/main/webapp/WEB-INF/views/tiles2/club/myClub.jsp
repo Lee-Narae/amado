@@ -81,6 +81,20 @@ text-align: center;
 margin-left: 2%;
 }
 
+.cards:hover {
+box-shadow: 0px 0px 15px #cccccc;
+cursor: pointer;
+}
+
+.cardsclick {
+box-shadow: 0px 0px 15px #cccccc;
+cursor: pointer;
+}
+
+.cardsunclick {
+opacity: 0.5;
+}
+
 </style>
 
 <script type="text/javascript">
@@ -94,14 +108,67 @@ $(document).ready(function(){
 		$("span#forhover").hide();
 	});
 	
+	
+	const page_url = window.location.href;
+
+	const url = new URL(page_url);
+	const urlParams = url.searchParams;
+	const seq = urlParams.get('sportseq');
+	// console.log("seq: "+seq); 확인 완료
+
+	
+	for(let i=1; i<9; i++){
+		if(seq == i){
+			$("div.cards").addClass("cardsunclick");
+			$(`div#\${seq}`).removeClass("cardsunclick");
+			$(`div#\${seq}`).addClass("cardsclick");
+		}
+	}
+	
+	
 });
 
 </script>
 
 <div id="container">
-	<div id="clubTitle" style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">💌 My 동호회 💌</div>
+	<div id="clubTitle" style="text-align: center; margin: 5% 0 2% 0; font-size: 30pt; font-weight: bolder;">💌 My 동호회 💌</div>
 
-	<div style="border: solid 1px red; width: 80%; height: 300px;"></div>
+	<div style="width: 100%; height: 200px; margin-bottom: 3%;" align="center">
+		<div style="background-color: #f2f2f2; width: 80%; height: 200px; border-radius: 15px; display: flex; justify-content: space-between; padding: 1.3%;">
+			<div class="cards" id="1" onclick="location.href='<%=ctxPath %>/club/myClub.do?sportseq=1'" style="width: 10%; height: 150px; background-color: white; border-radius: 15px; padding-top: 1%;">
+				<img width="70%" height="70%" src="https://img.icons8.com/emoji/96/soccer-ball-emoji.png" alt="soccer-ball-emoji"/>
+				<div style="font-weight: bold;">축구</div>
+			</div>
+			<div class="cards" id="2" onclick="location.href='<%=ctxPath %>/club/myClub.do?sportseq=2'" style="width: 10%; height: 150px; background-color: white; border-radius: 15px; padding-top: 1%;">
+				<img width="70%" height="70%" src="https://img.icons8.com/emoji/96/baseball-emoji.png" alt="baseball-emoji"/>
+				<div style="font-weight: bold;">야구</div>
+			</div>
+			<div class="cards" id="3" onclick="location.href='<%=ctxPath %>/club/myClub.do?sportseq=3'" style="width: 10%; height: 150px; background-color: white; border-radius: 15px; padding-top: 1%;">
+				<img width="70%" height="70%" src="https://img.icons8.com/emoji/96/volleyball-emoji.png" alt="volleyball-emoji"/>
+				<div style="font-weight: bold;">배구</div>
+			</div>
+			<div class="cards" id="4" onclick="location.href='<%=ctxPath %>/club/myClub.do?sportseq=4'" style="width: 10%; height: 150px; background-color: white; border-radius: 15px; padding-top: 1%;">
+				<img width="70%" height="70%" src="https://img.icons8.com/emoji/96/basketball-emoji.png" alt="basketball-emoji"/>
+				<div style="font-weight: bold;">농구</div>
+			</div>
+			<div class="cards" id="6" onclick="location.href='<%=ctxPath %>/club/myClub.do?sportseq=6'" style="width: 10%; height: 150px; background-color: white; border-radius: 15px; padding-top: 1%;">
+				<img width="70%" height="70%" src="https://img.icons8.com/emoji/96/tennis-emoji.png" alt="tennis-emoji"/>
+				<div style="font-weight: bold;">테니스</div>
+			</div>
+			<div class="cards" id="7" onclick="location.href='<%=ctxPath %>/club/myClub.do?sportseq=7'" style="width: 10%; height: 150px; background-color: white; border-radius: 15px; padding-top: 1%;">
+				<img style="margin: 6% 0;" width="57%" height="57%" src="https://img.icons8.com/external-smashingstocks-flat-smashing-stocks/96/external-Bowling-casino-smashingstocks-flat-smashing-stocks-3.png" alt="external-Bowling-casino-smashingstocks-flat-smashing-stocks-3"/>
+				<div style="font-weight: bold;">볼링</div>
+			</div>
+			<div class="cards" id="5" onclick="location.href='<%=ctxPath %>/club/myClub.do?sportseq=5'" style="width: 10%; height: 150px; background-color: white; border-radius: 15px; padding-top: 1%;">
+				<img style="margin: 7% 0;" width="53%" height="53%" src="https://img.icons8.com/office/96/beach-ball.png" alt="beach-ball"/>
+				<div style="font-weight: bold;">족구</div>
+			</div>
+			<div class="cards" id="8" onclick="location.href='<%=ctxPath %>/club/myClub.do?sportseq=8'" style="width: 10%; height: 150px; background-color: white; border-radius: 15px; padding-top: 1%;">
+				<img style="margin: 5% 0;" width="55%" height="55%" src="https://img.icons8.com/3d-fluency/96/shuttercock.png" alt="shuttercock"/>
+				<div style="font-weight: bold;">배드민턴</div>
+			</div>
+		</div>
+	</div>
 
 	<div id="top2" style="display: flex; height: 500px;">
 		<div id="myclub" style="width: 43%; margin: 2% 0 0 5%; border-radius: 70px; background-color: #e6f7ff; box-shadow: 0px 0px 10px #9ac5db;">

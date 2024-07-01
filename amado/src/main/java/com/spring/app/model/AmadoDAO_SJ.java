@@ -11,6 +11,6 @@ public interface AmadoDAO_SJ {
 	int emailDuplicateCheck(String email);
 
 	// 회원가입
-//	int memberRegisterEnd(MemberVO membervo);
+	int memberRegisterEnd(MemberVO membervo);
 
 }

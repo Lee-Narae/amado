@@ -121,7 +121,16 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 				}
 				else { // 암호를 마지막으로 변경한 것이 3개월 이내인 경우
 					
-					mav.setViewName("redirect:/index.do"); // 시작페이지로 이동
+					String goBackURL = (String)session.getAttribute("goBackURL");
+					
+					if(goBackURL != null) {
+						mav.setViewName("redirect:"+goBackURL); // 시작 페이지로 이동
+						session.removeAttribute("goBackURL");
+					}
+					
+					else {
+						mav.setViewName("redirect:/index.do");
+					}
 
 				}
 			}

@@ -43,21 +43,27 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		return n;
 	}
 
-//	// 회원가입
-//	@Override
-//	public int memberRegisterEnd(MemberVO membervo) {
-//		String password = membervo.getPassword();
-//		String email = membervo.getEmail();
-//		try {
-//			membervo.setPassword(aES256.decrypt(password));
-//			membervo.setEmail(aES256.decrypt(email));
-//
-//			int n = dao.memberRegisterEnd(membervo);
-//		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		return 0;
-//	}
+	// 회원가입
+	@Override
+	public int memberRegisterEnd(MemberVO membervo) {
+		String password = membervo.getPassword();
+		String email = membervo.getEmail();
+		String mobile = membervo.getMobile();
+		
+		int n = 0;
+		try {
+			membervo.setPassword(aES256.encrypt(password));
+			membervo.setEmail(aES256.encrypt(email));
+			membervo.setMobile(aES256.encrypt(mobile));
+			
+//			System.out.println(membervo.getMobile());
+
+			n = dao.memberRegisterEnd(membervo);
+		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+			e.printStackTrace();
+		}
+		
+		return n;
+	}
 	
 }
