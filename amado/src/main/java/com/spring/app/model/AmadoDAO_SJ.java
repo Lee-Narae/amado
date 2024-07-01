@@ -1,5 +1,8 @@
 package com.spring.app.model;
 
+import java.util.List;
+
+import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.MemberVO;
 
 public interface AmadoDAO_SJ {
@@ -12,5 +15,11 @@ public interface AmadoDAO_SJ {
 
 	// 회원가입
 	int memberRegisterEnd(MemberVO membervo);
+
+	// 글목록 보기
+	List<BoardVO> boardListNoSearch();
+
+	// 글쓰기
+	int add(BoardVO boardvo);
 
 }

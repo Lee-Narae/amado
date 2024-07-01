@@ -42,7 +42,7 @@ $(document).ready(function() {
 
 
 <div style="display: flex;">
-	<div style="width: 1024px; margin: auto; padding-left: 3%;">
+	<div style="width: 80%; margin: auto; padding-left: 3%;">
 
 		<h2 style="text-align:center; margin-bottom: 30px;">OOO 게시판</h2>
 		
@@ -74,18 +74,21 @@ $(document).ready(function() {
 
 			<tbody>
 			
-				<c:if test="${not empty requestScope.paraMap}">
+				<c:if test="${not empty requestScope.boardList}">
+					<c:forEach var="boardvo" items="${requestScope.boardList}">
 						<tr>
-							<td align="center" onclick="goView()">글번호</td>
+							<td align="center">${boardvo.boardseq}</td>
 							<td>
-								<span class="subject" onclick="goView()">${paraMap.content}</span>
+								<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.subject}</span>
 							</td>
-							<td align="center">${paraMap.name}</td>
-							<td align="center">날짜</td>
-							<td align="center">조회수</td>
+							<td align="center">${boardvo.fk_userid}</td>
+							<td align="center">${boardvo.registerdate}</td>
+							<td align="center">${boardvo.viewcount}</td>
 						</tr>
+					</c:forEach>
 				</c:if>
-				<c:if test="${empty requestScope.paraMap}">					
+
+				<c:if test="${empty requestScope.boardList}">
 					<tr>
 						<td colspan="5">데이터가 없습니다.</td>
 					</tr>

@@ -51,6 +51,16 @@ create table tbl_member
 
 
 
+		insert into tbl_board(boardseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status, orgfilename, filename, filesize)
+		values(seq_board.nextval, '제목', '내용', 'ksj1024sj', default, '1234', 0, 0, default, '', '' , to_number('0'))
+
+		select boardseq, title, content, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
+			 , password, commentcount, viewcount, status
+			 , orgfilename, filename, filesize
+		from tbl_board
+		where status = 1
+		order by boardseq desc
+
 create table tbl_board    
 (boardseq                    NUMBER   not null                -- 전체게시판번호
 ,title                       nvarchar2(50)  not null          -- 글제목
@@ -574,3 +584,8 @@ insert into tbl_member(USERID, PASSWORD, NAME, EMAIL, POSTCODE, ADDRESS, DETAILA
 values('ksj1024sj', '9695b88a59a1610320897fa84cb7e144cc51f2984520efb77111d94b402a8382', '김승진', 'Nb/STO9Z4GBQrKkY9koq/+g0lS1PgGRg/D4VpulV8QY=', '05237', '서울 강동구 아리수로 46', '201동 101호', ' (암사동)', 'L+bSt7E1AXYJSyebi4fSKA==', 1, '1995-10-24', default, default, default, default, default, default, default, default, default, default, default);
 
 commit;
+
+
+		select count(*) AS n
+		from tbl_member 
+		where email = 'Nb/STO9Z4GBQrKkY9koq/+g0lS1PgGRg/D4VpulV8QY='

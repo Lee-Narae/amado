@@ -1,7 +1,6 @@
 package com.spring.app.amado.controller;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.service.AmadoService_SJ;
 
@@ -27,17 +27,26 @@ public class ControllerSJ {
 	@GetMapping("/community/list.do")
 	public ModelAndView index(ModelAndView mav) {
 
-		String content = "제목";
-		String name = "김승진";
-		String regDate = "2024-06-24";
-		String readCount = "20";
-
-		Map<String, String> paraMap = new HashMap<>();
-		paraMap.put("content", content);
-		paraMap.put("name", name);
-		paraMap.put("regDate", regDate);
-		paraMap.put("readCount", readCount);
-		mav.addObject("paraMap", paraMap);
+		/*
+		 * String content = "제목"; String name = "김승진"; String regDate = "2024-06-24";
+		 * String readCount = "20";
+		 * 
+		 * Map<String, String> paraMap = new HashMap<>(); paraMap.put("content",
+		 * content); paraMap.put("name", name); paraMap.put("regDate", regDate);
+		 * paraMap.put("readCount", readCount); mav.addObject("paraMap", paraMap);
+		 */
+		
+		List<BoardVO> boardList = null;
+		
+		// === 페이징 처리를 안한 검색어가 없는 전체 글목록 보여주기 === //
+		boardList = service.boardListNoSearch();
+		
+		for(BoardVO boardvo : boardList) {
+			System.out.println(boardvo.getViewcount());
+		}
+		
+		System.out.println(boardList);
+		mav.addObject("boardList", boardList);
 
 		mav.setViewName("community/list.tiles2");
 		return mav;
@@ -50,6 +59,36 @@ public class ControllerSJ {
 		return mav;
 	}
 
+	// 게시판 글쓰기 완료 요청 
+	@PostMapping("/community/addEnd.do")
+	public ModelAndView addEnd(ModelAndView mav, BoardVO boardvo) { // <== After Advice 를 사용하기 전 
+	/*
+	    form 태그의 name 명과  BoardVO 의 필드명이 같다라면 
+	    request.getParameter("form 태그의 name명"); 을 사용하지 않더라도
+	        자동적으로 BoardVO boardvo 에 set 되어진다.
+	*/	
+		
+		String filename = boardvo.getFilename();
+		if(filename == null) {
+			boardvo.setOrgfilename("");
+			boardvo.setFilename("");
+			boardvo.setFilesize("0");
+		}
+		
+		int n = service.add(boardvo); // <== 파일첨부가 없는 글쓰기 
+		
+		if(n==1) {
+			mav.setViewName("redirect:/list.do");
+		    //  /list.do 페이지로 redirect(페이지이동)해라는 말이다.
+		}
+		else {
+			mav.setViewName("community/add.tiles2");
+			//  /WEB-INF/views/tiles1/board/error/add_error.jsp 파일을 생성한다.
+		}
+		
+		return mav;
+	}
+	
 	// 회원가입
 	@GetMapping("/member/memberRegister.do")
 	public ModelAndView memberRegister(ModelAndView mav) {

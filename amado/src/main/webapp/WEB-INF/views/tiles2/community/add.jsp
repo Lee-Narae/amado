@@ -44,10 +44,10 @@
         <%-- === 스마트 에디터 구현 끝 === --%>
     	 
     	 // 글제목 유효성 검사
-    	 const subject = $("input:text[name='subject']").val().trim();
-    	 if(subject == "") {
+    	 const title = $("input:text[name='title']").val().trim();
+    	 if(title == "") {
     		 alert("글제목을 입력하세요!!");
-    		 $("input:text[name='subject']").val("");
+    		 $("input:text[name='title']").val("");
     		 return; // 종료
     	 }
     	 
@@ -90,7 +90,7 @@
     	 // 폼(form) 을 전송(submit)
     	 const frm = document.addFrm;
     	 frm.method = "post";
-    	 frm.action = "<%= ctxPath%>/addEnd.action";
+    	 frm.action = "<%= ctxPath%>/community/addEnd.do";
     	 frm.submit();
     	 
      }); // end of $("button#btnWrite").click(function()-----
@@ -110,17 +110,17 @@
        <form name="addFrm"> 
         <table style="width: 1024px" class="table table-bordered">
          <tr>
-            <th style="width: 15%; background-color: #DDDDDD;">성명</th>
+            <th style="width: 15%; background-color: #DDDDDD;">아이디</th>
             <td>
-                <input type="hidden" name="fk_userid" value="${sessionScope.loginuser.userid}" />
-                <input type="text" name="name" value="${sessionScope.loginuser.name}" readonly /> 
+                <input type="text" name="fk_userid" value="${sessionScope.loginuser.userid}" readonly />
+                <%-- <input type="text" name="name" value="${sessionScope.loginuser.name}" readonly /> --%> 
             </td>
          </tr>
          
          <tr>
             <th style="width: 15%; background-color: #DDDDDD;">제목</th>
             <td>
-                    <input type="text" name="subject" size="100" maxlength="200" /> 
+                    <input type="text" name="title" size="100" maxlength="200" /> 
             </td>
          </tr>
          

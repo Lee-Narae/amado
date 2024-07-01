@@ -2,11 +2,13 @@ package com.spring.app.service;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.app.common.AES256;
+import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.model.AmadoDAO_SJ;
 
@@ -63,6 +65,20 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 			e.printStackTrace();
 		}
 		
+		return n;
+	}
+
+	// 글목록 보기
+	@Override
+	public List<BoardVO> boardListNoSearch() {
+		List<BoardVO> boardList = dao.boardListNoSearch();
+		return boardList;
+	}
+
+	@Override
+	public int add(BoardVO boardvo) {
+		
+		int n = dao.add(boardvo);
 		return n;
 	}
 	
