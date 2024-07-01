@@ -69,8 +69,34 @@ $(document).ready(function() {
 <div style="display: flex;">
 	<div style="width: 80%; margin: auto; padding-left: 3%;">
 
-		<h2 style="text-align:center; margin-bottom: 30px;">OOO 게시판</h2>
-		
+	<c:if test="${requestScope.params == '/community/list.do'}"> <!-- 나중에 post 방식으로 보낼 때는 clubseq 값도 같이 보내서 requestScope.clubseq 값에 따라 보여주게 변경. -->
+		<h2 style="text-align:center; margin-bottom: 30px;">전체 게시판</h2>
+	</c:if>		
+	<c:if test="${requestScope.params == '1'}">
+		<h2 style="text-align:center; margin-bottom: 30px;">축구 게시판</h2>
+	</c:if>		
+	<c:if test="${requestScope.params == '2'}">
+		<h2 style="text-align:center; margin-bottom: 30px;">야구 게시판</h2>
+	</c:if>		
+	<c:if test="${requestScope.params == '3'}">
+		<h2 style="text-align:center; margin-bottom: 30px;">배구 게시판</h2>
+	</c:if>		
+	<c:if test="${requestScope.params == '4'}">
+		<h2 style="text-align:center; margin-bottom: 30px;">농구 게시판</h2>
+	</c:if>		
+	<c:if test="${requestScope.params == '5'}">
+		<h2 style="text-align:center; margin-bottom: 30px;">테니스 게시판</h2>
+	</c:if>		
+	<c:if test="${requestScope.params == '6'}">
+		<h2 style="text-align:center; margin-bottom: 30px;">볼링 게시판</h2>
+	</c:if>		
+	<c:if test="${requestScope.params == '7'}">
+		<h2 style="text-align:center; margin-bottom: 30px;">족구 게시판</h2>
+	</c:if>		
+	<c:if test="${requestScope.params == '8'}">
+		<h2 style="text-align:center; margin-bottom: 30px;">배드민턴 게시판</h2>
+	</c:if>		
+	
 		<form name="searchFrm" class="float-right" style="text-align:right; margin-bottom: 20px; margin-top: 20px;">
 	    	<select name="searchType" style="height: 26px;">
 	    		<option value="title">글제목</option>

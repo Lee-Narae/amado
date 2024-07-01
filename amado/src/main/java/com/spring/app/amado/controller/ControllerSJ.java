@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.spring.app.common.MyUtil;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.service.AmadoService_SJ;
@@ -29,6 +30,16 @@ public class ControllerSJ {
 	@GetMapping("/community/list.do")
 	public ModelAndView index(ModelAndView mav, HttpServletRequest request) {
 
+		String url = MyUtil.getCurrentURL(request);
+		String params = url.substring(url.indexOf('=') + 1);
+
+//		System.out.println("테스트 url : " + url);
+//		테스트 url : /community/list.do?clubseq=1
+//		테스트 url : /community/list.do
+//		System.out.println("파라미터 부분: " + params);
+//		파라미터 부분: clubseq=1
+//		파라미터 부분: /community/list.do
+		
 		List<BoardVO> boardList = null;
 
 		// === 페이징 처리를 안한 검색어가 없는 전체 글목록 보여주기 === //
@@ -57,6 +68,7 @@ public class ControllerSJ {
 
 		mav.addObject("boardList", boardList);
 		mav.addObject("paraMap", paraMap);
+		mav.addObject("params", params);
 
 		mav.setViewName("community/list.tiles2");
 		return mav;
@@ -235,10 +247,14 @@ public class ControllerSJ {
 
 	// 동호회 찾가
 	@GetMapping("/club/findClub.do")
-	public ModelAndView findClub(ModelAndView mav) {
+	public ModelAndView findClub(ModelAndView mav, HttpServletRequest request) {
+		
+		String url = MyUtil.getCurrentURL(request);
+		String params = url.substring(url.indexOf('=') + 1);
 
 		mav.setViewName("/club/findClub.tiles2");
 		// /WEB-INF/views/test/modelandview_select.jsp 페이지를 만들어야 한다.
+		mav.addObject("params", params);
 
 		return mav;
 	}

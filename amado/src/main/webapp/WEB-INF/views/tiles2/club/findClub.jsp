@@ -53,8 +53,30 @@
 
 
 <div style="width: 1024px; margin: auto; margin-top: 5%;">
-   <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">동호회 찾기</div>
-
+	<c:if test="${requestScope.params == '/club/findClub.do' || requestScope.params == '1'}">
+	   <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">축구 동호회 찾기</div>
+	</c:if>
+	<c:if test="${requestScope.params == '2'}">
+	   <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">야구 동호회 찾기</div>
+	</c:if>
+	<c:if test="${requestScope.params == '3'}">
+	   <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">배구 동호회 찾기</div>
+	</c:if>
+	<c:if test="${requestScope.params == '4'}">
+	   <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">농구 동호회 찾기</div>
+	</c:if>
+	<c:if test="${requestScope.params == '5'}">
+	   <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">테니스 동호회 찾기</div>
+	</c:if>
+	<c:if test="${requestScope.params == '6'}">
+	   <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">볼링 동호회 찾기</div>
+	</c:if>
+	<c:if test="${requestScope.params == '7'}">
+	   <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">족구 동호회 찾기</div>
+	</c:if>
+	<c:if test="${requestScope.params == '8'}">
+	   <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">배드민턴 동호회 찾기</div>
+	</c:if>
 <div class="container" style="border: solid 1px; border-radius: 30px;">
     <div class="image-container">
         <img src="<%=ctxPath %>/resources/images/podium.png" alt="Podium" />
