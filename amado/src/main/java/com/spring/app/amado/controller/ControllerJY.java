@@ -18,13 +18,13 @@ public class ControllerJY {
 	
 	//dkdkkkk지윤이다
 	///////////////////////////////////////////////////////////////////////////
-	@RequestMapping(value="/club/oldshop.do")
-	public ModelAndView oldshop(ModelAndView mav) { //중고상품 리스트 보요주기
+	@RequestMapping(value="/club/fleamarket.do")
+	public ModelAndView fleamarket(ModelAndView mav) { //중고상품 리스트 보요주기
 
 
 		
-		mav.setViewName("club/oldshop.tiles2");
-		//    /WEB-INF/views/club/oldshop.jsp
+		mav.setViewName("club/fleamarket.tiles2");
+		//    /WEB-INF/views/club/fleamarket  .jsp
 		
 		return mav;
 		

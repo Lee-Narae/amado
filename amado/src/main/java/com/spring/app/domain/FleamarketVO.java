@@ -1,6 +1,6 @@
 package com.spring.app.domain;
 
-public class fleamarketVO {
+public class FleamarketVO {
 
 	private String fleamarketseq;
 	private String sportseq;
