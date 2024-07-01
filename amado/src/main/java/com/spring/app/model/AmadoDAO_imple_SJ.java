@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import com.spring.app.domain.MemberVO;
+
 @Repository
 public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 
@@ -27,5 +29,12 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 		n = sqlsession.selectOne("SJ.emailDuplicateCheck", email);
 		return n;
 	}
+
+	/*
+	 * // 회원가입
+	 * 
+	 * @Override public int memberRegisterEnd(MemberVO membervo) { int n = 0; n =
+	 * sqlsession.insert("SJ.memberRegisterEnd", membervo); return n; }
+	 */
 
 }

@@ -55,8 +55,7 @@ img#idcheck, img#zipcodeSearch {
 }
 
 span#emailcheck,
-span#phonecheck,
-span#phoneCheckResult {
+span#phonecheck {
 	border: solid 1px gray;
 	border-radius: 5px;
 	font-size: 8pt;
@@ -684,10 +683,11 @@ function goRegister() {
     const postcode = $("input#postcode").val().trim();
     const address = $("input#address").val().trim();
     const detailAddress = $("input#detailAddress").val().trim();
+    const extraaddress = $("input#extraaddress").val().trim();
     // const extraAddress = $("input#extraAddress").val().trim();
 
     // if (postcode == "" || address == "" || detailAddress == "" || extraAddress == "") {
-    if (postcode == "" || address == "" || detailAddress == "") {
+    if (postcode == "" || address == "" || detailAddress == "" || extraaddress == "") {
         alert("우편번호 및 주소를 입력하셔야 합니다.");
         return; // goRegister() 함수를 종료한다.
     }
@@ -715,7 +715,7 @@ function goRegister() {
 
 
     const frm = document.registerFrm;
-    frm.action = "memberRegister.up";
+    frm.action = "memberRegister.do";
     frm.method = "post";
     frm.submit();
 

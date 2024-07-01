@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.spring.app.domain.MemberVO;
 import com.spring.app.service.AmadoService_SJ;
-
-import net.nurigo.java_sdk.api.Message;
 
 @Controller
 public class ControllerSJ {
@@ -54,6 +53,16 @@ public class ControllerSJ {
 	// 회원가입
 	@GetMapping("/member/memberRegister.do")
 	public ModelAndView memberRegister(ModelAndView mav) {
+		mav.setViewName("member/memberRegister.tiles1");
+		return mav;
+	}
+
+	// 회원가입
+	@PostMapping("/member/memberRegister.do")
+	public ModelAndView memberRegisterEnd(MemberVO membervo, ModelAndView mav) {
+		
+//		int n = service.memberRegisterEnd(membervo);
+		
 		mav.setViewName("member/memberRegister.tiles1");
 		return mav;
 	}
