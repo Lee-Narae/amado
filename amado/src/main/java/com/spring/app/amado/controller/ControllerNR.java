@@ -42,6 +42,7 @@ public class ControllerNR {
 	public ModelAndView myClub(ModelAndView mav) {
 		
 		
+		
 		mav.setViewName("club/myClub.tiles2");
 		// /WEB-INF/views/tiles2/club/myClub.jsp
 		return mav;
