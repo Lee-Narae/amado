@@ -1,8 +1,8 @@
 package com.spring.app.model;
 
+import java.util.List;
 import java.util.Map;
 
-import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.MemberVO;
 
 public interface AmadoDAO_NR {
@@ -21,5 +21,8 @@ public interface AmadoDAO_NR {
 
 	// 가입한 동호회 정보 불러오기
 	Map<String, String> getClubInfo(String clubseq);
+
+	// 모든 매칭정보 불러오기
+	List<Map<String, String>> searchAllMatching();
 
 }
