@@ -565,3 +565,10 @@ nocache;
 -- Sequence SEQ_GYMANSWER이(가) 생성되었습니다.
 
 
+
+select *
+from tbl_member
+
+
+insert into tbl_member(USERID, PASSWORD, NAME, EMAIL, POSTCODE, ADDRESS, DETAILADDRESS, EXTRAADDRESS, MOBILE, GENDER, BIRTHDAY, REGISTERDAY, LASTPWDCHANGEDATE, STATUS, MEMBERRANK, GYMREGISTERSTATUS, SPEED, QUICK, POWER, EARTH, STRETCH, IDLE) 
+values(seq_yeyakno_1.nextval, '첫번째 글입니다.');

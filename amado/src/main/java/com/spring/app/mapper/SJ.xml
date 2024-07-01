@@ -17,6 +17,10 @@
 		from tbl_member 
 		where email = #{email}
 	</select>
+	
+	<!-- 회원가입 -->
+	
+
 
 
 
