@@ -138,7 +138,7 @@ $(document).ready(function(){
 		</c:if>		
 	</div>
 </div>
-<div id="tab" style="display: flex; width: 95%; height: 270px; background-color: #254179; margin-left: 5%;">
+<div id="tab" style="display: flex; width: 95%; height: 330px; background-color: #254179; margin-left: 5%;">
 	<div style="display: flex; width: 100%;">
 		<div class="tabs" style="margin-right: 1%; margin-left: 13%;">
 			<div onclick="location.href='<%=ctxPath%>/index.do'">Home</div>

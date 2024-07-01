@@ -49,8 +49,8 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 
 	// 가입한 동호회 정보 불러오기
 	@Override
-	public ClubVO getClubInfo(String clubseq) {
-		ClubVO club = sqlsession.selectOne("NR.getClubInfo", clubseq);
+	public Map<String, String> getClubInfo(String clubseq) {
+		Map<String, String> club = sqlsession.selectOne("NR.getClubInfo", clubseq);
 		return club;
 	}
 

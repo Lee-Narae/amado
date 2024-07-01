@@ -35,9 +35,32 @@
 		where fk_userid = #{userid} and sportseq = #{sportseq}
     </select>
 
-	<select id="getClubInfo" parameterType="String" resultType="ClubVO">
-		select *
-		from tbl_club
+
+	<resultMap type="HashMap" id="club">
+		<result property="clubseq" 		column="clubseq" 		javaType="String" />
+		<result property="clubname" 		column="clubname" 		javaType="String" />
+		<result property="clubimg" 		column="clubimg" 		javaType="String" />
+		<result property="fk_sportseq" 		column="fk_sportseq" 		javaType="String" />
+		<result property="fk_userid" 		column="fk_userid" 		javaType="String" />
+		<result property="clubtel" 		column="clubtel" 		javaType="String" />
+		<result property="city" 		column="city" 		javaType="String" />
+		<result property="local" 		column="local" 		javaType="String" />
+		<result property="clubgym" 		column="clubgym" 		javaType="String" />
+		<result property="clubtime" 		column="clubtime" 		javaType="String" />
+		<result property="membercount" 		column="membercount" 		javaType="String" />
+		<result property="clubpay" 		column="clubpay" 		javaType="String" />
+		<result property="clubstatus" 		column="clubstatus" 		javaType="String" />
+		<result property="clubscore" 		column="clubscore" 		javaType="String" />
+		<result property="name" 		column="name" 		javaType="String" />
+		<result property="sportname" 		column="sportname" 		javaType="String" />
+	</resultMap>
+	
+	<select id="getClubInfo" parameterType="String" resultMap="club">
+		select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, local, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, name, sportname
+		from tbl_club A join tbl_member B
+		on A.fk_userid = B.userid
+		join tbl_sport C
+		on A.fk_sportseq = C.sportseq
 		where clubseq = #{clubseq}
 	</select>
 
