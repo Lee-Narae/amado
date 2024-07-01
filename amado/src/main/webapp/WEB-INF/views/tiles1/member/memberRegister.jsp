@@ -55,8 +55,7 @@ img#idcheck, img#zipcodeSearch {
 }
 
 span#emailcheck,
-span#phonecheck,
-span#phoneCheckResult {
+span#phonecheck {
 	border: solid 1px gray;
 	border-radius: 5px;
 	font-size: 8pt;
@@ -134,7 +133,7 @@ $(document).ready(function () {
 
 
     $("input#userid").blur((e) => {
-        const regExp_userid = new RegExp(/^[a-z]+[a-z0-9]{4,19}$/g);
+        const regExp_userid = new RegExp(/^[a-zA-Z]{4,19}$/g);
         const bool = regExp_userid.test($(e.target).val());
         if (!bool) {
             // 아이디가 정규표현식에 위배된 경우
@@ -255,7 +254,7 @@ $(document).ready(function () {
     $("input#address").attr("readonly", true);
 
     // 참고항목을 읽기전용(readonly) 로 만들기
-    // $("input#extraAddress").attr("readonly", true);
+    $("input#extraAddress").attr("readonly", true);
 
 
 
@@ -297,10 +296,10 @@ $(document).ready(function () {
                         extraAddr = ' (' + extraAddr + ')';
                     }
                     // 조합된 참고항목을 해당 필드에 넣는다.
-                    // document.getElementById("extraAddress").value = extraAddr;
+                    document.getElementById("extraAddress").value = extraAddr;
 
                 } else {
-                    // document.getElementById("extraAddress").value = '';
+                    document.getElementById("extraAddress").value = '';
                 }
 
                 // 우편번호와 주소 정보를 해당 필드에 넣는다.
@@ -318,7 +317,7 @@ $(document).ready(function () {
         $("input#address").attr("readonly", true);
 
         // 참고항목을 읽기전용(readonly) 로 만들기
-        // $("input#extraAddress").attr("readonly", true);
+        $("input#extraAddress").attr("readonly", true);
 
         // 주소를 비활성화 로 만들기
         //  $("input#address").attr("disabled", true);
@@ -526,15 +525,14 @@ $(document).ready(function () {
 
             success : function(json) {
                 
-                if(json.isExist) {
-                    // 입력한 email이 이미 사용중이라면
-                    $("span#emailCheckResult").html($("input#email").val()  + " 은(는) 이미 사용중이므로 다른 이메일을 입력하세요.").css({"color":"red"});
-                    $("input#email").val("");
-                    
-                }
-                else {
+                if(json.n == 0) {
                     // 입력한 email이 존재하지 않는 경우
                     $("span#emailCheckResult").html($("input#email").val()  + " 은(는) 사용 가능한 이메일입니다.").css({"color":"blue"});
+                }
+                else {
+                	// 입력한 email이 이미 사용중이라면
+                    $("span#emailCheckResult").html($("input#email").val()  + " 은(는) 이미 사용중이므로 다른 이메일을 입력하세요.").css({"color":"red"});
+                    $("input#email").val("");
                 }
             },
             
@@ -567,7 +565,7 @@ $(document).ready(function () {
         if(b_phonecheck == false) {
 			alert("휴대폰 번호를 다시 한 번 확인해주세요!"); 	        	
         	$("span#phonecheckResult").html("");
-        	b_phonecheck_click = false;
+        	//b_phonecheck_click = false;
 			return false;        	
         }
 
@@ -617,12 +615,12 @@ $(document).ready(function () {
     });
 
     // 휴대폰 번호가 변경되면 가입하기 버튼을 클릭 시 "휴대폰확인" 을 클릭했는지 클릭안했는지를 알아보기위한 용도 초기화 시키기
-    $("input#hp2").bind("change", function() {
-        b_phonecheck_click = false;
+/*     $("input#hp2").bind("change", function() {
+        //b_phonecheck_click = false;
     });
     $("input#hp3").bind("change", function() {
-        b_phonecheck_click = false;
-    });
+        //b_phonecheck_click = false;
+    }); */
 
 
 }); // end of $(rurument).ready(function() {}) -------------------
@@ -633,7 +631,7 @@ $(document).ready(function () {
 // "가입하기" 버튼 클릭 시 호출되는 함수
 function goRegister() {
 
-    // *** 필수입력사항에 모두 입력이 되었는지 검사하기 시작 *** //
+	// *** 필수입력사항에 모두 입력이 되었는지 검사하기 시작 *** //
     let b_requiredInfo = true;
 
     const requiredInfo_list = document.querySelectorAll("input.requiredInfo");
@@ -684,7 +682,7 @@ function goRegister() {
     const postcode = $("input#postcode").val().trim();
     const address = $("input#address").val().trim();
     const detailAddress = $("input#detailAddress").val().trim();
-    // const extraAddress = $("input#extraAddress").val().trim();
+//    const extraAddress = $("input#extraAddress").val().trim();
 
     // if (postcode == "" || address == "" || detailAddress == "" || extraAddress == "") {
     if (postcode == "" || address == "" || detailAddress == "") {
@@ -711,11 +709,10 @@ function goRegister() {
         alert("생년월일을 입력하셔야 합니다.");
         return; // goRegister() 함수를 종료한다.
     }
-    // *** 생년월일 값을 입력했는지 검사하기 끝 *** //
-
+    // *** 생년월일 값을 입력했는지 검사하기 끝 *** //  
 
     const frm = document.registerFrm;
-    frm.action = "memberRegister.up";
+<%--     frm.action = "<%=ctxPath%>/member/memberRegister.do"; --%>
     frm.method = "post";
     frm.submit();
 
@@ -769,7 +766,7 @@ function goReset() {
                        <%-- 아이디중복체크 --%>
                        <img src="<%= ctxPath%>/resources/images/id_check.png" id="idcheck" class="rounded" alt="round" width="25" />
                        <span id="idcheckResult"></span>
-                       <span class="error">아이디는 영문자,숫자가 혼합된 5~20 글자로 입력하세요.</span>
+                       <span class="error">아이디는 영문대소자 5~20 글자로 입력하세요.</span>
                     </td>
                 </tr>
                 
@@ -806,11 +803,11 @@ function goReset() {
                        <input type="text" name="hp1" id="hp1" size="6" maxlength="3" value="010" readonly />&nbsp;-&nbsp; 
                        <input type="text" name="hp2" id="hp2" size="6" maxlength="4" />&nbsp;-&nbsp;
                        <input type="text" name="hp3" id="hp3" size="6" maxlength="4" />    
-                       <span id="phonecheck">휴대폰확인</span>
+<!--                        <span id="phonecheck">휴대폰확인</span> -->
                        <span class="error">휴대폰 형식이 아닙니다.</span>
                     </td>
                 </tr>
-                <tr>
+<!--                 <tr>
                     <td>인증번호확인&nbsp;</td>
                     <td>
 						<input type="text" name="phoneCheckResultVal" id="phoneCheckResultVal" size="10" maxlength="10" />
@@ -818,7 +815,7 @@ function goReset() {
 						<span id="phoneCheckResult"></span>
 						<span class="error">올바른 인증번호가 아닙니다.</span>
                     </td>
-                </tr>
+                </tr> -->
                 
                 <tr>
                     <td>우편번호</td>
@@ -856,7 +853,7 @@ function goReset() {
                 </tr>
                 
                 
-                <tr>
+<%--                 <tr>
                     <td colspan="2">
                        <label for="agree">이용약관에 동의합니다</label>&nbsp;&nbsp;<input type="checkbox" id="agree" />
                     </td>
@@ -866,7 +863,7 @@ function goReset() {
                     <td colspan="2">
                        <iframe src="<%= ctxPath%>/iframe_agree/agree.html" width="100%" height="150px" style="border: solid 1px navy;"></iframe>
                     </td>
-                </tr>
+                </tr> --%>
 
                 <tr>
                     <td colspan="2" class="text-center">

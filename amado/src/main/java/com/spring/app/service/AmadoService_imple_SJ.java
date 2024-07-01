@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.app.common.AES256;
+import com.spring.app.domain.MemberVO;
 import com.spring.app.model.AmadoDAO_SJ;
 
 // 승진 서비스 임플
@@ -38,6 +39,29 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 			e.printStackTrace();
 		}
 		n = dao.emailDuplicateCheck(email);
+		
+		return n;
+	}
+
+	// 회원가입
+	@Override
+	public int memberRegisterEnd(MemberVO membervo) {
+		String password = membervo.getPassword();
+		String email = membervo.getEmail();
+		String mobile = membervo.getMobile();
+		
+		int n = 0;
+		try {
+			membervo.setPassword(aES256.encrypt(password));
+			membervo.setEmail(aES256.encrypt(email));
+			membervo.setMobile(aES256.encrypt(mobile));
+			
+//			System.out.println(membervo.getMobile());
+
+			n = dao.memberRegisterEnd(membervo);
+		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+			e.printStackTrace();
+		}
 		
 		return n;
 	}

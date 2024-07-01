@@ -17,6 +17,12 @@
 		from tbl_member 
 		where email = #{email}
 	</select>
+	
+	<!-- 회원가입 -->
+	<insert id="memberRegisterEnd" parameterType="MemberVO">
+		insert into tbl_member(userid, password, name, email, postcode, address, detailaddress, extraaddress, mobile, gender, birthday, registerday, lastpwdchangedate, status, memberrank, gymregisterstatus, speed, quick, power, earth, stretch, idle) 
+		values(#{userid}, #{password}, #{name}, #{email}, #{postcode}, #{address}, #{detailaddress}, #{extraaddress}, #{mobile}, to_number(#{gender}), #{birthday}, default, default, default, default, default, default, default, default, default, default, default)
+	</insert>
 
 
 

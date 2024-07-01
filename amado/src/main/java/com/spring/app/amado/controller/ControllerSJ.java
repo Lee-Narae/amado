@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.spring.app.domain.MemberVO;
 import com.spring.app.service.AmadoService_SJ;
-
-import net.nurigo.java_sdk.api.Message;
 
 @Controller
 public class ControllerSJ {
@@ -55,6 +54,41 @@ public class ControllerSJ {
 	@GetMapping("/member/memberRegister.do")
 	public ModelAndView memberRegister(ModelAndView mav) {
 		mav.setViewName("member/memberRegister.tiles1");
+		return mav;
+	}
+
+	// 회원가입
+	@PostMapping("/member/memberRegister.do")
+	public ModelAndView memberRegisterEnd(HttpServletRequest request, MemberVO membervo, ModelAndView mav) {
+		
+		String hp2 = request.getParameter("hp2");
+		String hp3 = request.getParameter("hp3");
+		String password = request.getParameter("pwd");
+		
+		String mobile = "010"+hp2+hp3;
+		membervo.setMobile(mobile);
+		membervo.setPassword(password);
+		
+//		System.out.println(membervo.getMobile());
+//		System.out.println(membervo.getBirthday());
+//		System.out.println(membervo.getPassword());
+//		System.out.println(membervo.getUserid());
+//		System.out.println(membervo.getEmail());
+//		System.out.println(membervo.getPostcode());
+//		System.out.println(membervo.getAddress());
+//		System.out.println(membervo.getDetailaddress());
+//		System.out.println(membervo.getExtraaddress());
+//		System.out.println(membervo.getGender());
+		
+		int n = service.memberRegisterEnd(membervo);
+		
+		if(n == 1) {
+			mav.setViewName("main/index.tiles2");
+		}
+		else {
+			mav.setViewName("member/memberRegister.tiles1");
+		}
+		
 		return mav;
 	}
 
