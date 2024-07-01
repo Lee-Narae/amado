@@ -1,0 +1,195 @@
+
+
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ko">
+<head>
+<title>모바일 사용자 사이트 | 로그인</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+<link rel="canonical" href="http://scard1.snu.ac.kr/m/login.do" />
+<link rel="stylesheet" type="text/css" href="/_common/cms.css" />
+	<!--
+<link rel="stylesheet" type="text/css" href="/_res/m/_css/layout.css" />
+	-->
+<!--[if IE 8]>
+	<link rel="stylesheet" type="text/css" href="/_common/ie8.css" />
+<![endif]-->
+
+<link rel="stylesheet" type="text/css" href="/_res/m/_css/user.css" />
+	<!--
+<link rel="stylesheet" type="text/css" href="/_res/m/_js/jquery-ui-1.10.3.custom.min.css" />
+	-->
+	
+<link rel="stylesheet" type="text/css" href="/_res/m/_css/style.css" />
+	
+
+<link rel="stylesheet" type="text/css" href="/_res/m/_css/style_app.css" />
+<script type="text/javascript" src="/_res/m/_js/user/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="/_res/m/_js/user/common.js"></script>
+
+	
+<!--
+<script type="text/javascript" src="/_common/js/jquery/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="/_common/js/jquery/jquery-ui-1.11.4.min.js"></script>
+-->
+<script type="text/javaScript" src="/_res/m/_js/user/jquery-1.12.4.min.js"></script>
+<script type="text/javaScript" src="/_res/m/_js/user/jquery-ui-1.10.3.custom.min.js"></script>
+<script type="text/javascript" src="/_res/m/_js/user/front.ui.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+
+		$("input[data-type=date]").datepicker({//YY.MM.DD
+			onClose : function(selectedDate) {
+
+			}
+		});
+	});
+</script>
+<script type="text/javascript">
+//<![CDATA[
+	var _thisHost = location.protocol+'//'+location.host, _thisUrl = document.location.href,_so_ = false,_cur_menu_cd = '',_edit_content = false,front_page_edit = true,zooInOutMode = 'font',_reouscePath = '/_res/m/',editorVendor = 'froala',sslYN = 'N',sslPort = '443',servicePort = '',developMode = false,device='pc',isMobile=true,_cfgUseDevMode = false,_siteId = 'm',printSelector = '#jwxe_main_content',ctx = '',rootPath = '',locale= 'ko',localeScriptPath='/_custom/snu/resource/js/';
+//]]>
+</script>
+<script type="text/javascript" src="/_common/cms.js"></script>
+
+<script type="text/javascript" src="/_res/m/_js/user.js"></script>
+</head>
+<body id="item_body" class="pc">
+<ul id="go_main">
+	<li><a href="#jwxe_main_content" >본문 바로가기</a></li>
+	<li><a href="#jwxe_main_menu" >주메뉴 바로가기</a></li>
+	<li><a href="#jwxe_sub_menu" >서브메뉴 바로가기</a></li>
+</ul>
+
+
+<div id="login_wrap">
+
+
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+<title>서울대학교</title>
+<script type="text/javascript" src="/_custom/snu/_common/login/js/sso.js"></script>
+</head>
+
+<body style="background:#f1f1f1;">
+<div class="login_wrap" style="display: none;">
+
+
+
+
+	<script type="text/javascript">
+		$(".login_wrap").css("display", "");
+	</script>
+
+	
+
+<div class="popup_div popup_person_app" style="display: none; margin-left:-75%;" id="popup_conts_view">
+	<div class="popup_layer_wrap">
+		<div class="show_popup_ttl"><span>신분 선택</span></div>
+		<div class="close_x"><a href="/m/login.do" class="loginCancel" ><img src="/_res/snu/img/popup_close.png" alt="닫기"></a></div>
+		<div class="popup_access_box">
+			<div class="tbl_row_wrap">
+				<table class="tbl_row">
+					<colgroup>
+						<col style="width:40%;">
+						<col style="width:*;">
+					</colgroup>
+					<thead>
+						<tr>
+							<th>신분</th>
+							<th>학번</th>
+						</tr>
+					</thead>
+					<tbody>
+						
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="gap15"></div>
+		<div class="ac">
+			<a href="/m/login.do" class="btn_gray loginCancel" ><span>닫기</span></a>
+			<a href="javascript:;" class="btn_gray"  id="cmslogin" onClick="func( );" style="display: none;"><span>확인</span></a>
+		</div>
+		<div class="gap10"></div>
+	</div>
+</div>
+
+<!-- S:wrap -->
+<div id="wrap">
+    <!-- S:login_wrap -->
+    <div id="login_wrap">
+
+        <div class="login_div">
+            <div class="login_conts">
+                <div class="mww_logo"><img src="/_res/m/img/mww_logo.png" alt="서울대학교" /></div> 
+                
+                <div class="login_input_box">
+					<form id="ssoForm" method="post" action="https://sso.snu.ac.kr/safeidentity/modules/auth_idpwd">
+					<script type="text/javascript">
+						$(document).ready(function(){
+							var host = $(location).attr('protocol')+"//"+$(location).attr('host') + "/" + _siteId + "/login.do?result=s";
+							$("#ssoForm").find("input[name=si_redirect_address]").val( host );
+						});
+					</script>
+					<fieldset>
+						<input type="hidden" name="si_redirect_address" >
+						<input type="hidden" name="si_realm" value="SnuUser1">
+						<label for="ip_id">
+							
+							<input type="text" class="login_ip_id ip_id"  name="si_id" placeholder="아이디를 입력하세요" value="">
+						</label>
+						<label for="ip_pw">
+							<input type="password" class="login_ip_pw ip_pw" name="si_pwd" placeholder="비밀번호를 입력하세요"  autocomplete="off" >
+						</label>
+					</fieldset>
+					<input type="submit" style="display: block;position: absolute;left: -99999px;">
+					</form>
+				</div>
+                				
+                <div class="agree">
+					
+					<div class="all_agree">
+					<input type="checkbox" id="a1" name="아이디 저장">
+					<label for="a1"><span class="f13 tc_666">ID 정보저장</span></label>
+					</div>			
+					
+                </div><!-- .agree -->
+                
+                <div class="MWW_login_txt">ID 및 비밀번호 분실 시<br /> 
+					서울대학교 포털 사이트<span>(my.snu.ac.kr)</span>에서 <br />
+					확인하시기 바랍니다.<br />
+[<a href="http://www.snu.ac.kr/personal_information" >개인정보처리방침</a>]</div>
+                
+                <div class="login_btn">로그인</div>
+                
+            </div>
+        </div>
+        
+    </div>
+	<!-- E:login_wrap -->
+    
+</div>
+<!-- E:wrap -->
+</div>
+
+</body>
+</html>
+</div>
+<noscript><p>이 사이트는 자바스크립트를 지원하지 않으면 정상적으로 보이지 않을수 있습니다.</p></noscript>
+</body>
+</html>
