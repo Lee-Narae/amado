@@ -59,8 +59,6 @@ create table tbl_member
 
 
 
-<<<<<<< HEAD
-=======
 		insert into tbl_board(boardseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status, orgfilename, filename, filesize)
 		values(seq_board.nextval, '제목', '내용', 'ksj1024sj', default, '1234', 0, 0, default, '', '' , '')
 
@@ -81,7 +79,6 @@ create table tbl_member
 		where status = 1
 		order by boardseq desc
 
->>>>>>> branch 'main' of https://github.com/Lee-Narae/amado.git
 create table tbl_board    
 (boardseq                    NUMBER   not null                -- 전체게시판번호
 ,title                       nvarchar2(50)  not null          -- 글제목
@@ -114,13 +111,30 @@ nocache;
 
 -- Sequence SEQ_BOARD이(가) 생성되었습니다.
 
+select *
+from tbl_club
+
+select *
+from tbl_sport
+
+		select clubseq, clubname, clubimg, fk_sportseq, clubtel
+		 , city, local, clubgym, clubtime
+		 , membercount, clubpay, clubstatus, clubscore
+         , rank() over(order by nvl(salary + (salary * commission_pct), salary) desc) AS 전체월급등수
+		from tbl_club
+		where clubstatus = 1
+
+
+		order by clubseq desc	
+
+
 
 
 create table tbl_club    
 (clubseq      NUMBER              not null        -- 동호회번호
 ,clubname      nvarchar2(20)       not null        -- 동호회명
 ,clubimg      nvarchar2(50)                       -- 대표이미지
-,sportseq      NUMBER              not null        -- 종목번호(tbl_sport(sportseq) fk)
+,fk_sportseq      NUMBER              not null        -- 종목번호(tbl_sport(sportseq) fk)
 ,fk_userid      nvarchar2(20)       not null        -- 회장아이디(tbl_member(userid) fk)
 ,clubtel      nvarchar2(50)       not null        -- 연락처
 ,city          nvarchar2(50)       not null        -- 지역  (시)   
@@ -354,6 +368,7 @@ nocache;
 -- Sequence SEQ_MATCHINGAPPLY이(가) 생성되었습니다.
 
 
+
 create table tbl_notice    
 (noticeseq                   NUMBER   not null                -- 전체게시판번호
 ,title                       nvarchar2(50)  not null          -- 글제목
@@ -410,6 +425,8 @@ nocache;
 -- tbl_gym 시퀀스 이름 잘못지음.
 
 -- comment ==> comment_text ( comment 가 예약어라 사용 불가라 comment_text 로 변경)
+
+
 create table tbl_clubboardcomment    
 (clubboardcommentseq      NUMBER                                   -- 댓글번호(PK)
 ,clubboardseq             NUMBER                                   -- 동호회게시판번호(FK)
@@ -596,9 +613,6 @@ nocache;
 -- Sequence SEQ_GYMANSWER이(가) 생성되었습니다.
 
 
-<<<<<<< HEAD
-=======
-
 select *
 from tbl_member
 
@@ -612,4 +626,17 @@ commit;
 		select count(*) AS n
 		from tbl_member 
 		where email = 'Nb/STO9Z4GBQrKkY9koq/+g0lS1PgGRg/D4VpulV8QY='
->>>>>>> branch 'main' of https://github.com/Lee-Narae/amado.git
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        

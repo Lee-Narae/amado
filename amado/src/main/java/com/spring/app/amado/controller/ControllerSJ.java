@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.app.common.MyUtil;
 import com.spring.app.domain.BoardVO;
+import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.service.AmadoService_SJ;
 
@@ -245,18 +247,79 @@ public class ControllerSJ {
 //		return jsonObj.toString();
 //	}
 
-	// 동호회 찾가
+	// 동호회 찾기
 	@GetMapping("/club/findClub.do")
 	public ModelAndView findClub(ModelAndView mav, HttpServletRequest request) {
 		
 		String url = MyUtil.getCurrentURL(request);
 		String params = url.substring(url.indexOf('=') + 1);
+		// 파라미터 부분: 1
+		
+		List<ClubVO> clubList = null;
 
+		// === 페이징 처리를 안한 검색어가 없는 전체 동호회 보여주기 === //
+		clubList = service.clubListNoSearch(params);
+
+		mav.addObject("params", params);
+		mav.addObject("clubList", clubList);
+		
 		mav.setViewName("/club/findClub.tiles2");
 		// /WEB-INF/views/test/modelandview_select.jsp 페이지를 만들어야 한다.
-		mav.addObject("params", params);
 
 		return mav;
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "/club/searchType.do", produces = "text/plain;charset=UTF-8")
+	public String searchType_a(HttpServletRequest request) {
+		String searchType_a = request.getParameter("searchType_a");
+		String searchType_b = request.getParameter("searchType_b");
+		String searchType_c = request.getParameter("searchType_c");
+		String params = request.getParameter("params");
+		
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("searchType_a", searchType_a);
+		paraMap.put("searchType_b", searchType_b);
+		paraMap.put("searchType_c", searchType_c);
+		paraMap.put("params", params);
+		
+		System.out.println();
+		
+		List<ClubVO> clubList = null;
+		
+		// 검색타입 있는 리스트 가져오기
+		clubList = service.searchType(paraMap);
+		
+		JSONArray jsonArr = new JSONArray(); // []
+
+		if (clubList != null) {
+			for (ClubVO clubvo : clubList) {
+				JSONObject jsonObj = new JSONObject(); // {}
+				jsonObj.put("rank", clubvo.getRank()); 
+				jsonObj.put("city", clubvo.getCity()); 
+				jsonObj.put("clubgym", clubvo.getClubgym()); 
+				jsonObj.put("clubimg", clubvo.getClubimg()); 
+				jsonObj.put("clubname", clubvo.getClubname()); 
+				jsonObj.put("clubpay", clubvo.getClubpay()); 
+				jsonObj.put("clubscore", clubvo.getClubscore()); 
+				jsonObj.put("clubseq", clubvo.getClubseq()); 
+				jsonObj.put("clubstatus", clubvo.getClubstatus()); 
+				jsonObj.put("clubtel", clubvo.getClubtel()); 
+				jsonObj.put("clubtime", clubvo.getClubtime()); 
+				jsonObj.put("fk_sportseq", clubvo.getFk_sportseq()); 
+				jsonObj.put("local", clubvo.getLocal()); 
+				jsonObj.put("membercount", clubvo.getMembercount()); 
+
+				jsonObj.put("searchType_a", searchType_a); 
+				jsonObj.put("searchType_b", searchType_b); 
+				jsonObj.put("searchType_c", searchType_c); 
+																
+
+				jsonArr.put(jsonObj);
+			}
+		}
+
+		return jsonArr.toString();
 	}
 
 }

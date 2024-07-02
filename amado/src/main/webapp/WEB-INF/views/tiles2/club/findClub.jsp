@@ -82,6 +82,72 @@
     }
 </style>
 
+<script type="text/javascript">
+
+ $(document).ready(function() {
+	 
+	 $("select[name='searchType_a'], select[name='searchType_b'], select[name='searchType_c']").bind("change", function(){
+/* 		 alert($('select[name="searchType_a"] > option:checked').val());
+		 alert($('select[name="searchType_b"] > option:checked').val());
+		 alert($('select[name="searchType_c"] > option:checked').val());
+		 alert(${requestScope.params}); */
+		 
+ 		 $.ajax({
+			url:"<%= ctxPath%>/club/searchType.do",
+			type:"get",
+			data:{"searchType_a":$('select[name="searchType_a"] > option:checked').val(),
+				  "searchType_b":$('select[name="searchType_b"] > option:checked').val(),
+				  "searchType_c":$('select[name="searchType_c"] > option:checked').val(),
+				  "params":"${requestScope.params}"},
+			dataType:"json",
+			success:function(json) {
+				console.log(JSON.stringify(json));
+				
+				let v_html = ``;
+				
+				if(json.length > 0) {
+					
+					$.each(json, function(index, item) {
+//						alert(item.clubname);	
+						
+						v_html += `<tr>`;
+						v_html += `	<td>\${item.rank}</td>`;
+						v_html += `	<td><img src="<%=ctxPath %>/resources/images/zee/\${item.clubimg}" class="rounded" alt="round" width="80" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/></td>`;
+						v_html += `	<td>\${item.clubname}</td>`;
+						v_html += `	<td>\${item.clubscore}</td>`;
+						v_html += `	<td>\${item.fk_sportseq}</td>`;
+						v_html += `	<td>\${item.local}</td>`;
+						v_html += `	<td>\${item.membercount}</td>`;
+						v_html += `</tr>`;
+						
+					}); // end of each
+					
+					$("tbody#this").html(v_html);
+					
+				} 
+				else {
+					v_html = ``;
+					v_html += `<tr>`;
+					v_html += `	<td colspan="7">데이터가 없습니다.</td>`;
+					v_html += `</tr>`;
+					
+					$("tbody#this").html(v_html);
+				}
+				
+
+			}, // end of success:function(json)
+		    error: function(request, status, error){
+		    	alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}						
+		}); // end of $.ajax 		 
+	 });// end of searchType
+
+	 
+	 
+ }); // end of document
+
+</script>
+
 
 
 <div style="width: 1024px; margin: auto; margin-top: 5%;">
@@ -110,29 +176,37 @@
        <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">배드민턴 동호회 찾기</div>
     </c:if>
 
-    <div class="podium">
-        <div class="podium-item podium-2nd">
-            <div class="podium-rank">2등</div>
-            <img src="<%=ctxPath %>/resources/images/다운로드.jpg" class="podium-img" alt="Podium" />
-        </div>
-        <div class="podium-item podium-1st">
-            <div class="podium-rank">1등</div>
-            <img src="<%=ctxPath %>/resources/images/다운로드1.jpg" class="podium-img" alt="Podium" />
-        </div>
-        <div class="podium-item podium-3rd">
-            <div class="podium-rank">3등</div>
-            <img src="<%=ctxPath %>/resources/images/다운로드2.jpg" class="podium-img" alt="Podium" />
-        </div>
+    <div class="podium" style="margin-top: 120px;">
+   	<c:if test="${not empty requestScope.clubList}">
+		<c:forEach var="clubvo" items="${requestScope.clubList}">
+	        <div class="podium-item podium-2nd">
+	            <div class="podium-rank">2등</div>
+	            <img src="<%=ctxPath %>/resources/images/다운로드.jpg" class="podium-img" alt="Podium" />
+	            <div>동호회명2</div>
+	        </div>
+	        <div class="podium-item podium-1st">
+	            <div class="podium-rank">1등</div>
+	            <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+	            <div>${clubvo.clubname}</div>
+	        </div>
+	        <div class="podium-item podium-3rd">
+	            <div class="podium-rank">3등</div>
+	            <img src="<%=ctxPath %>/resources/images/다운로드2.jpg" class="podium-img" alt="Podium" />
+	            <div>동호회명3</div>
+	        </div>
+	    </c:forEach>
+    </c:if>
+        
     </div>
 
-    <form name="searchFrm" style="margin-bottom: 40px; margin-top: 20px;">
+    <form name="searchFrm" style="margin-bottom: 40px; margin-top: 50px;">
         <div style="display: flex;" class="float-left">
-            <select name="searchType-a" style="height: 26px;">
-                <option value="Ranking">랭킹순</option>
-                <option value="name">이름순</option>
-                <option value="Member">멤버수순</option>
+            <select name="searchType_a" style="height: 26px;">
+                <option value="rank" selected="selected">랭킹순</option>
+                <option value="memberM">멤버많은순</option>
+                <option value="memberL">멤버적은순</option>
             </select>
-            <select name="searchType-b" style="height: 26px; margin-left: 2%;">
+            <select name="searchType_b" style="height: 26px; margin-left: 2%;">
                 <option value="none" selected="selected">== 지역선택 ==</option>
                 <option value="seoul">서울특별시</option>
                 <option value="busan">부산광역시</option>
@@ -152,7 +226,7 @@
                 <option value="gyeongnam">경상남도</option>
                 <option value="jeju">제주특별자치도</option>
             </select> 
-            <select name="searchType-c" style="height: 26px; margin-left: 2%; margin-right: 5px;">
+            <select name="searchType_c" style="height: 26px; margin-left: 2%; margin-right: 5px;">
                 <option value="none" selected="selected">== 카테고리선택 ==</option>
                 <option value="soccer">축구</option>
                 <option value="baseball">야구</option>
@@ -178,22 +252,51 @@
                 <th style="width: 70px; text-align: center;">랭킹</th>
                 <th style="width: 70px; text-align: center;">대표이미지</th>
                 <th style="width: 300px; text-align: center;">동호회명</th>
-                <th style="width: 300px; text-align: center;">소개글</th>
+                <th style="width: 300px; text-align: center;">점수</th>
                 <th style="width: 100px; text-align: center;">카테고리</th>
                 <th style="width: 100px; text-align: center;">지역</th>
                 <th style="width: 100px; text-align: center;">멤버수</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td align="center" onclick="goView()">1</td>
-                <td><img src="<%=ctxPath %>/resources/images/다운로드1.jpg" class="rounded" alt="round" width="80" /></td>
-                <td align="center">동호회명</td>
-                <td align="center">소개글</td>
-                <td align="center">카테고리</td>
-                <td align="center">지역</td>
-                <td align="center">멤버수</td>
-            </tr>
+        <tbody id="this">
+        	<c:if test="${not empty requestScope.clubList}">
+        		<c:forEach var="clubvo" items="${requestScope.clubList}">
+		            <tr>
+		                <td align="center" onclick="goView()">1</td>
+		                <td><img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="rounded" alt="round" width="80" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/></td>
+		                <td align="center">${clubvo.clubname}</td>
+		                <td align="center">${clubvo.clubscore}점</td>
+		                
+		                <c:if test="${clubvo.fk_sportseq == 1}">
+		                	<td align="center">축구</td>
+		                </c:if>
+		                <c:if test="${clubvo.fk_sportseq == 2}">
+		                	<td align="center">야구</td>
+		                </c:if>
+		                <c:if test="${clubvo.fk_sportseq == 3}">
+		                	<td align="center">배구</td>
+		                </c:if>
+		                <c:if test="${clubvo.fk_sportseq == 4}">
+		                	<td align="center">농구</td>
+		                </c:if>
+		                <c:if test="${clubvo.fk_sportseq == 5}">
+		                	<td align="center">테니스</td>
+		                </c:if>
+		                <c:if test="${clubvo.fk_sportseq == 6}">
+		                	<td align="center">볼링</td>
+		                </c:if>
+		                <c:if test="${clubvo.fk_sportseq == 7}">
+		                	<td align="center">족구</td>
+		                </c:if>
+		                <c:if test="${clubvo.fk_sportseq == 8}">
+		                	<td align="center">배드민턴</td>
+		                </c:if>
+		                
+		                <td align="center">${clubvo.local}</td>
+		                <td align="center">${clubvo.membercount}명</td>
+		            </tr>
+	            </c:forEach>
+            </c:if>
             <tr>
                 <td align="center" onclick="goView()">2</td>
                 <td><img src="<%=ctxPath %>/resources/images/다운로드.jpg" class="rounded" alt="round" width="80" /></td>

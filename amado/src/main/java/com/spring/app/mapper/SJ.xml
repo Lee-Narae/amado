@@ -34,6 +34,7 @@
 		order by boardseq desc
     </select>
     
+    <!-- 페이징 처리를 안한 검색어가 있는 전체 글목록 보여주기 -->
 	<select id="boardListSearch" resultType="BoardVO" parameterType="HashMap">
 		select boardseq, title, content, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
 			 , password, commentcount, viewcount, status
@@ -64,6 +65,117 @@
 		insert into tbl_board(boardseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status, orgfilename, filename, filesize)
 		values(seq_board.nextval, #{title}, #{content}, #{fk_userid}, default, #{password}, 0, 0, default, #{orgfilename}, #{filename} , to_number(#{filesize}))
 	</insert>
+
+
+	<!-- 페이징 처리를 안한 검색어가 없는 전체 동아리목록 보여주기 -->
+	<select id="clubListNoSearch" parameterType="String" resultType="ClubVO">
+		select clubseq, clubname, clubimg, fk_sportseq, clubtel
+		 , city, local, clubgym, clubtime
+		 , membercount, clubpay, clubstatus, clubscore
+<!-- 		 <if test="">
+			, rank() over(order by clubscore desc) AS rank		 
+		 </if>
+ -->
+ 		from tbl_club
+		where clubstatus = 1
+		<choose>
+			<when test="params == '/club/findClub.do'">
+				and fk_sportseq = 1
+			</when>
+			<otherwise>and fk_sportseq = to_number(#{params})</otherwise>
+		</choose>
+		order by clubseq desc	
+	</select>
+	
+	
+	<!-- 페이징 처리를 안한 검색어가 있는 전체 동아리목록 보여주기 -->
+	<select id="searchType" parameterType="HashMap" resultType="ClubVO">
+		select clubseq, clubname, clubimg, fk_sportseq, clubtel
+		 , city, local, clubgym, clubtime
+		 , membercount, clubpay, clubstatus, clubscore
+		 , rank() over(order by clubscore desc) AS rank		 
+ 
+ 		from tbl_club
+		where clubstatus = 1
+		<choose>
+			<when test="params == '/club/findClub.do'">
+				and fk_sportseq = 1
+			</when>
+			<otherwise>and fk_sportseq = to_number(#{params})</otherwise>
+		</choose>
+		
+		<choose>
+			<when test="searchType_b == 'none'"></when>
+			<when test="searchType_b == 'seoul'">
+				and city like '%'||'서울'||'%'
+			</when>
+			<when test="searchType_b == 'busan'">
+				and city like '%'||'부산'||'%'
+			</when>
+			<when test="searchType_b == 'daegu'">
+				and city like '%'||'대구'||'%'			
+			</when>
+			<when test="searchType_b == 'incheon'">
+				and city like '%'||'인천'||'%'
+			</when>
+			<when test="searchType_b == 'gwangju'">
+				and city like '%'||'광주'||'%'
+			</when>
+			<when test="searchType_b == 'daejeon'">
+				and city like '%'||'대전'||'%'
+			</when>
+			<when test="searchType_b == 'ulsan'">
+				and city like '%'||'울산'||'%'
+			</when>
+			<when test="searchType_b == 'sejong'">
+				and city like '%'||'세종'||'%'
+			</when>
+			<when test="searchType_b == 'gyeonggi'">
+				and city like '%'||'경기'||'%'
+			</when>
+			<when test="searchType_b == 'gangwon'">
+				and city like '%'||'강원'||'%'
+			</when>
+			<when test="searchType_b == 'chung-cheong_bukdo'">
+				and city like '%'||'충청북'||'%' or city like '%'||'충북'||'%'
+			</when>
+			<when test="searchType_b == 'chung-cheong_namdo'">
+				and city like '%'||'충청남'||'%' or city like '%'||'충남'||'%'
+			</when>
+			<when test="searchType_b == 'jeonbuk'">
+				and city like '%'||'전라북'||'%' or city like '%'||'전북'||'%'
+			</when>
+			<when test="searchType_b == 'jeonnam'">
+				and city like '%'||'전라남'||'%' or city like '%'||'전남'||'%'
+			</when>
+			<when test="searchType_b == 'gyeongbuk'">
+				and city like '%'||'경상북'||'%' or city like '%'||'경북'||'%'
+			</when>
+			<when test="searchType_b == 'gyeongnam'">
+				and city like '%'||'경상남'||'%' or city like '%'||'경남'||'%'
+			</when>
+			<when test="searchType_b == 'jeju'">
+				and city like '%'||'제주'||'%'
+			</when>
+			<otherwise></otherwise>
+		</choose>
+		
+		<choose>
+			<when test="searchType_a == 'rank'">
+				order by rank asc	
+			</when>
+			<when test="searchType_a == 'memberM'">
+				order by membercount desc	
+			</when>
+			<when test="searchType_a == 'memberL'">
+				order by membercount asc	
+			</when>
+			<otherwise></otherwise>
+		</choose>
+		
+	</select>
+
+
 
 
 </mapper>
