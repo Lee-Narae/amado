@@ -55,7 +55,7 @@ public class ControllerJY {
 	public ModelAndView registerClub(ModelAndView mav) {
 		
 		mav.setViewName("club/registerClub.tiles2");
-		//    /WEB-INF/views/club/viewClub.jsp
+		//    /WEB-INF/views/club/registerClub.jsp
 		return mav;
 		
 	}
