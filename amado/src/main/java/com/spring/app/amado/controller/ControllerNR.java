@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,14 +71,7 @@ public class ControllerNR {
 		// /WEB-INF/views/tiles2/club/myClub.jsp
 		return mav;
 	}
-		
-	
-	@GetMapping("/club/matchRegister.do")
-	public ModelAndView matchRegister(ModelAndView mav) {
-		
-		mav.setViewName("club/matchRegister.tiles2");
-		return mav;
-	}
+
 	
 	@GetMapping("/member/login.do")
 	public ModelAndView login(ModelAndView mav) {
@@ -140,14 +135,75 @@ public class ControllerNR {
 	}
 	
 	
+	@GetMapping("/club/matchRegister.do")
+	public ModelAndView matchRegister(ModelAndView mav) {
+
+		List<Map<String,String>> sportList = service.getSportList(); 
+		mav.addObject("sportList", sportList);
+		
+		List<Map<String,String>> cityList = service.getCityList(); 
+		mav.addObject("cityList", cityList);
+		
+		mav.setViewName("club/matchRegister.tiles2");
+		return mav;
+	}
+	
 	@ResponseBody
-	@GetMapping("/searchAllMatching.do")
-	public String searchAllMatching() {
+	@GetMapping("/club/getLocal.do")
+	public String getLocal(HttpServletRequest request) {
 		
-		List<Map<String,String>> matchList = service.searchAllMatching();
+		String cityname = request.getParameter("cityname");
 		
+		List<String> localList = service.getLocalList(cityname);
+		 
+		JSONArray jsonArr = new JSONArray(); 
 		
-		return "";
+		for(String local : localList) {
+			JSONObject jsonObj = new JSONObject();
+			
+			jsonObj.put("local", local);
+			jsonArr.put(jsonObj);
+		}
+		
+		return jsonArr.toString();
+	}
+	
+	@ResponseBody
+	@GetMapping("/searchMatch.do")
+	public String searchMatch(HttpServletRequest request) {
+		
+		String sportseq = request.getParameter("sportseq");
+		String cityname = request.getParameter("cityname");
+		String localname = request.getParameter("localname");
+		String matchdate = request.getParameter("matchdate");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("sportseq", sportseq);
+		paramap.put("cityname", cityname);
+		paramap.put("localname", localname);
+		paramap.put("matchdate", matchdate);
+		
+		List<Map<String,String>> matchList = service.searchMatch(paramap);
+		
+		JSONArray jsonArr = new JSONArray();
+		
+		for(Map<String,String> item :matchList) {
+			JSONObject jsonObj = new JSONObject();
+			
+			jsonObj.put("matchingregseq", item.get("matchingregseq"));
+			jsonObj.put("clubname", item.get("clubname"));
+			jsonObj.put("membercount", item.get("membercount"));
+			jsonObj.put("matchdate", item.get("matchdate"));
+			jsonObj.put("matchtime", item.get("matchtime"));
+			jsonObj.put("city", item.get("city"));
+			jsonObj.put("local", item.get("local"));
+			jsonObj.put("area", item.get("area"));
+			jsonObj.put("status", item.get("status"));
+			
+			jsonArr.put(jsonObj);
+		}
+		
+		return jsonArr.toString();
 	}
 	
 }

@@ -158,12 +158,31 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		return club;
 	}
 
-	// 모든 매칭정보 불러오기
+	// 시군구 정보
 	@Override
-	public List<Map<String, String>> searchAllMatching() {
+	public List<Map<String, String>> getCityList() {
+		List<Map<String, String>> cityList = dao.getCityList();
+		return cityList;
+	}
 
-		List<Map<String, String>> matchList = dao.searchAllMatching();
-		
+	// 상세지역 정보
+	@Override
+	public List<String> getLocalList(String cityname) {
+		List<String> localList = dao.getLocalList(cityname);
+		return localList;
+	}
+
+	// 운동 종목 불러오기
+	@Override
+	public List<Map<String, String>> getSportList() {
+		List<Map<String, String>> sportList = dao.getSportList();
+		return sportList;
+	}
+
+	// 조건에 따른 매칭정보 불러오기
+	@Override
+	public List<Map<String, String>> searchMatch(Map<String, String> paramap) {
+		List<Map<String, String>> matchList = dao.searchMatch(paramap);
 		return matchList;
 	}
 	

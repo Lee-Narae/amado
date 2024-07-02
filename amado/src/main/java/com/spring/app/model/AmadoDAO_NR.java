@@ -22,7 +22,16 @@ public interface AmadoDAO_NR {
 	// 가입한 동호회 정보 불러오기
 	Map<String, String> getClubInfo(String clubseq);
 
-	// 모든 매칭정보 불러오기
-	List<Map<String, String>> searchAllMatching();
+	// 시군구 정보
+	List<Map<String, String>> getCityList();
+
+	// 상세지역 정보
+	List<String> getLocalList(String cityname);
+
+	// 운동 종목 불러오기
+	List<Map<String, String>> getSportList();
+
+	// 조건에 따른 매칭정보 불러오기
+	List<Map<String, String>> searchMatch(Map<String, String> paramap);
 
 }
