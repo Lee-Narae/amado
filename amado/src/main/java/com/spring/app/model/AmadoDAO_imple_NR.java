@@ -54,12 +54,31 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		return club;
 	}
 
-	// 모든 매칭정보 불러오기
+	// 시군구 정보
 	@Override
-	public List<Map<String, String>> searchAllMatching() {
+	public List<Map<String, String>> getCityList() {
+		List<Map<String, String>> cityList = sqlsession.selectList("NR.getCityList");
+		return cityList;
+	}
 
-		List<Map<String, String>> matchList = sqlsession.selectList("NR.searchAllMatching");
-		
+	// 상세지역 정보
+	@Override
+	public List<String> getLocalList(String cityname) {
+		List<String> localList = sqlsession.selectList("NR.getLocalList", cityname);
+		return localList;
+	}
+
+	// 운동 종목 불러오기
+	@Override
+	public List<Map<String, String>> getSportList() {
+		List<Map<String,String>> sportList = sqlsession.selectList("NR.getSportList");
+		return sportList;
+	}
+
+	// 조건에 따른 매칭정보 불러오기
+	@Override
+	public List<Map<String, String>> searchMatch(Map<String, String> paramap) {
+		List<Map<String, String>> matchList = sqlsession.selectList("NR.searchMatch", paramap);
 		return matchList;
 	}
 

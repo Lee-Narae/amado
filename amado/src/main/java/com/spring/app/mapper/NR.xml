@@ -65,4 +65,51 @@
 	</select>
 
 
+	<resultMap type="HashMap" id="cityMap">
+		<result property="cityseq" column="cityseq" javaType="String"/>
+		<result property="cityname" column="cityname" javaType="String"/>
+	</resultMap>
+	<select id="getCityList" resultMap="cityMap">
+		select cityseq, cityname from tbl_city
+	</select>
+
+
+	<select id="getLocalList" parameterType="String" resultType="String">
+		select localname from tbl_local A join tbl_city B on A.fk_cityseq = B.cityseq where cityname = #{cityname}
+	</select>
+	
+	
+	<resultMap type="HashMap" id="sport">
+		<result property="sportseq" column="sportseq" javaType="String"/>
+		<result property="sportname" column="sportname" javaType="String"/>
+	</resultMap>
+	<select id="getSportList" resultMap="sport">
+		select sportseq, sportname from tbl_sport
+	</select>
+	
+	
+	<resultMap type="HashMap" id="matchMap">
+		<result property="matchingregseq" column="matchingregseq" javaType="String"/>
+		<result property="clubname" column="clubname" javaType="String"/>
+		<result property="membercount" column="membercount" javaType="String"/>
+		<result property="matchdate" column="matchdate" javaType="String"/>
+		<result property="matchtime" column="matchtime" javaType="String"/>
+		<result property="city" column="city" javaType="String"/>
+		<result property="local" column="local" javaType="String"/>
+		<result property="area" column="area" javaType="String"/>
+		<result property="status" column="status" javaType="String"/>
+	</resultMap>
+	<select id="searchMatch" parameterType="HashMap" resultMap="matchMap">
+		select matchingregseq, clubname, A.membercount,
+			   substr(to_char(matchdate, 'yyyy-mm-dd hh24:mi'), 0, 10) matchdate,
+			   substr(to_char(matchdate, 'yyyy-mm-dd hh24:mi'), 12) matchtime, A.city, A.local, A.area, A.status
+		from tbl_matchingreg A join tbl_club B
+		on A.clubseq = B.clubseq
+		where A.sportseq = #{sportseq}
+		<if test="cityname != ''">and A.city = #{cityname}</if>
+		<if test="localname != '선택하세요'">and A.local = #{localname}</if>
+		<if test="matchdate != ''">and to_char(A.matchdate, 'yyyy-mm-dd') >= #{matchdate}</if>
+		<if test="matchdate == ''">and matchdate >= sysdate</if>
+	</select>
+	
 </mapper>
