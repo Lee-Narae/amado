@@ -17,6 +17,14 @@ SELECT * FROM TAB
 select *
 from user_constraints
 where table_name = 'PK_tbl_sport_sportseq';
+
+select *
+from tbl_member
+
+delete from tbl_member 
+where userid = 'TestID';
+
+commit;
         
 create table tbl_member    
 (userid                          nvarchar2(20)   not null         -- 회원아이디
@@ -59,6 +67,7 @@ create table tbl_member
 		select boardseq, title, content, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
 			 , password, commentcount, viewcount, status
 			 , orgfilename, filename, filesize
+        from tbl_board
 		where status = 1 
 				and lower(title) like '%'||lower('제목')||'%'
 		order by boardseq desc
