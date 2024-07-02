@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 
 
-
 <%
    String ctxPath = request.getContextPath();
 %>    
@@ -106,15 +105,6 @@ $(document).ready(function(){
 
 	 
 	 /////////////////////////////////////////////////////////////////
-	 // == 제품설명서 파일첨부(선택)을 선택하면 total_fileSize 에 파일크기 누적하기 시작 == <<
-	 $(document).on("change", "input[name='prdmanualFile']", function(e){
-		 
-		 const input_file = $(e.target).get(0);
-		 total_fileSize += input_file.files[0].size; 
-	 });
-	 // == 제품설명서 파일첨부(선택)을 선택하면 total_fileSize 에 파일크기 누적하기 끝 == <<
-	 /////////////////////////////////////////////////////////////////
-
 	
 		<%-- === jQuery 를 사용하여 드래그앤드롭(DragAndDrop)을 통한 파일 업로드 시작 === --%>
 	   let file_arr = []; // 첨부되어진 파일 정보를 담아둘 배열 
@@ -198,25 +188,17 @@ $(document).ready(function(){
 	            
 	        	let html = "";
             	const f = files[0]; // 어차피 files.length 의 값이 1 이므로 위의 for문을 사용하지 않고 files[0] 을 사용하여 1개만 가져오면 된다. 
-        		let fileSize = f.size/1024/1024;  /* 파일의 크기는 MB로 나타내기 위하여 /1024/1024 하였음 */
         	
 	        	if( !(f.type == 'image/jpeg' || f.type == 'image/png') ) {
 	        		alert("jpg 또는 png 파일만 가능합니다.");
 	        		$(this).css("background-color", "#fff");
 	        		return;
 	        	}
-        	
-	        	else if(fileSize >= 10) {
-	        		alert("10MB 이상인 파일은 업로드할 수 없습니다.!!");
-	        		$(this).css("background-color", "#fff");
-	        		return;
-	        	}
-        	
+	        	
 	        	else {
 	        		file_arr.push(f);
 		        	const fileName = f.name; // 파일명	
 	        	
-	        	    fileSize = fileSize < 1 ? fileSize.toFixed(3) : fileSize.toFixed(1);
 	        	    // fileSize 가 1MB 보다 작으면 소수부는 반올림하여 소수점 3자리까지 나타내며, 
 	                // fileSize 가 1MB 이상이면 소수부는 반올림하여 소수점 1자리까지 나타낸다. 만약에 소수부가 없으면 소수점은 0 으로 표시한다.
 	                /* 
@@ -234,7 +216,6 @@ $(document).ready(function(){
 	                    "<div class='fileList'>" +
 	                        "<span class='delete'>&times;</span>" +
 	                        "<span class='fileName'>"+fileName+"</span>" +
-	                        "<span class='fileSize'>"+fileSize+" MB</span>" +
 	                        "<span class='clear'></span>" +
 	                    "</div>";
 		            $(this).append(html);
@@ -294,6 +275,7 @@ $(document).ready(function(){
     // 등록하기 버튼
     $("button#btnRegister").click(function(){
   	 
+    	
       let is_infoData_OK = true;
     	
       if(is_infoData_OK) {
@@ -331,46 +313,51 @@ $(document).ready(function(){
       
           var formData = new FormData($("form[name='prodInputFrm']").get(0));  // $("form[name='prodInputFrm']").get(0) 폼 에 작성된 모든 데이터 보내기
           
-          if(file_arr.length > 0) { // 추가이미지파일을 추가했을 경우
-          	
-          	// 첨부한 파일의 총합의 크기가 10MB 이상 이라면 전송을 하지 못하게 막는다.
-          	let sum_file_size = 0;
+      
               
-              for(let i=0; i<file_arr.length; i++){
-              	sum_file_size += file_arr[i].size;
-              }// end of for--------------
-          	
-         ////////////////////////////////////////
-              // 첨부한 파일의 총량을 누적하는 용도 
-              total_fileSize += sum_file_size;
-         ////////////////////////////////////////
-              
-              if( sum_file_size >= 10*1024*1024 ) { // 첨부한 파일의 총합의 크기가 10MB 이상 이라면 
-		            alert("첨부한 추가이미지 파일의 총합의 크기가 10MB 이상이라서 제품등록을 할 수 없습니다.!!");
-		            return; // 종료
-		        }
-              else { // 첨부한 파일의 총합의 크기가 10MB 미만 이라면, formData 속에 첨부파일 넣어주기
-              	formData.append("attachCount", file_arr.length); // 추가이미지파일 개수 
+             
               	
-              	file_arr.forEach(function(item, index){
-              		formData.append("attach"+index, item); // 첨부파일 추가하기. item 이 첨부파일이다. 
-              	});
-              }
               
           }// end of if(file_arr.length > 0)----------
            // end of 추가이미지파일을 추가했을 경우 -------------
-          
-		  ///////////////////////////////////////
-		     // 첨부한 파일의 총량이 20MB 초과시 //   
-		     if( total_fileSize > 20*1024*1024 ) {
-		        	alert("ㅋㅋㅋ 첨부한 파일의 총합의 크기가 20MB를 넘어서 제품등록을 할 수 없습니다.!!");
-			        return; // 종료
-		     } 
-		  ///////////////////////////////////////
+   // 글제목 유효성 검사
+	  const clubName = $("input:text[name='clubName']").val().trim();
+	  const cost = $("input:text[name='cost']").val().trim();
+	  const headImg = $("input:file[name='headImg']").val().trim();
+	  const sportType = $("select[name='sportType']").val();
+	  const city = $("select[name='city']").val();
+	  const local = $("select[name='local']").val();
+	  const gym = $("select[name='gym']").val();
+	  const time = $("select[name='time']").val();
+	  const memberCnt = $("input:range[name='memberCnt']").val();
+	  
+	  if(clubName == "" || cost=="" ||
+		 headImg == "" ){
+		  
+		  alert("필수사항을 입력하세요!!");
+		  return; // 종료
+	  }
+	  if(sportType == "종목" || city == "시" || 
+		 local == "구" || gym == "구장" || 
+		 time=="주요 활동 시간대"){
+		  
+		  alert("필수사항을 선택하세요!!");
+		  return; // 종료
+	  }
+	  if(memberCnt=="1"){
+		  alert("동호회 정원은 1명 이상이어야 합니다.");
+		  return;
+	  }
+	  
+	  // 동호회명이 존재하는 경우 
+	  
+	  // 글내용 유효성 검사()
+  
+	     
       
         $.ajax({
         <%-- url : "<%= ctxPath%>/shop/admin/productRegister.up", --%>
-             url : "${pageContext.request.contextPath}/shop/admin/productRegister.up",
+             url : "<%= ctxPath%>/club/clubRegister.do",
              type : "post",
              data : formData,
              processData:false,  // 파일 전송시 설정 
@@ -380,64 +367,21 @@ $(document).ready(function(){
          	   	console.log("~~~ 확인용 : " + JSON.stringify(json));
                  // ~~~ 확인용 : {"result":1}
                  if(json.result == 1) {
-         	       location.href="${pageContext.request.contextPath}/shop/mallHomeMore.up"; 
+         	       location.href="<%= ctxPath%>/club/viewclub.do"; 
                  }
                  
              },
              error: function(request, status, error){
-			    // alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-			       alert("첨부된 파일의 크기의 총합이 20MB 를 초과하여 제품등록이 실패했습니다.ㅜㅜ");
+			    
 		     }
-      });
+      	});
 
+     
+    });//end of  $("button#btnRegister").click(function(){---------------
       
-      
-      
-      
-      
-    	
-  	  /* 글제목 유효성 검사
-  	  const clubName = $("input:text[name='clubName']").val().trim();
-  	  const cost = $("input:text[name='cost']").val().trim();
-  	  const headImg = $("input:file[name='headImg']").val().trim();
-  	  const sportType = $("select[name='sportType']").val();
-  	  const city = $("select[name='city']").val();
-  	  const local = $("select[name='local']").val();
-  	  const gym = $("select[name='gym']").val();
-  	  const time = $("select[name='time']").val();
-  	  const memberCnt = $("input:range[name='memberCnt']").val();
   	  
-  	  if(clubName == "" || cost=="" ||
-  		 headImg == "" ){
-  		  
-  		  alert("필수사항을 입력하세요!!");
-  		  return; // 종료
-  	  }
-  	  if(sportType == "종목" || city == "시" || 
-  		 local == "구" || gym == "구장" || 
-  		 time=="주요 활동 시간대"){
-  		  
-  		  alert("필수사항을 선택하세요!!");
-  		  return; // 종료
-  	  }
-  	  if(memberCnt=="1"){
-  		  alert("동호회 정원은 1명 이상이어야 합니다.");
-  		  return;
-  	  }
-  	  
-  	  // 동호회명이 존재하는 경우 
-  	  
-  	  // 글내용 유효성 검사()
-  	  
-		
-	    	  
-   	  // 폼(form)을 전송(submit)
-   	  const frm = document.registerClubFrm;
-   	  frm.method = "post";
-   	  frm.action = "<%= ctxPath%>/registerClub.action";
-   	  frm.submit();
-   	  */
-    });
+      
+
 		
 	
 });// end of $(document).ready(function(){})---------------------------
