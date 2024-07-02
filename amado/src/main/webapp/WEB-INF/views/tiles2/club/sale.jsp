@@ -182,6 +182,7 @@ rotate(
 
 
 	$(document).ready(function(){
+	
 		
 		// ======= 추가이미지 캐러젤로 보여주기(Bootstrap Carousel 4개 표시 하되 1번에 1개 진행) 시작 ======= //
 	 	   $('div#recipeCarousel').carousel({
@@ -342,6 +343,69 @@ rotate(
    
    
    
+	// == 댓글쓰기 == //
+	function goAddWrite(){
+	   
+		const comment_content = $("textarea[name='content']").val().trim();
+		if(comment_content == ""){
+			alert("댓글 내용을 입력하세요!!");
+			return; // 종료
+		}
+		
+		
+		goAddWrite_noAttach();
+		
+		
+	}// end of fucntion goAddWrite(){}------------------
+   
+   
+   
+   
+   function goAddWrite_noAttach(){
+		
+		<%--
+	        // 보내야할 데이터를 선정하는 또 다른 방법
+	        // jQuery에서 사용하는 것으로써,
+	        // form태그의 선택자.serialize(); 을 해주면 form 태그내의 모든 값들을 name값을 키값으로 만들어서 보내준다. 
+	        const queryString = $("form[name='addWriteFrm']").serialize();
+	    --%>
+   
+	    const queryString = $("form[name='commentFrm']").serialize();
+	    
+		$.ajax({
+			url:"<%= ctxPath%>/addComment.action",
+		/*
+			data:{"fk_userid":$("input:hidden[name='fk_userid']").val() 
+	             ,"name":$("input:text[name='name']").val() 
+	             ,"content":$("input:text[name='content']").val()
+	             ,"parentSeq":$("input:hidden[name='parentSeq']").val()},
+	    */
+	    	// 또는
+	    	data:queryString,
+	    	type:"post",
+           dataType:"json",
+           success:function(json){
+           	console.log(JSON.stringify(json));
+           	//{"name":"최준혁","n":1}
+           	//또는
+           	//{"name":"최준혁","n":0}
+           	
+           	if(json.n == 0){
+           		alert(json.name + "님의 포인트는 300점을 초과할 수 없으므로 댓글쓰기가 불가합니다.");
+           	}
+           	else{
+           		//goReadComment(); 					// 페이징 처리 안한 댓글 읽어오기
+           		//goViewComment(1)	// 페이징 처리한 댓글 읽어오기
+           	}
+           	
+           	$("textarea[name='content']").val("");
+           },
+           error: function(request, status, error){
+               alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+           }
+		})
+	}// end of function goAddWrite_noAttach(){}--------------------------
+   
    
 </script>
 
@@ -469,21 +533,20 @@ rotate(
     </div>
 
 	<div>
-		<div>
-			<form name="commentFrm">
-				<textarea name="contents"
-					style="font-size: 12pt; width: 100%; height: 100px;"></textarea>
-				<input type="hidden" name="fk_userid"
-					value="${sessionScope.loginuser.userid}" /> <input type="hidden"
-					name="fk_pnum" value="${requestScope.pvo.pnum}" />
-			</form>
-		</div>
-		<div style="text-align: right; font-size: 12pt;">
-			<button type="button" class="btn btn-outline-secondary"
-				id="btnCommentOK" style="margin: auto;">
-				<span style="font-size: 10pt;">등록</span>
-			</button>
-		</div>
+		<form name="commentFrm">
+			<div>
+				<textarea name="content" style="font-size: 12pt; width: 100%; height: 100px;"></textarea>
+				<input type="text" name="fk_userid" value="${sessionScope.loginuser.userid}" /> 
+				<input type="text" name="name" value="${sessionScope.loginuser.name}" />
+				<input type="text" name="fleamarketseq" value="${requestScope.pvo.pnum}" />
+			</div>
+			<div style="text-align: right; font-size: 12pt;">
+				<button type="button" class="btn btn-outline-secondary"
+					id="btnCommentOK" style="margin: auto;" onclick="goAddWrite()">
+					<span style="font-size: 10pt;">등록</span>
+				</button>
+			</div>
+		</form>
 	</div>
 
 	
