@@ -65,8 +65,4 @@
 	</select>
 
 
-	<select id="searchAllMatching">
-		
-	</select>
-
 </mapper>

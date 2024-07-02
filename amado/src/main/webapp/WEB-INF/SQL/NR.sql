@@ -77,3 +77,6 @@ select * from tbl_matchingreg;
 
 update tbl_matchingreg set sportseq=2 where clubseq = 3;
 commit;
+
+
+
