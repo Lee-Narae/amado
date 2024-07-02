@@ -31,7 +31,12 @@ public interface AmadoService_NR {
 	// 상세지역 정보
 	List<String> getLocalList(String cityname);
 
+	// 매칭 정보 불러오기
 	List<Map<String, String>> searchMatch(Map<String, String> paramap);
+
+	// sportname + userid로 가입된 동호회 정보 불러오기
+	Map<String, String> getClubseq_forMatch(Map<String, String> paramap);
+	
 
 
 }

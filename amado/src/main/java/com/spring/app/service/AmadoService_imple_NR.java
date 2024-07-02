@@ -185,5 +185,11 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		List<Map<String, String>> matchList = dao.searchMatch(paramap);
 		return matchList;
 	}
-	
+
+	// sportname + userid로 가입된 동호회 정보 불러오기
+	@Override
+	public Map<String, String> getClubseq_forMatch(Map<String, String> paramap) {
+		Map<String, String> club = dao.getClubseq_forMatch(paramap);
+		return club; 
+	}
 }

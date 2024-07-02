@@ -172,13 +172,13 @@ public class ControllerNR {
 	@GetMapping("/searchMatch.do")
 	public String searchMatch(HttpServletRequest request) {
 		
-		String sportseq = request.getParameter("sportseq");
+		String sportname = request.getParameter("sportname");
 		String cityname = request.getParameter("cityname");
 		String localname = request.getParameter("localname");
 		String matchdate = request.getParameter("matchdate");
 		
 		Map<String, String> paramap = new HashMap<String, String>();
-		paramap.put("sportseq", sportseq);
+		paramap.put("sportname", sportname);
 		paramap.put("cityname", cityname);
 		paramap.put("localname", localname);
 		paramap.put("matchdate", matchdate);
@@ -205,5 +205,49 @@ public class ControllerNR {
 		
 		return jsonArr.toString();
 	}
+	
+
+	@ResponseBody
+	@PostMapping("/getClubseq.do")
+	public String getClubseq(HttpServletRequest request) {
+		
+		String sportname = request.getParameter("sportname");
+		
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("sportname", sportname);
+		paramap.put("userid", loginuser.getUserid());
+		
+		Map<String, String> club = service.getClubseq_forMatch(paramap);
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("clubseq", club.get("clubseq"));
+		jsonObj.put("clubname", club.get("clubname"));
+		
+		return jsonObj.toString();
+
+	}
+
+	
+	
+	@PostMapping("/club/matchRegister/reg.do")
+	public ModelAndView reg(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+		
+		String sport = request.getParameter("sport");
+		String city = request.getParameter("city");
+		String local = request.getParameter("local");
+		String date = request.getParameter("date");
+		String clubseq = request.getParameter("clubseq");
+		String clubname = request.getParameter("clubname");
+		
+		System.out.println(clubseq+" and "+clubname);
+		System.out.println(sport+" "+city+" "+local+" "+date);
+		
+		mav.setViewName("club/reg.tiles2");
+		return mav;
+	}
+	
 	
 }

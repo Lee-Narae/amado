@@ -2,7 +2,10 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <% String ctxPath = request.getContextPath(); %>
+<% Object member = session.getAttribute("loginuser"); %>
 
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" /> 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 <style type="text/css">
 
 #topImg {
@@ -170,7 +173,7 @@ $(function(){
 
 function searchMatch(){
 	
-	let sportseq = $("select[name='sport']").val();
+	let sportname = $("select[name='sport']").val();
 	let cityname = "";
 	let localname = "";
 	let matchdate = $("input:text[name='date']").val();
@@ -186,10 +189,10 @@ function searchMatch(){
 	
 	$.ajax({
 		url: "<%=ctxPath%>/searchMatch.do",
-		data: {"sportseq": sportseq, "cityname": cityname, "localname": localname, "matchdate": matchdate},
+		data: {"sportname": sportname, "cityname": cityname, "localname": localname, "matchdate": matchdate},
 		dataType: "json",
 		success: function(json){
-    		console.log(JSON.stringify(json));
+    		// console.log(JSON.stringify(json));
     		
     		if(json.length > 0){
     			
@@ -249,7 +252,7 @@ function searchMatch(){
    					v_html += `<tr>
 					   	 <td style="width: 10%;">\${item.matchtime}</td>
 					   	 <td style="width: 30%;">\${item.clubname}</td>
-					   	 <td style="width: 30%;">\${item.area}</td>
+					   	 <td style="width: 30%; height: 30px;"><div style="font-size: 10pt;">\${item.city} > \${item.local}</div>\${item.area}</td>
 					   	 <td style="width: 10%;">\${item.membercount}</td>`;
 
 					if(item.status == '0'){
@@ -307,6 +310,71 @@ function searchMatch(){
 	
 }
 
+
+function goRegister(){
+	
+	if('<%=member%>' == 'null'){
+		swal('로그인이 필요합니다.');
+		return;
+	}
+	
+	let sportname = $("select[name='sport']").val();
+	let cityname = $("select[name='city']").val();
+	let localname = $("select[name='local']").val();
+	let matchdate = $("input:text[name='date']").val();
+	
+	if(cityname == "0"){
+		swal('지역을 선택하세요.');
+		return;
+	}
+	
+	if(localname == '선택하세요'){
+		swal('지역을 선택하세요.');
+		return;
+	}
+	
+	if(matchdate == ''){
+		swal('날짜를 선택하세요.');
+		return;
+	}
+	
+
+	let clubseq = "";
+	let clubname = "";
+	
+	// 로그인 유저의 가입 동호회 번호 알아오기
+	$.ajax({
+		url: "<%=ctxPath%>/getClubseq.do",
+		data: {"sportname": sportname},
+		type: "post",
+		async: "false",
+		dataType: "json",
+		success: function(json){
+			
+			if(json != null){
+				clubseq = json.clubseq;
+				clubname = json.clubname;
+				$("input:text[name='clubseq']").val(clubseq);
+				$("input:text[name='clubname']").val(clubname);
+				
+				
+				// 정상 처리되었다면
+				const frm = document.matchFrm;
+				frm.action = "<%=ctxPath%>/club/matchRegister/reg.do";
+				frm.method = "post";
+				frm.submit();
+				
+			}
+		},
+		error: function(request, status, error){
+			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		}
+	});
+	
+
+
+}
+
 </script>
 
 <div id="container" align="center">
@@ -315,13 +383,15 @@ function searchMatch(){
 	</div>
 	<div style="font-size: 40pt; font-weight: bolder; position: relative; top: -400px; left: -320px;">매치 등록하기</div>
 	<form name="matchFrm">
+		<input type="text" name="clubseq" />
+		<input type="text" name="clubname" />
 		<div id="matching" style="padding-left: 3%; padding-top: 1%;">
 			<div id="sportdiv">
 				<div align="left" style="margin: 10% 0 3% 15%; font-weight: bold;">종목</div>
 				<div>
 					<select name="sport" id="sport">
 						<c:forEach var="sport" items="${requestScope.sportList}">
-							<option value="${sport.sportseq}">${sport.sportname}</option>						
+							<option value="${sport.sportname}">${sport.sportname}</option>						
 						</c:forEach>
 			      	</select>
 				</div>
@@ -348,7 +418,7 @@ function searchMatch(){
 				<div align="left" style="margin: 10% 0 3% 7%; font-weight: bold;">날짜</div>
 				<input type="text" name="date" id="datepicker" placeholder="선택하세요">
 			</div>
-			<div><button type="button" class="btn btn-success btn-lg" style="margin-top: 25%;">등록하기</button></div>
+			<div><button type="button" class="btn btn-success btn-lg" style="margin-top: 25%;" onclick="goRegister()">등록하기</button></div>
 		</div>
 	</form>
 	

@@ -105,11 +105,27 @@
 			   substr(to_char(matchdate, 'yyyy-mm-dd hh24:mi'), 12) matchtime, A.city, A.local, A.area, A.status
 		from tbl_matchingreg A join tbl_club B
 		on A.clubseq = B.clubseq
-		where A.sportseq = #{sportseq}
+		join tbl_sport C
+		on A.sportseq = C.sportseq
+		where C.sportname = #{sportname}
 		<if test="cityname != ''">and A.city = #{cityname}</if>
 		<if test="localname != '선택하세요'">and A.local = #{localname}</if>
 		<if test="matchdate != ''">and to_char(A.matchdate, 'yyyy-mm-dd') >= #{matchdate}</if>
 		<if test="matchdate == ''">and matchdate >= sysdate</if>
+		order by matchdate, matchtime
+	</select>
+	
+	
+	<resultMap type="HashMap" id="getClubseq">
+		<result property="clubseq" column="clubseq" javaType="String"/>
+		<result property="clubname" column="clubname" javaType="String"/>
+	</resultMap>
+	<select id="getClubseq_forMatch" parameterType="HashMap" resultMap="getClubseq">
+		select A.clubseq, clubname from tbl_clubmember A join tbl_sport B
+		on A.sportseq = B.sportseq
+		join tbl_club C
+		on A.clubseq = C.clubseq
+		where A.fk_userid = #{userid} and sportname = #{sportname}
 	</select>
 	
 </mapper>
