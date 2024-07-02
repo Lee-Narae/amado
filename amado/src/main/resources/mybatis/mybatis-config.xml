@@ -7,5 +7,6 @@
 		<typeAlias type="com.spring.app.domain.MemberVO" alias="MemberVO"/>
 		<typeAlias type="com.spring.app.domain.BoardVO" alias="BoardVO"/>
 		<typeAlias type="com.spring.app.domain.ClubVO" alias="ClubVO"/>
+		<typeAlias type="com.spring.app.domain.FleamarketCommentVO" alias="FleamarketCommentVO"/>
 	</typeAliases>
 </configuration>

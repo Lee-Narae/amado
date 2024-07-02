@@ -4,5 +4,17 @@
 
 <mapper namespace="JH">
 
+<!-- #88. 댓글쓰기 (tbl_comment 테이블에 insert) -->
+	<insert id="addComment" parameterType="FleamarketCommentVO">
+		insert into tbl_fleamarketcomment(fleamarketcommentseq, fleamarketseq, comment_text, registerdate, fk_userid)
+		values(seq_fleamarketcomment.nextval, 1, 'ㅎㅇㅎㅇ', default, #{fk_userid})
+	</insert>
+	
+	<!-- #89-1. tbl_board 테이블에 commentCount 컬럼이 1증가(update) -->
+	<update id="updateCommentCount" parameterType="String">
+		update tbl_fleamarket set commentCount = commentCount+1
+		where fleamarketseq = 1
+	</update>
+	
 
 </mapper>
