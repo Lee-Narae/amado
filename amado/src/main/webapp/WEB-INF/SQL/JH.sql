@@ -36,3 +36,14 @@ from tbl_fleamarket
 insert into tbl_fleamarket(fleamarketseq, sportseq, city, title, content, cost, deal, fk_userid, registerdate, password, status)
 values(1, 1, '서울', '호날두가 신었던 축구화 팝니다!!', '제가 직접 신었답니다ㅎㅎ', 50000000, '직거래', 'leejy', default, '1234', 0);
 
+
+update tbl_fleamarket set commentCount = commentCount+1
+where fleamarketseq = 1
+
+
+insert into tbl_fleamarketcomment(fleamarketcommentseq, fleamarketseq, comment_text, registerdate, fk_userid)
+values(seq_fleamarket.nextval, 1, 'ㅎㅇㅎㅇ', default, 'leess')
+
+
+insert into tbl_fleamarketcomment(fleamarketcommentseq, fleamarketseq, comment_text, registerdate, fk_userid)
+		values(seq_fleamarketcomment.nextval, 1, 'ㅎㅇㅎㅇ2', default, 'leess')

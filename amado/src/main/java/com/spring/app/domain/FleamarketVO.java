@@ -21,6 +21,7 @@ public class FleamarketVO {
 	
 	
 	
+	
 	public String getFleamarketseq() {
 		return fleamarketseq;
 	}
