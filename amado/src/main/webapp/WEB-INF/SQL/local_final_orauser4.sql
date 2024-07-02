@@ -59,6 +59,8 @@ create table tbl_member
 
 
 
+<<<<<<< HEAD
+=======
 		insert into tbl_board(boardseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status, orgfilename, filename, filesize)
 		values(seq_board.nextval, '제목', '내용', 'ksj1024sj', default, '1234', 0, 0, default, '', '' , '')
 
@@ -79,6 +81,7 @@ create table tbl_member
 		where status = 1
 		order by boardseq desc
 
+>>>>>>> branch 'main' of https://github.com/Lee-Narae/amado.git
 create table tbl_board    
 (boardseq                    NUMBER   not null                -- 전체게시판번호
 ,title                       nvarchar2(50)  not null          -- 글제목
@@ -593,6 +596,8 @@ nocache;
 -- Sequence SEQ_GYMANSWER이(가) 생성되었습니다.
 
 
+<<<<<<< HEAD
+=======
 
 select *
 from tbl_member
@@ -607,3 +612,4 @@ commit;
 		select count(*) AS n
 		from tbl_member 
 		where email = 'Nb/STO9Z4GBQrKkY9koq/+g0lS1PgGRg/D4VpulV8QY='
+>>>>>>> branch 'main' of https://github.com/Lee-Narae/amado.git
