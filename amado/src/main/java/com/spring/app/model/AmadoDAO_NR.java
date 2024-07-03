@@ -34,4 +34,7 @@ public interface AmadoDAO_NR {
 	// 조건에 따른 매칭정보 불러오기
 	List<Map<String, String>> searchMatch(Map<String, String> paramap);
 
+	// sportname + userid로 가입된 동호회 정보 불러오기
+	Map<String, String> getClubseq_forMatch(Map<String, String> paramap);
+
 }

@@ -1,5 +1,6 @@
 package com.spring.app.amado.controller;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,9 +14,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.app.common.MyUtil;
+import com.spring.app.domain.ClubVO;
 import com.spring.app.service.AmadoService_JY;
 import com.spring.app.service.AmadoService_SJ;
 
@@ -50,15 +54,19 @@ public class ControllerJY {
 		
 	}
 
-	// 동호회 등록
-	@RequestMapping(value="/club/registerClub.do")
-	public ModelAndView registerClub(ModelAndView mav) {
+	
+	// ========== 동호회 등록 ==========
+	//게시판 글쓰기 폼페이지 요청
+	@ResponseBody
+	@RequestMapping(value="/club/clubRegister.do" , produces="text/plain;charset=UTF-8")
+	public ModelAndView clubRegister(Map<String, String> paraMap, ModelAndView mav, ClubVO clubvo, MultipartHttpServletRequest mrequest) {
 		
-		mav.setViewName("club/registerClub.tiles2");
-		//    /WEB-INF/views/club/viewClub.jsp
+		mav.setViewName("club/clubRegister.tiles2");
+		//    /WEB-INF/views/club/clubRegister.jsp
 		return mav;
-		
-	}
+	}	
+	
+	/*
 	// 동호회명 중복체크
 	@ResponseBody
 	@PostMapping(value = "/clubnameDuplicateCheck.do", produces = "text/plain;charset=UTF-8")
@@ -76,7 +84,9 @@ public class ControllerJY {
 
 		return jsonObj.toString();
 	}
-
+*/
+	
+	//게시판 글쓰기 완료 요청 //첨부파일 있는
 	
 	
 	

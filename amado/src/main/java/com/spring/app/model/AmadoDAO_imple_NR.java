@@ -82,4 +82,12 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		return matchList;
 	}
 
+	
+	// sportname + userid로 가입된 동호회 정보 불러오기
+	@Override
+	public Map<String, String> getClubseq_forMatch(Map<String, String> paramap) {
+		Map<String, String> club = sqlsession.selectOne("NR.getClubseq_forMatch", paramap);
+		return club;
+	}
+
 }
