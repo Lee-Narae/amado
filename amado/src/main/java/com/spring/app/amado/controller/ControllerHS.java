@@ -26,7 +26,9 @@ public class ControllerHS {
 	@GetMapping(value="/gym/registerGym.do")
 	   public ModelAndView registerGym(ModelAndView mav) {
 		mav.setViewName("/gym/registerGym.tiles2");
-	      return mav;
+	     
+		
+		return mav;
 	       //  /WEB-INF/views/tiles1/opendata/korea_tour_api.jsp 페이지를 만들어야 한다.
 	   }  
 
