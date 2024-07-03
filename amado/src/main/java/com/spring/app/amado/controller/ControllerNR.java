@@ -223,8 +223,11 @@ public class ControllerNR {
 		Map<String, String> club = service.getClubseq_forMatch(paramap);
 		
 		JSONObject jsonObj = new JSONObject();
-		jsonObj.put("clubseq", club.get("clubseq"));
-		jsonObj.put("clubname", club.get("clubname"));
+		
+		if(club != null) {
+			jsonObj.put("clubseq", club.get("clubseq"));
+			jsonObj.put("clubname", club.get("clubname"));
+		}
 		
 		return jsonObj.toString();
 
@@ -235,6 +238,9 @@ public class ControllerNR {
 	@PostMapping("/club/matchRegister/reg.do")
 	public ModelAndView reg(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
 		
+		List<Map<String,String>> cityList = service.getCityList(); 
+		mav.addObject("cityList", cityList);
+		
 		String sport = request.getParameter("sport");
 		String city = request.getParameter("city");
 		String local = request.getParameter("local");
@@ -242,11 +248,64 @@ public class ControllerNR {
 		String clubseq = request.getParameter("clubseq");
 		String clubname = request.getParameter("clubname");
 		
-		System.out.println(clubseq+" and "+clubname);
-		System.out.println(sport+" "+city+" "+local+" "+date);
+		List<String> localList = service.getLocalList(city);
+		mav.addObject("localList", localList);
+		
+		// System.out.println(clubseq+" and "+clubname); 확인 완료
+		// System.out.println(sport+" "+city+" "+local+" "+date); 확인 완료
+		
+		mav.addObject("sportname", sport);
+		mav.addObject("city", city);
+		mav.addObject("local", local);
+		mav.addObject("date", date);
+		mav.addObject("clubseq", clubseq);
+		mav.addObject("clubname", clubname);
+		
 		
 		mav.setViewName("club/reg.tiles2");
 		return mav;
+	}
+
+	
+	
+	@ResponseBody
+	@PostMapping("/club/matchRegisterEnd.do")
+	public String matchRegisterEnd(HttpServletRequest request) {
+
+		String clubname = request.getParameter("clubname");
+		String sportname = request.getParameter("sportname");
+		String membercount = request.getParameter("membercount");
+		String matchdate = request.getParameter("matchdate");
+		String city = request.getParameter("city");
+		String local = request.getParameter("local");
+		String area = request.getParameter("area");
+		String hour = request.getParameter("hour");
+		hour = (Integer.parseInt(hour) < 10)?"0"+hour:hour;
+		String minute = request.getParameter("minute");
+		minute = (Integer.parseInt(minute) < 10)?"0"+minute:minute;
+		
+		matchdate = matchdate+" "+hour+":"+minute;
+		
+		String clubseq = service.getClubseq_forReg(clubname);
+		String sportseq = service.getSportseq_forReg(sportname);
+		
+		// System.out.println(clubseq+","+sportseq); 확인 완료
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("clubseq", clubseq);
+		paramap.put("sportseq", sportseq);
+		paramap.put("membercount", membercount);
+		paramap.put("matchdate", matchdate);
+		paramap.put("city", city);
+		paramap.put("local", local);
+		paramap.put("area", area);
+		
+		int n = service.matchRegister(paramap);
+		
+		JSONObject jsonObj = new JSONObject();
+		
+		return jsonObj.toString();
+
 	}
 	
 	

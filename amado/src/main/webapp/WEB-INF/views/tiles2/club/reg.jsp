@@ -1,32 +1,34 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<% String ctxPath = request.getContextPath(); %>
 
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" /> 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 <style type="text/css">
-   table#tblProdInput {
-                       border-collapse: collapse; }
+table#match {border-collapse: collapse; }
+                    
+table#match td {padding-left: 10px;
+                 height: 50px; }
                        
-    table#tblProdInput td {
-                          padding-left: 10px;
-                          height: 50px; }
-                          
-    .prodInputName { background-color: #ccf2ff;  
-    				 text-align: center;
-                    font-weight: bold; }                                                 
-   
-   .error {color: red; font-weight: bold; font-size: 9pt;}
-   
-   div.fileDrop{ display: inline-block; 
-                  width: 100%; 
-                  height: 100px;
-                  overflow: auto;
-                  background-color: #fff;
-                  padding-left: 10px;}
-                 
-    div.fileDrop > div.fileList > span.delete{display:inline-block; width: 20px; border: solid 1px gray; text-align: center;} 
-    div.fileDrop > div.fileList > span.delete:hover{background-color: #000; color: #fff; cursor: pointer;}
-    div.fileDrop > div.fileList > span.fileName{padding-left: 10px;}
-    div.fileDrop > div.fileList > span.fileSize{padding-right: 20px; float:right;} 
-    span.clear{clear: both;} 
+.prodInputName {background-color: #ccf2ff;  
+ 				text-align: center;
+                font-weight: bold;}                                                 
+
+.error {color: red; font-weight: bold; font-size: 9pt;}
+
+div.fileDrop{display: inline-block; 
+             width: 100%; 
+             height: 100px;
+             overflow: auto;
+             background-color: #fff;
+             padding-left: 10px;}
+              
+div.fileDrop > div.fileList > span.delete{display:inline-block; width: 20px; border: solid 1px gray; text-align: center;} 
+div.fileDrop > div.fileList > span.delete:hover{background-color: #000; color: #fff; cursor: pointer;}
+div.fileDrop > div.fileList > span.fileName{padding-left: 10px;}
+div.fileDrop > div.fileList > span.fileSize{padding-right: 20px; float:right;} 
+span.clear{clear: both;} 
     
 
 
@@ -43,149 +45,307 @@ div#tableWrap {
 	  
 }
 
-table#tblProdInput {
+table#match {
 margin: 0%;
 border-style: hidden;
 }
 
-</style>
-    
-<div id="container" align="center" style="margin-bottom: 20px; margin-top: 10%;">
+.product{
+height: 60px;
+align-content: center;
+}
 
-   <div style="width: 250px; margin-top: 20px; padding-top: 10px; padding-bottom: 10px;">       
-      <span style="font-size: 15pt; font-weight: bold;">제품등록&nbsp;[관리자전용]</span>   
-   </div>
-   <br>
-   
-   <%-- !!!!! ==== 중요 ==== !!!!! --%>
-   <%-- 폼에서 파일을 업로드 하려면 반드시 method 는 POST 이어야 하고 
-        enctype="multipart/form-data" 으로 지정해주어야 한다.!! --%>
-   <form name="prodInputFrm" enctype="multipart/form-data"> 
-      <div id="tableWrap">   
-      <table id="tblProdInput" style="background-color: #ccf2ff; width: 100%;">
-      <tbody>
-      
-      
-      	 <tr>
-      	 	<td class="prodInputName" width="25%">등록 제품 설정</td>
-      	 	<td>
-      	 	<select id="selectTag" name="searchType">
-				<option value="">선택하세요</option>
-				<option value="1">컵 등록</option>
-				<option value="2">맛 등록</option>
-			</select>
-      	 </td>
-      	 </tr>
-      	
-      	
-         <tr class="product">
-            <td width="25%" class="prodInputName">사이즈명</td>
-            <td width="75%" align="left">
-               <input placeholder="ex)파인트, 쿼터 ..."type="text" style="width: 300px;" name="productname" class="box infoData" />
-               <span class="error">필수입력</span>
-            </td>
-         </tr>
-         <tr class="product">
-            <td width="25%" class="prodInputName">제품코드</td>
-            <td width="75%" align="left">
-               <input placeholder="ex)P, Q, F, H ..." type="text" style="width: 300px;" name="productcodeno" class="box infoData" />
-               <span class="error">필수입력</span>
-            </td>
-         </tr>
-         <tr class="product">
-            <td width="25%" class="prodInputName">제품이미지</td>
-            <td width="75%" align="left">
-               <input type="file" name="pimage1" class="infoData img_file" accept='image/*' /><span class="error">필수입력</span>
-            </td>
-         </tr>
-         <tr class="product">
-            <td width="25%" class="prodInputName">제품판매가</td>
-            <td width="75%" align="left">
-               <input type="text" style="width: 100px;" name="price" class="box infoData" /> 원
-               <span class="error">필수입력</span>
-            </td>
-         </tr>
-         <tr class="product">
-            <td width="25%" class="prodInputName">제품설명</td>
-            <td width="75%" align="left">
-               <textarea placeholder="ex)3가지 맛 선택 ..." name="productdetail" rows="5" cols="60"></textarea>
-            </td>
-         </tr>
-         
-         <%-- ==== 추가이미지파일을 마우스 드래그앤드롭(DragAndDrop)으로 추가하기 ==== --%>
-          <tr class="product">
-                <td width="25%" class="prodInputName">제품상세이미지</td>
-                <td>
-                   <span style="font-size: 10pt;">파일을 1개씩 마우스로 끌어 오세요</span>
-                <div id="fileDrop" class="fileDrop border border-secondary"></div>
-                </td>
-          </tr>
+#datepicker {
+width: 30%;
+height: 35px;
+border-radius: 10px;
+text-align: center;
+padding: 3%;
+border: solid 1px gray;
+background-color: #f2f2f2;
+cursor: pointer;
+}
+
+select {
+width: 20%;
+height: 35px;
+border-radius: 10px;
+text-align: center;
+}
+
+#area {
+height: 35px;
+border-radius: 10px;
+border: solid 1px gray;
+padding-left: 1%;
+}
+d
+
+</style>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/i18n/jquery-ui-i18n.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	
+	$("span.error").hide();
+	
+	$(".spinner_membercnt").spinner({
+        spin: function(event, ui) {
+           if(ui.value > 100) {
+              $(this).spinner("value", 100);
+              return false;
+           }
+           else if(ui.value < 0) {
+              $(this).spinner("value", 0);
+              return false;
+           }
+        }
+    });
+	
+	$(".spinner_hour").spinner({
+        spin: function(event, ui) {
+           if(ui.value > 23) {
+              $(this).spinner("value", 23);
+              return false;
+           }
+           else if(ui.value < 0) {
+              $(this).spinner("value", 0);
+              return false;
+           }
+        }
+    });
+	
+	$(".spinner_minute").spinner({
+        spin: function(event, ui) {
+           if(ui.value > 59) {
+              $(this).spinner("value", 59);
+              return false;
+           }
+           else if(ui.value < 0) {
+              $(this).spinner("value", 0);
+              return false;
+           }
+        }
+     });
+	
+	$.datepicker.setDefaults($.datepicker.regional['ko']);
+    $( "#datepicker" ).datepicker({dateFormat: 'yy-mm-dd', minDate: 0});
           
-          <%-- ==== 이미지파일 미리보여주기 ==== --%>
-          <tr class="product">
-                <td width="25%" class="prodInputName">이미지파일 미리보기</td>
-                <td>
-                   <img id="previewImg" width="300"/>
-                </td>
-          </tr>
-          <tr class="taste">
-          	<td class="prodInputName">맛 이름</td>
-          	<td><input placeholder="ex)바람과 함께 날아가다" type="text" style="width: 300px;" name="tastename" class="box tasteData" /><span class="error">필수입력</span></td>
-          </tr>
-          <tr class="taste">
-          	<td class="prodInputName">이미지</td>
-          	<td><input type="file" name="tasteimg" class="taste_img_file tasteData" accept='image/*' /><span class="error">필수입력</span></td>
-          </tr>
-          <tr class="taste">
-          	<td class="prodInputName">맛 설명</td>
-          	<td><input placeholder="ex)블루베리와 딸기로 상큼함을 더한 치즈케이크 한 조각"type="text" style="width: 500px;" name="tasteexplain" class="box tasteData" /><span class="error">필수입력</span></td>
-          </tr>
-          <tr class="taste">
-          	<td class="prodInputName">1회 제공량</td>
-          	<td><input type="text" style="width: 100px;" name="oncesupply" class="box tasteData" /><span class="error">필수입력</span></td>
-          </tr>
-          <tr class="taste">
-          	<td class="prodInputName">열량(kcal)</td>
-          	<td><input type="text" style="width: 100px;" name="calory" class="box tasteData" /><span class="error">필수입력</span></td>
-          </tr>
-          <tr class="taste">
-          	<td class="prodInputName">당류(g)</td>
-          	<td><input type="text" style="width: 100px;" name="sugar" class="box tasteData" /><span class="error">필수입력</span></td>
-          </tr>
-          <tr class="taste">
-          	<td class="prodInputName">단백질(g)</td>
-          	<td><input type="text" style="width: 100px;" name="protein" class="box tasteData" /><span class="error">필수입력</span></td>
-          </tr>
-          <tr class="taste">
-          	<td class="prodInputName">포화지방(g)</td>
-          	<td><input type="text" style="width: 100px;" name="fat" class="box tasteData" /><span class="error">필수입력</span></td>
-          </tr>
-          <tr class="taste">
-          	<td class="prodInputName">나트륨(mg)</td>
-          	<td><input type="text" style="width: 100px;" name="natrium" class="box tasteData" /><span class="error">필수입력</span></td>
-          </tr>
-          <tr class="taste">
-          	<td class="prodInputName">알레르기 성분</td>
-          	<td><input type="text" style="width: 200px;" name="allergy" class="box tasteData" /><span class="error">필수입력</span></td>
-          </tr>
-          <tr class="taste">
-          	<td class="prodInputName">핵심 재료</td>
-          	<td><input type="text" style="width: 300px;" name="ingredients" class="box tasteData" /><span class="error">필수입력</span></td>
-          </tr>
-          <tr class="taste">
-          	<td class="prodInputName">영문 이름</td>
-          	<td><input placeholder="ex)Twinberry CheeseCake" type="text" style="width: 300px;" name="eng_name" class="box tasteData" /><span class="error">필수입력</span></td>
-          </tr>
+    $("select[name='city']").val('${requestScope.city}');
+    $("select[name='local']").val('${requestScope.local}');
+    
+	// 세부 지역 불러오기
+	$("select[name='city']").change(function(e){
+		getLocal();
+	});
+    
+	
+	// 유효성 검사
+	$("input:text[name='membercount']").blur(function(e){
+		if($(e.target).val() == 0 || $(e.target).val() == ""){
+			$("span.error1").show();
+		}
+		else if($(e.target).val() > 100){
+			alert("인원은 최대 100명까지 입력 가능합니다.");
+			$(e.target).val(0);
+		}
+		else {
+			$("span.error1").hide();
+		}
+	});
+	
+	$("input:text[name='membercount']").blur(function(e){
+		if($(e.target).val() == ''){
+			$("span.error2").show();
+		}
+		else {
+			$("span.error2").hide();
+		}		
+	});
+	
+	$("input:text[name='area']").blur(function(e){
+		if($(e.target).val() == ''){
+			$("span.error3").show();
+		}
+		else {
+			$("span.error3").hide();
+		}		
+	});	
+	
+	$("input:text[name='hour']").blur(function(e){
+		if($(e.target).val() == ''){
+			$("span.error2").show();
+		}
+		else if($(e.target).val() > 23){
+			alert("최대 23시까지 입력 가능합니다.");
+			$(e.target).val(0);
+		}
+		else if($("input:text[name='minute']").val() != '' && $(e.target).val() != ''){
+			$("span.error2").hide();
+		}		
+	});	
+	
+	$("input:text[name='minute']").blur(function(e){
+		if($(e.target).val() == ''){
+			$("span.error2").show();
+		}
+		else if($(e.target).val() > 59){
+			alert("최대 59분까지 입력 가능합니다.");
+			$(e.target).val(0);
+		}
+		else if($("input:text[name='hour']").val() != '' && $(e.target).val() != ''){
+			$("span.error2").hide();
+		}		
+	});	
+	
+});
+
+function getLocal(){
+	
+	let cityname = $("select[name='city']").val();
+	
+	// 세부 지역 불러오기
+	$.ajax({
+		url: "<%=ctxPath%>/club/getLocal.do",
+		data: {"cityname": cityname},
+		async: "false",
+		dataType: "json",
+		success: function(json){
+			// console.log(JSON.stringify(json));
+			
+			let v_html = `<option value='0'>선택하세요</option>`;
+			
+			$.each(json, function(index, item){
+				v_html += `<option value='\${item.local}'>\${item.local}</option>`;
+			});
+			
+			$("select[name='local']").html(v_html);
+			
+		},
+		error: function(request, status, error){
+			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		}
+	});
+	
+}
+
+
+function goReg(){
+	
+	const clubname = $("td#clubname").text();
+	const sportname = $("td#sportname").text();
+	let membercount = $("input:text[name='membercount']").val();
+	let matchdate = $("input:text[name='matchdate']").val();
+	let city = $("select[name='city']").val();
+	let local = $("select[name='local']").val();
+	let area = $("input:text[name='area']").val();
+	let hour = $("input:text[name='hour']").val();
+	let minute = $("input:text[name='minute']").val();
+	
+	/* 확인 완료
+		console.log("clubname: "+clubname);
+		console.log("sportname: "+sportname);
+		console.log("membercount: "+membercount);
+		console.log("matchdate: "+matchdate);
+		console.log("city: "+city);
+		console.log("local: "+local);
+		console.log("area: "+area);
+	*/ 
+	
+	if(membercount == 0 || membercount == '' || matchdate == '' || city == 0 || local == 0 || area == '' || hour == '' || minute == ''){
+		alert("필수 항목을 입력하세요.");
+		return;
+	}
+	
+	$.ajax({
+		url: "<%=ctxPath%>/club/matchRegisterEnd.do",
+		data: {"clubname": clubname, "sportname": sportname, "membercount": membercount,
+			   "matchdate": matchdate, "city": city, "local": local, "area": area, "hour": hour, "minute": minute},
+		dataType: "json",
+		type: "post",
+		success: function(json){
+			
+			alert("등록 완료!");
+			location.href = "<%=ctxPath%>/club/matchRegister.do";
+			
+		},
+		error: function(request, status, error){
+			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		}
+		
+	});
+	
+}
+
+</script>
+    
+<div id="container" align="center" style="margin-bottom: 20px; margin-top: 3%;">
+
+   <div style="margin-top: 20px; padding-top: 10px; padding-bottom: 10px; font-size: 30pt; font-weight: bold;">매치 등록하기</div>
+   <br>
+
+
+   <form name="registerFrm"> 
+      <div id="tableWrap">   
+      <table id="match" style="background-color: #ccf2ff; width: 100%;">
+      <tbody>
+         <tr class="product">
+            <td width="25%" class="prodInputName">동호회</td>
+            <td width="75%" align="left" id="clubname">${requestScope.clubname}</td>
+         </tr>
+         <tr class="product">
+            <td width="25%" class="prodInputName">종목</td>
+            <td width="75%" align="left" id="sportname">${requestScope.sportname}</td>
+         </tr>
+         <tr class="product">
+            <td width="25%" class="prodInputName">인원</td>
+            <td width="75%" align="left">
+               <input type="text" name="membercount" class="spinner spinner_membercnt" value="0" style="width: 50px;"/><span>&nbsp;명</span>
+               <span class="error error1">필수입력</span>
+            </td>
+         </tr>
+         <tr class="product">
+            <td width="25%" class="prodInputName">시합일자</td>
+            <td width="75%" align="left">
+               <input type="text" name="matchdate" id="datepicker" placeholder="선택하세요" value="${requestScope.date}">
+               &nbsp;&nbsp;
+               <input type="text" name="hour" class="spinner spinner_hour" value="0" style="width: 20px;" />&nbsp;시&nbsp;&nbsp;
+               <input type="text" name="minute" class="spinner spinner_minute" value="0" style="width: 20px;" />&nbsp;분
+               &nbsp;&nbsp;
+               <span class="error error2">필수입력</span>
+            </td>
+         </tr>
+         <tr class="product">
+            <td width="25%" class="prodInputName">지역</td>
+            <td width="75%" align="left">
+               <select name="city" id="city">
+					<option value="0">선택하세요</option>
+					<c:forEach var="city" items="${requestScope.cityList}">
+						<option value="${city.cityname}">${city.cityname}</option>
+					</c:forEach>
+	      	   </select>&nbsp;&nbsp;
+               <select name="local">
+				  <option value="0">선택하세요</option>
+					  <c:forEach var="local" items="${requestScope.localList}">
+					  	  <option value="${local}">${local}</option>
+					  </c:forEach>
+			   </select>
+            </td>
+         </tr>
+         <tr class="product">
+			<td width="25%" class="prodInputName">장소</td>
+			<td>
+			    <input type="text" name="area" id="area" maxlength="30" placeholder="○○체육관 등"/>
+			    <span class="error error3">필수입력</span>
+			</td>
+         </tr>
       </tbody>
       </table>
       </div>
-         
-         <div style="height: 70px;  background-color: white; margin-bottom: 10%;">
-            <div colspan="2" align="center" style="border-left: hidden; border-bottom: hidden; border-right: hidden; padding: 50px 0;">
-                <input type="button" value="제품등록" id="btnRegister" style="width: 120px;" class="btn btn-info btn-lg mr-5" /> 
-                <input type="reset" value="취소"  style="width: 120px;" class="btn btn-danger btn-lg" />   
-            </div>
-         </div>
-      
    </form>
+   
+   <div class="mt-5">
+	   <button type="button" class="btn btn-primary" onclick="goReg()">등록하기</button>&nbsp;&nbsp;
+	   <button type="button" class="btn btn-light" onclick="location.href='<%=ctxPath%>/club/matchRegister.do'">취소</button>
+   </div>
 </div>

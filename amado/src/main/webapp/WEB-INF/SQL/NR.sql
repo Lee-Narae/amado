@@ -64,19 +64,44 @@ where clubseq = 2;
 
 select * from tab;
 
-select * from tbl_club;
+select * from TBL_MATCHINGREG;
+
+update tbl_matchingreg set matchdate = to_date('2024-07-21 13:00', 'yyyy-mm-dd hh24:mi') where matchingregseq = 7;
+commit;
 
 desc TBL_MATCHINGREG;
 
 insert into tbl_matchingreg(matchingregseq, clubseq, sportseq, membercount, matchdate, city, local, area, status)
-values(SEQ_MATCHINGREG.nextval, 5, 4, 17, '2024-07-21', '서울시', '노원구', '노원운동장', 0);
+values(SEQ_MATCHINGREG.nextval, 2, 1, 14, to_date('2024-08-21 09:00', 'yyyy-mm-dd hh24:mi'), '충청북도', '청주시', '아라초등학교', 0);
 
 commit;
 
-select * from tbl_matchingreg;
+select matchingregseq, clubname, A.membercount, substr(to_char(matchdate, 'yyyy-mm-dd hh24:mi'), 0, 10) matchdate, substr(to_char(matchdate, 'yyyy-mm-dd hh24:mi'), 12) matchtime, A.city, A.local, A.area, A.status
+from tbl_matchingreg A join tbl_club B
+on A.clubseq = B.clubseq;
 
-update tbl_matchingreg set sportseq=2 where clubseq = 3;
-commit;
+select localname from tbl_local A join tbl_city B on A.fk_cityseq = B.cityseq where cityname = '서울시';
+
+select matchingregseq, clubname, A.membercount,
+       substr(to_char(matchdate, 'yyyy-mm-dd hh24:mi'), 0, 10) matchdate,
+       substr(to_char(matchdate, 'yyyy-mm-dd hh24:mi'), 12) matchtime, A.city, A.local, A.area, A.status
+from tbl_matchingreg A join tbl_club B
+on A.clubseq = B.clubseq
+where A.sportseq = 1
+and matchdate >= sysdate
+order by matchdate, matchtime;
+
+select * from tbl_clubmember;
+
+select A.clubseq, clubname from tbl_clubmember A join tbl_sport B
+on A.sportseq = B.sportseq
+join tbl_club C
+on A.clubseq = C.clubseq
+where A.fk_userid = 'leenr' and sportname = '축구';
+
+
+
+
 
 
 

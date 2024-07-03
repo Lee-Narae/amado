@@ -36,6 +36,15 @@ public interface AmadoService_NR {
 
 	// sportname + userid로 가입된 동호회 정보 불러오기
 	Map<String, String> getClubseq_forMatch(Map<String, String> paramap);
+
+	// 매치 등록하기
+	int matchRegister(Map<String, String> paramap);
+
+	// 동호회 이름으로 동호회 시퀀스 불러오기
+	String getClubseq_forReg(String clubname);
+
+	// 종목 이름으로 종목 시퀀스 불러오기
+	String getSportseq_forReg(String sportname);
 	
 
 

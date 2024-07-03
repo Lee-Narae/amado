@@ -192,4 +192,25 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		Map<String, String> club = dao.getClubseq_forMatch(paramap);
 		return club; 
 	}
+
+	// 매치 등록하기
+	@Override
+	public int matchRegister(Map<String, String> paramap) {
+		int n = dao.matchRegister(paramap);
+		return n;
+	}
+
+	// 동호회 이름으로 동호회 시퀀스 불러오기
+	@Override
+	public String getClubseq_forReg(String clubname) {
+		String clubseq = dao.getClubseq_forReg(clubname);
+		return clubseq;
+	}
+
+	// 종목 이름으로 종목 시퀀스 불러오기
+	@Override
+	public String getSportseq_forReg(String sportname) {
+		String sportseq = dao.getSportseq_forReg(sportname);
+		return sportseq;
+	}
 }
