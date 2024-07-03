@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.spring.app.common.AES256;
 import com.spring.app.common.Sha256;
 import com.spring.app.domain.BoardVO;
+import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.model.AmadoDAO_SJ;
 
@@ -87,6 +88,27 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	public int add(BoardVO boardvo) {
 		int n = dao.add(boardvo);
 		return n;
+	}
+
+	// 동호회목록 보기(페이지바 없음)
+	@Override
+	public List<ClubVO> clubListNoSearch(String params) {
+		List<ClubVO> clubList = dao.clubListNoSearch(params);
+		return clubList;
+	}
+
+	// 검색타입 있는 리스트 가져오기
+	@Override
+	public List<ClubVO> search(Map<String, String> paraMap) {
+		List<ClubVO> clubList = dao.search(paraMap);
+		return clubList;
+	}
+
+	// === 페이징 처리를 안한 검색어가 있는 전체 동호회 보여주기 === //
+	@Override
+	public List<ClubVO> clubListSearch(Map<String, String> paraMap) {
+		List<ClubVO> clubList = dao.clubListSearch(paraMap);
+		return clubList;
 	}
 
 

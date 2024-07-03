@@ -82,6 +82,87 @@
     }
 </style>
 
+<script type="text/javascript">
+
+ $(document).ready(function() {
+	 
+	$("input:text[name='searchWord']").bind("keyup", function(e){
+		if(e.keyCode == 13){
+			goSearch();
+		}
+	});
+	 
+	 $("select[name='searchType_a'], select[name='searchType_b'], select[name='searchType_c']").bind("change", function(){
+/* 		 alert($('select[name="searchType_a"] > option:checked').val());
+		 alert($('select[name="searchType_b"] > option:checked').val());
+		 alert($('select[name="searchType_c"] > option:checked').val());
+		 alert(${requestScope.params}); */
+
+		 goSearch();
+ 		  		 
+	 });// end of searchType
+	 
+ }); // end of (document)
+ 
+	function goSearch() {
+//		alert("눌렀다");
+	const searchWord = $("input:text[name='searchWord']").val();
+//	alert(searchWord);
+
+$.ajax({
+			url:"<%= ctxPath%>/club/search.do",
+			type:"get",
+			data:{"searchType_a":$('select[name="searchType_a"] > option:checked').val(),
+				  "searchType_b":$('select[name="searchType_b"] > option:checked').val(),
+				  "searchWord":searchWord,
+				  "params":"${requestScope.params}"},
+			dataType:"json",
+			success:function(json) {
+				console.log(JSON.stringify(json));
+				
+				let v_html = ``;
+				
+				if(json.length > 0) {
+					
+					$.each(json, function(index, item) {
+//						alert(item.clubname);	
+						
+						v_html += `<tr>`;
+						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.rank}</td>`;
+						v_html += `	<td style="vertical-align: middle; text-align: center;"><img src="<%=ctxPath %>/resources/images/zee/\${item.clubimg}" class="rounded" alt="round" style="width:70px; height:70px; display:block; margin:auto; vertical-align: middle;" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/></td>`;
+						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.clubname}</td>`;
+						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.clubscore}</td>`;
+						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.fk_sportseq}</td>`;
+						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.local}</td>`;
+						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.membercount}</td>`;
+						v_html += `</tr>`;
+
+						
+					}); // end of each
+					
+					$("tbody#this").html(v_html);
+					
+				} 
+				else {
+					v_html = ``;
+					v_html += `<tr>`;
+					v_html += `	<td style="vertical-align: middle; text-align: center;" colspan="7">데이터가 없습니다.</td>`;
+					v_html += `</tr>`;
+					
+					$("tbody#this").html(v_html);
+				}
+				
+
+			}, // end of success:function(json)
+		    error: function(request, status, error){
+		    	alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}						
+		}); // end of $.ajax
+		
+	} // end of goSearch
+
+</script>
+
 
 
 <div style="width: 1024px; margin: auto; margin-top: 5%;">
@@ -110,29 +191,59 @@
        <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">배드민턴 동호회 찾기</div>
     </c:if>
 
-    <div class="podium">
-        <div class="podium-item podium-2nd">
-            <div class="podium-rank">2등</div>
-            <img src="<%=ctxPath %>/resources/images/다운로드.jpg" class="podium-img" alt="Podium" />
-        </div>
-        <div class="podium-item podium-1st">
-            <div class="podium-rank">1등</div>
-            <img src="<%=ctxPath %>/resources/images/다운로드1.jpg" class="podium-img" alt="Podium" />
-        </div>
-        <div class="podium-item podium-3rd">
-            <div class="podium-rank">3등</div>
-            <img src="<%=ctxPath %>/resources/images/다운로드2.jpg" class="podium-img" alt="Podium" />
-        </div>
+    <div class="podium" style="margin-top: 120px;">
+   	<c:if test="${not empty requestScope.clubList}">
+		<c:forEach var="clubvo" items="${requestScope.clubList}">
+	        <div class="podium-item podium-2nd">
+	            <div class="podium-rank">2등</div>
+	            <c:if test="${not empty clubvo.rank && clubvo.rank == '2'}">
+	            	<c:if test="${clubvo.rank == '2'}">
+			            <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+			            <div>${clubvo.clubname}</div>
+		            </c:if>
+	            </c:if>
+	            <c:if test="${empty clubvo.rank == '2'}">
+		            <img src="<%=ctxPath %>/resources/images/noimg.jpg" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+		            <div>2등이 없습니다</div>
+	            </c:if>
+	        </div>
+	        <div class="podium-item podium-1st">
+	            <div class="podium-rank">1등</div>
+	            <c:if test="${not empty clubvo.rank && clubvo.rank == '1'}">
+		            <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+		            <div>${clubvo.clubname}</div>
+	            </c:if>
+	            <c:if test="${empty clubvo.rank && clubvo.rank == '3'}">
+		            <img src="<%=ctxPath %>/resources/images/noimg.jpg" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+		            <div>1등이 없습니다</div>
+	            </c:if>
+	        </div>
+	        <div class="podium-item podium-3rd">
+	            <div class="podium-rank">3등</div>
+	            <c:if test="${not empty clubvo.rank == '3'}">
+	            	<c:if test="${clubvo.rank == '3'}">
+			            <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+			            <div>${clubvo.clubname}</div>
+		            </c:if>
+	            </c:if>
+	            <c:if test="${empty clubvo.rank == '3'}">
+		            <img src="<%=ctxPath %>/resources/images/noimg.jpg" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+		            <div>3등이 없습니다</div>
+	            </c:if>
+	        </div>
+	    </c:forEach>
+    </c:if>
+        
     </div>
 
-    <form name="searchFrm" style="margin-bottom: 40px; margin-top: 20px;">
+    <form name="searchFrm" style="margin-bottom: 40px; margin-top: 50px;">
         <div style="display: flex;" class="float-left">
-            <select name="searchType-a" style="height: 26px;">
-                <option value="Ranking">랭킹순</option>
-                <option value="name">이름순</option>
-                <option value="Member">멤버수순</option>
+            <select name="searchType_a" style="height: 26px;">
+                <option value="rank" selected="selected">랭킹순</option>
+                <option value="memberM">멤버많은순</option>
+                <option value="memberL">멤버적은순</option>
             </select>
-            <select name="searchType-b" style="height: 26px; margin-left: 2%;">
+            <select name="searchType_b" style="height: 26px; margin-left: 2%;">
                 <option value="none" selected="selected">== 지역선택 ==</option>
                 <option value="seoul">서울특별시</option>
                 <option value="busan">부산광역시</option>
@@ -152,7 +263,7 @@
                 <option value="gyeongnam">경상남도</option>
                 <option value="jeju">제주특별자치도</option>
             </select> 
-            <select name="searchType-c" style="height: 26px; margin-left: 2%; margin-right: 5px;">
+<!--             <select name="searchType_c" style="height: 26px; margin-left: 2%; margin-right: 5px;">
                 <option value="none" selected="selected">== 카테고리선택 ==</option>
                 <option value="soccer">축구</option>
                 <option value="baseball">야구</option>
@@ -162,13 +273,14 @@
                 <option value="Bowling">볼링</option>
                 <option value="foot_volleyball">족구</option>
                 <option value="Badminton">배드민턴</option>
-            </select> 
+            </select>  -->
         </div>
         <div class="float-right" style="display: flex; margin-bottom: 20px;">
             <input type="text" name="searchWord" size="30" placeholder="동호회명을 검색하세요" class="search-input" autocomplete="off" />
             <input type="text" style="display: none;" />
             <%-- form 태그내에 input 태그가 오로지 1개 뿐일 경우에는 엔터를 했을 경우 검색이 되어지므로 이것을 방지하고자 만든것이다. --%>
             <button style="margin-left: 5px;" type="button" class="btn btn-secondary btn-sm" onclick="goSearch()">검색</button>
+        	<input type="hidden" name="sportseq" value="${requestScope.params}" />
         </div>
     </form>
 
@@ -178,23 +290,54 @@
                 <th style="width: 70px; text-align: center;">랭킹</th>
                 <th style="width: 70px; text-align: center;">대표이미지</th>
                 <th style="width: 300px; text-align: center;">동호회명</th>
-                <th style="width: 300px; text-align: center;">소개글</th>
+                <th style="width: 300px; text-align: center;">점수</th>
                 <th style="width: 100px; text-align: center;">카테고리</th>
                 <th style="width: 100px; text-align: center;">지역</th>
                 <th style="width: 100px; text-align: center;">멤버수</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td align="center" onclick="goView()">1</td>
-                <td><img src="<%=ctxPath %>/resources/images/다운로드1.jpg" class="rounded" alt="round" width="80" /></td>
-                <td align="center">동호회명</td>
-                <td align="center">소개글</td>
-                <td align="center">카테고리</td>
-                <td align="center">지역</td>
-                <td align="center">멤버수</td>
-            </tr>
-            <tr>
+        <tbody id="this">
+        	<c:if test="${not empty requestScope.clubList}">
+        		<c:forEach var="clubvo" items="${requestScope.clubList}">
+					<tr>
+					    <td class="align-middle text-center" onclick="goView()">${clubvo.rank}</td>
+					    <td class="align-middle text-center">
+					        <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="rounded" alt="round" style="width:70px; height:70px; display:block; margin:auto; vertical-align: middle;"  onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/>
+					    </td>
+					    <td class="align-middle text-center">${clubvo.clubname}</td>
+					    <td class="align-middle text-center">${clubvo.clubscore}점</td>
+					    
+					    <c:if test="${clubvo.fk_sportseq == 1}">
+					        <td class="align-middle text-center">축구</td>
+					    </c:if>
+					    <c:if test="${clubvo.fk_sportseq == 2}">
+					        <td class="align-middle text-center">야구</td>
+					    </c:if>
+					    <c:if test="${clubvo.fk_sportseq == 3}">
+					        <td class="align-middle text-center">배구</td>
+					    </c:if>
+					    <c:if test="${clubvo.fk_sportseq == 4}">
+					        <td class="align-middle text-center">농구</td>
+					    </c:if>
+					    <c:if test="${clubvo.fk_sportseq == 5}">
+					        <td class="align-middle text-center">테니스</td>
+					    </c:if>
+					    <c:if test="${clubvo.fk_sportseq == 6}">
+					        <td class="align-middle text-center">볼링</td>
+					    </c:if>
+					    <c:if test="${clubvo.fk_sportseq == 7}">
+					        <td class="align-middle text-center">족구</td>
+					    </c:if>
+					    <c:if test="${clubvo.fk_sportseq == 8}">
+					        <td class="align-middle text-center">배드민턴</td>
+					    </c:if>
+					    
+					    <td class="align-middle text-center">${clubvo.local}</td>
+					    <td class="align-middle text-center">${clubvo.membercount}명</td>
+					</tr>
+	            </c:forEach>
+            </c:if>
+<%--             <tr>
                 <td align="center" onclick="goView()">2</td>
                 <td><img src="<%=ctxPath %>/resources/images/다운로드.jpg" class="rounded" alt="round" width="80" /></td>
                 <td align="center">동호회명2</td>
@@ -211,7 +354,7 @@
                 <td align="center">카테고리3</td>
                 <td align="center">지역3</td>
                 <td align="center">멤버수3</td>
-            </tr>
+            </tr> --%>
         </tbody>
     </table>
 </div>

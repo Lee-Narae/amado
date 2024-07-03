@@ -4,11 +4,24 @@
 
 <mapper namespace="JY">
 
-	<!-- 동호회명 중복 체크 -->
-	<select id="clubnameDuplicateCheck" parameterType="String" resultType="int">
-		select count(*)
-		from tbl_member 
-		where clubname = #{clubname}
+	<!-- 동호회등록  완료 요청(파일첨부ㅇ) -->
+	<insert id="add_withFile"  parameterType="ClubVO">
+		insert into tbl_club(clubseq, clubname, clubimg, sportseq, userid, clubtel, city, local, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfilename)
+        values(seq_club.nextval, #{clubname}, #{clubimg}, #{sportseq}, #{userid}, #{clubtel}, #{city}, #{local}, #{clubgym}, #{clubtime}, #{membercount}, #{clubpay}, default, #{clubscore} , #{wasfilename} ) 
+	</insert>
+	
+	
+	<resultMap type="HashMap" id="cityMap">
+		<result property="cityseq" column="cityseq" javaType="String"/>
+	<result property="cityname" column="cityname" javaType="String"/>
+	</resultMap>
+	<select id="getCityList" resultMap="cityMap">
+		select cityseq, cityname from tbl_city
+	</select>
+	
+	
+	<select id="getLocalList" parameterType="String" resultType="String">
+		select localname from tbl_local A join tbl_city B on A.fk_cityseq = B.cityseq where cityname = #{cityname}
 	</select>
 	
 

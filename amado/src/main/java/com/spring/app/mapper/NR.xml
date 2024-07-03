@@ -128,4 +128,16 @@
 		where A.fk_userid = #{userid} and sportname = #{sportname}
 	</select>
 	
+	<insert id="matchRegister" parameterType="HashMap">
+		insert into tbl_matchingreg(matchingregseq, clubseq, sportseq, membercount, matchdate, city, local, area, status)
+		values(SEQ_MATCHINGREG.nextval, #{clubseq}, #{sportseq}, #{membercount}, to_date(#{matchdate}, 'yyyy-mm-dd hh24:mi'), #{city}, #{local}, #{area}, 0)
+	</insert>
+	
+	<select id="getClubseq_forReg" resultType="String" parameterType="String">
+		select clubseq from tbl_club where clubname = #{clubname}
+	</select>
+	
+	<select id="getSportseq_forReg" resultType="String" parameterType="String">
+	select sportseq from tbl_sport where sportname = #{sportname}
+	</select>
 </mapper>
