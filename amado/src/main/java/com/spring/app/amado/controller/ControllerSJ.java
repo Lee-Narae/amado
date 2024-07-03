@@ -322,6 +322,7 @@ public class ControllerSJ {
 				jsonObj.put("fk_sportseq", clubvo.getFk_sportseq()); 
 				jsonObj.put("local", clubvo.getLocal()); 
 				jsonObj.put("membercount", clubvo.getMembercount()); 
+				jsonObj.put("rank", clubvo.getRank()); 
 
 				jsonObj.put("searchType_a", searchType_a); 
 				jsonObj.put("searchType_b", searchType_b); 

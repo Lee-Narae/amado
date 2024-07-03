@@ -128,14 +128,15 @@ $.ajax({
 //						alert(item.clubname);	
 						
 						v_html += `<tr>`;
-						v_html += `	<td>\${item.rank}</td>`;
-						v_html += `	<td><img src="<%=ctxPath %>/resources/images/zee/\${item.clubimg}" class="rounded" alt="round" style="width:70px; height:70px;" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/></td>`;
-						v_html += `	<td>\${item.clubname}</td>`;
-						v_html += `	<td>\${item.clubscore}</td>`;
-						v_html += `	<td>\${item.fk_sportseq}</td>`;
-						v_html += `	<td>\${item.local}</td>`;
-						v_html += `	<td>\${item.membercount}</td>`;
+						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.rank}</td>`;
+						v_html += `	<td style="vertical-align: middle; text-align: center;"><img src="<%=ctxPath %>/resources/images/zee/\${item.clubimg}" class="rounded" alt="round" style="width:70px; height:70px; display:block; margin:auto; vertical-align: middle;" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/></td>`;
+						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.clubname}</td>`;
+						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.clubscore}</td>`;
+						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.fk_sportseq}</td>`;
+						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.local}</td>`;
+						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.membercount}</td>`;
 						v_html += `</tr>`;
+
 						
 					}); // end of each
 					
@@ -145,7 +146,7 @@ $.ajax({
 				else {
 					v_html = ``;
 					v_html += `<tr>`;
-					v_html += `	<td colspan="7">데이터가 없습니다.</td>`;
+					v_html += `	<td style="vertical-align: middle; text-align: center;" colspan="7">데이터가 없습니다.</td>`;
 					v_html += `</tr>`;
 					
 					$("tbody#this").html(v_html);
@@ -195,18 +196,40 @@ $.ajax({
 		<c:forEach var="clubvo" items="${requestScope.clubList}">
 	        <div class="podium-item podium-2nd">
 	            <div class="podium-rank">2등</div>
-	            <img src="<%=ctxPath %>/resources/images/다운로드.jpg" class="podium-img" alt="Podium" />
-	            <div>동호회명2</div>
+	            <c:if test="${not empty clubvo.rank && clubvo.rank == '2'}">
+	            	<c:if test="${clubvo.rank == '2'}">
+			            <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+			            <div>${clubvo.clubname}</div>
+		            </c:if>
+	            </c:if>
+	            <c:if test="${empty clubvo.rank == '2'}">
+		            <img src="<%=ctxPath %>/resources/images/noimg.jpg" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+		            <div>2등이 없습니다</div>
+	            </c:if>
 	        </div>
 	        <div class="podium-item podium-1st">
 	            <div class="podium-rank">1등</div>
-	            <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
-	            <div>${clubvo.clubname}</div>
+	            <c:if test="${not empty clubvo.rank && clubvo.rank == '1'}">
+		            <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+		            <div>${clubvo.clubname}</div>
+	            </c:if>
+	            <c:if test="${empty clubvo.rank && clubvo.rank == '3'}">
+		            <img src="<%=ctxPath %>/resources/images/noimg.jpg" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+		            <div>1등이 없습니다</div>
+	            </c:if>
 	        </div>
 	        <div class="podium-item podium-3rd">
 	            <div class="podium-rank">3등</div>
-	            <img src="<%=ctxPath %>/resources/images/다운로드2.jpg" class="podium-img" alt="Podium" />
-	            <div>동호회명3</div>
+	            <c:if test="${not empty clubvo.rank == '3'}">
+	            	<c:if test="${clubvo.rank == '3'}">
+			            <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+			            <div>${clubvo.clubname}</div>
+		            </c:if>
+	            </c:if>
+	            <c:if test="${empty clubvo.rank == '3'}">
+		            <img src="<%=ctxPath %>/resources/images/noimg.jpg" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+		            <div>3등이 없습니다</div>
+	            </c:if>
 	        </div>
 	    </c:forEach>
     </c:if>
@@ -276,40 +299,42 @@ $.ajax({
         <tbody id="this">
         	<c:if test="${not empty requestScope.clubList}">
         		<c:forEach var="clubvo" items="${requestScope.clubList}">
-		            <tr>
-		                <td align="center" onclick="goView()">1</td>
-		                <td><img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="rounded" alt="round" style="width:70px; height:70px;"  onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/></td>
-		                <td align="center">${clubvo.clubname}</td>
-		                <td align="center">${clubvo.clubscore}점</td>
-		                
-		                <c:if test="${clubvo.fk_sportseq == 1}">
-		                	<td align="center">축구</td>
-		                </c:if>
-		                <c:if test="${clubvo.fk_sportseq == 2}">
-		                	<td align="center">야구</td>
-		                </c:if>
-		                <c:if test="${clubvo.fk_sportseq == 3}">
-		                	<td align="center">배구</td>
-		                </c:if>
-		                <c:if test="${clubvo.fk_sportseq == 4}">
-		                	<td align="center">농구</td>
-		                </c:if>
-		                <c:if test="${clubvo.fk_sportseq == 5}">
-		                	<td align="center">테니스</td>
-		                </c:if>
-		                <c:if test="${clubvo.fk_sportseq == 6}">
-		                	<td align="center">볼링</td>
-		                </c:if>
-		                <c:if test="${clubvo.fk_sportseq == 7}">
-		                	<td align="center">족구</td>
-		                </c:if>
-		                <c:if test="${clubvo.fk_sportseq == 8}">
-		                	<td align="center">배드민턴</td>
-		                </c:if>
-		                
-		                <td align="center">${clubvo.local}</td>
-		                <td align="center">${clubvo.membercount}명</td>
-		            </tr>
+					<tr>
+					    <td class="align-middle text-center" onclick="goView()">${clubvo.rank}</td>
+					    <td class="align-middle text-center">
+					        <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="rounded" alt="round" style="width:70px; height:70px; display:block; margin:auto; vertical-align: middle;"  onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/>
+					    </td>
+					    <td class="align-middle text-center">${clubvo.clubname}</td>
+					    <td class="align-middle text-center">${clubvo.clubscore}점</td>
+					    
+					    <c:if test="${clubvo.fk_sportseq == 1}">
+					        <td class="align-middle text-center">축구</td>
+					    </c:if>
+					    <c:if test="${clubvo.fk_sportseq == 2}">
+					        <td class="align-middle text-center">야구</td>
+					    </c:if>
+					    <c:if test="${clubvo.fk_sportseq == 3}">
+					        <td class="align-middle text-center">배구</td>
+					    </c:if>
+					    <c:if test="${clubvo.fk_sportseq == 4}">
+					        <td class="align-middle text-center">농구</td>
+					    </c:if>
+					    <c:if test="${clubvo.fk_sportseq == 5}">
+					        <td class="align-middle text-center">테니스</td>
+					    </c:if>
+					    <c:if test="${clubvo.fk_sportseq == 6}">
+					        <td class="align-middle text-center">볼링</td>
+					    </c:if>
+					    <c:if test="${clubvo.fk_sportseq == 7}">
+					        <td class="align-middle text-center">족구</td>
+					    </c:if>
+					    <c:if test="${clubvo.fk_sportseq == 8}">
+					        <td class="align-middle text-center">배드민턴</td>
+					    </c:if>
+					    
+					    <td class="align-middle text-center">${clubvo.local}</td>
+					    <td class="align-middle text-center">${clubvo.membercount}명</td>
+					</tr>
 	            </c:forEach>
             </c:if>
 <%--             <tr>

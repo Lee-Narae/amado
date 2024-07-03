@@ -72,6 +72,7 @@
 		select clubseq, clubname, clubimg, fk_sportseq, clubtel
 		 , city, local, clubgym, clubtime
 		 , membercount, clubpay, clubstatus, clubscore
+		 , rank() over(order by clubscore desc) AS rank	
 <!-- 		 <if test="">
 			, rank() over(order by clubscore desc) AS rank		 
 		 </if>
