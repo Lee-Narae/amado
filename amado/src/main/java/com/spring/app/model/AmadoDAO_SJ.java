@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.spring.app.domain.BoardVO;
+import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.MemberVO;
 
 public interface AmadoDAO_SJ {
@@ -25,6 +26,15 @@ public interface AmadoDAO_SJ {
 
 	// 글쓰기
 	int add(BoardVO boardvo);
+
+	// 동호회목록 보기(페이지바 없음)
+	List<ClubVO> clubListNoSearch(String params);
+
+	// 검색타입 있는 리스트 가져오기
+	List<ClubVO> search(Map<String, String> paraMap);
+
+	// === 페이징 처리를 안한 검색어가 있는 전체 동호회 보여주기 === //
+	List<ClubVO> clubListSearch(Map<String, String> paraMap);
 
 	
 
