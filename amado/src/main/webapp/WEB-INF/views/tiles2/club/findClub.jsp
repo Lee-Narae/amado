@@ -160,6 +160,12 @@ $.ajax({
 		}); // end of $.ajax
 		
 	} // end of goSearch
+	
+	
+	function goView(clubseq, fk_sportseq) {
+//		alert('ClubSeq: ' + clubseq + ', FK_SportSeq: ' + fk_sportseq);
+		location.href = "<%=ctxPath%>/club/myClub_plus.do?clubseq="+clubseq+"&sportseq="+fk_sportseq;
+	}
 
 </script>
 
@@ -300,11 +306,11 @@ $.ajax({
         	<c:if test="${not empty requestScope.clubList}">
         		<c:forEach var="clubvo" items="${requestScope.clubList}">
 					<tr>
-					    <td class="align-middle text-center" onclick="goView()">${clubvo.rank}</td>
+					    <td class="align-middle text-center" onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})">${clubvo.rank}</td>
 					    <td class="align-middle text-center">
 					        <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="rounded" alt="round" style="width:70px; height:70px; display:block; margin:auto; vertical-align: middle;"  onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/>
 					    </td>
-					    <td class="align-middle text-center">${clubvo.clubname}</td>
+					    <td class="align-middle text-center" onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})">${clubvo.clubname}</td>
 					    <td class="align-middle text-center">${clubvo.clubscore}점</td>
 					    
 					    <c:if test="${clubvo.fk_sportseq == 1}">
