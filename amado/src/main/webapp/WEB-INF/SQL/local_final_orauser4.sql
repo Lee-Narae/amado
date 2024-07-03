@@ -120,12 +120,12 @@ from tbl_sport
 		select clubseq, clubname, clubimg, fk_sportseq, clubtel
 		 , city, local, clubgym, clubtime
 		 , membercount, clubpay, clubstatus, clubscore
-         , rank() over(order by nvl(salary + (salary * commission_pct), salary) desc) AS 전체월급등수
+         , rank() over(order by clubscore desc) AS rank
 		from tbl_club
 		where clubstatus = 1
 
 
-		order by clubseq desc	
+		order by membercount asc	
 
 
 
@@ -280,8 +280,8 @@ nocache;
 -- Sequence SEQ_CLUBBOARD이(가) 생성되었습니다.
 
 
-
-
+select *
+from tbl_matchingreg
 
 create table tbl_matchingreg    
 (matchingregseq  NUMBER   not null                -- 시합등록번호

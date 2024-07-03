@@ -104,6 +104,13 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		return clubList;
 	}
 
+	// === 페이징 처리를 안한 검색어가 있는 전체 동호회 보여주기 === //
+	@Override
+	public List<ClubVO> clubListSearch(Map<String, String> paraMap) {
+		List<ClubVO> clubList = dao.clubListSearch(paraMap);
+		return clubList;
+	}
+
 
 	
 }

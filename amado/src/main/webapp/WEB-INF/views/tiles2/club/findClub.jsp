@@ -97,7 +97,7 @@
 			type:"get",
 			data:{"searchType_a":$('select[name="searchType_a"] > option:checked').val(),
 				  "searchType_b":$('select[name="searchType_b"] > option:checked').val(),
-				  "searchType_c":$('select[name="searchType_c"] > option:checked').val(),
+				  /* "searchType_c":$('select[name="searchType_c"] > option:checked').val(), */ 
 				  "params":"${requestScope.params}"},
 			dataType:"json",
 			success:function(json) {
@@ -112,7 +112,7 @@
 						
 						v_html += `<tr>`;
 						v_html += `	<td>\${item.rank}</td>`;
-						v_html += `	<td><img src="<%=ctxPath %>/resources/images/zee/\${item.clubimg}" class="rounded" alt="round" width="80" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/></td>`;
+						v_html += `	<td><img src="<%=ctxPath %>/resources/images/zee/\${item.clubimg}" class="rounded" alt="round" style="width:70px; height:70px;" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/></td>`;
 						v_html += `	<td>\${item.clubname}</td>`;
 						v_html += `	<td>\${item.clubscore}</td>`;
 						v_html += `	<td>\${item.fk_sportseq}</td>`;
@@ -141,10 +141,16 @@
 			}						
 		}); // end of $.ajax 		 
 	 });// end of searchType
+	 
+ }); // end of (document)
+ 
+	function goSearch() {
+//		alert("눌렀다");
 
-	 
-	 
- }); // end of document
+		const frm = document.searchFrm;
+		frm.submit();
+		
+	} // end of goSearch
 
 </script>
 
@@ -226,7 +232,7 @@
                 <option value="gyeongnam">경상남도</option>
                 <option value="jeju">제주특별자치도</option>
             </select> 
-            <select name="searchType_c" style="height: 26px; margin-left: 2%; margin-right: 5px;">
+<!--             <select name="searchType_c" style="height: 26px; margin-left: 2%; margin-right: 5px;">
                 <option value="none" selected="selected">== 카테고리선택 ==</option>
                 <option value="soccer">축구</option>
                 <option value="baseball">야구</option>
@@ -236,13 +242,14 @@
                 <option value="Bowling">볼링</option>
                 <option value="foot_volleyball">족구</option>
                 <option value="Badminton">배드민턴</option>
-            </select> 
+            </select>  -->
         </div>
         <div class="float-right" style="display: flex; margin-bottom: 20px;">
             <input type="text" name="searchWord" size="30" placeholder="동호회명을 검색하세요" class="search-input" autocomplete="off" />
             <input type="text" style="display: none;" />
             <%-- form 태그내에 input 태그가 오로지 1개 뿐일 경우에는 엔터를 했을 경우 검색이 되어지므로 이것을 방지하고자 만든것이다. --%>
             <button style="margin-left: 5px;" type="button" class="btn btn-secondary btn-sm" onclick="goSearch()">검색</button>
+        	<input type="hidden" name="clubseq" value="${requestScope.params}" />
         </div>
     </form>
 
@@ -263,7 +270,7 @@
         		<c:forEach var="clubvo" items="${requestScope.clubList}">
 		            <tr>
 		                <td align="center" onclick="goView()">1</td>
-		                <td><img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="rounded" alt="round" width="80" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/></td>
+		                <td><img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="rounded" alt="round" style="width:70px; height:70px;"  onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/></td>
 		                <td align="center">${clubvo.clubname}</td>
 		                <td align="center">${clubvo.clubscore}점</td>
 		                
@@ -297,7 +304,7 @@
 		            </tr>
 	            </c:forEach>
             </c:if>
-            <tr>
+<%--             <tr>
                 <td align="center" onclick="goView()">2</td>
                 <td><img src="<%=ctxPath %>/resources/images/다운로드.jpg" class="rounded" alt="round" width="80" /></td>
                 <td align="center">동호회명2</td>
@@ -314,7 +321,7 @@
                 <td align="center">카테고리3</td>
                 <td align="center">지역3</td>
                 <td align="center">멤버수3</td>
-            </tr>
+            </tr> --%>
         </tbody>
     </table>
 </div>

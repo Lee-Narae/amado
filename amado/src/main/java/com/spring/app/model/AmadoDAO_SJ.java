@@ -33,6 +33,9 @@ public interface AmadoDAO_SJ {
 	// 검색타입 있는 리스트 가져오기
 	List<ClubVO> searchType(Map<String, String> paraMap);
 
+	// === 페이징 처리를 안한 검색어가 있는 전체 동호회 보여주기 === //
+	List<ClubVO> clubListSearch(Map<String, String> paraMap);
+
 	
 
 }
