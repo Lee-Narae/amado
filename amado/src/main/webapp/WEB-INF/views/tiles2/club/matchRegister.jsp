@@ -100,6 +100,9 @@ border-top-right-radius: 10px;
 margin-bottom: 5%;
 }
 
+.sweet-alert h2{
+font-size: 15pt;
+}
 </style>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/i18n/jquery-ui-i18n.min.js"></script>
@@ -323,6 +326,8 @@ function goRegister(){
 	let localname = $("select[name='local']").val();
 	let matchdate = $("input:text[name='date']").val();
 	
+	console.log(sportname);
+	
 	if(cityname == "0"){
 		swal('지역을 선택하세요.');
 		return;
@@ -351,11 +356,12 @@ function goRegister(){
 		dataType: "json",
 		success: function(json){
 			
-			if(json != null){
+			console.log(json);
+			if(json.clubseq != null){
 				clubseq = json.clubseq;
 				clubname = json.clubname;
-				$("input:text[name='clubseq']").val(clubseq);
-				$("input:text[name='clubname']").val(clubname);
+				$("input:hidden[name='clubseq']").val(clubseq);
+				$("input:hidden[name='clubname']").val(clubname);
 				
 				
 				// 정상 처리되었다면
@@ -365,6 +371,13 @@ function goRegister(){
 				frm.submit();
 				
 			}
+			
+			else {
+				swal(`현재 가입하신 \${sportname} 동호회가 없어 
+				매치 등록을 할 수 없습니다.`);
+			}
+			
+			
 		},
 		error: function(request, status, error){
 			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
@@ -383,8 +396,8 @@ function goRegister(){
 	</div>
 	<div style="font-size: 40pt; font-weight: bolder; position: relative; top: -400px; left: -320px;">매치 등록하기</div>
 	<form name="matchFrm">
-		<input type="text" name="clubseq" />
-		<input type="text" name="clubname" />
+		<input type="hidden" name="clubseq" />
+		<input type="hidden" name="clubname" />
 		<div id="matching" style="padding-left: 3%; padding-top: 1%;">
 			<div id="sportdiv">
 				<div align="left" style="margin: 10% 0 3% 15%; font-weight: bold;">종목</div>

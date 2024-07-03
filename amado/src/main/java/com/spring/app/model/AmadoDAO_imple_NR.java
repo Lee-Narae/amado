@@ -90,4 +90,25 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		return club;
 	}
 
+	// 매치 등록하기
+	@Override
+	public int matchRegister(Map<String, String> paramap) {
+		int n = sqlsession.insert("NR.matchRegister", paramap);
+		return n;
+	}
+
+	// 동호회 이름으로 동호회 시퀀스 불러오기
+	@Override
+	public String getClubseq_forReg(String clubname) {
+		String clubseq = sqlsession.selectOne("NR.getClubseq_forReg", clubname);
+		return clubseq;
+	}
+
+	// 종목 이름으로 종목 시퀀스 불러오기
+	@Override
+	public String getSportseq_forReg(String sportname) {
+		String sportseq = sqlsession.selectOne("NR.getSportseq_forReg", sportname);
+		return sportseq;
+	}
+
 }

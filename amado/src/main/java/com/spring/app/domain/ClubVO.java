@@ -37,6 +37,7 @@ public class ClubVO {
 	private String clubstatus;		// 운영 상태
 	private String clubscore;		// 점수
 	
+	private String rank; // select 용 랭킹  
 	
 	
 	   private MultipartFile attach;
@@ -140,6 +141,12 @@ public class ClubVO {
 	}
 	public void setClubscore(String clubscore) {
 		this.clubscore = clubscore;
+	}
+	public String getRank() {
+		return rank;
+	}
+	public void setRank(String rank) {
+		this.rank = rank;
 	}
 
 	
