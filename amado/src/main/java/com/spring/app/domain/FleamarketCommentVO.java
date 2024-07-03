@@ -7,9 +7,16 @@ public class FleamarketCommentVO {
 	private String comment_text;
 	private String registerdate;
 	private String fk_userid;
+	private String memberimg;
 	
 	
 	
+	public String getMemberimg() {
+		return memberimg;
+	}
+	public void setMemberimg(String memberimg) {
+		this.memberimg = memberimg;
+	}
 	public String getFleamarketcommentseq() {
 		return fleamarketcommentseq;
 	}

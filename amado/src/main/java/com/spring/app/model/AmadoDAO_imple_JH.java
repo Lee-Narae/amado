@@ -1,6 +1,8 @@
 package com.spring.app.model;
 
 
+import java.util.List;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,6 +31,12 @@ public class AmadoDAO_imple_JH implements AmadoDAO_JH {
 	public int updateCommentCount(String fleamarketseq) {
 		int n = sqlsession.update("JH.updateCommentCount", fleamarketseq);
 		return n;
+	}
+
+	@Override
+	public List<FleamarketCommentVO> getCommentList(String parentSeq) {
+		List<FleamarketCommentVO> commentList = sqlsession.selectList("JH.getCommentList", parentSeq);
+		return commentList;
 	}
 
 

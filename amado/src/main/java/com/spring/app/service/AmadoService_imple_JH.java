@@ -1,5 +1,7 @@
 package com.spring.app.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -39,6 +41,14 @@ public class AmadoService_imple_JH implements AmadoService_JH {
 		}
 		
 		return result;
+	}
+
+
+
+	@Override
+	public List<FleamarketCommentVO> getCommentList(String parentSeq) {
+		List<FleamarketCommentVO> commentList = dao.getCommentList(parentSeq);
+		return commentList;
 	}
 
 }

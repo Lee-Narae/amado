@@ -5,11 +5,11 @@
 <mapper namespace="NR">
 
 	<select id="getLoginMember" resultType="MemberVO" parameterType="HashMap">
-		select userid, name, email, postcode, address, detailaddress, extraaddress, mobile, gender, birthday,
+		select userid, name, email, postcode, address, detailaddress, extraaddress, mobile, gender, birthday, memberimg,
 		       memberrank, speed, quick, power, earth, stretch, pwdchangegap, NVL( lastlogingap, trunc( months_between(sysdate, registerday) ) ) AS lastlogingap
 		from
 		(select userid, password, name, email, postcode, address, detailaddress, extraaddress, mobile, gender,
-		       birthday, registerday, status, memberrank, gymregisterstatus, speed, quick,
+		       birthday, registerday, status, memberrank, gymregisterstatus, speed, quick, memberimg,
 		       power, earth, stretch, idle, trunc( months_between(sysdate, lastpwdchangedate) ) AS pwdchangegap
 		 from tbl_member
 		 where status = 1 and userid = #{userid} and password = #{password}) A

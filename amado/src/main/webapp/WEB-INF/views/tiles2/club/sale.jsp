@@ -182,7 +182,7 @@ rotate(
 
 
 	$(document).ready(function(){
-	
+		goReadComment();
 		
 		// ======= 추가이미지 캐러젤로 보여주기(Bootstrap Carousel 4개 표시 하되 1번에 1개 진행) 시작 ======= //
 	 	   $('div#recipeCarousel').carousel({
@@ -346,7 +346,7 @@ rotate(
 	// == 댓글쓰기 == //
 	function goAddWrite(){
 	   
-		const comment_content = $("textarea[name='content']").val().trim();
+		const comment_content = $("textarea[name='comment_text']").val().trim();
 		if(comment_content == ""){
 			alert("댓글 내용을 입력하세요!!");
 			return; // 종료
@@ -385,7 +385,7 @@ rotate(
 	    	type:"post",
            dataType:"json",
            success:function(json){
-           	console.log(JSON.stringify(json));
+           	//console.log(JSON.stringify(json));
            	//{"name":"최준혁","n":1}
            	//또는
            	//{"name":"최준혁","n":0}
@@ -394,11 +394,11 @@ rotate(
            		alert(json.name + "님의 포인트는 300점을 초과할 수 없으므로 댓글쓰기가 불가합니다.");
            	}
            	else{
-           		//goReadComment(); 					// 페이징 처리 안한 댓글 읽어오기
+           		goReadComment(); 					// 페이징 처리 안한 댓글 읽어오기
            		//goViewComment(1)	// 페이징 처리한 댓글 읽어오기
            	}
            	
-           	$("textarea[name='content']").val("");
+           	$("textarea[name='comment_text']").val("");
            },
            error: function(request, status, error){
                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
@@ -406,6 +406,277 @@ rotate(
 		})
 	}// end of function goAddWrite_noAttach(){}--------------------------
    
+	
+	
+	
+	
+function goReadComment(){
+		
+		$.ajax({
+			url:"<%= ctxPath%>/readComment.action",
+			data:{"parentSeq":"1"},
+			dataType:"json",
+			success:function(json){
+				console.log(JSON.stringify(json));
+			    // [{"name":"서영학","regdate":"2024-06-18 16:09:06","fk_userid":"seoyh","seq":"6","content":"여섯번째로 쓰는 댓글입니다."},{"name":"서영학","regdate":"2024-06-18 16:08:56","fk_userid":"seoyh","seq":"5","content":"다섯번째로 쓰는 댓글입니다."},{"name":"서영학","regdate":"2024-06-18 16:08:49","fk_userid":"seoyh","seq":"4","content":"네번째로 쓰는 댓글입니다."},{"name":"서영학","regdate":"2024-06-18 16:08:43","fk_userid":"seoyh","seq":"3","content":"세번째로 쓰는 댓글입니다."},{"name":"서영학","regdate":"2024-06-18 16:05:51","fk_userid":"seoyh","seq":"2","content":"두번째로 쓰는 댓글입니다."},{"name":"서영학","regdate":"2024-06-18 15:36:31","fk_userid":"seoyh","seq":"1","content":"첫번째 댓글입니다. ㅎㅎㅎ"}]
+			    // 또는
+			    // []
+			    
+			    let v_html = "";
+			    if(json.length > 0){
+			    	$.each(json, function(index, item){
+			    		
+			    		v_html +=   "<div style='display: flex; margin: 5% 0;'>";
+			    		if(item.memberimg == null){
+			    			v_html += "<div style='width: 20%;'><img style='width: 25%; height: 50%;' src='<%=ctxPath%>/resources/images/기본이미지.png'></div>";
+			    		}
+			    		if(item.memberimg != null){
+			    			v_html += "<div style='width: 20%;'><img style='width: 25%; height: 50%;' src='<%=ctxPath%>/resources/images/"+item.memberimg+"'></div>";
+			    		}
+			    		v_html +=   "<div>";
+			    		v_html +=   "<div style='font-size:12pt; font-weight: bold; margin-bottom: 3%;'>"+item.fk_userid+"</div>";
+			    		v_html +=   "<div>"+item.comment_text+"</div>";
+			    		v_html +=   "<div class='comment'; style='color:#999999; font-size:10pt; margin-top: 3%;'>"+item.registerdate+" &nbsp;&nbsp;<a>답글쓰기</a>"
+			    		if( ${sessionScope.loginuser != null} && "${sessionScope.loginuser.userid}" == item.fk_userid ){
+			    			v_html += "<br><a>수정</a>&nbsp;&nbsp;<a>삭제</a>";
+			    		}
+			    		v_html +=	"</div>";
+			    		v_html +=   "</div>";
+			    		v_html +=   "</div>";
+			    		
+			    	});
+			    }
+			    
+			    else {
+			    	v_html += "<div colspan='4'>댓글이 없습니다</td>";
+			    }
+			    
+			    $("div#commentView").html(v_html);
+			},
+			error: function(request, status, error){
+			   alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+		});
+		
+	}// end of function goReadComment()----------------- 
+	
+	
+	
+	
+	<%-- 
+function goViewComment(currentShowPageNo){
+		
+		$.ajax({
+			url:"<%= ctxPath%>/commentList.action",
+			data:{"parentSeq":"${requestScope.boardvo.seq}"
+				 ,"currentShowPageNo":currentShowPageNo},
+			dataType:"json",
+			success:function(json){
+				// console.log(JSON.stringify(json));
+				// 첨부파일기능이 없는 경우 [{"name":"엄정화","regdate":"2024-07-01 12:15:38","totalCount":2,"sizePerPage":5,"fk_userid":"eomjh","seq":"4","content":"파일첨부가 있는 댓글 입니다"},{"name":"엄정화","regdate":"2024-07-01 12:11:24","totalCount":2,"sizePerPage":5,"fk_userid":"eomjh","seq":"3","content":"댓글연습이요~~"}]  
+				// 첨부파일기능이 있는 경우 [{"fileName":"20240701121538424421867593200.png","fileSize":"366894","name":"엄정화","regdate":"2024-07-01 12:15:38","totalCount":2,"sizePerPage":5,"fk_userid":"eomjh","seq":"4","content":"파일첨부가 있는 댓글 입니다","orgFilename":"cloth_buckaroo_3.png"},{"fileName":" ","fileSize":" ","name":"엄정화","regdate":"2024-07-01 12:11:24","totalCount":2,"sizePerPage":5,"fk_userid":"eomjh","seq":"3","content":"댓글연습이요~~","orgFilename":" "}] 
+				// 또는 []
+				
+				let v_html = "";
+				if(json.length > 0){
+					$.each(json, function(index, item){
+					    v_html += "<tr>";
+					    v_html +=   "<td class='comment_text'>"+(item.totalCount - (currentShowPageNo - 1) * item.sizePerPage - index)+"</td>";
+					 
+					 >>> 페이징 처리시 보여주는 순번 공식 <<<
+						   데이터개수 - (페이지번호 - 1) * 1페이지당보여줄개수 - 인덱스번호 => 순번 
+						
+						   <예제>
+						   데이터개수 : 12
+						   1페이지당보여줄개수 : 5
+						
+						   ==> 1 페이지       
+						   12 - (1-1) * 5 - 0  => 12
+						   12 - (1-1) * 5 - 1  => 11
+						   12 - (1-1) * 5 - 2  => 10
+						   12 - (1-1) * 5 - 3  =>  9
+						   12 - (1-1) * 5 - 4  =>  8
+						
+						   ==> 2 페이지
+						   12 - (2-1) * 5 - 0  =>  7
+						   12 - (2-1) * 5 - 1  =>  6
+						   12 - (2-1) * 5 - 2  =>  5
+						   12 - (2-1) * 5 - 3  =>  4
+						   12 - (2-1) * 5 - 4  =>  3
+						
+						   ==> 3 페이지
+						   12 - (3-1) * 5 - 0  =>  2
+						   12 - (3-1) * 5 - 1  =>  1 
+					 
+						
+						 v_html += "<td>"+item.content+"</td>";
+						 
+						 === #198. 첨부파일 기능이 추가된 경우 시작 ===
+						 if(${sessionScope.loginuser != null}){
+							 v_html += "<td><a href='<%= ctxPath%>/downloadComment.action?seq="+item.seq+"'>"+item.orgFilename+"</a></td>"; 
+						 }
+						 else {
+							 v_html += "<td>"+item.orgFilename+"</td>";
+						 }
+						 
+						 if(item.fileSize.trim() == ""){
+							 v_html += "<td></td>";
+						 }
+						 else{
+							 v_html += "<td>"+Number(item.fileSize).toLocaleString('en')+"</td>";
+						 }
+						 === 첨부파일 기능이 추가된 경우 끝 ===
+						 
+				    	 v_html += "<td class='comment_text'>"+item.name+"</td>";
+				    	 v_html += "<td class='comment_text'>"+item.regdate+"</td>";
+				    		
+				    	 if( ${sessionScope.loginuser != null } &&
+				    		"${sessionScope.loginuser.userid}" == item.fk_userid ){
+				    	       v_html += "<td class='comment_text'><button class='btn btn-secondary btn-sm btnUpdateComment'>수정</button><input type='hidden' value='"+item.seq+"' />&nbsp;<button class='btn btn-secondary btn-sm btnDeleteComment'>삭제</button><input type='hidden' value='"+currentShowPageNo+"' class='currentShowPageNo' /></td>";	
+				    	 }
+				    		
+				    	 v_html += "</tr>";
+				    	 
+					}); // end of $.each(json, function(index, item){})-------- 
+				}
+				
+				else {
+					v_html += "<tr>";
+					v_html +=   "<td colspan='5' class='comment_text'>댓글이 없습니다</td>";
+					v_html += "</tr>";
+				}
+				
+			    $("tbody#commentDisplay").html(v_html);
+			    
+			    // === #154. 페이지바 함수 호출  === //
+			    const totalPage = Math.ceil(json[0].totalCount/json[0].sizePerPage); 
+			 // console.log("totalPage : ", totalPage);
+			 // totalPage : 3
+			    
+			    makeCommentPageBar(currentShowPageNo, totalPage);
+			},
+			error: function(request, status, error){
+			   alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+		});
+		
+	}// end of function goViewComment(currentShowPageNo)------
+	
+	
+	// === #153. 페이지바 함수 만들기  === //
+	function makeCommentPageBar(currentShowPageNo, totalPage){
+		
+		const blockSize = 10;
+		// blockSize 는 1개 블럭(토막)당 보여지는 페이지번호의 개수이다.
+		/*
+			             1  2  3  4  5  6  7  8  9 10 [다음][마지막]  -- 1개블럭
+			[맨처음][이전]  11 12 13 14 15 16 17 18 19 20 [다음][마지막]  -- 1개블럭
+			[맨처음][이전]  21 22 23
+		*/
+		
+		let loop = 1;
+		/*
+	    	loop는 1부터 증가하여 1개 블럭을 이루는 페이지번호의 개수[ 지금은 10개(== blockSize) ] 까지만 증가하는 용도이다.
+	    */
+		
+		let pageNo = Math.floor((currentShowPageNo - 1)/blockSize) * blockSize + 1;
+		// *** !! 공식이다. !! *** //
+		
+	/*
+		currentShowPageNo 가 3페이지 이라면 pageNo 는 1 이 되어야 한다.
+	    ((3 - 1)/10) * 10 + 1;
+		( 2/10 ) * 10 + 1;
+		( 0.2 ) * 10 + 1;
+		Math.floor( 0.2 ) * 10 + 1;  // 소수부가 있을시 Math.floor(0.2) 은 0.2 보다 작은 최대의 정수인 0을 나타낸다.
+		0 * 10 + 1 
+		1
+			       
+		currentShowPageNo 가 11페이지 이라면 pageNo 는 11 이 되어야 한다.
+		((11 - 1)/10) * 10 + 1;
+		( 10/10 ) * 10 + 1;
+		( 1 ) * 10 + 1;
+		Math.floor( 1 ) * 10 + 1;  // 소수부가 없을시 Math.floor(1) 은 그대로 1 이다.
+		1 * 10 + 1
+		11
+			       
+		currentShowPageNo 가 20페이지 이라면 pageNo 는 11 이 되어야 한다.
+		((20 - 1)/10) * 10 + 1;
+		( 19/10 ) * 10 + 1;
+		( 1.9 ) * 10 + 1;
+		Math.floor( 1.9 ) * 10 + 1;  // 소수부가 있을시 Math.floor(1.9) 은 1.9 보다 작은 최대의 정수인 1을 나타낸다.
+		1 * 10 + 1
+		11
+			    
+			       
+		1  2  3  4  5  6  7  8  9  10  -- 첫번째 블럭의 페이지번호 시작값(pageNo)은 1 이다.
+		11 12 13 14 15 16 17 18 19 20  -- 두번째 블럭의 페이지번호 시작값(pageNo)은 11 이다.
+		21 22 23 24 25 26 27 28 29 30  -- 세번째 블럭의 페이지번호 시작값(pageNo)은 21 이다.
+				    
+		currentShowPageNo         pageNo
+		----------------------------------
+		   1                      1 = Math.floor((1 - 1)/10) * 10 + 1
+		   2                      1 = Math.floor((2 - 1)/10) * 10 + 1
+		   3                      1 = Math.floor((3 - 1)/10) * 10 + 1
+		   4                      1
+		   5                      1
+		   6                      1
+		   7                      1 
+		   8                      1
+		   9                      1
+		   10                     1 = Math.floor((10 - 1)/10) * 10 + 1
+				        
+		   11                    11 = Math.floor((11 - 1)/10) * 10 + 1
+		   12                    11 = Math.floor((12 - 1)/10) * 10 + 1
+		   13                    11 = Math.floor((13 - 1)/10) * 10 + 1
+		   14                    11
+		   15                    11
+		   16                    11
+		   17                    11
+		   18                    11 
+		   19                    11 
+		   20                    11 = Math.floor((20 - 1)/10) * 10 + 1
+				         
+		   21                    21 = Math.floor((21 - 1)/10) * 10 + 1
+		   22                    21 = Math.floor((22 - 1)/10) * 10 + 1
+		   23                    21 = Math.floor((23 - 1)/10) * 10 + 1
+		   ..                    ..
+		   29                    21
+		   30                    21 = Math.floor((30 - 1)/10) * 10 + 1	    
+	*/
+		
+		let pageBar_HTML = "<ul style='list-style:none;'>";
+		
+		// === [맨처음][이전] 만들기 === //
+		if(pageNo != 1) {
+			pageBar_HTML += "<li style='display:inline-block; width:70px; font-size:12pt;'><a href='javascript:goViewComment(1)'>[맨처음]</a></li>";
+			pageBar_HTML += "<li style='display:inline-block; width:50px; font-size:12pt;'><a href='javascript:goViewComment("+(pageNo-1)+")'>[이전]</a></li>"; 
+		}
+		
+		while( !(loop > blockSize || pageNo > totalPage) ) {
+			
+			if(pageNo == currentShowPageNo) {
+				pageBar_HTML += "<li style='display:inline-block; width:30px; font-size:12pt; border:solid 1px gray; color:red; padding:2px 4px;'>"+pageNo+"</li>";
+			}
+			else {
+				pageBar_HTML += "<li style='display:inline-block; width:30px; font-size:12pt;'><a href='javascript:goViewComment("+pageNo+")'>"+pageNo+"</a></li>"; 
+			}
+			
+			loop++;
+			pageNo++;
+		}// end of while------------------------
+		
+		// === [다음][마지막] 만들기 === //
+		if(pageNo <= totalPage) {
+			pageBar_HTML += "<li style='display:inline-block; width:50px; font-size:12pt;'><a href='javascript:goViewComment("+pageNo+")'>[다음]</a></li>";
+			pageBar_HTML += "<li style='display:inline-block; width:70px; font-size:12pt;'><a href='javascript:goViewComment("+totalPage+")'>[마지막]</a></li>"; 
+		}
+		
+		pageBar_HTML += "</ul>";		
+		
+		// === #156. 댓글 페이지바 출력하기 === //
+		$("div#pageBar").html(pageBar_HTML);
+		
+	}// end of function makeCommentPageBar(currentShowPageNo)----------- --%>
    
 </script>
 
@@ -521,21 +792,14 @@ rotate(
 	
 	<%-- === #94. 댓글 내용 보여주기 === --%>
      
-    <div style="display: flex; margin: 5% 0;">
-    	
-		  <img style="width: 8%; height: 3%;" src="<%=ctxPath%>/resources/images/real_madrid.png">
-		
-		  <div>
-     		 <div style="font-size:12pt; font-weight: bold; margin-bottom: 3%;">호우마드리드</div>
-     		 <div>안녕하세요! 혹시 발냄새는 안나나요?</div>
-     		 <div style="color:#999999; font-size:10pt; margin-top: 3%;">2024.07.01. 14:57 &nbsp;&nbsp;<a>답글쓰기</a></div>
-     	  </div>
-    </div>
-
+     <div id="commentView" >
+    
+	</div>
+	
 	<div>
 		<form name="commentFrm">
 			<div>
-				<textarea name="content" style="font-size: 12pt; width: 100%; height: 100px;"></textarea>
+				<textarea name="comment_text" style="font-size: 12pt; width: 100%; height: 100px;"></textarea>
 				<input type="text" name="fk_userid" value="${sessionScope.loginuser.userid}" /> 
 				<input type="text" name="name" value="${sessionScope.loginuser.name}" />
 				<input type="text" name="fleamarketseq" value="${requestScope.pvo.pnum}" />
@@ -549,7 +813,10 @@ rotate(
 		</form>
 	</div>
 
-	
+	<%-- === #155. 댓글페이지바가 보여지는 곳 === --%> 
+ 	<div style="display: flex; margin-bottom: 50px;">
+   	   <div id="pageBar" style="margin: auto; text-align: center;"></div>
+   	</div>
       
       <%-- #155. 댓글페이지바가 보여지는 곳 === --%>
       <div style="display: flex; margin-bottom: 50px;">

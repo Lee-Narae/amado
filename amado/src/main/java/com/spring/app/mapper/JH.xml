@@ -7,14 +7,26 @@
 <!-- #88. 댓글쓰기 (tbl_comment 테이블에 insert) -->
 	<insert id="addComment" parameterType="FleamarketCommentVO">
 		insert into tbl_fleamarketcomment(fleamarketcommentseq, fleamarketseq, comment_text, registerdate, fk_userid)
-		values(seq_fleamarketcomment.nextval, 1, 'ㅎㅇㅎㅇ', default, #{fk_userid})
+		values(seq_fleamarketcomment.nextval, 1, #{comment_text}, default, #{fk_userid})
 	</insert>
 	
 	<!-- #89-1. tbl_board 테이블에 commentCount 컬럼이 1증가(update) -->
 	<update id="updateCommentCount" parameterType="String">
-		update tbl_fleamarket set commentCount = commentCount+1
+		update tbl_fleamarket set commentcount = commentcount+1
 		where fleamarketseq = 1
 	</update>
 	
+	<!-- === #93. 원게시물에 딸린 댓글들을 조회해오기 === -->
+    <!-- 첨부파일이 없는 경우  -->
+    <select id="getCommentList" parameterType="String" resultType="FleamarketCommentVO">
+		select fleamarketcommentseq, fk_userid, comment_text
+		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
+             , V.memberimg
+		from tbl_fleamarketcomment A join tbl_member V
+		ON A.fk_userid = V.userid
+		where A.fleamarketseq = #{parentSeq}
+		order by fleamarketcommentseq desc
+    </select>
+
 
 </mapper>

@@ -32,9 +32,14 @@ from tbl_sport;
 select *
 from tbl_fleamarket
 
+select *
+from tbl_member
+
 
 insert into tbl_fleamarket(fleamarketseq, sportseq, city, title, content, cost, deal, fk_userid, registerdate, password, status)
 values(1, 1, '서울', '호날두가 신었던 축구화 팝니다!!', '제가 직접 신었답니다ㅎㅎ', 50000000, '직거래', 'leejy', default, '1234', 0);
+
+ALTER TABLE tbl_member ADD (memberImg VARCHAR2(50));
 
 
 update tbl_fleamarket set commentCount = commentCount+1
@@ -47,3 +52,23 @@ values(seq_fleamarket.nextval, 1, 'ㅎㅇㅎㅇ', default, 'leess')
 
 insert into tbl_fleamarketcomment(fleamarketcommentseq, fleamarketseq, comment_text, registerdate, fk_userid)
 		values(seq_fleamarketcomment.nextval, 1, 'ㅎㅇㅎㅇ2', default, 'leess')
+        
+        commit
+
+update tbl_fleamarket set commentcount = commentcount+1
+where fleamarketseq = 1
+
+update tbl_member set memberImg = 'real_madrid.png'
+where userid = 'eomjh';
+
+
+
+
+select fleamarketcommentseq, fk_userid, comment_text
+		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
+             ,V.memberimg
+from tbl_fleamarketcomment A join tbl_member V
+ON A.fk_userid = V.userid
+where A.fleamarketseq = 1
+order by fleamarketcommentseq desc
+
