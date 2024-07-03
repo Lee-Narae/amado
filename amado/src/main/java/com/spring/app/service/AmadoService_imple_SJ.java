@@ -99,8 +99,8 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 
 	// 검색타입 있는 리스트 가져오기
 	@Override
-	public List<ClubVO> searchType(Map<String, String> paraMap) {
-		List<ClubVO> clubList = dao.searchType(paraMap);
+	public List<ClubVO> search(Map<String, String> paraMap) {
+		List<ClubVO> clubList = dao.search(paraMap);
 		return clubList;
 	}
 

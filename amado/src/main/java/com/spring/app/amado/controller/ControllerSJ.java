@@ -255,33 +255,42 @@ public class ControllerSJ {
 		String params = url.substring(url.indexOf('=') + 1);
 		// 파라미터 부분: 1
 		
+		if(request.getParameter("sportseq") != null) {
+			params = request.getParameter("sportseq");
+		}
+
+		List<ClubVO> clubList = null;
+
+		// === 페이징 처리를 안한 검색어가 없는 전체 동호회 보여주기 === //
+		clubList = service.clubListNoSearch(params);
+		
+		
+		mav.addObject("params", params);
+		mav.addObject("clubList", clubList);
+		mav.setViewName("/club/findClub.tiles2");
+		// /WEB-INF/views/test/modelandview_select.jsp 페이지를 만들어야 한다.
+
+		return mav;
+	}
+	
+	
+	
+	@ResponseBody
+	@GetMapping(value = "/club/search.do", produces = "text/plain;charset=UTF-8")
+	public String searchType_a(HttpServletRequest request) {
+		
 		String searchType_a = request.getParameter("searchType_a");
 		String searchType_b = request.getParameter("searchType_b");
 		String searchWord = request.getParameter("searchWord");
-		if(request.getParameter("clubseq") != null) {
-			params = request.getParameter("clubseq");
-		}
-
-		if (searchType_a == null) {
-			searchType_a = "rank";
-		}
-		
-		if (searchType_b == null) {
-			searchType_b = "none";
-		}
+		String params = request.getParameter("params");
 		
 		if (searchWord == null) {
-			searchWord = "";
+			searchWord = " ";
 		}
 
 		if (searchWord != null) {
 			searchWord = searchWord.trim();
 		}
-
-		System.out.println("확인용 searchType_a" + searchType_a);
-		System.out.println("확인용 searchType_b" + searchType_b);
-		System.out.println("확인용 searchWord" + searchWord);
-		System.out.println("확인용 params" + params);
 		
 		Map<String, String> paraMap = new HashMap<>();
 		paraMap.put("searchType_a", searchType_a);
@@ -290,46 +299,9 @@ public class ControllerSJ {
 		paraMap.put("params", params);
 		
 		List<ClubVO> clubList = null;
-
-		// === 페이징 처리를 안한 검색어가 없는 전체 동호회 보여주기 === //
-//		clubList = service.clubListNoSearch(params);
-		
-		
-		// === 페이징 처리를 안한 검색어가 있는 전체 동호회 보여주기 === //
-		clubList = service.clubListSearch(paraMap);
-		
-		mav.addObject("params", params);
-		mav.addObject("clubList", clubList);
-		mav.addObject("searchType_a", searchType_a);
-		mav.addObject("searchType_b", searchType_b);
-		mav.addObject("searchWord", searchWord);
-		
-		mav.setViewName("/club/findClub.tiles2");
-		// /WEB-INF/views/test/modelandview_select.jsp 페이지를 만들어야 한다.
-
-		return mav;
-	}
-	
-	@ResponseBody
-	@GetMapping(value = "/club/searchType.do", produces = "text/plain;charset=UTF-8")
-	public String searchType_a(HttpServletRequest request) {
-		String searchType_a = request.getParameter("searchType_a");
-		String searchType_b = request.getParameter("searchType_b");
-//		String searchType_c = request.getParameter("searchType_c");
-		String params = request.getParameter("params");
-		
-		Map<String, String> paraMap = new HashMap<>();
-		paraMap.put("searchType_a", searchType_a);
-		paraMap.put("searchType_b", searchType_b);
-//		paraMap.put("searchType_c", searchType_c);
-		paraMap.put("params", params);
-		
-		System.out.println();
-		
-		List<ClubVO> clubList = null;
 		
 		// 검색타입 있는 리스트 가져오기
-		clubList = service.searchType(paraMap);
+		clubList = service.search(paraMap);
 		
 		JSONArray jsonArr = new JSONArray(); // []
 
@@ -353,8 +325,6 @@ public class ControllerSJ {
 
 				jsonObj.put("searchType_a", searchType_a); 
 				jsonObj.put("searchType_b", searchType_b); 
-//				jsonObj.put("searchType_c", searchType_c); 
-																
 
 				jsonArr.put(jsonObj);
 			}

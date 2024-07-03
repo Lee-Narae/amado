@@ -89,7 +89,7 @@
 	
 	
 	<!-- 페이징 처리를 안한 검색타입만 있고 검색어가 없는 동아리목록 보여주기 -->
-	<select id="searchType" parameterType="HashMap" resultType="ClubVO">
+	<select id="search" parameterType="HashMap" resultType="ClubVO">
 		select clubseq, clubname, clubimg, fk_sportseq, clubtel
 		 , city, local, clubgym, clubtime
 		 , membercount, clubpay, clubstatus, clubscore
@@ -160,11 +160,9 @@
 			<otherwise></otherwise>
 		</choose>
 		
-		<choose>
-			<when test="searchWord != ''">
-				and clubname like '%'||'#{searchWord}'||'%'
-			</when>
-		</choose>
+		<if test='!searchWord.equals("")'>
+		    and clubname like '%' || #{searchWord} || '%'
+		</if>
 		
 		<choose>
 			<when test="searchType_a == 'rank'">
@@ -186,7 +184,7 @@
 	<select id="clubListSearch" parameterType="HashMap" resultType="ClubVO">
 		select clubseq, clubname, clubimg, fk_sportseq, clubtel
 		 , city, local, clubgym, clubtime
-		 , membercount, clubpay, clubstatus, clubscore
+		 , membercount, clubpay, clubstatus, clubscore 	
 		 , rank() over(order by clubscore desc) AS rank		 
  
  		from tbl_club
@@ -253,6 +251,8 @@
 			</when>
 			<otherwise></otherwise>
 		</choose>
+		
+
 		
 		<choose>
 			<when test="searchType_a == 'rank'">

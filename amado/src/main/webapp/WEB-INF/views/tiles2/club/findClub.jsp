@@ -86,18 +86,35 @@
 
  $(document).ready(function() {
 	 
+	$("input:text[name='searchWord']").bind("keyup", function(e){
+		if(e.keyCode == 13){
+			goSearch();
+		}
+	});
+	 
 	 $("select[name='searchType_a'], select[name='searchType_b'], select[name='searchType_c']").bind("change", function(){
 /* 		 alert($('select[name="searchType_a"] > option:checked').val());
 		 alert($('select[name="searchType_b"] > option:checked').val());
 		 alert($('select[name="searchType_c"] > option:checked').val());
 		 alert(${requestScope.params}); */
-		 
- 		 $.ajax({
-			url:"<%= ctxPath%>/club/searchType.do",
+
+		 goSearch();
+ 		  		 
+	 });// end of searchType
+	 
+ }); // end of (document)
+ 
+	function goSearch() {
+//		alert("눌렀다");
+	const searchWord = $("input:text[name='searchWord']").val();
+//	alert(searchWord);
+
+$.ajax({
+			url:"<%= ctxPath%>/club/search.do",
 			type:"get",
 			data:{"searchType_a":$('select[name="searchType_a"] > option:checked').val(),
 				  "searchType_b":$('select[name="searchType_b"] > option:checked').val(),
-				  /* "searchType_c":$('select[name="searchType_c"] > option:checked').val(), */ 
+				  "searchWord":searchWord,
 				  "params":"${requestScope.params}"},
 			dataType:"json",
 			success:function(json) {
@@ -139,16 +156,7 @@
 		    error: function(request, status, error){
 		    	alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 			}						
-		}); // end of $.ajax 		 
-	 });// end of searchType
-	 
- }); // end of (document)
- 
-	function goSearch() {
-//		alert("눌렀다");
-
-		const frm = document.searchFrm;
-		frm.submit();
+		}); // end of $.ajax
 		
 	} // end of goSearch
 
@@ -249,7 +257,7 @@
             <input type="text" style="display: none;" />
             <%-- form 태그내에 input 태그가 오로지 1개 뿐일 경우에는 엔터를 했을 경우 검색이 되어지므로 이것을 방지하고자 만든것이다. --%>
             <button style="margin-left: 5px;" type="button" class="btn btn-secondary btn-sm" onclick="goSearch()">검색</button>
-        	<input type="hidden" name="clubseq" value="${requestScope.params}" />
+        	<input type="hidden" name="sportseq" value="${requestScope.params}" />
         </div>
     </form>
 
