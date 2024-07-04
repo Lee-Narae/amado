@@ -396,6 +396,8 @@
 			</when>
 			<otherwise>and fk_sportseq = to_number(#{params})</otherwise>
 		</choose>
+		)
+		where rno between to_number(#{startno}) and to_number(#{endno})
 		<choose>
 			<when test="searchType_b == 'none'"></when>
 			<when test="searchType_b == 'seoul'">
@@ -468,8 +470,6 @@
 			</when>
 			<otherwise></otherwise>
 		</choose>	
-		)
-		where rno between to_number(#{startno}) and to_number(#{endno})
 	
 	</select>
 
