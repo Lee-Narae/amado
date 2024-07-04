@@ -1,5 +1,6 @@
 package com.spring.app.domain;
 
+import org.springframework.web.multipart.MultipartFile;
 
 public class GymVO {
 /*
@@ -32,6 +33,20 @@ public class GymVO {
 	private String caution;         //주의사항
 	private String membercount;     //인원
 	private String likecount;       //좋아요수
+	
+	
+	private String orgfilename;       //좋아요수
+	private String filename;       //좋아요수
+	private String filesize;       //좋아요수
+	
+	public GymVO() {}
+	/*
+ #172. 파일을 첨부하도록 VO 수정하기
+ 
+*/
+private MultipartFile attach;
+	
+	
 	
 	public String getYmseq() {
 		return ymseq;
@@ -116,6 +131,30 @@ public class GymVO {
 	}
 	public void setLikecount(String likecount) {
 		this.likecount = likecount;
+	}
+	public String getOrgfilename() {
+		return orgfilename;
+	}
+	public void setOrgfilename(String orgfilename) {
+		this.orgfilename = orgfilename;
+	}
+	public String getFilename() {
+		return filename;
+	}
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
+	public String getFilesize() {
+		return filesize;
+	}
+	public void setFilesize(String filesize) {
+		this.filesize = filesize;
+	}
+	public MultipartFile getAttach() {
+		return attach;
+	}
+	public void setAttach(MultipartFile attach) {
+		this.attach = attach;
 	}
 	
 	

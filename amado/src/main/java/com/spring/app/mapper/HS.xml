@@ -5,4 +5,13 @@
 <mapper namespace="HS">
 
 
+
+	<!-- 체육관 등록  -->
+ 	<insert id="add" parameterType="BoardVO">
+		insert into tbl_board(boardseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status, orgfilename, filename, filesize)
+		values(seq_board.nextval, #{title}, #{content}, #{fk_userid}, default, #{password}, 0, 0, default, #{orgfilename}, #{filename} , to_number(#{filesize}))
+	</insert>
+
+
+
 </mapper>

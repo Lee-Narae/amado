@@ -1,5 +1,9 @@
 package com.spring.app.model;
 
-public interface AmadoDAO_HS {
+import com.spring.app.board.domain.GymVO;
 
+public interface AmadoDAO_HS {
+	
+	
+	int add(GymVO gymvo);
 }

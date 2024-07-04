@@ -102,10 +102,18 @@
         fileReader.onload = function() {
             document.getElementById("previewImg").src = fileReader.result;
         };
-    });
-});
-    
   
+        // 폼(form)을 전송(submit)
+        const frm = document.addFrm;
+        frm.method = "post";
+        frm.action = "<%= ctxPath%>/gym/registerGymend.do";
+        frm.submit();
+    
+    });
+
+  
+}); //end of   $(document).ready(function() ----------------------
+ 
   </script>
 
 <h1>체육관 등록</h1>
@@ -139,8 +147,8 @@
       <label for="operational-status">실내/실외</label>
       <select id="operational-status" name="operational-status" required>
         <option value="">선택하세요</option>
-        <option value="운영중">실내</option>
-        <option value="운영중지">실외</option>
+        <option value="0">실내</option>
+        <option value="1">실외</option>
       </select>
     </div>
     
@@ -151,7 +159,7 @@
     
 	 <div class="form-group">
 	  <label for="attachment">첨부 파일</label>
-	  <input type="file" id="attachment" name="attachment" multiple>
+	  <input type="file" id="attach" name="attach" multiple>
 	</div>
 	
 	<!-- 이미지 미리보기 -->
