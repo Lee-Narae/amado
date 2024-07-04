@@ -5,13 +5,10 @@
 <mapper namespace="HS">
 
 
-
-	<!-- 체육관 등록  -->
- 	<insert id="add" parameterType="BoardVO">
-		insert into tbl_board(boardseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status, orgfilename, filename, filesize)
-		values(seq_board.nextval, #{title}, #{content}, #{fk_userid}, default, #{password}, 0, 0, default, #{orgfilename}, #{filename} , to_number(#{filesize}))
+	<!-- 동호회등록  완료 요청(파일첨부ㅇ) -->
+	<insert id="add_withFile"  parameterType="ClubVO">
+		insert into tbl_club(clubseq, clubname, clubimg, sportseq, userid, clubtel, city, local, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfilename)
+        values(seq_club.nextval, #{clubname}, 'sdfsd', #{sportseq}, #{userid}, #{clubtel}, #{city}, #{local}, #{clubgym}, #{clubtime}, '3', #{clubpay}, default, #{clubscore} , 'sdfsdfdf' ) 
 	</insert>
-
-
 
 </mapper>
