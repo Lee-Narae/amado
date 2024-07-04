@@ -54,13 +54,6 @@
 			<version>${org.aspectj-version}</version>
 		</dependency>	
 		
-		<!-- coolsms -->
-		<dependency>
-		    <groupId>net.nurigo</groupId>
-		    <artifactId>javaSDK</artifactId>
-		    <version>2.2</version>
- 		</dependency> 
-		
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -266,12 +259,12 @@
          <artifactId>json</artifactId>
          <version>20220320</version>
       </dependency>
-	  <!-- ===== #7-2. JSON-SIMPLE 관련 jar 추가하기 ===== -->
+      
       <dependency>
          <groupId>com.googlecode.json-simple</groupId>
          <artifactId>json-simple</artifactId>
          <version>1.1.1</version>
-      </dependency>       
+      </dependency> 
       
       <!-- =====  #8. JSON 관련 jar 추가하기 =====  -->
       <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
@@ -348,6 +341,13 @@
           <artifactId>poi-ooxml-schemas</artifactId>
           <version>4.1.2</version>
       </dependency>
+      
+      <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+      <dependency>
+          <groupId>org.apache.poi</groupId>
+          <artifactId>poi</artifactId>
+          <version>5.2.3</version>
+      </dependency>
             
       <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
       <dependency>
@@ -356,12 +356,13 @@
           <version>5.2.3</version>
       </dependency>
       
-      <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
-      <dependency>
-          <groupId>org.apache.poi</groupId>
-          <artifactId>poi</artifactId>
-          <version>5.2.3</version>
-      </dependency>
+      <!-- https://mvnrepository.com/artifact/org.apache.xmlbeans/xmlbeans -->
+	  <dependency>
+	     <groupId>org.apache.xmlbeans</groupId>
+	     <artifactId>xmlbeans</artifactId>
+	     <version>5.2.0</version>
+	  </dependency>
+      
       
       <!-- ===== #12. log4j 관련1 jar 추가하기 ===== -->
       <dependency>
@@ -370,7 +371,7 @@
          <version>0.2.7</version>
       </dependency>
       
-      <!-- ==== #165-2. 이미지 썸네일 생성 라이브러리인 Thumbnailator 라이브러리 추가하기 ==== -->
+      <!-- ==== #165. 이미지 썸네일 생성 라이브러리인 Thumbnailator 라이브러리 추가하기 ==== -->
       <dependency>
           <groupId>net.coobird</groupId>
           <artifactId>thumbnailator</artifactId>
@@ -378,7 +379,7 @@
       </dependency>
       
       
-      <!-- === #191-2. Spring websocket dependency를 에 추가(웹채팅관련1) === -->
+      <!-- === #191. Spring websocket dependency를 에 추가(웹채팅관련1) === -->
       <dependency>
            <groupId>org.springframework</groupId>
            <artifactId>spring-websocket</artifactId>
@@ -386,7 +387,7 @@
       </dependency>
       
       
-      <!-- === #192-2. (웹채팅관련2) Gson 은 Java 객체를 JSON 표현식으로 변환할 수 있게 해주는 Java 라이브러리임. 
+      <!-- === #192. (웹채팅관련2) Gson 은 Java 객체를 JSON 표현식으로 변환할 수 있게 해주는 Java 라이브러리임. 
                또한 거꾸로 JSON 표현식 형태의 String 을 Java 객체로 변환도 가능하게 해주는 라이브러리임.
       === -->
       <dependency>
