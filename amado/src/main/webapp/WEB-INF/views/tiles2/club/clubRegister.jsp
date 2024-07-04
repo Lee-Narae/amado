@@ -43,6 +43,7 @@ select{
 $(document).ready(function(){
 	
 	
+	
 	$("select[name='city']").change(function(e){ // 도시 선택하면
 	
 		let cityname = $(e.target).val();
@@ -70,7 +71,6 @@ $(document).ready(function(){
 		 });
 	});
 	
-	searchMatch();
 	
 	// ---------------------------------------------- //
 	
@@ -93,55 +93,12 @@ $(document).ready(function(){
 });// end of $(document).ready(function(){})---------------------------
 
 
-function searchMatch(){
-	
-	let cityname = "";
-	let localname = "";
-	
-	if($("select[name='city']").val() != '0'){
-		cityname = $("select[name='city']").val();
-	}
-	
-	if($("select[name='local']") != '선택하세요'){
-		localname = $("select[name='local']").val();	
-	}
-
-	
-	$.ajax({
-		url: "<%=ctxPath%>/club/clubRegister.do",
-		data: {"cityname": cityname, "localname": localname},
-		dataType: "json",
-		success: function(json){
-    		// console.log(JSON.stringify(json));
-    		
-    		if(json.length > 0){
-    			
-   				$.each(json, function(index, item){
-    			
-   		    		let v_html = ``;
-   		    		
-   					v_html += `<tr>
-					   	 <td style="width: 30%; height: 30px;"><div style="font-size: 10pt;">\${item.city} > \${item.local}</div>\${item.area}</td>
-					v_html += </tr>`;
-					
-					$("span#location").html(v_html);
-    			});
-    			
-    		}
-    	},
-        error: function(request, status, error){
-			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-		}
-	});
-	
-}
 
 
 </script>
 
 
 <form name="registerClubFrm" enctype="multipart/form-data">
-
 	<div class="container" style="border:solid 0px black; margin-top: 12%;">
 	
 		<div class="row">
@@ -159,7 +116,7 @@ function searchMatch(){
 				
 				<!-- 종목  -->
 				<div id="infoo">
-					<select name="sportType" style="width:80%;" class="form-select-lg mb-3" aria-label="Large select example">
+					<select name="sportseq" style="width:80%;" class="form-select-lg mb-3" aria-label="Large select example">
 						<option selected>종목</option>
 						<option value="soccer">축구</option>
 						<option value="baseball">야구</option>
@@ -171,9 +128,9 @@ function searchMatch(){
 						<option value="badmiton">배드민턴</option>
 					</select>
 					
-					<div style="font-size: 25px; font-weight: bold; ">${sessionScope.loginuser.name}</div> <!-- 자동 -->
-					<div style="color: lightgray;">🕻 연락처</div><sapn>${sessionScope.loginuser.mobile}</sapn> <!-- 자동 -->
-					<div style="color: lightgray;">✉️ 이메일</div><sapn>${sessionScope.loginuser.email}</sapn> <!-- 자동 -->
+					<div id="name" style="font-size: 25px; font-weight: bold; ">${sessionScope.loginuser.name}</div> <!-- 자동 -->
+					<div style="color: lightgray;">🕻 연락처</div><span>${sessionScope.loginuser.mobile}</span> <!-- 자동 -->
+					<div style="color: lightgray;">✉️ 이메일</div><span>${sessionScope.loginuser.email}</span> <!-- 자동 -->
 				</div>
 			  </div>
 			  
@@ -182,7 +139,7 @@ function searchMatch(){
 		      <!-- 동호회명 -->
 				<h3 id="simple-list-item-2" style="font-weight: bolder;">동호회명<span style="color: red;">*</span></h3>
 				<hr>
-				<input name="clubName" id="form-control-lg" type="text" placeholder="동호회 이름을 입력하세요. " aria-label="">
+				<input name="clubgym" id="form-control-lg" type="text" placeholder="동호회 이름을 입력하세요. " aria-label="">
 			
 				<br><br><br><br>
 		
@@ -209,7 +166,7 @@ function searchMatch(){
 		
 			<h3 id="simple-list-item-4" style="font-weight: bolder;">운영 시간<span style="color: red;">*</span></h3>
 			<hr>
-			<select name="time" style="width:30%;" class="form-select form-select-lg mb-3" aria-label="Large select example">
+			<select name="clubtime" style="width:30%;" class="form-select form-select-lg mb-3" aria-label="Large select example">
 			  <option selected>주요 활동 시간대</option>
 			  <option value="1">08:00~</option>
 			  <option value="2">08:00~</option>
@@ -220,26 +177,28 @@ function searchMatch(){
 			
 			<h3 id="simple-list-item-5" style="font-weight: bolder;">정원<span style="color: red;">*</span></h3>
 			<hr>
+			<!-- 
 			<label for="customRange3" class="form-label">최대 정원은 30명 까지입니다.</label>
 			<br>
 			    1
 		        <input name="memberCnt" style="width:80%;" value="1" type="range" class="form-range slider" min="0" max="30" step="1" id="customRange3">
 		        30
 		        <span class="value" id="rangeValue"></span>
-			
+			 -->
+			 
 			<br><br><br><br>
 			
 			<h3 id="simple-list-item-6" style="font-weight: bolder;">회비<span style="color: red;">*</span></h3>
 			<hr>
 			<div style="display: flex;">
-				<input name="cost" class="form-control form-control-lg" type="text" placeholder="" aria-label="" style="width: 30%;"><div style="font-weight: bold; padding-top: 20px; margin-left: 10px;">원</div>
+				<input name="clubpay" class="form-control form-control-lg" type="text" placeholder="" aria-label="" style="width: 30%;"><div style="font-weight: bold; padding-top: 20px; margin-left: 10px;">원</div>
 			</div>
 			
 			<br><br><br><br>
 			
 			<h3 id="simple-list-item-7" style="font-weight: bolder;">동호회 대표 이미지<span style="color: red;">*</span></h3>
 			<hr>
-			<input class="img_file" name="headImg" type="file" name="attach" />
+			<!-- <input class="img_file" name="clubimg" type="file" name="attach" /> -->
 			
 			<br><br><br><br>
 		      
@@ -269,4 +228,5 @@ function searchMatch(){
 	        <button type="button" class="btn btn-secondary btn-sm" onclick="javascript:history.back()">취소</button>  
 		</div>
 	</div>
+
 </form>

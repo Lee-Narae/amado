@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.app.common.FileManager;
+import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.service.AmadoService_JY;
 
@@ -64,9 +66,8 @@ public class ControllerJY {
 	
 	// ========== 동호회 등록 ==========
 	// 동호회등록 폼페이지 요청
-	@ResponseBody
 	@GetMapping("/club/clubRegister.do")
-	public ModelAndView clubRegister(ModelAndView mav) {
+	public ModelAndView requiredLogin_clubRegister(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
 		
 /*		
 		동호회등록 종목 선택
@@ -83,9 +84,27 @@ public class ControllerJY {
 		return mav;
 	}	
 	
+	
+	@ResponseBody
+	@GetMapping(value="/club/getLocation.do", produces="text/plain;charset=UTF-8")
+	public String getLocation(HttpServletRequest request) {
+		String cityname = request.getParameter("cityname");
+		
+		List<String> localList = service.getLocalList(cityname);
+		
+		JSONObject jsonObj = new JSONObject(); // {}
+		
+		for(String localname : localList) {
+			jsonObj.put("localname", localname);
+		}	      
+	   return jsonObj.toString();
+	}
+	
+	
 	// 동호회등록  완료 요청
 	@PostMapping(value="/club/clubRegisterEnd.do" , produces="text/plain;charset=UTF-8")
-	public ModelAndView clubRegisterEnd(Map<String, String> paraMap, ModelAndView mav, ClubVO clubvo, MultipartHttpServletRequest mrequest) throws Exception {
+	public ModelAndView clubRegisterEnd(Map<String, String> paraMap, ModelAndView mav, BoardVO boardvo, ClubVO clubvo, MultipartHttpServletRequest mrequest) throws Exception {
+		
 		
 		MultipartFile attach = clubvo.getAttach();
 		
@@ -113,7 +132,9 @@ public class ControllerJY {
 			 */
 			
 			/*
+			 
 			 #2 . 파일첨부를 위한 변수의 설정 및 값을 초기화 한 후 파일 올리기
+			  
 			 */
 			String newFileName ="";
 			//was(톰캣)의 디스크에 저장될 파일명
@@ -121,11 +142,14 @@ public class ControllerJY {
 			byte[] bytes = null;
 			//첨부파일의 내용물을 담는것
 			
+			long fileSize = 0;
+			//첨부 파일의 크기 
+			
 			try {
 				bytes= attach.getBytes();
 				//첨부파일의 내용물을 읽어오는 것
 				
-				String originalFilename = attach.getOriginalFilename();
+				String originalFilename=attach.getOriginalFilename();
 				// attach.getOriginalFilename() 이 첨부파일명의 파일명(예: 강아지.png) 이다.
 				
 			//   System.out.println("~~~ 확인용 originalFilename => " + originalFilename); 
@@ -137,36 +161,52 @@ public class ControllerJY {
 				
 				/*
 	             3. BoardVO boardvo 에 fileName 값과 orgFilename 값과 fileSize 값을 넣어주기  
-				*/
+	             
+	         */
 				
-				clubvo.setWasfileName(newFileName);
+				boardvo.setFilename(newFileName);
 				//was(톰캣)에 저장된 파일명(2024062712075997631067179400.jpg)
-				clubvo.setClubimg(originalFilename);
+				boardvo.setOrgfilename(originalFilename);
 				// 게시판 페이지에서 첨부된 파일(LG_싸이킹청소기_사용설명서.pdf)을 보여줄 때 사용.
 	            // 또한 사용자가 파일을 다운로드 할때 사용되어지는 파일명으로 사용.
+				fileSize = attach.getSize(); // 첨부파일의 크기 
+				boardvo.setFilesize(String.valueOf(fileSize));
+				
+				
 			} catch (IOException e) {
+			
 				e.printStackTrace();
 			}
+		
+			
+			
+			
 		}
 		
-	// === !!! 첨부파일이 있는 경우 작업 끝 !!! ===	
-
-		int n =0;
 		
-		if(!(attach.isEmpty())) {
-			//파일첨부가 있는 경우라면
-			n=service.add_withFile(clubvo);
-		}
 		
-		if(n==1) {
-			mav.setViewName("redirect:/club/findClub.action");
-		    //  /list.action 페이지로 redirect(페이지이동)해라는 말이다.
-		}
-		else {
-			mav.setViewName("amado/error/add_error.tiles1");
-			//  /WEB-INF/views/tiles1/board/error/add_error.jsp 파일을 생성한다.
-		}
+		
+		//MultipartFile attach = clubvo.getAttach();
+		
+		System.out.println("1"+clubvo.getAttach());
+		//System.out.println("2"+clubvo.getCity());
+		
+		System.out.println("4"+clubvo.getClubgym());
+		System.out.println("5"+clubvo.getClubimg());
+		
+		//System.out.println("6"+clubvo.getClubname());
+		System.out.println("7"+clubvo.getClubpay());
+		
+		System.out.println("12"+clubvo.getClubtime());
+		//System.out.println("14"+clubvo.getLocal());
+		System.out.println("17"+clubvo.getWasfileName());
+		
+	
+		mav.setViewName("redirect:/index.do");
+		
 		return mav;
+		
+		
 	}
 	
 	

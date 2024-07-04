@@ -173,6 +173,15 @@ rotate(
 		.carousel-inner .carousel-item-left{ 
 		  transform: translateX(0);
 		}
+		
+		
+		
+.profile-img {
+      width: 35px; /* 원하는 너비 */
+      height: 35px; /* 원하는 높이 */
+      border-radius: 50%; /* 원형으로 만들기 */
+      object-fit: cover; /* 이미지를 컨테이너에 맞추어 자르기 */
+  }
 </style>
 
 <script type="text/javascript"
@@ -192,7 +201,7 @@ rotate(
 	       $('div.carousel div.carousel-item').each(function(index, elmt){
 	    	   <%--
 	    	        console.log($(elmt).html());
-	    	   --%>    
+	    	   --%>
 	    	   <%--      
 	    	       <img class="d-block col-3 img-fluid" src="/MyMVC/images/berkelekle단가라포인트033.jpg">
 	    	       <img class="d-block col-3 img-fluid" src="/MyMVC/images/berkelekle덩크043.jpg">
@@ -424,26 +433,24 @@ function goReadComment(){
 			    
 			    let v_html = "";
 			    if(json.length > 0){
-			    	$.each(json, function(index, item){
-			    		
-			    		v_html +=   "<div style='display: flex; margin: 5% 0;'>";
-			    		if(item.memberimg == null){
-			    			v_html += "<div style='width: 20%;'><img style='width: 25%; height: 50%;' src='<%=ctxPath%>/resources/images/기본이미지.png'></div>";
-			    		}
-			    		if(item.memberimg != null){
-			    			v_html += "<div style='width: 20%;'><img style='width: 25%; height: 50%;' src='<%=ctxPath%>/resources/images/"+item.memberimg+"'></div>";
-			    		}
-			    		v_html +=   "<div>";
-			    		v_html +=   "<div style='font-size:12pt; font-weight: bold; margin-bottom: 3%;'>"+item.fk_userid+"</div>";
-			    		v_html +=   "<div>"+item.comment_text+"</div>";
-			    		v_html +=   "<div class='comment'; style='color:#999999; font-size:10pt; margin-top: 3%;'>"+item.registerdate+" &nbsp;&nbsp;<a>답글쓰기</a>"
-			    		if( ${sessionScope.loginuser != null} && "${sessionScope.loginuser.userid}" == item.fk_userid ){
-			    			v_html += "<br><a>수정</a>&nbsp;&nbsp;<a>삭제</a>";
-			    		}
-			    		v_html +=	"</div>";
-			    		v_html +=   "</div>";
-			    		v_html +=   "</div>";
-			    		
+			    	$.each(json, function(index, item) {
+			    	    v_html += "<div style='display: flex; margin: 5% 0;'>";
+			    	    if (item.memberimg == null) {
+			    	        v_html += "<div style='width: 6%;'><img class='profile-img' src='<%=ctxPath%>/resources/images/기본이미지.png'></div>";
+			    	    }
+			    	    if (item.memberimg != null) {
+			    	        v_html += "<div style='width: 6%;'><img class='profile-img' src='<%=ctxPath%>/resources/images/" + item.memberimg + "'></div>";
+			    	    }
+			    	    v_html += "<div>";
+			    	    v_html += "<div style='font-size:12pt; font-weight: bold; margin-bottom: 3%;'>" + item.fk_userid + "</div>";
+			    	    v_html += "<div>" + item.comment_text + "</div>";
+			    	    v_html += "<div class='comment' style='color:#999999; font-size:10pt; margin-top: 3%;'>" + item.registerdate + " &nbsp;&nbsp;<a>답글쓰기</a>";
+			    	    if (${sessionScope.loginuser != null} && "${sessionScope.loginuser.userid}" == item.fk_userid) {
+			    	        v_html += "<br><a>수정</a>&nbsp;&nbsp;<a>삭제</a>";
+			    	    }
+			    	    v_html += "</div>";
+			    	    v_html += "</div>";
+			    	    v_html += "</div>";
 			    	});
 			    }
 			    
