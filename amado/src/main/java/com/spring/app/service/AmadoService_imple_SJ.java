@@ -111,6 +111,36 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		return clubList;
 	}
 
+	// 동호회 총 페이지 수
+	@Override
+	public int getClubTotalPage(String params) {
+		int totalPage = dao.getClubTotalPage(params);
+		return totalPage;
+	}
+
+	
+	// === 페이징 처리를 한 검색어가 없는 전체 동호회 보여주기 === //
+	@Override
+	public List<ClubVO> clubListPagingSearch(Map<String, String> paraMap) {
+	      List<ClubVO> clubList = dao.clubListPagingSearch(paraMap);
+	      return clubList;
+
+	}
+
+	// 동호회 총 페이지 수(검색포함)
+	@Override
+	public int getClubSearchTotalPage(Map<String, String> paraMap) {
+		int totalPage = dao.getClubSearchTotalPage(paraMap);
+		return totalPage;
+	}
+
+	// 검색타입 있는 리스트 가져오기(페이징)
+	@Override
+	public List<ClubVO> searchPaging(Map<String, String> paraMap) {
+	      List<ClubVO> clubList = dao.searchPaging(paraMap);
+	      return clubList;
+	}
+
 
 	
 }

@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
 
 <%
    String ctxPath = request.getContextPath();
@@ -86,7 +88,7 @@
 
  $(document).ready(function() {
 	 
-	$("input:text[name='searchWord']").bind("keyup", function(e){
+	$("input:text[name='searchWord']").on("keyup", function(e){
 		if(e.keyCode == 13){
 			goSearch();
 		}
@@ -109,12 +111,31 @@
 	const searchWord = $("input:text[name='searchWord']").val();
 //	alert(searchWord);
 
+	var currentShowPageNo = "${requestScope.currentShowPageNo}";
+	if (isNaN(currentShowPageNo) || currentShowPageNo === "") {
+	    currentShowPageNo = "1"; // 기본값 설정
+	}
+//	alert(currentShowPageNo);
+	
+	var sizePerPageString = "${requestScope.sizePerPage}"; // JSP에서 받은 문자열
+
+	// 문자열을 정수로 변환
+	var sizePerPage = parseInt(sizePerPageString);
+
+	// isNaN() 함수를 사용하여 NaN인지 확인하고 기본값 설정
+	if (isNaN(sizePerPage) || sizePerPage <= 0) {
+	    sizePerPage = 1; // NaN이거나 0 이하일 경우 기본값 1 설정
+	}
+//	alert(sizePerPage);
+
 $.ajax({
 			url:"<%= ctxPath%>/club/search.do",
 			type:"get",
 			data:{"searchType_a":$('select[name="searchType_a"] > option:checked').val(),
 				  "searchType_b":$('select[name="searchType_b"] > option:checked').val(),
 				  "searchWord":searchWord,
+				  "currentShowPageNo":currentShowPageNo,
+				  "sizePerPage":sizePerPage,
 				  "params":"${requestScope.params}"},
 			dataType:"json",
 			success:function(json) {
@@ -124,13 +145,18 @@ $.ajax({
 				
 				if(json.length > 0) {
 					
+					
 					$.each(json, function(index, item) {
 //						alert(item.clubname);	
 						
+						v_html += `<input type="hidden" name="currentShowPageNo" value="\${item.currentShowPageNo}" />`;
+						v_html += `<input type="hidden" name="sizePerPage" value="\${item.sizePerPage}" />`;
+						
+						
 						v_html += `<tr>`;
-						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.rank}</td>`;
-						v_html += `	<td style="vertical-align: middle; text-align: center;"><img src="<%=ctxPath %>/resources/images/zee/\${item.clubimg}" class="rounded" alt="round" style="width:70px; height:70px; display:block; margin:auto; vertical-align: middle;" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/></td>`;
-						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.clubname}</td>`;
+						v_html += `	<td style="vertical-align: middle; text-align: center;" onclick="goView(${item.clubseq}, ${item.fk_sportseq})">\${item.rank}</td>`;
+						v_html += `	<td style="vertical-align: middle; text-align: center;"><img onclick="goView(${item.clubseq}, ${item.fk_sportseq})" src="<%=ctxPath %>/resources/images/zee/\${item.clubimg}" class="rounded" alt="round" style="width:70px; height:70px; display:block; margin:auto; vertical-align: middle;" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/></td>`;
+						v_html += `	<td style="vertical-align: middle; text-align: center;" onclick="goView(${item.clubseq}, ${item.fk_sportseq})">\${item.clubname}</td>`;
 						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.clubscore}</td>`;
 						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.fk_sportseq}</td>`;
 						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.local}</td>`;
@@ -197,50 +223,94 @@ $.ajax({
        <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">배드민턴 동호회 찾기</div>
     </c:if>
 
-    <div class="podium" style="margin-top: 120px;">
-   	<c:if test="${not empty requestScope.clubList}">
-		<c:forEach var="clubvo" items="${requestScope.clubList}">
+	
+	<div class="podium" style="margin-top: 120px;">
+	
+		<%-- 2등 시작 --%>
+	    <c:if test="${not empty requestScope.clubList && requestScope.clubList.size() >= 2}">
+	        <c:forEach var="clubvo" items="${requestScope.clubList}">
+	            <c:choose>
+	                <c:when test="${clubvo.rank == '2'}">
+	                    <div class="podium-item podium-2nd">
+	                        <div class="podium-rank">2등</div>
+	                        <img onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})" src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+	                        <div>${clubvo.clubname}</div>
+	                    </div>
+	                </c:when>
+	            </c:choose>
+	        </c:forEach>
+	    </c:if>
+	    <c:if test="${not empty requestScope.clubList && requestScope.clubList.size() < 2}">
 	        <div class="podium-item podium-2nd">
 	            <div class="podium-rank">2등</div>
-	            <c:if test="${not empty clubvo.rank && clubvo.rank == '2'}">
-	            	<c:if test="${clubvo.rank == '2'}">
-			            <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
-			            <div>${clubvo.clubname}</div>
-		            </c:if>
-	            </c:if>
-	            <c:if test="${empty clubvo.rank == '2'}">
-		            <img src="<%=ctxPath %>/resources/images/noimg.jpg" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
-		            <div>2등이 없습니다</div>
-	            </c:if>
+	            <img src="<%=ctxPath %>/resources/images/noimg.jpg" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+	            <div>2등이 없습니다.</div>
+	        </div>
+	    </c:if>
+	    <%-- 2등 끝 --%>
+	    	
+	    <%-- 1등 시작 --%>	    	
+	    <c:if test="${not empty requestScope.clubList}">
+	        <c:forEach var="clubvo" items="${requestScope.clubList}">
+	            <c:choose>
+	            	<c:when test="${clubvo.rank == '1'}">
+	                    <div class="podium-item podium-1st">
+	                        <div class="podium-rank">1등</div>
+	                        <img onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})" src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+	                        <div>${clubvo.clubname}</div>
+	                    </div>
+	                </c:when>
+	            </c:choose>
+	        </c:forEach>
+	    </c:if>	   
+
+	    <%-- 1등 끝 --%>
+	    
+	    <%-- 3등 시작 --%>
+	    <c:if test="${not empty requestScope.clubList && requestScope.clubList.size() >= 3}">
+	        <c:forEach var="clubvo" items="${requestScope.clubList}">
+	            <c:choose>
+	                <c:when test="${clubvo.rank == '3'}">
+	                    <div class="podium-item podium-3rd">
+	                        <div class="podium-rank">3등</div>
+	                        <img onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})" src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+	                        <div>${clubvo.clubname}</div>
+	                    </div>
+	                </c:when>
+	            </c:choose>
+	        </c:forEach>
+	    </c:if>		    
+	    <c:if test="${not empty requestScope.clubList && requestScope.clubList.size() < 3}">
+	        <div class="podium-item podium-3rd">
+	            <div class="podium-rank">3등</div>
+	            <img src="<%=ctxPath %>/resources/images/noimg.jpg" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+	            <div>3등이 없습니다.</div>
+	        </div>
+	    </c:if>		
+		<%-- 3등 끝 --%>
+		
+		
+		<%-- 만약 동호회가 없을 경우 --%>
+		<c:if test="${empty requestScope.clubList}">
+	        <div class="podium-item podium-2nd">
+	            <div class="podium-rank">2등</div>
+	            <img src="<%=ctxPath %>/resources/images/noimg.jpg" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+	            <div>2등이 없습니다.</div>
 	        </div>
 	        <div class="podium-item podium-1st">
 	            <div class="podium-rank">1등</div>
-	            <c:if test="${not empty clubvo.rank && clubvo.rank == '1'}">
-		            <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
-		            <div>${clubvo.clubname}</div>
-	            </c:if>
-	            <c:if test="${empty clubvo.rank && clubvo.rank == '3'}">
-		            <img src="<%=ctxPath %>/resources/images/noimg.jpg" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
-		            <div>1등이 없습니다</div>
-	            </c:if>
+	            <img src="<%=ctxPath %>/resources/images/noimg.jpg" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+	            <div>1등이 없습니다.</div>
 	        </div>
 	        <div class="podium-item podium-3rd">
 	            <div class="podium-rank">3등</div>
-	            <c:if test="${not empty clubvo.rank == '3'}">
-	            	<c:if test="${clubvo.rank == '3'}">
-			            <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
-			            <div>${clubvo.clubname}</div>
-		            </c:if>
-	            </c:if>
-	            <c:if test="${empty clubvo.rank == '3'}">
-		            <img src="<%=ctxPath %>/resources/images/noimg.jpg" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
-		            <div>3등이 없습니다</div>
-	            </c:if>
+	            <img src="<%=ctxPath %>/resources/images/noimg.jpg" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+	            <div>3등이 없습니다.</div>
 	        </div>
-	    </c:forEach>
-    </c:if>
-        
-    </div>
+	    </c:if>	
+		
+	</div>
+
 
     <form name="searchFrm" style="margin-bottom: 40px; margin-top: 50px;">
         <div style="display: flex;" class="float-left">
@@ -303,12 +373,16 @@ $.ajax({
             </tr>
         </thead>
         <tbody id="this">
-        	<c:if test="${not empty requestScope.clubList}">
-        		<c:forEach var="clubvo" items="${requestScope.clubList}">
+        	<c:if test="${not empty requestScope.clubPagingList}">
+        		<c:forEach var="clubvo" items="${requestScope.clubPagingList}">
+        		
+                  <fmt:parseNumber var="currentShowPageNo" value="${requestScope.currentShowPageNo}" /> 
+                  <fmt:parseNumber var="sizePerPage" value="${requestScope.sizePerPage}" />
+        		
 					<tr>
 					    <td class="align-middle text-center" onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})">${clubvo.rank}</td>
 					    <td class="align-middle text-center">
-					        <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="rounded" alt="round" style="width:70px; height:70px; display:block; margin:auto; vertical-align: middle;"  onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/>
+					        <img onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})" src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="rounded" alt="round" style="width:70px; height:70px; display:block; margin:auto; vertical-align: middle;"  onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/>
 					    </td>
 					    <td class="align-middle text-center" onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})">${clubvo.clubname}</td>
 					    <td class="align-middle text-center">${clubvo.clubscore}점</td>
@@ -343,25 +417,11 @@ $.ajax({
 					</tr>
 	            </c:forEach>
             </c:if>
-<%--             <tr>
-                <td align="center" onclick="goView()">2</td>
-                <td><img src="<%=ctxPath %>/resources/images/다운로드.jpg" class="rounded" alt="round" width="80" /></td>
-                <td align="center">동호회명2</td>
-                <td align="center">소개글2</td>
-                <td align="center">카테고리2</td>
-                <td align="center">지역2</td>
-                <td align="center">멤버수2</td>
-            </tr>
-            <tr>
-                <td align="center" onclick="goView()">3</td>
-                <td><img src="<%=ctxPath %>/resources/images/다운로드2.jpg" class="rounded" alt="round" width="80" /></td>
-                <td align="center">동호회명3</td>
-                <td align="center">소개글3</td>
-                <td align="center">카테고리3</td>
-                <td align="center">지역3</td>
-                <td align="center">멤버수3</td>
-            </tr> --%>
         </tbody>
     </table>
+	<nav aria-label="Page navigation example">
+		<ul class="pagination justify-content-center">${requestScope.pageBar}</ul>
+    </nav>  
+
 </div>
 
