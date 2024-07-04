@@ -197,50 +197,95 @@ $.ajax({
        <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">배드민턴 동호회 찾기</div>
     </c:if>
 
-    <div class="podium" style="margin-top: 120px;">
-   	<c:if test="${not empty requestScope.clubList}">
-		<c:forEach var="clubvo" items="${requestScope.clubList}">
+	
+	<div class="podium" style="margin-top: 120px;">
+	
+		<%-- 2등 시작 --%>
+	    <c:if test="${not empty requestScope.clubList && requestScope.clubList.size() >= 2}">
+	        <c:forEach var="clubvo" items="${requestScope.clubList}">
+	            <c:choose>
+	                <c:when test="${clubvo.rank == '2'}">
+	                    <div class="podium-item podium-2nd">
+	                        <div class="podium-rank">2등</div>
+	                        <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+	                        <div>${clubvo.clubname}</div>
+	                    </div>
+	                </c:when>
+	            </c:choose>
+	        </c:forEach>
+	    </c:if>
+	    <c:if test="${not empty requestScope.clubList && requestScope.clubList.size() < 2}">
 	        <div class="podium-item podium-2nd">
 	            <div class="podium-rank">2등</div>
-	            <c:if test="${not empty clubvo.rank && clubvo.rank == '2'}">
-	            	<c:if test="${clubvo.rank == '2'}">
-			            <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
-			            <div>${clubvo.clubname}</div>
-		            </c:if>
-	            </c:if>
-	            <c:if test="${empty clubvo.rank == '2'}">
-		            <img src="<%=ctxPath %>/resources/images/noimg.jpg" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
-		            <div>2등이 없습니다</div>
-	            </c:if>
+	            <img src="<%=ctxPath %>/resources/images/noimg.jpg" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+	            <div>2등이 없습니다.</div>
 	        </div>
-	        <div class="podium-item podium-1st">
+	    </c:if>
+	    <%-- 2등 끝 --%>
+	    	
+	    <%-- 1등 시작 --%>	    	
+	    <c:if test="${not empty requestScope.clubList}">
+	        <c:forEach var="clubvo" items="${requestScope.clubList}">
+	            <c:choose>
+	            	<c:when test="${clubvo.rank == '1'}">
+	            		<c:if test=""></c:if>
+	                    <div class="podium-item podium-1st">
+	                        <div class="podium-rank">1등</div>
+	                        <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+	                        <div>${clubvo.clubname}</div>
+	                    </div>
+	                </c:when>
+	            </c:choose>
+	        </c:forEach>
+	    </c:if>	   
+
+	    <%-- 1등 끝 --%>
+	    
+	    <%-- 3등 시작 --%>
+	    <c:if test="${not empty requestScope.clubList && requestScope.clubList.size() >= 3}">
+	        <c:forEach var="clubvo" items="${requestScope.clubList}">
+	            <c:choose>
+	                <c:when test="${clubvo.rank == '3'}">
+	                    <div class="podium-item podium-3rd">
+	                        <div class="podium-rank">3등</div>
+	                        <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+	                        <div>${clubvo.clubname}</div>
+	                    </div>
+	                </c:when>
+	            </c:choose>
+	        </c:forEach>
+	    </c:if>		    
+	    <c:if test="${not empty requestScope.clubList && requestScope.clubList.size() < 3}">
+	        <div class="podium-item podium-3rd">
+	            <div class="podium-rank">3등</div>
+	            <img src="<%=ctxPath %>/resources/images/noimg.jpg" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+	            <div>3등이 없습니다.</div>
+	        </div>
+	    </c:if>		
+		<%-- 3등 끝 --%>
+		
+		
+		<%-- 만약 동호회가 없을 경우 --%>
+		<c:if test="${empty requestScope.clubList}">
+	        <div class="podium-item podium-2rd">
+	            <div class="podium-rank">2등</div>
+	            <img src="<%=ctxPath %>/resources/images/noimg.jpg" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+	            <div>2등이 없습니다.</div>
+	        </div>
+	        <div class="podium-item podium-1rd">
 	            <div class="podium-rank">1등</div>
-	            <c:if test="${not empty clubvo.rank && clubvo.rank == '1'}">
-		            <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
-		            <div>${clubvo.clubname}</div>
-	            </c:if>
-	            <c:if test="${empty clubvo.rank && clubvo.rank == '3'}">
-		            <img src="<%=ctxPath %>/resources/images/noimg.jpg" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
-		            <div>1등이 없습니다</div>
-	            </c:if>
+	            <img src="<%=ctxPath %>/resources/images/noimg.jpg" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+	            <div>1등이 없습니다.</div>
 	        </div>
 	        <div class="podium-item podium-3rd">
 	            <div class="podium-rank">3등</div>
-	            <c:if test="${not empty clubvo.rank == '3'}">
-	            	<c:if test="${clubvo.rank == '3'}">
-			            <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
-			            <div>${clubvo.clubname}</div>
-		            </c:if>
-	            </c:if>
-	            <c:if test="${empty clubvo.rank == '3'}">
-		            <img src="<%=ctxPath %>/resources/images/noimg.jpg" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
-		            <div>3등이 없습니다</div>
-	            </c:if>
+	            <img src="<%=ctxPath %>/resources/images/noimg.jpg" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+	            <div>3등이 없습니다.</div>
 	        </div>
-	    </c:forEach>
-    </c:if>
-        
-    </div>
+	    </c:if>	
+		
+	</div>
+
 
     <form name="searchFrm" style="margin-bottom: 40px; margin-top: 50px;">
         <div style="display: flex;" class="float-left">
