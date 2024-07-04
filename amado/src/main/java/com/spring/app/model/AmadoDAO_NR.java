@@ -46,4 +46,16 @@ public interface AmadoDAO_NR {
 	// 종목 이름으로 종목 시퀀스 불러오기
 	String getSportseq_forReg(String sportname);
 
+	// 관리자 로그인
+	MemberVO getAdmin(Map<String, String> paramap);
+
+	// 관리자 - 전체 페이지 수 알아오기
+	int getMemberTotalPage(Map<String, String> paramap);
+
+	// 관리자 - 회원 조회
+	List<MemberVO> select_member_paging(Map<String, String> paramap);
+
+	// 관리자 - 전체 회원 수 조회
+	int getTotalMemberCount(Map<String, String> paramap);
+
 }
