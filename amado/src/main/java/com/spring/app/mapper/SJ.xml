@@ -353,11 +353,11 @@
 			 , rank	
 		FROM
 		(
-		select row_number() over(order by clubscore asc) AS rno 
+		select row_number() over(order by clubscore desc) AS rno 
 		 , clubseq, clubname, clubimg, fk_sportseq, clubtel
 		 , city, local, clubgym, clubtime
 		 , membercount, clubpay, clubstatus, clubscore
-		 , rank() over(order by clubscore asc) AS rank	
+		 , rank() over(order by clubscore desc) AS rank	
  		from tbl_club
 		where clubstatus = 1
 		<choose>
@@ -383,11 +383,11 @@
 			 , rank	
 		FROM
 		(
-		select row_number() over(order by clubscore asc) AS rno 
+		select row_number() over(order by clubscore desc) AS rno 
 		 , clubseq, clubname, clubimg, fk_sportseq, clubtel
 		 , city, local, clubgym, clubtime
 		 , membercount, clubpay, clubstatus, clubscore
-		 , rank() over(order by clubscore asc) AS rank	
+		 , rank() over(order by clubscore desc) AS rank	
  		from tbl_club
 		where clubstatus = 1
 		<choose>
@@ -396,6 +396,8 @@
 			</when>
 			<otherwise>and fk_sportseq = to_number(#{params})</otherwise>
 		</choose>
+		)
+		where rno between to_number(#{startno}) and to_number(#{endno})
 		<choose>
 			<when test="searchType_b == 'none'"></when>
 			<when test="searchType_b == 'seoul'">
@@ -468,8 +470,6 @@
 			</when>
 			<otherwise></otherwise>
 		</choose>	
-		)
-		where rno between to_number(#{startno}) and to_number(#{endno})
 	
 	</select>
 

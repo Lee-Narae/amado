@@ -111,4 +111,37 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		return sportseq;
 	}
 
+	// 관리자 로그인
+	@Override
+	public MemberVO getAdmin(Map<String, String> paramap) {
+		MemberVO admin = sqlsession.selectOne("NR.getAdmin", paramap);
+		
+		if(admin != null) {
+			sqlsession.insert("NR.insert_tbl_loginhistory", paramap);
+		}
+		
+		return admin;
+	}
+	
+	// 관리자 - 전체 페이지 수 알아오기
+	@Override
+	public int getMemberTotalPage(Map<String, String> paramap) {
+		int n = sqlsession.selectOne("NR.getMemberTotalPage", paramap);
+		return n;
+	}
+
+	// 관리자 - 회원 조회
+	@Override
+	public List<MemberVO> select_member_paging(Map<String, String> paramap) {
+		List<MemberVO> memberList = sqlsession.selectList("NR.select_member_paging", paramap);
+		return memberList;
+	}
+
+	// 관리자 - 전체 회원 수 조회
+	@Override
+	public int getTotalMemberCount(Map<String, String> paramap) {
+		int n = sqlsession.selectOne("NR.getTotalMemberCount", paramap);
+		return n;
+	}
+
 }

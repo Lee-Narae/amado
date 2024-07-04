@@ -71,7 +71,7 @@ display: flex;
     
 <script type="text/javascript">
 $(document).ready(function(){
-	
+
 	$("div#dashboard").addClass("hover");
 	
 });

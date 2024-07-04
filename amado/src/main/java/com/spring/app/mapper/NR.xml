@@ -140,4 +140,46 @@
 	<select id="getSportseq_forReg" resultType="String" parameterType="String">
 	select sportseq from tbl_sport where sportname = #{sportname}
 	</select>
+	
+	
+	<select id="getAdmin" parameterType="HashMap" resultType="MemberVO">
+		select userid, name, email, postcode, address, detailaddress, extraaddress, mobile, gender, birthday
+		from tbl_member
+		where userid = #{userid} and password = #{password} and memberrank = 2
+	</select>
+	
+	<select id="getMemberTotalPage" parameterType="HashMap" resultType="int">
+		select ceil(count(*)/#{sizePerPage})
+		from tbl_member
+		where 1=1
+		<if test="searchType == 'name' and searchWord != ''">and name like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'userid' and searchWord != ''">and userid like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'email' and searchWord != ''">and email like '%'||#{searchWord}||'%'</if>
+	</select>
+	
+	<select id="select_member_paging" parameterType="HashMap" resultType="MemberVO">
+		select rn, userid, name, email, gender, memberrank
+		from
+		(select rownum rn, userid, name, email, gender, memberrank
+		from
+		(select userid, name, email, gender, case memberrank when 0 then '일반회원' when 1 then '동호회장' else '관리자' end memberrank
+		from tbl_member
+		where 1=1
+		<if test="searchType == 'name' and searchWord != ''">and name like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'userid' and searchWord != ''">and userid like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'email' and searchWord != ''">and email like '%'||#{searchWord}||'%'</if>
+		order by registerday desc)
+		)
+		where rn between to_number(#{currentShowPageNo})*to_number(#{sizePerPage})-(to_number(#{sizePerPage})-1) and to_number(#{currentShowPageNo})*to_number(#{sizePerPage})
+	</select>
+	
+	<select id="getTotalMemberCount" parameterType="HashMap" resultType="int">
+		select count(*)
+		from tbl_member
+		where 1=1
+		<if test="searchType == 'name' and searchWord != ''">and name like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'userid' and searchWord != ''">and userid like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'email' and searchWord != ''">and email like '%'||#{searchWord}||'%'</if>
+	</select>
+	
 </mapper>

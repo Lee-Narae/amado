@@ -264,8 +264,13 @@ function goReg(){
 		dataType: "json",
 		type: "post",
 		success: function(json){
+			if(json.n == 1){
+				alert("등록 완료!");
+			}
+			else{
+				alert("등록 실패");
+			}
 			
-			alert("등록 완료!");
 			location.href = "<%=ctxPath%>/club/matchRegister.do";
 			
 		},

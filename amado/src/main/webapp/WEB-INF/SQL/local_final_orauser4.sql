@@ -651,15 +651,22 @@ commit;
 		 , clubseq, clubname, clubimg, fk_sportseq, clubtel
 		 , city, local, clubgym, clubtime
 		 , membercount, clubpay, clubstatus, clubscore
-		 , rank() over(order by clubscore asc) AS rank	
+		 , rank() over(order by clubscore desc) AS rank	
  		from tbl_club
 		where clubstatus = 1
 				and fk_sportseq = 1
+                and city like '%'||'서울'||'%'
 		order by rno asc	
 )
 where rno between '1' and '10'
 
 
+
+		select count(*) AS totalPage
+ 		from tbl_club
+		where clubstatus = 1		
+				and fk_sportseq = 1
+				and city like '%'||'서울'||'%'
 
 
 
