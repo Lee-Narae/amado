@@ -154,9 +154,9 @@ $.ajax({
 						
 						
 						v_html += `<tr>`;
-						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.rank}</td>`;
-						v_html += `	<td style="vertical-align: middle; text-align: center;"><img src="<%=ctxPath %>/resources/images/zee/\${item.clubimg}" class="rounded" alt="round" style="width:70px; height:70px; display:block; margin:auto; vertical-align: middle;" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/></td>`;
-						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.clubname}</td>`;
+						v_html += `	<td style="vertical-align: middle; text-align: center;" onclick="goView(${item.clubseq}, ${item.fk_sportseq})">\${item.rank}</td>`;
+						v_html += `	<td style="vertical-align: middle; text-align: center;"><img onclick="goView(${item.clubseq}, ${item.fk_sportseq})" src="<%=ctxPath %>/resources/images/zee/\${item.clubimg}" class="rounded" alt="round" style="width:70px; height:70px; display:block; margin:auto; vertical-align: middle;" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/></td>`;
+						v_html += `	<td style="vertical-align: middle; text-align: center;" onclick="goView(${item.clubseq}, ${item.fk_sportseq})">\${item.clubname}</td>`;
 						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.clubscore}</td>`;
 						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.fk_sportseq}</td>`;
 						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.local}</td>`;
@@ -233,7 +233,7 @@ $.ajax({
 	                <c:when test="${clubvo.rank == '2'}">
 	                    <div class="podium-item podium-2nd">
 	                        <div class="podium-rank">2등</div>
-	                        <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+	                        <img onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})" src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
 	                        <div>${clubvo.clubname}</div>
 	                    </div>
 	                </c:when>
@@ -256,7 +256,7 @@ $.ajax({
 	            	<c:when test="${clubvo.rank == '1'}">
 	                    <div class="podium-item podium-1st">
 	                        <div class="podium-rank">1등</div>
-	                        <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+	                        <img onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})" src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
 	                        <div>${clubvo.clubname}</div>
 	                    </div>
 	                </c:when>
@@ -273,7 +273,7 @@ $.ajax({
 	                <c:when test="${clubvo.rank == '3'}">
 	                    <div class="podium-item podium-3rd">
 	                        <div class="podium-rank">3등</div>
-	                        <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+	                        <img onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})" src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
 	                        <div>${clubvo.clubname}</div>
 	                    </div>
 	                </c:when>
@@ -382,7 +382,7 @@ $.ajax({
 					<tr>
 					    <td class="align-middle text-center" onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})">${clubvo.rank}</td>
 					    <td class="align-middle text-center">
-					        <img src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="rounded" alt="round" style="width:70px; height:70px; display:block; margin:auto; vertical-align: middle;"  onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/>
+					        <img onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})" src="<%=ctxPath %>/resources/images/zee/${clubvo.clubimg}" class="rounded" alt="round" style="width:70px; height:70px; display:block; margin:auto; vertical-align: middle;"  onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/>
 					    </td>
 					    <td class="align-middle text-center" onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})">${clubvo.clubname}</td>
 					    <td class="align-middle text-center">${clubvo.clubscore}점</td>
