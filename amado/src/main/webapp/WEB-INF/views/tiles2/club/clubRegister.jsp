@@ -43,6 +43,7 @@ select{
 $(document).ready(function(){
 	
 	
+	
 	$("select[name='city']").change(function(e){ // 도시 선택하면
 	
 		let cityname = $(e.target).val();
@@ -108,7 +109,7 @@ function searchMatch(){
 
 	
 	$.ajax({
-		url: "<%=ctxPath%>/club/clubRegister.do",
+		url: "<%=ctxPath%>/club/getLocation.do",
 		data: {"cityname": cityname, "localname": localname},
 		dataType: "json",
 		success: function(json){
@@ -141,7 +142,6 @@ function searchMatch(){
 
 
 <form name="registerClubFrm" enctype="multipart/form-data">
-
 	<div class="container" style="border:solid 0px black; margin-top: 12%;">
 	
 		<div class="row">
@@ -159,7 +159,7 @@ function searchMatch(){
 				
 				<!-- 종목  -->
 				<div id="infoo">
-					<select name="sportType" style="width:80%;" class="form-select-lg mb-3" aria-label="Large select example">
+					<select name="sportseq" style="width:80%;" class="form-select-lg mb-3" aria-label="Large select example">
 						<option selected>종목</option>
 						<option value="soccer">축구</option>
 						<option value="baseball">야구</option>
@@ -171,9 +171,9 @@ function searchMatch(){
 						<option value="badmiton">배드민턴</option>
 					</select>
 					
-					<div style="font-size: 25px; font-weight: bold; ">${sessionScope.loginuser.name}</div> <!-- 자동 -->
-					<div style="color: lightgray;">🕻 연락처</div><sapn>${sessionScope.loginuser.mobile}</sapn> <!-- 자동 -->
-					<div style="color: lightgray;">✉️ 이메일</div><sapn>${sessionScope.loginuser.email}</sapn> <!-- 자동 -->
+					<div id="name" style="font-size: 25px; font-weight: bold; ">${sessionScope.loginuser.name}</div> <!-- 자동 -->
+					<div style="color: lightgray;">🕻 연락처</div><span>${sessionScope.loginuser.mobile}</span> <!-- 자동 -->
+					<div style="color: lightgray;">✉️ 이메일</div><span>${sessionScope.loginuser.email}</span> <!-- 자동 -->
 				</div>
 			  </div>
 			  
@@ -182,7 +182,7 @@ function searchMatch(){
 		      <!-- 동호회명 -->
 				<h3 id="simple-list-item-2" style="font-weight: bolder;">동호회명<span style="color: red;">*</span></h3>
 				<hr>
-				<input name="clubName" id="form-control-lg" type="text" placeholder="동호회 이름을 입력하세요. " aria-label="">
+				<input name="clubname" id="form-control-lg" type="text" placeholder="동호회 이름을 입력하세요. " aria-label="">
 			
 				<br><br><br><br>
 		
@@ -220,13 +220,15 @@ function searchMatch(){
 			
 			<h3 id="simple-list-item-5" style="font-weight: bolder;">정원<span style="color: red;">*</span></h3>
 			<hr>
+			<!-- 
 			<label for="customRange3" class="form-label">최대 정원은 30명 까지입니다.</label>
 			<br>
 			    1
 		        <input name="memberCnt" style="width:80%;" value="1" type="range" class="form-range slider" min="0" max="30" step="1" id="customRange3">
 		        30
 		        <span class="value" id="rangeValue"></span>
-			
+			 -->
+			 
 			<br><br><br><br>
 			
 			<h3 id="simple-list-item-6" style="font-weight: bolder;">회비<span style="color: red;">*</span></h3>
@@ -269,4 +271,5 @@ function searchMatch(){
 	        <button type="button" class="btn btn-secondary btn-sm" onclick="javascript:history.back()">취소</button>  
 		</div>
 	</div>
+
 </form>

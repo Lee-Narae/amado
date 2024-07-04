@@ -15,6 +15,7 @@ public interface AmadoService_JY {
 
 	// 상세지역 정보
 	List<String> getLocalList(String cityname);
+
 	
 	
 	
