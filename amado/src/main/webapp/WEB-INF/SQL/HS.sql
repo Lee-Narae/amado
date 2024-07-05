@@ -185,7 +185,9 @@ nominvalue
 nocycle
 nocache;
 
--- Sequence SEQ_SPORT이(가) 생성되었습니다.\
+-- Sequence SEQ_SPORT이(가) 생성되었습니다.
+
+
 
 
 

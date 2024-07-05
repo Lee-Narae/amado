@@ -115,7 +115,7 @@ $(document).ready(function(){
 		frm.submit();
 	});
 	
-});
+}); // document.ready
 
 function goSearch() {
 	if($("input:text[name='searchWord']").val() == ""){
@@ -163,10 +163,11 @@ function goInsert(){
                // console.log("~~~ 확인용 : " + JSON.stringify(json));
                 // ~~~ 확인용 : {"result":1}
                 if(json.result == 1) {
-                   alert("파일 업로드 성공");
+                   alert("회원 등록 성공!\n회원 정보는 마이페이지에서 수정 가능합니다.");
+                   location.reload(true);
                 }
                 else {
-                   alert("파일 업로드 실패");
+                   alert("회원 등록 실패");
                 }
             },
             error: function(request, status, error){
@@ -274,7 +275,10 @@ function goInsert(){
 
 </div>
 
-
+<form name="memberOneDetail_frm">
+	<input type="hidden" name="goBackURL" value="${requestScope.currentURL}"/>
+	<input type="hidden" name="userid" />
+</form>
 
 
 </div>

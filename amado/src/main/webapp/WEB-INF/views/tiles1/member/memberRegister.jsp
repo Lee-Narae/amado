@@ -82,6 +82,23 @@ span#phonecheck {
       box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15)
     }
 
+.file-input-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+.file-input-wrapper input[type="file"] {
+    display: none; /* 파일 입력 요소를 숨김 */
+}
+.file-input-wrapper label {
+    display: inline-block;
+    cursor: pointer; /* 커서를 포인터로 변경 */
+}
+.file-input-wrapper label img {
+    width: 100px; /* 이미지 너비 */
+    height: 100px; /* 이미지 높이 */
+    object-fit: cover; /* 이미지 맞춤 */
+}
+
 
 </style>
 
@@ -623,6 +640,9 @@ $(document).ready(function () {
     }); */
 
 
+    
+    
+    
 }); // end of $(rurument).ready(function() {}) -------------------
 
 
@@ -750,7 +770,6 @@ function goReset() {
                 <tr>
                     <td colspan="2" style="line-height: 50%;">&nbsp;</td>
                 </tr>
-                
                 <tr>
                     <td>성명&nbsp;<span class="star">*</span></td>
                     <td>
@@ -873,6 +892,18 @@ function goReset() {
                 </tr>
                  
              </tbody>
+             <tbody>
+             <tr> 
+		            <td class="file-input-wrapper">
+		                <input type="file" name="attach" id="attach" />
+        				<label for="attach">
+            				<img style="top: -630px; position: absolute; left: 420px;" src="<%= ctxPath%>/resources/images/이미지첨부.png" alt="파일 선택">
+            				<div style="border-radius:50%; background-color: white; border: solid 1px lightgray; width: 160%; height: 100%; position: absolute; top:  -562px; left: 490px; z-index: 2;"></div>
+            				<img style="width: 100%; height: 70%; position: absolute; top:   -556px; left: 497px; z-index: 3;" src="<%= ctxPath%>/resources/images/파일첨부2.png" alt="파일 선택">
+        			    </label>
+		            </td>
+		        </tr>
+		        </tbody>
           </table>
 
       </form>

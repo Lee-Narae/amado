@@ -102,23 +102,37 @@
         fileReader.onload = function() {
             document.getElementById("previewImg").src = fileReader.result;
         };
-    });
-});
-    
   
+        
+    
+    });
+   
+    
+    $("button#submit").click(function(){
+	 	 
+		  //폼(form)을 전송(submit)
+    	 const frm = document.addFrm;
+ 	    frm.method = "post";
+ 	    frm.action = "<%= ctxPath%>/gym/registerGymend.do";
+ 	    frm.submit();
+	 	  
+	 });
+  
+}); //end of   $(document).ready(function() ----------------------
+ 
   </script>
 
 <h1>체육관 등록</h1>
   
-<form id="gym-registration-form" enctype="multipart/form-data">
+<form name="addFrm" id="gym-registration-form" enctype="multipart/form-data">
     <div class="form-group">
       <label for="gym-name">체육관명</label>
-      <input type="text" id="gym-name" name="gym-name" required>
+      <input type="text" id="gymname" name="gymname" required>
     </div>
     
     <div class="form-group">
       <label for="manager-id">담당자 아이디</label>
-      <input type="text" id="manager-id" name="manager-id" required>
+      <input type="text" name="fk_userid" value="${sessionScope.loginuser.userid}" required disabled>
     </div>
      <div class="form-group">
         <label for="address">주소</label>
@@ -131,16 +145,16 @@
         <input type="text" id="postcode" name="postcode" required>
     </div>
     <div class="form-group">
-        <label for="detailAddress">상세주소</label>
-        <input type="text" id="detailAddress" name="detailAddress" required>
+        <label for="detailaddress">상세주소</label>
+        <input type="text" id="detailaddress" name="detailaddress" required>
     </div>
     
     <div class="form-group">
-      <label for="operational-status">실내/실외</label>
-      <select id="operational-status" name="operational-status" required>
-        <option value="">선택하세요</option>
-        <option value="운영중">실내</option>
-        <option value="운영중지">실외</option>
+      <label>실내/실외</label>
+      <select name="insidestatus">
+        <option selected>선택하세요</option>
+        <option value="0">실내</option>
+        <option value="1">실외</option>
       </select>
     </div>
     
@@ -149,9 +163,14 @@
       <input type="number" id="cost" name="cost" required>
     </div>
     
+    <div class="form-group">
+      <label for="cost">인원수</label>
+      <input type="number" id="membercount" name="membercount" required>
+    </div>
+    
 	 <div class="form-group">
 	  <label for="attachment">첨부 파일</label>
-	  <input type="file" id="attachment" name="attachment" multiple>
+	  <input type="file" id="imgfilename" name="attach" multiple>
 	</div>
 	
 	<!-- 이미지 미리보기 -->
@@ -163,17 +182,16 @@
 	    
     <div class="form-group">
       <label for="notes">공간 정보</label>
-      <textarea id="notes" name="notes"></textarea>
+      <textarea id="info" name="info"></textarea>
     </div>
  
     <div class="form-group">
       <label for="notes">주의 사항</label>
-      <textarea id="notes" name="notes"></textarea>
+      <textarea id="caution" name="caution"></textarea>
     </div>
     
-       
     
-    <button type="submit">등록</button>
+    <button id="submit" type="submit">등록</button>
     <button type="button" onclick="goBack()" class="btn btn-danger">취소</button>
 </form>
   
