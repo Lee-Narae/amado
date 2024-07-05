@@ -121,7 +121,7 @@
 
 
 
-<div style="width: 1024px; margin: auto; margin-top: 5%;">
+<div style="width: 90%; margin: auto; margin-top: 5%;">
     <c:if test="${requestScope.params == '/club/findClub.do' || requestScope.params == '1'}">
        <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">축구 동호회 찾기</div>
     </c:if>
@@ -281,7 +281,7 @@
                 <th style="width: 300px; text-align: center;">동호회명</th>
                 <th style="width: 300px; text-align: center;">점수</th>
                 <th style="width: 100px; text-align: center;">카테고리</th>
-                <th style="width: 100px; text-align: center;">지역</th>
+                <th style="width: 150px; text-align: center;">지역</th>
                 <th style="width: 100px; text-align: center;">멤버수</th>
             </tr>
         </thead>
@@ -321,7 +321,7 @@
 					        <td class="align-middle text-center">배드민턴</td>
 					    </c:if>
 					    
-					    <td class="align-middle text-center">${clubvo.local}</td>
+					    <td class="align-middle text-center">${clubvo.city}&nbsp;${clubvo.local}</td>
 					    <td class="align-middle text-center">${clubvo.membercount}명</td>
 					</tr>
 	            </c:forEach>
