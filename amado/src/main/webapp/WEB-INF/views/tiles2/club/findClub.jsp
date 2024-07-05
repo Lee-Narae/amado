@@ -94,98 +94,22 @@
 		}
 	});
 	 
-	 $("select[name='searchType_a'], select[name='searchType_b'], select[name='searchType_c']").bind("change", function(){
-/* 		 alert($('select[name="searchType_a"] > option:checked').val());
-		 alert($('select[name="searchType_b"] > option:checked').val());
-		 alert($('select[name="searchType_c"] > option:checked').val());
-		 alert(${requestScope.params}); */
-
+	 $("select[name='searchType_a'], select[name='searchType_b']").on("change", function(){
 		 goSearch();
- 		  		 
 	 });// end of searchType
+	 
+	 if(${not empty requestScope.paraMap}) {
+		 $("select[name='searchType_a']").val("${requestScope.paraMap.searchType_a}");
+		 $("select[name='searchType_b']").val("${requestScope.paraMap.searchType_b}");
+		 $("input[name='searchWord']").val("${requestScope.paraMap.searchWord}");
+	 }
 	 
  }); // end of (document)
  
 	function goSearch() {
-//		alert("눌렀다");
-	const searchWord = $("input:text[name='searchWord']").val();
-//	alert(searchWord);
-
-	var currentShowPageNo = "${requestScope.currentShowPageNo}";
-	if (isNaN(currentShowPageNo) || currentShowPageNo === "") {
-	    currentShowPageNo = "1"; // 기본값 설정
-	}
-//	alert(currentShowPageNo);
-	
-	var sizePerPageString = "${requestScope.sizePerPage}"; // JSP에서 받은 문자열
-
-	// 문자열을 정수로 변환
-	var sizePerPage = parseInt(sizePerPageString);
-
-	// isNaN() 함수를 사용하여 NaN인지 확인하고 기본값 설정
-	if (isNaN(sizePerPage) || sizePerPage <= 0) {
-	    sizePerPage = 1; // NaN이거나 0 이하일 경우 기본값 1 설정
-	}
-//	alert(sizePerPage);
-
-$.ajax({
-			url:"<%= ctxPath%>/club/search.do",
-			type:"get",
-			data:{"searchType_a":$('select[name="searchType_a"] > option:checked').val(),
-				  "searchType_b":$('select[name="searchType_b"] > option:checked').val(),
-				  "searchWord":searchWord,
-				  "currentShowPageNo":currentShowPageNo,
-				  "sizePerPage":sizePerPage,
-				  "params":"${requestScope.params}"},
-			dataType:"json",
-			success:function(json) {
-				console.log(JSON.stringify(json));
-				
-				let v_html = ``;
-				
-				if(json.length > 0) {
-					
-					
-					$.each(json, function(index, item) {
-//						alert(item.clubname);	
-						
-						v_html += `<input type="hidden" name="currentShowPageNo" value="\${item.currentShowPageNo}" />`;
-						v_html += `<input type="hidden" name="sizePerPage" value="\${item.sizePerPage}" />`;
-						
-						
-						v_html += `<tr>`;
-						v_html += `	<td style="vertical-align: middle; text-align: center;" onclick="goView(${item.clubseq}, ${item.fk_sportseq})">\${item.rank}</td>`;
-						v_html += `	<td style="vertical-align: middle; text-align: center;"><img onclick="goView(${item.clubseq}, ${item.fk_sportseq})" src="<%=ctxPath %>/resources/images/zee/\${item.clubimg}" class="rounded" alt="round" style="width:70px; height:70px; display:block; margin:auto; vertical-align: middle;" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/></td>`;
-						v_html += `	<td style="vertical-align: middle; text-align: center;" onclick="goView(${item.clubseq}, ${item.fk_sportseq})">\${item.clubname}</td>`;
-						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.clubscore}</td>`;
-						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.fk_sportseq}</td>`;
-						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.local}</td>`;
-						v_html += `	<td style="vertical-align: middle; text-align: center;">\${item.membercount}</td>`;
-						v_html += `</tr>`;
-
-						
-					}); // end of each
-					
-					$("tbody#this").html(v_html);
-					
-				} 
-				else {
-					v_html = ``;
-					v_html += `<tr>`;
-					v_html += `	<td style="vertical-align: middle; text-align: center;" colspan="7">데이터가 없습니다.</td>`;
-					v_html += `</tr>`;
-					
-					$("tbody#this").html(v_html);
-				}
-				
-
-			}, // end of success:function(json)
-		    error: function(request, status, error){
-		    	alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-			}						
-		}); // end of $.ajax
-		
-	} // end of goSearch
+		const frm = document.searchFrm;
+		frm.submit(); 
+ 	} // end of goSearch
 	
 	
 	function goView(clubseq, fk_sportseq) {
@@ -375,10 +299,6 @@ $.ajax({
         <tbody id="this">
         	<c:if test="${not empty requestScope.clubPagingList}">
         		<c:forEach var="clubvo" items="${requestScope.clubPagingList}">
-        		
-                  <fmt:parseNumber var="currentShowPageNo" value="${requestScope.currentShowPageNo}" /> 
-                  <fmt:parseNumber var="sizePerPage" value="${requestScope.sizePerPage}" />
-        		
 					<tr>
 					    <td class="align-middle text-center" onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})">${clubvo.rank}</td>
 					    <td class="align-middle text-center">
