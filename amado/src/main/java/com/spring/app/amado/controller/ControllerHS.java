@@ -16,10 +16,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.app.common.FileManager;
-import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.GymVO;
 import com.spring.app.service.AmadoService_HS;
-import com.spring.app.service.AmadoService_SJ;
+
 
 @Controller
 public class ControllerHS {
@@ -150,22 +149,24 @@ public class ControllerHS {
 		
 		if(attach.isEmpty()) {
 			//파일 첨부가  없는 경우라면 
-			service.add(gymvo);  //<== 파일첨부가 없은 글쓰기
+			n=service.add(gymvo);  //<== 파일첨부가 없은 글쓰기
+			
+			System.out.println();
 		}
 		else {
 			//파일첨부가 있는 경우라면
-			n=service.add_withFile(gymvo);
+			//n=service.add_withFile(gymvo);
 			
 		}
 		
 		
 		
-		if(n==1) {
-			mav.setViewName("redirect:/list.action");
+		if(n ==1) {
+			mav.setViewName("redirect:/.action");
 		    //  /list.action 페이지로 redirect(페이지이동)해라는 말이다.
 		}
 		else {
-			mav.setViewName("board/error/add_error.tiles1");
+			mav.setViewName("gym/error/add_error.tiles2");
 			//  /WEB-INF/views/tiles1/board/error/add_error.jsp 파일을 생성한다.
 		}
 		

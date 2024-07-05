@@ -118,10 +118,10 @@
 
 <h1>체육관 등록</h1>
   
-<form id="gym-registration-form" enctype="multipart/form-data">
+<form name="addFrm" id="gym-registration-form" enctype="multipart/form-data">
     <div class="form-group">
       <label for="gym-name">체육관명</label>
-      <input type="text" id="gym-name" name="gym-name" required>
+      <input type="text" id="gymname" name="gymname" required>
     </div>
     
     <div class="form-group">
@@ -171,12 +171,12 @@
 	    
     <div class="form-group">
       <label for="notes">공간 정보</label>
-      <textarea id="notes" name="notes"></textarea>
+      <textarea id="info" name="info"></textarea>
     </div>
  
     <div class="form-group">
       <label for="notes">주의 사항</label>
-      <textarea id="notes" name="notes"></textarea>
+      <textarea id="caution" name="caution"></textarea>
     </div>
     
        

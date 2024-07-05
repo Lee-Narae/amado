@@ -156,6 +156,7 @@ private MultipartFile attach;
 	public void setAttach(MultipartFile attach) {
 		this.attach = attach;
 	}
+
 	
 	
 	

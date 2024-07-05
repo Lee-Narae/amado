@@ -4,11 +4,11 @@
 
 <mapper namespace="HS">
 
+<insert id="add" parameterType="GymVO">
+	
+	insert into tbl_gym(ymseq ,gymname,fk_userid,postcode,address,detailaddress,extraaddress,status,info,imgfilename,cost,caution,membercount,likecount)
+	values (seq_gym.nextval, #{gymname}, #{fk_userid}, #{postcode}, #{address}, #{detailaddress},#{extraaddress}, #{status},#{info},#{imgfilename},#{cost},#{caution},,#{membercount},#{likecount} )
+</insert>
 
-	<!-- 동호회등록  완료 요청(파일첨부ㅇ) -->
-	<insert id="add_withFile"  parameterType="ClubVO">
-		insert into tbl_club(clubseq, clubname, clubimg, sportseq, userid, clubtel, city, local, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfilename)
-        values(seq_club.nextval, #{clubname}, 'sdfsd', #{sportseq}, #{userid}, #{clubtel}, #{city}, #{local}, #{clubgym}, #{clubtime}, '3', #{clubpay}, default, #{clubscore} , 'sdfsdfdf' ) 
-	</insert>
-
+	
 </mapper>
