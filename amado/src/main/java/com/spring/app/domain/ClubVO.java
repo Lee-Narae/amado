@@ -27,6 +27,7 @@ public class ClubVO {
 	private String clubname;		// 동호회 명
 	private String clubimg;			// 대표 이미지명 // 진짜 파일명(강아지.png)  // 사용자가 파일을 업로드 하거나 파일을 다운로드 할때 사용되어지는 파일명  
 	private String fk_sportseq;		// 종목 번호
+	private String fk_userid;
 	private String clubtel;			// 연락처
 	private String city;			// 시/도
 	private String local;			// 구
@@ -147,6 +148,12 @@ public class ClubVO {
 	}
 	public void setRank(String rank) {
 		this.rank = rank;
+	}
+	public String getFk_userid() {
+		return fk_userid;
+	}
+	public void setFk_userid(String fk_userid) {
+		this.fk_userid = fk_userid;
 	}
 
 	

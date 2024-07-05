@@ -7,8 +7,7 @@ import com.spring.app.domain.ClubVO;
 
 public interface AmadoService_JY {
 
-	// 동호회등록  완료 요청(파일첨부ㅇ)
-	int add_withFile(ClubVO clubvo);
+	
 
 	// 시군구 정보
 	List<Map<String, String>> getCityList();
@@ -17,7 +16,8 @@ public interface AmadoService_JY {
 	List<String> getLocalList(String cityname);
 
 	
-	
+	// 동호회등록  완료 요청(파일첨부ㅇ)
+	int add_withFile(ClubVO clubvo);
 	
 
 }
