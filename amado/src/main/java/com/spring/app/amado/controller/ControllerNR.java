@@ -1,5 +1,9 @@
 package com.spring.app.amado.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -8,6 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +25,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.spring.app.common.FileManager;
+import com.spring.app.common.MyUtil;
 import com.spring.app.common.Sha256;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.service.AmadoService_NR;
@@ -28,6 +42,9 @@ public class ControllerNR {
 
 	@Autowired
 	private AmadoService_NR service;
+	
+	@Autowired
+	private FileManager fileManager;
 	
 	
 	// 먼저 com.spring.app.HomeController에 가서 @Controller를 주석처리해야 한다.(스프링 기본 제공)
@@ -121,14 +138,23 @@ public class ControllerNR {
 	
 	
 	@GetMapping("/admin")
-	public ModelAndView admin(ModelAndView mav) {
+	public ModelAndView admin(ModelAndView mav, HttpServletRequest request) {
 		
-		mav.setViewName("admin_login");
+		HttpSession session = request.getSession();
+		MemberVO admin = (MemberVO)session.getAttribute("admin");
+		
+		if(admin != null) {
+			mav.setViewName("redirect:/admin/main");
+		}
+		
+		else {
+			mav.setViewName("admin_login");
+		}
 		return mav;
 	}
 	
 	@GetMapping("/admin/main")
-	public ModelAndView test(ModelAndView mav) {
+	public ModelAndView adminLogin_main(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
 		
 		mav.setViewName("adminMain.tiles3");
 		return mav;
@@ -149,7 +175,7 @@ public class ControllerNR {
 	}
 	
 	@ResponseBody
-	@GetMapping("/club/getLocal.do")
+	@GetMapping(value="/club/getLocal.do", produces="text/plain;charset=UTF-8")
 	public String getLocal(HttpServletRequest request) {
 		
 		String cityname = request.getParameter("cityname");
@@ -169,7 +195,7 @@ public class ControllerNR {
 	}
 	
 	@ResponseBody
-	@GetMapping("/searchMatch.do")
+	@GetMapping(value="/searchMatch.do", produces="text/plain;charset=UTF-8")
 	public String searchMatch(HttpServletRequest request) {
 		
 		String sportname = request.getParameter("sportname");
@@ -208,7 +234,7 @@ public class ControllerNR {
 	
 
 	@ResponseBody
-	@PostMapping("/getClubseq.do")
+	@PostMapping(value="/getClubseq.do", produces="text/plain;charset=UTF-8")
 	public String getClubseq(HttpServletRequest request) {
 		
 		String sportname = request.getParameter("sportname");
@@ -269,7 +295,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/club/matchRegisterEnd.do")
+	@PostMapping(value="/club/matchRegisterEnd.do", produces="text/plain;charset=UTF-8")
 	public String matchRegisterEnd(HttpServletRequest request) {
 
 		String clubname = request.getParameter("clubname");
@@ -303,10 +329,427 @@ public class ControllerNR {
 		int n = service.matchRegister(paramap);
 		
 		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
 		
 		return jsonObj.toString();
 
 	}
+	
+	
+	
+	
+	@PostMapping("/admin/adminLogin")
+	public ModelAndView adminLogin(HttpServletRequest request, ModelAndView mav) {
+		
+		String userid = request.getParameter("userid");
+		String password = request.getParameter("password");
+		
+		// System.out.println(userid+", "+password); 확인 완료
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("userid", userid);
+		paramap.put("password", Sha256.encrypt(password));
+		
+		String clientip = request.getRemoteAddr();
+		paramap.put("clientip", clientip);
+		
+		MemberVO admin = service.adminLogin(paramap);
+		
+		if(admin == null) {
+			String message = "아이디 또는 비밀번호가 틀립니다.";
+			String loc = "javascript:history.back()";
+			
+			mav.addObject("message", message);
+			mav.addObject("loc", loc);
+			
+			mav.setViewName("msg");
+		}
+		else {
+			
+			HttpSession session = request.getSession();
+			session.setAttribute("admin", admin); 
+			
+			mav.setViewName("redirect:/admin/main");
+		}
+		
+		return mav;
+	}
+	
+	
+	@GetMapping("/admin/logout")
+	public ModelAndView adminLogin_adminLogout(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+		
+		HttpSession session = request.getSession();
+		
+		session.invalidate();
+		
+		String message = "로그아웃되었습니다.";
+		String loc = request.getContextPath()+"/index.do";
+		
+		mav.addObject("message", message);
+		mav.addObject("loc", loc);
+		
+		mav.setViewName("msg");
+		
+		return mav;
+	}
+	
+	
+	@GetMapping("/admin/manage/member")
+	public ModelAndView adminLogin_manage_member(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+		
+		String searchType = request.getParameter("searchType");
+		String searchWord = request.getParameter("searchWord");
+		String sizePerPage = request.getParameter("sizePerPage");
+		String currentShowPageNo = request.getParameter("currentShowPageNo");
+		
+		if(sizePerPage == null || !"3".equals(sizePerPage) && !"5".equals(sizePerPage) && !"10".equals(sizePerPage)) {
+			sizePerPage = "10";
+		}
+		
+		if(searchType == null || !"name".equals(searchType) && !"userid".equals(searchType) && !"email".equals(searchType)) {
+			searchType = "";
+		}
+		
+		if(searchWord == null || searchWord != null && searchWord.trim().isEmpty()) {
+			searchWord = "";
+		}
+		
+		if(currentShowPageNo == null) {
+			currentShowPageNo = "1";
+		}
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("searchType", searchType);
+		paramap.put("searchWord", searchWord);
+		paramap.put("sizePerPage", sizePerPage);
+		paramap.put("currentShowPageNo", currentShowPageNo);
+
+		// 페이징처리를 한 모든 회원 or 검색한 회원 목록 보여주기
+		int totalPage = service.getMemberTotalPage(paramap);
+		
+		// === GET 방식이므로 사용자가 웹브라우저 주소창에서 currentShowPageNo 에 totalPage 값보다 더 큰 값을 입력하여 장난친 경우
+		// === GET 방식이므로 사용자가 웹브라우저 주소창에서 currentShowPageNo 에 0 또는 음수를 입력하여 장난친 경우
+		// === GET 방식이므로 사용자가 웹브라우저 주소창에서 currentShowPageNo 에 숫자가 아닌 문자열을 입력하여 장난친 경우 
+		// 아래처럼 막아주도록 하겠다.
+		try {
+			if(Integer.parseInt(currentShowPageNo) > totalPage || Integer.parseInt(currentShowPageNo) < 0) {
+				currentShowPageNo = "1";
+				paramap.put("currentShowPageNo", currentShowPageNo);
+			}
+		}catch (NumberFormatException e) {
+			currentShowPageNo = "1";
+			paramap.put("currentShowPageNo", currentShowPageNo);
+		}
+		
+		
+		
+		// 페이지바 만들기		
+		String pageBar = "";
+		int blockSize = 5; // blockSize 는 블럭(토막)당 보여지는 페이지 번호의 개수이다.
+		int loop = 1;  // loop 는 1부터 증가하여 1개 블럭을 이루는 페이지번호의 개수(지금은 10개)까지만 증가하는 용도이다.
+
+		// pageNo  ==> ( (currentShowPageNo - 1)/blockSize ) * blockSize + 1
+		int pageNo = ((Integer.parseInt(currentShowPageNo)-1)/blockSize)*blockSize+1;
+		// pageNo는 페이지바에서 보여지는 첫 번째 번호이다.
+		
+		
+		// *** [맨처음][이전] 만들기 *** //
+		   
+           pageBar += "<li class='page-item'><a class='page-link' href='member?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo=1'>[맨처음]</a></li>";
+
+           if(pageNo != 1) {
+              pageBar += "<li class='page-item'><a class='page-link' href='member?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a></li>";
+           }
+   
+           while(!(loop > blockSize || pageNo > totalPage)) {
+              
+              
+              if(pageNo ==  Integer.parseInt(currentShowPageNo)) {
+                 pageBar += "<li class='page-item active'><a class='page-link' href='#'>"+pageNo+"</a></li>";
+              }
+              else {
+                 pageBar += "<li class='page-item'><a class='page-link' href='member?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a></li>";
+              }
+              
+              loop++;
+              
+              pageNo++;
+              
+           }// end of while(!( )) {}------------------- 
+           
+           // *** [다음][마지막] 만들기 *** //
+           // pageNo ==> 11
+           if(pageNo <= totalPage) {
+              pageBar += "<li class='page-item'><a class='page-link' href='member?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"'>[다음]</a></li>";
+           }
+           pageBar += "<li class='page-item'><a class='page-link' href='member?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+totalPage+"'>[맨마지막]</a></li>";
+           
+           
+         // *** ==== 페이지바 만들기 끝 ==== *** //
+		
+           
+           
+        
+           
+        // *** ====== 현재 페이지를 돌아갈 페이지(goBackURL)로 주소 지정하기 ======= *** //
+        
+        String currentURL = MyUtil.getCurrentURL(request);
+        // 회원조회를 했을시 현재 그 페이지로 그대로 되돌아가길 위한 용도로 쓰임.
+        
+        // System.out.println(currentURL);
+        // /member/memberList.up?searchType=name&searchWord=%EC%9C%A0&sizePerPage=5&currentShowPageNo=15
+
+		List<MemberVO> memberList = service.select_member_paging(paramap);
+		
+		mav.addObject("memberList", memberList);
+		
+		if(searchType != null && ("name".equals(searchType) ||"userid".equals(searchType)||"email".equals(searchType))) {
+			mav.addObject("searchType", searchType);
+		}
+		
+		if(searchWord != null && !searchWord.trim().isEmpty()) {
+			mav.addObject("searchWord", searchWord);
+		}
+		
+		mav.addObject("sizePerPage", sizePerPage);
+		mav.addObject("pageBar", pageBar);
+		
+		mav.addObject("currentURL", currentURL); 
+		
+		
+		
+		/* >>> 뷰단(memberList.jsp)에서 "페이징 처리시 보여주는 순번 공식" 에서 사용하기 위해 
+        	        검색이 있는 또는 검색이 없는 회원의 총개수 알아오기 <<< */
+		int totalMemberCount = service.getTotalMemberCount(paramap);
+		
+		mav.addObject("totalMemberCount", totalMemberCount);
+		mav.addObject("currentShowPageNo", currentShowPageNo);
+		
+		mav.setViewName("manage/member.tiles3");
+		
+		return mav;
+	}
+	
+	
+	
+	
+	@GetMapping("/admin/memberRegisterFrmDownload")
+	public void memberRegisterFrmDownload(HttpServletRequest request, HttpServletResponse response) {
+		
+		response.setContentType("text/html; charset=UTF-8");
+		// 한글을 깨지지 않게 한다.
+		
+		PrintWriter out = null;
+		
+		String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\file";
+		
+		boolean flag = false; // file 다운로드 성공, 실패인지 여부를 알려주는 용도 
+        
+		flag = fileManager.doFileDownload("회원 등록 양식.xlsx", "회원 등록 양식.xlsx", path, response); 
+        // file 다운로드 성공시 flag 는 true,
+        // file 다운로드 실패시 flag 는 false 를 가진다.
+        
+        if(!flag) {
+            // 다운로드가 실패한 경우 메시지를 띄워준다. 
+            try {
+				out = response.getWriter();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+            // out 은 웹브라우저에 기술하는 대상체라고 생각하자.
+            
+            out.println("<script type='text/javascript'>alert('파일다운로드가 실패하였습니다.'); history.back();</script>");
+        }
+	}
+	
+	
+	// ★★★★★★★★★★★★★★★★★★★★★★★★★★★ 여기서부터
+	
+	@ResponseBody
+	@PostMapping("/admin/memberInsert")
+	public String memberInsert(MultipartHttpServletRequest mrequest) {
+		
+		MultipartFile mtpExcelFile = mrequest.getFile("excelsheet"); // input:file 태그의 태그 name을 넣는다.
+		
+		JSONObject jsonObj = new JSONObject();
+		
+		if(mtpExcelFile != null) {
+			
+			// == MultipartFile 을 File 로 변환하기 시작 ==		==> spring - MultipartFile을 java - File 로 바꾸어야 한다. 
+			try {
+	            // WAS 의 webapp 의 절대경로를 알아와야 한다.
+	            HttpSession session = mrequest.getSession();
+	            String root = session.getServletContext().getRealPath("/");
+	            String path = root + "resources" + File.separator + "files";
+	            File excel_file = new File(path + File.separator + mtpExcelFile.getOriginalFilename());
+				mtpExcelFile.transferTo(excel_file);
+				
+				OPCPackage opcPackage = OPCPackage.open(excel_file);
+	            /* 아파치 POI(Apache POI)는 아파치 소프트웨어 재단에서 만든 라이브러리로서 마이크로소프트 오피스파일 포맷을 순수 자바 언어로서 읽고 쓰는 기능을 제공한다. 
+	                                      주로 워드, 엑셀, 파워포인트와 파일을 지원하며 최근의 오피스 포맷인 Office Open XML File Formats
+	               (OOXML, 즉 xml 기반의 *.docx, *.xlsx, *.pptx 등) 이나 아웃룩, 비지오, 퍼블리셔 등으로 지원 파일 포맷을 늘려가고 있다. 
+	            */
+				
+				XSSFWorkbook workbook = new XSSFWorkbook(opcPackage);
+				
+				// 첫번째 시트 불러오기
+	            XSSFSheet sheet = workbook.getSheetAt(0);
+				
+	            List<Map<String, String>> paraMapList = new ArrayList<Map<String,String>>();
+	            
+	            for(int i=1; i<sheet.getLastRowNum()+1; i++) {	// 시트의 가장 첫 번째 행은 insert할 데이터가 아니므로 i=0이 아닌 i=1로 시작
+	            				// 마지막 열까지 읽어줘야하므로
+	            	Map<String, String> paramap = new HashMap<String, String>();
+	            	
+	            	XSSFRow row = sheet.getRow(i);
+	            	
+	            	if(row == null) { // 행이 비어있다면
+	            		continue;
+	            	}
+	            	
+	            	// 행의 첫 번째 열(이 파일에서는 사원번호)
+	            	XSSFCell cell = row.getCell(0);
+	            	if(cell != null) {
+	            		paramap.put("employee_id", String.valueOf(cellReader(cell)));
+	            	}
+	            	
+	            	// 행의 두 번째 열(이름)
+	            	cell = row.getCell(1);
+	            	if(cell != null) {
+	            		paramap.put("first_name", String.valueOf(cellReader(cell)));
+	            	}
+	            	
+	            	// 행의 세 번째 열(성)
+	            	cell = row.getCell(2);
+	            	if(cell != null) {
+	            		paramap.put("last_name", String.valueOf(cellReader(cell)));
+	            	}
+	            	
+	            	// 행의 네 번째 열(이메일)
+	            	cell = row.getCell(3);
+	            	if(cell != null) {
+	            		paramap.put("email", String.valueOf(cellReader(cell)));
+	            	}
+	            	
+	            	// 행의 다섯 번째 열(연락처)
+	            	cell = row.getCell(4);
+	            	if(cell != null) {
+	            		paramap.put("phone_number", String.valueOf(cellReader(cell)));
+	            	}
+	            	
+	            	// 행의 여섯 번째 열(입사일자)
+	            	cell = row.getCell(5);
+	            	if(cell != null) {
+	            		paramap.put("hire_date", String.valueOf(cellReader(cell)));
+	            	}
+	            	
+	            	// 행의 일곱 번째 열(직종 ID)
+	            	cell = row.getCell(6);
+	            	if(cell != null) {
+	            		paramap.put("job_id", String.valueOf(cellReader(cell)));
+	            	}
+	            	
+	            	// 행의 여덟 번째 열(기본 급여)
+	            	cell = row.getCell(7);
+	            	if(cell != null) {
+	            		paramap.put("salary", String.valueOf(cellReader(cell)));
+	            	}
+	            	
+	            	// 행의 아홉 번째 열(커미션 퍼센티지)
+	            	cell = row.getCell(8);
+	            	if(cell != null) {
+	            		paramap.put("commission_pct", String.valueOf(cellReader(cell)));
+	            	}
+	            	
+	            	// 행의 열 번째 열(직속 상관 사원번호)
+	            	cell = row.getCell(9);
+	            	if(cell != null) {
+	            		paramap.put("manager_id", String.valueOf(cellReader(cell)));
+	            	}
+	            	
+	            	// 행의 열한 번째 열(부서번호)
+	            	cell = row.getCell(10);
+	            	if(cell != null) {
+	            		paramap.put("department_id", String.valueOf(cellReader(cell)));
+	            	}
+	            	
+	            	// 행의 열두 번째 열(주민번호)
+	            	cell = row.getCell(11);
+	            	if(cell != null) {
+	            		paramap.put("jubun", String.valueOf(cellReader(cell)));
+	            	}
+	            	
+	            	paraMapList.add(paramap);
+	            	
+	            } // end of for
+	            
+	            workbook.close();
+	            
+	            /*
+	            int insertCount = service.addEmployeeList(paraMapList);
+				
+	            if(insertCount == paraMapList.size()) { // 삽입된 결과의 합이 처음에 넣고자 했던 데이터가 들어있는 리스트의 사이즈와 같다면(insert 성공)
+	            	jsonObj.put("result", 1);
+	            }
+	            else {
+	            	jsonObj.put("result", 0);
+	            }
+	            */
+	            excel_file.delete(); // insert하는 데 다 썼으니 이젠 지운다.(insert하기 위해서 잠시 운영경로에 올려둔 것이므로)
+	            
+			} catch (Exception e) {
+				e.printStackTrace();
+				jsonObj.put("result", 0);
+			}
+			// == MultipartFile 을 File 로 변환하기 끝 == 
+			
+		}
+		
+		else {
+			jsonObj.put("result", 0);
+		}
+		
+		
+		return jsonObj.toString();
+		
+	}
+	
+	
+	
+	
+	@SuppressWarnings("incomplete-switch")
+	private static String cellReader(XSSFCell cell) {
+
+		String value = "";
+		CellType ct = cell.getCellType();
+		
+		if(ct != null) {
+			switch(cell.getCellType()) {
+		        case FORMULA:
+					value = cell.getCellFormula()+"";
+					break;
+		        case NUMERIC:
+		            value = cell.getNumericCellValue()+"";
+		            break;
+		        case STRING:
+		            value = cell.getStringCellValue()+"";
+		            break;
+		        case BOOLEAN:
+		            value = cell.getBooleanCellValue()+"";
+		            break;
+		        case ERROR:
+		            value = cell.getErrorCellValue()+"";
+		            break;
+			}
+		}
+		
+		return value; 
+
+	}
+	
+	
+	
 	
 	
 }

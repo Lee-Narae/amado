@@ -309,6 +309,109 @@ rotate(
         	        next.children(':first-child').clone().appendTo($(this));
         	      }
         	});
+        	
+        	
+        	
+        	
+        	
+        	
+        	// ===== 댓글 수정 ===== //
+    		let origin_comment_content = "";
+    		
+    		$(document).on("click", "button.btnUpdateComment", function(e){
+    		    
+    			const $btn = $(e.target);
+    			
+    			if($(e.target).text() == "수정"){
+    			 // alert("댓글수정");
+    			 //	alert($(e.target).parent().parent().children("td:nth-child(2)").text()); // 수정전 댓글내용
+    			    const $content = $(e.target).parent().parent().children("td:nth-child(2)");
+    			    origin_comment_content = $(e.target).parent().parent().children("td:nth-child(2)").text();
+    			    $content.html(`<input id='comment_update' type='text' value='\${origin_comment_content}' size='40' />`); // 댓글내용을 수정할 수 있도록 input 태그를 만들어 준다.
+    			    
+    			    $(e.target).text("완료").removeClass("btn-secondary").addClass("btn-info");
+    			    $(e.target).next().next().text("취소").removeClass("btn-secondary").addClass("btn-danger"); 
+    			    
+    			    $(document).on("keyup", "input#comment_update", function(e){
+    			    	if(e.keyCode == 13){
+    			    	  // alert("엔터했어요~~");
+    			    	  // alert($btn.text()); // "완료"
+    			    		 $btn.click();
+    			    	}
+    			    });
+    			}
+    			
+    			else if($(e.target).text() == "완료"){
+    			  // alert("댓글수정완료");
+    			  // alert($(e.target).next().val()); // 수정해야할 댓글시퀀스 번호 
+    			  // alert($(e.target).parent().parent().children("td:nth-child(2)").children("input").val()); // 수정후 댓글내용
+    			     const content = $(e.target).parent().parent().children("td:nth-child(2)").children("input").val(); 
+    			  
+    			     $.ajax({
+    			    	 url:"${pageContext.request.contextPath}/updateComment.action",
+    			    	 type:"post",
+    			    	 data:{"seq":$(e.target).next().val(),
+    			    		   "content":content},
+    			    	 dataType:"json",
+    			    	 success:function(json){
+    			    	  // $(e.target).parent().parent().children("td:nth-child(2)").html(content);
+    			          // goReadComment();  // 페이징 처리 안한 댓글 읽어오기
+    			    		
+    			          ////////////////////////////////////////////////////
+    			          // goViewComment(1); // 페이징 처리 한 댓글 읽어오기   
+    			             
+    			             const currentShowPageNo = $(e.target).parent().parent().find("input.currentShowPageNo").val(); 
+    	                  // alert("currentShowPageNo : "+currentShowPageNo);		          
+    	                     goViewComment(currentShowPageNo); // 페이징 처리 한 댓글 읽어오기
+    			    	  ////////////////////////////////////////////////////
+    			    	  
+    			    	     $(e.target).text("수정").removeClass("btn-info").addClass("btn-secondary");
+    			    		 $(e.target).next().next().text("삭제").removeClass("btn-danger").addClass("btn-secondary");
+    			    	 },
+    			    	 error: function(request, status, error){
+    					    alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+    					 }
+    			     });
+    			}
+    			
+    		}); 
+    		
+    		
+    		// ===== 댓글수정취소 / 댓글삭제 ===== //
+    		$(document).on("click", "button.btnDeleteComment", function(e){
+    			if($(e.target).text() == "취소"){
+    			 // alert("댓글수정취소");
+    			 //	alert($(e.target).parent().parent().children("td:nth-child(2)").html()); 
+    				
+    			    const $content = $(e.target).parent().parent().children("td:nth-child(2)"); 
+    			    $content.html(`\${origin_comment_content}`);
+    			 
+    			    $(e.target).text("삭제").removeClass("btn-danger").addClass("btn-secondary");
+    		    	$(e.target).prev().prev().text("수정").removeClass("btn-info").addClass("btn-secondary"); 
+    			}
+    			
+    			else if($(e.target).text() == "삭제"){
+    			  // alert("댓글삭제");
+    			  // alert($(e.target).prev().val()); // 삭제해야할 댓글시퀀스 번호 
+    				
+    			     if(confirm("정말로 삭제하시겠습니까?")){
+    				     $.ajax({
+    				    	 url:"${pageContext.request.contextPath}/deleteComment.action",
+    				    	 type:"post",
+    				    	 data:{"seq":$(e.target).prev().val(),
+    				    		   "parentSeq":"${requestScope.boardvo.seq}"},
+    				    	 dataType:"json",
+    				    	 success:function(json){
+    				    	 //	 goReadComment();  // 페이징 처리 안한 댓글 읽어오기
+    				    	     goViewComment(1); // 페이징 처리 한 댓글 읽어오기
+    				    	 },
+    				    	 error: function(request, status, error){
+    						    alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+    						 }
+    				     });
+    			     }
+    			}
+    		}); 
 	});// end of $(document).ready(function(){})-----------------
 
 	
@@ -446,13 +549,14 @@ function goReadComment(){
 			    	    v_html += "<div>" + item.comment_text + "</div>";
 			    	    v_html += "<div class='comment' style='color:#999999; font-size:10pt; margin-top: 3%;'>" + item.registerdate + " &nbsp;&nbsp;<a>답글쓰기</a>";
 			    	    if (${sessionScope.loginuser != null} && "${sessionScope.loginuser.userid}" == item.fk_userid) {
-			    	        v_html += "<br><a>수정</a>&nbsp;&nbsp;<a>삭제</a>";
+			    	        v_html += "<br><button class='btnUpdateComment' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>수정</button>&nbsp;&nbsp;<button class='btnDeleteComment' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>삭제</button>";
 			    	    }
 			    	    v_html += "</div>";
 			    	    v_html += "</div>";
 			    	    v_html += "</div>";
 			    	});
 			    }
+			    
 			    
 			    else {
 			    	v_html += "<div colspan='4'>댓글이 없습니다</td>";

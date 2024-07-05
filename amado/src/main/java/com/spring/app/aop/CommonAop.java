@@ -60,4 +60,42 @@ public class CommonAop {
 		}
 		
 	}
+	
+	
+	
+	
+	// 관리자 로그인 확인용 AOP
+	@Pointcut("execution(public * com.spring.app..Controller*.adminLogin_*(..))") // 메소드 괄호 속 .. => 파라미터가 있든지 없든지
+	public void adminLogin() {}
+	
+	// === Before Advice(공통관심사, 보조업무)를 구현한다. === //
+	@Before("adminLogin()")
+	public void adminLoginCheck(JoinPoint joinpoint) {
+		
+		HttpServletRequest request = (HttpServletRequest)joinpoint.getArgs()[0];
+		HttpServletResponse response = (HttpServletResponse)joinpoint.getArgs()[1];
+		HttpSession session = request.getSession();
+		
+		if(session.getAttribute("admin") == null) {
+			String message = "관리자 전용 페이지입니다. 관리자 로그인이 필요합니다.";
+	        String loc = request.getContextPath()+"/admin";
+	          
+	        request.setAttribute("message", message);
+	        request.setAttribute("loc", loc);
+	        
+ 	        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/msg.jsp");
+ 	        
+ 	        try {
+			
+ 	        	dispatcher.forward(request, response);
+			
+ 	        } catch (ServletException | IOException e) {
+				e.printStackTrace();
+			}
+ 	        
+	        // === 로그인 후 로그인 전에 머물던 페이지로 돌아가는 작업 끝
+		}
+		
+	}
+	
 }
