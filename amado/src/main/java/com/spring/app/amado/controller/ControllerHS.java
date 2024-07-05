@@ -117,7 +117,7 @@ public class ControllerHS {
 				
 				gymvo.setFilename(newFileName);
 				//was(톰캣)에 저장된 파일명(2024062712075997631067179400.jpg)
-				gymvo.setOrgfilename(originalFilename);
+				gymvo.setImgfilename(originalFilename);
 				// 게시판 페이지에서 첨부된 파일(LG_싸이킹청소기_사용설명서.pdf)을 보여줄 때 사용.
 	            // 또한 사용자가 파일을 다운로드 할때 사용되어지는 파일명으로 사용.
 				fileSize = attach.getSize(); // 첨부파일의 크기 
@@ -135,34 +135,40 @@ public class ControllerHS {
 		}
 		
 	// === !!! 첨부파일이 있는 경우 작업 끝 !!! ===	
+	
+		System.out.println("1"+gymvo.getAttach());
+		System.out.println("2"+gymvo.getGymname());
+		System.out.println("3"+gymvo.getFk_userid());
+		System.out.println("4"+gymvo.getPostcode());
+		System.out.println("5"+gymvo.getAddress());
+		
+		System.out.println("6"+gymvo.getDetailaddress());
+		//System.out.println("7"+gymvo.getExtraaddress());
+		
+		System.out.println("8"+gymvo.getInsidestatus());
+		System.out.println("9"+gymvo.getInfo());
+		System.out.println("10"+gymvo.getImgfilename());
+		
+		System.out.println("8"+gymvo.getCost());
+		System.out.println("9"+gymvo.getCaution());
+		//System.out.println("10"+gymvo.getMembercount());
+		//System.out.println("10"+gymvo.getLikecount());
 		
 		
-		//int n = service.add(boardvo); // <== 파일첨부가 없는 글쓰기 
-		
-		// ===#176 파일첨부가 있는 글쓰기 또는 파일첨부가 없는 글쓰기로 나뉘어서 service로 호출하기 시작//
-		
-		
-		// ===파일첨부가 있는 글쓰기 또는 파일첨부가 없는 글쓰기로 나뉘어서 service로 호출하기 끝//
-		//    먼저 위의  int n = service.add(boardvo); 를 하고서 아래와 같이 한다 
-		
+	
 		int n =0;
 		
-		if(attach.isEmpty()) {
-			//파일 첨부가  없는 경우라면 
-			n=service.add(gymvo);  //<== 파일첨부가 없은 글쓰기
+		if(!(attach.isEmpty())) {
+			//파일 첨부가  있는 경우라면 
+			n=service.add_withFile(gymvo);
 			
 			System.out.println();
-		}
-		else {
-			//파일첨부가 있는 경우라면
-			//n=service.add_withFile(gymvo);
-			
 		}
 		
 		
 		
 		if(n ==1) {
-			mav.setViewName("redirect:/.action");
+			mav.setViewName("redirect:/index.do");
 		    //  /list.action 페이지로 redirect(페이지이동)해라는 말이다.
 		}
 		else {

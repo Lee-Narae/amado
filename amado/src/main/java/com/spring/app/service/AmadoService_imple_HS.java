@@ -15,7 +15,7 @@ public class AmadoService_imple_HS implements AmadoService_HS {
 
 
 	@Autowired
-	private AmadoDAO_HS adao;
+	private AmadoDAO_HS dao;
 	
 	
 	
@@ -26,11 +26,13 @@ public class AmadoService_imple_HS implements AmadoService_HS {
 
 	
 	
-	
+
+
 	//체육관 등록
 	@Override
-	public int add(GymVO gymvo) {
-		int n = adao.add(gymvo);
+	public int add_withFile(GymVO gymvo) {
+	
+		int n = dao.add_withFile(gymvo);
 		return n;
 	}
 

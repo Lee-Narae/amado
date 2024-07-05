@@ -7,7 +7,7 @@
 <insert id="add" parameterType="GymVO">
 	
 	insert into tbl_gym(ymseq ,gymname,fk_userid,postcode,address,detailaddress,extraaddress,status,info,imgfilename,cost,caution,membercount,likecount)
-	values (seq_gym.nextval, #{gymname}, #{fk_userid}, #{postcode}, #{address}, #{detailaddress},#{extraaddress}, #{status},#{info},#{imgfilename},#{cost},#{caution},,#{membercount},#{likecount} )
+	values(seq_gym.nextval, #{gymname}, #{fk_userid}, #{postcode}, #{address}, #{detailaddress},#{extraaddress}, #{status},#{info},#{imgfilename},#{cost},#{caution},#{membercount},0 )
 </insert>
 
 	
