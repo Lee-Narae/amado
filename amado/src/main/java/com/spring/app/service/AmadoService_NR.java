@@ -59,6 +59,24 @@ public interface AmadoService_NR {
 
 	// 관리자 - 전체 회원 수 조회
 	int getTotalMemberCount(Map<String, String> paramap);
+
+	// 관리자 - 엑셀에서 회원 등록하기
+	int addMemberList(List<Map<String, String>> paraMapList);
+
+	// 관리자 - 회원 상세정보
+	MemberVO getMemberDetail(String userid);
+
+	// 관리자 - 전체 동호회 개수
+	int getClubCount();
+
+	// 관리자 - 종목별 동호회 개수
+	List<Map<String, String>> getSportPerClubCount();
+
+	// 관리자 - 조건에 따른 멤버수
+	int getMemberCount(int i);
+
+	// 관리자 - 방문통계
+	String getMemberStatic(String str_twoWeekBefore);
 	
 
 

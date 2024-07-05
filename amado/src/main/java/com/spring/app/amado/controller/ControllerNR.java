@@ -3,7 +3,12 @@ package com.spring.app.amado.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -29,12 +34,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.spring.app.common.AES256;
 import com.spring.app.common.FileManager;
 import com.spring.app.common.MyUtil;
 import com.spring.app.common.Sha256;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.service.AmadoService_NR;
-
 
 @Controller
 public class ControllerNR {
@@ -46,6 +51,8 @@ public class ControllerNR {
 	@Autowired
 	private FileManager fileManager;
 	
+    @Autowired
+    private AES256 aES256;
 	
 	// 먼저 com.spring.app.HomeController에 가서 @Controller를 주석처리해야 한다.(스프링 기본 제공)
 	@GetMapping("/")
@@ -155,10 +162,64 @@ public class ControllerNR {
 	
 	@GetMapping("/admin/main")
 	public ModelAndView adminLogin_main(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+	
+		// 동호회 관련 메소드
+		int clubCount = service.getClubCount();
+		List<Map<String, String>> clubCountList = service.getSportPerClubCount();
+		mav.addObject("clubCount", clubCount);
+		mav.addObject("clubCountList", clubCountList);
+		
+		// 회원 관련 메소드
+		int allMemberCount = service.getMemberCount(1); // 1: 전체 멤버수
+		int weekMemberCount = service.getMemberCount(2); // 2: 일주일 가입 멤버수
+		int status1MemberCount = service.getMemberCount(3); // 3: 탈퇴 멤버수
+		int rank0MemberCount = service.getMemberCount(4); // 4: 일반회원 수
+		int adminMemberCount = service.getMemberCount(5); // 5: 관리자  수
+		mav.addObject("allMemberCount", allMemberCount);
+		mav.addObject("weekMemberCount", weekMemberCount);
+		mav.addObject("status1MemberCount", status1MemberCount);
+		mav.addObject("rank0MemberCount", rank0MemberCount);
+		mav.addObject("adminMemberCount", adminMemberCount);
+		
+	
+		
+		
 		
 		mav.setViewName("adminMain.tiles3");
 		return mav;
 	}
+	
+	
+	@ResponseBody
+	@GetMapping("/admin/getMemberStatic")
+	public String getMemberStatic() {
+		
+		JSONArray jsonArr = new JSONArray();
+ 		
+ 		for(int i=13; i>=0; i--) {
+ 			
+ 			Calendar cal1 = Calendar.getInstance();
+ 			cal1.add(Calendar.DATE, -i);
+ 			
+ 			Date twoWeekBefore = new Date(cal1.getTimeInMillis());
+ 			
+ 			SimpleDateFormat sdfmt = new SimpleDateFormat("yy/MM/dd");
+ 	 		String str_twoWeekBefore = sdfmt.format(twoWeekBefore);
+ 			
+ 	 		String memberCount = service.getMemberStatic(str_twoWeekBefore);
+ 	 		
+ 	 		JSONObject jsonObj = new JSONObject();
+ 	 		jsonObj.put("date", str_twoWeekBefore);
+ 	 		jsonObj.put("cnt", memberCount);
+ 	 		
+ 	 		jsonArr.put(jsonObj);
+ 			
+ 		}
+ 		
+		return jsonArr.toString();
+	}
+	
+	
 	
 	
 	@GetMapping("/club/matchRegister.do")
@@ -564,8 +625,6 @@ public class ControllerNR {
 	}
 	
 	
-	// ★★★★★★★★★★★★★★★★★★★★★★★★★★★ 여기서부터
-	
 	@ResponseBody
 	@PostMapping("/admin/memberInsert")
 	public String memberInsert(MultipartHttpServletRequest mrequest) {
@@ -598,7 +657,7 @@ public class ControllerNR {
 				
 	            List<Map<String, String>> paraMapList = new ArrayList<Map<String,String>>();
 	            
-	            for(int i=1; i<sheet.getLastRowNum()+1; i++) {	// 시트의 가장 첫 번째 행은 insert할 데이터가 아니므로 i=0이 아닌 i=1로 시작
+	            for(int i=3; i<sheet.getLastRowNum()+1; i++) {	// 시트의 가장 첫 번째 행은 insert할 데이터가 아니므로 i=0이 아닌 i=1로 시작
 	            				// 마지막 열까지 읽어줘야하므로
 	            	Map<String, String> paramap = new HashMap<String, String>();
 	            	
@@ -608,76 +667,80 @@ public class ControllerNR {
 	            		continue;
 	            	}
 	            	
-	            	// 행의 첫 번째 열(이 파일에서는 사원번호)
+	            	// 행의 첫 번째 열(ID)
 	            	XSSFCell cell = row.getCell(0);
 	            	if(cell != null) {
-	            		paramap.put("employee_id", String.valueOf(cellReader(cell)));
+	            		paramap.put("userid", String.valueOf(cellReader(cell)));
 	            	}
 	            	
-	            	// 행의 두 번째 열(이름)
+	            	// 행의 두 번째 열(비번)
 	            	cell = row.getCell(1);
 	            	if(cell != null) {
-	            		paramap.put("first_name", String.valueOf(cellReader(cell)));
+	            		paramap.put("password", Sha256.encrypt(String.valueOf(cellReader(cell))));
 	            	}
 	            	
-	            	// 행의 세 번째 열(성)
+	            	// 행의 세 번째 열(이름)
 	            	cell = row.getCell(2);
 	            	if(cell != null) {
-	            		paramap.put("last_name", String.valueOf(cellReader(cell)));
+	            		paramap.put("name", String.valueOf(cellReader(cell)));
 	            	}
 	            	
 	            	// 행의 네 번째 열(이메일)
 	            	cell = row.getCell(3);
 	            	if(cell != null) {
-	            		paramap.put("email", String.valueOf(cellReader(cell)));
+	            		paramap.put("email", aES256.encrypt(String.valueOf(cellReader(cell))));
 	            	}
 	            	
-	            	// 행의 다섯 번째 열(연락처)
+	            	// 행의 다섯 번째 열(우편번호)
 	            	cell = row.getCell(4);
 	            	if(cell != null) {
-	            		paramap.put("phone_number", String.valueOf(cellReader(cell)));
+	            		paramap.put("postcode", String.valueOf(cellReader(cell)));
 	            	}
 	            	
-	            	// 행의 여섯 번째 열(입사일자)
+	            	// 행의 여섯 번째 열(address)
 	            	cell = row.getCell(5);
 	            	if(cell != null) {
-	            		paramap.put("hire_date", String.valueOf(cellReader(cell)));
+	            		paramap.put("address", String.valueOf(cellReader(cell)));
 	            	}
 	            	
-	            	// 행의 일곱 번째 열(직종 ID)
+	            	// 행의 일곱 번째 열(detailaddress)
 	            	cell = row.getCell(6);
 	            	if(cell != null) {
-	            		paramap.put("job_id", String.valueOf(cellReader(cell)));
+	            		paramap.put("detailaddress", String.valueOf(cellReader(cell)));
 	            	}
 	            	
-	            	// 행의 여덟 번째 열(기본 급여)
+	            	// 행의 여덟 번째 열(extraaddress)
 	            	cell = row.getCell(7);
 	            	if(cell != null) {
-	            		paramap.put("salary", String.valueOf(cellReader(cell)));
+	            		paramap.put("extraaddress", String.valueOf(cellReader(cell)));
 	            	}
 	            	
-	            	// 행의 아홉 번째 열(커미션 퍼센티지)
+	            	String mobile = "";
+	            	
+	            	// 행의 아홉 번째 열(phone1)
 	            	cell = row.getCell(8);
 	            	if(cell != null) {
-	            		paramap.put("commission_pct", String.valueOf(cellReader(cell)));
+	            		mobile += String.valueOf(cellReader(cell));
 	            	}
 	            	
-	            	// 행의 열 번째 열(직속 상관 사원번호)
+	            	// 행의 열 번째 열(phone2)
 	            	cell = row.getCell(9);
 	            	if(cell != null) {
-	            		paramap.put("manager_id", String.valueOf(cellReader(cell)));
+	            		mobile += String.valueOf(cellReader(cell));
 	            	}
 	            	
-	            	// 행의 열한 번째 열(부서번호)
+	            	// 행의 열한 번째 열(phone3)
 	            	cell = row.getCell(10);
 	            	if(cell != null) {
-	            		paramap.put("department_id", String.valueOf(cellReader(cell)));
+	            		mobile += String.valueOf(cellReader(cell));
 	            	}
 	            	
-	            	// 행의 열두 번째 열(주민번호)
+	            	paramap.put("mobile", aES256.encrypt(mobile));
+	            	
+	            	// 행의 열두 번째 열(gender)
 	            	cell = row.getCell(11);
 	            	if(cell != null) {
-	            		paramap.put("jubun", String.valueOf(cellReader(cell)));
+	            		paramap.put("gender", String.valueOf(cellReader(cell)));
 	            	}
 	            	
 	            	paraMapList.add(paramap);
@@ -686,8 +749,7 @@ public class ControllerNR {
 	            
 	            workbook.close();
 	            
-	            /*
-	            int insertCount = service.addEmployeeList(paraMapList);
+	            int insertCount = service.addMemberList(paraMapList);
 				
 	            if(insertCount == paraMapList.size()) { // 삽입된 결과의 합이 처음에 넣고자 했던 데이터가 들어있는 리스트의 사이즈와 같다면(insert 성공)
 	            	jsonObj.put("result", 1);
@@ -695,7 +757,6 @@ public class ControllerNR {
 	            else {
 	            	jsonObj.put("result", 0);
 	            }
-	            */
 	            excel_file.delete(); // insert하는 데 다 썼으니 이젠 지운다.(insert하기 위해서 잠시 운영경로에 올려둔 것이므로)
 	            
 			} catch (Exception e) {
@@ -750,6 +811,36 @@ public class ControllerNR {
 	
 	
 	
+	
+	
+	
+	// 관리자 - 회원 상세정보
+	@PostMapping("/admin/manage/memberDetail")
+	public ModelAndView adminLogin_memberDetail(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+		
+		String userid = request.getParameter("userid");
+		String goBackURL = request.getParameter("goBackURL");
+		
+		// System.out.println("userid: "+userid+"/"+"goBackURL: "+goBackURL); 확인 완료
+		
+		MemberVO member = service.getMemberDetail(userid);
+		
+		try {
+			member.setEmail(aES256.decrypt(member.getEmail()));
+			member.setMobile(aES256.decrypt(member.getMobile()));
+		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+			e.printStackTrace();
+		}
+		
+		mav.addObject("member", member);
+		mav.addObject("goBackURL", goBackURL);
+		
+		mav.setViewName("manage/memberDetail.tiles3");
+		
+		return mav;
+	}
+	
+
 	
 	
 }

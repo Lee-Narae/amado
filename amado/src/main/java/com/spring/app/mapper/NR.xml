@@ -182,4 +182,50 @@
 		<if test="searchType == 'email' and searchWord != ''">and email like '%'||#{searchWord}||'%'</if>
 	</select>
 	
+	
+	
+	<insert id="addMemberList" parameterType="HashMap">
+		insert into tbl_member(userid, password, name, email, postcode, address, detailaddress, extraaddress, mobile, gender, birthday, registerday, lastpwdchangedate, status, memberrank, gymregisterstatus, speed, quick, power, earth, stretch, idle)
+		values (#{userid}, #{password}, #{name}, #{email}, #{postcode}, #{address}, #{detailaddress}, #{extraaddress}, #{mobile}, #{gender}, to_char(sysdate, 'yyyy-mm-dd'), sysdate, sysdate, 1, 0, 0, 1, 1, 1, 1, 1, 0)
+	</insert>
+	
+	
+	<select id="getMemberDetail" parameterType="String" resultType="MemberVO">
+		select userid, name, email, postcode, address, detailaddress, extraaddress, mobile, gender, birthday, memberimg,
+		       memberrank, speed, quick, power, earth, stretch, registerday
+		from tbl_member
+		where userid = #{userid}
+	</select>
+	
+	<select id="getClubCount" resultType="int">
+		select count(*)
+		from tbl_club
+	</select>
+	
+	<resultMap type="HashMap" id="clubCountMap">
+		<result property="sportname" column="sportname" javaType="String"/>
+		<result property="cnt" column="cnt" javaType="String"/>
+	</resultMap>
+	<select id="getSportPerClubCount" resultMap="clubCountMap">
+		select sportname, count(*) cnt
+		from tbl_club A join tbl_sport B
+		on A.fk_sportseq = B.sportseq
+		group by B.sportname
+	</select>
+	
+	<select id="getMemberCount" parameterType="int" resultType="int">
+		select count(*)
+		from tbl_member
+		<if test="i == 2">where registerday >= sysdate-7</if>
+		<if test="i == 3">where status = 0</if>
+		<if test="i == 4">where memberrank = 0</if>
+		<if test="i == 5">where memberrank = 2</if>
+	</select>
+	
+	<select id="getMemberStatic" parameterType="String" resultType="String">
+		select count(*)
+		from tbl_loginhistory
+		where logindate = #{str_twoWeekBefore}
+	</select>
+	
 </mapper>
