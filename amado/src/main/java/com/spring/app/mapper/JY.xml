@@ -27,5 +27,10 @@
         values(seq_club.nextval, #{clubname},  #{clubimg}, #{fk_sportseq}, #{fk_userid}, #{clubtel}, #{city}, #{local}, #{clubgym}, #{clubtime}, '30', #{clubpay}, default, default, #{wasfileName} ) 
 	</insert>
 	
+	<!-- 동호회 등록후 회원등급 동호회장으로  업데이트 해주기 -->
+	<update id="updateRank" parameterType="String" >
+		update tbl_member set memberrank = 1
+		where userid = #{userid}
+	</update>
 
 </mapper>

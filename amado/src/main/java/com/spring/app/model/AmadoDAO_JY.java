@@ -16,5 +16,8 @@ public interface AmadoDAO_JY {
 	
 	// 동호회등록  완료 요청(파일첨부ㅇ)
 	int add_withFile(ClubVO clubvo);
+
+	// 동호회 등록후 회원등급 동호회장으로  업데이트 해주기
+	void updateRank(String fk_userid);
 		
 }

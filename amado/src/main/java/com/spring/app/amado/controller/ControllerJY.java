@@ -203,11 +203,14 @@ public class ControllerJY {
 		}
 		
 		if(n==1) {
-			mav.setViewName("redirect:/index.do");
+			
+			// 동호회 등록후 회원등급 동호회장으로  업데이트 해주기
+			service.updateRank(clubvo.getFk_userid()); 
+			mav.setViewName("club/findClub.tiles2");
 		    //  /list.action 페이지로 redirect(페이지이동)해라는 말이다.
 		}
 		else {
-			mav.setViewName("amado/error/add_error.tiles1");
+			mav.setViewName("error/add_error.tiles1");
 			//  /WEB-INF/views/tiles1/board/error/add_error.jsp 파일을 생성한다.
 		}
 
