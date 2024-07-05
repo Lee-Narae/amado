@@ -30,23 +30,20 @@ public interface AmadoDAO_SJ {
 	// 동호회목록 보기(페이지바 없음)
 	List<ClubVO> clubListNoSearch(String params);
 
-	// 검색타입 있는 리스트 가져오기
-	List<ClubVO> search(Map<String, String> paraMap);
-
-	// === 페이징 처리를 안한 검색어가 있는 전체 동호회 보여주기 === //
-	List<ClubVO> clubListSearch(Map<String, String> paraMap);
-
-	// 동호회 총 페이지 수
-	int getClubTotalPage(String params);
-
-	// === 페이징 처리를 한 검색어가 없는 전체 동호회 보여주기 === //
-	List<ClubVO> clubListPagingSearch(Map<String, String> paraMap);
-
 	// 동호회 총 페이지 수(검색포함)
 	int getClubSearchTotalPage(Map<String, String> paraMap);
 
 	// 검색타입 있는 리스트 가져오기(페이징)
 	List<ClubVO> searchPaging(Map<String, String> paraMap);
+
+	
+	////////////////////////////////////////////////////////////////
+	
+	// 게시판 총 페이지 수(검색포함)
+	int getListSearchTotalPage(Map<String, String> paraMap);
+
+	// 검색타입 있거나 없는 리스트 가져오기(페이징)
+	List<BoardVO> boardListSearchPaging(Map<String, String> paraMap);
 
 	
 

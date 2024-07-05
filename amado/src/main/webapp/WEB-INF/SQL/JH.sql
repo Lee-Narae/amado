@@ -40,7 +40,7 @@ insert into tbl_fleamarket(fleamarketseq, sportseq, city, title, content, cost, 
 values(1, 1, '서울', '호날두가 신었던 축구화 팝니다!!', '제가 직접 신었답니다ㅎㅎ', 50000000, '직거래', 'leejy', default, '1234', 0);
 
 ALTER TABLE tbl_member ADD (memberImg VARCHAR2(50));
-
+ALTER TABLE tbl_gym ADD (insidestatus number(1));
 
 update tbl_fleamarket set commentCount = commentCount+1
 where fleamarketseq = 1
@@ -58,8 +58,8 @@ insert into tbl_fleamarketcomment(fleamarketcommentseq, fleamarketseq, comment_t
 update tbl_fleamarket set commentcount = commentcount+1
 where fleamarketseq = 1
 
-update tbl_member set memberImg = 'real_madrid.png'
-where userid = 'eomjh';
+update tbl_member set memberImg = '차은우.jpg'
+where userid = 'chaew';
 
 
 
@@ -72,3 +72,12 @@ ON A.fk_userid = V.userid
 where A.fleamarketseq = 1
 order by fleamarketcommentseq desc
 
+
+
+ALTER TABLE tbl_club
+MODIFY (clubscore DEFAULT 0);
+
+ALTER TABLE tbl_club
+MODIFY (clubstatus DEFAULT 1);
+
+commit

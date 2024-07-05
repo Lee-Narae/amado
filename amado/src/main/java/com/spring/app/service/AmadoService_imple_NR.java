@@ -261,4 +261,46 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		int n = dao.getTotalMemberCount(paramap);
 		return n;
 	}
+
+	// 관리자 - 엑셀에서 회원 등록하기
+	@Override
+	public int addMemberList(List<Map<String, String>> paraMapList) {
+		int n = dao.addMemberList(paraMapList);
+		return n;
+	}
+
+	// 관리자 - 회원 상세정보
+	@Override
+	public MemberVO getMemberDetail(String userid) {
+		MemberVO member = dao.getMemberDetail(userid);
+		return member;
+	}
+
+	// 관리자 - 전체 동호회 개수
+	@Override
+	public int getClubCount() {
+		int clubCount = dao.getClubCount();
+		return clubCount;
+	}
+
+	// 관리자 - 종목별 동호회 개수
+	@Override
+	public List<Map<String, String>> getSportPerClubCount() {
+		List<Map<String, String>> clubCountList = dao.getSportPerClubCount();
+		return clubCountList;
+	}
+
+	// 조건에 따른 멤버 수 알아오기
+	@Override
+	public int getMemberCount(int i) {
+		int memberCount = dao.getMemberCount(i);
+		return memberCount;
+	}
+
+	// 관리자 - 방문 통계
+	@Override
+	public String getMemberStatic(String str_twoWeekBefore) {
+		String memberCount = dao.getMemberStatic(str_twoWeekBefore);
+		return memberCount;
+	}
 }

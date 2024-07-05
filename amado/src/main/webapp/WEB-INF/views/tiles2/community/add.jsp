@@ -103,9 +103,33 @@
 <div style="display: flex;">
   <div style="margin: auto; padding-top: 3%; padding-left: 3%;">
      
-     
-        <h2 style="margin-bottom: 30px;">글쓰기</h2>
-     
+     	<c:if test="${requestScope.params == '/community/list.do'}"> <!-- 나중에 post 방식으로 보낼 때는 clubseq 값도 같이 보내서 requestScope.clubseq 값에 따라 보여주게 변경. -->
+		<h2 style="margin-bottom: 30px;">전체 글쓰기</h2>
+		</c:if>		
+		<c:if test="${requestScope.params == '1'}">
+			<h2 style="margin-bottom: 30px;">축구 글쓰기</h2>
+		</c:if>		
+		<c:if test="${requestScope.params == '2'}">
+			<h2 style="margin-bottom: 30px;">야구 글쓰기</h2>
+		</c:if>		
+		<c:if test="${requestScope.params == '3'}">
+			<h2 style="margin-bottom: 30px;">배구 글쓰기</h2>
+		</c:if>		
+		<c:if test="${requestScope.params == '4'}">
+			<h2 style="margin-bottom: 30px;">농구 글쓰기</h2>
+		</c:if>		
+		<c:if test="${requestScope.params == '5'}">
+			<h2 style="margin-bottom: 30px;">테니스 글쓰기</h2>
+		</c:if>		
+		<c:if test="${requestScope.params == '6'}">
+			<h2 style="margin-bottom: 30px;">볼링 글쓰기</h2>
+		</c:if>		
+		<c:if test="${requestScope.params == '7'}">
+			<h2 style="margin-bottom: 30px;">족구 글쓰기</h2>
+		</c:if>		
+		<c:if test="${requestScope.params == '8'}">
+			<h2 style="margin-bottom: 30px;">배드민턴 글쓰기</h2>
+		</c:if>
      
        <form name="addFrm"> 
         <table style="width: 1024px" class="table table-bordered">
@@ -148,6 +172,7 @@
         	이런식으로 타입을 안적으면 기본적으로 type="submit" 이기 때문에
         	유효성 검사를 하지 않고 GET 방식으로 넘어가버린다. 
          --%>
+         <input type="hidden" name="sportseq" value="${requestScope.params}" />
      </form>
      
   </div>

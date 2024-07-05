@@ -147,9 +147,14 @@ create table tbl_club
 ,clubstatus       NUMBER(1)           not null        -- 동호회상태
 ,clubscore       NUMBER              not null        -- 점수
 ,constraint PK_tbl_club_clubseq primary key(clubseq)
-,constraint FK_tbl_club_sportseq foreign key(sportseq) references tbl_sport(sportseq)
+,constraint FK_tbl_club_sportseq foreign key(fk_sportseq) references tbl_sport(sportseq)
 ,constraint FK_tbl_club_fk_userid foreign key(fk_userid) references tbl_member(userid)
 );
+
+alter table tbl_club add constraint FK_tbl_club_sportseq foreign key(fk_sportseq) references tbl_sport(sportseq) on delete casecade;
+
+select *
+from tbl_club
 
 -- Table TBL_CLUB이(가) 생성되었습니다.
 
@@ -687,3 +692,46 @@ where rno between '1' and '10'
 		order by rno desc
 )
 where rno between 1 and 10        
+
+
+
+
+		select count(*) AS totalPage
+ 		from tbl_club
+		where clubstatus = 1
+        and fk_sportseq = 1
+        
+        
+        
+        	    SELECT clubseq, clubname, clubimg, fk_sportseq, clubtel
+			 , city, local, clubgym, clubtime
+			 , membercount, clubpay, clubstatus, clubscore
+			 , rank	
+		FROM
+		(
+        select row_number() over(order by clubscore desc) AS rno 
+		 , clubseq, clubname, clubimg, fk_sportseq, clubtel
+		 , city, local, clubgym, clubtime
+		 , membercount, clubpay, clubstatus, clubscore
+		 , rank() over(order by clubscore desc) AS rank	
+ 		from tbl_club
+		where clubstatus = 1
+        and fk_sportseq = 1
+        )
+		where rno between #{startno} and #{startno}
+        
+        select *
+        from tbl_sport
+        
+     alter table tbl_board 
+     add fk_sportseq NUMBER;   
+        
+     alter table tbl_board add constraint FK_tbl_board_sportseq foreign key(fk_sportseq) references tbl_sport(sportseq);   
+     
+     commit
+         
+         select *
+         from tbl_board
+         
+         
+         

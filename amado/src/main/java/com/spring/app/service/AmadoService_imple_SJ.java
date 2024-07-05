@@ -97,41 +97,12 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		return clubList;
 	}
 
-	// 검색타입 있는 리스트 가져오기
-	@Override
-	public List<ClubVO> search(Map<String, String> paraMap) {
-		List<ClubVO> clubList = dao.search(paraMap);
-		return clubList;
-	}
-
-	// === 페이징 처리를 안한 검색어가 있는 전체 동호회 보여주기 === //
-	@Override
-	public List<ClubVO> clubListSearch(Map<String, String> paraMap) {
-		List<ClubVO> clubList = dao.clubListSearch(paraMap);
-		return clubList;
-	}
-
-	// 동호회 총 페이지 수
-	@Override
-	public int getClubTotalPage(String params) {
-		int totalPage = dao.getClubTotalPage(params);
-		return totalPage;
-	}
-
-	
-	// === 페이징 처리를 한 검색어가 없는 전체 동호회 보여주기 === //
-	@Override
-	public List<ClubVO> clubListPagingSearch(Map<String, String> paraMap) {
-	      List<ClubVO> clubList = dao.clubListPagingSearch(paraMap);
-	      return clubList;
-
-	}
 
 	// 동호회 총 페이지 수(검색포함)
 	@Override
 	public int getClubSearchTotalPage(Map<String, String> paraMap) {
-		int totalPage = dao.getClubSearchTotalPage(paraMap);
-		return totalPage;
+		int totalCount = dao.getClubSearchTotalPage(paraMap);
+		return totalCount;
 	}
 
 	// 검색타입 있는 리스트 가져오기(페이징)
@@ -139,6 +110,22 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	public List<ClubVO> searchPaging(Map<String, String> paraMap) {
 	      List<ClubVO> clubPagingList = dao.searchPaging(paraMap);
 	      return clubPagingList;
+	}
+
+	/////////////////////////////////////////////////////////////////
+	
+	// 게시판 총 페이지 수(검색포함)
+	@Override
+	public int getListSearchTotalPage(Map<String, String> paraMap) {
+		int totalCount = dao.getListSearchTotalPage(paraMap);
+		return totalCount;
+	}
+
+	// 검색타입 있거나 없는 리스트 가져오기(페이징)
+	@Override
+	public List<BoardVO> boardListSearchPaging(Map<String, String> paraMap) {
+		  List<BoardVO> boardPagingList = dao.boardListSearchPaging(paraMap);
+	      return boardPagingList;
 	}
 
 

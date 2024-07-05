@@ -88,7 +88,7 @@ margin-left: 2%;
 <div  style="background-color: #4040bf">
 <div class="board_header"  style="display: flex; margin-left: 15%; color: white; padding: 3%;">
     <div class="tit">
-        <h1>프로필</h1>
+        <h1>호우마드리드</h1>
         <div class="desc">호날두가 속한 동호회 입니다.</div>
     </div>
     
@@ -131,7 +131,7 @@ margin-left: 2%;
 	<div id="top2" style="display: flex; height: 500px; margin-top: 5%;">
 		<!-- 동호회 여러개 가입시 캐러셀 적용 -->
 		<div id="myclub" style="width: 38%; margin: 1% 0 0 8%;">
-			<img src="<%=ctxPath%>/resources/images/real_madrid.png" />
+			<img style="margin-left: 15%;" src="<%=ctxPath%>/resources/images/real_madrid.png" />
 			<div style="text-align: center; margin: 5% 13% 0 0; font-size: 25px; font-weight: bold;">호우마드리드</div>
 		</div>
 		

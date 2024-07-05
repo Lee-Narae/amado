@@ -144,4 +144,53 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		return n;
 	}
 
+	// 관리자 - 엑셀에서 회원 등록하기
+	@Override
+	public int addMemberList(List<Map<String, String>> paraMapList) {
+
+		int insertCount = 0;
+		
+		for(Map<String, String> map : paraMapList) {
+			int n = sqlsession.insert("NR.addMemberList", map);
+			insertCount += n;
+		}
+		
+		return insertCount;
+	}
+
+	// 관리자 - 회원 상세정보
+	@Override
+	public MemberVO getMemberDetail(String userid) {
+		MemberVO member = sqlsession.selectOne("NR.getMemberDetail", userid);
+		return member;
+	}
+	
+	// 관리자 - 전체 동호회 개수
+	@Override
+	public int getClubCount() {
+		int clubCount = sqlsession.selectOne("NR.getClubCount");
+		return clubCount;
+	}
+
+	// 관리자 - 종목별 동호회 개수
+	@Override
+	public List<Map<String, String>> getSportPerClubCount() {
+		List<Map<String, String>> clubCountList = sqlsession.selectList("NR.getSportPerClubCount");
+		return clubCountList;
+	}
+
+	// 관리자 - 조건에 따른 멤버수
+	@Override
+	public int getMemberCount(int i) {
+		int memberCount = sqlsession.selectOne("NR.getMemberCount", i);
+		return memberCount;
+	}
+
+	// 관리자 - 방문 통계
+	@Override
+	public String getMemberStatic(String str_twoWeekBefore) {
+		String memberCount = sqlsession.selectOne("NR.getMemberStatic", str_twoWeekBefore);
+		return memberCount;
+	}
+
 }
