@@ -841,6 +841,13 @@ public class ControllerNR {
 	}
 	
 
+	@GetMapping("/admin/reg/notice")
+	public ModelAndView notice(ModelAndView mav) {
+		
+		mav.setViewName("reg/notice.tiles3");
+		
+		return mav;
+	}
 	
 	
 }

@@ -56,7 +56,7 @@ background-color: #247AFB; border-radius: 10px; font-weight: bold; color: white;
 <hr>
 <div id="middle2" style="height: 150px;" align="center">
 <div class="minitext">등록</div>
-	<div class="text" onclick="location.href='<%=ctxPath%>/admin/reg/...'" id="noticeR">공지사항 등록</div>
+	<div class="text" onclick="location.href='<%=ctxPath%>/admin/reg/notice'" id="noticeR">공지사항 등록</div>
 	<div class="text" onclick="location.href='<%=ctxPath%>/admin/reg/...'" id="gymR">체육관 등록</div>
 </div>
 <hr>
