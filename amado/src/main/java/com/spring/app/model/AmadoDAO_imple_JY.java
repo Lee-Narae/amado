@@ -20,13 +20,6 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 	
 	////////////////////////////////////////////////////////////////
 	
-	// 동호회등록  완료 요청(파일첨부ㅇ)
-	@Override
-	public int add_withFile(ClubVO clubvo) {
-		int n = sqlsession.insert("JY.add_withFile",clubvo);
-		return n;
-
-	}
 
 	// 시군구 정보
 	@Override
@@ -43,7 +36,13 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 	}
 	
 	
-	
-	
+	// 동호회등록  완료 요청(파일첨부ㅇ)
+	@Override
+	public int add_withFile(ClubVO clubvo) {
+		int n = sqlsession.insert("JY.add_withFile",clubvo);
+		return n;
+
+	}
+
 
 }

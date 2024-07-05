@@ -111,8 +111,8 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 	// 검색타입 있는 리스트 가져오기(페이징)
 	@Override
 	public List<ClubVO> searchPaging(Map<String, String> paraMap) {
-		List<ClubVO> clubList = sqlsession.selectList("SJ.searchPaging", paraMap);
-		return clubList;
+		List<ClubVO> clubPagingList = sqlsession.selectList("SJ.searchPaging", paraMap);
+		return clubPagingList;
 	}
 
 

@@ -44,24 +44,24 @@ background-color: #247AFB; border-radius: 10px; font-weight: bold; color: white;
 <img src="<%=ctxPath %>/resources/images/logo.png" style="width: 70%;"/>
 </div>
 <div id="top" style="height: 50px;" align="center">
-	<div class="text" onclick="location.href='#'" id="dashboard" style="margin-top: 15%;">대시보드</div>
+	<div class="text" onclick="location.href='<%=ctxPath%>/admin/main'" id="dashboard" style="margin-top: 15%;">대시보드</div>
 </div>
 <hr>
 <div id="middle" style="height: 200px;" align="center">
 	<div class="minitext">관리</div>
-	<div class="text" onclick="location.href='#'" id="memberM">회원 관리</div>
-	<div class="text" onclick="location.href='#'" id="clubM">동호회 관리</div>
-	<div class="text" onclick="location.href='#'" id="gymM">대관 관리</div>
+	<div class="text" onclick="location.href='<%=ctxPath%>/admin/manage/member'" id="memberM">회원 관리</div>
+	<div class="text" onclick="location.href='<%=ctxPath%>/admin/manage/...'" id="clubM">동호회 관리</div>
+	<div class="text" onclick="location.href='<%=ctxPath%>/admin/manage/...'" id="gymM">대관 관리</div>
 </div>
 <hr>
 <div id="middle2" style="height: 150px;" align="center">
 <div class="minitext">등록</div>
-	<div class="text" onclick="location.href='#'" id="noticeR">공지사항 등록</div>
-	<div class="text" onclick="location.href='#'" id="gymR">체육관 등록</div>
+	<div class="text" onclick="location.href='<%=ctxPath%>/admin/reg/...'" id="noticeR">공지사항 등록</div>
+	<div class="text" onclick="location.href='<%=ctxPath%>/admin/reg/...'" id="gymR">체육관 등록</div>
 </div>
 <hr>
 <div id="bottom" style="height: 100px;" align="center">
-	<div class="text" onclick="location.href='#'" id="logout">로그아웃</div>
+	<div class="text" onclick="location.href='<%=ctxPath%>/admin/logout'" id="logout">로그아웃</div>
 </div>
 
 </div>

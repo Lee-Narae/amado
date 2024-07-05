@@ -100,8 +100,34 @@ on A.clubseq = C.clubseq
 where A.fk_userid = 'leenr' and sportname = '축구';
 
 
+select * from tbl_matchingreg;
 
 
+select * from tbl_member;
+
+update tbl_member set memberrank = 2 where userid='admin';
+commit;
 
 
+userid, name, email, postcode, address, detailaddress, extraaddress, mobile, gender, birthday, memberimg,
+		       memberrank, speed, quick, power, earth, stretch, pwdchangegap, NVL( lastlogingap, trunc( months_between(sysdate, registerday) ) ) AS lastlogingap
 
+
+select userid, name, email, postcode, address, detailaddress, extraaddress, mobile, gender, birthday
+from tbl_member
+where userid = 'leenr' and password = '9695b88a59a1610320897fa84cb7e144cc51f2984520efb77111d94b402a8382' and memberrank = 2;
+
+select rn, userid, name, email, gender, memberrank
+from
+(select rownum rn, userid, name, email, gender, memberrank
+from
+(select userid, name, email, gender, case memberrank when 0 then '일반회원' when 1 then '동호회장' else '관리자' end memberrank
+from tbl_member
+where userid = 'leenr'
+order by registerday desc)
+)
+where rn between 1 and 10;
+
+desc tbl_member;
+
+select * from tbl_member;

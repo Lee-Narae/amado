@@ -213,4 +213,52 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		String sportseq = dao.getSportseq_forReg(sportname);
 		return sportseq;
 	}
+
+	// 관리자 로그인
+	@Override
+	public MemberVO adminLogin(Map<String, String> paramap) {
+
+		MemberVO admin = dao.getAdmin(paramap);
+		
+		return admin;
+	}
+
+	// 관리자 - 전체 페이지 수 알아오기
+	@Override
+	public int getMemberTotalPage(Map<String, String> paramap) {
+		
+		try {
+			if("email".equals(paramap.get("searchType"))) {
+				paramap.put("searchWord", aES256.encrypt(paramap.get("searchWord")));
+			}
+		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+			e.printStackTrace();
+		}
+		
+		int n = dao.getMemberTotalPage(paramap);
+		return n;
+	}
+
+	// 관리자 - 회원 조회
+	@Override
+	public List<MemberVO> select_member_paging(Map<String, String> paramap) {
+		List<MemberVO> memberList = dao.select_member_paging(paramap);
+		
+		for(MemberVO member:memberList) {
+			try {
+			member.setEmail(aES256.decrypt(member.getEmail()));
+			}catch(UnsupportedEncodingException | GeneralSecurityException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return memberList;
+	}
+
+	// 관리자 - 전체 회원 수 조회
+	@Override
+	public int getTotalMemberCount(Map<String, String> paramap) {
+		int n = dao.getTotalMemberCount(paramap);
+		return n;
+	}
 }

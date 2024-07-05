@@ -103,7 +103,7 @@ public class ControllerJY {
 	
 	// 동호회등록  완료 요청
 	@PostMapping(value="/club/clubRegisterEnd.do" , produces="text/plain;charset=UTF-8")
-	public ModelAndView clubRegisterEnd(Map<String, String> paraMap, ModelAndView mav, BoardVO boardvo, ClubVO clubvo, MultipartHttpServletRequest mrequest) throws Exception {
+	public ModelAndView clubRegisterEnd(Map<String, String> paraMap, ModelAndView mav, ClubVO clubvo, MultipartHttpServletRequest mrequest) throws Exception {
 		
 		
 		MultipartFile attach = clubvo.getAttach();
@@ -142,8 +142,6 @@ public class ControllerJY {
 			byte[] bytes = null;
 			//첨부파일의 내용물을 담는것
 			
-			long fileSize = 0;
-			//첨부 파일의 크기 
 			
 			try {
 				bytes= attach.getBytes();
@@ -164,46 +162,55 @@ public class ControllerJY {
 	             
 	         */
 				
-				boardvo.setFilename(newFileName);
+				clubvo.setWasfileName(newFileName);
 				//was(톰캣)에 저장된 파일명(2024062712075997631067179400.jpg)
-				boardvo.setOrgfilename(originalFilename);
+				clubvo.setClubimg(originalFilename);
 				// 게시판 페이지에서 첨부된 파일(LG_싸이킹청소기_사용설명서.pdf)을 보여줄 때 사용.
 	            // 또한 사용자가 파일을 다운로드 할때 사용되어지는 파일명으로 사용.
-				fileSize = attach.getSize(); // 첨부파일의 크기 
-				boardvo.setFilesize(String.valueOf(fileSize));
 				
 				
 			} catch (IOException e) {
 			
 				e.printStackTrace();
 			}
-		
-			
-			
 			
 		}
 		
+			
+			System.out.println("1"+clubvo.getAttach());
+			System.out.println("2"+clubvo.getCity());
+			System.out.println("22"+clubvo.getFk_sportseq());
+			System.out.println("4"+clubvo.getClubgym());
+			System.out.println("5"+clubvo.getClubimg());
+			
+			System.out.println("6"+clubvo.getClubname());
+			System.out.println("7"+clubvo.getClubpay());
+			
+			System.out.println("12"+clubvo.getClubtime());
+			System.out.println("14"+clubvo.getLocal());
+			System.out.println("17"+clubvo.getWasfileName());
+			
+			System.out.println(clubvo.getFk_userid());
+			System.out.println(clubvo.getClubtel());
+			System.out.println(clubvo.getClubgym());
+		// === !!! 첨부파일이 있는 경우 작업 끝 !!! ===	
+
+		int n =0;
 		
+		if(!(attach.isEmpty())) {
+			//파일첨부가 있는 경우라면
+			n=service.add_withFile(clubvo);
+		}
 		
-		
-		//MultipartFile attach = clubvo.getAttach();
-		
-		System.out.println("1"+clubvo.getAttach());
-		//System.out.println("2"+clubvo.getCity());
-		
-		System.out.println("4"+clubvo.getClubgym());
-		System.out.println("5"+clubvo.getClubimg());
-		
-		//System.out.println("6"+clubvo.getClubname());
-		System.out.println("7"+clubvo.getClubpay());
-		
-		System.out.println("12"+clubvo.getClubtime());
-		//System.out.println("14"+clubvo.getLocal());
-		System.out.println("17"+clubvo.getWasfileName());
-		
-	
-		mav.setViewName("redirect:/index.do");
-		
+		if(n==1) {
+			mav.setViewName("redirect:/index.do");
+		    //  /list.action 페이지로 redirect(페이지이동)해라는 말이다.
+		}
+		else {
+			mav.setViewName("amado/error/add_error.tiles1");
+			//  /WEB-INF/views/tiles1/board/error/add_error.jsp 파일을 생성한다.
+		}
+
 		return mav;
 		
 		

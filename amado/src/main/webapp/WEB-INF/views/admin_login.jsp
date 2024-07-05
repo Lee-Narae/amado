@@ -218,9 +218,53 @@
   letter-spacing: 0;
   line-height: normal;
 }
-</style>
 
+.overlap-2:hover {
+cursor: pointer;
+background-color: #4da9ff;
+}
+</style>
 </head>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$("input:text[name='userid']").focus();
+	
+	$("input:password[name='password']").keyup(function(e){
+		if(e.keyCode == 13){
+			goAdminLogin();
+		}
+	});
+	
+});
+
+function goAdminLogin(){
+	
+	// 유효성 검사
+	const userid = $("input:text[name='userid']").val().trim();
+	const password = $("input:password[name='password']").val().trim();
+	
+	if(userid == ''){
+		alert("아이디를 입력하세요.");
+		$("input:text[name='userid']").focus();
+		return;
+	}
+	
+	if(password == ''){
+		alert("비밀번호를 입력하세요.");
+		$("input:password[name='password']").focus();
+		return;
+	}
+	
+	// 폼태그 전송
+	const frm = document.adminLoginFrm;
+	frm.action = "<%=ctxPath%>/admin/adminLogin";
+	frm.method = "post";
+	frm.submit();
+	
+}
+</script>
+
 <body>
 <div class="login">
   <div class="div">
@@ -232,17 +276,17 @@
           <form name="adminLoginFrm">
           <div class="group-3">
             <div class="text-wrapper-2">ID</div>
-            <input class="password-wrapper" type="text" maxlength="20" placeholder="아이디를 입력하세요"/>
+            <input class="password-wrapper" name="userid" type="text" maxlength="20" placeholder="아이디를 입력하세요"/>
           </div>
           <div class="group-wrapper">
             <div class="group-4">
               <div class="text-wrapper-2">Password</div>
-              <input class="password-wrapper" type="password" maxlength="20" placeholder="비밀번호를 입력하세요"/>
+              <input class="password-wrapper" name="password" type="password" maxlength="20" placeholder="비밀번호를 입력하세요"/>
             </div>
           </div>
           </form>
           <div class="overlap-wrapper">
-            <div class="overlap-2"><div class="text-wrapper-4">로그인</div></div>
+            <div class="overlap-2" onclick="goAdminLogin()"><div class="text-wrapper-4">로그인</div></div>
           </div>
         </div>
       </div>

@@ -341,7 +341,12 @@
 				and city like '%'||'제주'||'%'
 			</when>
 			<otherwise></otherwise>
-		</choose>			
+		</choose>
+		
+		<if test='!searchWord.equals("")'>
+		    and clubname like '%' || #{searchWord} || '%'
+		</if>
+					
 	</select>
 	
 	
@@ -396,6 +401,8 @@
 			</when>
 			<otherwise>and fk_sportseq = to_number(#{params})</otherwise>
 		</choose>
+		)
+		where rno between to_number(#{startRno}) and to_number(#{endRno})
 		<choose>
 			<when test="searchType_b == 'none'"></when>
 			<when test="searchType_b == 'seoul'">
@@ -468,8 +475,6 @@
 			</when>
 			<otherwise></otherwise>
 		</choose>	
-		)
-		where rno between to_number(#{startno}) and to_number(#{endno})
 	
 	</select>
 
