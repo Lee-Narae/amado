@@ -263,17 +263,6 @@
                 <option value="gyeongnam">경상남도</option>
                 <option value="jeju">제주특별자치도</option>
             </select> 
-<!--             <select name="searchType_c" style="height: 26px; margin-left: 2%; margin-right: 5px;">
-                <option value="none" selected="selected">== 카테고리선택 ==</option>
-                <option value="soccer">축구</option>
-                <option value="baseball">야구</option>
-                <option value="volleyball">배구</option>
-                <option value="basketball">농구</option>
-                <option value="tennis">테니스</option>
-                <option value="Bowling">볼링</option>
-                <option value="foot_volleyball">족구</option>
-                <option value="Badminton">배드민턴</option>
-            </select>  -->
         </div>
         <div class="float-right" style="display: flex; margin-bottom: 20px;">
             <input type="text" name="searchWord" size="30" placeholder="동호회명을 검색하세요" class="search-input" autocomplete="off" />

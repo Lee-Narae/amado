@@ -5,11 +5,16 @@ public class BoardVO {
 	private String boardseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status,
 			orgfilename, filename, filesize;
 
+	private String fk_sportseq;
+	
 	// select 용 //
 	private String previousseq; // 이전글번호
 	private String previoussubject; // 이전글제목
 	private String nextseq; // 다음글번호
 	private String nextsubject; // 다음글제목
+	private String rno; 
+	
+	
 	// select 용 //
 	
 	/*
@@ -156,6 +161,23 @@ boardseq                    NUMBER   not null                -- 전체게시판�
 		this.nextsubject = nextsubject;
 	}
 
+	public String getFk_sportseq() {
+		return fk_sportseq;
+	}
+
+	public void setFk_sportseq(String fk_sportseq) {
+		this.fk_sportseq = fk_sportseq;
+	}
+
+	public String getRno() {
+		return rno;
+	}
+
+	public void setRno(String rno) {
+		this.rno = rno;
+	}
+
+	
 	
 	
 }

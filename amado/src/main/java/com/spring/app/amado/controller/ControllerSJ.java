@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
@@ -43,21 +44,29 @@ public class ControllerSJ {
 //		System.out.println("파라미터 부분: " + params);
 //		파라미터 부분: sportseq=1
 //		파라미터 부분: /community/list.do
-		
-		List<BoardVO> boardList = null;
 
+		if(request.getParameter("sportseq") != null) {
+			params = request.getParameter("sportseq");
+		}
+		
+		List<BoardVO> boardPagingList = null;
+
+		
+		
+		
 		// === 페이징 처리를 안한 검색어가 없는 전체 글목록 보여주기 === //
 //		boardList = service.boardListNoSearch();
 
-		// === #110. 페이징 처리를 안한 검색어가 있는 전체 글목록 보여주기 === //
 		String searchType = request.getParameter("searchType");
 		String searchWord = request.getParameter("searchWord");
-
+		String str_currentShowPageNo = request.getParameter("currentShowPageNo");
+		
+		
 		if (searchType == null) {
 			searchType = "title";
 		}
 		if (searchWord == null) {
-			searchWord = "";
+			searchWord = " ";
 		}
 
 		if (searchWord != null) {
@@ -67,12 +76,108 @@ public class ControllerSJ {
 		Map<String, String> paraMap = new HashMap<>();
 		paraMap.put("searchType", searchType);
 		paraMap.put("searchWord", searchWord);
+		paraMap.put("params", params);
+		
+//		System.out.println("확인용 params : " + params);
+		
+		int totalCount = 0; // 총 게시물 건수
+		int sizePerPage = 10; // 한 페이지당 보여줄 게시물 건수
+		int currentShowPageNo = 0; // 현재 보여주는 페이지 번호로서, 초기치로는 1페이지로 설정함.
+		int totalPage = 0; // 총 페이지수(웹브라우저상에서 보여줄 총 페이지 개수, 페이지바)
 
-		boardList = service.boardListSearch(paraMap);
+        // 게시판 총 페이지 수(검색포함)
+        totalCount = service.getListSearchTotalPage(paraMap);
 
-		mav.addObject("boardList", boardList);
-		mav.addObject("paraMap", paraMap);
-		mav.addObject("params", params);
+//      System.out.println("확인용 ~~ totalCount : " + totalCount);
+        
+        
+        totalPage = (int) Math.ceil((double) totalCount / sizePerPage);
+        
+        
+        // 게시판에 보여지는 초기화면
+		if (str_currentShowPageNo == null) {
+			currentShowPageNo = 1;
+		}
+		else {
+			try {
+				currentShowPageNo = Integer.parseInt(str_currentShowPageNo);
+				if (currentShowPageNo < 1 || currentShowPageNo > totalCount) {
+					currentShowPageNo = 1;
+				}
+			} catch (NumberFormatException e) {
+				currentShowPageNo = 1;
+			}
+		}
+
+		int startRno = ((currentShowPageNo - 1) * sizePerPage) + 1; // 시작 행번호
+		int endRno = startRno + sizePerPage - 1; // 끝 행번호
+//		System.out.println("확인용 !~~ startRno : " + startRno);
+//		System.out.println("확인용 !~~ endRno : " + endRno);
+		
+		paraMap.put("startRno", Integer.toString(startRno));
+		paraMap.put("endRno", Integer.toString(endRno));
+        
+        
+        
+		// 검색타입 있거나 없는 리스트 가져오기(페이징)
+		boardPagingList = service.boardListSearchPaging(paraMap);
+		mav.addObject("boardPagingList", boardPagingList);
+		
+		// 검색시 검색조건 및 검색어 값 유지시키기
+		if ("title".equals(searchType) || "content".equals(searchType) || "title_content".equals(searchType) ||
+			"fk_userid".equals(searchType) || !" ".equals(searchWord) ) { 
+			mav.addObject("paraMap", paraMap);
+		}
+		
+		// === 페이지바 만들기 === //
+		int blockSize = 10;
+		// blockSize 는 1개 블럭(토막)당 보여지는 페이지번호의 개수이다.
+
+		int loop = 1;
+		/*
+		 * loop는 1부터 증가하여 1개 블럭을 이루는 페이지번호의 개수[ 지금은 10개(== blockSize) ] 까지만 증가하는 용도이다.
+		 */
+
+		int pageNo = ((currentShowPageNo - 1) / blockSize) * blockSize + 1;
+        
+		String pageBar = ""; 
+        
+        // *** [맨처음][이전] 만들기 *** //
+        pageBar += "<li class='page-item'><a class='page-link' href='list.do?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo=1&sportseq="+params+"'>◀◀</a></li>"; 
+        
+        if(pageNo != 1) {
+           pageBar += "<li class='page-item'><a class='page-link' href='list.do?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+(pageNo-1)+"&sportseq="+params+"'>◀</a></li>"; 
+        }
+        
+        while( !(loop > blockSize || pageNo > totalPage) ) {
+           
+           if(pageNo == currentShowPageNo) {
+              pageBar += "<li class='page-item active'><a class='page-link' href='#'>"+pageNo+"</a></li>"; 
+           }
+           else {
+              pageBar += "<li class='page-item'><a class='page-link' href='list.do?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"&sportseq="+params+"'>"+pageNo+"</a></li>"; 
+           }
+           loop++;    
+           pageNo++;  
+        }// end of while( !( ) )--------
+        
+        // *** [다음][마지막] 만들기 *** //
+        
+        if(pageNo <= totalPage) { 
+           pageBar += "<li class='page-item'><a class='page-link' href='list.do?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"&sportseq="+params+"'>▶</a></li>";
+        }
+        pageBar += "<li class='page-item'><a class='page-link' href='list.do?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+totalPage+"&sportseq="+params+"'>▶▶</a></li>";
+        
+        // *** ======= 페이지바 만들기 끝 ======= *** //           
+        
+        String currentURL = MyUtil.getCurrentURL(request);		
+		
+		
+        mav.addObject("params", params);
+        mav.addObject("paraMap", paraMap);
+	    mav.addObject("sizePerPage", sizePerPage);
+	    mav.addObject("pageBar", pageBar);
+	    mav.addObject("currentURL", currentURL);
 
 		mav.setViewName("community/list.tiles2");
 		return mav;
@@ -80,18 +185,41 @@ public class ControllerSJ {
 
 	// 글쓰기
 	@GetMapping("/community/add.do")
-	public ModelAndView add(ModelAndView mav) {
+	public ModelAndView requiredLogin_add(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+		
+		String url = MyUtil.getCurrentURL(request);
+		String params = url.substring(url.indexOf('=') + 1);
+		// sportseq 값(사이드 선택시)
+		
+		if(request.getParameter("sportseq") != null) {
+			params = request.getParameter("sportseq");
+		}
+		
+		mav.addObject("params", params);
+		
 		mav.setViewName("community/add.tiles2");
 		return mav;
 	}
 
 	// 게시판 글쓰기 완료 요청
 	@PostMapping("/community/addEnd.do")
-	public ModelAndView addEnd(ModelAndView mav, BoardVO boardvo) { // <== After Advice 를 사용하기 전
+	public ModelAndView addEnd(ModelAndView mav, BoardVO boardvo, HttpServletRequest request) { // <== After Advice 를 사용하기 전
 		/*
 		 * form 태그의 name 명과 BoardVO 의 필드명이 같다라면 request.getParameter("form 태그의 name명");
 		 * 을 사용하지 않더라도 자동적으로 BoardVO boardvo 에 set 되어진다.
 		 */
+		
+		String url = MyUtil.getCurrentURL(request);
+		String params = url.substring(url.indexOf('=') + 1);
+		// sportseq 값(사이드 선택시)
+		
+		if(request.getParameter("sportseq") != null) {
+			params = request.getParameter("sportseq");
+		}
+		
+		boardvo.setFk_sportseq(params);
+		
+		mav.addObject("params", params);		
 
 		String filename = boardvo.getFilename();
 		if (filename == null) {
@@ -210,7 +338,7 @@ public class ControllerSJ {
 		
 		String url = MyUtil.getCurrentURL(request);
 		String params = url.substring(url.indexOf('=') + 1);
-		// 파라미터 부분: 1
+		// sportseq 값(사이드 선택시)
 		
 		if(request.getParameter("sportseq") != null) {
 			params = request.getParameter("sportseq");
@@ -365,152 +493,5 @@ public class ControllerSJ {
 	}
 	
 	
-	/*
-	 * // 동호회 찾기 검색했을 경우
-	 * 
-	 * @ResponseBody
-	 * 
-	 * @GetMapping(value = "/club/search.do", produces = "text/plain;charset=UTF-8")
-	 * public String searchType_a(HttpServletRequest request) {
-	 * 
-	 * String searchType_a = request.getParameter("searchType_a"); String
-	 * searchType_b = request.getParameter("searchType_b"); String searchWord =
-	 * request.getParameter("searchWord"); String params =
-	 * request.getParameter("params");
-	 * 
-	 * if (searchWord == null) { searchWord = " "; }
-	 * 
-	 * if (searchWord != null) { searchWord = searchWord.trim(); }
-	 * 
-	 * // 현재 페이지 번호 String currentShowPageNo =
-	 * request.getParameter("currentShowPageNo");
-	 * 
-	 * // 페이지당 보여줄 동호회 수 String sizePerPage = request.getParameter("sizePerPage");
-	 * 
-	 * int totalCount = 0; int totalPage = 0;
-	 * 
-	 * 
-	 * Map<String, String> paraMap = new HashMap<>(); paraMap.put("searchType_a",
-	 * searchType_a); paraMap.put("searchType_b", searchType_b);
-	 * paraMap.put("searchWord", searchWord); paraMap.put("params", params);
-	 * 
-	 * // 동호회 총 페이지 수(검색포함) totalCount = service.getClubSearchTotalPage(paraMap); //
-	 * System.out.println("확인용~~ totalCount : " + totalCount); // 확인용~~ totalCount :
-	 * 3
-	 * 
-	 * HttpSession session = request.getSession();
-	 * session.setAttribute("totalCount", totalCount);
-	 * 
-	 * totalPage = (int) Math.ceil((double) totalCount /
-	 * Integer.parseInt(sizePerPage));
-	 * 
-	 * paraMap.put("currentShowPageNo", currentShowPageNo);
-	 * paraMap.put("sizePerPage", sizePerPage);
-	 * 
-	 * int no_currentShowPageNo =
-	 * Integer.parseInt(paraMap.get("currentShowPageNo")); int no_sizePerPage =
-	 * Integer.parseInt(paraMap.get("sizePerPage")); int int_startno =
-	 * (no_currentShowPageNo * no_sizePerPage) - (no_sizePerPage - 1); int int_endno
-	 * = (no_currentShowPageNo * no_sizePerPage); String startno =
-	 * String.valueOf(int_startno); String endno = String.valueOf(int_endno);
-	 * paraMap.put("startno", startno); paraMap.put("endno", endno);
-	 * 
-	 * try { if( Integer.parseInt(currentShowPageNo) > totalPage ||
-	 * Integer.parseInt(currentShowPageNo) <= 0 ) {
-	 * 
-	 * currentShowPageNo = "1"; paraMap.put("currentShowPageNo", currentShowPageNo);
-	 * 
-	 * } } catch(NumberFormatException e) { currentShowPageNo = "1";
-	 * paraMap.put("currentShowPageNo", currentShowPageNo); }
-	 * 
-	 * String pageBar = "";
-	 * 
-	 * int blockSize = 10; // blockSize 는 블럭(토막)당 보여지는 페이지 번호의 개수이다.
-	 * 
-	 * int loop = 1; // loop 는 1 부터 증가하여 1개 블럭을 이루는 페이지번호의 개수(지금은 10개)까지만 증가하는 용도이다.
-	 * 
-	 * // ==== !!! 다음은 pageNo 구하는 공식이다. !!! ==== // int pageNo = (
-	 * (Integer.parseInt(currentShowPageNo) - 1)/blockSize ) * blockSize + 1; //
-	 * pageNo 는 페이지바에서 보여지는 첫번째 번호이다.
-	 * 
-	 * // *** [맨처음][이전] 만들기 *** // pageBar +=
-	 * "<li class='page-item'><a class='page-link' href='findClub.do?searchType_a="
-	 * +searchType_a+"&searchType_b="+searchType_b+"&searchWord="+searchWord+
-	 * "&sizePerPage="+sizePerPage+"&currentShowPageNo=1&sportseq="+params+
-	 * "'>◀◀</a></li>";
-	 * 
-	 * if(pageNo != 1) { pageBar +=
-	 * "<li class='page-item'><a class='page-link' href='findClub.do?searchType_a="
-	 * +searchType_a+"&searchType_b="+searchType_b+"&searchWord="+searchWord+
-	 * "&sizePerPage="+sizePerPage+"&currentShowPageNo="+(pageNo-1)+"&sportseq="+
-	 * params+"'>◀</a></li>"; }
-	 * 
-	 * while( !(loop > blockSize || pageNo > totalPage) ) {
-	 * 
-	 * if(pageNo == Integer.parseInt(currentShowPageNo)) { pageBar +=
-	 * "<li class='page-item active'><a class='page-link' href='#'>"+pageNo+
-	 * "</a></li>"; } else { pageBar +=
-	 * "<li class='page-item'><a class='page-link' href='findClub.do?searchType_a="
-	 * +searchType_a+"&searchType_b="+searchType_b+"&searchWord="+searchWord+
-	 * "&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"&sportseq="+params+
-	 * "'>"+pageNo+"</a></li>"; }
-	 * 
-	 * loop++;
-	 * 
-	 * pageNo++;
-	 * 
-	 * }// end of while( !( ) )--------
-	 * 
-	 * // *** [다음][마지막] 만들기 *** //
-	 * 
-	 * 
-	 * if(pageNo <= totalPage) { pageBar +=
-	 * "<li class='page-item'><a class='page-link' href='findClub.do?searchType_a="
-	 * +searchType_a+"&searchType_b="+searchType_b+"&searchWord="+searchWord+
-	 * "&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"&sportseq="+params+
-	 * "'>▶</a></li>"; } pageBar +=
-	 * "<li class='page-item'><a class='page-link' href='findClub.do?searchType_a="
-	 * +searchType_a+"&searchType_b="+searchType_b+"&searchWord="+searchWord+
-	 * "&sizePerPage="+sizePerPage+"&currentShowPageNo="+totalPage+"&sportseq="+
-	 * params+"'>▶▶</a></li>";
-	 * 
-	 * // *** ======= 페이지바 만들기 끝 ======= *** //
-	 * 
-	 * String currentURL = MyUtil.getCurrentURL(request);
-	 * 
-	 * List<ClubVO> clubList = null;
-	 * 
-	 * // 검색타입 있는 리스트 가져오기 // clubList = service.search(paraMap);
-	 * 
-	 * 
-	 * 
-	 * 
-	 * JSONArray jsonArr = new JSONArray(); // []
-	 * 
-	 * if (clubList != null) { for (ClubVO clubvo : clubList) { JSONObject jsonObj =
-	 * new JSONObject(); // {} jsonObj.put("rank", clubvo.getRank());
-	 * jsonObj.put("city", clubvo.getCity()); jsonObj.put("clubgym",
-	 * clubvo.getClubgym()); jsonObj.put("clubimg", clubvo.getClubimg());
-	 * jsonObj.put("clubname", clubvo.getClubname()); jsonObj.put("clubpay",
-	 * clubvo.getClubpay()); jsonObj.put("clubscore", clubvo.getClubscore());
-	 * jsonObj.put("clubseq", clubvo.getClubseq()); jsonObj.put("clubstatus",
-	 * clubvo.getClubstatus()); jsonObj.put("clubtel", clubvo.getClubtel());
-	 * jsonObj.put("clubtime", clubvo.getClubtime()); jsonObj.put("fk_sportseq",
-	 * clubvo.getFk_sportseq()); jsonObj.put("local", clubvo.getLocal());
-	 * jsonObj.put("membercount", clubvo.getMembercount()); jsonObj.put("rank",
-	 * clubvo.getRank());
-	 * 
-	 * jsonObj.put("searchType_a", searchType_a); jsonObj.put("searchType_b",
-	 * searchType_b);
-	 * 
-	 * jsonObj.put("params", params); jsonObj.put("sizePerPage", sizePerPage);
-	 * jsonObj.put("pageBar", pageBar); jsonObj.put("currentURL", currentURL);
-	 * 
-	 * jsonArr.put(jsonObj); } }
-	 * 
-	 * request.setAttribute("pageBar", pageBar);
-	 * 
-	 * return jsonArr.toString(); }
-	 */
 
 }
