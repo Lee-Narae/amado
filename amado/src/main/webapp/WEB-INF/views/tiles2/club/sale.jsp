@@ -324,13 +324,13 @@ rotate(
     			
     			if($(e.target).text() == "수정"){
     			 // alert("댓글수정");
-    			 //	alert($(e.target).parent().parent().children("td:nth-child(2)").text()); // 수정전 댓글내용
-    			    const $content = $(e.target).parent().parent().children("td:nth-child(2)");
-    			    origin_comment_content = $(e.target).parent().parent().children("td:nth-child(2)").text();
+    			 	alert($(e.target).parent().parent().children('#comment_text').text()); // 수정전 댓글내용
+    			    const $content = $(e.target).parent().parent().children('#comment_text');
+    			    origin_comment_content = $(e.target).parent().parent().children('#comment_text').text();
     			    $content.html(`<input id='comment_update' type='text' value='\${origin_comment_content}' size='40' />`); // 댓글내용을 수정할 수 있도록 input 태그를 만들어 준다.
     			    
-    			    $(e.target).text("완료").removeClass("btn-secondary").addClass("btn-info");
-    			    $(e.target).next().next().text("취소").removeClass("btn-secondary").addClass("btn-danger"); 
+    			    $(e.target).text("완료");
+    			    $(e.target).next().text("취소"); 
     			    
     			    $(document).on("keyup", "input#comment_update", function(e){
     			    	if(e.keyCode == 13){
@@ -365,8 +365,8 @@ rotate(
     	                     goViewComment(currentShowPageNo); // 페이징 처리 한 댓글 읽어오기
     			    	  ////////////////////////////////////////////////////
     			    	  
-    			    	     $(e.target).text("수정").removeClass("btn-info").addClass("btn-secondary");
-    			    		 $(e.target).next().next().text("삭제").removeClass("btn-danger").addClass("btn-secondary");
+    			    	     $(e.target).text("수정");
+    			    		 $(e.target).next().text("삭제");
     			    	 },
     			    	 error: function(request, status, error){
     					    alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
@@ -386,8 +386,8 @@ rotate(
     			    const $content = $(e.target).parent().parent().children("td:nth-child(2)"); 
     			    $content.html(`\${origin_comment_content}`);
     			 
-    			    $(e.target).text("삭제").removeClass("btn-danger").addClass("btn-secondary");
-    		    	$(e.target).prev().prev().text("수정").removeClass("btn-info").addClass("btn-secondary"); 
+    			    $(e.target).text("삭제");
+    		    	$(e.target).prev().text("수정"); 
     			}
     			
     			else if($(e.target).text() == "삭제"){
@@ -546,7 +546,7 @@ function goReadComment(){
 			    	    }
 			    	    v_html += "<div>";
 			    	    v_html += "<div style='font-size:12pt; font-weight: bold; margin-bottom: 3%;'>" + item.fk_userid + "</div>";
-			    	    v_html += "<div>" + item.comment_text + "</div>";
+			    	    v_html += "<div id='comment_text'>" + item.comment_text + "</div>";
 			    	    v_html += "<div class='comment' style='color:#999999; font-size:10pt; margin-top: 3%;'>" + item.registerdate + " &nbsp;&nbsp;<a>답글쓰기</a>";
 			    	    if (${sessionScope.loginuser != null} && "${sessionScope.loginuser.userid}" == item.fk_userid) {
 			    	        v_html += "<br><button class='btnUpdateComment' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>수정</button>&nbsp;&nbsp;<button class='btnDeleteComment' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>삭제</button>";
@@ -903,17 +903,13 @@ function goViewComment(currentShowPageNo){
 	
 	<%-- === #94. 댓글 내용 보여주기 === --%>
      
-     <div id="commentView" >
-    
-	</div>
-	
-	<div>
+     <div>
 		<form name="commentFrm">
 			<div>
 				<textarea name="comment_text" style="font-size: 12pt; width: 100%; height: 100px;"></textarea>
-				<input type="text" name="fk_userid" value="${sessionScope.loginuser.userid}" /> 
-				<input type="text" name="name" value="${sessionScope.loginuser.name}" />
-				<input type="text" name="fleamarketseq" value="${requestScope.pvo.pnum}" />
+				  
+				<input type="hidden" name="name" value="${sessionScope.loginuser.name}" />
+				<input type="hidden" name="fleamarketseq" value="${requestScope.pvo.pnum}" />
 			</div>
 			<div style="text-align: right; font-size: 12pt;">
 				<button type="button" class="btn btn-outline-secondary"
@@ -923,6 +919,12 @@ function goViewComment(currentShowPageNo){
 			</div>
 		</form>
 	</div>
+     
+     <div id="commentView" >
+    
+	</div>
+	
+	
 
 	<%-- === #155. 댓글페이지바가 보여지는 곳 === --%> 
  	<div style="display: flex; margin-bottom: 50px;">
