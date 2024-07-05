@@ -27,3 +27,10 @@ create table tbl_club
 );
 
 -- Table TBL_CLUB이(가) 생성되었습니다.
+
+
+select *
+from tbl_club
+
+
+

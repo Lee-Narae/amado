@@ -25,14 +25,6 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 	
 	//////////////////////////////////////////////
 	
-	// 동호회등록  완료 요청(파일첨부ㅇ)
-	@Override
-	public int add_withFile(ClubVO clubvo) {
-		
-		int n = dao.add_withFile(clubvo); //첨부파일이 있는경우
-		return n;
-
-	}
 
 
 
@@ -53,7 +45,15 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 	}
 
 
-	
+	// 동호회등록  완료 요청(파일첨부ㅇ)
+	@Override
+	public int add_withFile(ClubVO clubvo) {
+		
+		int n = dao.add_withFile(clubvo); //첨부파일이 있는경우
+		return n;
+
+	}
+
 	
 	
 	

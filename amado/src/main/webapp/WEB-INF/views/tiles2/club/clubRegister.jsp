@@ -83,16 +83,15 @@ $(document).ready(function(){
 	
 	 $("button#btnRegister").click(function(){
 	 	 
-		  // 폼(form)을 전송(submit)
+		  //폼(form)을 전송(submit)
 	 	  const frm = document.registerClubFrm;
 	 	  frm.method = "post";
 	 	  frm.action = "<%= ctxPath%>/club/clubRegisterEnd.do";
 	 	  frm.submit();
+	 	  
 	 });
 	
 });// end of $(document).ready(function(){})---------------------------
-
-
 
 
 </script>
@@ -116,16 +115,16 @@ $(document).ready(function(){
 				
 				<!-- 종목  -->
 				<div id="infoo">
-					<select name="sportseq" style="width:80%;" class="form-select-lg mb-3" aria-label="Large select example">
+					<select name="fk_sportseq" style="width:80%;" class="form-select-lg mb-3" aria-label="Large select example">
 						<option selected>종목</option>
-						<option value="soccer">축구</option>
-						<option value="baseball">야구</option>
-						<option value="volleyball">배구</option>
-						<option value="basketball">농구</option>
-						<option value="tenis">테니스</option>
-						<option value="bowling">볼링</option>
-						<option value="jockgu">족구</option>
-						<option value="badmiton">배드민턴</option>
+						<option value="1">축구</option>
+						<option value="2">야구</option>
+						<option value="3">배구</option>
+						<option value="4">농구</option>
+						<option value="5">테니스</option>
+						<option value="6">볼링</option>
+						<option value="7">족구</option>
+						<option value="8">배드민턴</option>
 					</select>
 					
 					<div id="name" style="font-size: 25px; font-weight: bold; ">${sessionScope.loginuser.name}</div> <!-- 자동 -->
@@ -139,7 +138,7 @@ $(document).ready(function(){
 		      <!-- 동호회명 -->
 				<h3 id="simple-list-item-2" style="font-weight: bolder;">동호회명<span style="color: red;">*</span></h3>
 				<hr>
-				<input name="clubgym" id="form-control-lg" type="text" placeholder="동호회 이름을 입력하세요. " aria-label="">
+				<input name="clubname" id="form-control-lg" type="text" placeholder="동호회 이름을 입력하세요. " aria-label="">
 			
 				<br><br><br><br>
 		
@@ -159,7 +158,7 @@ $(document).ready(function(){
 			<select name="local"  id="local" class="form-select form-select-lg mb-3" aria-label="Large select example"></select>
 			
 			<span style="font-weight: bolder;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;활동 구장</span>
-			<input name="gym" id="form-control-lg" type="text" placeholder="oo체육관" aria-label="">
+			<input name="clubgym" id="form-control-lg" type="text" placeholder="oo체육관" aria-label="">
 			
 			
 			<br><br><br><br>
@@ -198,7 +197,7 @@ $(document).ready(function(){
 			
 			<h3 id="simple-list-item-7" style="font-weight: bolder;">동호회 대표 이미지<span style="color: red;">*</span></h3>
 			<hr>
-			<!-- <input class="img_file" name="clubimg" type="file" name="attach" /> -->
+			<input class="img_file" id="clubimg" type="file" name="attach" />
 			
 			<br><br><br><br>
 		      
@@ -222,6 +221,9 @@ $(document).ready(function(){
 		  </div>
 		  
 		</div>
+	
+		<input type="hidden" name="fk_userid" value="${sessionScope.loginuser.userid}" />
+		<input type="hidden" name="clubtel" value="${sessionScope.loginuser.mobile}" />
 	
 		<div style="margin: 20px;">
 			<button type="button" class="btn btn-secondary btn-sm mr-3" id="btnRegister">등록하기</button>
