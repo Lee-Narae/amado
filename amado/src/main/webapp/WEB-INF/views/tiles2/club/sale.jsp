@@ -907,7 +907,7 @@ function goViewComment(currentShowPageNo){
 		<form name="commentFrm">
 			<div>
 				<textarea name="comment_text" style="font-size: 12pt; width: 100%; height: 100px;"></textarea>
-				  
+				<input type="hidden" name="fk_userid" value="${sessionScope.loginuser.userid}" />
 				<input type="hidden" name="name" value="${sessionScope.loginuser.name}" />
 				<input type="hidden" name="fleamarketseq" value="${requestScope.pvo.pnum}" />
 			</div>
