@@ -45,6 +45,10 @@ $(document).ready(function(){
 	// ==>> 제품이미지 파일선택을 선택하면 화면에 이미지를 미리 보여주기 시작 <<== //
 	 $(document).on("change", "input.img_file", function(e){
 		
+		 const scrollSpy = new bootstrap.ScrollSpy(document.body, {
+			  target: '#navbar-example'
+			})
+		 
 		 $("div#pview").hide();
 		 
 		 const input_file =  $(e.target).get(0);
@@ -157,12 +161,15 @@ $(document).ready(function(){
 	
 });// end of $(document).ready(function(){})---------------------------
 
+function goTop() {
+    $(window).scrollTop(0);
+}
 
 </script>
 
 
 <form name="registerClubFrm" enctype="multipart/form-data">
-	<div class="container" style="border:solid 0px black; margin-top: 12%;">
+	<div id="simple-list-item-0" class="container" style="border:solid 0px black; margin-top: 12%;">
 	
 		<div class="row">
 		  
@@ -271,20 +278,18 @@ $(document).ready(function(){
 		  
 		  
 		  <div class="col-4">
-		    <div style="position: fixed;" id="simple-list-example" class="d-flex flex-column gap-2 simple-list-example-scrollspy">
-		      <div>필수 입력사항</div>
+		    <div id="simple-list-example" class="d-flex flex-column gap-2 simple-list-example-scrollspy">
+		      <div style="margin-bottom: 1rem;">필수 입력사항</div>
 		      <br>
-		      <button onclick="goTop()" class='scroll-top' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>맨첨으로 가기</button>
-			  <button onclick="goBottom()" class='scroll-top' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>맨밑 으로 가기</button>
-		      <a class="p-1 rounded" href="#simple-list-item-1"><em>✔️</em>기본정보</a>
-		      <a class="p-1 rounded" href="#simple-list-item-2"><em>✔️</em>동호회명</a>
-		      <a class="p-1 rounded" href="#simple-list-item-3"><em>✔️</em>지역</a>
-		      <a class="p-1 rounded" href="#simple-list-item-4"><em>✔️</em>운영시간</a>
-		      <a class="p-1 rounded" href="#simple-list-item-5"><em>✔️</em>정원</a>
-		      <a class="p-1 rounded" href="#simple-list-item-6"><em>✔️</em>회비</a>
-		      <a class="p-1 rounded" href="#simple-list-item-7"><em>✔️</em>대표 이미지</a>
+		      <a class="p-1 rounded" href="#simple-list-item-0"><em>✔️</em>기본정보</a>
+		      <a class="p-1 rounded" href="#simple-list-item-1"><em>✔️</em>동호회명</a>
+		      <a class="p-1 rounded" href="#simple-list-item-2"><em>✔️</em>지역</a>
+		      <a class="p-1 rounded" href="#simple-list-item-3"><em>✔️</em>운영시간</a>
+		      <a class="p-1 rounded" href="#simple-list-item-4"><em>✔️</em>정원</a>
+		      <a class="p-1 rounded" href="#simple-list-item-5"><em>✔️</em>회비</a>
+		      <a class="p-1 rounded" href="#simple-list-item-6"><em>✔️</em>대표 이미지</a>
 		    </div>
-		  </div>
+		  </div>   
 		  
 		</div>
 	

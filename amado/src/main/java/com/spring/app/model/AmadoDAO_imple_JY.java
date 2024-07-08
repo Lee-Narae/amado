@@ -52,5 +52,13 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 		
 	}
 
+	
+	// 운동 종목 시퀀스가져오기
+	@Override
+	public List<String> getSportList() {
+		List<String> sportList = sqlsession.selectList("JY.getSportList");
+		return sportList;
+	}
+
 
 }
