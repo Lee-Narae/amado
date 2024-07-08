@@ -39,6 +39,7 @@ import com.spring.app.common.FileManager;
 import com.spring.app.common.MyUtil;
 import com.spring.app.common.Sha256;
 import com.spring.app.domain.MemberVO;
+import com.spring.app.domain.NoticeVO;
 import com.spring.app.service.AmadoService_NR;
 
 @Controller
@@ -850,4 +851,218 @@ public class ControllerNR {
 	}
 	
 	
+	@PostMapping("/admin/reg/noticeEnd")
+	public ModelAndView noticeEnd(HttpServletRequest request, NoticeVO nvo, MultipartHttpServletRequest mrequest, ModelAndView mav) {
+		
+		MultipartFile attach = nvo.getAttach();
+
+		if(attach != null) {
+			
+			HttpSession session = mrequest.getSession(); 
+	        String root = session.getServletContext().getRealPath("/");
+	        String path = root+"resources"+File.separator+"files";
+			
+	        String newFileName = "";
+	        
+	        byte[] bytes = null;
+	        
+	        long fileSize = 0;
+			
+	        try {
+				bytes = attach.getBytes();
+				// 첨부파일의 내용물을 읽어서 배열에 저장한다.
+				
+				String originalFilename = attach.getOriginalFilename();
+				// attach.getOriginalFilename() 이 첨부파일명의 파일명(예: 강아지.png) 이다.
+				// System.out.println("originalFilename => " + originalFilename); 
+	            // originalFilename => LG_싸이킹청소기_사용설명서.pdf
+				
+				newFileName = fileManager.doFileUpload(bytes, originalFilename, path);
+				// 첨부된 파일을 업로드하는 것
+				
+				// System.out.println("newFileName => " + newFileName);
+				
+				/*
+	             3. BoardVO boardvo 에 fileName 값과 orgFilename 값과 fileSize 값을 넣어주기  
+	            */
+				
+				nvo.setFilename(newFileName); // WAS에 저장된 파일 이름(나노시분초) => 2024062712062911435437005500.png
+				nvo.setOrgfilename(originalFilename); // 원래 파일명 => icons8-volleyball-96.png ==> 사용자가 다운받을 때 이 이름 사용
+				
+				fileSize = attach.getSize();
+				nvo.setFilesize(String.valueOf(fileSize));
+				
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	        
+		}
+		
+		int n = 0;
+		
+		if(attach.isEmpty()) { // null 과 비슷한데 ""이어도 해당됨. return 타입은 boolean
+			// 파일 첨부가 없다면
+			n = service.addNotice(nvo);
+		}
+		
+		else {
+			// 파일 첨부가 있다면
+			n = service.addNoticeWithFile(nvo); 
+			
+		}
+		
+		if(n == 1) {
+			mav.setViewName("redirect:/community/noticeList.do");
+		    //  /list.action 페이지로 redirect(페이지이동)하라는 말이다.
+		}
+		
+		else {
+			String message = "공지사항 등록이 실패하였습니다.";
+			String loc = "javascript:history.back()";
+			
+			mav.addObject("message", message);
+			mav.addObject("loc", loc);
+			
+			mav.setViewName("msg");			
+		}
+		
+		return mav;
+	}
+	
+	
+	
+	@GetMapping("/community/noticeList.do")
+	public ModelAndView noticeList(HttpServletRequest request, ModelAndView mav) {
+		
+		String searchType = request.getParameter("searchType");
+		String searchWord = request.getParameter("searchWord");
+		String currentShowPageNo = request.getParameter("currentShowPageNo");
+		String sizePerPage = "10";
+		
+		if(searchType == null || !"title".equals(searchType) && !"content".equals(searchType)) {
+			searchType = "";
+		}
+		
+		if(searchWord == null || searchWord != null && searchWord.trim().isEmpty()) {
+			searchWord = "";
+		}
+		
+		if(currentShowPageNo == null) {
+			currentShowPageNo = "1";
+		}
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("searchType", searchType);
+		paramap.put("searchWord", searchWord);
+		paramap.put("currentShowPageNo", currentShowPageNo);
+		paramap.put("sizePerPage", sizePerPage);
+		
+		// 페이징처리를 한 모든 회원 or 검색한 회원 목록 보여주기
+		int totalPage = service.getNoticeTotalPage(paramap);
+		
+		// === GET 방식이므로 사용자가 웹브라우저 주소창에서 currentShowPageNo 에 totalPage 값보다 더 큰 값을 입력하여 장난친 경우
+		// === GET 방식이므로 사용자가 웹브라우저 주소창에서 currentShowPageNo 에 0 또는 음수를 입력하여 장난친 경우
+		// === GET 방식이므로 사용자가 웹브라우저 주소창에서 currentShowPageNo 에 숫자가 아닌 문자열을 입력하여 장난친 경우 
+		// 아래처럼 막아주도록 하겠다.
+		try {
+			if(Integer.parseInt(currentShowPageNo) > totalPage || Integer.parseInt(currentShowPageNo) < 0) {
+				currentShowPageNo = "1";
+				paramap.put("currentShowPageNo", currentShowPageNo);
+			}
+		}catch (NumberFormatException e) {
+			currentShowPageNo = "1";
+			paramap.put("currentShowPageNo", currentShowPageNo);
+		}
+		
+		
+		
+		// 페이지바 만들기		
+		String pageBar = "";
+		int blockSize = 5; // blockSize 는 블럭(토막)당 보여지는 페이지 번호의 개수이다.
+		int loop = 1;  // loop 는 1부터 증가하여 1개 블럭을 이루는 페이지번호의 개수(지금은 10개)까지만 증가하는 용도이다.
+
+		// pageNo  ==> ( (currentShowPageNo - 1)/blockSize ) * blockSize + 1
+		int pageNo = ((Integer.parseInt(currentShowPageNo)-1)/blockSize)*blockSize+1;
+		// pageNo는 페이지바에서 보여지는 첫 번째 번호이다.
+		
+		
+		// *** [맨처음][이전] 만들기 *** //
+		   
+           pageBar += "<li class='page-item'><a class='page-link' href='noticeList.do?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo=1'>[맨처음]</a></li>";
+
+           if(pageNo != 1) {
+              pageBar += "<li class='page-item'><a class='page-link' href='noticeList.do?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a></li>";
+           }
+   
+           while(!(loop > blockSize || pageNo > totalPage)) {
+              
+              
+              if(pageNo ==  Integer.parseInt(currentShowPageNo)) {
+                 pageBar += "<li class='page-item active'><a class='page-link' href='#'>"+pageNo+"</a></li>";
+              }
+              else {
+                 pageBar += "<li class='page-item'><a class='page-link' href='noticeList.do?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a></li>";
+              }
+              
+              loop++;
+              
+              pageNo++;
+              
+           }// end of while(!( )) {}------------------- 
+           
+           // *** [다음][마지막] 만들기 *** //
+           // pageNo ==> 11
+           if(pageNo <= totalPage) {
+              pageBar += "<li class='page-item'><a class='page-link' href='noticeList.do?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"'>[다음]</a></li>";
+           }
+           pageBar += "<li class='page-item'><a class='page-link' href='noticeList.do?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+totalPage+"'>[맨마지막]</a></li>";
+           
+           
+         // *** ==== 페이지바 만들기 끝 ==== *** //
+		
+           
+           
+        
+           
+        // *** ====== 현재 페이지를 돌아갈 페이지(goBackURL)로 주소 지정하기 ======= *** //
+        
+        String currentURL = MyUtil.getCurrentURL(request);
+        // 회원조회를 했을시 현재 그 페이지로 그대로 되돌아가길 위한 용도로 쓰임.
+        
+        // System.out.println(currentURL);
+        // /member/memberList.up?searchType=name&searchWord=%EC%9C%A0&sizePerPage=5&currentShowPageNo=15
+
+		List<NoticeVO> noticeList = service.select_notice_paging(paramap);
+		
+		mav.addObject("noticeList", noticeList);
+		
+		if(searchType != null && ("title".equals(searchType) ||"content".equals(searchType))) {
+			mav.addObject("searchType", searchType);
+		}
+		
+		if(searchWord != null && !searchWord.trim().isEmpty()) {
+			mav.addObject("searchWord", searchWord);
+		}
+		
+		mav.addObject("pageBar", pageBar);
+		
+		mav.addObject("currentURL", currentURL); 
+		
+		
+		
+		/* >>> 뷰단(memberList.jsp)에서 "페이징 처리시 보여주는 순번 공식" 에서 사용하기 위해 
+        	        검색이 있는 또는 검색이 없는 회원의 총개수 알아오기 <<< */
+		int totalMemberCount = service.getTotalNoticeCount(paramap);
+		
+		mav.addObject("totalMemberCount", totalMemberCount);
+		mav.addObject("currentShowPageNo", currentShowPageNo);
+		
+		mav.setViewName("community/noticeList.tiles2");
+		
+		return mav;
+	}
+	
+	
 }
+

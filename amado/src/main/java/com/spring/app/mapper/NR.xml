@@ -228,4 +228,46 @@
 		where logindate = #{str_twoWeekBefore}
 	</select>
 	
+	<insert id="addNotice" parameterType="NoticeVO">
+		insert into tbl_notice(noticeseq, title, content, registerdate, viewcount, status)
+		values (SEQ_NOTICE.nextval, #{title}, #{content}, sysdate, 0, 0)
+	</insert>
+	
+	<insert id="addNoticeWithFile" parameterType="NoticeVO">
+		insert into tbl_notice(noticeseq, title, content, registerdate, viewcount, status, orgfilename, filename, filesize)
+		values (SEQ_NOTICE.nextval, #{title}, #{content}, sysdate, 0, 0, #{orgfilename}, #{filename}, #{filesize})
+	</insert>
+	
+	<select id="getNoticeTotalPage" parameterType="HashMap" resultType="int">
+		select ceil(count(*)/#{sizePerPage})
+		from tbl_notice
+		where 1=1
+		<if test="searchType == 'title' and searchWord != ''">and title like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'content' and searchWord != ''">and content like '%'||#{searchWord}||'%'</if>
+	</select>
+	
+	<select id="select_notice_paging" parameterType="HashMap" resultType="NoticeVO">
+		select rn, noticeseq, title, content, registerdate, viewcount, status, orgfilename, filename, filesize
+		from
+		(select rownum rn, noticeseq, title, content, registerdate, viewcount, status, orgfilename, filename, filesize
+		from
+		(select noticeseq, title, content, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, viewcount, status, orgfilename, filename, filesize
+		from tbl_notice
+		where 1=1
+		<if test="searchType == 'title' and searchWord != ''">and title like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'content' and searchWord != ''">and content like '%'||#{searchWord}||'%'</if>
+		order by registerdate desc)
+		)
+		where rn between to_number(#{currentShowPageNo})*to_number(#{sizePerPage})-(to_number(#{sizePerPage})-1) and to_number(#{currentShowPageNo})*to_number(#{sizePerPage})
+	</select>
+	
+	<select id="getTotalNoticeCount" parameterType="HashMap" resultType="int">
+		select count(*)
+		from tbl_notice
+		where 1=1
+		<if test="searchType == 'title' and searchWord != ''">and title like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'content' and searchWord != ''">and content like '%'||#{searchWord}||'%'</if>
+	</select>
+	
+	
 </mapper>
