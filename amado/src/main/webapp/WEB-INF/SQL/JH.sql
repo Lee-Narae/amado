@@ -41,6 +41,7 @@ values(1, 1, '서울', '호날두가 신었던 축구화 팝니다!!', '제가 �
 
 ALTER TABLE tbl_member ADD (memberImg VARCHAR2(50));
 ALTER TABLE tbl_gym ADD (insidestatus number(1));
+ALTER TABLE tbl_fleamarketcomment ADD (changestatus number(1) default 0);
 
 update tbl_fleamarket set commentCount = commentCount+1
 where fleamarketseq = 1
@@ -62,7 +63,11 @@ update tbl_member set memberImg = '차은우.jpg'
 where userid = 'chaew';
 
 
+update tbl_fleamarketcomment set comment_text = '수정했습니다', registerdate = sysdate
+where fleamarketcommentseq = 21
 
+select *
+from tbl_fleamarketcomment
 
 select fleamarketcommentseq, fk_userid, comment_text
 		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate

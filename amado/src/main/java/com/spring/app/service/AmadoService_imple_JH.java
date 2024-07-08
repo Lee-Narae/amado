@@ -1,6 +1,7 @@
 package com.spring.app.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,11 +34,11 @@ public class AmadoService_imple_JH implements AmadoService_JH {
 		int n1=0, result=0;
 		
 		n1 = dao.addComment(fmcommentvo); // 댓글쓰기(tbl_comment 테이블에 insert)
-		System.out.println("~~~ 확인용n1: " + n1);
+		//System.out.println("~~~ 확인용n1: " + n1);
 		
 		if(n1 == 1) {
 			result = dao.updateCommentCount(fmcommentvo.getFleamarketseq());  // tbl_board 테이블에 commentCount 컬럼이 1증가(update)
-			System.out.println("~~~ 확인용result: " + result);
+			//System.out.println("~~~ 확인용result: " + result);
 		}
 		
 		return result;
@@ -49,6 +50,31 @@ public class AmadoService_imple_JH implements AmadoService_JH {
 	public List<FleamarketCommentVO> getCommentList(String parentSeq) {
 		List<FleamarketCommentVO> commentList = dao.getCommentList(parentSeq);
 		return commentList;
+	}
+
+
+	@Override
+	public int updateComment(Map<String, String> paraMap) {
+		int n = dao.updateComment(paraMap);
+		return n;
+	}
+
+
+
+	@Override
+	public int deleteComment(Map<String, String> paraMap) {
+		
+		int n = dao.deleteComment(paraMap.get("fleamarketcommentseq"));
+		
+		int m = 0;
+		if(n==1) {
+			// 댓글삭제시 tbl_board 테이블에 commentCount 컬럼이 1감소(update)
+			m = dao.updateCommentCount_decrease(paraMap.get("fleamarketseq"));
+		//	System.out.println("~~~ 확인용 m : " + m);
+			// ~~~ 확인용 m : 1
+		}
+		
+		return n*m;
 	}
 
 }

@@ -191,6 +191,7 @@ rotate(
 
 
 	$(document).ready(function(){
+		
 		goReadComment();
 		
 		// ======= 추가이미지 캐러젤로 보여주기(Bootstrap Carousel 4개 표시 하되 1번에 1개 진행) 시작 ======= //
@@ -324,7 +325,7 @@ rotate(
     			
     			if($(e.target).text() == "수정"){
     			 // alert("댓글수정");
-    			 	alert($(e.target).parent().parent().children('#comment_text').text()); // 수정전 댓글내용
+    			 //	alert($(e.target).parent().parent().children('#comment_text').text()); // 수정전 댓글내용
     			    const $content = $(e.target).parent().parent().children('#comment_text');
     			    origin_comment_content = $(e.target).parent().parent().children('#comment_text').text();
     			    $content.html(`<input id='comment_update' type='text' value='\${origin_comment_content}' size='40' />`); // 댓글내용을 수정할 수 있도록 input 태그를 만들어 준다.
@@ -343,30 +344,33 @@ rotate(
     			
     			else if($(e.target).text() == "완료"){
     			  // alert("댓글수정완료");
-    			  // alert($(e.target).next().val()); // 수정해야할 댓글시퀀스 번호 
-    			  // alert($(e.target).parent().parent().children("td:nth-child(2)").children("input").val()); // 수정후 댓글내용
-    			     const content = $(e.target).parent().parent().children("td:nth-child(2)").children("input").val(); 
+    			  // alert($(e.target).parent().children("input").val()); // 수정해야할 댓글시퀀스 번호 
+    			  // alert($(e.target).parent().parent().children("div:nth-child(2)").children("input").val()); // 수정후 댓글내용
+    			     const content = $(e.target).parent().parent().children("div:nth-child(2)").children("input").val(); 
     			  
     			     $.ajax({
     			    	 url:"${pageContext.request.contextPath}/updateComment.action",
     			    	 type:"post",
-    			    	 data:{"seq":$(e.target).next().val(),
+    			    	 data:{"fleamarketcommentseq":$(e.target).parent().children("input").val(),
     			    		   "content":content},
     			    	 dataType:"json",
     			    	 success:function(json){
-    			    	  // $(e.target).parent().parent().children("td:nth-child(2)").html(content);
-    			          // goReadComment();  // 페이징 처리 안한 댓글 읽어오기
+    			    	   $(e.target).parent().parent().children('#comment_text').html(content);
+
+    			           goReadComment();  // 페이징 처리 안한 댓글 읽어오기
     			    		
     			          ////////////////////////////////////////////////////
     			          // goViewComment(1); // 페이징 처리 한 댓글 읽어오기   
     			             
-    			             const currentShowPageNo = $(e.target).parent().parent().find("input.currentShowPageNo").val(); 
+    			          // const currentShowPageNo = $(e.target).parent().parent().find("input.currentShowPageNo").val(); 
     	                  // alert("currentShowPageNo : "+currentShowPageNo);		          
-    	                     goViewComment(currentShowPageNo); // 페이징 처리 한 댓글 읽어오기
+    	                  // goViewComment(currentShowPageNo); // 페이징 처리 한 댓글 읽어오기
     			    	  ////////////////////////////////////////////////////
     			    	  
     			    	     $(e.target).text("수정");
     			    		 $(e.target).next().text("삭제");
+    			    		 
+    			    		 
     			    	 },
     			    	 error: function(request, status, error){
     					    alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
@@ -381,9 +385,8 @@ rotate(
     		$(document).on("click", "button.btnDeleteComment", function(e){
     			if($(e.target).text() == "취소"){
     			 // alert("댓글수정취소");
-    			 //	alert($(e.target).parent().parent().children("td:nth-child(2)").html()); 
-    				
-    			    const $content = $(e.target).parent().parent().children("td:nth-child(2)"); 
+    			 //	alert($(e.target).parent().parent().children("div:nth-child(2)").html());
+    			    const $content = $(e.target).parent().parent().children("div:nth-child(2)"); 
     			    $content.html(`\${origin_comment_content}`);
     			 
     			    $(e.target).text("삭제");
@@ -392,18 +395,18 @@ rotate(
     			
     			else if($(e.target).text() == "삭제"){
     			  // alert("댓글삭제");
-    			  // alert($(e.target).prev().val()); // 삭제해야할 댓글시퀀스 번호 
+    			  // alert($(e.target).next().val()); // 삭제해야할 댓글시퀀스 번호 
     				
     			     if(confirm("정말로 삭제하시겠습니까?")){
     				     $.ajax({
     				    	 url:"${pageContext.request.contextPath}/deleteComment.action",
     				    	 type:"post",
-    				    	 data:{"seq":$(e.target).prev().val(),
-    				    		   "parentSeq":"${requestScope.boardvo.seq}"},
+    				    	 data:{"fleamarketcommentseq":$(e.target).next().val(),
+    				    		   "parentSeq":"1"},
     				    	 dataType:"json",
     				    	 success:function(json){
-    				    	 //	 goReadComment();  // 페이징 처리 안한 댓글 읽어오기
-    				    	     goViewComment(1); // 페이징 처리 한 댓글 읽어오기
+    				    	 	 goReadComment();  // 페이징 처리 안한 댓글 읽어오기
+    				    	 //  goViewComment(1); // 페이징 처리 한 댓글 읽어오기
     				    	 },
     				    	 error: function(request, status, error){
     						    alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
@@ -547,10 +550,15 @@ function goReadComment(){
 			    	    v_html += "<div>";
 			    	    v_html += "<div style='font-size:12pt; font-weight: bold; margin-bottom: 3%;'>" + item.fk_userid + "</div>";
 			    	    v_html += "<div id='comment_text'>" + item.comment_text + "</div>";
-			    	    v_html += "<div class='comment' style='color:#999999; font-size:10pt; margin-top: 3%;'>" + item.registerdate + " &nbsp;&nbsp;<a>답글쓰기</a>";
+			    	    v_html += "<div class='comment' style='color:#999999; font-size:10pt; margin-top: 3%;'>" + item.registerdate; 
+			    	    if(item.changestatus > 0){
+			    	    	v_html += " (수정됨)";
+			    	    }
+			    	    v_html += " &nbsp;&nbsp;<a>답글쓰기</a>";
 			    	    if (${sessionScope.loginuser != null} && "${sessionScope.loginuser.userid}" == item.fk_userid) {
 			    	        v_html += "<br><button class='btnUpdateComment' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>수정</button>&nbsp;&nbsp;<button class='btnDeleteComment' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>삭제</button>";
 			    	    }
+			    	    v_html += "<input type='hidden' value='"+item.fleamarketcommentseq+"' />"
 			    	    v_html += "</div>";
 			    	    v_html += "</div>";
 			    	    v_html += "</div>";
