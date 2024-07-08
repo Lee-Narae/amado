@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.spring.app.domain.MemberVO;
+import com.spring.app.domain.NoticeVO;
 
 @Repository
 public class AmadoDAO_imple_NR implements AmadoDAO_NR {
@@ -191,6 +192,41 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 	public String getMemberStatic(String str_twoWeekBefore) {
 		String memberCount = sqlsession.selectOne("NR.getMemberStatic", str_twoWeekBefore);
 		return memberCount;
+	}
+
+	// 관리자 - 파일첨부가 없는 경우 공지사항 등록
+	@Override
+	public int addNotice(NoticeVO nvo) {
+		int n = sqlsession.insert("NR.addNotice", nvo);
+		return n;
+	}
+	
+	// 관리자 - 파일첨부가 있는 경우 공지사항 등록
+	@Override
+	public int addNoticeWithFile(NoticeVO nvo) {
+		int n = sqlsession.insert("NR.addNoticeWithFile", nvo);
+		return n;
+	}
+
+	// 공지사항 목록 - 토탈페이지수
+	@Override
+	public int getNoticeTotalPage(Map<String, String> paramap) {
+		int n = sqlsession.selectOne("NR.getNoticeTotalPage", paramap);
+		return n;
+	}
+
+	// 공지사항 목록 - 페이징처리
+	@Override
+	public List<NoticeVO> select_notice_paging(Map<String, String> paramap) {
+		List<NoticeVO> noticeList = sqlsession.selectList("NR.select_notice_paging", paramap);
+		return noticeList;
+	}
+
+	// 공지사항 목록 - 공지사항 개수
+	@Override
+	public int getTotalNoticeCount(Map<String, String> paramap) {
+		int n = sqlsession.selectOne("NR.getTotalNoticeCount", paramap);
+		return n;
 	}
 
 }

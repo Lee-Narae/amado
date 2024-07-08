@@ -61,6 +61,15 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 		dao.updateRank(fk_userid);
 	}
 
+
+
+	// 운동 종목 시퀀스가져오기
+	@Override
+	public List<String> getSportList() {
+		List<String> sportList = dao.getSportList();
+		return sportList;
+	}
+
 	
 	
 	

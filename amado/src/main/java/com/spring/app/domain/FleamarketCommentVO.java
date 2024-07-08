@@ -8,9 +8,15 @@ public class FleamarketCommentVO {
 	private String registerdate;
 	private String fk_userid;
 	private String memberimg;
+	private String changestatus;
 	
 	
-	
+	public String getChangestatus() {
+		return changestatus;
+	}
+	public void setChangestatus(String changestatus) {
+		this.changestatus = changestatus;
+	}
 	public String getMemberimg() {
 		return memberimg;
 	}

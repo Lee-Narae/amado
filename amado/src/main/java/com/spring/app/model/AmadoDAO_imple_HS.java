@@ -21,7 +21,7 @@ public class AmadoDAO_imple_HS implements AmadoDAO_HS {
 	//체욱관 등록
 	@Override
 	public int add_withFile(GymVO gymvo) {
-		int n = sqlsession.insert("gym.add", gymvo);
+		int n = sqlsession.insert("HS.add_withFile", gymvo);
 		return n;
 	}
 

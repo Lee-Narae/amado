@@ -6,9 +6,9 @@
 
 	
 	<!--  지역    -->
-	<resultMap type="HashMap" id="cityMap">
+	<resultMap type="HashMap" id="cityMap"> <!-- 리스트 안에 맵을 쓰든, 그냥 맵쓰는 경우에 resultMap -->
 		<result property="cityseq" column="cityseq" javaType="String"/>
-	<result property="cityname" column="cityname" javaType="String"/>
+		<result property="cityname" column="cityname" javaType="String"/>
 	</resultMap>
 	<select id="getCityList" resultMap="cityMap">
 		select cityseq, cityname from tbl_city
@@ -32,5 +32,10 @@
 		update tbl_member set memberrank = 1
 		where userid = #{userid}
 	</update>
+	
+	<select id="getSportList" resultType="String">
+		select sportseq
+		from tbl_fleamarket
+	</select>
 
 </mapper>

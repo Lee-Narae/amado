@@ -9,6 +9,10 @@
 		<typeAlias type="com.spring.app.domain.ClubVO" alias="ClubVO"/>
 		<typeAlias type="com.spring.app.domain.FleamarketCommentVO" alias="FleamarketCommentVO"/>
 		<typeAlias type="com.spring.app.domain.GymVO" alias="GymVO"/>
+<<<<<<< HEAD
 		<typeAlias type="com.spring.app.domain.BoardCommentVO" alias="BoardCommentVO"/>
+=======
+		<typeAlias type="com.spring.app.domain.NoticeVO" alias="NoticeVO"/>
+>>>>>>> branch 'main' of https://github.com/Lee-Narae/amado.git
 	</typeAliases>
 </configuration>

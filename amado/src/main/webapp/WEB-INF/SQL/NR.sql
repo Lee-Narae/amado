@@ -130,4 +130,24 @@ where rn between 1 and 10;
 
 desc tbl_member;
 
-select * from tbl_member;
+select * from tbl_loginhistory
+order by logindate;
+
+insert into tbl_loginhistory(loginseq, fk_userid, logindate, clientip) values (SEQ_LOGINHISTORY.nextval, 'leenr', sysdate-30, '127.0.0.1');
+
+commit;
+
+select to_char(sysdate, 'yyyy-mm-dd')
+from dual;
+
+select count(*)
+from tbl_loginhistory
+where logindate = '24/06/05';
+
+select noticeseq, title, content, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, viewcount, status, orgfilename, filename, filesize from tbl_notice;
+
+desc tbl_notice;        
+        
+select * from tbl_notice
+order by registerdate desc;
+

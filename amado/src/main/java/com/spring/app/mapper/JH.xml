@@ -19,7 +19,7 @@
 	<!-- === #93. 원게시물에 딸린 댓글들을 조회해오기 === -->
     <!-- 첨부파일이 없는 경우  -->
     <select id="getCommentList" parameterType="String" resultType="FleamarketCommentVO">
-		select fleamarketcommentseq, fk_userid, comment_text
+		select fleamarketcommentseq, fk_userid, comment_text, changestatus
 		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
              , V.memberimg
 		from tbl_fleamarketcomment A join tbl_member V
@@ -28,5 +28,20 @@
 		order by fleamarketcommentseq desc
     </select>
 
+
+	<update id="updateComment" parameterType="HashMap">
+        update tbl_fleamarketcomment set comment_text = #{comment_text}, registerdate = sysdate, changestatus = 1
+        where fleamarketcommentseq = #{fleamarketcommentseq}
+    </update>
+
+    <delete id="deleteComment" parameterType="String">
+        delete from tbl_fleamarketcomment
+        where fleamarketcommentseq = #{fleamarketcommentseq}
+    </delete>
+    
+    <update id="updateCommentCount_decrease" parameterType="String">
+        update tbl_fleamarket set commentcount = commentcount - 1 
+        where fleamarketseq = #{fleamarketseq}
+    </update>
 
 </mapper>

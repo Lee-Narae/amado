@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.app.domain.MemberVO;
+import com.spring.app.domain.NoticeVO;
 
 
 public interface AmadoService_NR {
@@ -77,6 +78,21 @@ public interface AmadoService_NR {
 
 	// 관리자 - 방문통계
 	String getMemberStatic(String str_twoWeekBefore);
+
+	// 관리자 - 파일첨부가 없는 경우 공지사항 등록
+	int addNotice(NoticeVO nvo);
+
+	// 관리자 - 파일첨부가 있는 경우 공지사항 등록
+	int addNoticeWithFile(NoticeVO nvo);
+
+	// 공지사항 목록 - 토탈페이지수
+	int getNoticeTotalPage(Map<String, String> paramap);
+
+	// 공지사항 목록 - 페이징처리
+	List<NoticeVO> select_notice_paging(Map<String, String> paramap);
+
+	// 공지사항 목록 - 공지사항 개수
+	int getTotalNoticeCount(Map<String, String> paramap);
 	
 
 

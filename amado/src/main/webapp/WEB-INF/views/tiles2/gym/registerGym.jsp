@@ -70,6 +70,8 @@
     }
   </style>
  
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
  
   <script type="text/javascript">	
    
@@ -109,7 +111,9 @@
    
     
     $("button#submit").click(function(){
-	 	 
+	 	
+    	
+    	
 		  //폼(form)을 전송(submit)
     	 const frm = document.addFrm;
  	    frm.method = "post";
@@ -119,6 +123,30 @@
 	 });
   
 }); //end of   $(document).ready(function() ----------------------
+		
+//비용(input[type="number"]) 입력 필드에 대한 숫자만 입력 유효성 검사
+var costInput = document.getElementById("cost");
+costInput.addEventListener("input", function(event) {
+    var value = event.target.value;
+
+    // 숫자가 아닌 경우 입력을 막음
+    if (isNaN(value)) {
+        event.target.value = ""; // 비우거나 이전 값으로 되돌림
+        alert("숫자만 입력할 수 있습니다.");
+    }
+});
+
+// 인원수(input[type="number"]) 입력 필드에 대한 숫자만 입력 유효성 검사
+var memberCountInput = document.getElementById("membercount");
+memberCountInput.addEventListener("input", function(event) {
+    var value = event.target.value;
+
+    // 숫자가 아닌 경우 입력을 막음
+    if (isNaN(value)) {
+        event.target.value = ""; // 비우거나 이전 값으로 되돌림
+        alert("숫자만 입력할 수 있습니다.");
+    }
+});
  
   </script>
 
@@ -132,7 +160,7 @@
     
     <div class="form-group">
       <label for="manager-id">담당자 아이디</label>
-      <input type="text" name="fk_userid" value="${sessionScope.loginuser.userid}" required disabled>
+      <input type="text" name="fk_userid" value="${sessionScope.loginuser.userid}" required readonly>
     </div>
      <div class="form-group">
         <label for="address">주소</label>
@@ -148,6 +176,7 @@
         <label for="detailaddress">상세주소</label>
         <input type="text" id="detailaddress" name="detailaddress" required>
     </div>
+    
     
     <div class="form-group">
       <label>실내/실외</label>
@@ -193,5 +222,6 @@
     
     <button id="submit" type="submit">등록</button>
     <button type="button" onclick="goBack()" class="btn btn-danger">취소</button>
+    
 </form>
   
