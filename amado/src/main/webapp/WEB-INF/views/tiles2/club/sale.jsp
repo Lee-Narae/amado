@@ -532,7 +532,7 @@ function goReadComment(){
 			data:{"parentSeq":"1"},
 			dataType:"json",
 			success:function(json){
-				console.log(JSON.stringify(json));
+				// console.log(JSON.stringify(json));
 			    // [{"name":"서영학","regdate":"2024-06-18 16:09:06","fk_userid":"seoyh","seq":"6","content":"여섯번째로 쓰는 댓글입니다."},{"name":"서영학","regdate":"2024-06-18 16:08:56","fk_userid":"seoyh","seq":"5","content":"다섯번째로 쓰는 댓글입니다."},{"name":"서영학","regdate":"2024-06-18 16:08:49","fk_userid":"seoyh","seq":"4","content":"네번째로 쓰는 댓글입니다."},{"name":"서영학","regdate":"2024-06-18 16:08:43","fk_userid":"seoyh","seq":"3","content":"세번째로 쓰는 댓글입니다."},{"name":"서영학","regdate":"2024-06-18 16:05:51","fk_userid":"seoyh","seq":"2","content":"두번째로 쓰는 댓글입니다."},{"name":"서영학","regdate":"2024-06-18 15:36:31","fk_userid":"seoyh","seq":"1","content":"첫번째 댓글입니다. ㅎㅎㅎ"}]
 			    // 또는
 			    // []
@@ -561,6 +561,10 @@ function goReadComment(){
 			    	    v_html += "<input type='hidden' value='"+item.fleamarketcommentseq+"' />"
 			    	    v_html += "</div>";
 			    	    v_html += "</div>";
+			    	    v_html += "</div>";
+			    	    
+			    	    v_html += "<div>";
+			    	    v_html += "답글입니다!";
 			    	    v_html += "</div>";
 			    	});
 			    }
