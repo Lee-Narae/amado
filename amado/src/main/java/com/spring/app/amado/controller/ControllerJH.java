@@ -88,6 +88,7 @@ public class ControllerJH {
 				jsonObj.put("comment_text", fmcommentvo.getComment_text());           // {"seq":1, "fk_userid":"seoyh","name":"서영학"}
 				jsonObj.put("registerdate", fmcommentvo.getRegisterdate());     // {"seq":1, "fk_userid":"seoyh","name":서영학,"content":"첫번째 댓글입니다. ㅎㅎㅎ","regdate":"2024-06-18 15:36:31"}
 				jsonObj.put("memberimg", fmcommentvo.getMemberimg());
+				jsonObj.put("changestatus", fmcommentvo.getChangestatus());
 				
 				jsonArr.put(jsonObj);
 			}// end of for-----------------------
@@ -170,6 +171,58 @@ public class ControllerJH {
 		}
 	
 	*/
+	
+	
+	
+	// === #95. 댓글 수정(Ajax 로 처리) === //
+	@ResponseBody
+	@PostMapping(value="/updateComment.action", produces="text/plain;charset=UTF-8")
+	public String updateComment(HttpServletRequest request) {
+		
+		String fleamarketcommentseq = request.getParameter("fleamarketcommentseq");
+		String comment_text = request.getParameter("content");
+		
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("fleamarketcommentseq", fleamarketcommentseq);
+		paraMap.put("comment_text", comment_text);
+		
+		int n = service.updateComment(paraMap);
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+		
+		return jsonObj.toString(); // "{"n":1}"
+	}
+	
+		
+	
+	
+	@ResponseBody
+	@PostMapping(value="/deleteComment.action", produces="text/plain;charset=UTF-8") 
+	public String deleteComment(HttpServletRequest request) {
+		
+		String fleamarketcommentseq = request.getParameter("fleamarketcommentseq");
+		String fleamarketseq = request.getParameter("parentSeq");
+		
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("fleamarketcommentseq", fleamarketcommentseq);
+		paraMap.put("fleamarketseq", fleamarketseq);
+		
+		int n=0;
+		try {
+			n = service.deleteComment(paraMap);
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+		
+		return jsonObj.toString(); // "{"n":1}"
+	}
+	
+	
+		
 	
 	@GetMapping("/club/myClub_plus.do")
 	public ModelAndView myClub_plus(ModelAndView mav) {
