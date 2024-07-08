@@ -2,6 +2,7 @@ package com.spring.app.model;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,25 @@ public class AmadoDAO_imple_JH implements AmadoDAO_JH {
 	public List<FleamarketCommentVO> getCommentList(String parentSeq) {
 		List<FleamarketCommentVO> commentList = sqlsession.selectList("JH.getCommentList", parentSeq);
 		return commentList;
+	}
+
+	@Override
+	public int updateComment(Map<String, String> paraMap) {
+		int n = sqlsession.update("JH.updateComment", paraMap);
+		return n;
+	}
+
+	@Override
+	public int deleteComment(String fleamarketcommentseq) {
+		int n = sqlsession.delete("JH.deleteComment", fleamarketcommentseq);
+		return n;
+	}
+
+	// === #102.-2  댓글삭제시 tbl_board 테이블에 commentCount 컬럼이 1감소(update) === //
+	@Override
+	public int updateCommentCount_decrease(String fleamarketseq) {
+		int n = sqlsession.update("JH.updateCommentCount_decrease", fleamarketseq);
+		return n;
 	}
 
 

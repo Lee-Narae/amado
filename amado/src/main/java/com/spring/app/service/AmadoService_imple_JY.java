@@ -54,6 +54,22 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 
 	}
 
+
+	// 동호회 등록후 회원등급 동호회장으로  업데이트 해주기
+	@Override
+	public void updateRank(String fk_userid) {
+		dao.updateRank(fk_userid);
+	}
+
+
+
+	// 운동 종목 시퀀스가져오기
+	@Override
+	public List<String> getSportList() {
+		List<String> sportList = dao.getSportList();
+		return sportList;
+	}
+
 	
 	
 	

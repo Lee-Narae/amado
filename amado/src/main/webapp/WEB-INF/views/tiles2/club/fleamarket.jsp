@@ -39,18 +39,19 @@
 </style>
 
 <script type="text/javascript">
-/*
+
 $(document).ready(function(){
 
     $.ajax({
-        url:"/MyMVC/shop/categoryListJSON.up",
+        url:"<%= ctxPath%>/club/fleamarket.do",
+        //data:{"sportseq":sportseq},  요기가 아니라 다음번ajax때?
         dataType:"json",
         success:function(json){
             let v_html = ``;
 		    
 		    if(json.length == 0) {
 				v_html = `현재 카테고리 준비중 입니다...`;
-				$("div#categoryList").html(v_html);
+				$("div#product").html(v_html);
 			}
 			
 			else if(json.length > 0) {
@@ -66,7 +67,7 @@ $(document).ready(function(){
 					
 				});
 			*/	 
-		    //	console.log("~~~ 확인용 json => ", JSON.stringify(json));
+		    	console.log("~~~ 확인용 json => ", JSON.stringify(json));
 			/*
 			   ~~~ 확인용 json => [{"code":"100000","cname":"전자제품","cnum":1}
 			                     ,{"code":"200000","cname":"의류","cnum":2}
@@ -110,7 +111,7 @@ $(document).ready(function(){
 
 });// end of $(document).ready(function(){})-------------------
 
-*/
+
 </script>
 
 
@@ -172,7 +173,7 @@ $(document).ready(function(){
 	    
 	
 	<div>	
-		<div style="display: flex; margin-top: 5%;">
+		<div id="product" style="display: flex; margin-top: 5%;">
 			<div class='col-md- col-lg-2 offset-lg-1' style="border:solid 0px red; ">
 			   <div class="card mb-3">
 				   <img src='<%= ctxPath%>/resources/images/스크린샷 2024-02-15 151204.png' class='card-img-top'/>

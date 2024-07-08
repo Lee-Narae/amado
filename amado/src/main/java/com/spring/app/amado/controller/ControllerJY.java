@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.spring.app.common.FileManager;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
+import com.spring.app.domain.FleamarketVO;
 import com.spring.app.service.AmadoService_JY;
 
 
@@ -44,15 +45,7 @@ public class ControllerJY {
 	
 	
 	///////////////////////////////////////////////////////////////////////////
-	@RequestMapping(value="/club/fleamarket.do")
-	public ModelAndView fleamarket(ModelAndView mav) { //중고상품 리스트 보요주기
-		
-		mav.setViewName("club/fleamarket.tiles2");
-		//    /WEB-INF/views/club/fleamarket  .jsp
-		
-		return mav;
-		
-	}
+
 	
 	
 	@RequestMapping(value="/club/viewclub.do")
@@ -69,11 +62,6 @@ public class ControllerJY {
 	@GetMapping("/club/clubRegister.do")
 	public ModelAndView requiredLogin_clubRegister(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
 		
-/*		
-		동호회등록 종목 선택
-		List<Map<String,String>> sportList = service.getSportList(); 
-		mav.addObject("sportList", sportList);
-*/
 		
 		// 동호회등록 지역 선택
 		List<Map<String,String>> cityList = service.getCityList(); 
@@ -203,11 +191,14 @@ public class ControllerJY {
 		}
 		
 		if(n==1) {
-			mav.setViewName("redirect:/index.do");
+			
+			// 동호회 등록후 회원등급 동호회장으로  업데이트 해주기
+			service.updateRank(clubvo.getFk_userid()); 
+			mav.setViewName("club/findClub.tiles2");
 		    //  /list.action 페이지로 redirect(페이지이동)해라는 말이다.
 		}
 		else {
-			mav.setViewName("amado/error/add_error.tiles1");
+			mav.setViewName("error/add_error.tiles1");
 			//  /WEB-INF/views/tiles1/board/error/add_error.jsp 파일을 생성한다.
 		}
 
@@ -217,10 +208,38 @@ public class ControllerJY {
 	}
 	
 	
-
-
 	
 	
+	// ========== 플리마켓  ==========
+	// 플리마켓 페이지 보요주기
+	@ResponseBody
+	@GetMapping(value="/club/fleamarket.do", produces="text/plain;charset=UTF-8")
+	public String fleamarket(HttpServletRequest request) {
+		
+		// 운동 종목 시퀀스가져오기
+		List<String> sportList = service.getSportList();
+		//운동 종목시퀀스만 가져올 거니까 컬럼 한개
+		
+		/*
+			List<Map<String,String>> sportList = service.getSportList(); 
+			// 운동종목시퀀스, 운동종목이름  등등 컬럼 여러개 일때
+			// Map<> 은 행이 한개 일때 
+			 
+		*/
+		JSONObject jsonObj = new JSONObject(); // {}
+		
+		for(String sportname : sportList) {
+			jsonObj.put("sportname", sportname);
+		}	      
+	   return jsonObj.toString();
+
+		
+	}
+
+		
+
+
+
 	
 
 	
