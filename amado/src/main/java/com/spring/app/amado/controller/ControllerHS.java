@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.app.common.FileManager;
 import com.spring.app.domain.GymVO;
+import com.spring.app.domain.MemberVO;
 import com.spring.app.service.AmadoService_HS;
 
 
@@ -62,7 +64,7 @@ public class ControllerHS {
 	
 	//체육관 등록  완료 요청
 	@PostMapping("/gym/registerGymend.do")
-	public ModelAndView registerGym(Map<String, String> paraMap ,ModelAndView mav, GymVO gymvo ,MultipartHttpServletRequest mrequest) throws Exception  { // <== After Advice 를 사용하기 전
+	public ModelAndView registerGym(Map<String, String> paraMap ,ModelAndView mav,HttpServletRequest request, GymVO gymvo ,MultipartHttpServletRequest mrequest) throws Exception  { // <== After Advice 를 사용하기 전
 	
 		MultipartFile attach = gymvo.getAttach();
 		
@@ -135,34 +137,39 @@ public class ControllerHS {
 		}
 		
 	// === !!! 첨부파일이 있는 경우 작업 끝 !!! ===	
+
 	
-		System.out.println("1"+gymvo.getAttach());
-		System.out.println("2"+gymvo.getGymname());
-		System.out.println("3"+gymvo.getFk_userid());
-		System.out.println("4"+gymvo.getPostcode());
-		System.out.println("5"+gymvo.getAddress());
-		
-		System.out.println("6"+gymvo.getDetailaddress());
-		//System.out.println("7"+gymvo.getExtraaddress());
-		
-		System.out.println("8"+gymvo.getInsidestatus());
-		System.out.println("9"+gymvo.getInfo());
-		System.out.println("10"+gymvo.getImgfilename());
-		
-		System.out.println("8"+gymvo.getCost());
-		System.out.println("9"+gymvo.getCaution());
-		//System.out.println("10"+gymvo.getMembercount());
-		//System.out.println("10"+gymvo.getLikecount());
-		
-		
-	
+	  System.out.println("1"+gymvo.getAttach());
+	  System.out.println("2"+gymvo.getGymname());
+	  System.out.println("3"+gymvo.getFk_userid());
+	  System.out.println("4"+gymvo.getPostcode());
+	  System.out.println("5"+gymvo.getAddress());
+	 
+	  System.out.println("6"+gymvo.getDetailaddress());
+	  
+	  System.out.println("8"+gymvo.getInsidestatus());
+	  System.out.println("9"+gymvo.getInfo());
+	  System.out.println("10"+gymvo.getImgfilename());
+	  
+	  System.out.println("11"+gymvo.getCost());
+	  System.out.println("12"+gymvo.getCaution());
+	  System.out.println("10"+gymvo.getMembercount());
+	 
+
+//
+//		HttpSession session2 = request.getSession();
+//		MemberVO loginuser = (MemberVO)session2.getAttribute("loginuser");
+//		
+//		String userid = loginuser.getUserid();
+//		
+//		gymvo.setFk_userid(userid);
+//	
 		int n =0;
 		
 		if(!(attach.isEmpty())) {
 			//파일 첨부가  있는 경우라면 
 			n=service.add_withFile(gymvo);
 			
-			System.out.println();
 		}
 		
 		
