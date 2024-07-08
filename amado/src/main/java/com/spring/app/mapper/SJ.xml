@@ -322,7 +322,12 @@
 
 
 
-
+	<!-- === 댓글쓰기(tbl_comment 테이블에 insert) === -->
+	<insert id="addBoardComment" parameterType="BoardCommentVO">
+	<!-- 첨부파일이 없는 경우 -->
+		insert into tbl_boardcomment(boardcommentseq, parentseq, comment_text, registerdate, fk_userid, status)
+		values(seq_boardcomment.nextval, #{parentseq}, #{comment_text}, default, #{fk_userid}, default)
+	</insert>
 
 
 

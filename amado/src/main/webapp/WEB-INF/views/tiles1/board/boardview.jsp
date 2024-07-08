@@ -28,6 +28,54 @@ a {
 }
 </style>
 
+<script type="text/javascript">
+	
+	$(document).ready(function (){
+		
+	}); // end of document
+	
+	function goAddWrite(){
+		   
+		   <%--
+		    // 보내야할 데이터를 선정하는 또 다른 방법
+		    // jQuery에서 사용하는 것으로서,
+		    // form태그의 선택자.serialize(); 을 해주면 form 태그내의 모든 값들을 name값을 키값으로 만들어서 보내준다. 
+		       const queryString = $("form[name='addWriteFrm']").serialize();
+		    --%>
+		    
+		    const queryString = $("form[name='addWriteFrm']").serialize();
+		   
+		   $.ajax({
+		      
+		      url: "<%=ctxPath%>/addComment.do",
+		      data: queryString,
+		      type: "post",
+/*				
+				data:{"fk_userid":$("input:hidden[name='fk_userid']").val() 
+		             ,"name":$("input:text[name='name']").val() 
+		             ,"content":$("input:text[name='content']").val()
+		             ,"parentseq":$("input:hidden[name='parentseq']").val()},
+*/
+				// 또는			      
+		      dataType: "json",
+		      success: function(json){
+		         console.log(JSON.stringify(json));
+		         
+		        	 //goReadComment(); // 페이징 처리 안한 댓글 읽어오기
+		        	 // 페이징 처리한 댓글 읽어오기
+		         
+		         $("input:text[name='content']").val("");
+		        	 
+		      },
+		      error: function(request, status, error){
+		             alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		        }
+		   });
+		   
+		} // end of goAddWriteNoAttach
+
+</script>
+
 
 
 <div style="display: flex;">
@@ -104,17 +152,16 @@ a {
 				<form name="addWriteFrm" id="addWriteFrm" style="margin-top: 20px;">
 					<table class="table" style="width: 1024px">
 						<tr style="height: 30px;">
-							<th width="10%">성명</th>
+							<th width="10%">아이디</th>
 							<td>
-								<input type="hidden" name="fk_userid" value="${sessionScope.loginuser.userid}" readonly /> 
-								<input type="text" name="name" value="${sessionScope.loginuser.userid}" readonly />
+								<input type="text" name="fk_userid" value="${sessionScope.loginuser.userid}" readonly />
 							</td>
 						<tr>
 						<tr style="height: 30px;">
 							<th>댓글내용</th>
 							<td>
-								<input type="text" name="content" size="100" maxlength="1000" /> <%-- 댓글에 달리는 원게시물 글번호(즉, 댓글의 부모글 글번호) --%>
-	  							<input type="hidden" name="parentSeq" value="${requestScope.boardvo.boardseq}" />  
+								<input type="text" name="comment_text" size="100" maxlength="1000" /> <%-- 댓글에 달리는 원게시물 글번호(즉, 댓글의 부모글 글번호) --%>
+	  							<input type="hidden" name="parentseq" value="${requestScope.boardvo.boardseq}" />  
 							</td>
 						</tr>
 

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.MemberVO;
@@ -101,6 +102,14 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 	@Override
 	public int increase_viewcount(String boardseq) {
 		int n = sqlsession.update("SJ.increase_viewcount", boardseq);
+		return n;
+	}
+
+	
+	// 댓글쓰기(tbl_boardcomment 테이블에 insert)
+	@Override
+	public int addBoardComment(BoardCommentVO bdcmtvo) {
+		int n = sqlsession.insert("SJ.addBoardComment", bdcmtvo);
 		return n;
 	}
 

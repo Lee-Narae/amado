@@ -2,14 +2,19 @@ package com.spring.app.service;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.app.common.AES256;
 import com.spring.app.common.Sha256;
+import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.MemberVO;
@@ -134,6 +139,33 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		}
 		
 		return boardvo;
+	}
+
+	
+	// 댓글쓰기(Transaction)
+	// rollbackFor= {Throwable.class} 오류 뜨면 그냥 롤백해줌. 
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor= {Throwable.class})
+	public int addBoardComment(BoardCommentVO bdcmtvo) throws Throwable {
+		
+		int n1 = 0; int n2 = 0; int result = 0;
+		n1 = dao.addBoardComment(bdcmtvo); // 댓글쓰기(tbl_boardcomment 테이블에 insert)
+//		System.out.println("~~~ 확인용 n1 : " + n1);
+		
+		/*
+		 * if(n1 == 1) { n2 = dao.updateBoardCommentCount(bdcmtvo.getParentseq()); //
+		 * tbl_board 테이블에 commentCount 컬럼이 1증가(update) //
+		 * System.out.println("~~~ 확인용 n2 : " + n2); }
+		 * 
+		 * if(n2 == 1) { Map<String,String> paraMap = new HashMap<>();
+		 * paraMap.put("userid", bdcmtvo.getFk_userid()); paraMap.put("point", "50");
+		 * 
+		 * result = dao.updateMemberPoint(paraMap);// tbl_member 테이블의 point 컬럼의 값을 50점을
+		 * 증가(update) // System.out.println("~~~ 확인용 result : " + result); }
+		 */
+
+		
+		return result;
 	}
 
 

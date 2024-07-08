@@ -3,6 +3,7 @@ package com.spring.app.service;
 import java.util.List;
 import java.util.Map;
 
+import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.MemberVO;
@@ -44,6 +45,10 @@ public interface AmadoService_SJ {
 	List<BoardVO> boardListSearchPaging(Map<String, String> paraMap);
 
 	BoardVO getView(Map<String, String> paraMap);
+
+	
+	// 댓글쓰기(Transaction)
+	int addBoardComment(BoardCommentVO bdcmtvo) throws Throwable;
 
 
 }

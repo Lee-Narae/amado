@@ -3,6 +3,7 @@ package com.spring.app.model;
 import java.util.List;
 import java.util.Map;
 
+import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.MemberVO;
@@ -43,6 +44,11 @@ public interface AmadoDAO_SJ {
 	BoardVO getView(Map<String, String> paraMap);
 
 	int increase_viewcount(String boardseq);
+
+	
+	
+	// 댓글쓰기(tbl_boardcomment 테이블에 insert)
+	int addBoardComment(BoardCommentVO bdcmtvo);
 
 	
 

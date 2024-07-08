@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.app.common.MyUtil;
+import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.MemberVO;
@@ -255,7 +257,29 @@ public class ControllerSJ {
 	
 	
 	
-	
+	// === 댓글쓰기(Ajax 로 처리) === //
+	@ResponseBody
+	@PostMapping(value = "/addComment.do", produces = "text/plain;charset=UTF-8")
+	public String addComment(BoardCommentVO bdcmtvo) {
+		// 댓글쓰기에 첨부파일이 없는 경우
+
+		int n = 0;
+		try {
+			n = service.addBoardComment(bdcmtvo);
+			// 댓글쓰기(insert) 및 원게시물(tbl_board 테이블)에 댓글의 개수 증가(update 1씩 증가)하기
+			// 이어서 회원의 포인트를 50점을 증가하도록 한다. (tbl_member 테이블에 point 컬럼의 값을 50 증가하도록 update
+			// 한다.)
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+
+		JSONObject jsonObject = new JSONObject(); // {}
+		jsonObject.put("n", n); // 정상일 경우 {"n":1} 문제가 생겼을 경우{"n":0}
+
+		return jsonObject.toString();
+		// 정상일 경우 {"n":1, "name":"엄정화"} 문제가 생겼을 경우(point 300 넘을 경우){"n":0, "name":"엄정화"}
+	}
+
 	
 	
 	
