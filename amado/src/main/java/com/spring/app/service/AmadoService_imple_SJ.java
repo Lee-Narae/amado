@@ -69,19 +69,6 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		return n;
 	}
 
-	// 글목록 보기
-	@Override
-	public List<BoardVO> boardListNoSearch() {
-		List<BoardVO> boardList = dao.boardListNoSearch();
-		return boardList;
-	}
-	
-	// 글목록 보기(검색가능)	
-	@Override
-	public List<BoardVO> boardListSearch(Map<String, String> paraMap) {
-		List<BoardVO> boardList = dao.boardListSearch(paraMap);
-		return boardList;
-	}
 
 	// 글쓰기
 	@Override
@@ -126,6 +113,27 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	public List<BoardVO> boardListSearchPaging(Map<String, String> paraMap) {
 		  List<BoardVO> boardPagingList = dao.boardListSearchPaging(paraMap);
 	      return boardPagingList;
+	}
+
+	// 글 조회수 증가와 함께 글 1개를 조회를 해오는 것
+	@Override
+	public BoardVO getView(Map<String, String> paraMap) {
+		BoardVO boardvo = dao.getView(paraMap);		// 글 1개 조회하기
+		
+		String loginuser = paraMap.get("loginuser");
+		// paraMap.get("login_userid") 은 로그인을 한 상태이라면 로그인한 사용자의 userid 이고,
+	    // 로그인을 하지 않은 상태이라면  paraMap.get("login_userid") 은 null 이다.
+		
+		if(loginuser != null && boardvo != null && !loginuser.equals(boardvo.getFk_userid())) {
+			// 글조회수 증가는 로그인을 한 상태에서 다른 사람의 글을 읽을때만 증가하도록 한다.
+			
+			int n = dao.increase_viewcount(boardvo.getBoardseq()); // 글 조회수 1 증가하기
+			if(n == 1) {
+				boardvo.setViewcount(String.valueOf(Integer.parseInt(boardvo.getViewcount()) + 1));
+			}
+		}
+		
+		return boardvo;
 	}
 
 

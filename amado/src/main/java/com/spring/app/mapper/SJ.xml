@@ -24,41 +24,7 @@
 		values(#{userid}, #{password}, #{name}, #{email}, #{postcode}, #{address}, #{detailaddress}, #{extraaddress}, #{mobile}, to_number(#{gender}), #{birthday}, default, default, default, default, default, default, default, default, default, default, default)
 	</insert>
 
-    <!-- 페이징 처리를 안한 검색어가 없는 전체 글목록 보여주기 -->
-    <select id="boardListNoSearch" resultType="BoardVO">
-		select boardseq, title, content, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
-			 , password, commentcount, viewcount, status
-			 , orgfilename, filename, filesize
-		from tbl_board
-		where status = 1
-		order by boardseq desc
-    </select>
-    
-    <!-- 페이징 처리를 안한 검색어가 있는 전체 글목록 보여주기 -->
-	<select id="boardListSearch" resultType="BoardVO" parameterType="HashMap">
-		select boardseq, title, content, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
-			 , password, commentcount, viewcount, status
-			 , orgfilename, filename, filesize
-	    from tbl_board
-		where status = 1 
-		<choose>
-			<when test='searchType == "title" and searchWord != "" '>
-				and lower(title) like '%'||lower(#{searchWord})||'%'
-			</when>
-			<when test='searchType == "content" and searchWord != "" '>
-				and lower(content) like '%'||lower(#{searchWord})||'%'
-			</when>
-			<when test='searchType == "title_content" and searchWord != "" '>
-				and ( lower(title) like '%'||lower(#{searchWord})||'%'
-				or    lower(content) like '%'||lower(#{searchWord})||'%' )
-			</when>
-			<when test='searchType == "fk_userid" and searchWord != "" '>
-				and lower(fk_userid) like '%'||lower(#{searchWord})||'%'
-			</when>
-			<otherwise></otherwise>
-		</choose>
-		order by boardseq desc
-	</select>    
+
     
     <!-- 글쓰기 -->
    	<insert id="add" parameterType="BoardVO">
@@ -72,7 +38,7 @@
 		select clubseq, clubname, clubimg, fk_sportseq, clubtel
 		 , city, local, clubgym, clubtime
 		 , membercount, clubpay, clubstatus, clubscore
-		 , rank() over(order by clubscore desc) AS rank	
+		 , ROW_NUMBER() over(order by clubscore desc) AS rank	
  		from tbl_club
 		where clubstatus = 1
 		<choose>
@@ -173,7 +139,7 @@
 		 , clubseq, clubname, clubimg, fk_sportseq, clubtel
 		 , city, local, clubgym, clubtime
 		 , membercount, clubpay, clubstatus, clubscore
-		 , rank() over(order by clubscore desc) AS rank	
+		 , ROW_NUMBER() over(order by clubscore desc) AS rank	
  		from tbl_club
 		where clubstatus = 1
 		<choose>
@@ -325,6 +291,39 @@
 		           ) V
 			  where rno between to_number(#{startRno}) and to_number(#{endRno})
 	</select>	
+
+
+
+
+
+	<select id="getView" parameterType="HashMap" resultType="BoardVO">
+	   select previousseq, previoussubject, boardseq, fk_userid, 
+	   		  title, content, viewcount, registerdate, password, nextseq, nextsubject
+	    FROM
+	    (
+	        select lag (boardseq, 1) over(order by boardseq desc) AS previousseq
+	             , lag (title, 1) over(order by boardseq desc)  AS previoussubject
+	             , boardseq, fk_userid, title, content, viewcount
+	             , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate, password
+	             , lead (boardseq, 1) over(order by boardseq desc) AS nextseq
+	             , lead (title, 1) over(order by boardseq desc) AS nextsubject
+	        from tbl_board
+	        where status = 1
+	    ) V
+	    WHERE V.boardseq = #{boardseq}		
+	</select>	
+
+
+	<!-- === 글 조회수 1 증가하기 === -->
+	<update id="increase_viewcount" parameterType="String">
+		update tbl_board set viewcount = viewcount + 1
+		where boardseq = #{boardseq}
+	</update>
+
+
+
+
+
 
 
 </mapper>

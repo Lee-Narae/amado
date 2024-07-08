@@ -4,17 +4,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -50,12 +49,6 @@ public class ControllerSJ {
 		}
 		
 		List<BoardVO> boardPagingList = null;
-
-		
-		
-		
-		// === 페이징 처리를 안한 검색어가 없는 전체 글목록 보여주기 === //
-//		boardList = service.boardListNoSearch();
 
 		String searchType = request.getParameter("searchType");
 		String searchWord = request.getParameter("searchWord");
@@ -170,19 +163,124 @@ public class ControllerSJ {
         
         // *** ======= 페이지바 만들기 끝 ======= *** //           
         
-        String currentURL = MyUtil.getCurrentURL(request);		
+        String goBackURL = MyUtil.getCurrentURL(request);		
 		
 		
         mav.addObject("params", params);
         mav.addObject("paraMap", paraMap);
 	    mav.addObject("sizePerPage", sizePerPage);
 	    mav.addObject("pageBar", pageBar);
-	    mav.addObject("currentURL", currentURL);
+	    mav.addObject("goBackURL", goBackURL);
 
 		mav.setViewName("community/list.tiles2");
 		return mav;
 	}
 
+	
+	
+	
+	@RequestMapping(value = "/board/boardview.do")
+	public ModelAndView view(ModelAndView mav, HttpServletRequest request) {
+		String boardseq = "";
+		String goBackURL = "";
+		String searchType = "";
+		String searchWord = "";
+
+		boardseq = request.getParameter("boardseq");
+		goBackURL = request.getParameter("goBackURL");
+		searchType = request.getParameter("searchType");
+		searchWord = request.getParameter("searchWord");
+
+		if (searchType == null) {
+			searchType = "";
+		}
+		if (searchWord == null) {
+			searchWord = "";
+		}
+		
+		System.out.println("확인용 ~~ boardseq : " + boardseq);
+		System.out.println("확인용 ~~ goBackURL : " + goBackURL);
+		System.out.println("확인용 ~~ searchType : " + searchType);
+		System.out.println("확인용 ~~ searchWord : " + searchWord);
+/*
+ 		확인용 ~~ boardseq : 7
+		확인용 ~~ goBackURL : /community/list.do?searchType=title&searchWord=%ED%85%8C&sportseq=%2Fcommunity%2Flist.do
+		확인용 ~~ searchType : title
+		확인용 ~~ searchWord : 테스트
+*/
+		
+		mav.addObject("goBackURL", goBackURL);
+		
+		try {
+			Integer.parseInt(boardseq);
+			
+			HttpSession session = request.getSession();
+			MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
+
+			String login_userid = null;
+			if (loginuser != null) {
+				login_userid = loginuser.getUserid();
+				// login_userid 로그인 되어진 사용자의 userid 이다.
+			}
+
+			Map<String, String> paraMap = new HashMap<>();
+			paraMap.put("boardseq", boardseq);
+			paraMap.put("loginuser", login_userid);
+			// 글목록에서 검색되어진 글내용일 경우 이전글제목, 다음글제목은 검색되어진 결과물내의 이전글과 다음글이 나오도록 하기 위한 것이다. 시작 //
+			paraMap.put("searchType", searchType);
+			paraMap.put("searchWord", searchWord);
+			
+			BoardVO boardvo = null;
+	
+	
+			boardvo = service.getView(paraMap);
+	
+	
+			if (boardvo == null) {
+				mav.setViewName("redirect:/list.do");
+				return mav;
+			}
+
+			mav.addObject("boardvo", boardvo);
+			// === #140. 이전글제목, 다음글제목 보기 === //
+			mav.addObject("paraMap", paraMap);
+			mav.setViewName("board/boardview.tiles1");
+			// /WEB-INF/views/tiles1/board/view.jsp 파일을 생성한다.
+		} catch (NumberFormatException e) {
+			mav.setViewName("redirect:/list.do");
+		}
+	return mav;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	// 글쓰기
 	@GetMapping("/community/add.do")
 	public ModelAndView requiredLogin_add(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {

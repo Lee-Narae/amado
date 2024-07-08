@@ -42,19 +42,7 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 		n = sqlsession.insert("SJ.memberRegisterEnd", membervo);
 		return n;
 	}
-
-	// 글목록 보기
-	@Override
-	public List<BoardVO> boardListNoSearch() {
-		List<BoardVO> boardList = sqlsession.selectList("SJ.boardListNoSearch");
-		return boardList;
-	}
 	
-	@Override
-	public List<BoardVO> boardListSearch(Map<String, String> paraMap) {
-		List<BoardVO> boardList = sqlsession.selectList("SJ.boardListSearch", paraMap);
-		return boardList;
-	}
 
 	// 글쓰기
 	@Override
@@ -100,6 +88,20 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 	public List<BoardVO> boardListSearchPaging(Map<String, String> paraMap) {
 		List<BoardVO> boardPagingList = sqlsession.selectList("SJ.boardListSearchPaging", paraMap);
 		return boardPagingList;
+	}
+
+	// 글 조회수 증가와 함께 글 1개를 조회를 해오는 것
+	@Override
+	public BoardVO getView(Map<String, String> paraMap) {
+		BoardVO boardvo = sqlsession.selectOne("SJ.getView", paraMap);
+		return boardvo;
+	}
+
+	// 글 조회수 1 증가하기
+	@Override
+	public int increase_viewcount(String boardseq) {
+		int n = sqlsession.update("SJ.increase_viewcount", boardseq);
+		return n;
 	}
 
 

@@ -19,11 +19,6 @@ public interface AmadoService_SJ {
 	// 회원가입
 	int memberRegisterEnd(MemberVO membervo);
 
-	// 글목록 보기(페이지바 없음)
-	List<BoardVO> boardListNoSearch();
-
-	// 글목록 보기(검색가능)(페이지바 없음)
-	List<BoardVO> boardListSearch(Map<String, String> paraMap);
 
 	
 	// 글쓰기
@@ -47,6 +42,8 @@ public interface AmadoService_SJ {
 
 	// 검색타입 있거나 없는 리스트 가져오기(페이징)
 	List<BoardVO> boardListSearchPaging(Map<String, String> paraMap);
+
+	BoardVO getView(Map<String, String> paraMap);
 
 
 }

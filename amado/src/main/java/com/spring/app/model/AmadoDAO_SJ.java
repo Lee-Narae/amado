@@ -17,12 +17,7 @@ public interface AmadoDAO_SJ {
 
 	// 회원가입
 	int memberRegisterEnd(MemberVO membervo);
-
-	// 글목록 보기
-	List<BoardVO> boardListNoSearch();
 	
-	// 글목록 목비(검색가능)
-	List<BoardVO> boardListSearch(Map<String, String> paraMap);
 
 	// 글쓰기
 	int add(BoardVO boardvo);
@@ -44,6 +39,10 @@ public interface AmadoDAO_SJ {
 
 	// 검색타입 있거나 없는 리스트 가져오기(페이징)
 	List<BoardVO> boardListSearchPaging(Map<String, String> paraMap);
+
+	BoardVO getView(Map<String, String> paraMap);
+
+	int increase_viewcount(String boardseq);
 
 	
 
