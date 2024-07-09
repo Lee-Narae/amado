@@ -148,6 +148,48 @@ select noticeseq, title, content, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss')
 
 desc tbl_notice;        
         
-select * from tbl_notice
-order by registerdate desc;
+select title, content, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, viewcount, orgfilename, filename, filesize
+from tbl_notice
+where status = 0 and noticeseq = 102;
 
+select * from tab;
+
+create table tbl_noticecomment    
+(noticecommentseq          NUMBER                                   -- 댓글번호(PK)
+,parentseq                NUMBER                                   -- 게시판번호(FK)
+,comment_text             nvarchar2(200)                           -- 댓글내용(시)
+,registerdate             DATE DEFAULT SYSDATE NOT NULL            -- 댓글작성일자
+,fk_userid                nvarchar2(20)                            -- 아이디(FK)
+,status                   number(1) default 1 not null             -- 댓글 상태 1 : 작성 0 : 삭제
+,constraint PK_tbl_ntcmt_ntcmtseq primary key(noticecommentseq)
+,constraint FK_tbl_ntcmt_ntcmtseq foreign key(parentseq) references tbl_notice(noticeseq)
+,constraint FK_tbl_ntcmt_fk_userid foreign key(fk_userid) references tbl_member(userid)
+,constraint CK_tbl_ntcmt_status check( status in(0,1) )                  -- 1 : 작성 0 : 삭제
+);
+
+select count(*)
+from tbl_noticecomment
+where status = 1 and parentseq = 102;
+
+create sequence seq_noticecomment
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+insert into tbl_noticecomment(noticecommentseq, parentseq, comment_text, registerdate, fk_userid, status)
+values(seq_noticecomment.nextval, 102, 'ㅋㅋㅋ이게 공지냐', default, 'test1', default);
+
+select noticecommentseq, parentseq, comment_text, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, fk_userid, memberimg
+from tbl_noticecomment A join tbl_member B
+on A.fk_userid = B.userid
+where A.status = 1 and parentseq = 102;
+
+
+select * from tbl_notice;
+
+alter table tbl_notice add commentcount number default 0;
+update tbl_notice set commentcount = 4 where noticeseq = 102;
+commit;

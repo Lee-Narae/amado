@@ -229,4 +229,46 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		return n;
 	}
 
+	// 공지사항 - 상세 글 보기
+	@Override
+	public NoticeVO getNoticeDetail(Map<String, String> paramap) {
+		NoticeVO notice = sqlsession.selectOne("NR.getNoticeDetail", paramap);
+		return notice;
+	}
+
+	// 공지사항 댓글 불러오기
+	@Override
+	public List<Map<String, String>> getNoticeComment(String noticeseq) {
+		List<Map<String, String>> commentList = sqlsession.selectList("NR.getNoticeComment", noticeseq);
+		return commentList;
+	}
+
+	// 공지사항 댓글 개수
+	@Override
+	public String getNoticeCommentCount(String noticeseq) {
+		String commentCount = sqlsession.selectOne("NR.getNoticeCommentCount", noticeseq);
+		return commentCount;
+	}
+
+	// 공지사항 - 첨부파일 다운받기
+	@Override
+	public Map<String, String> getOrgfilename(String noticeseq) {
+		Map<String, String> filenameMap = sqlsession.selectOne("NR.getOrgfilename", noticeseq);
+		return filenameMap;
+	}
+
+	// 공지사항 - 글 지우기
+	@Override
+	public int deleteNotice(String noticeseq) {
+		int n = sqlsession.delete("NR.deleteNotice", noticeseq);
+		return n;
+	}
+
+	// 공지사항 - 수정하기 위해서 글 가져오기
+	@Override
+	public NoticeVO editNotice_get(String noticeseq) {
+		NoticeVO editNotice = sqlsession.selectOne("NR.editNotice_get", noticeseq);
+		return editNotice;
+	}
+
 }

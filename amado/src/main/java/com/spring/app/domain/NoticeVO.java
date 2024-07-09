@@ -28,7 +28,47 @@ public class NoticeVO {
 	private String orgfilename;
 	private String filename;
 	private String filesize;
+	private String commentcount;
 	
+	
+	// 이전글, 다음글 보기
+	private String previousseq;
+	private String previoustitle;
+	private String nextseq;
+	private String nexttitle;
+	
+	
+	
+	public String getPreviousseq() {
+		return previousseq;
+	}
+	public void setPreviousseq(String previousseq) {
+		this.previousseq = previousseq;
+	}
+	public String getPrevioustitle() {
+		return previoustitle;
+	}
+	public void setPrevioustitle(String previoustitle) {
+		this.previoustitle = previoustitle;
+	}
+	public String getNextseq() {
+		return nextseq;
+	}
+	public void setNextseq(String nextseq) {
+		this.nextseq = nextseq;
+	}
+	public String getNexttitle() {
+		return nexttitle;
+	}
+	public void setNexttitle(String nexttitle) {
+		this.nexttitle = nexttitle;
+	}
+	public String getCommentcount() {
+		return commentcount;
+	}
+	public void setCommentcount(String commentcount) {
+		this.commentcount = commentcount;
+	}
 	private MultipartFile attach;
 	
 	public MultipartFile getAttach() {

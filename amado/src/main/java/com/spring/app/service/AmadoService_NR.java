@@ -93,6 +93,24 @@ public interface AmadoService_NR {
 
 	// 공지사항 목록 - 공지사항 개수
 	int getTotalNoticeCount(Map<String, String> paramap);
+
+	// 공지사항 - 상세 글 보기
+	NoticeVO getNoticeDetail(Map<String, String> paramap);
+
+	// 공지사항 댓글 불러오기
+	List<Map<String, String>> getNoticeComment(String noticeseq);
+
+	// 공지사항 댓글 개수
+	String getNoticeCommentCount(String noticeseq);
+
+	// 공지사항 - 첨부파일 다운받기
+	Map<String, String> getOrgfilename(String noticeseq);
+
+	// 공지사항 - 글 지우기
+	int deleteNotice(String noticeseq);
+
+	// 공지사항 - 수정하기 위해서 글 가져오기
+	NoticeVO editNotice_get(String noticeseq);
 	
 
 

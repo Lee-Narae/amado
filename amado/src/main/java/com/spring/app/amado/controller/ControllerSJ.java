@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -15,10 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.app.common.MyUtil;
+import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.MemberVO;
@@ -50,12 +51,6 @@ public class ControllerSJ {
 		}
 		
 		List<BoardVO> boardPagingList = null;
-
-		
-		
-		
-		// === 페이징 처리를 안한 검색어가 없는 전체 글목록 보여주기 === //
-//		boardList = service.boardListNoSearch();
 
 		String searchType = request.getParameter("searchType");
 		String searchWord = request.getParameter("searchWord");
@@ -170,19 +165,197 @@ public class ControllerSJ {
         
         // *** ======= 페이지바 만들기 끝 ======= *** //           
         
-        String currentURL = MyUtil.getCurrentURL(request);		
+        String goBackURL = MyUtil.getCurrentURL(request);		
 		
 		
         mav.addObject("params", params);
         mav.addObject("paraMap", paraMap);
 	    mav.addObject("sizePerPage", sizePerPage);
 	    mav.addObject("pageBar", pageBar);
-	    mav.addObject("currentURL", currentURL);
+	    mav.addObject("goBackURL", goBackURL);
 
 		mav.setViewName("community/list.tiles2");
 		return mav;
 	}
 
+	
+	
+	
+	@RequestMapping(value = "/board/boardview.do")
+	public ModelAndView view(ModelAndView mav, HttpServletRequest request) {
+		String boardseq = "";
+		String goBackURL = "";
+		String searchType = "";
+		String searchWord = "";
+
+		boardseq = request.getParameter("boardseq");
+		goBackURL = request.getParameter("goBackURL");
+		searchType = request.getParameter("searchType");
+		searchWord = request.getParameter("searchWord");
+
+		if (searchType == null) {
+			searchType = "";
+		}
+		if (searchWord == null) {
+			searchWord = "";
+		}
+		
+		System.out.println("확인용 ~~ boardseq : " + boardseq);
+		System.out.println("확인용 ~~ goBackURL : " + goBackURL);
+		System.out.println("확인용 ~~ searchType : " + searchType);
+		System.out.println("확인용 ~~ searchWord : " + searchWord);
+/*
+ 		확인용 ~~ boardseq : 7
+		확인용 ~~ goBackURL : /community/list.do?searchType=title&searchWord=%ED%85%8C&sportseq=%2Fcommunity%2Flist.do
+		확인용 ~~ searchType : title
+		확인용 ~~ searchWord : 테스트
+*/
+		
+		mav.addObject("goBackURL", goBackURL);
+		
+		try {
+			Integer.parseInt(boardseq);
+			
+			HttpSession session = request.getSession();
+			MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
+
+			String login_userid = null;
+			if (loginuser != null) {
+				login_userid = loginuser.getUserid();
+				// login_userid 로그인 되어진 사용자의 userid 이다.
+			}
+
+			Map<String, String> paraMap = new HashMap<>();
+			paraMap.put("boardseq", boardseq);
+			paraMap.put("loginuser", login_userid);
+			// 글목록에서 검색되어진 글내용일 경우 이전글제목, 다음글제목은 검색되어진 결과물내의 이전글과 다음글이 나오도록 하기 위한 것이다. 시작 //
+			paraMap.put("searchType", searchType);
+			paraMap.put("searchWord", searchWord);
+			
+			BoardVO boardvo = null;
+	
+	
+			boardvo = service.getView(paraMap);
+	
+	
+			if (boardvo == null) {
+				mav.setViewName("redirect:/list.do");
+				return mav;
+			}
+
+			mav.addObject("boardvo", boardvo);
+			// === #140. 이전글제목, 다음글제목 보기 === //
+			mav.addObject("paraMap", paraMap);
+			mav.setViewName("board/boardview.tiles1");
+			// /WEB-INF/views/tiles1/board/view.jsp 파일을 생성한다.
+		} catch (NumberFormatException e) {
+			mav.setViewName("redirect:/list.do");
+		}
+	return mav;
+	}
+	
+	
+	
+	
+	
+	// === 댓글쓰기(Ajax 로 처리) === //
+	@ResponseBody
+	@PostMapping(value = "/addComment.do", produces = "text/plain;charset=UTF-8")
+	public String addComment(BoardCommentVO bdcmtvo) {
+		// 댓글쓰기에 첨부파일이 없는 경우
+
+		
+		int n = 0;
+		try {
+			n = service.addBoardComment(bdcmtvo);
+			// 댓글쓰기(insert) 및 원게시물(tbl_board 테이블)에 댓글의 개수 증가(update 1씩 증가)하기
+			// 이어서 회원의 포인트를 50점을 증가하도록 한다. (tbl_member 테이블에 point 컬럼의 값을 50 증가하도록 update
+			// 한다.)
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+
+		JSONObject jsonObject = new JSONObject(); // {}
+		jsonObject.put("n", n); // 정상일 경우 {"n":1} 문제가 생겼을 경우{"n":0}
+
+		return jsonObject.toString();
+		// 정상일 경우 {"n":1, "name":"엄정화"} 문제가 생겼을 경우(point 300 넘을 경우){"n":0, "name":"엄정화"}
+	}
+
+	
+	
+	// === 원 게시물에 딸린 댓글들을 조회해오기(Ajax 로 처리) === //
+	@ResponseBody
+	@GetMapping(value = "/readComment.do", produces = "text/plain;charset=UTF-8")
+	public String readComment(HttpServletRequest request) {
+		String parentseq = request.getParameter("parentseq");
+
+		// 원게시물에 딸린 댓글들을 조회해오기
+		List<BoardCommentVO> bdcmtList = service.readComment(parentseq);
+
+		JSONArray jsonArr = new JSONArray(); // []
+
+		if (bdcmtList != null) {
+			for (BoardCommentVO bdcmtvo : bdcmtList) {
+				JSONObject jsonObj = new JSONObject(); // {}
+				jsonObj.put("boardcommentseq", bdcmtvo.getBoardcommentseq()); 
+				jsonObj.put("fk_userid", bdcmtvo.getFk_userid()); 
+				jsonObj.put("comment_text", bdcmtvo.getComment_text()); 
+				jsonObj.put("registerdate", bdcmtvo.getRegisterdate()); 
+				
+				jsonArr.put(jsonObj);
+			}
+		}
+		
+		return jsonArr.toString(); 
+	}
+	
+
+	
+	// === 댓글 삭제(Ajax 로 처리) === //
+	@ResponseBody
+	@PostMapping(value = "/deleteComment.do", produces = "text/plain;charset=UTF-8")
+	public String deleteComment(HttpServletRequest request) {
+		String boardcommentseq = request.getParameter("boardcommentseq");
+		String parentseq = request.getParameter("parentseq");
+		String userid = request.getParameter("userid");
+
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("boardcommentseq", boardcommentseq);
+		paraMap.put("parentseq", parentseq);
+		paraMap.put("userid", userid);
+		int n = 0;
+		try {
+			n = service.deleteComment(paraMap); // 댓글 삭제
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+
+		return jsonObj.toString(); // {"n":1}
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	// 글쓰기
 	@GetMapping("/community/add.do")
 	public ModelAndView requiredLogin_add(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {

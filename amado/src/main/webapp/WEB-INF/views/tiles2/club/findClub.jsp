@@ -9,6 +9,7 @@
 %>
 
 <style type="text/css">
+
     .container {
         display: flex;
         justify-content: center;
@@ -121,7 +122,7 @@
 
 
 
-<div style="width: 90%; margin: auto; margin-top: 5%;">
+<div style="width: 1400px; margin: auto; margin-top: 5%;">
     <c:if test="${requestScope.params == '/club/findClub.do' || requestScope.params == '1'}">
        <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">축구 동호회 찾기</div>
     </c:if>
@@ -273,7 +274,7 @@
         </div>
     </form>
 
-    <table class="table table-bordered" style="margin-bottom: 10%;">
+    <table class="table table-bordered" style="margin-bottom: 3%;">
         <thead>
             <tr>
                 <th style="width: 70px; text-align: center;">랭킹</th>
