@@ -62,13 +62,15 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 	}
 
 
-
-	// 운동 종목 시퀀스가져오기
+	// 상품 select 헤오기
 	@Override
-	public List<String> getSportList() {
-		List<String> sportList = dao.getSportList();
-		return sportList;
+	public List<Map<String, String>> getSportNameList(String sportname) {
+		List<Map<String, String>> sportNameList = dao.getSportNameList(sportname);
+		return sportNameList;
 	}
+
+
+	
 
 	
 	
