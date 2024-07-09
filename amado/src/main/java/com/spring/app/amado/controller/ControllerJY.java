@@ -212,12 +212,24 @@ public class ControllerJY {
 	
 	// ========== 플리마켓  ==========
 	// 플리마켓 페이지 보요주기
+	@RequestMapping(value="/club/fleamarket.do")
+	public ModelAndView fleamarket(ModelAndView mav) {
+		mav.setViewName("club/fleamarket.tiles2");
+		//    /WEB-INF/views/club/viewclub.jsp
+		return mav;
+		
+	}
+	
+	// 
 	@ResponseBody
-	@GetMapping(value="/club/fleamarket.do", produces="text/plain;charset=UTF-8")
+	@GetMapping(value="/sportname.do", produces="text/plain;charset=UTF-8")
 	public String fleamarket(HttpServletRequest request) {
 		
-		// 운동 종목 시퀀스가져오기
-		List<String> sportList = service.getSportList();
+		String sportname = request.getParameter("sportname");
+		System.out.println(sportname);
+		
+		// 상품 select 헤오기
+		List<Map<String,String>> sportNameList = service.getSportNameList(sportname);
 		//운동 종목시퀀스만 가져올 거니까 컬럼 한개
 		
 		/*
@@ -226,17 +238,37 @@ public class ControllerJY {
 			// Map<> 은 행이 한개 일때 
 			 
 		*/
-		JSONObject jsonObj = new JSONObject(); // {}
 		
-		for(String sportname : sportList) {
-			jsonObj.put("sportname", sportname);
+		JSONArray jsonArr = new JSONArray();
+		
+		for(Map<String, String> productinfo : sportNameList) {
+			
+			JSONObject jsonObj = new JSONObject(); // {}
+			jsonObj.put("sportseq", productinfo.get("sportseq"));
+			jsonObj.put("sportname", productinfo.get("sportname"));
+			jsonObj.put("city", productinfo.get("city"));
+			jsonObj.put("local", productinfo.get("local"));
+			jsonObj.put("title", productinfo.get("title"));
+			jsonObj.put("content", productinfo.get("content"));
+			jsonObj.put("cost", productinfo.get("cost"));
+			jsonObj.put("deal", productinfo.get("deal"));
+			jsonObj.put("fk_userid", productinfo.get("fk_userid"));
+			jsonObj.put("registerdate", productinfo.get("registerdate"));
+			jsonObj.put("commentcount", productinfo.get("commentcount"));
+			jsonObj.put("viewcount", productinfo.get("viewcount"));
+			jsonObj.put("status", productinfo.get("status"));
+			jsonObj.put("imgfilename", productinfo.get("imgfilename"));
+			
+			jsonArr.put(jsonObj);
+		
 		}	      
-	   return jsonObj.toString();
+		
+	   return jsonArr.toString();
 
 		
 	}
 
-		
+
 
 
 

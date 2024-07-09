@@ -22,5 +22,8 @@ public interface AmadoDAO_JY {
 
 	// 운동 종목 시퀀스가져오기
 	List<String> getSportList();
+
+	// 상품 select 헤오기
+	List<Map<String, String>> getSportNameList(String sportname);
 		
 }
