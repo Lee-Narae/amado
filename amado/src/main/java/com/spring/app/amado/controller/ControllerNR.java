@@ -851,6 +851,22 @@ public class ControllerNR {
 	}
 	
 	
+	
+	
+	@PostMapping("/admin/reg/notice")
+	public ModelAndView editNotice(HttpServletRequest request, ModelAndView mav) {
+		
+		String noticeseq = request.getParameter("noticeseq");
+		
+		NoticeVO editNotice = service.editNotice_get(noticeseq);
+		
+		mav.addObject("editNotice", editNotice);
+		mav.setViewName("reg/notice.tiles3");
+		return mav;
+	}
+	
+	
+	
 	@PostMapping("/admin/reg/noticeEnd")
 	public ModelAndView noticeEnd(HttpServletRequest request, NoticeVO nvo, MultipartHttpServletRequest mrequest, ModelAndView mav) {
 		
@@ -1045,6 +1061,7 @@ public class ControllerNR {
 			mav.addObject("searchWord", searchWord);
 		}
 		
+		mav.addObject("paramap", paramap);
 		mav.addObject("pageBar", pageBar);
 		
 		mav.addObject("currentURL", currentURL); 
@@ -1062,6 +1079,114 @@ public class ControllerNR {
 		
 		return mav;
 	}
+	
+	
+	
+	
+	@PostMapping("/community/noticeDetail.do")
+	public ModelAndView noticeDetail(ModelAndView mav, HttpServletRequest request) {
+		
+		String noticeseq = request.getParameter("noticeseq");
+		String goBackURL = request.getParameter("goBackURL");
+		String searchType = request.getParameter("searchType");
+		String searchWord = request.getParameter("searchWord");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("noticeseq", noticeseq);
+		paramap.put("goBackURL", goBackURL);
+		paramap.put("searchType", searchType);
+		paramap.put("searchWord", searchWord);
+		
+		// 댓글
+		List<Map<String,String>> commentList = service.getNoticeComment(noticeseq);
+		
+		// 댓글 수
+		String commentCount = service.getNoticeCommentCount(noticeseq);
+		
+		if(commentList.size() > 0) {
+			mav.addObject("commentList", commentList);
+			mav.addObject("commentCount", commentCount);
+		}
+		
+		
+		// 게시글
+		NoticeVO notice = service.getNoticeDetail(paramap);
+		
+		if(notice == null) {
+			String message = "존재하지 않는 게시글입니다.";
+			String loc = "javascript:history.back()";
+			
+			mav.addObject("message", message);
+			mav.addObject("loc", loc);
+			
+			mav.setViewName("msg");
+		}
+		
+		mav.addObject("notice", notice);
+		mav.addObject("noticeseq", noticeseq);
+		mav.addObject("goBackURL", goBackURL);
+		mav.addObject("searchType", searchType);
+		mav.addObject("searchWord", searchWord);
+		
+		mav.setViewName("community/noticeDetail.tiles2");
+		return mav;
+	}
+	
+	
+	@GetMapping("/community/noticeAttachDownload.do")
+	public void noticeAttachDownload(HttpServletRequest request, HttpServletResponse response) {
+		
+		String noticeseq = request.getParameter("noticeseq");
+	
+		// 파일관련 이름 알아오기
+		Map<String, String> filenameMap = service.getOrgfilename(noticeseq);
+		
+		String filename = filenameMap.get("filename");
+		String orgfilename = filenameMap.get("orgfilename");
+		
+		HttpSession session = request.getSession(); 
+        String root = session.getServletContext().getRealPath("/");
+        String path = root+"resources"+File.separator+"files";
+		
+        fileManager.doFileDownload(filename, orgfilename, path, response);
+		
+	}
+	
+	
+	@PostMapping("/community/deleteNotice.do")
+	public ModelAndView deleteNotice(HttpServletRequest request, ModelAndView mav) {
+	
+		String noticeseq = request.getParameter("noticeseq");
+		
+		int n = service.deleteNotice(noticeseq);
+		
+		if(n == 1) {
+			
+			String message = "공지사항이 삭제되었습니다.";
+			String loc = "noticeList.do";
+			
+			mav.addObject("message", message);
+			mav.addObject("loc", loc);
+			
+			mav.setViewName("msg");
+			
+		}
+		
+		else {
+			
+			String message = "게시글 삭제가 실패하였습니다.";
+			String loc = "javascript:history.back()";
+			
+			mav.addObject("message", message);
+			mav.addObject("loc", loc);
+			
+			mav.setViewName("msg");
+			
+		}
+		
+		return mav;
+	}
+	
 	
 	
 }
