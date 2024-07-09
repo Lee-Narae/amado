@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% String ctxPath = request.getContextPath(); %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <style type="text/css">
 .title {
@@ -102,6 +103,14 @@ $(document).ready(function(){
      });
      
      
+     
+     // 글 수정
+     if(${requestScope.editNotice != null}){
+    	 
+    	 $("input[name='title']").val('${requestScope.editNotice.title}');
+    	 
+     }
+     
 });
 </script>
 
@@ -121,7 +130,7 @@ $(document).ready(function(){
 	
 	
 		<div style="width: 75%; background-color: white;">
-			<textarea style="width: 100%; height: 612px;" name="content" id="CONTENT"></textarea>
+			<textarea style="width: 100%; height: 612px;" name="content" id="CONTENT"><c:if test=""></c:if></textarea>
 		</div>
 	</div>
 </form>

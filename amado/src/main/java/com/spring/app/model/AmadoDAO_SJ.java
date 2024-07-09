@@ -3,6 +3,7 @@ package com.spring.app.model;
 import java.util.List;
 import java.util.Map;
 
+import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.MemberVO;
@@ -17,12 +18,7 @@ public interface AmadoDAO_SJ {
 
 	// 회원가입
 	int memberRegisterEnd(MemberVO membervo);
-
-	// 글목록 보기
-	List<BoardVO> boardListNoSearch();
 	
-	// 글목록 목비(검색가능)
-	List<BoardVO> boardListSearch(Map<String, String> paraMap);
 
 	// 글쓰기
 	int add(BoardVO boardvo);
@@ -44,6 +40,27 @@ public interface AmadoDAO_SJ {
 
 	// 검색타입 있거나 없는 리스트 가져오기(페이징)
 	List<BoardVO> boardListSearchPaging(Map<String, String> paraMap);
+
+	BoardVO getView(Map<String, String> paraMap);
+
+	int increase_viewcount(String boardseq);
+
+	
+	
+	// 댓글쓰기(tbl_boardcomment 테이블에 insert)
+	int addBoardComment(BoardCommentVO bdcmtvo);
+
+	// 원게시물에 딸린 댓글들을 조회해오기
+	List<BoardCommentVO> readComment(String parentseq);
+
+	// 댓글 작성 시 댓글카운트 증가
+	int updateBoardCommentCount(String parentseq);
+
+	// 댓글 삭제
+	int deleteComment(String boardcommentseq);
+
+	// 댓글 삭제 시 댓글카운트 감소
+	int updateCommentCount_decrease(String parentseq);
 
 	
 

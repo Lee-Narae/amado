@@ -3,6 +3,7 @@ package com.spring.app.service;
 import java.util.List;
 import java.util.Map;
 
+import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.MemberVO;
@@ -19,11 +20,6 @@ public interface AmadoService_SJ {
 	// 회원가입
 	int memberRegisterEnd(MemberVO membervo);
 
-	// 글목록 보기(페이지바 없음)
-	List<BoardVO> boardListNoSearch();
-
-	// 글목록 보기(검색가능)(페이지바 없음)
-	List<BoardVO> boardListSearch(Map<String, String> paraMap);
 
 	
 	// 글쓰기
@@ -47,6 +43,18 @@ public interface AmadoService_SJ {
 
 	// 검색타입 있거나 없는 리스트 가져오기(페이징)
 	List<BoardVO> boardListSearchPaging(Map<String, String> paraMap);
+
+	BoardVO getView(Map<String, String> paraMap);
+
+	
+	// 댓글쓰기(Transaction)
+	int addBoardComment(BoardCommentVO bdcmtvo) throws Throwable;
+
+	// 원게시물에 딸린 댓글들을 조회해오기
+	List<BoardCommentVO> readComment(String parentseq);
+
+	// 댓글 삭제
+	int deleteComment(Map<String, String> paraMap) throws Throwable;
 
 
 }

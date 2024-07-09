@@ -136,7 +136,7 @@ VALUES
 
 
 create table tbl_gym    
-(ymseq          NUMBER          NOT NULL    -- 체육관번호(PK)
+(gymseq          NUMBER          NOT NULL    -- 체육관번호(PK)
 ,gymname      nvarchar2(30)   NOT NULL    -- 체육관명
 ,fk_userid      nvarchar2(20)   NOT NULL    -- 담당자아이디(FK)
 ,postcode      nvarchar2(5)    NOT NULL    -- 우편번호
@@ -154,8 +154,10 @@ create table tbl_gym
 ,constraint FK_tbl_gym_fk_userid foreign key(fk_userid) references tbl_member(userid)
 );
 
+insidestatus
 -- Table TBL_GYM이(가) 생성되었습니다.
-
+select *
+from tbl_gym;
 
 create sequence seq_gym 
 start with 1

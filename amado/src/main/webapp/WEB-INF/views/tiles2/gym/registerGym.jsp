@@ -3,10 +3,7 @@
 <%
    String ctxPath = request.getContextPath();
 %>
- <!-- Daum 주소 API 스크립트 -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-  <style>
+ <style>
     h1 {
       text-align: center;
       margin-bottom: 30px;
@@ -68,59 +65,181 @@
       color: #666;
       margin-top: 5px;
     }
-  </style>
- 
- 
-  <script type="text/javascript">	
-   
+    
+    .drop-area {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+	}
+
+	.drag-over {
+	  background-color: #f0f0f0; /* 드래그 중일 때 배경색 변경 */
+	}
+    
+    .file-item {
+    margin-bottom: 5px;
+}
+.delete-btn {
+    margin-left: 10px;
+    font-size: 12px;
+    padding: 5px 10px;
+    background-color: #ff4c4c;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+    
   
-  	// Daum 주소 API를 이용한 주소 찾기 함수
-    function searchAddress() {
-            // 주소 검색 로직 구현 (예: 카카오 주소 검색 API 사용)
-            new daum.Postcode({
-                oncomplete: function(data) {
-                    // 검색된 주소를 'address' 입력 필드에 설정
-                    document.getElementById('address').value = data.address;
-                    // 우편번호를 'postcode' 입력 필드에 설정
-                    document.getElementById('postcode').value = data.zonecode;
-                    // 상세주소 입력 필드에 포커스를 설정
-                    document.getElementById('detailAddress').focus();
-                }
-            }).open();
+  </style>
+  <!-- Daum 주소 API 스크립트 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript">	
+
+// Daum 주소 API를 이용한 주소 찾기 함수
+function searchAddress() {
+    new daum.Postcode({
+        oncomplete: function(data) {
+            document.getElementById('address').value = data.address;
+            document.getElementById('postcode').value = data.zonecode;
+            document.getElementById('detailaddress').focus();
         }
-    
-    function goBack() {
-        window.history.back(); // 이전 페이지로 이동하는 함수
+    }).open();
+}//end of function searchAddress
+
+// === 파일드래그 드롭 시작 ===
+document.addEventListener('DOMContentLoaded', function() {
+    var dropArea = document.getElementById('dropArea');
+    var fileListContainer = document.getElementById('fileList');
+
+    if (dropArea) {
+        // dragover 이벤트 핸들러
+        dropArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            dropArea.classList.add('drag-over');
+        });
+
+        // dragleave 이벤트 핸들러
+        dropArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            dropArea.classList.remove('drag-over');
+        });
+
+        // drop 이벤트 핸들러
+        dropArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            dropArea.classList.remove('drag-over');
+
+            var files = e.dataTransfer.files;
+
+            // 파일 리스트에 파일 추가
+            addFilesToList(files);
+
+            // 선택된 파일을 input 요소에 설정 (미리보기 기능과 동일)
+            var fileReader = new FileReader();
+            fileReader.readAsDataURL(files[0]);
+            fileReader.onload = function() {
+                document.getElementById("previewImg").src = fileReader.result;
+            };
+        });
+
+        // click 이벤트 핸들러
+        dropArea.addEventListener('click', function(e) {
+            var input = document.getElementById('imgfilename');
+            if (input) {
+                input.click();
+            }
+        });
+
+        // 파일 선택(input[type="file"]) 시 파일명 표시 및 삭제 버튼 추가 기능
+        $(document).on("change", "input#imgfilename", function(e) {
+            var input_file = $(e.target).get(0);
+            addFilesToList(input_file.files);
+
+            var fileReader = new FileReader();
+            fileReader.readAsDataURL(input_file.files[0]);
+            fileReader.onload = function() {
+                document.getElementById("previewImg").src = fileReader.result;
+            };
+        });
+
+        // 파일 리스트에 파일 추가하는 함수
+        function addFilesToList(files) {
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                var listItem = document.createElement('div');
+                listItem.classList.add('file-item');
+                listItem.innerHTML = '<span>' + file.name + '</span>';
+                var deleteBtn = document.createElement('button');
+                deleteBtn.textContent = '삭제';
+                deleteBtn.classList.add('delete-btn');
+                deleteBtn.setAttribute('data-file-index', i); // 삭제 버튼에 파일 인덱스 설정
+                deleteBtn.addEventListener('click', function() {
+                    var index = this.getAttribute('data-file-index');
+                    fileListContainer.removeChild(listItem); // 파일 리스트에서 해당 파일 아이템 제거
+                });
+                listItem.appendChild(deleteBtn);
+                fileListContainer.appendChild(listItem);
+            }
+        }
+    } else {
+        console.error('dropArea 요소를 찾을 수 없습니다.');
     }
-    
+});
+
+
+//=== 파일드래그 드롭 끝 ===
+
+$(document).ready(function() {
+
+
     // 제품 이미지 파일 선택 시 미리보기 기능
-  $(document).ready(function() {
-    $(document).on("change", "input#attachment", function(e) {
+    $(document).on("change", "input#imgfilename", function(e) {
         const input_file = $(e.target).get(0);
         const fileReader = new FileReader();
         fileReader.readAsDataURL(input_file.files[0]);
         fileReader.onload = function() {
             document.getElementById("previewImg").src = fileReader.result;
         };
-  
-        
-    
     });
-   
-    
-    $("button#submit").click(function(){
-	 	 
-		  //폼(form)을 전송(submit)
-    	 const frm = document.addFrm;
- 	    frm.method = "post";
- 	    frm.action = "<%= ctxPath%>/gym/registerGymend.do";
- 	    frm.submit();
-	 	  
-	 });
-  
-}); //end of   $(document).ready(function() ----------------------
- 
-  </script>
+
+    // 폼 제출 시 알림 및 폼 전송
+    $("button#submit").click(function() {
+        alert("관리자가 승인해야 정상등록 됩니다");
+        const frm = document.addFrm;
+        frm.method = "post";
+        frm.action = "<%= ctxPath %>/gym/registerGymend.do";
+        frm.submit();
+    });
+
+    // 비용(input[type="number"]) 입력 필드에 대한 숫자만 입력 유효성 검사
+    var costInput = document.getElementById("cost");
+    costInput.addEventListener("input", function(event) {
+        var value = event.target.value;
+        if (isNaN(value)) {
+            event.target.value = "";
+            alert("숫자만 입력할 수 있습니다.");
+        }
+    });
+
+    // 인원수(input[type="number"]) 입력 필드에 대한 숫자만 입력 유효성 검사
+    var memberCountInput = document.getElementById("membercount");
+    memberCountInput.addEventListener("input", function(event) {
+        var value = event.target.value;
+        if (isNaN(value)) {
+            event.target.value = "";
+            alert("숫자만 입력할 수 있습니다.");
+        }
+    });
+});
+
+
+
+</script>
+
+
 
 <h1>체육관 등록</h1>
   
@@ -132,12 +251,12 @@
     
     <div class="form-group">
       <label for="manager-id">담당자 아이디</label>
-      <input type="text" name="fk_userid" value="${sessionScope.loginuser.userid}" required disabled>
+      <input type="text" name="fk_userid" value="${sessionScope.loginuser.userid}" required readonly>
     </div>
      <div class="form-group">
         <label for="address">주소</label>
         <input type="text" id="address" name="address" required>
-        <br>
+         <br><br>
         <button type="button" onclick="searchAddress()">주소 찾기</button>
     </div>
     <div class="form-group">
@@ -148,6 +267,7 @@
         <label for="detailaddress">상세주소</label>
         <input type="text" id="detailaddress" name="detailaddress" required>
     </div>
+    
     
     <div class="form-group">
       <label>실내/실외</label>
@@ -173,6 +293,19 @@
 	  <input type="file" id="imgfilename" name="attach" multiple>
 	</div>
 	
+	<div class="form-group">
+	  <label for="attachment">첨부 파일</label>
+	  <input type="file" id="imgfilename" name="attach" multiple style="display: none;">
+	 <div id="dropArea" class="drop-area">
+	   파일을 드래그하여 이곳에 놓으세요.
+	 </div>
+	 	<div id="fileList"></div> <!-- 파일 리스트를 표시할 공간 -->
+	</div>
+
+
+
+	
+	
 	<!-- 이미지 미리보기 -->
     <div class="form-group">
         <label for="previewImg">이미지 미리보기</label>
@@ -193,5 +326,6 @@
     
     <button id="submit" type="submit">등록</button>
     <button type="button" onclick="goBack()" class="btn btn-danger">취소</button>
+    
 </form>
   

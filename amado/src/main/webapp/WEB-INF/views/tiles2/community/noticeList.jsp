@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<% String ctxpath = request.getContextPath(); %>
+<% String ctxPath = request.getContextPath(); %>
 
 
 <style type="text/css">
@@ -71,7 +71,24 @@ $(document).ready(function(){
 	});
 	
 	// 글을 눌렀을 때
+	$("tr *").click(function(e){
+
+		let noticeseq = $(e.target).parent().find("input[name='noticeseq']").val();
+		
+		const frm = document.goViewFrm;
+		frm.noticeseq.value = noticeseq;
+		frm.goBackURL.value = "${requestScope.currentURL}";
+		
+		if(${not empty requestScope.paramap.searchType}){ // 검색을 했을 경우
+			frm.searchType.value = '${requestScope.paramap.searchType}';
+			frm.searchWord.value = '${requestScope.paramap.searchWord}';
+		}
+		
+		frm.method = "post";
+		frm.action = "<%=ctxPath%>/community/noticeDetail.do";
+		frm.submit();
 	
+	});
 });
 
 function goSearch(){
@@ -97,8 +114,8 @@ function goSearch(){
 				<tr>
 					<th width="10">순번</th>
 					<th width="65">제목</th>
-					<th width="10">조회수</th>
 					<th width="15">작성일자</th>
+					<th width="10">조회수</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -108,9 +125,9 @@ function goSearch(){
 							<fmt:parseNumber var="currentShowPageNo" value="${requestScope.currentShowPageNo}" />
 	          				<fmt:parseNumber var="sizePerPage" value="${requestScope.sizePerPage}" />
 	          				<td align="center">${requestScope.totalMemberCount - (currentShowPageNo-1)*sizePerPage - status.index}</td>
-							<td>${notice.title}</td>
+							<td>${notice.title}&nbsp;<c:if test="${notice.commentcount != 0}"><span id="commentCount">[${notice.commentcount}]</span></c:if></td>
+							<td align="center">${notice.registerdate}<input id="noticeseq" type="hidden" name="noticeseq" value="${notice.noticeseq}" /></td>
 							<td align="center">${notice.viewcount}</td>
-							<td align="center">${notice.registerdate}<input type="hidden" name="noticeseq" value="${notice.noticeseq}" /></td>
 						</tr>
 					</c:forEach>
 				</c:if>
@@ -139,5 +156,12 @@ function goSearch(){
 	    </div>
 		
 	</div>
+	
+	<form name="goViewFrm">
+		<input type="hidden" name="noticeseq" />
+		<input type="hidden" name="goBackURL" />
+		<input type="hidden" name="searchType" />
+		<input type="hidden" name="searchWord" />
+	</form>
 
 </div>
