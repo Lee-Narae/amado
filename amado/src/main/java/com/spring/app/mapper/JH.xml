@@ -44,4 +44,16 @@
         where fleamarketseq = #{fleamarketseq}
     </update>
 
+
+	<select id="getCommentreList" parameterType="String" resultType="FleamarketCommentReVO">
+		select fleamarketcommentreplyseq, fk_userid, commentreply_text, changestatus
+		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
+             , V.memberimg
+		from tbl_fleamarketcommentreply A join tbl_member V
+		ON A.fk_userid = V.userid
+		where A.fleamarketcommentseq = #{fleamarketcommentseq}
+		order by fleamarketcommentreplyseq desc
+    </select>
+
+
 </mapper>

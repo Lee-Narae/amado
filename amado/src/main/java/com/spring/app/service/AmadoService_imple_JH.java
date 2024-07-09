@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.app.common.AES256;
+import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
 import com.spring.app.model.AmadoDAO_JH;
 
@@ -75,6 +76,14 @@ public class AmadoService_imple_JH implements AmadoService_JH {
 		}
 		
 		return n*m;
+	}
+
+
+	
+	@Override
+	public List<FleamarketCommentReVO> getCommentreList(String fleamarketcommentseq) {
+		List<FleamarketCommentReVO> commentreList = dao.getCommentreList(fleamarketcommentseq);
+		return commentreList;
 	}
 
 }

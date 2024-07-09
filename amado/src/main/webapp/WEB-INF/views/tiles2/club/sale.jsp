@@ -16,21 +16,7 @@
 
 <style type="text/css">
 
-@font-face {
-    font-family: 'Volt110';
-    src: url('path/to/volt110.woff2') format('woff2'),
-         url('path/to/volt110.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
 
-@font-face {
-    font-family: 'Volt220';
-    src: url('path/to/volt220.woff2') format('woff2'),
-         url('path/to/volt220.woff') format('woff');
-    font-weight: bold;
-    font-style: normal;
-}
 
 li {
 	margin-bottom: 10px;
@@ -184,8 +170,7 @@ rotate(
   }
 </style>
 
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/myshop/categoryListJSON.js"></script>
+<%-- <script type="text/javascript" src="<%= ctxPath%>/resources/js/myshop/categoryListJSON.js"></script> --%>
 
 <script type="text/javascript">
 
@@ -193,6 +178,7 @@ rotate(
 	$(document).ready(function(){
 		
 		goReadComment();
+		
 		
 		// ======= 추가이미지 캐러젤로 보여주기(Bootstrap Carousel 4개 표시 하되 1번에 1개 진행) 시작 ======= //
 	 	   $('div#recipeCarousel').carousel({
@@ -264,7 +250,7 @@ rotate(
 	      	        $(elmt).append(next.children(':first-child').clone());
 	      	    }// end of for--------------------------
 	      	  
-		        console.log(index+" => "+$(elmt).html()); 
+		        // console.log(index+" => "+$(elmt).html()); 
 		      
 	      	}); // end of $('div.carousel div.carousel-item').each(function(index, elmt)----
 	        // ======= 추가이미지 캐러젤로 보여주기(Bootstrap Carousel 4개 표시 하되 1번에 1개 진행) 끝 ======= //		
@@ -415,6 +401,20 @@ rotate(
     			     }
     			}
     		}); 
+    		
+    		
+    		
+    		
+    		
+    		// ===== 답글쓰기 ===== //
+    		$(document).on("click", "button.btnReply", function(e){
+    			
+    			  // alert("답글쓰기");
+    			  
+    			  
+    			  
+    			
+    		}); 
 	});// end of $(document).ready(function(){})-----------------
 
 	
@@ -525,7 +525,8 @@ rotate(
 	
 	
 	
-function goReadComment(){
+	
+	function goReadComment(){
 		
 		$.ajax({
 			url:"<%= ctxPath%>/readComment.action",
@@ -554,7 +555,7 @@ function goReadComment(){
 			    	    if(item.changestatus > 0){
 			    	    	v_html += " (수정됨)";
 			    	    }
-			    	    v_html += " &nbsp;&nbsp;<a>답글쓰기</a>";
+			    	    v_html += " &nbsp;&nbsp;<button class='btnReply' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>답글쓰기</button>";
 			    	    if (${sessionScope.loginuser != null} && "${sessionScope.loginuser.userid}" == item.fk_userid) {
 			    	        v_html += "<br><button class='btnUpdateComment' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>수정</button>&nbsp;&nbsp;<button class='btnDeleteComment' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>삭제</button>";
 			    	    }
@@ -563,9 +564,14 @@ function goReadComment(){
 			    	    v_html += "</div>";
 			    	    v_html += "</div>";
 			    	    
-			    	    v_html += "<div>";
-			    	    v_html += "답글입니다!";
+			    	    v_html += "<form name='commentreFrm'>";
+			    	    v_html += "<input type='hidden' id='flmkcmseq' name='fleamarketcommentseq' value='"+item.fleamarketcommentseq+"' />";
+			    	    v_html += "</form>";
+			    	    
+			    	    v_html += "<div class='comment_reply"+item.fleamarketcommentseq+"'>";
 			    	    v_html += "</div>";
+			    	    
+			    	    readcommentreply(item.fleamarketcommentseq);
 			    	});
 			    }
 			    
@@ -575,6 +581,8 @@ function goReadComment(){
 			    }
 			    
 			    $("div#commentView").html(v_html);
+			    
+			    
 			},
 			error: function(request, status, error){
 			   alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
@@ -584,7 +592,68 @@ function goReadComment(){
 	}// end of function goReadComment()----------------- 
 	
 	
-	
+	function readcommentreply(fleamarketcommentseq){
+		
+		  //alert(fleamarketcommentseq);
+		  
+		  $.ajax({
+				url:"<%= ctxPath%>/addReplyComment.action",
+			
+				//data:{"fk_userid":$("input:hidden[name='fk_userid']").val()},
+		    
+		    	// 또는
+		    	data:{"fleamarketcommentseq":fleamarketcommentseq},
+		    	type:"post",
+	            dataType:"json",
+	            success:function(json){
+	           	console.log(JSON.stringify(json));
+	           	//{"name":"최준혁","n":1}
+	           	//또는
+	           	//{"name":"최준혁","n":0}
+	           	
+	            	let v_html = "";
+				    if(json.length > 0){
+				    	$.each(json, function(index, item) {
+				    	    v_html += "<div style='display: flex; margin: 4% 0 4% 5%;'>";
+				    	    v_html += "<div style='width: 6%;'><img class='profile-img' style='width: 50%; height: 25%;' src='<%=ctxPath%>/resources/images/reply.png'></div>";
+				    	    if (item.memberimg == null) {
+				    	        v_html += "<div style='width: 6%;'><img class='profile-img' src='<%=ctxPath%>/resources/images/기본이미지.png'></div>";
+				    	    }
+				    	    if (item.memberimg != null) {
+				    	        v_html += "<div style='width: 6%;'><img class='profile-img' src='<%=ctxPath%>/resources/images/" + item.memberimg + "'></div>";
+				    	    }
+				    	    v_html += "<div style='display: flex;'>";
+				    	    v_html += "<div style='font-size:12pt; font-weight: bold; margin-bottom: 3%;'>" + item.fk_userid + "</div>";
+				    	    v_html += "<div id='commentreply_text'>" + item.commentreply_text + "</div>";
+				    	    v_html += "<div class='comment' style='color:#999999; font-size:10pt; margin-top: 3%;'>" + item.registerdate; 
+				    	    if(item.changestatus > 0){
+				    	    	v_html += " (수정됨)";
+				    	    }
+				    	    
+				    	    if (${sessionScope.loginuser != null} && "${sessionScope.loginuser.userid}" == item.fk_userid) {
+				    	        v_html += "<button class='btnUpdateComment' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>수정</button>&nbsp;&nbsp;<button class='btnDeleteComment' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>삭제</button>";
+				    	    }
+				    	    v_html += "<input type='hidden' value='"+item.fleamarketcommentseq+"' />"
+				    	    v_html += "</div>";
+				    	    v_html += "</div>";
+				    	    v_html += "</div>";
+				    	    
+				    	    v_html += "<form name='commentreFrm'>";
+				    	    v_html += "<input type='hidden' name='fleamarketcommentseq' value='"+item.fleamarketcommentseq+"' />";
+				    	    v_html += "</form>";
+				    	    
+				    	    v_html += "<div class='comment_reply'>";
+				    	    v_html += "</div>";
+				    	});
+				    }
+				    
+				    $("div.comment_reply"+fleamarketcommentseq+"").html(v_html);
+				},
+				error: function(request, status, error){
+				   alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				}
+			})
+	}
 	
 	<%-- 
 function goViewComment(currentShowPageNo){
