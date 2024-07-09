@@ -50,6 +50,18 @@ public interface AmadoDAO_SJ {
 	// 댓글쓰기(tbl_boardcomment 테이블에 insert)
 	int addBoardComment(BoardCommentVO bdcmtvo);
 
+	// 원게시물에 딸린 댓글들을 조회해오기
+	List<BoardCommentVO> readComment(String parentseq);
+
+	// 댓글 작성 시 댓글카운트 증가
+	int updateBoardCommentCount(String parentseq);
+
+	// 댓글 삭제
+	int deleteComment(String boardcommentseq);
+
+	// 댓글 삭제 시 댓글카운트 감소
+	int updateCommentCount_decrease(String parentseq);
+
 	
 
 }

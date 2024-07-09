@@ -330,5 +330,32 @@
 	</insert>
 
 
+	<!-- 댓글 작성 시 카운트 증가 -->
+	<update id="updateBoardCommentCount" parameterType="String">
+			update tbl_board set commentcount = commentcount + 1
+			where boardseq = #{parentseq}		
+	</update>
+
+
+	<!-- === 원게시물에 딸린 댓글들을 조회해오기 === -->
+	<select id="readComment" parameterType="String" resultType="BoardCommentVO">
+		select boardcommentseq, fk_userid, comment_text
+		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') as registerdate
+		from tbl_boardcomment
+		where status = 1 and parentseq = #{parentseq}
+		order by boardcommentseq desc
+	</select>
+	
+	<!-- 댓글 삭제 -->
+	<update id="deleteComment" parameterType="String">
+		update tbl_boardcomment set status = 0
+		where boardcommentseq = #{boardcommentseq}
+	</update>
+
+	<!-- 댓글 삭제 시 카운트 감소 -->
+	<update id="updateCommentCount_decrease" parameterType="String">
+			update tbl_board set commentcount = commentcount - 1
+			where boardseq = #{parentseq}		
+	</update>
 
 </mapper>

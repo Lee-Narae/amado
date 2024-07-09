@@ -50,5 +50,11 @@ public interface AmadoService_SJ {
 	// 댓글쓰기(Transaction)
 	int addBoardComment(BoardCommentVO bdcmtvo) throws Throwable;
 
+	// 원게시물에 딸린 댓글들을 조회해오기
+	List<BoardCommentVO> readComment(String parentseq);
+
+	// 댓글 삭제
+	int deleteComment(Map<String, String> paraMap) throws Throwable;
+
 
 }
