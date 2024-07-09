@@ -113,6 +113,34 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 		return n;
 	}
 
+	// 원게시물에 딸린 댓글들을 조회해오기
+	@Override
+	public List<BoardCommentVO> readComment(String parentseq) {
+		List<BoardCommentVO> bdcmtList =  sqlsession.selectList("SJ.readComment", parentseq);
+		return bdcmtList;
+	}
+
+	// 댓글 작성 시 댓글카운트 증가
+	@Override
+	public int updateBoardCommentCount(String parentseq) {
+		int result = sqlsession.update("SJ.updateBoardCommentCount", parentseq);
+		return result;
+	}
+
+	// 댓글 삭제
+	@Override
+	public int deleteComment(String boardcommentseq) {
+		int n = sqlsession.update("SJ.deleteComment", boardcommentseq);
+		return n;
+	}
+
+	// 댓글 삭제 시 댓글카운트 감소
+	@Override
+	public int updateCommentCount_decrease(String parentseq) {
+		int result = sqlsession.update("SJ.updateCommentCount_decrease", parentseq);
+		return result;
+	}
+
 
 
 }

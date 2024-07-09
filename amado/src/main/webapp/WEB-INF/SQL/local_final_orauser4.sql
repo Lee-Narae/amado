@@ -773,6 +773,7 @@ commit
 ALTER SESSION SET ddl_lock_timeout=60;
 rollback
 
+
 create table tbl_boardcomment    
 (boardcommentseq          NUMBER                                   -- 댓글번호(PK)
 ,parentseq                NUMBER                                   -- 게시판번호(FK)
@@ -793,7 +794,25 @@ commit
 alter table tbl_boardcomment
 add status number(1) default 1 not null;
 
+select *
+from tbl_boardcomment
+
+alter table tbl_boardcomment
+add groupno number not null;
+
+alter table tbl_boardcomment
+add fk_boardcommentseq number default 0 not null;
+
+alter table tbl_boardcomment
+add depthno number default 0 not null;
+
+select *
+from tbl_board
+
 alter table tbl_boardcomment add constraint CK_tbl_bdcmt_status check( status in(0,1) );
+
+select *
+from tbl_boardcomment
 
 create sequence seq_boardcomment 
 start with 1
@@ -806,14 +825,36 @@ nocache;
 
 
 
-commit;
 
+
+
+
+
+select *
+from tbl_member
+
+
+update tbl_board  set COMMENTCOUNT = 0
+
+update tbl_board  set VIEWCOUNT = 0
+
+commit
 
 select *
 from tbl_board
 
+delete from tbl_boardcomment
+
+commit
+
+select *
+from tbl_boardcomment
 
 
+delete from tbl_boardcomment
+where fk_userid = 'ksj1024sj'
+
+commit;
 
 
 

@@ -21,6 +21,7 @@ span.move {
 	background-color: #ffffe6;
 }
 
+th.comment,
 td.comment {text-align: center;}
 
 a {
@@ -31,6 +32,131 @@ a {
 <script type="text/javascript">
 	
 	$(document).ready(function (){
+		
+		goReadComment(); // 페이징 처리 안한 댓글 읽어오기
+		
+		$("input:text[name='comment_text']").bind("keyup", function(e){
+			if(e.keyCode == 13){
+				goAddWrite();
+			}
+		});		
+		
+		
+		// ==== 댓글 수정/완료 ==== //
+		
+		let origin_comment_content = "";
+		
+		$(document).on("click", "button.btnUpdateComment", function(e){
+			const $btn = $(e.target);
+			if($(e.target).text() == "수정") {
+//				alert("댓글 수정");
+				// 수정 전 댓글 내용(btnUpdateComment 버튼(button) (tr) 의 부모 (td) 의 (tr)첫번째 자식에 있다.)
+//				alert($(e.target).parent().parent().children("td:nth-child(2)").text());
+
+				const $content = $(e.target).parent().parent().children("td:nth-child(2)");
+				origin_comment_content = $(e.target).parent().parent().children("td:nth-child(2)").text();
+				$content.html(`<input id='comment_update' type='text' value='\${origin_comment_content}' size='40' />`); // 댓글 내용을 수정할 수 있도록 input 태그를 만들어준다.
+				
+				$(e.target).text("완료").removeClass("btn-secondary").addClass("btn-info");						
+				$(e.target).next().next().text("취소").removeClass("btn-secondary").addClass("btn-danger"); // 수정버튼도 "취소"로 변경시켜준다
+			
+	/* 			$content.on("keyup", function(ev){
+				    if(ev.keyCode == 13) {
+				    	$(e.target).trigger("click");
+				    }
+				}); 
+	*/
+				$(document).on("keyup", "input#comment_update", function(e){
+				    if(e.keyCode == 13) {
+				    	//alert("엔터했어요");
+				    	//alert($btn.text()); // "완료"
+				    	$btn.trigger("click");
+				    }
+				});
+				
+			}
+			
+			else if($(e.target).text() == "완료") {
+				
+//				alert("댓글 수정 완료");
+//				alert($(e.target).next().val()); // 수정해야할 댓글 시퀀스 번호
+//				alert($(e.target).parent().parent().children("td:nth-child(2)").children("input").val()); // 수정 후 댓글내용
+
+				const content = $(e.target).parent().parent().children("td:nth-child(2)").children("input").val();
+				
+				alert($(e.target).next().val());
+				
+				$.ajax({
+					url:"${pageContext.request.contextPath}/updateComment.do",
+					type:"post",
+					data:{"boardcommentseq":$(e.target).next().val(),
+						  "content":content},
+					dataType:"json",
+				    success: function(json){
+				    	// goReadComment(); // (이 방식을 사용하면 DB 에서 모든 댓글 데이터를 읽어야 하기 때문에 시간이 더 걸린다.) (작성일자 변경시켜서 다시 복구시킴.)
+				    	// goViewComment(1); // 페이징처리 (무조건 1페이지로 가서 댓글 수정 3페이지를 수정해도 1페이지로 이동하게된다.)
+				    	const PageNo = $(e.target).parent().parent().find("input.currentShowPageNo").val();
+				    	alert("PageNo : " + PageNo);
+				    	currentShowPageNo(PageNo);
+				    	
+				    	//$(e.target).parent().parent().children("td:nth-child(2)").html(content); // 이 방식은 DB에서 모든 댓글 정보를 가져오는게 아니다 보니 좀 더 빠를 것이다.
+				    	$(e.target).text("수정").removeClass("btn-info").addClass("btn-secondary");;
+				    	$(e.target).next().next().text("삭제").removeClass("btn-danger").addClass("btn-secondary"); 
+					},
+					error: function(request, status, error){
+						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					}
+				});
+			}
+			
+		}); // 댓글 수정/확인
+
+		
+		// ==== 댓글 삭제/취소 ==== //
+		$(document).on("click", "button.btnDeleteComment", function(e){
+			
+			if($(e.target).text() == "취소") {
+//				alert("댓글 수정 취소");
+				// 수정 전 댓글 내용(btnDeleteComment 버튼(button) (tr) 의 부모 (td) 의 (tr)첫번째 자식에 있다.)
+//				alert($(e.target).parent().parent().children("td:nth-child(1)").html());
+
+	 			const $content = $(e.target).parent().parent().children("td:nth-child(2)");
+				$content.html(`\${origin_comment_content}`); // 댓글 내용을 수정할 수 있도록 input 태그를 만들어준다.
+				
+				$(e.target).text("삭제").removeClass("btn-danger").addClass("btn-secondary");
+	            $(e.target).prev().prev().text("수정").removeClass("btn-info").addClass("btn-secondary");
+			}
+			
+			else if($(e.target).text() == "삭제") {
+				
+//				alert($(e.target).prev().val()); // 삭제해야할 댓글 시퀀스 번호
+
+				if(confirm("정말로 삭제하시겠습니까?")) {
+				
+					$.ajax({
+						url:"${pageContext.request.contextPath}/deleteComment.do",
+						type:"post",
+						data:{"boardcommentseq":$(e.target).prev().val(),
+							  "parentseq":"${requestScope.boardvo.boardseq}",
+							  "userid":"${sessionScope.loginuser.userid}"},
+						dataType:"json",
+					    success: function(json){
+					    	 goReadComment();
+					    	//goViewComment(1); // 페이징처리
+						},
+						error: function(request, status, error){
+							alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+						}
+					});
+				}
+
+			}
+			
+		}); // 댓글 삭제/취소
+		
+		
+		
+		
 		
 	}); // end of document
 	
@@ -49,22 +175,15 @@ a {
 		      
 		      url: "<%=ctxPath%>/addComment.do",
 		      data: queryString,
-		      type: "post",
-/*				
-				data:{"fk_userid":$("input:hidden[name='fk_userid']").val() 
-		             ,"name":$("input:text[name='name']").val() 
-		             ,"content":$("input:text[name='content']").val()
-		             ,"parentseq":$("input:hidden[name='parentseq']").val()},
-*/
-				// 또는			      
+		      type: "post",     
 		      dataType: "json",
 		      success: function(json){
 		         console.log(JSON.stringify(json));
 		         
-		        	 //goReadComment(); // 페이징 처리 안한 댓글 읽어오기
+		        	 goReadComment(); // 페이징 처리 안한 댓글 읽어오기
 		        	 // 페이징 처리한 댓글 읽어오기
 		         
-		         $("input:text[name='content']").val("");
+		         $("input:text[name='comment_text']").val("");
 		        	 
 		      },
 		      error: function(request, status, error){
@@ -73,6 +192,61 @@ a {
 		   });
 		   
 		} // end of goAddWriteNoAttach
+		
+		function goReadComment() { // 페이징 처리 안한 댓글 읽어오기
+		    $.ajax({
+		        url: "<%=ctxPath%>/readComment.do",
+		        data: {"parentseq": "${requestScope.boardvo.boardseq}"},
+		        dataType: "json",
+		        success: function(json){
+		            let v_html = "";
+
+		            if(json.length > 0) {
+		                $.each(json, function(index, item){
+		                    v_html += "<tr>";
+		                    v_html += "    <td>" + item.fk_userid + "</td>";
+		                    v_html += "    <td>" + item.comment_text;
+
+		                    // 수정 삭제 버튼 추가
+		                    if("${sessionScope.loginuser != null}" && "${sessionScope.loginuser.userid}" == item.fk_userid) {
+		                        v_html += "        <div class='dropdown float-right'>";
+		                        v_html += "            <button class='btn dropdown-toggle' type='button' id='dropdownMenuButton' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
+		                        v_html += "            </button>";
+		                        v_html += "            <div class='dropdown-menu' aria-labelledby='dropdownMenuButton'>";
+		                        v_html += "                <button class='dropdown-item btnUpdateComment' type='button'>수정</button>"; // 수정 버튼
+		                        v_html += "                <input type='hidden' value='" + item.boardcommentseq + "' />"; // 숨겨진 입력 필드
+		                        v_html += "                <button class='dropdown-item btnDeleteComment' type='button'>삭제</button>"; // 삭제 버튼
+		                        v_html += "            </div>";
+		                        v_html += "        </div>";
+		                    }
+
+		                    v_html += "    </td>";
+		                    v_html += "    <td class='comment'>" + item.registerdate + "</td>";
+		                    v_html += "</tr>";
+		                });
+		            } else {
+		                v_html += "<tr>";
+		                v_html += "    <td colspan='3'>댓글이 없습니다.</td>";
+		                v_html += "</tr>";
+		            }
+
+		            var v_html2 = "";
+		            v_html2 += "<tr>";
+		            v_html2 += "    <th>작성자</th>";
+		            v_html2 += "    <th>내용</th>";
+		            v_html2 += "    <th class='comment'>작성일자</th>";
+		            v_html2 += "</tr>";
+
+		            $("thead#commentTheadDisplay").html(v_html2);
+		            $("tbody#commentDisplay").html(v_html);
+
+		        },
+		        error: function(request, status, error){
+		            alert("code: " + request.status + "\n" + "message: " + request.responseText + "\n" + "error: " + error);
+		        }
+		    });
+		}
+
 
 </script>
 
@@ -144,15 +318,15 @@ a {
 				<button type="button" class="btn btn-secondary btn-sm mr-3" onclick="javascript:location.href='<%= ctxPath%>/edit.do?seq=${requestScope.boardvo.boardseq}'">글수정하기</button>
 				<button type="button" class="btn btn-secondary btn-sm mr-3" onclick="javascript:location.href='<%= ctxPath%>/del.do?seq=${requestScope.boardvo.boardseq}'">글삭제하기</button>
 			</c:if>
-
-			<%-- === #83. 댓글쓰기 폼 추가 --%>
+			
+			<%-- 댓글쓰기 폼 추가 --%>
 			<c:if test="${not empty sessionScope.loginuser}">
 				<h3 style="margin-top: 50px;">댓글쓰기</h3>
 
 				<form name="addWriteFrm" id="addWriteFrm" style="margin-top: 20px;">
-					<table class="table" style="width: 1024px">
+					<table class="table" style="width: 1080px">
 						<tr style="height: 30px;">
-							<th width="10%">아이디</th>
+							<th>아이디</th>
 							<td>
 								<input type="text" name="fk_userid" value="${sessionScope.loginuser.userid}" readonly />
 							</td>
@@ -179,14 +353,7 @@ a {
 			<%-- === #94. 댓글 내용 보여주기 === --%>
 	       <h3 style="margin-top: 50px;">댓글내용</h3>
 	       <table class="table" style="width: 1024px; margin-top: 2%; margin-bottom: 3%;">
-	          <thead>
-		          <tr>
-		              <th style="text-align: center;">내용</th>
-		              <th style="width: 8%; text-align: center;">작성자</th>
-		              <th style="width: 12%; text-align: center;">작성일자</th>
-		              <th style="width: 12%; text-align: center;">수정/삭제</th>
-		          </tr>
-	          </thead>
+	          <thead id="commentTheadDisplay"></thead>
 	          <tbody id="commentDisplay"></tbody>
 	        </table>
 			

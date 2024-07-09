@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -263,6 +264,7 @@ public class ControllerSJ {
 	public String addComment(BoardCommentVO bdcmtvo) {
 		// 댓글쓰기에 첨부파일이 없는 경우
 
+		
 		int n = 0;
 		try {
 			n = service.addBoardComment(bdcmtvo);
@@ -282,9 +284,59 @@ public class ControllerSJ {
 
 	
 	
+	// === 원 게시물에 딸린 댓글들을 조회해오기(Ajax 로 처리) === //
+	@ResponseBody
+	@GetMapping(value = "/readComment.do", produces = "text/plain;charset=UTF-8")
+	public String readComment(HttpServletRequest request) {
+		String parentseq = request.getParameter("parentseq");
+
+		// 원게시물에 딸린 댓글들을 조회해오기
+		List<BoardCommentVO> bdcmtList = service.readComment(parentseq);
+
+		JSONArray jsonArr = new JSONArray(); // []
+
+		if (bdcmtList != null) {
+			for (BoardCommentVO bdcmtvo : bdcmtList) {
+				JSONObject jsonObj = new JSONObject(); // {}
+				jsonObj.put("boardcommentseq", bdcmtvo.getBoardcommentseq()); 
+				jsonObj.put("fk_userid", bdcmtvo.getFk_userid()); 
+				jsonObj.put("comment_text", bdcmtvo.getComment_text()); 
+				jsonObj.put("registerdate", bdcmtvo.getRegisterdate()); 
+				
+				jsonArr.put(jsonObj);
+			}
+		}
+		
+		return jsonArr.toString(); 
+	}
 	
+
 	
-	
+	// === 댓글 삭제(Ajax 로 처리) === //
+	@ResponseBody
+	@PostMapping(value = "/deleteComment.do", produces = "text/plain;charset=UTF-8")
+	public String deleteComment(HttpServletRequest request) {
+		String boardcommentseq = request.getParameter("boardcommentseq");
+		String parentseq = request.getParameter("parentseq");
+		String userid = request.getParameter("userid");
+
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("boardcommentseq", boardcommentseq);
+		paraMap.put("parentseq", parentseq);
+		paraMap.put("userid", userid);
+		int n = 0;
+		try {
+			n = service.deleteComment(paraMap); // 댓글 삭제
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+
+		return jsonObj.toString(); // {"n":1}
+	}
+
 	
 	
 	
