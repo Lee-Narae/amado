@@ -37,8 +37,16 @@ public class NoticeVO {
 	private String nextseq;
 	private String nexttitle;
 	
+	// 공지 수정 시 첨부파일 삭제 여부 확인용
+	private String deleteAttach; // 1: 첨부파일 지움   2: 첨부파일 안 지움
 	
 	
+	public String getDeleteAttach() {
+		return deleteAttach;
+	}
+	public void setDeleteAttach(String deleteAttach) {
+		this.deleteAttach = deleteAttach;
+	}
 	public String getPreviousseq() {
 		return previousseq;
 	}

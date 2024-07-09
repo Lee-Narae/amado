@@ -327,4 +327,36 @@
 	<select id="editNotice_get" parameterType="String" resultType="NoticeVO">
 		select noticeseq, title, content, orgfilename from tbl_notice where noticeseq = #{noticeseq}
 	</select>
+	
+	<update id="editNoticeBy1" parameterType="NoticeVO">
+		update tbl_notice set 
+		title = #{title},
+		content = #{content},
+		registerdate = sysdate,
+		orgfilename = null,
+        filename = null,
+        filesize = null
+        where noticeseq = #{noticeseq}
+	</update>
+	
+	<update id="editNoticeBy2" parameterType="NoticeVO">
+		update tbl_notice set 
+		title = #{title},
+		content = #{content},
+		registerdate = sysdate,
+		orgfilename = #{orgfilename},
+        filename = #{filename},
+        filesize = #{filesize} 
+        where noticeseq = #{noticeseq}
+	</update>
+	
+	<update id="editNoticeBy3" parameterType="NoticeVO">
+		update tbl_notice set 
+		title = #{title},
+		content = #{content},
+		registerdate = sysdate 
+        where noticeseq = #{noticeseq}
+	</update>
+	
+	
 </mapper>

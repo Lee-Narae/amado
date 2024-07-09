@@ -1188,6 +1188,91 @@ public class ControllerNR {
 	}
 	
 	
+	@PostMapping("/community/editNotice.do")
+	public ModelAndView editNoticeEnd(MultipartHttpServletRequest mrequest, NoticeVO nvo, ModelAndView mav) {
+
+		MultipartFile attach = nvo.getAttach();
+
+		if(attach != null) {
+			
+			HttpSession session = mrequest.getSession(); 
+	        String root = session.getServletContext().getRealPath("/");
+	        String path = root+"resources"+File.separator+"files";
+			
+	        String newFileName = "";
+	        
+	        byte[] bytes = null;
+	        
+	        long fileSize = 0;
+			
+	        try {
+				bytes = attach.getBytes();
+				// 첨부파일의 내용물을 읽어서 배열에 저장한다.
+				
+				String originalFilename = attach.getOriginalFilename();
+				// attach.getOriginalFilename() 이 첨부파일명의 파일명(예: 강아지.png) 이다.
+				// System.out.println("originalFilename => " + originalFilename); 
+	            // originalFilename => LG_싸이킹청소기_사용설명서.pdf
+				
+				newFileName = fileManager.doFileUpload(bytes, originalFilename, path);
+				// 첨부된 파일을 업로드하는 것
+				
+				// System.out.println("newFileName => " + newFileName);
+				
+				/*
+	             3. BoardVO boardvo 에 fileName 값과 orgFilename 값과 fileSize 값을 넣어주기  
+	            */
+				
+				nvo.setFilename(newFileName); // WAS에 저장된 파일 이름(나노시분초) => 2024062712062911435437005500.png
+				nvo.setOrgfilename(originalFilename); // 원래 파일명 => icons8-volleyball-96.png ==> 사용자가 다운받을 때 이 이름 사용
+				
+				fileSize = attach.getSize();
+				nvo.setFilesize(String.valueOf(fileSize));
+				
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	        
+		}
+		
+		int n = 0;
+		
+		// 1. 기존 첨부파일을 삭제하고 아무것도 올리지 않은 경우 -> 행 update 시 filename, orgfilename, filesize 비우기
+		if("1".equals(nvo.getDeleteAttach()) && "".equals(attach.getOriginalFilename())) {
+			n = service.editNoticeBy1(nvo);
+		}
+		
+		
+		// 2. attach가 있는 경우 -> 행 update 시 filename, orgfilename, filesize 바꾸기
+		else if(!"".equals(attach.getOriginalFilename())) {
+			n = service.editNoticeBy2(nvo);
+		}
+		
+		
+		// 3. 기존 첨부파일을 지우지 않고 attach도 없는 경우 -> 행 update 시 filename, orgfilename, filesize 건들지 않기
+		else if("0".equals(nvo.getDeleteAttach()) && "".equals(attach.getOriginalFilename())) {
+			n = service.editNoticeBy3(nvo);
+		}
+		
+		if(n == 1) {
+			mav.setViewName("redirect:/community/noticeList.do");
+		    //  /list.action 페이지로 redirect(페이지이동)하라는 말이다.
+		}
+		
+		else {
+			String message = "공지사항 수정이 실패하였습니다.";
+			String loc = "javascript:history.back()";
+			
+			mav.addObject("message", message);
+			mav.addObject("loc", loc);
+			
+			mav.setViewName("msg");			
+		}
+		
+		return mav;
+	}
+	
 	
 }
 

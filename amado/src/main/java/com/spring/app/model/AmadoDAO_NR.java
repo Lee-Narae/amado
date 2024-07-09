@@ -110,4 +110,9 @@ public interface AmadoDAO_NR {
 	// 공지사항 - 수정하기 위해서 글 가져오기
 	NoticeVO editNotice_get(String noticeseq);
 
+	// 공지사항 수정하기
+	int editNoticeBy1(NoticeVO nvo);
+	int editNoticeBy2(NoticeVO nvo);
+	int editNoticeBy3(NoticeVO nvo);
+	
 }

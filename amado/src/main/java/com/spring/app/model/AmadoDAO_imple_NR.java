@@ -271,4 +271,25 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		return editNotice;
 	}
 
+	// 공지사항 수정하기(1)
+	@Override
+	public int editNoticeBy1(NoticeVO nvo) {
+		int n = sqlsession.update("NR.editNoticeBy1", nvo);
+		return n;
+	}
+
+	// 공지사항 수정하기(2)
+	@Override
+	public int editNoticeBy2(NoticeVO nvo) {
+		int n = sqlsession.update("NR.editNoticeBy2", nvo);
+		return n;
+	}
+
+	// 공지사항 수정하기(3)
+	@Override
+	public int editNoticeBy3(NoticeVO nvo) {
+		int n = sqlsession.update("NR.editNoticeBy3", nvo);
+		return n;
+	}
+
 }
