@@ -729,9 +729,133 @@ where rno between 1 and 10
      alter table tbl_board add constraint FK_tbl_board_sportseq foreign key(fk_sportseq) references tbl_sport(sportseq);   
      
      commit
-         
+     
+     
+     
+     
+     
          select *
          from tbl_board
          
          
          
+         
+	    SELECT clubseq, clubname, clubimg, fk_sportseq, clubtel
+			 , city, local, clubgym, clubtime
+			 , membercount, clubpay, clubstatus, clubscore
+			 , rank	
+		FROM
+		(
+		select row_number() over(order by clubscore desc) AS rno 
+		 , clubseq, clubname, clubimg, fk_sportseq, clubtel
+		 , city, local, clubgym, clubtime
+		 , membercount, clubpay, clubstatus, clubscore
+		 , ROW_NUMBER() over(order by clubscore desc) AS rank	
+ 		from tbl_club
+		where clubstatus = 1
+    	and fk_sportseq = 5
+		)
+		where rno between to_number('1') and to_number('10')
+		order by rno asc	
+
+
+
+
+select * from tab
+
+select *
+from tbl_boardcomment
+
+PURGE TABLE "BIN$W71/r1iXROmezAcnCMa6KQ==$0";   
+
+commit
+
+ALTER SESSION SET ddl_lock_timeout=60;
+rollback
+
+
+create table tbl_boardcomment    
+(boardcommentseq          NUMBER                                   -- 댓글번호(PK)
+,parentseq                NUMBER                                   -- 게시판번호(FK)
+,comment_text             nvarchar2(200)                           -- 댓글내용(시)
+,registerdate             DATE DEFAULT SYSDATE NOT NULL            -- 댓글작성일자
+,fk_userid                nvarchar2(20)                            -- 아이디(FK)
+,status                   number(1) default 1 not null             -- 댓글 상태 1 : 작성 0 : 삭제
+
+,constraint PK_tbl_bdcmt_bdcmtseq primary key(boardcommentseq)
+,constraint FK_tbl_bdcmt_bdcmtseq foreign key(parentseq) references tbl_board(boardseq)
+,constraint FK_tbl_bdcmt_fk_userid foreign key(fk_userid) references tbl_member(userid)
+,constraint CK_tbl_bdcmt_status check( status in(0,1) )                  -- 1 : 작성 0 : 삭제
+);
+-- Table TBL_BOARDCOMMENT이(가) 생성되었습니다.
+
+commit
+
+alter table tbl_boardcomment
+add status number(1) default 1 not null;
+
+select *
+from tbl_boardcomment
+
+alter table tbl_boardcomment
+add groupno number not null;
+
+alter table tbl_boardcomment
+add fk_boardcommentseq number default 0 not null;
+
+alter table tbl_boardcomment
+add depthno number default 0 not null;
+
+select *
+from tbl_board
+
+alter table tbl_boardcomment add constraint CK_tbl_bdcmt_status check( status in(0,1) );
+
+select *
+from tbl_boardcomment
+
+create sequence seq_boardcomment 
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+-- Sequence SEQ_BOARDCOMMENT이(가) 생성되었습니다.
+
+
+
+
+
+
+
+
+select *
+from tbl_member
+
+
+update tbl_board  set COMMENTCOUNT = 0
+
+update tbl_board  set VIEWCOUNT = 0
+
+commit
+
+select *
+from tbl_board
+
+delete from tbl_boardcomment
+
+commit
+
+select *
+from tbl_boardcomment
+
+
+delete from tbl_boardcomment
+where fk_userid = 'ksj1024sj'
+
+commit;
+
+
+
+

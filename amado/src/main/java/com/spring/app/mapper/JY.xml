@@ -6,9 +6,9 @@
 
 	
 	<!--  지역    -->
-	<resultMap type="HashMap" id="cityMap">
+	<resultMap type="HashMap" id="cityMap"> <!-- 리스트 안에 맵을 쓰든, 그냥 맵쓰는 경우에 resultMap -->
 		<result property="cityseq" column="cityseq" javaType="String"/>
-	<result property="cityname" column="cityname" javaType="String"/>
+		<result property="cityname" column="cityname" javaType="String"/>
 	</resultMap>
 	<select id="getCityList" resultMap="cityMap">
 		select cityseq, cityname from tbl_city
@@ -32,5 +32,29 @@
 		update tbl_member set memberrank = 1
 		where userid = #{userid}
 	</update>
+	
+	
+	<resultMap type="HashMap" id="sportname"> <!-- 리스트 안에 맵을 쓰든, 그냥 맵쓰는 경우에 resultMap -->
+		<result property="sportseq" column="sportseq" javaType="String"/>
+		<result property="city" column="city" javaType="String"/>
+		<result property="local" column="local" javaType="String"/>
+		<result property="title" column="title" javaType="String"/>
+		<result property="content" column="content" javaType="String"/>
+		<result property="cost" column="cost" javaType="String"/>
+		<result property="deal" column="deal" javaType="String"/>
+		<result property="fk_userid" column="fk_userid" javaType="String"/>
+		<result property="registerdate" column="registerdate" javaType="String"/>
+		<result property="commentcount" column="commentcount" javaType="String"/>
+		<result property="viewcount" column="viewcount" javaType="String"/>
+		<result property="status" column="status" javaType="String"/>
+		<result property="imgfilename" column="imgfilename" javaType="String"/>
+	</resultMap>
+	<select id="getSportNameList" resultType="HashMap" parameterType="String">
+		select S.sportseq, city, local, title, content, cost, deal, fk_userid, registerdate, commentcount, viewcount, status, imgfilename
+		from tbl_sport S
+		JOIN tbl_fleamarket F
+		ON S.sportseq = F.sportseq
+		where sportname = #{sportname}
+	</select>
 
 </mapper>

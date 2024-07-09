@@ -228,6 +228,7 @@ background-color: #4da9ff;
 
 <script type="text/javascript">
 $(document).ready(function(){
+	
 	$("input:text[name='userid']").focus();
 	
 	$("input:password[name='password']").keyup(function(e){

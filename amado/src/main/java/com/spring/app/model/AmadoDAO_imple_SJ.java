@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.MemberVO;
@@ -42,19 +43,7 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 		n = sqlsession.insert("SJ.memberRegisterEnd", membervo);
 		return n;
 	}
-
-	// 글목록 보기
-	@Override
-	public List<BoardVO> boardListNoSearch() {
-		List<BoardVO> boardList = sqlsession.selectList("SJ.boardListNoSearch");
-		return boardList;
-	}
 	
-	@Override
-	public List<BoardVO> boardListSearch(Map<String, String> paraMap) {
-		List<BoardVO> boardList = sqlsession.selectList("SJ.boardListSearch", paraMap);
-		return boardList;
-	}
 
 	// 글쓰기
 	@Override
@@ -100,6 +89,56 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 	public List<BoardVO> boardListSearchPaging(Map<String, String> paraMap) {
 		List<BoardVO> boardPagingList = sqlsession.selectList("SJ.boardListSearchPaging", paraMap);
 		return boardPagingList;
+	}
+
+	// 글 조회수 증가와 함께 글 1개를 조회를 해오는 것
+	@Override
+	public BoardVO getView(Map<String, String> paraMap) {
+		BoardVO boardvo = sqlsession.selectOne("SJ.getView", paraMap);
+		return boardvo;
+	}
+
+	// 글 조회수 1 증가하기
+	@Override
+	public int increase_viewcount(String boardseq) {
+		int n = sqlsession.update("SJ.increase_viewcount", boardseq);
+		return n;
+	}
+
+	
+	// 댓글쓰기(tbl_boardcomment 테이블에 insert)
+	@Override
+	public int addBoardComment(BoardCommentVO bdcmtvo) {
+		int n = sqlsession.insert("SJ.addBoardComment", bdcmtvo);
+		return n;
+	}
+
+	// 원게시물에 딸린 댓글들을 조회해오기
+	@Override
+	public List<BoardCommentVO> readComment(String parentseq) {
+		List<BoardCommentVO> bdcmtList =  sqlsession.selectList("SJ.readComment", parentseq);
+		return bdcmtList;
+	}
+
+	// 댓글 작성 시 댓글카운트 증가
+	@Override
+	public int updateBoardCommentCount(String parentseq) {
+		int result = sqlsession.update("SJ.updateBoardCommentCount", parentseq);
+		return result;
+	}
+
+	// 댓글 삭제
+	@Override
+	public int deleteComment(String boardcommentseq) {
+		int n = sqlsession.update("SJ.deleteComment", boardcommentseq);
+		return n;
+	}
+
+	// 댓글 삭제 시 댓글카운트 감소
+	@Override
+	public int updateCommentCount_decrease(String parentseq) {
+		int result = sqlsession.update("SJ.updateCommentCount_decrease", parentseq);
+		return result;
 	}
 
 

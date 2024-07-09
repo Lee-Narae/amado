@@ -30,7 +30,33 @@ create table tbl_club
 
 
 select *
-from tbl_club
+from tbl_member
+where userid = 'test1'
+
+update tbl_member set memberrank = 1
+where userid = 'test1'
+
+
+
+select *
+from tbl_fleamarket
+
+-- 플리마켓 게시글 insert
+insert into tbl_fleamarket(fleamarketseq, sportseq, city, title, content, cost, deal, fk_userid, registerdate, password, status)
+values(2, 3, '인천시', '다이소에서 사와 직접 기른 방울토마토 팝니다~', '창가에서 직접 기른 유기농 도마도! 면역력을 길러줘요', 1000, '직거래', 'leejy', default, '1234', 0);
+
+-- 플리마켓 등록된 상품들 select
+select S.sportseq, sportname, city, local, title, content, cost, deal, fk_userid, registerdate, commentcount, viewcount, status, imgfilename
+from tbl_sport S
+JOIN tbl_fleamarket F
+ON S.sportseq = F.sportseq
+where sportname = '축구';
+
+
+insert into tbl_fleamarket(fleamarketseq, sportseq, city, title, content, cost, deal, fk_userid, registerdate, password, commentcount, viewcount, status, imgfilename)
+values(4, 7, '강원도', '강원도에서 캔 감자 분양합니다', '말을 잘 들어요', 1000, '직거래', 'leejy', default, '1234', 0, 0, default, '영학선생님.png');
+
+commit
 
 
 

@@ -228,4 +228,103 @@
 		where logindate = #{str_twoWeekBefore}
 	</select>
 	
+	<insert id="addNotice" parameterType="NoticeVO">
+		insert into tbl_notice(noticeseq, title, content, registerdate, viewcount, status)
+		values (SEQ_NOTICE.nextval, #{title}, #{content}, sysdate, 0, 0)
+	</insert>
+	
+	<insert id="addNoticeWithFile" parameterType="NoticeVO">
+		insert into tbl_notice(noticeseq, title, content, registerdate, viewcount, status, orgfilename, filename, filesize)
+		values (SEQ_NOTICE.nextval, #{title}, #{content}, sysdate, 0, 0, #{orgfilename}, #{filename}, #{filesize})
+	</insert>
+	
+	<select id="getNoticeTotalPage" parameterType="HashMap" resultType="int">
+		select ceil(count(*)/#{sizePerPage})
+		from tbl_notice
+		where 1=1
+		<if test="searchType == 'title' and searchWord != ''">and title like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'content' and searchWord != ''">and content like '%'||#{searchWord}||'%'</if>
+	</select>
+	
+	<select id="select_notice_paging" parameterType="HashMap" resultType="NoticeVO">
+		select rn, noticeseq, title, content, registerdate, viewcount, status, orgfilename, filename, filesize, commentcount
+		from
+		(select rownum rn, noticeseq, title, content, registerdate, viewcount, status, orgfilename, filename, filesize, commentcount
+		from
+		(select noticeseq, title, content, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, viewcount, status, orgfilename, filename, filesize, commentcount
+		from tbl_notice
+		where 1=1
+		<if test="searchType == 'title' and searchWord != ''">and title like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'content' and searchWord != ''">and content like '%'||#{searchWord}||'%'</if>
+		order by registerdate desc)
+		)
+		where rn between to_number(#{currentShowPageNo})*to_number(#{sizePerPage})-(to_number(#{sizePerPage})-1) and to_number(#{currentShowPageNo})*to_number(#{sizePerPage})
+	</select>
+	
+	<select id="getTotalNoticeCount" parameterType="HashMap" resultType="int">
+		select count(*)
+		from tbl_notice
+		where 1=1
+		<if test="searchType == 'title' and searchWord != ''">and title like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'content' and searchWord != ''">and content like '%'||#{searchWord}||'%'</if>
+	</select>
+	
+	<select id="getNoticeDetail" parameterType="HashMap" resultType="NoticeVO">
+		select previousseq, previoustitle, noticeseq, title, content, registerdate, viewcount, orgfilename, filename, filesize, nextseq, nexttitle
+		from 
+		(
+		select lag(noticeseq, 1) over(order by noticeseq desc) previousseq,
+		       lag(title, 1) over(order by noticeseq desc) previoustitle,
+		       noticeseq, title, content, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, viewcount, orgfilename, filename, filesize,
+		       lead(noticeseq, 1) over(order by noticeseq desc) nextseq,
+		       lead(title, 1) over(order by noticeseq desc) nexttitle
+		from tbl_notice
+		where status = 0
+		<if test="searchType == 'title' and searchWord != ''">and title like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'content' and searchWord != ''">and content like '%'||#{searchWord}||'%'</if>
+		) A
+		where A.noticeseq = #{noticeseq}
+	</select>
+	
+	<resultMap type="HashMap" id="commentMap">
+		<result property="noticecommentseq" column="noticecommentseq" javaType="String"/>
+		<result property="parentseq" column="parentseq" javaType="String"/>
+		<result property="comment_text" column="comment_text" javaType="String"/>
+		<result property="registerdate" column="registerdate" javaType="String"/>
+		<result property="fk_userid" column="fk_userid" javaType="String"/>
+		<result property="memberimg" column="memberimg" javaType="String"/>
+	</resultMap>
+	<select id="getNoticeComment" parameterType="String" resultMap="commentMap">
+		select noticecommentseq, parentseq, comment_text, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, fk_userid, memberimg
+		from tbl_noticecomment A join tbl_member B
+		on A.fk_userid = B.userid
+		where A.status = 1 and parentseq = ${noticeseq}
+		order by registerdate
+	</select>
+	
+	<select id="getNoticeCommentCount" parameterType="String" resultType="String">
+		select count(*)
+		from tbl_noticecomment
+		where status = 1 and parentseq = ${noticeseq}
+	</select>
+	
+	
+	<resultMap type="HashMap" id="noticefileMap">
+		<result property="filename" column="filename" javaType="String"/>
+		<result property="orgfilename" column="orgfilename" javaType="String"/>
+	</resultMap>
+	<select id="getOrgfilename" parameterType="String" resultMap="noticefileMap">
+		select filename, orgfilename from tbl_notice
+		where noticeseq = #{noticeseq}
+	</select>
+	
+	
+	<delete id="deleteNotice">
+		delete from tbl_notice where noticeseq = #{noticeseq}
+	</delete>
+	
+	
+	<select id="editNotice_get" parameterType="String" resultType="NoticeVO">
+		select noticeseq, title, content, orgfilename from tbl_notice where noticeseq = #{noticeseq}
+	</select>
 </mapper>

@@ -326,8 +326,6 @@ function goRegister(){
 	let localname = $("select[name='local']").val();
 	let matchdate = $("input:text[name='date']").val();
 	
-	console.log(sportname);
-	
 	if(cityname == "0"){
 		swal('지역을 선택하세요.');
 		return;
@@ -343,10 +341,35 @@ function goRegister(){
 		return;
 	}
 	
+	var mdate = new Date(matchdate);
 
+	var mdateYear = mdate.getFullYear();
+	var mdateMonth = mdate.getMonth();
+	var mdateDate = mdate.getDate();
+	
+	var today = new Date();
+
+	var todayYear = today.getFullYear();
+	var todayMonth = today.getMonth();
+	var todayDate = today.getDate();	
+	
+	
+	if(Number(mdateYear) < Number(todayYear)){
+		swal('현재보다 이전의 날짜는 선택할 수 없습니다.');
+		return;
+	}
+	if(Number(mdateYear) == Number(todayYear) && Number(mdateMonth) < Number(todayMonth)){
+		swal('현재보다 이전의 날짜는 선택할 수 없습니다.');
+		return;
+	}
+	if(Number(mdateYear) == Number(todayYear) && Number(mdateMonth) == Number(todayMonth) && Number(mdateDate) < Number(todayDate)){
+		swal('현재보다 이전의 날짜는 선택할 수 없습니다.');
+		return;
+	}
+	
 	let clubseq = "";
 	let clubname = "";
-	
+
 	// 로그인 유저의 가입 동호회 번호 알아오기
 	$.ajax({
 		url: "<%=ctxPath%>/getClubseq.do",
@@ -384,7 +407,6 @@ function goRegister(){
 		}
 	});
 	
-
 
 }
 

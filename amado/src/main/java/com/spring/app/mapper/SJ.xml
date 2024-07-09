@@ -24,41 +24,7 @@
 		values(#{userid}, #{password}, #{name}, #{email}, #{postcode}, #{address}, #{detailaddress}, #{extraaddress}, #{mobile}, to_number(#{gender}), #{birthday}, default, default, default, default, default, default, default, default, default, default, default)
 	</insert>
 
-    <!-- 페이징 처리를 안한 검색어가 없는 전체 글목록 보여주기 -->
-    <select id="boardListNoSearch" resultType="BoardVO">
-		select boardseq, title, content, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
-			 , password, commentcount, viewcount, status
-			 , orgfilename, filename, filesize
-		from tbl_board
-		where status = 1
-		order by boardseq desc
-    </select>
-    
-    <!-- 페이징 처리를 안한 검색어가 있는 전체 글목록 보여주기 -->
-	<select id="boardListSearch" resultType="BoardVO" parameterType="HashMap">
-		select boardseq, title, content, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
-			 , password, commentcount, viewcount, status
-			 , orgfilename, filename, filesize
-	    from tbl_board
-		where status = 1 
-		<choose>
-			<when test='searchType == "title" and searchWord != "" '>
-				and lower(title) like '%'||lower(#{searchWord})||'%'
-			</when>
-			<when test='searchType == "content" and searchWord != "" '>
-				and lower(content) like '%'||lower(#{searchWord})||'%'
-			</when>
-			<when test='searchType == "title_content" and searchWord != "" '>
-				and ( lower(title) like '%'||lower(#{searchWord})||'%'
-				or    lower(content) like '%'||lower(#{searchWord})||'%' )
-			</when>
-			<when test='searchType == "fk_userid" and searchWord != "" '>
-				and lower(fk_userid) like '%'||lower(#{searchWord})||'%'
-			</when>
-			<otherwise></otherwise>
-		</choose>
-		order by boardseq desc
-	</select>    
+
     
     <!-- 글쓰기 -->
    	<insert id="add" parameterType="BoardVO">
@@ -72,7 +38,7 @@
 		select clubseq, clubname, clubimg, fk_sportseq, clubtel
 		 , city, local, clubgym, clubtime
 		 , membercount, clubpay, clubstatus, clubscore
-		 , rank() over(order by clubscore desc) AS rank	
+		 , ROW_NUMBER() over(order by clubscore desc) AS rank	
  		from tbl_club
 		where clubstatus = 1
 		<choose>
@@ -173,7 +139,7 @@
 		 , clubseq, clubname, clubimg, fk_sportseq, clubtel
 		 , city, local, clubgym, clubtime
 		 , membercount, clubpay, clubstatus, clubscore
-		 , rank() over(order by clubscore desc) AS rank	
+		 , ROW_NUMBER() over(order by clubscore desc) AS rank	
  		from tbl_club
 		where clubstatus = 1
 		<choose>
@@ -326,5 +292,70 @@
 			  where rno between to_number(#{startRno}) and to_number(#{endRno})
 	</select>	
 
+
+
+
+
+	<select id="getView" parameterType="HashMap" resultType="BoardVO">
+	   select previousseq, previoussubject, boardseq, fk_userid, 
+	   		  title, content, viewcount, registerdate, password, nextseq, nextsubject
+	    FROM
+	    (
+	        select lag (boardseq, 1) over(order by boardseq desc) AS previousseq
+	             , lag (title, 1) over(order by boardseq desc)  AS previoussubject
+	             , boardseq, fk_userid, title, content, viewcount
+	             , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate, password
+	             , lead (boardseq, 1) over(order by boardseq desc) AS nextseq
+	             , lead (title, 1) over(order by boardseq desc) AS nextsubject
+	        from tbl_board
+	        where status = 1
+	    ) V
+	    WHERE V.boardseq = #{boardseq}		
+	</select>	
+
+
+	<!-- === 글 조회수 1 증가하기 === -->
+	<update id="increase_viewcount" parameterType="String">
+		update tbl_board set viewcount = viewcount + 1
+		where boardseq = #{boardseq}
+	</update>
+
+
+
+	<!-- === 댓글쓰기(tbl_comment 테이블에 insert) === -->
+	<insert id="addBoardComment" parameterType="BoardCommentVO">
+	<!-- 첨부파일이 없는 경우 -->
+		insert into tbl_boardcomment(boardcommentseq, parentseq, comment_text, registerdate, fk_userid, status)
+		values(seq_boardcomment.nextval, #{parentseq}, #{comment_text}, default, #{fk_userid}, default)
+	</insert>
+
+
+	<!-- 댓글 작성 시 카운트 증가 -->
+	<update id="updateBoardCommentCount" parameterType="String">
+			update tbl_board set commentcount = commentcount + 1
+			where boardseq = #{parentseq}		
+	</update>
+
+
+	<!-- === 원게시물에 딸린 댓글들을 조회해오기 === -->
+	<select id="readComment" parameterType="String" resultType="BoardCommentVO">
+		select boardcommentseq, fk_userid, comment_text
+		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') as registerdate
+		from tbl_boardcomment
+		where status = 1 and parentseq = #{parentseq}
+		order by boardcommentseq desc
+	</select>
+	
+	<!-- 댓글 삭제 -->
+	<update id="deleteComment" parameterType="String">
+		update tbl_boardcomment set status = 0
+		where boardcommentseq = #{boardcommentseq}
+	</update>
+
+	<!-- 댓글 삭제 시 카운트 감소 -->
+	<update id="updateCommentCount_decrease" parameterType="String">
+			update tbl_board set commentcount = commentcount - 1
+			where boardseq = #{parentseq}		
+	</update>
 
 </mapper>

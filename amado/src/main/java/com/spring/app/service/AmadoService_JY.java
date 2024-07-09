@@ -20,6 +20,11 @@ public interface AmadoService_JY {
 
 	// 동호회 등록후 회원등급 동호회장으로  업데이트 해주기
 	void updateRank(String fk_userid);
+
+	// 상품 select 헤오기
+	List<Map<String, String>> getSportNameList(String sportname);
+
+	
 	
 
 }

@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.app.common.AES256;
 import com.spring.app.domain.MemberVO;
+import com.spring.app.domain.NoticeVO;
 import com.spring.app.model.AmadoDAO_NR;
 
 @Service
@@ -107,6 +108,10 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 				
 				session.setAttribute("loginuser", loginuser); 
 				// session(세션)에 로그인 되어진 사용자 정보인 loginuser 을 키이름을 "loginuser" 으로 저장시켜두는 것이다. 
+				
+				if(Integer.parseInt(loginuser.getMemberrank()) == 2) {
+					session.setAttribute("admin", loginuser);
+				}
 				
 				if(loginuser.isRequirePwdChange() == true) { // 암호를 마지막으로 변경한 것이 3개월이 경과한 경우
 					
@@ -303,4 +308,83 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		String memberCount = dao.getMemberStatic(str_twoWeekBefore);
 		return memberCount;
 	}
+
+	// 관리자 - 파일첨부가 없는 경우 공지사항 등록
+	@Override
+	public int addNotice(NoticeVO nvo) {
+		int n = dao.addNotice(nvo);
+		return n;
+	}
+
+	// 관리자 - 파일첨부가 있는 경우 공지사항 등록
+	@Override
+	public int addNoticeWithFile(NoticeVO nvo) {
+		int n = dao.addNoticeWithFile(nvo);
+		return n;
+	}
+
+	// 공지사항 목록 - 토탈페이지수
+	@Override
+	public int getNoticeTotalPage(Map<String, String> paramap) {
+		int n = dao.getNoticeTotalPage(paramap);
+		return n;
+		}
+
+	// 공지사항 목록 - 페이징처리
+	@Override
+	public List<NoticeVO> select_notice_paging(Map<String, String> paramap) {
+		List<NoticeVO> noticeList = dao.select_notice_paging(paramap);
+		return noticeList;
+	}
+
+	// 공지사항 목록 - 공지사항 개수
+	@Override
+	public int getTotalNoticeCount(Map<String, String> paramap) {
+		int n = dao.getTotalNoticeCount(paramap);
+		return n;
+	}
+
+	// 공지사항 - 상세 글 보기
+	@Override
+	public NoticeVO getNoticeDetail(Map<String, String> paramap) {
+		NoticeVO notice = dao.getNoticeDetail(paramap);
+		return notice;
+	}
+
+	// 공지사항 댓글 불러오기
+	@Override
+	public List<Map<String, String>> getNoticeComment(String noticeseq) {
+		List<Map<String, String>> commentList = dao.getNoticeComment(noticeseq);
+		return commentList;
+	}
+
+	// 공지사항 댓글 개수
+	@Override
+	public String getNoticeCommentCount(String noticeseq) {
+		String commentCount = dao.getNoticeCommentCount(noticeseq);
+		return commentCount;
+	}
+
+	// 공지사항 - 첨부파일 다운받기
+	@Override
+	public Map<String, String> getOrgfilename(String noticeseq) {
+		Map<String, String> filenameMap = dao.getOrgfilename(noticeseq);
+		return filenameMap;
+	}
+
+	// 공지사항 - 글 지우기
+	@Override
+	public int deleteNotice(String noticeseq) {
+		int n = dao.deleteNotice(noticeseq);
+		return n;
+	}
+
+	// 공지사항 - 수정하기 위해서 글 가져오기
+	@Override
+	public NoticeVO editNotice_get(String noticeseq) {
+		NoticeVO editNotice = dao.editNotice_get(noticeseq);
+		return editNotice;
+	}
+	
+	
 }

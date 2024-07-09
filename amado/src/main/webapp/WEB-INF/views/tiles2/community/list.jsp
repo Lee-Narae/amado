@@ -52,7 +52,14 @@ $(document).ready(function() {
 			
 		
 	function goAdd() {
-		location.href = "<%=ctxPath%>/community/add.do?sportseq="+${requestScope.params};
+		if("${requestScope.params}" == "/community/list.do") {
+			location.href = "<%=ctxPath%>/community/add.do?sportseq="+"1";
+		}
+		else {
+			location.href = "<%=ctxPath%>/community/add.do?sportseq="+"${requestScope.params}";	
+		}
+	
+		
 	} // end of goAdd
 	
 	function goSearch(){
@@ -62,16 +69,42 @@ $(document).ready(function() {
 		frm.submit();
 	} // end of goSearch
 	
+	
+	
+	function goView(boardseq) {
+		
+/* 		alert("~~ 확인용 boardseq : " + boardseq); */
+		
+		const goBackURL = "${requestScope.goBackURL}";
+
+ 
+//	그러므로 & 를 글자 그대로 인식하는 post 방식으로 보내야 한다.
+//	아래에 #132. 에 표기된 from 태그를 먼저 만든다.
+
+		const frm = document.goViewFrm;
+ 		frm.boardseq.value = boardseq;
+		frm.goBackURL.value = goBackURL; 
+		
+		if(${not empty requestScope.paraMap}) { // 검색조건이 있을 경우
+			frm.searchType.value = "${requestScope.paraMap.searchType}";
+			frm.searchWord.value = "${requestScope.paraMap.searchWord}";
+		}
+		frm.action = "<%= ctxPath %>/board/boardview.do";
+		frm.method = "post";
+		frm.submit();
+
+	} // end of function goView(seq) -------------------- 		
+	
 </script>
+
 
 
 
 <div style="display: flex;">
 	<div style="width: 80%; margin: auto; padding-left: 3%;">
-
-	<c:if test="${requestScope.params == '/community/list.do'}"> <!-- 나중에 post 방식으로 보낼 때는 clubseq 값도 같이 보내서 requestScope.clubseq 값에 따라 보여주게 변경. -->
+	<c:if test="${requestScope.params == '/community/list.do'}">
 		<h2 style="text-align:center; margin-bottom: 30px;">전체 게시판</h2>
-	</c:if>		
+	</c:if>
 	<c:if test="${requestScope.params == '1'}">
 		<h2 style="text-align:center; margin-bottom: 30px;">축구 게시판</h2>
 	</c:if>		
@@ -124,129 +157,111 @@ $(document).ready(function() {
 
 			<tbody>
 			
-				<c:if test="${requestScope.params == '/community/list.do'}">
-					<c:if test="${not empty requestScope.boardPagingList}">
-						<c:forEach var="boardvo" items="${requestScope.boardPagingList}" >
-								<tr>
-									<td align="center">${boardvo.rno}</td>
-									<td>
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
-									</td>
-									<td align="center">${boardvo.fk_userid}</td>
-									<td align="center">${boardvo.fk_sportseq}</td>
-									<td align="center">${boardvo.registerdate}</td>
-									<td align="center">${boardvo.viewcount}</td>
-								</tr>						
-						</c:forEach>
-					</c:if>
-				</c:if>
 				
-				<c:if test="${requestScope.params != '/community/list.do'}">
-					<c:if test="${not empty requestScope.boardPagingList}">
-						<c:forEach var="boardvo" items="${requestScope.boardPagingList}">
-							<c:if test="${boardvo.fk_sportseq == 1}">
-								<tr>
-									<td align="center">${boardvo.boardseq}</td>
-									<td>
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
-									</td>
-									<td align="center">${boardvo.fk_userid}</td>
-									<td align="center">${boardvo.fk_sportseq}</td>
-									<td align="center">${boardvo.registerdate}</td>
-									<td align="center">${boardvo.viewcount}</td>
-								</tr>
-							</c:if>
-							<c:if test="${boardvo.fk_sportseq == 2}">
-								<tr>
-									<td align="center">${boardvo.boardseq}</td>
-									<td>
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
-									</td>
-									<td align="center">${boardvo.fk_userid}</td>
-									<td align="center">${boardvo.fk_sportseq}</td>
-									<td align="center">${boardvo.registerdate}</td>
-									<td align="center">${boardvo.viewcount}</td>
-								</tr>
-							</c:if>
-							<c:if test="${boardvo.fk_sportseq == 3}">
-								<tr>
-									<td align="center">${boardvo.boardseq}</td>
-									<td>
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
-									</td>
-									<td align="center">${boardvo.fk_userid}</td>
-									<td align="center">${boardvo.fk_sportseq}</td>
-									<td align="center">${boardvo.registerdate}</td>
-									<td align="center">${boardvo.viewcount}</td>
-								</tr>
-							</c:if>
-							<c:if test="${boardvo.fk_sportseq == 4}">
-								<tr>
-									<td align="center">${boardvo.boardseq}</td>
-									<td>
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
-									</td>
-									<td align="center">${boardvo.fk_userid}</td>
-									<td align="center">${boardvo.fk_sportseq}</td>
-									<td align="center">${boardvo.registerdate}</td>
-									<td align="center">${boardvo.viewcount}</td>
-								</tr>
-							</c:if>
-							<c:if test="${boardvo.fk_sportseq == 5}">
-								<tr>
-									<td align="center">${boardvo.boardseq}</td>
-									<td>
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
-									</td>
-									<td align="center">${boardvo.fk_userid}</td>
-									<td align="center">${boardvo.fk_sportseq}</td>
-									<td align="center">${boardvo.registerdate}</td>
-									<td align="center">${boardvo.viewcount}</td>
-								</tr>
-							</c:if>
-							<c:if test="${boardvo.fk_sportseq == 6}">
-								<tr>
-									<td align="center">${boardvo.boardseq}</td>
-									<td>
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
-									</td>
-									<td align="center">${boardvo.fk_userid}</td>
-									<td align="center">${boardvo.fk_sportseq}</td>
-									<td align="center">${boardvo.registerdate}</td>
-									<td align="center">${boardvo.viewcount}</td>
-								</tr>
-							</c:if>
-							<c:if test="${boardvo.fk_sportseq == 7}">
-								<tr>
-									<td align="center">${boardvo.boardseq}</td>
-									<td>
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
-									</td>
-									<td align="center">${boardvo.fk_userid}</td>
-									<td align="center">${boardvo.fk_sportseq}</td>
-									<td align="center">${boardvo.registerdate}</td>
-									<td align="center">${boardvo.viewcount}</td>
-								</tr>
-							</c:if>
-							<c:if test="${boardvo.fk_sportseq == 8}">
-								<tr>
-									<td align="center">${boardvo.boardseq}</td>
-									<td>
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
-									</td>
-									<td align="center">${boardvo.fk_userid}</td>
-									<td align="center">${boardvo.fk_sportseq}</td>
-									<td align="center">${boardvo.registerdate}</td>
-									<td align="center">${boardvo.viewcount}</td>
-								</tr>
-							</c:if>
-						</c:forEach>
-					</c:if>
+				<c:if test="${not empty requestScope.boardPagingList}">
+					<c:forEach var="boardvo" items="${requestScope.boardPagingList}">
+						<c:if test="${boardvo.fk_sportseq == 1}">
+							<tr>
+								<td align="center">${boardvo.boardseq}</td>
+								<td>
+									<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
+								</td>
+								<td align="center">${boardvo.fk_userid}</td>
+								<td align="center">축구</td>
+								<td align="center">${boardvo.registerdate}</td>
+								<td align="center">${boardvo.viewcount}</td>
+							</tr>
+						</c:if>					
+						<c:if test="${boardvo.fk_sportseq == 2}">
+							<tr>
+								<td align="center">${boardvo.boardseq}</td>
+								<td>
+									<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
+								</td>
+								<td align="center">${boardvo.fk_userid}</td>
+								<td align="center">야구</td>
+								<td align="center">${boardvo.registerdate}</td>
+								<td align="center">${boardvo.viewcount}</td>
+							</tr>
+						</c:if>
+						<c:if test="${boardvo.fk_sportseq == 3}">
+							<tr>
+								<td align="center">${boardvo.boardseq}</td>
+								<td>
+									<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
+								</td>
+								<td align="center">${boardvo.fk_userid}</td>
+								<td align="center">배구</td>
+								<td align="center">${boardvo.registerdate}</td>
+								<td align="center">${boardvo.viewcount}</td>
+							</tr>
+						</c:if>
+						<c:if test="${boardvo.fk_sportseq == 4}">
+							<tr>
+								<td align="center">${boardvo.boardseq}</td>
+								<td>
+									<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
+								</td>
+								<td align="center">${boardvo.fk_userid}</td>
+								<td align="center">농구</td>
+								<td align="center">${boardvo.registerdate}</td>
+								<td align="center">${boardvo.viewcount}</td>
+							</tr>
+						</c:if>
+						<c:if test="${boardvo.fk_sportseq == 5}">
+							<tr>
+								<td align="center">${boardvo.boardseq}</td>
+								<td>
+									<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
+								</td>
+								<td align="center">${boardvo.fk_userid}</td>
+								<td align="center">테니스</td>
+								<td align="center">${boardvo.registerdate}</td>
+								<td align="center">${boardvo.viewcount}</td>
+							</tr>
+						</c:if>
+						<c:if test="${boardvo.fk_sportseq == 6}">
+							<tr>
+								<td align="center">${boardvo.boardseq}</td>
+								<td>
+									<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
+								</td>
+								<td align="center">${boardvo.fk_userid}</td>
+								<td align="center">볼링</td>
+								<td align="center">${boardvo.registerdate}</td>
+								<td align="center">${boardvo.viewcount}</td>
+							</tr>
+						</c:if>
+						<c:if test="${boardvo.fk_sportseq == 7}">
+							<tr>
+								<td align="center">${boardvo.boardseq}</td>
+								<td>
+									<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
+								</td>
+								<td align="center">${boardvo.fk_userid}</td>
+								<td align="center">족구</td>
+								<td align="center">${boardvo.registerdate}</td>
+								<td align="center">${boardvo.viewcount}</td>
+							</tr>
+						</c:if>
+						<c:if test="${boardvo.fk_sportseq == 8}">
+							<tr>
+								<td align="center">${boardvo.boardseq}</td>
+								<td>
+									<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
+								</td>
+								<td align="center">${boardvo.fk_userid}</td>
+								<td align="center">배드민턴</td>
+								<td align="center">${boardvo.registerdate}</td>
+								<td align="center">${boardvo.viewcount}</td>
+							</tr>
+						</c:if>
+					</c:forEach>
 				</c:if>
 
 				<c:if test="${empty requestScope.boardPagingList}">
 					<tr>
-						<td colspan="5">데이터가 없습니다.</td>
+						<td colspan="6">데이터가 없습니다.</td>
 					</tr>
 				</c:if>
 
@@ -269,7 +284,7 @@ $(document).ready(function() {
      //    현재 페이지 주소를 뷰단으로 넘겨준다. 
 --%>
 <form name="goViewFrm">
-	<input type="hidden" name="seq" /> 
+	<input type="hidden" name="boardseq" /> 
 	<input type="hidden" name="goBackURL" /> 
 	<input type="hidden" name="searchType" /> 
 	<input type="hidden" name="searchWord" /> 

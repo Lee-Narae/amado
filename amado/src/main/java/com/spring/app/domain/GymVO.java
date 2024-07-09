@@ -25,7 +25,6 @@ public class GymVO {
 	private String postcode;        //우편번호
 	private String address;         //주소
 	private String detailaddress;   //상세주소
-	private String extraaddress;    //주소참고항목
 	private String status;          //운영여부
 	private String info;            //정보
 	private String imgfilename;     //첨부파일
@@ -84,12 +83,6 @@ private MultipartFile attach;
 	}
 	public void setDetailaddress(String detailaddress) {
 		this.detailaddress = detailaddress;
-	}
-	public String getExtraaddress() {
-		return extraaddress;
-	}
-	public void setExtraaddress(String extraaddress) {
-		this.extraaddress = extraaddress;
 	}
 	public String getStatus() {
 		return status;

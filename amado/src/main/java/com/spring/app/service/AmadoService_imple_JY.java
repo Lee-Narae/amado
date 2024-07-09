@@ -61,6 +61,17 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 		dao.updateRank(fk_userid);
 	}
 
+
+	// 상품 select 헤오기
+	@Override
+	public List<Map<String, String>> getSportNameList(String sportname) {
+		List<Map<String, String>> sportNameList = dao.getSportNameList(sportname);
+		return sportNameList;
+	}
+
+
+	
+
 	
 	
 	
