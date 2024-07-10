@@ -18,5 +18,7 @@ public interface AmadoService_JH {
 
 	List<FleamarketCommentReVO> getCommentreList(String fleamarketcommentseq);
 
+	int addReComment(FleamarketCommentReVO fmcommentrevo) throws Throwable;
+
 	
 }

@@ -253,6 +253,42 @@ public class ControllerJH {
 	
 	
 	
+	@ResponseBody
+	@PostMapping(value="/addReComment.do", produces="text/plain;charset=UTF-8")
+	public String addReComment(FleamarketCommentReVO fmcommentrevo, HttpServletRequest request) {
+		
+		// 댓글쓰기에 첨부파일이 없는 경우
+		String fk_userid = request.getParameter("fk_userid");
+		String commentreply_text = request.getParameter("commentreply_text");
+		String fleamarketcommentseq = request.getParameter("fleamarketcommentseq");
+		
+		//System.out.println("1"+fk_userid);
+		//System.out.println("2"+commentreply_text);
+		//System.out.println("3"+fleamarketcommentseq);
+		
+		fmcommentrevo.setFk_userid(fk_userid);
+		
+		int n = 0;
+		
+		try {
+			n = service.addReComment(fmcommentrevo);
+			// 댓글쓰기(insert) 및 원게시물(tbl_board 테이블)에 댓글의 개수 증가(update 1씩 증가)하기 
+	        // 이어서 회원의 포인트를 50점을 증가하도록 한다. (tbl_member 테이블에 point 컬럼의 값을 50 증가하도록 update 한다.)
+			 
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		
+		JSONObject jsonObj = new JSONObject(); // {}
+		jsonObj.put("n", n);  // {"n":1} 또는 	{"n":0}
+		
+		
+		return jsonObj.toString();
+		// "{"n":1, "name":"엄정화"} 또는  {"n":0, "name":"최준혁"}"
+	}
+	
+	
+	
 	/*
 	// === #90. 원게시물에 딸린 댓글들을 조회해오기(Ajax 로 처리) === //
 	@ResponseBody

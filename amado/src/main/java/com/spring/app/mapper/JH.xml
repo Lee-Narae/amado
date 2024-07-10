@@ -55,5 +55,14 @@
 		order by fleamarketcommentreplyseq desc
     </select>
 
+	<insert id="addReComment" parameterType="FleamarketCommentReVO">
+		insert into tbl_fleamarketcommentreply(fleamarketcommentreplyseq, fleamarketcommentseq, commentreply_text, fk_userid)
+		values(seq_fleamarketcommentreplyseq.nextval, #{fleamarketcommentseq}, #{commentreply_text}, #{fk_userid})
+	</insert>
+	
+	<update id="updateReCommentCount" parameterType="String">
+		update tbl_fleamarketcomment set recommentcount = recommentcount+1
+		where fleamarketcommentseq = #{fleamarketcommentseq}
+	</update>
 
 </mapper>

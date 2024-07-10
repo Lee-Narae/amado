@@ -9,7 +9,7 @@ public class FleamarketCommentVO {
 	private String fk_userid;
 	private String memberimg;
 	private String changestatus;
-	
+	private String recommentcount;
 	
 	public String getChangestatus() {
 		return changestatus;
@@ -52,6 +52,12 @@ public class FleamarketCommentVO {
 	}
 	public void setFk_userid(String fk_userid) {
 		this.fk_userid = fk_userid;
+	}
+	public String getRecommentcount() {
+		return recommentcount;
+	}
+	public void setRecommentcount(String recommentcount) {
+		this.recommentcount = recommentcount;
 	}
 	
 	

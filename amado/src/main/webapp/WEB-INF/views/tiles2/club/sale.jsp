@@ -409,12 +409,35 @@ rotate(
     		// ===== 답글쓰기 ===== //
     		$(document).on("click", "button.btnReply", function(e){
     			
-    			  // alert("답글쓰기");
+    			   // alert("답글쓰기");
     			  
-    			  
+    			   const fleamarketcommentseq = $(e.target).parent().children("input").val();
+    			   //alert(fleamarketcommentseq);
+    			   let v_html = "";
+    			   
+    			   if($(e.target).parent().children(".input_reply").html() == ""){
+    				   $(".input_reply").html("");
+    				   v_html += "<div>";
+    				   v_html += "<form name='recommentFrm'>";
+	    			   v_html += "<textarea name='commentreply_text' style='font-size: 12pt; width: 100%; height: 60px;'></textarea>";
+	    			   v_html += "<div style='text-align: right; font-size: 12pt;'>";
+	    			   v_html += "<button type='button' class='btn btn-outline-secondary' id='btnCommentOK' style='margin: auto; padding: 0.5% 1.5%;' onclick='goAddWritere("+fleamarketcommentseq+")'>";
+				       v_html += "<span style='font-size: 8pt;'>등록</span>";
+				       v_html += "</button>";
+				       v_html += "</div>";
+				       v_html += "</form>";
+				       v_html += "</div>";
+    			   }
+    			   else{
+    				   $(e.target).parent().children(".input_reply").html("");
+    			   }
+    			   $(e.target).parent().children(".input_reply").html(v_html); 
+    			   
     			  
     			
     		}); 
+    		
+    		
 	});// end of $(document).ready(function(){})-----------------
 
 	
@@ -485,10 +508,10 @@ rotate(
 	        const queryString = $("form[name='addWriteFrm']").serialize();
 	    --%>
    
-	    const queryString = $("form[name='commentFrm']").serialize();
+	    const queryString = $("form[name='recommentFrm']").serialize();
 	    
 		$.ajax({
-			url:"<%= ctxPath%>/addComment.action",
+			url:"<%= ctxPath%>/addComment.do",
 		/*
 			data:{"fk_userid":$("input:hidden[name='fk_userid']").val() 
 	             ,"name":$("input:text[name='name']").val() 
@@ -498,22 +521,22 @@ rotate(
 	    	// 또는
 	    	data:queryString,
 	    	type:"post",
-           dataType:"json",
-           success:function(json){
-           	//console.log(JSON.stringify(json));
-           	//{"name":"최준혁","n":1}
-           	//또는
-           	//{"name":"최준혁","n":0}
-           	
-           	if(json.n == 0){
-           		alert(json.name + "님의 포인트는 300점을 초과할 수 없으므로 댓글쓰기가 불가합니다.");
-           	}
-           	else{
-           		goReadComment(); 					// 페이징 처리 안한 댓글 읽어오기
-           		//goViewComment(1)	// 페이징 처리한 댓글 읽어오기
-           	}
-           	
-           	$("textarea[name='comment_text']").val("");
+            dataType:"json",
+            success:function(json){
+           		//console.log(JSON.stringify(json));
+	           	//{"name":"최준혁","n":1}
+	           	//또는
+	           	//{"name":"최준혁","n":0}
+	           	
+	           	if(json.n == 0){
+	           		alert(json.name + "님의 포인트는 300점을 초과할 수 없으므로 댓글쓰기가 불가합니다.");
+	           	}
+	           	else{
+	           		goReadComment(); 					// 페이징 처리 안한 댓글 읽어오기
+	           		//goViewComment(1)	// 페이징 처리한 댓글 읽어오기
+	           	}
+	           	
+	           	$("textarea[name='comment_text']").val("");
            },
            error: function(request, status, error){
                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
@@ -541,17 +564,19 @@ rotate(
 			    let v_html = "";
 			    if(json.length > 0){
 			    	$.each(json, function(index, item) {
-			    	    v_html += "<div style='display: flex; margin: 5% 0;'>";
+			    	    v_html += "<div style='display: flex; margin: 5% 0 3% 0;' >";
 			    	    if (item.memberimg == null) {
 			    	        v_html += "<div style='width: 6%;'><img class='profile-img' src='<%=ctxPath%>/resources/images/기본이미지.png'></div>";
 			    	    }
 			    	    if (item.memberimg != null) {
 			    	        v_html += "<div style='width: 6%;'><img class='profile-img' src='<%=ctxPath%>/resources/images/" + item.memberimg + "'></div>";
 			    	    }
-			    	    v_html += "<div>";
-			    	    v_html += "<div style='font-size:12pt; font-weight: bold; margin-bottom: 3%;'>" + item.fk_userid + "</div>";
+			    	    v_html += "<div style='width: 85%;'>";
+			    	    v_html += "<div style='font-size:12pt; font-weight: bold; margin-bottom: 2.3%;'>" + item.fk_userid + "</div>";
+			    	    v_html += "<div style='width: 100%;'>";
 			    	    v_html += "<div id='comment_text'>" + item.comment_text + "</div>";
-			    	    v_html += "<div class='comment' style='color:#999999; font-size:10pt; margin-top: 3%;'>" + item.registerdate; 
+			    	    v_html += "</div>";
+			    	    v_html += "<div class='comment' style='color:#999999; font-size:10pt; margin-top: 2%;'>" + item.registerdate; 
 			    	    if(item.changestatus > 0){
 			    	    	v_html += " (수정됨)";
 			    	    }
@@ -560,6 +585,11 @@ rotate(
 			    	        v_html += "<br><button class='btnUpdateComment' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>수정</button>&nbsp;&nbsp;<button class='btnDeleteComment' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>삭제</button>";
 			    	    }
 			    	    v_html += "<input type='hidden' value='"+item.fleamarketcommentseq+"' />"
+			    	    v_html += "<div class='input_reply' style='width: 100%;'>";
+			    	    v_html += "</div>";
+			    	    
+			    	    
+			    	    
 			    	    v_html += "</div>";
 			    	    v_html += "</div>";
 			    	    v_html += "</div>";
@@ -567,6 +597,8 @@ rotate(
 			    	    v_html += "<form name='commentreFrm'>";
 			    	    v_html += "<input type='hidden' id='flmkcmseq' name='fleamarketcommentseq' value='"+item.fleamarketcommentseq+"' />";
 			    	    v_html += "</form>";
+
+			    	    
 			    	    
 			    	    v_html += "<div class='comment_reply"+item.fleamarketcommentseq+"'>";
 			    	    v_html += "</div>";
@@ -606,7 +638,7 @@ rotate(
 		    	type:"post",
 	            dataType:"json",
 	            success:function(json){
-	           	console.log(JSON.stringify(json));
+	           	//console.log(JSON.stringify(json));
 	           	//{"name":"최준혁","n":1}
 	           	//또는
 	           	//{"name":"최준혁","n":0}
@@ -615,7 +647,7 @@ rotate(
 				    if(json.length > 0){
 				    	$.each(json, function(index, item) {
 				    	    v_html += "<div style='display: flex; margin: 4% 0 4% 5%;'>";
-				    	    v_html += "<div style='width: 6%;'><img class='profile-img' style='width: 50%; height: 25%;' src='<%=ctxPath%>/resources/images/reply.png'></div>";
+				    	    v_html += "<div style='width: 6%;'><img class='profile-img' style='width: 50%; height: 50%;' src='<%=ctxPath%>/resources/images/reply.png'></div>";
 				    	    if (item.memberimg == null) {
 				    	        v_html += "<div style='width: 6%;'><img class='profile-img' src='<%=ctxPath%>/resources/images/기본이미지.png'></div>";
 				    	    }
@@ -655,6 +687,63 @@ rotate(
 			})
 	}
 	
+	
+	
+	// == 딥글쓰기 == //
+	function goAddWritere(fleamarketcommentseq){
+	   
+		// alert($("input[name='fleamarketcommentseq']").val());
+		// const fleamarketcommentseq = $("input[name='fleamarketcommentseq']").val();
+		const commentreply_text = $("textarea[name='commentreply_text']").val().trim();
+		if(commentreply_text == ""){
+			alert("댓글 내용을 입력하세요!!");
+			return; // 종료
+		}
+		if($("input:hidden[name='fk_userid']").val()==""){
+			alert("로그인을 먼저 하셔야합니다!");
+			return;
+		}
+		
+		
+		goAddWrite_reply(fleamarketcommentseq);
+		
+		
+	}// end of fucntion goAddWrite(){}------------------
+	
+	
+	function goAddWrite_reply(fleamarketcommentseq){
+		
+		const queryString = $("form[name='recommentFrm']").serialize();
+	    console.log(fleamarketcommentseq);
+		$.ajax({
+			url:"<%= ctxPath%>/addReComment.do",
+		
+			data:{"fk_userid":$("input:hidden[name='fk_userid']").val() 
+	             ,"commentreply_text":$("textarea[name='commentreply_text']").val() 
+	             ,"fleamarketcommentseq":fleamarketcommentseq},
+	    
+	    	type:"post",
+            dataType:"json",
+            success:function(json){
+           	console.log(JSON.stringify(json));
+           	//{"name":"최준혁","n":1}
+           	//또는
+           	//{"name":"최준혁","n":0}
+           	
+           	if(json.n == 0){
+           		alert(json.name + "오류가 발생했습니다.");
+           	}
+           	else{
+           		readcommentreply(fleamarketcommentseq);
+           	}
+           	
+           	$("textarea[name='commentreply_text']").val("");
+           },
+           error: function(request, status, error){
+               alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+           }
+		})
+	}
 	<%-- 
 function goViewComment(currentShowPageNo){
 		

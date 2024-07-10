@@ -66,5 +66,17 @@ public class AmadoDAO_imple_JH implements AmadoDAO_JH {
 		return commentreList;
 	}
 
+	@Override
+	public int addReComment(FleamarketCommentReVO fmcommentrevo) {
+		int n = sqlsession.insert("JH.addReComment", fmcommentrevo);
+		return n;
+	}
+
+	@Override
+	public int updateReCommentCount(String fleamarketcommentseq) {
+		int n = sqlsession.update("JH.updateReCommentCount", fleamarketcommentseq);
+		return n;
+	}
+
 
 }

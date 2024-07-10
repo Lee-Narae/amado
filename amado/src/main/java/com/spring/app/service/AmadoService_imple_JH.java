@@ -86,4 +86,21 @@ public class AmadoService_imple_JH implements AmadoService_JH {
 		return commentreList;
 	}
 
+
+
+	@Override
+	public int addReComment(FleamarketCommentReVO fmcommentrevo) throws Throwable {
+		int n1=0, result=0;
+		
+		n1 = dao.addReComment(fmcommentrevo); // 댓글쓰기(tbl_comment 테이블에 insert)
+		System.out.println("~~~ 확인용n1: " + n1);
+		
+		if(n1 == 1) {
+			result = dao.updateReCommentCount(fmcommentrevo.getFleamarketcommentseq());  // tbl_board 테이블에 commentCount 컬럼이 1증가(update)
+			System.out.println("~~~ 확인용result: " + result);
+		}
+		
+		return result;
+	}
+
 }
