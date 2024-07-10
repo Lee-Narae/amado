@@ -33,6 +33,9 @@ public class GymVO {
 	private String membercount;     //인원
 	private String likecount;       //좋아요수
 	private String insidestatus;
+
+	
+	
 	
 	
 	private String orgfilename;       //좋아요수

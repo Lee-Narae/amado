@@ -109,88 +109,8 @@ function searchAddress() {
     }).open();
 }//end of function searchAddress
 
-// === 파일드래그 드롭 시작 ===
-document.addEventListener('DOMContentLoaded', function() {
-    var dropArea = document.getElementById('dropArea');
-    var fileListContainer = document.getElementById('fileList');
-
-    if (dropArea) {
-        // dragover 이벤트 핸들러
-        dropArea.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            dropArea.classList.add('drag-over');
-        });
-
-        // dragleave 이벤트 핸들러
-        dropArea.addEventListener('dragleave', function(e) {
-            e.preventDefault();
-            dropArea.classList.remove('drag-over');
-        });
-
-        // drop 이벤트 핸들러
-        dropArea.addEventListener('drop', function(e) {
-            e.preventDefault();
-            dropArea.classList.remove('drag-over');
-
-            var files = e.dataTransfer.files;
-
-            // 파일 리스트에 파일 추가
-            addFilesToList(files);
-
-            // 선택된 파일을 input 요소에 설정 (미리보기 기능과 동일)
-            var fileReader = new FileReader();
-            fileReader.readAsDataURL(files[0]);
-            fileReader.onload = function() {
-                document.getElementById("previewImg").src = fileReader.result;
-            };
-        });
-
-        // click 이벤트 핸들러
-        dropArea.addEventListener('click', function(e) {
-            var input = document.getElementById('imgfilename');
-            if (input) {
-                input.click();
-            }
-        });
-
-        // 파일 선택(input[type="file"]) 시 파일명 표시 및 삭제 버튼 추가 기능
-        $(document).on("change", "input#imgfilename", function(e) {
-            var input_file = $(e.target).get(0);
-            addFilesToList(input_file.files);
-
-            var fileReader = new FileReader();
-            fileReader.readAsDataURL(input_file.files[0]);
-            fileReader.onload = function() {
-                document.getElementById("previewImg").src = fileReader.result;
-            };
-        });
-
-        // 파일 리스트에 파일 추가하는 함수
-        function addFilesToList(files) {
-            for (var i = 0; i < files.length; i++) {
-                var file = files[i];
-                var listItem = document.createElement('div');
-                listItem.classList.add('file-item');
-                listItem.innerHTML = '<span>' + file.name + '</span>';
-                var deleteBtn = document.createElement('button');
-                deleteBtn.textContent = '삭제';
-                deleteBtn.classList.add('delete-btn');
-                deleteBtn.setAttribute('data-file-index', i); // 삭제 버튼에 파일 인덱스 설정
-                deleteBtn.addEventListener('click', function() {
-                    var index = this.getAttribute('data-file-index');
-                    fileListContainer.removeChild(listItem); // 파일 리스트에서 해당 파일 아이템 제거
-                });
-                listItem.appendChild(deleteBtn);
-                fileListContainer.appendChild(listItem);
-            }
-        }
-    } else {
-        console.error('dropArea 요소를 찾을 수 없습니다.');
-    }
-});
 
 
-//=== 파일드래그 드롭 끝 ===
 
 $(document).ready(function() {
 
@@ -210,7 +130,7 @@ $(document).ready(function() {
         alert("관리자가 승인해야 정상등록 됩니다");
         const frm = document.addFrm;
         frm.method = "post";
-        frm.action = "<%= ctxPath %>/gym/registerGymend.do";
+        frm.action = "<%= ctxPath%>/gym/registerGymend.do";
         frm.submit();
     });
 
@@ -293,18 +213,12 @@ $(document).ready(function() {
 	  <input type="file" id="imgfilename" name="attach" multiple>
 	</div>
 	
-	<div class="form-group">
-	  <label for="attachment">첨부 파일</label>
-	  <input type="file" id="imgfilename" name="attach" multiple style="display: none;">
-	 <div id="dropArea" class="drop-area">
-	   파일을 드래그하여 이곳에 놓으세요.
-	 </div>
-	 	<div id="fileList"></div> <!-- 파일 리스트를 표시할 공간 -->
-	</div>
-
-
-
 	
+	 <div class="form-group">
+	  <label for="attachment">여러 파일</label>
+	  <input type="file" id="several_photos" name="attach" multiple>
+	</div>
+	 
 	
 	<!-- 이미지 미리보기 -->
     <div class="form-group">
