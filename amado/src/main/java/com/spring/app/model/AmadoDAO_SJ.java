@@ -62,6 +62,9 @@ public interface AmadoDAO_SJ {
 	// 댓글 삭제 시 댓글카운트 감소
 	int updateCommentCount_decrease(String parentseq);
 
+	// 댓글 수정
+	int updateComment(Map<String, String> paraMap);
+
 	
 
 }

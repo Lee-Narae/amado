@@ -141,6 +141,13 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 		return result;
 	}
 
+	// 댓글 수정
+	@Override
+	public int updateComment(Map<String, String> paraMap) {
+		int n = sqlsession.update("SJ.updateComment", paraMap);
+		return n;
+	}
+
 
 
 }

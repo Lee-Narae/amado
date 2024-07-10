@@ -357,5 +357,11 @@
 			update tbl_board set commentcount = commentcount - 1
 			where boardseq = #{parentseq}		
 	</update>
+	
+	<!-- 댓글 수정 -->
+	<update id="updateComment" parameterType="HashMap">
+		update tbl_boardcomment set comment_text = #{comment_text} || ' (' || to_char(sysdate, 'yyyy-mm-dd hh24:mi:ss') || ') (수정됨)'
+		where boardcommentseq = to_number(#{boardcommentseq})
+	</update>	
 
 </mapper>
