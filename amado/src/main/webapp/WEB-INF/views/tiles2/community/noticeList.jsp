@@ -30,7 +30,7 @@ align-content: center;
 border-top: solid 1px #e0e0e0;
 }
 
-tr:hover {
+tbody > tr:hover {
 background-color: #e4edfb;
 opacity: 0.8;
 cursor: pointer;
@@ -71,7 +71,7 @@ $(document).ready(function(){
 	});
 	
 	// 글을 눌렀을 때
-	$("tr *").click(function(e){
+	$("tbody > tr *").click(function(e){
 
 		let noticeseq = $(e.target).parent().find("input[name='noticeseq']").val();
 		

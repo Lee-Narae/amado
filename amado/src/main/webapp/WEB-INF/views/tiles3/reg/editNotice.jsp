@@ -56,7 +56,7 @@ $(document).ready(function(){
      
      
      // 글쓰기버튼 클릭 시
-     $("button#btnWrite").click(function(){
+     $("button#btnEdit").click(function(){
 
     	 // 글제목 유효성 검사
     	 if($("input:text[name='title']").val().trim() == ""){
@@ -96,14 +96,29 @@ $(document).ready(function(){
 
 	     // form 전송
     	 const frm = document.addFrm;
+	     
+    	 if(frm.attach.value != '' && $("div#prevAttach").html() != ''){
+    		 if(confirm('기존 첨부파일을 삭제하지 않고 새로운 첨부파일을 등록하더라도 새로운 첨부파일만 업로드됩니다.')){
+    			 frm.method = "post";
+    	    	 frm.action = "<%= ctxPath%>/community/editNotice.do";
+    	    	 frm.submit();
+    		 }
+    	 }
+	     
     	 frm.method = "post";
-    	 frm.action = "<%= ctxPath%>/admin/reg/noticeEnd";
+    	 frm.action = "<%= ctxPath%>/community/editNotice.do";
 	     frm.submit();
 	     
      });
+     
 
      
 });
+
+function display_none(){
+	$("div#prevAttach").html("");
+	$("input[name='deleteAttach']").val(1);
+}
 
 </script>
 
@@ -114,23 +129,32 @@ $(document).ready(function(){
 	<div id="noticeContent" style="width: 90%; padding-top: 3%;">
 		<div class="tr" style="align-content: center; margin-left: 8%; display: flex; margin-bottom: 0.5%;">
 			<div class="title">제목</div>
-			<div style="width: 70%;"><input type="text" name="title" size="100" maxlength="50"/></div>
+			<div style="width: 70%;"><input type="text" name="title" size="100" maxlength="50" value="${requestScope.editNotice.title}"/></div>
 		</div>
 		<div class="tr" style="align-content: center; margin-left: 8%; display: flex;">
 			<div class="title">첨부파일</div>
 			<div style="width: 70%;" align="left"><input type="file" name="attach" style="margin-top: 0.5%;" /></div>
 		</div>
+			<c:if test="${not empty requestScope.editNotice}">
+				<div id="prevAttach" style="border: solid 1px gray; width: 64.5%; height: 50px; margin-left: 10%; border-radius: 10px; background-color: white; text-align: left; padding: 1%;">
+				<span style="cursor: pointer;" onclick="display_none()">❌</span>&nbsp;&nbsp;<span>${requestScope.editNotice.orgfilename}</span>
+				</div>
+			</c:if>
 	
 	
 		<div style="width: 75%; background-color: white; margin-top: 1%;">
-			<textarea style="width: 100%; height: 612px;" name="content" id="CONTENT"></textarea>
+			<textarea style="width: 100%; height: 612px;" name="content" id="CONTENT">${requestScope.editNotice.content}</textarea>
 		</div>
 	</div>
-
+	
+	<c:if test="${not empty requestScope.editNotice}">
+		<input type="hidden" name="noticeseq" value="${requestScope.editNotice.noticeseq}"/>
+		<input type="hidden" name="deleteAttach" value="0" />
+	</c:if>
 </form>
 
 		<div style="margin: 50px;">
-			<button type="button" class="btn btn-primary mr-3" id="btnWrite">글쓰기</button>
+		    <button type="button" class="btn btn-primary mr-3" id="btnEdit">수정하기</button>
 		    <button type="button" class="btn btn-secondary" onclick="javascript:history.back()">취소</button>  
 		</div>
 </div>

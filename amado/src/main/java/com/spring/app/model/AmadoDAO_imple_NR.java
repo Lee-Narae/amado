@@ -292,4 +292,40 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		return n;
 	}
 
+	// 공지사항 조회수
+	@Override
+	public void updateNoticeViewcount(String noticeseq) {
+		sqlsession.update("NR.updateNoticeViewcount", noticeseq);
+	}
+
+	// 댓글 작성하기
+	@Override
+	public int insertNoticeComment(Map<String, String> paramap) {
+		int n = sqlsession.insert("NR.insertNoticeComment", paramap);
+		return n;
+	}
+	@Override
+	public void updateNoticeCommentcount(String parentseq) {
+		sqlsession.update("NR.updateNoticeCommentcount", parentseq);
+	}
+
+	// 댓글 삭제
+	@Override
+	public int delNoticeComment(String noticecommentseq) {
+		int n = sqlsession.delete("NR.delNoticeComment", noticecommentseq);
+		return n;
+	}
+	@Override
+	public void updateNoticeCommentcount_del(String parentseq) {
+		sqlsession.update("NR.updateNoticeCommentcount_del", parentseq);
+	}
+
+	// 댓글 수정
+	@Override
+	public int editNoticeComment(Map<String, String> paramap) {
+		int n = sqlsession.update("NR.editNoticeComment", paramap);
+		
+		return n;
+	}
+
 }

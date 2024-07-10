@@ -26,6 +26,16 @@ font-weight: bold;
 color: #0066ff;
 cursor: pointer;
 }
+
+.commentBtn {
+font-size: 8pt;
+color: gray;
+}
+
+.commentBtn:hover {
+cursor: pointer;
+opacity: 0.8;
+}
 </style>
 
 <script type="text/javascript">
@@ -38,7 +48,89 @@ $(document).ready(function(){
 		frm.searchType.value = '${requestScope.searchType}';
 		frm.searchWord.value = '${requestScope.searchWord}';
 	}
+	
+	$("button.regComment").click(function(){
+		viewComment();
+	});
+	
+	$("input[name='comment_text']").keyup(function(e){
+		if(e.keyCode == 13){
+			viewComment();
+		}
+	});
+	
+	// 댓글 삭제
+	$(document).on("click", "span#delComment", function(e){
+
+		if(confirm('댓글을 삭제하시겠습니까?')){
+			let noticecommentseq = $(e.target).parent().parent().parent().find("input#commentseq").val();
+			const parentseq = '${requestScope.notice.noticeseq}';
+			
+			$.ajax({
+				url: "<%=ctxPath%>/community/delNoticeComment.do",
+				type: "post",
+				data: {"noticecommentseq": noticecommentseq, "parentseq":parentseq},
+				dataType: "json",
+				success: function(json){
+					viewCommentOnly();
+				},
+				error: function(request, status, error){
+		               alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		        }
+			});
+		
+		}
+
+	});
+	
+	// 댓글 수정
+	$(document).on("click", "span#editComment", function(e){
+		
+		const noticecommentseq = $(e.target).parent().parent().parent().find("input#commentseq").val();
+		const org_comment_text = $(e.target).parent().parent().parent().find("div#comment_text").text();
+		
+		$("span#editOrDel").hide();
+		$(e.target).parent().parent().parent().find("div#comment_text").html(`<input type="text" id="comment_text_edit" name="comment_text_edit" maxlength="200" style="width: 70%; height: 70px;" value="\${org_comment_text}"/>&nbsp;&nbsp;
+																			  <button type="button" class="btn btn-primary btn-sm" onclick="commentEdit(\${noticecommentseq})">수정하기</button>&nbsp;&nbsp;
+																			  <button type="button" class="btn btn-secondary btn-sm" onclick="cancelEditComment('\${org_comment_text}')">취소</button>`);
+		
+	});
+	
+	
+	$(document).on("keyup", "input#comment_text_edit", function(e){
+		if(e.keyCode == 13){
+			commentEdit($(e.target).parent().parent().find("input#commentseq").val());
+		}
+	});
+	
 });
+
+
+function commentEdit(noticecommentseq){
+
+	const edit_comment_text = $(event.target).parent().find("input#comment_text_edit").val().trim();
+	const commentseq = $(event.target).parent().parent().find("input#commentseq").val();
+
+	$.ajax({
+		url: "<%=ctxPath%>/community/editNoticeComment.do",
+		data: {"edit_comment_text": edit_comment_text, "commentseq": commentseq},
+		dataType: "json",
+		type: "post",
+		success: function(json){
+			viewCommentOnly();
+		},
+		error: function(request, status, error){
+            alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+        }
+	});
+
+}
+
+function cancelEditComment(org_comment_text){
+	$("span#editOrDel").show();
+	$(event.target).parent().html(org_comment_text);
+}
+
 
 function goPrevOrNext(seq){
 	
@@ -73,6 +165,136 @@ function editNotice(seq){
 	frm4.submit();
 	
 }
+
+function viewComment(){
+	
+	if($("input[name='comment_text']").val().trim() == ''){
+		alert('내용을 입력하세요.');
+	}
+	
+	else {
+		
+		const comment_text = $("input[name='comment_text']").val().trim();
+		const parentseq = '${requestScope.notice.noticeseq}';
+		
+		$.ajax({
+			url: "<%=ctxPath%>/community/regComment.do",
+			data: {"comment_text": comment_text, "parentseq": parentseq},
+			type: "post",
+			dataType: "json",
+			success: function(json){
+				
+				let v_html = ``;
+				
+				if(json.length > 0){
+					
+					$.each(json, function(index, item){
+						
+						v_html += `<div style="display: flex;">
+										<div class="mr-3">`;
+										
+						if(item.memberimg != null){
+							v_html += `<img width="50" height="50" style="border-radius: 50px;" src="<%=ctxPath%>/resources/images/\${item.memberimg}"/>`;
+						}
+						else {
+							v_html += `<img width="50" height="50" style="border-radius: 50px;" src="<%=ctxPath%>/resources/images/기본이미지.png"/>`;
+						}
+						
+						v_html += `</div>
+									<div align="left" style="width: 80%;">
+									<input id="commentseq" type="hidden" value="\${item.noticecommentseq}"/>
+									<span style="font-size: 10pt; font-weight: bold;">\${item.fk_userid }</span>&nbsp;&nbsp;<span style="font-size: 10pt;">\${item.registerdate}</span>
+										<span id="editOrDel">`;
+										
+						if(item.fk_userid == '${sessionScope.loginuser.userid}'){
+							v_html += `<span id="editComment" class="commentBtn" style="margin-left: 3%;">수정</span>&nbsp;|&nbsp;<span id="delComment" class="commentBtn">삭제</span>`;
+						}			
+										
+						v_html += `</span>
+							<div style="text-align: left;">\${item.comment_text }</div>
+							</div>
+						</div>`;					
+												
+													
+						if(index < json.length-1){
+							v_html += `<hr>`;
+						}
+					
+					});
+				}
+				
+				$("div#comment").html(v_html);
+				$("input[name='comment_text']").val('');
+				
+			},
+			error: function(request, status, error){
+	               alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+	        }
+		});
+		
+	}		
+	
+}
+
+function viewCommentOnly(){
+	
+	const parentseq = '${requestScope.notice.noticeseq}';
+	
+	$.ajax({
+		url: "<%=ctxPath%>/community/viewCommentOnly.do",
+		data: {"parentseq": parentseq},
+		type: "get",
+		dataType: "json",
+		success: function(json){
+			
+			let v_html = ``;
+			
+			if(json.length > 0){
+				
+				$.each(json, function(index, item){
+					
+					v_html += `<div style="display: flex;">
+									<div class="mr-3">`;
+									
+					if(item.memberimg != null){
+						v_html += `<img width="50" height="50" style="border-radius: 50px;" src="<%=ctxPath%>/resources/images/\${item.memberimg}"/>`;
+					}
+					else {
+						v_html += `<img width="50" height="50" style="border-radius: 50px;" src="<%=ctxPath%>/resources/images/기본이미지.png"/>`;
+					}
+					
+					v_html += `</div>
+								<div align="left" style="width: 80%;">
+								<input id="commentseq" type="hidden" value="\${item.noticecommentseq}"/>
+								<span style="font-size: 10pt; font-weight: bold;">\${item.fk_userid }</span>&nbsp;&nbsp;<span style="font-size: 10pt;">\${item.registerdate}</span>
+									<span id="editOrDel">`;
+									
+					if(item.fk_userid == '${sessionScope.loginuser.userid}'){
+						v_html += `<span id="editComment" class="commentBtn" style="margin-left: 3%;">수정</span>&nbsp;|&nbsp;<span id="delComment" class="commentBtn">삭제</span>`;
+					}			
+									
+					v_html += `</span>
+						<div style="text-align: left;">\${item.comment_text }</div>
+						</div>
+					</div>`;					
+											
+												
+					if(index < json.length-1){
+						v_html += `<hr>`;
+					}
+				
+				});
+			}
+			
+			$("div#comment").html(v_html);
+			
+		},
+		error: function(request, status, error){
+               alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+        }
+	});
+}
+
 </script>
 
 
@@ -90,10 +312,18 @@ function editNotice(seq){
 			<div class="title">제목</div>
 			<div style="width: 70%; margin-top: 0.5%;" align="left">${requestScope.notice.title}</div>
 		</div>
-		<div class="tr" style="align-content: center; margin-left: 8%; display: flex; margin-bottom: 1%;">
+		<div class="tr" style="align-content: center; margin-left: 8%; display: flex; margin-bottom: 0.5%;">
 			<div class="title">첨부파일</div>
 			<c:if test="${not empty requestScope.notice.orgfilename}"><div style="width: 70%; margin-top: 0.5%;" align="left"><a href="noticeAttachDownload.do?noticeseq=${requestScope.notice.noticeseq}">${requestScope.notice.orgfilename}</a></div></c:if>
 			<c:if test="${empty requestScope.notice.orgfilename}"><div style="width: 70%; margin-top: 0.5%;" align="left">첨부파일이 없습니다.</div></c:if>
+		</div>
+		<div class="tr" style="align-content: center; margin-left: 8%; display: flex; margin-bottom: 0.5%;">
+			<div class="title">조회수</div>
+			<div style="width: 70%; margin-top: 0.5%;" align="left">${requestScope.notice.viewcount}</div>
+		</div>
+		<div class="tr" style="align-content: center; margin-left: 8%; display: flex; margin-bottom: 0.5%;">
+			<div class="title">작성일자</div>
+			<div style="width: 70%; margin-top: 0.5%;" align="left">${requestScope.notice.registerdate}</div>
 		</div>
 	</div>
 	<hr style="width: 75%;">
@@ -113,9 +343,15 @@ function editNotice(seq){
 						<c:if test="${comment.memberimg != null}"><img width="50" height="50" style="border-radius: 50px;" src="<%=ctxPath%>/resources/images/${comment.memberimg}"/></c:if>
 						<c:if test="${comment.memberimg == null}"><img width="50" height="50" style="border-radius: 50px;" src="<%=ctxPath%>/resources/images/기본이미지.png"/></c:if>
 					</div>
-					<div align="left">
+					<div align="left" style="width: 100%;">
+						<input id="commentseq" type="hidden" value="${comment.noticecommentseq}"/>
 						<span style="font-size: 10pt; font-weight: bold;">${comment.fk_userid }</span>&nbsp;&nbsp;<span style="font-size: 10pt;">${comment.registerdate}</span>
-						<div style="text-align: left;">${comment.comment_text }</div>
+							<span id="editOrDel">
+								<c:if test="${comment.fk_userid == sessionScope.loginuser.userid}">
+									<span id="editComment" class="commentBtn" style="margin-left: 3%;">수정</span>&nbsp;|&nbsp;<span id="delComment" class="commentBtn">삭제</span>
+								</c:if>
+							</span>
+						<div id="comment_text" style="text-align: left; width: 100%;">${comment.comment_text }</div>
 					</div>
 				</div>
 				<c:if test="${status.index < requestScope.commentList.size()-1}"><hr></c:if>
@@ -124,8 +360,8 @@ function editNotice(seq){
 		<c:if test="${empty requestScope.commentList}">댓글이 없습니다.</c:if>
 	</div>
 	<div id="commentWrite" class="mt-3 p-3" style="border: solid 0.5px #e3e3e3; width: 75%" align="left">
-		<input type="text" style="width: 87%; height: 70px;"/>
-		<button type="button" class="btn btn-primary btn-lg ml-3" style="font-size: 13pt;">등록하기</button>	
+		<input type="text" name="comment_text" maxlength="200" style="width: 87%; height: 70px;"/>
+		<button type="button" class="btn btn-primary btn-lg ml-3 regComment" style="font-size: 13pt;">등록하기</button>	
 	</div>
 	
 	<div id="pre_next_notice" class="mt-3 p-3" style="width: 75%" align="left">
