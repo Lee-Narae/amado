@@ -267,9 +267,10 @@ a {
 
 	                        v_html += "        <br>";
 	                        v_html += "        <div class='float-left'>";
-	                        v_html += "        	   <button type='button'>좋아요</button>"; 
-	                        v_html += "        	   <button type='button'>싫어요</button>"; 
-	                        v_html += "        	   <button type='button'>댓글</button>"; 
+	                        v_html += "        	   <button type='button'>👍</button>"; 
+	                        v_html += "        	   <button type='button'>👎</button>"; 
+	                        v_html += "        	   <button type='button' onclick='addReply("+item.boardcommentseq+")'>답글</button>"; 
+	                        						// addReply(groupno, fk_boardcommentseq) fk_boardcommentseq 는 boardcommentseq 임
 	                        v_html += "        </div";
 		                    
 		                    v_html += "    </td>";
