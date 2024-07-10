@@ -164,7 +164,7 @@ public class ControllerJY {
 			
 		}
 		
-			
+			/*
 			System.out.println("1"+clubvo.getAttach());
 			System.out.println("2"+clubvo.getCity());
 			System.out.println("22"+clubvo.getFk_sportseq());
@@ -181,6 +181,7 @@ public class ControllerJY {
 			System.out.println(clubvo.getFk_userid());
 			System.out.println(clubvo.getClubtel());
 			System.out.println(clubvo.getClubgym());
+			*/
 		// === !!! 첨부파일이 있는 경우 작업 끝 !!! ===	
 
 		int n =0;
@@ -220,30 +221,43 @@ public class ControllerJY {
 		
 	}
 	
-	// 
+	// 플리마켓 등록된 상품 카테고리별로 띄우기
 	@ResponseBody
 	@GetMapping(value="/sportname.do", produces="text/plain;charset=UTF-8")
 	public String fleamarket(HttpServletRequest request) {
 		
 		String sportname = request.getParameter("sportname");
-		System.out.println(sportname);
+		//System.out.println(sportname);
 		
-		// 상품 select 헤오기
+		// 상품 select 해오기
 		List<Map<String,String>> sportNameList = service.getSportNameList(sportname);
-		//운동 종목시퀀스만 가져올 거니까 컬럼 한개
+		//FleamarketVO????
 		
 		/*
 			List<Map<String,String>> sportList = service.getSportList(); 
-			// 운동종목시퀀스, 운동종목이름  등등 컬럼 여러개 일때
-			// Map<> 은 행이 한개 일때 
+			// 운동종목시퀀스, 운동종목이름  등등 컬럼 여러개 일때   // Map<> 은 행이 한개 일때 
 			 
 		*/
 		
+		
 		JSONArray jsonArr = new JSONArray();
+		/*
+		if(sportNameList != null) {
+			for(Map<String, String> abc : sportNameList) {
+				JSONObject jsonObj = new JSONObject();     // {} 
+				jsonObj.put("no", vo.getNo());             // {"no":"101"} 
+				jsonObj.put("name", vo.getName());         // {"no":"101", "name":"이순신"}
+				jsonObj.put("writeday", vo.getWriteday()); // {"no":"101", "name":"이순신", "writeday":"2024-06-11 17:27:09"}
+				
+				jsonArr.put(jsonObj); // [{"no":"101", "name":"이순신", "writeday":"2024-06-11 17:27:09"}]
+			}// end of for------------------------
+		}
+		*/
 		
 		for(Map<String, String> productinfo : sportNameList) {
 			
 			JSONObject jsonObj = new JSONObject(); // {}
+			jsonObj.put("fleamarketseq", productinfo.get("fleamarketseq"));
 			jsonObj.put("sportseq", productinfo.get("sportseq"));
 			jsonObj.put("sportname", productinfo.get("sportname"));
 			jsonObj.put("city", productinfo.get("city"));
@@ -260,6 +274,14 @@ public class ControllerJY {
 			jsonObj.put("imgfilename", productinfo.get("imgfilename"));
 			
 			jsonArr.put(jsonObj);
+			//System.out.println("aaa"+jsonArr);
+			/* 	
+			  	jsonArr => 
+				[{"deal":"직거래","cost":"5000000","city":"경기도","imgfilename":"가평잣.png",
+				  "sportseq":"3","title":"잣막걸리 공장을 물려드립니다","registerdate":"2024-07-10 14:18:38",
+				  "local":"가평군","content":"떼돈 벌 수 있는 기회는 지금뿐!","commentcount":"0","viewcount":"0",
+				  "fk_userid":"leejy","status":"0"}]
+			*/
 		
 		}	      
 		
@@ -269,8 +291,30 @@ public class ControllerJY {
 	}
 
 
+	// 상품 상세보기
+	@GetMapping(value="/club/prodView.do", produces="text/plain;charset=UTF-8")
+	public ModelAndView requiredLogin_prodView(HttpServletRequest request, HttpServletResponse response, ModelAndView mav)  {
+		
+		mav.setViewName("club/sale.tiles2");
+		//    /WEB-INF/views/club/viewclub.jsp
+		return mav;
+	}
 
 
+	// 상품판매등록 페이지 불러오기
+	@GetMapping(value="/club/itemRegister.do", produces="text/plain;charset=UTF-8")
+	public ModelAndView requiredLogin_registerItem(HttpServletRequest request, HttpServletResponse response, ModelAndView mav)  {
+		
+		mav.setViewName("club/itemRegister.tiles2");
+		//    /WEB-INF/views/club/itemRegister.jsp
+		
+		return mav;
+		
+	}
+
+	
+	
+	
 
 	
 

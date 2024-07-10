@@ -59,15 +59,29 @@
 	#rItem img{
 		border-radius: 20px;
 	}
-    
+	div#notready{
+		font-size: 15pt;
+		padding-left: 38%;
+	}    
+	div#notready span{
+		font-size: 30pt;
+	}  
+	a#itemRegister{
+		color: black;
+		margin-left: 80%;
+		margin-top: 5%;
+		
+	}
 </style>
 
 <script type="text/javascript">
 
 $(document).ready(function(){
 	
-	$(document).on("click", function(e){
-		 //alert($(e.target).text());
+	
+	
+	$(document).on("click","button.cbtn", function(e){
+		//alert($(e.target).text());
 		
 		const sportname = $(e.target).text();
 		
@@ -80,45 +94,86 @@ $(document).ready(function(){
 	        	
 	        	let v_html=``;
 	        	
-	        	$.each(json, function(index, item) {
-		            v_html = `<div class='col-md- col-lg-2 offset-lg-1' >
-					 			   <div class="card mb-3">
-									   <img src='<%= ctxPath%>/resources/images/"+item.imgfilename+"' class='card-img-top'/>
-									   <div class='card-body' style='padding: 0; font-size: 9pt;'>
-										  <ul class='list-unstyled mt-3 pl-3'> 
-								             <li><label class='prodInfo' style="font-weight: bold;">글제목: <span style="font-weight: normal;">잔망루피</sapn></label></li>
-								             <li><label class='prodInfo' style="font-weight: bold;">가격: <span style="font-weight: normal;">백만원</sapn></label></li> 
-								             <li><label class='prodInfo' style="font-weight: bold;">장소: <span style="font-weight: normal;">홍대입구 3번 출구</sapn></label><span style="color: red;"></span></li> 
-								             <li class='text-center'><a href='#' class='stretched-link btn btn-outline-dark btn-sm' role='button'>자세히보기</a></li> 
-							            	         <%-- 카드 내부의 링크에 .stretched-link 클래스를 추가하면 전체 카드를 클릭할 수 있고 호버링할 수 있습니다(카드가 링크 역할을 함). --%>
-								          </ul>
-								       </div>
-							      	</div>
-						      	</div>`;
-						      	
-	        	});
+	        	if(json.length == 0) {
+	        		if(sportname == "배드민턴"){
+	        			v_html = `<div id="notready">현재 상품 준비중 입니다...<span>🏸</span></div>`;
+	        		}
+	        		else if(sportname == "족구"){
+	        			v_html = `<div id="notready">현재 상품 준비중 입니다...<span>⚽</span></div>`;
+	        		}
+	        		else if(sportname == "볼링"){
+	        			v_html = `<div id="notready">현재 상품 준비중 입니다...<span>🎳</span></div>`;
+	        		}
+	        		else if(sportname == "테니스"){
+	        			v_html = `<div id="notready">현재 상품 준비중 입니다...<span>🎾</span></div>`;
+	        		}
+	        		else if(sportname == "농구"){
+	        			v_html = `<div id="notready">현재 상품 준비중 입니다...<span>🏀</span></div>`;
+	        		}
+	        		else if(sportname == "배구"){
+	        			v_html = `<div id="notready">현재 상품 준비중 입니다...<span>🏐</span></div>`;
+	        		}
+	        		else if(sportname == "야구"){
+	        			v_html = `<div id="notready">현재 상품 준비중 입니다...<span>⚾</span></div>`;
+	        		}
+	        		else if(sportname == "축구"){
+	        			v_html = `<div id="notready">현재 상품 준비중 입니다...<span>⚽</span></div>`;
+	        		}
+	        		
+					$("div#product").html(v_html);
+	        	}
 	        	
-				$("div#product").html(v_html);
+	        	else if(json.length > 0) {
+		        	$.each(json, function(index, item) {
+			            v_html = `<div class='col-md- col-lg-2 offset-lg-1' >
+						 			   <div class="card mb-3">
+										   <img src='<%= ctxPath%>/resources/images/zee/\${item.imgfilename}' class='card-img-top'/>
+										   <div class='card-body' style='padding: 0; font-size: 9pt;'>
+											  <ul class='list-unstyled mt-3 pl-3'> 
+									             <li><label class='prodInfo' style="font-weight: bold;">글제목: <span style="font-weight: normal;">\${item.title}</sapn></label></li>
+									             <li><label class='prodInfo' style="font-weight: bold;">가격: <span style="font-weight: normal;">\${Number(item.cost).toLocaleString('en')}원</sapn></label></li> 
+									             <li><label class='prodInfo' style="font-weight: bold;">장소: <span style="font-weight: normal;">\${item.city}&nbsp;\${item.local}</sapn></label><span style="color: red;"></span></li> 
+									             <li class='text-center'><a href='/amado/club/prodView.do?fleamarketseq=\${item.fleamarketseq}' class='stretched-link btn btn-outline-dark btn-sm' role='button'>자세히보기</a></li> 
+								            	         <%-- 카드 내부의 링크에 .stretched-link 클래스를 추가하면 전체 카드를 클릭할 수 있고 호버링할 수 있습니다(카드가 링크 역할을 함). --%>
+									          </ul>
+									       </div>
+								      	</div>
+							      	</div>`;
+							      	
+		        	});
+	        	
+					$("div#product").html(v_html);
+	        	}
 			     
 	        },
 	        error: function(request, status, error){
 				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 			} 
 	    });
-	                
 	});
 	
-    
+	
+	$("a#register").click(function(){
 
+		if(${sessionScope.loginuser == null}){ //form으로 아이디 보내서 하는 것보다 어차피 session에 있으니까 이 방식으로 하는게 더 간편
+			alert('상품판매등록은 로그인 후에 가능합니다.');
+			return; 
+		}
+		
+		
+	 	  
+	});
+	
 });// end of $(document).ready(function(){})-------------------
-//해당하는 카테고리의 제품이 없을경우
+
+
 
 </script>
 
 
 <div id="container" style="border:solid 0px black; display:flex; margin: 12% auto; width: 80%;">
 
-	<div id="item1" style="border:solid 0px red;">
+	<div id="item1" style="border:solid 0px red; width:100%;">
 	
 		<%-- 머릿말, 검색 --%>
 		<div style="border:solid 0px black; text-align: center; ">
@@ -138,7 +193,7 @@ $(document).ready(function(){
 		
 		<%-- 종목 카테고리 --%>
 		<div id="categoryList" style="border:solid 0px black; display: flex; margin-top: 5%; margin-left:10%; ">
-			<div style="border:solid 0px black; padding-left:10%; width:73%; display: flex;" >
+			<div style="border:solid 0px black; padding-left:10%; width:75%; display: flex;" >
     			  <button id="all" class='cbtn' style="margin-right: 3%;">전체</button>
                   <button id="soccor" class='cbtn'>축구</button>
                   <button id="baseball" class='cbtn'>야구</button>
@@ -152,7 +207,7 @@ $(document).ready(function(){
 		</div>
 		
 		<br>
-		<button type="button" class="btn btn-info btn-sm" onclick="goWrite()" style="margin-left: 85%;">판매 등록하기</button>
+		<div><a id="itemRegister" href='/amado/club/itemRegister.do'>판매 등록하기</a></div>
 		
 		<!-- 상품  -->
 		<div id="product" style="display: flex; margin-top: 5%; border:solid 0px red; "></div>
@@ -174,22 +229,27 @@ $(document).ready(function(){
 	</div>
 	
 	
-	
 	<!-- 최근 본 상품 -->
-	<div id="item2" style="background-color: #f1f5f9; width: 20%; border-radius: 20px;">
-		<div id="recentItem" style="text-align: center; padding-top: 15%;">
-	      <div  style="color:gray;">최근 본 상품</div>
-	      <br>
-	      <div>
-	      	<a id="rItem" href="#"><img style="width: 80px; height:75px;" src="<%= ctxPath%>/resources/images/zee/영학선생님.png" /><!-- 카드뒤집기해서 정보넣기 --></a>
-	      </div>
-	      <br>
-	      <div>
-	      	<a id="rItem" href="#"><img style="width: 80px; height:75px;" src="<%= ctxPath%>/resources/images/zee/웜벳.png" /></a>
-	      </div>
+	<div id="item2" style="border-left:solid 1px lightgray ; width: 20%; height: 400px; ">
+		<div style="background-color: #f1f5f9; width: 60%; height: 40px; border-radius: 20px; margin-left: 3%;" ><!-- 스크롤할때 같이 움직이기 -->
+			<div id="recentItem" style="text-align: center; padding-top: 3%;">
+		      <div  style="color:gray; padding-top: 3%;">최근 본 상품</div>
+		      <hr>
+		      <br>
+		      <div>
+		      	<a id="rItem" href="#"><img style="width: 90px; height:85px;" src="<%= ctxPath%>/resources/images/zee/영학선생님.png" /><!-- 카드뒤집기해서 정보넣기 --></a>
+		      </div>
+		      <br>
+		      <div>
+		      	<a id="rItem" href="#"><img style="width: 90px; height:85px;" src="<%= ctxPath%>/resources/images/zee/웜벳.png" /></a>
+		      </div>
+		      <br><br><br>
+		      <div>더보기 ></div>
+		    </div>
 	    </div>
 	</div>
 	
+
 	
 	
 </div>
