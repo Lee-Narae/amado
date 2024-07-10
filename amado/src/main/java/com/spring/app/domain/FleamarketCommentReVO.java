@@ -1,27 +1,28 @@
 package com.spring.app.domain;
 
-public class FleamarketCommentVO {
+public class FleamarketCommentReVO {
 
+	private String fleamarketcommentreplyseq;
 	private String fleamarketcommentseq;
-	private String fleamarketseq;
-	private String comment_text;
+	private String commentreply_text;
 	private String registerdate;
 	private String fk_userid;
-	private String memberimg;
 	private String changestatus;
-	private String recommentcount;
+	private String memberimg;
 	
-	public String getChangestatus() {
-		return changestatus;
-	}
-	public void setChangestatus(String changestatus) {
-		this.changestatus = changestatus;
-	}
+	
+
 	public String getMemberimg() {
 		return memberimg;
 	}
 	public void setMemberimg(String memberimg) {
 		this.memberimg = memberimg;
+	}
+	public String getFleamarketcommentreplyseq() {
+		return fleamarketcommentreplyseq;
+	}
+	public void setFleamarketcommentreplyseq(String fleamarketcommentreplyseq) {
+		this.fleamarketcommentreplyseq = fleamarketcommentreplyseq;
 	}
 	public String getFleamarketcommentseq() {
 		return fleamarketcommentseq;
@@ -29,17 +30,11 @@ public class FleamarketCommentVO {
 	public void setFleamarketcommentseq(String fleamarketcommentseq) {
 		this.fleamarketcommentseq = fleamarketcommentseq;
 	}
-	public String getFleamarketseq() {
-		return fleamarketseq;
+	public String getCommentreply_text() {
+		return commentreply_text;
 	}
-	public void setFleamarketseq(String fleamarketseq) {
-		this.fleamarketseq = fleamarketseq;
-	}
-	public String getComment_text() {
-		return comment_text;
-	}
-	public void setComment_text(String comment_text) {
-		this.comment_text = comment_text;
+	public void setCommentreply_text(String commentreply_text) {
+		this.commentreply_text = commentreply_text;
 	}
 	public String getRegisterdate() {
 		return registerdate;
@@ -53,12 +48,13 @@ public class FleamarketCommentVO {
 	public void setFk_userid(String fk_userid) {
 		this.fk_userid = fk_userid;
 	}
-	public String getRecommentcount() {
-		return recommentcount;
+	public String getChangestatus() {
+		return changestatus;
 	}
-	public void setRecommentcount(String recommentcount) {
-		this.recommentcount = recommentcount;
+	public void setChangestatus(String changestatus) {
+		this.changestatus = changestatus;
 	}
+	
 	
 	
 	

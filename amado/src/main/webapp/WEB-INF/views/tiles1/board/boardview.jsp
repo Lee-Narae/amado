@@ -27,6 +27,42 @@ td.comment {text-align: center;}
 a {
 	text-decoration: none !important;
 }
+
+    /* 버튼 스타일 */
+    .float-right {
+        float: right;
+        margin-left: 10px; /* 버튼 사이 간격 조정 */
+    }
+
+    /* 완료 버튼의 기본 및 마우스 오버 배경색 */
+    #btnComplete {
+        background-color: transparent; /* 기본 배경색 투명 */
+        border: 1px solid lightgray; /* 테두리 추가 */
+        border-radius: 5px; /* 둥근 테두리 설정 */
+        padding: 8px 16px; /* 내부 여백 설정 */
+        color: black;
+        cursor: pointer;
+        transition: background-color 0.3s ease; /* 배경색 변경에 애니메이션 효과 적용 */
+    }
+
+    #btnComplete:hover {
+        background-color: lightblue; /* 마우스 오버 시 배경색 변경 */
+    }
+
+    /* 취소 버튼 스타일 */
+    #btnCancel {
+        background-color: transparent; /* 기본 배경색 투명 */
+        border: 1px solid lightgray; /* 테두리 추가 */
+        border-radius: 5px; /* 둥근 테두리 설정 */
+        padding: 8px 16px; /* 내부 여백 설정 */
+        color: black;
+        cursor: pointer;
+    }
+
+    #btnCancel:hover {
+        background-color: lightgray; /* 마우스 오버 시 배경색 변경 */
+    }
+
 </style>
 
 <script type="text/javascript">
@@ -44,33 +80,48 @@ a {
 		
 		// ==== 댓글 수정/완료 ==== //
 		
+		
 		let origin_comment_content = "";
 		
 		$(document).on("click", "button.btnUpdateComment", function(e){
 			const $btn = $(e.target);
 			if($(e.target).text() == "수정") {
-//				alert("댓글 수정");
+				
+				const $dropdownMenu = $btn.closest('.dropdown-menu');
+				const boardcommentseq = $dropdownMenu.find('input[type=hidden]').val();
+				
 				// 수정 전 댓글 내용(btnUpdateComment 버튼(button) (tr) 의 부모 (td) 의 (tr)첫번째 자식에 있다.)
 //				alert($(e.target).parent().parent().children("td:nth-child(2)").text());
-
-				const $content = $(e.target).parent().parent().children("td:nth-child(2)");
-				origin_comment_content = $(e.target).parent().parent().children("td:nth-child(2)").text();
-				$content.html(`<input id='comment_update' type='text' value='\${origin_comment_content}' size='40' />`); // 댓글 내용을 수정할 수 있도록 input 태그를 만들어준다.
 				
-				$(e.target).text("완료").removeClass("btn-secondary").addClass("btn-info");						
-				$(e.target).next().next().text("취소").removeClass("btn-secondary").addClass("btn-danger"); // 수정버튼도 "취소"로 변경시켜준다
-			
-	/* 			$content.on("keyup", function(ev){
-				    if(ev.keyCode == 13) {
-				    	$(e.target).trigger("click");
-				    }
-				}); 
-	*/
+				const fullText = $(e.target).parent().parent().parent().text();
+				const lastIndex20 = fullText.lastIndexOf("(20"); // "(20"이 마지막으로 등장하는 위치를 찾습니다.
+				const lastIndexModify = fullText.lastIndexOf("수정"); // "(수정)"이 마지막으로 등장하는 위치를 찾습니다.
+
+				if (lastIndex20 == -1) {
+				    // "(20"이 문자열에 없는 경우
+				    beforeEdit = fullText.substring(0, lastIndexModify); // "(수정)" 이전까지의 부분을 가져옵니다.
+				} else {
+				    // "(20"이 문자열에 있는 경우
+				    beforeEdit = fullText.substring(0, lastIndex20); // "(20" 이전까지의 부분을 가져옵니다.
+				}
+				
+				const $content = $(e.target).parent().parent().parent();
+				origin_comment_content = beforeEdit.trim();
+				
+				$content.html(`<input id='comment_update' type='text' value='\${origin_comment_content}' size='80' /><br>
+						<button class='float-right' id='btnCancel' type='button'>취소</button>
+						<input type='hidden' value='\${boardcommentseq}' />
+						<button class='btnUpdateComment float-right' id='btnComplete' type='button'>완료</button>`); // 댓글 내용을 수정할 수 있도록 input 태그를 만들어준다.
+				
+				document.getElementById('btnCancel').addEventListener('click', function() {
+					goReadComment();
+				});					    
+					    
 				$(document).on("keyup", "input#comment_update", function(e){
 				    if(e.keyCode == 13) {
 				    	//alert("엔터했어요");
 				    	//alert($btn.text()); // "완료"
-				    	$btn.trigger("click");
+				    	$("button#btnComplete").trigger("click");
 				    }
 				});
 				
@@ -82,26 +133,22 @@ a {
 //				alert($(e.target).next().val()); // 수정해야할 댓글 시퀀스 번호
 //				alert($(e.target).parent().parent().children("td:nth-child(2)").children("input").val()); // 수정 후 댓글내용
 
-				const content = $(e.target).parent().parent().children("td:nth-child(2)").children("input").val();
-				
-				alert($(e.target).next().val());
+				const content = $("#comment_update").val();
+				const boardcommentseq = $("#commentDisplay > tr > td.newcomment > input[type=hidden]:nth-child(4)").val();
 				
 				$.ajax({
 					url:"${pageContext.request.contextPath}/updateComment.do",
 					type:"post",
-					data:{"boardcommentseq":$(e.target).next().val(),
+					data:{"boardcommentseq":boardcommentseq,
 						  "content":content},
 					dataType:"json",
 				    success: function(json){
-				    	// goReadComment(); // (이 방식을 사용하면 DB 에서 모든 댓글 데이터를 읽어야 하기 때문에 시간이 더 걸린다.) (작성일자 변경시켜서 다시 복구시킴.)
+				    	 goReadComment(); // (이 방식을 사용하면 DB 에서 모든 댓글 데이터를 읽어야 하기 때문에 시간이 더 걸린다.) (작성일자 변경시켜서 다시 복구시킴.)
 				    	// goViewComment(1); // 페이징처리 (무조건 1페이지로 가서 댓글 수정 3페이지를 수정해도 1페이지로 이동하게된다.)
-				    	const PageNo = $(e.target).parent().parent().find("input.currentShowPageNo").val();
-				    	alert("PageNo : " + PageNo);
-				    	currentShowPageNo(PageNo);
-				    	
-				    	//$(e.target).parent().parent().children("td:nth-child(2)").html(content); // 이 방식은 DB에서 모든 댓글 정보를 가져오는게 아니다 보니 좀 더 빠를 것이다.
-				    	$(e.target).text("수정").removeClass("btn-info").addClass("btn-secondary");;
-				    	$(e.target).next().next().text("삭제").removeClass("btn-danger").addClass("btn-secondary"); 
+//				    	const PageNo = $(e.target).parent().parent().find("input.currentShowPageNo").val();
+//				    	alert("PageNo : " + PageNo);
+//				    	currentShowPageNo(PageNo);
+				    	 
 					},
 					error: function(request, status, error){
 						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
@@ -123,8 +170,6 @@ a {
 	 			const $content = $(e.target).parent().parent().children("td:nth-child(2)");
 				$content.html(`\${origin_comment_content}`); // 댓글 내용을 수정할 수 있도록 input 태그를 만들어준다.
 				
-				$(e.target).text("삭제").removeClass("btn-danger").addClass("btn-secondary");
-	            $(e.target).prev().prev().text("수정").removeClass("btn-info").addClass("btn-secondary");
 			}
 			
 			else if($(e.target).text() == "삭제") {
@@ -205,7 +250,7 @@ a {
 		                $.each(json, function(index, item){
 		                    v_html += "<tr>";
 		                    v_html += "    <td>" + item.fk_userid + "</td>";
-		                    v_html += "    <td>" + item.comment_text;
+		                    v_html += "    <td class='newcomment'>" + item.comment_text;
 
 		                    // 수정 삭제 버튼 추가
 		                    if("${sessionScope.loginuser != null}" && "${sessionScope.loginuser.userid}" == item.fk_userid) {
@@ -220,6 +265,14 @@ a {
 		                        v_html += "        </div>";
 		                    }
 
+	                        v_html += "        <br>";
+	                        v_html += "        <div class='float-left'>";
+	                        v_html += "        	   <button type='button'>👍</button>"; 
+	                        v_html += "        	   <button type='button'>👎</button>"; 
+	                        v_html += "        	   <button type='button' onclick='addReply("+item.boardcommentseq+")'>답글</button>"; 
+	                        						// addReply(groupno, fk_boardcommentseq) fk_boardcommentseq 는 boardcommentseq 임
+	                        v_html += "        </div";
+		                    
 		                    v_html += "    </td>";
 		                    v_html += "    <td class='comment'>" + item.registerdate + "</td>";
 		                    v_html += "</tr>";

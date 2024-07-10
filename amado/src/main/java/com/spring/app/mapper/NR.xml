@@ -298,14 +298,14 @@
 		select noticecommentseq, parentseq, comment_text, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, fk_userid, memberimg
 		from tbl_noticecomment A join tbl_member B
 		on A.fk_userid = B.userid
-		where A.status = 1 and parentseq = ${noticeseq}
+		where A.status = 1 and parentseq = #{noticeseq}
 		order by registerdate
 	</select>
 	
 	<select id="getNoticeCommentCount" parameterType="String" resultType="String">
 		select count(*)
 		from tbl_noticecomment
-		where status = 1 and parentseq = ${noticeseq}
+		where status = 1 and parentseq = #{noticeseq}
 	</select>
 	
 	
@@ -327,4 +327,63 @@
 	<select id="editNotice_get" parameterType="String" resultType="NoticeVO">
 		select noticeseq, title, content, orgfilename from tbl_notice where noticeseq = #{noticeseq}
 	</select>
+	
+	<update id="editNoticeBy1" parameterType="NoticeVO">
+		update tbl_notice set 
+		title = #{title},
+		content = #{content},
+		registerdate = sysdate,
+		orgfilename = null,
+        filename = null,
+        filesize = null
+        where noticeseq = #{noticeseq}
+	</update>
+	
+	<update id="editNoticeBy2" parameterType="NoticeVO">
+		update tbl_notice set 
+		title = #{title},
+		content = #{content},
+		registerdate = sysdate,
+		orgfilename = #{orgfilename},
+        filename = #{filename},
+        filesize = #{filesize} 
+        where noticeseq = #{noticeseq}
+	</update>
+	
+	<update id="editNoticeBy3" parameterType="NoticeVO">
+		update tbl_notice set 
+		title = #{title},
+		content = #{content},
+		registerdate = sysdate 
+        where noticeseq = #{noticeseq}
+	</update>
+	
+	<update id="updateNoticeViewcount" parameterType="String">
+		update tbl_notice set viewcount = viewcount + 1
+		where noticeseq = #{nocticeseq}
+	</update>
+	
+	<insert id="insertNoticeComment" parameterType="HashMap">
+		insert into tbl_noticecomment(noticecommentseq, parentseq, comment_text, registerdate, fk_userid, status)
+		values (seq_noticecomment.nextval, #{parentseq}, #{comment_text}, sysdate, #{fk_userid}, 1)
+	</insert>
+	
+	<update id="updateNoticeCommentcount" parameterType="String">
+		update tbl_notice set commentcount = commentcount+1
+		where noticeseq = #{parentseq}
+	</update>
+	
+	<delete id="delNoticeComment" parameterType="String">
+		delete from tbl_noticecomment where noticecommentseq = #{noticecommentseq}
+	</delete>
+	
+	<update id="updateNoticeCommentcount_del" parameterType="String">
+		update tbl_notice set commentcount = commentcount-1
+		where noticeseq = #{parentseq}
+	</update>
+	
+	<update id="editNoticeComment" parameterType="HashMap">
+		update tbl_noticecomment set comment_text = #{comment_text}, registerdate = sysdate
+		where noticecommentseq = #{noticecommentseq}
+	</update>
 </mapper>

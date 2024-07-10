@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.spring.app.common.FileManager;
 import com.spring.app.domain.GymVO;
+import com.spring.app.domain.PhotoVO;
 import com.spring.app.model.AmadoDAO_HS;
 
 
@@ -33,6 +34,16 @@ public class AmadoService_imple_HS implements AmadoService_HS {
 	public int add_withFile(GymVO gymvo) {
 	
 		int n = dao.add_withFile(gymvo);
+		return n;
+	}
+
+
+
+
+
+	@Override
+	public int add_photofile(PhotoVO photovo) {
+		int n = dao.add_photofile(photovo);
 		return n;
 	}
 

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
 import com.spring.app.service.AmadoService_JH;
 
@@ -45,7 +46,7 @@ public class ControllerJH {
 		String name = request.getParameter("name");
 		String comment_text = request.getParameter("comment_text");
 		
-		System.out.println(comment_text);
+		//System.out.println(comment_text);
 		
 		int n = 0;
 		
@@ -222,7 +223,106 @@ public class ControllerJH {
 	}
 	
 	
+	@ResponseBody
+	@PostMapping(value="/addReplyComment.action", produces="text/plain;charset=UTF-8")
+	public String addReplyComment(HttpServletRequest request) {
 		
+		String fleamarketcommentseq = request.getParameter("fleamarketcommentseq");
+		
+		// System.out.println(fleamarketcommentseq);
+		List<FleamarketCommentReVO> commentreList = service.getCommentreList(fleamarketcommentseq); 
+		
+		JSONArray jsonArr = new JSONArray(); // [] 
+		
+		if(commentreList != null) {
+			for(FleamarketCommentReVO fmcommentrevo : commentreList) {
+				JSONObject jsonObj = new JSONObject();          // {} 
+				jsonObj.put("fleamarketcommentreplyseq", fmcommentrevo.getFleamarketcommentreplyseq());             // {"seq":1}
+				jsonObj.put("fk_userid", fmcommentrevo.getFk_userid()); // {"seq":1, "fk_userid":"seoyh"}
+				jsonObj.put("commentreply_text", fmcommentrevo.getCommentreply_text());           // {"seq":1, "fk_userid":"seoyh","name":"서영학"}
+				jsonObj.put("registerdate", fmcommentrevo.getRegisterdate());     // {"seq":1, "fk_userid":"seoyh","name":서영학,"content":"첫번째 댓글입니다. ㅎㅎㅎ","regdate":"2024-06-18 15:36:31"}
+				jsonObj.put("memberimg", fmcommentrevo.getMemberimg());
+				jsonObj.put("changestatus", fmcommentrevo.getChangestatus());
+				
+				jsonArr.put(jsonObj);
+			}// end of for-----------------------
+		}
+		
+		return jsonArr.toString();
+	}
+	
+	
+	
+	@ResponseBody
+	@PostMapping(value="/addReComment.do", produces="text/plain;charset=UTF-8")
+	public String addReComment(FleamarketCommentReVO fmcommentrevo, HttpServletRequest request) {
+		
+		// 댓글쓰기에 첨부파일이 없는 경우
+		String fk_userid = request.getParameter("fk_userid");
+		String commentreply_text = request.getParameter("commentreply_text");
+		String fleamarketcommentseq = request.getParameter("fleamarketcommentseq");
+		
+		//System.out.println("1"+fk_userid);
+		//System.out.println("2"+commentreply_text);
+		//System.out.println("3"+fleamarketcommentseq);
+		
+		fmcommentrevo.setFk_userid(fk_userid);
+		
+		int n = 0;
+		
+		try {
+			n = service.addReComment(fmcommentrevo);
+			// 댓글쓰기(insert) 및 원게시물(tbl_board 테이블)에 댓글의 개수 증가(update 1씩 증가)하기 
+	        // 이어서 회원의 포인트를 50점을 증가하도록 한다. (tbl_member 테이블에 point 컬럼의 값을 50 증가하도록 update 한다.)
+			 
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		
+		JSONObject jsonObj = new JSONObject(); // {}
+		jsonObj.put("n", n);  // {"n":1} 또는 	{"n":0}
+		
+		
+		return jsonObj.toString();
+		// "{"n":1, "name":"엄정화"} 또는  {"n":0, "name":"최준혁"}"
+	}
+	
+	
+	
+	/*
+	// === #90. 원게시물에 딸린 댓글들을 조회해오기(Ajax 로 처리) === //
+	@ResponseBody
+	@GetMapping(value="/readComment.action", produces="text/plain;charset=UTF-8") 
+	public String readComment(HttpServletRequest request) {
+		
+		String parentSeq = request.getParameter("parentSeq"); 
+		
+		List<FleamarketCommentVO> commentList = service.getCommentList(parentSeq); 
+		
+		JSONArray jsonArr = new JSONArray(); // [] 
+		
+		if(commentList != null) {
+			for(FleamarketCommentVO fmcommentvo : commentList) {
+				JSONObject jsonObj = new JSONObject();          // {} 
+				jsonObj.put("fleamarketcommentseq", fmcommentvo.getFleamarketcommentseq());             // {"seq":1}
+				jsonObj.put("fk_userid", fmcommentvo.getFk_userid()); // {"seq":1, "fk_userid":"seoyh"}
+				jsonObj.put("comment_text", fmcommentvo.getComment_text());           // {"seq":1, "fk_userid":"seoyh","name":"서영학"}
+				jsonObj.put("registerdate", fmcommentvo.getRegisterdate());     // {"seq":1, "fk_userid":"seoyh","name":서영학,"content":"첫번째 댓글입니다. ㅎㅎㅎ","regdate":"2024-06-18 15:36:31"}
+				jsonObj.put("memberimg", fmcommentvo.getMemberimg());
+				jsonObj.put("changestatus", fmcommentvo.getChangestatus());
+				
+				jsonArr.put(jsonObj);
+			}// end of for-----------------------
+		}
+		
+		return jsonArr.toString(); // "[{"seq":1, "fk_userid":"seoyh","name":서영학,"content":"첫번째 댓글입니다. ㅎㅎㅎ","regdate":"2024-06-18 15:36:31"}]"
+		                           // 또는
+		                           // "[]"
+	}
+	*/
+	
+	
+	
 	
 	@GetMapping("/club/myClub_plus.do")
 	public ModelAndView myClub_plus(ModelAndView mav) {
@@ -232,4 +332,8 @@ public class ControllerJH {
 		
 		return mav;
 	}	
+	
+	
+	
+	
 }

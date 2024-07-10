@@ -56,5 +56,8 @@ public interface AmadoService_SJ {
 	// 댓글 삭제
 	int deleteComment(Map<String, String> paraMap) throws Throwable;
 
+	// 댓글 수정
+	int updateComment(Map<String, String> paraMap);
+
 
 }

@@ -271,4 +271,61 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		return editNotice;
 	}
 
+	// 공지사항 수정하기(1)
+	@Override
+	public int editNoticeBy1(NoticeVO nvo) {
+		int n = sqlsession.update("NR.editNoticeBy1", nvo);
+		return n;
+	}
+
+	// 공지사항 수정하기(2)
+	@Override
+	public int editNoticeBy2(NoticeVO nvo) {
+		int n = sqlsession.update("NR.editNoticeBy2", nvo);
+		return n;
+	}
+
+	// 공지사항 수정하기(3)
+	@Override
+	public int editNoticeBy3(NoticeVO nvo) {
+		int n = sqlsession.update("NR.editNoticeBy3", nvo);
+		return n;
+	}
+
+	// 공지사항 조회수
+	@Override
+	public void updateNoticeViewcount(String noticeseq) {
+		sqlsession.update("NR.updateNoticeViewcount", noticeseq);
+	}
+
+	// 댓글 작성하기
+	@Override
+	public int insertNoticeComment(Map<String, String> paramap) {
+		int n = sqlsession.insert("NR.insertNoticeComment", paramap);
+		return n;
+	}
+	@Override
+	public void updateNoticeCommentcount(String parentseq) {
+		sqlsession.update("NR.updateNoticeCommentcount", parentseq);
+	}
+
+	// 댓글 삭제
+	@Override
+	public int delNoticeComment(String noticecommentseq) {
+		int n = sqlsession.delete("NR.delNoticeComment", noticecommentseq);
+		return n;
+	}
+	@Override
+	public void updateNoticeCommentcount_del(String parentseq) {
+		sqlsession.update("NR.updateNoticeCommentcount_del", parentseq);
+	}
+
+	// 댓글 수정
+	@Override
+	public int editNoticeComment(Map<String, String> paramap) {
+		int n = sqlsession.update("NR.editNoticeComment", paramap);
+		
+		return n;
+	}
+
 }

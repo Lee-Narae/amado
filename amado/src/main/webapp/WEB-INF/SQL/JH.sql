@@ -42,6 +42,7 @@ values(1, 1, '서울', '호날두가 신었던 축구화 팝니다!!', '제가 �
 ALTER TABLE tbl_member ADD (memberImg VARCHAR2(50));
 ALTER TABLE tbl_gym ADD (insidestatus number(1));
 ALTER TABLE tbl_fleamarketcomment ADD (changestatus number(1) default 0);
+ALTER TABLE tbl_fleamarketcomment ADD (recommentcount number(5) default 0);
 
 update tbl_fleamarket set commentCount = commentCount+1
 where fleamarketseq = 1
@@ -52,9 +53,9 @@ values(seq_fleamarket.nextval, 1, 'ㅎㅇㅎㅇ', default, 'leess')
 
 
 insert into tbl_fleamarketcomment(fleamarketcommentseq, fleamarketseq, comment_text, registerdate, fk_userid)
-		values(seq_fleamarketcomment.nextval, 1, 'ㅎㅇㅎㅇ2', default, 'leess')
+values(seq_fleamarketcomment.nextval, 1, 'ㅎㅇㅎㅇ2', default, 'leess')
         
-        commit
+commit
 
 update tbl_fleamarket set commentcount = commentcount+1
 where fleamarketseq = 1
@@ -68,6 +69,9 @@ where fleamarketcommentseq = 21
 
 select *
 from tbl_fleamarketcomment
+
+select *
+from tbl_sport
 
 select fleamarketcommentseq, fk_userid, comment_text
 		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
@@ -86,3 +90,53 @@ ALTER TABLE tbl_club
 MODIFY (clubstatus DEFAULT 1);
 
 commit
+
+
+
+
+create table tbl_fleamarketcommentreply    
+(fleamarketcommentreplyseq      NUMBER                  -- 댓글번호(PK)
+,fleamarketcommentseq             NUMBER                  -- 중고마켓게시판번호(FK)
+,commentreply_text              nvarchar2(200)          -- 댓글내용
+,registerdate              date default sysdate  not null                     -- 댓글작성일자
+,fk_userid                 nvarchar2(20)           -- 아이디(FK)
+,changestatus              number(1)        default 0
+
+,constraint PK_tbl_fktcommentre_fmkcmreseq primary key(fleamarketcommentreplyseq)
+,constraint FK_tbl_fktcommentre_fmketcmseq foreign key(fleamarketcommentseq) references tbl_fleamarketcomment(fleamarketcommentseq)
+,constraint FK_tbl_fktcommentre_fk_userid foreign key(fk_userid) references tbl_member(userid)
+);
+
+-- Table TBL_FLEAMARKETCOMMENTREPLY이(가) 생성되었습니다.
+
+
+create sequence seq_fleamarketcommentreplyseq 
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+-- Sequence SEQ_FLEAMARKETCOMMENTREPLYSEQ이(가) 생성되었습니다.
+
+insert into tbl_fleamarketcommentreply(fleamarketcommentreplyseq, fleamarketcommentseq, commentreply_text, fk_userid)
+values(seq_fleamarketcommentreplyseq.nextval, 10, '10번의 답글입니다', 'leess')
+        
+insert into tbl_fleamarketcommentreply(fleamarketcommentreplyseq, fleamarketcommentseq, commentreply_text, fk_userid)
+values(seq_fleamarketcommentreplyseq.nextval, 15, '15번의 답글입니다', 'leejy')
+
+insert into tbl_fleamarketcommentreply(fleamarketcommentreplyseq, fleamarketcommentseq, commentreply_text, fk_userid)
+values(seq_fleamarketcommentreplyseq.nextval, 15, '15번의 답글입니다2', 'eomjh')
+
+commit
+
+
+
+
+select fleamarketcommentreplyseq, fk_userid, commentreply_text, changestatus
+		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
+             , V.memberimg
+from tbl_fleamarketcommentreply A join tbl_member V
+ON A.fk_userid = V.userid
+where A.fleamarketcommentseq = #{fleamarketcommentseq}
+order by fleamarketcommentreplyseq desc

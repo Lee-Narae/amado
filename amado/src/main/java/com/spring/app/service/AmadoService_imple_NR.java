@@ -385,6 +385,63 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		NoticeVO editNotice = dao.editNotice_get(noticeseq);
 		return editNotice;
 	}
+
+	// 공지사항 수정하기(1)
+	@Override
+	public int editNoticeBy1(NoticeVO nvo) {
+		int n = dao.editNoticeBy1(nvo);
+		return n;
+	}
+
+	// 공지사항 수정하기(2)
+	@Override
+	public int editNoticeBy2(NoticeVO nvo) {
+		int n = dao.editNoticeBy2(nvo);
+		return n;
+	}
+
+	// 공지사항 수정하기(3)
+	@Override
+	public int editNoticeBy3(NoticeVO nvo) {
+		int n = dao.editNoticeBy3(nvo);
+		return n;
+	}
+
+	// 공지사항 조회수 올리기
+	@Override
+	public void updateNoticeViewcount(String noticeseq) {
+		dao.updateNoticeViewcount(noticeseq);
+	}
+
+	// 댓글 작성하기
+	@Override
+	public int insertNoticeComment(Map<String, String> paramap) {
+		int n = dao.insertNoticeComment(paramap);
+		return n;
+	}
+	@Override
+	public void updateNoticeCommentcount(String parentseq) {
+		dao.updateNoticeCommentcount(parentseq);
+	}
+
+	// 댓글 삭제
+	@Override
+	public int delNoticeComment(String noticecommentseq) {
+		int n = dao.delNoticeComment(noticecommentseq);
+		return n;
+	}
+	@Override
+	public void updateNoticeCommentcount_del(String parentseq) {
+		dao.updateNoticeCommentcount_del(parentseq);		
+	}
+
+	// 댓글 수정
+	@Override
+	public int editNoticeComment(Map<String, String> paramap) {
+		int n = dao.editNoticeComment(paramap);
+		
+		return n;
+	}
 	
 	
 }

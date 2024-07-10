@@ -199,12 +199,12 @@ public class ControllerSJ {
 		if (searchWord == null) {
 			searchWord = "";
 		}
-		
+
+/*
 		System.out.println("확인용 ~~ boardseq : " + boardseq);
 		System.out.println("확인용 ~~ goBackURL : " + goBackURL);
 		System.out.println("확인용 ~~ searchType : " + searchType);
 		System.out.println("확인용 ~~ searchWord : " + searchWord);
-/*
  		확인용 ~~ boardseq : 7
 		확인용 ~~ goBackURL : /community/list.do?searchType=title&searchWord=%ED%85%8C&sportseq=%2Fcommunity%2Flist.do
 		확인용 ~~ searchType : title
@@ -341,7 +341,24 @@ public class ControllerSJ {
 	
 	
 	
-	
+	// 댓글 수정(Ajax 로 처리) //
+	@ResponseBody
+	@PostMapping(value = "/updateComment.do", produces = "text/plain;charset=UTF-8")
+	public String updateComment(HttpServletRequest request) {
+		String boardcommentseq = request.getParameter("boardcommentseq");
+		String content = request.getParameter("content");
+		
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("boardcommentseq", boardcommentseq);
+		paraMap.put("comment_text", content);
+
+		int n = service.updateComment(paraMap);
+
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+
+		return jsonObj.toString(); // {"n":1}
+	}
 	
 	
 	

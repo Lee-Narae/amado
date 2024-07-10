@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.app.common.AES256;
+import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
 import com.spring.app.model.AmadoDAO_JH;
 
@@ -75,6 +76,31 @@ public class AmadoService_imple_JH implements AmadoService_JH {
 		}
 		
 		return n*m;
+	}
+
+
+	
+	@Override
+	public List<FleamarketCommentReVO> getCommentreList(String fleamarketcommentseq) {
+		List<FleamarketCommentReVO> commentreList = dao.getCommentreList(fleamarketcommentseq);
+		return commentreList;
+	}
+
+
+
+	@Override
+	public int addReComment(FleamarketCommentReVO fmcommentrevo) throws Throwable {
+		int n1=0, result=0;
+		
+		n1 = dao.addReComment(fmcommentrevo); // 댓글쓰기(tbl_comment 테이블에 insert)
+		System.out.println("~~~ 확인용n1: " + n1);
+		
+		if(n1 == 1) {
+			result = dao.updateReCommentCount(fmcommentrevo.getFleamarketcommentseq());  // tbl_board 테이블에 commentCount 컬럼이 1증가(update)
+			System.out.println("~~~ 확인용result: " + result);
+		}
+		
+		return result;
 	}
 
 }

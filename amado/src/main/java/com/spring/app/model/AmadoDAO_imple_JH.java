@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
 
 
@@ -56,6 +57,24 @@ public class AmadoDAO_imple_JH implements AmadoDAO_JH {
 	@Override
 	public int updateCommentCount_decrease(String fleamarketseq) {
 		int n = sqlsession.update("JH.updateCommentCount_decrease", fleamarketseq);
+		return n;
+	}
+
+	@Override
+	public List<FleamarketCommentReVO> getCommentreList(String fleamarketcommentseq) {
+		List<FleamarketCommentReVO> commentreList = sqlsession.selectList("JH.getCommentreList", fleamarketcommentseq);
+		return commentreList;
+	}
+
+	@Override
+	public int addReComment(FleamarketCommentReVO fmcommentrevo) {
+		int n = sqlsession.insert("JH.addReComment", fmcommentrevo);
+		return n;
+	}
+
+	@Override
+	public int updateReCommentCount(String fleamarketcommentseq) {
+		int n = sqlsession.update("JH.updateReCommentCount", fleamarketcommentseq);
 		return n;
 	}
 

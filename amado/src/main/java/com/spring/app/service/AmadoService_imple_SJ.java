@@ -189,4 +189,15 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		return result;
 	}
 
+	
+	// 댓글 수정
+	@Override
+	public int updateComment(Map<String, String> paraMap) {
+		String boardcommentseq = paraMap.get("boardcommentseq");
+		String comment_text = paraMap.get("comment_text");
+
+		int n = dao.updateComment(paraMap);
+		return n;
+	}
+
 }
