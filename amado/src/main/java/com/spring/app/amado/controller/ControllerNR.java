@@ -860,8 +860,10 @@ public class ControllerNR {
 		
 		NoticeVO editNotice = service.editNotice_get(noticeseq);
 		
-		mav.addObject("editNotice", editNotice);
-		mav.setViewName("reg/notice.tiles3");
+		if(editNotice != null) {
+			mav.addObject("editNotice", editNotice);
+		}
+		mav.setViewName("reg/editNotice.tiles3");
 		return mav;
 	}
 	
@@ -1122,6 +1124,10 @@ public class ControllerNR {
 			mav.setViewName("msg");
 		}
 		
+		// 조회수 (로그인 여부 상관 없이, 중복 상관 없이 무조건 1 증가)
+		service.updateNoticeViewcount(noticeseq);
+		
+		
 		mav.addObject("notice", notice);
 		mav.addObject("noticeseq", noticeseq);
 		mav.addObject("goBackURL", goBackURL);
@@ -1238,13 +1244,13 @@ public class ControllerNR {
 		
 		int n = 0;
 		
-		// 1. 기존 첨부파일을 삭제하고 아무것도 올리지 않은 경우 -> 행 update 시 filename, orgfilename, filesize 비우기
+		// 1. 기존 첨부파일을 삭제하고 아무것도 올리지 않은 경우 -> 행 update 시 filename, orgfilename, filesize 비우기 (확인 완료)
 		if("1".equals(nvo.getDeleteAttach()) && "".equals(attach.getOriginalFilename())) {
 			n = service.editNoticeBy1(nvo);
 		}
 		
 		
-		// 2. attach가 있는 경우 -> 행 update 시 filename, orgfilename, filesize 바꾸기
+		// 2. attach가 있는 경우 -> 행 update 시 filename, orgfilename, filesize 바꾸기 (확인 완료)
 		else if(!"".equals(attach.getOriginalFilename())) {
 			n = service.editNoticeBy2(nvo);
 		}
@@ -1272,6 +1278,122 @@ public class ControllerNR {
 		
 		return mav;
 	}
+	
+	
+	
+	@ResponseBody
+	@PostMapping("/community/regComment.do")
+	public String requiredLogin_regComment(HttpServletRequest request, HttpServletResponse response) {
+		
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		
+		String comment_text = request.getParameter("comment_text");
+		String parentseq = request.getParameter("parentseq");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		
+		paramap.put("comment_text", comment_text);
+		paramap.put("parentseq", parentseq);
+		paramap.put("fk_userid", loginuser.getUserid());
+		
+		int n = service.insertNoticeComment(paramap);
+		
+		JSONArray jsonArr = new JSONArray();
+
+		if(n == 1) {
+			
+			// tbl_notice commentcount 컬럼 1 올리기
+			service.updateNoticeCommentcount(parentseq);
+			
+			List<Map<String,String>> commentList = service.getNoticeComment(parentseq);
+			
+			for(Map<String,String> commentmap : commentList) {
+				JSONObject jsonObj = new JSONObject();
+				
+				jsonObj.put("noticecommentseq", commentmap.get("noticecommentseq"));
+				jsonObj.put("parentseq", commentmap.get("parentseq"));
+				jsonObj.put("comment_text", commentmap.get("comment_text"));
+				jsonObj.put("registerdate", commentmap.get("registerdate"));
+				jsonObj.put("fk_userid", commentmap.get("fk_userid"));
+				jsonObj.put("memberimg", commentmap.get("memberimg"));
+				
+				jsonArr.put(jsonObj);
+			}
+			
+		}
+		
+		
+		return jsonArr.toString();
+	}
+	
+	
+	
+	@ResponseBody
+	@PostMapping("/community/delNoticeComment.do")
+	public String delNoticeComment(HttpServletRequest request) {
+		
+		String noticecommentseq = request.getParameter("noticecommentseq");
+		String parentseq = request.getParameter("parentseq");
+		
+		int n = service.delNoticeComment(noticecommentseq);
+		
+		service.updateNoticeCommentcount_del(parentseq);
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+		
+		return jsonObj.toString();
+	}
+	
+	
+	@ResponseBody
+	@GetMapping("/community/viewCommentOnly.do")
+	public String viewCommentOnly(HttpServletRequest request) {
+		String parentseq = request.getParameter("parentseq");
+		
+		List<Map<String,String>> commentList = service.getNoticeComment(parentseq);
+		
+		JSONArray jsonArr = new JSONArray();
+		
+		for(Map<String,String> commentmap : commentList) {
+			JSONObject jsonObj = new JSONObject();
+			
+			jsonObj.put("noticecommentseq", commentmap.get("noticecommentseq"));
+			jsonObj.put("parentseq", commentmap.get("parentseq"));
+			jsonObj.put("comment_text", commentmap.get("comment_text"));
+			jsonObj.put("registerdate", commentmap.get("registerdate"));
+			jsonObj.put("fk_userid", commentmap.get("fk_userid"));
+			jsonObj.put("memberimg", commentmap.get("memberimg"));
+			
+			jsonArr.put(jsonObj);
+		}
+		
+		return jsonArr.toString();
+	}
+	
+	
+	@ResponseBody
+	@PostMapping("/community/editNoticeComment.do")
+	public String editNoticeComment(HttpServletRequest request) {
+		
+		String comment_text = request.getParameter("edit_comment_text");
+		String noticecommentseq = request.getParameter("commentseq");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		
+		paramap.put("comment_text", comment_text);
+		paramap.put("noticecommentseq", noticecommentseq);
+		
+		int n = service.editNoticeComment(paramap);
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+		
+		return jsonObj.toString();
+	}
+	
+	
 	
 	
 }

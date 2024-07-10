@@ -116,6 +116,20 @@ public interface AmadoService_NR {
 	int editNoticeBy1(NoticeVO nvo);
 	int editNoticeBy2(NoticeVO nvo);
 	int editNoticeBy3(NoticeVO nvo);
+
+	// 공지사항 조회수 올리기
+	void updateNoticeViewcount(String noticeseq);
+
+	// 댓글 작성하기
+	int insertNoticeComment(Map<String, String> paramap);
+	void updateNoticeCommentcount(String parentseq);
+
+	// 댓글 삭제
+	int delNoticeComment(String noticecommentseq);
+	void updateNoticeCommentcount_del(String parentseq);
+
+	// 댓글 수정
+	int editNoticeComment(Map<String, String> paramap);
 	
 
 

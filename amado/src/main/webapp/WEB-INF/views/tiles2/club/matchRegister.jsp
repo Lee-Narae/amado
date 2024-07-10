@@ -103,11 +103,54 @@ margin-bottom: 5%;
 .sweet-alert h2{
 font-size: 15pt;
 }
+
+/* table#modalTable * {
+ border: solid 1px gray;
+} */
+
+table#modalTable td {
+height: 45px;
+align-content: center;
+}
+
+table#modalTable > tr {
+margin-bottom: 3%;
+}
+
+#modalTable > tbody > tr:nth-child(1) > td:nth-child(1),
+#modalTable > tbody > tr:nth-child(2) > td:nth-child(1) {
+background-color: #80bfff;
+color: white;
+font-weight: bold;
+}
+
+#modalTable > tbody > tr:nth-child(1) > td:nth-child(2),
+#modalTable > tbody > tr:nth-child(2) > td:nth-child(2) {
+padding: 2% 0;
+padding-left: 5%;
+background-color: #e6f2ff;
+}
+
+
 </style>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/i18n/jquery-ui-i18n.min.js"></script>
 <script type="text/javascript">
 $(function(){
+	
+	$(".app_memberCount").spinner({
+        spin: function(event, ui) {
+           if(ui.value > 100) {
+              $(this).spinner("value", 100);
+              return false;
+           }
+           else if(ui.value < 0) {
+              $(this).spinner("value", 0);
+              return false;
+           }
+        }
+    });
+	
 	$.datepicker.setDefaults($.datepicker.regional['ko']);
     $( "#datepicker" ).datepicker({dateFormat: 'yy-mm-dd', minDate: 0});
     
@@ -259,7 +302,7 @@ function searchMatch(){
 					   	 <td style="width: 10%;">\${item.membercount}</td>`;
 
 					if(item.status == '0'){
-						v_html += `<td style="width: 20%;"><button class='btn btn-primary'>매치 신청하기</button></td>`;
+						v_html += `<td style="width: 20%;"><button class='btn btn-primary' data-toggle="modal" data-target="#matchApplyModal" onclick="modalInfo(\${item.matchingregseq}, '\${item.clubname}')">매치 신청하기</button></td>`;
 					}
 					
 					else {
@@ -313,6 +356,11 @@ function searchMatch(){
 	
 }
 
+// 모달에 값 넣어주는 용도
+function modalInfo(matchingregseq, clubname){
+	console.log(matchingregseq);
+	console.log(clubname);
+}
 
 function goRegister(){
 	
@@ -458,5 +506,47 @@ function goRegister(){
 	</form>
 	
 	<div id="bottom" style="width: 80%; min-height: 700px; margin-top: -10%; margin-bottom: 5%;"></div>
+
+
+<!-- Modal -->
+<!-- Modal 구성 요소는 현재 페이지 상단에 표시되는 대화 상자/팝업 창입니다. -->
+<div class="modal fade" id="matchApplyModal" style="margin-top: 5%;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      
+      <!-- Modal header -->
+      <div class="modal-header">
+        <h5 class="modal-title" style="font-weight: bold;">매치 신청하기</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body" style="height: 250px;">
+        
+        <div style="font-size: 20pt; font-weight: bold; margin-top: 5%;">
+        	<span style="color: blue;">팀 A</span> vs <span style="color: red;">팀 B</span>
+        </div>
+        
+        <table id="modalTable" style="width: 95%; margin-top: 5%;">
+        	<tr>
+        		<td align="center">인원</td>
+        		<td><input type="text" class="spinner app_memberCount" value="0" style="height: 30px; width: 40px;"/></td>
+        	</tr>
+        	<tr>
+        		<td align="center">요청 메세지</td>
+        		<td><input type="text" id="message" maxlength="50" style="width: 90%; height: 50px; border-radius: 15px; border: solid 1px gray;" /></td>
+        	</tr>
+        </table>
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+        <button type="button" class="btn btn-primary">신청하기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 </div>
