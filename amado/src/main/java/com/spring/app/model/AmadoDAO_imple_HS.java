@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.spring.app.domain.GymVO;
+import com.spring.app.domain.PhotoVO;
 
 @Repository
 public class AmadoDAO_imple_HS implements AmadoDAO_HS {
@@ -22,6 +23,16 @@ public class AmadoDAO_imple_HS implements AmadoDAO_HS {
 	@Override
 	public int add_withFile(GymVO gymvo) {
 		int n = sqlsession.insert("HS.add_withFile", gymvo);
+		return n;
+	}
+
+
+
+
+
+	@Override
+	public int add_photofile(PhotoVO pthotovo) {
+		int n = sqlsession.insert("HS.add_photofile", pthotovo);
 		return n;
 	}
 

@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.spring.app.common.FileManager;
 import com.spring.app.domain.GymVO;
 import com.spring.app.domain.MemberVO;
+import com.spring.app.domain.PhotoVO;
 import com.spring.app.service.AmadoService_HS;
 
 
@@ -64,7 +65,7 @@ public class ControllerHS {
 	
 	//체육관 등록  완료 요청
 	@PostMapping("/gym/registerGymend.do")
-	public ModelAndView registerGym(Map<String, String> paraMap ,ModelAndView mav,HttpServletRequest request, GymVO gymvo ,MultipartHttpServletRequest mrequest) throws Exception  { // <== After Advice 를 사용하기 전
+	public ModelAndView registerGym(Map<String, String> paraMap ,ModelAndView mav,HttpServletRequest request, GymVO gymvo ,PhotoVO photovo, MultipartHttpServletRequest mrequest) throws Exception  { // <== After Advice 를 사용하기 전
 	
 		MultipartFile attach = gymvo.getAttach();
 		
@@ -108,7 +109,6 @@ public class ControllerHS {
 			try {
 				bytes= attach.getBytes();
 				//첨부파일의 내용물을 읽어오는 것
-				
 				String originalFilename=attach.getOriginalFilename();
 				// attach.getOriginalFilename() 이 첨부파일명의 파일명(예: 강아지.png) 이다.
 				
@@ -141,20 +141,21 @@ public class ControllerHS {
 	
 	  System.out.println("1"+gymvo.getAttach());
 	  System.out.println("2"+gymvo.getGymname());
-	  System.out.println("3"+gymvo.getFk_userid());
-	  System.out.println("4"+gymvo.getPostcode());
-	  System.out.println("5"+gymvo.getAddress());
+	  System.out.println("3 "+gymvo.getFk_userid());
+	  System.out.println("4 "+gymvo.getPostcode());
+	  System.out.println("5 "+gymvo.getAddress());
 	 
-	  System.out.println("6"+gymvo.getDetailaddress());
+	  System.out.println("6 "+gymvo.getDetailaddress());
 	  
-	  System.out.println("8"+gymvo.getInsidestatus());
-	  System.out.println("9"+gymvo.getInfo());
-	  System.out.println("10"+gymvo.getImgfilename());
+	  System.out.println("7 "+gymvo.getInsidestatus());
+	  System.out.println("8 "+gymvo.getInfo());
+	  System.out.println("9 "+gymvo.getImgfilename());
 	  
-	  System.out.println("11"+gymvo.getCost());
-	  System.out.println("12"+gymvo.getCaution());
-	  System.out.println("10"+gymvo.getMembercount());
-	 
+	  System.out.println("10"+gymvo.getCost());
+	  System.out.println("11 "+gymvo.getCaution());
+	  System.out.println("12 "+gymvo.getMembercount());
+	  System.out.println("13 "+photovo.getSeveral_photos());
+	  System.out.println("14 "+request.getParameter("several_photos"));
 
 //
 //		HttpSession session2 = request.getSession();
@@ -169,6 +170,9 @@ public class ControllerHS {
 		if(!(attach.isEmpty())) {
 			//파일 첨부가  있는 경우라면 
 			n=service.add_withFile(gymvo);
+			if(n==1) {
+				n=service.add_photofile(photovo);
+			}
 			
 		}
 		
