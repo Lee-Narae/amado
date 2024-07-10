@@ -23,5 +23,9 @@ public interface AmadoDAO_JH {
 
 	List<FleamarketCommentReVO> getCommentreList(String fleamarketcommentseq);
 
+	int addReComment(FleamarketCommentReVO fmcommentrevo);
+
+	int updateReCommentCount(String fleamarketcommentseq);
+
 
 }

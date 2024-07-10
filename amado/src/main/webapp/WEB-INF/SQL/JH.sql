@@ -42,6 +42,7 @@ values(1, 1, '서울', '호날두가 신었던 축구화 팝니다!!', '제가 �
 ALTER TABLE tbl_member ADD (memberImg VARCHAR2(50));
 ALTER TABLE tbl_gym ADD (insidestatus number(1));
 ALTER TABLE tbl_fleamarketcomment ADD (changestatus number(1) default 0);
+ALTER TABLE tbl_fleamarketcomment ADD (recommentcount number(5) default 0);
 
 update tbl_fleamarket set commentCount = commentCount+1
 where fleamarketseq = 1
