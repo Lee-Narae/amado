@@ -93,14 +93,40 @@ public class AmadoService_imple_JH implements AmadoService_JH {
 		int n1=0, result=0;
 		
 		n1 = dao.addReComment(fmcommentrevo); // 댓글쓰기(tbl_comment 테이블에 insert)
-		System.out.println("~~~ 확인용n1: " + n1);
+		//System.out.println("~~~ 확인용n1: " + n1);
 		
 		if(n1 == 1) {
 			result = dao.updateReCommentCount(fmcommentrevo.getFleamarketcommentseq());  // tbl_board 테이블에 commentCount 컬럼이 1증가(update)
-			System.out.println("~~~ 확인용result: " + result);
+			//System.out.println("~~~ 확인용result: " + result);
 		}
 		
 		return result;
+	}
+
+
+
+	@Override
+	public int updateReComment(Map<String, String> paraMap) {
+		int n = dao.updateReComment(paraMap);
+		return n;
+	}
+
+
+
+	@Override
+	public int deleteReComment(Map<String, String> paraMap) {
+
+		int n = dao.deleteReComment(paraMap.get("fleamarketcommentreplyseq"));
+		
+		int m = 0;
+		if(n==1) {
+			// 댓글삭제시 tbl_board 테이블에 commentCount 컬럼이 1감소(update)
+			m = dao.updateReCommentCount_decrease(paraMap.get("fleamarketcommentseq"));
+			// System.out.println("~~~ 확인용 m : " + m);
+			// ~~~ 확인용 m : 1
+		}
+		
+		return n*m;
 	}
 
 }

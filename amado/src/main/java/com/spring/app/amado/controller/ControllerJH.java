@@ -40,7 +40,7 @@ public class ControllerJH {
 	
 	
 	@ResponseBody
-	@PostMapping(value="/addComment.action", produces="text/plain;charset=UTF-8")
+	@PostMapping(value="/addComment.do", produces="text/plain;charset=UTF-8")
 	public String addComment(FleamarketCommentVO fmcommentvo, HttpServletRequest request) {
 		// 댓글쓰기에 첨부파일이 없는 경우
 		String name = request.getParameter("name");
@@ -322,6 +322,54 @@ public class ControllerJH {
 	*/
 	
 	
+	
+	
+	// === 답글 수정(Ajax 로 처리) === //
+	@ResponseBody
+	@PostMapping(value="/updateReComment.do", produces="text/plain;charset=UTF-8")
+	public String updateReComment(HttpServletRequest request) {
+		
+		String fleamarketcommentreplyseq = request.getParameter("fleamarketcommentreplyseq");
+		String commentreply_text = request.getParameter("content");
+		
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("fleamarketcommentreplyseq", fleamarketcommentreplyseq);
+		paraMap.put("commentreply_text", commentreply_text);
+		
+		int n = service.updateReComment(paraMap);
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+		
+		return jsonObj.toString(); // "{"n":1}"
+	}
+	
+		
+	
+	
+	@ResponseBody
+	@PostMapping(value="/deleteReComment.do", produces="text/plain;charset=UTF-8") 
+	public String deleteReComment(HttpServletRequest request) {
+		
+		String fleamarketcommentreplyseq = request.getParameter("fleamarketcommentreplyseq");
+		String fleamarketcommentseq = request.getParameter("fleamarketcommentseq");
+		
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("fleamarketcommentreplyseq", fleamarketcommentreplyseq);
+		paraMap.put("fleamarketcommentseq", fleamarketcommentseq);
+		
+		int n=0;
+		try {
+			n = service.deleteReComment(paraMap);
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+		
+		return jsonObj.toString(); // "{"n":1}"
+	}
 	
 	
 	@GetMapping("/club/myClub_plus.do")

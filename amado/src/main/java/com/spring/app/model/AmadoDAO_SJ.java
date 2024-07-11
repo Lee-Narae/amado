@@ -48,7 +48,7 @@ public interface AmadoDAO_SJ {
 	
 	
 	// 댓글쓰기(tbl_boardcomment 테이블에 insert)
-	int addBoardComment(BoardCommentVO bdcmtvo);
+	int addBoardComment(BoardCommentVO boardcommentvo);
 
 	// 원게시물에 딸린 댓글들을 조회해오기
 	List<BoardCommentVO> readComment(String parentseq);
@@ -64,6 +64,12 @@ public interface AmadoDAO_SJ {
 
 	// 댓글 수정
 	int updateComment(Map<String, String> paraMap);
+
+	// 댓글의 GroupnoMax 알아오기
+	int getGroupnoMax();
+
+	// 답글쓰기
+	int addReply(BoardCommentVO boardcmtvo);
 
 	
 

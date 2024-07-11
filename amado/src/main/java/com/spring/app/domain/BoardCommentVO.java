@@ -10,7 +10,7 @@ boardcommentseq          NUMBER                                   -- 댓글번�
 ,fk_userid                nvarchar2(20)                            -- 아이디(FK) 	
 */
 	
-	private String boardcommentseq, parentseq, comment_text, registerdate, fk_userid, status;
+	private String boardcommentseq, parentseq, comment_text, registerdate, fk_userid, status, groupno, fk_boardcommentseq, depthno;
 
 	public String getBoardcommentseq() {
 		return boardcommentseq;
@@ -58,6 +58,30 @@ boardcommentseq          NUMBER                                   -- 댓글번�
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getGroupno() {
+		return groupno;
+	}
+
+	public void setGroupno(String groupno) {
+		this.groupno = groupno;
+	}
+
+	public String getFk_boardcommentseq() {
+		return fk_boardcommentseq;
+	}
+
+	public void setFk_boardcommentseq(String fk_boardcommentseq) {
+		this.fk_boardcommentseq = fk_boardcommentseq;
+	}
+
+	public String getDepthno() {
+		return depthno;
+	}
+
+	public void setDepthno(String depthno) {
+		this.depthno = depthno;
 	}
 	
 	

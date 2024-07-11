@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.spring.app.domain.ClubVO;
+import com.spring.app.domain.FleamarketVO;
 
 public interface AmadoDAO_JY {
 	
@@ -25,5 +26,8 @@ public interface AmadoDAO_JY {
 
 	// 상품 select 헤오기
 	List<Map<String, String>> getSportNameList(String sportname);
+
+	// 상품등록  완료 요청(파일첨부ㅇ)
+	int add_withFile(FleamarketVO fvo);
 		
 }

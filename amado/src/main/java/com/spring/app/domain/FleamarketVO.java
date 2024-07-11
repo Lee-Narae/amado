@@ -1,5 +1,7 @@
 package com.spring.app.domain;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class FleamarketVO {
 
 	private String fleamarketseq;
@@ -18,10 +20,30 @@ public class FleamarketVO {
 	private String status;
 	private String imgfilename;
 	
+	private MultipartFile attach;
+	   /* form 태그에서 type="file" 인 파일을 받아서 저장되는 필드이다. 
+	         진짜파일 ==> WAS(톰캣) 디스크에 저장됨.
+	             조심할것은 MultipartFile attach 는 오라클 데이터베이스 tbl_comment 테이블의 컬럼이 아니다.   
+	      /board/src/main/webapp/WEB-INF/views/tiles1/board/view.jsp 파일에서 input type="file" 인 name 의 이름(attach)과  
+	        동일해야만 파일첨부가 가능해진다.!!!!
+	 */
+	private String wasfileName;    // WAS(톰캣)에 저장될 파일명(2024070109291535243254235235234.png) 
+
 	
 	
 	
-	
+	public MultipartFile getAttach() {
+		return attach;
+	}
+	public void setAttach(MultipartFile attach) {
+		this.attach = attach;
+	}
+	public String getWasfileName() {
+		return wasfileName;
+	}
+	public void setWasfileName(String wasfileName) {
+		this.wasfileName = wasfileName;
+	}
 	public String getFleamarketseq() {
 		return fleamarketseq;
 	}
