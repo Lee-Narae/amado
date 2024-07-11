@@ -108,8 +108,8 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 	
 	// 댓글쓰기(tbl_boardcomment 테이블에 insert)
 	@Override
-	public int addBoardComment(BoardCommentVO bdcmtvo) {
-		int n = sqlsession.insert("SJ.addBoardComment", bdcmtvo);
+	public int addBoardComment(BoardCommentVO boardcommentvo) {
+		int n = sqlsession.insert("SJ.addBoardComment", boardcommentvo);
 		return n;
 	}
 
@@ -145,6 +145,20 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 	@Override
 	public int updateComment(Map<String, String> paraMap) {
 		int n = sqlsession.update("SJ.updateComment", paraMap);
+		return n;
+	}
+
+	@Override
+	public int getGroupnoMax() {
+		int maxgrouno = sqlsession.selectOne("SJ.getGroupnoMax");
+	    return maxgrouno;
+	}
+
+	// 답글쓰기
+	@Override
+	public int addReply(BoardCommentVO boardcmtvo) {
+		int n = 0;
+		n = sqlsession.insert("SJ.addReply", boardcmtvo);
 		return n;
 	}
 

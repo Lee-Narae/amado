@@ -325,8 +325,9 @@
 	<!-- === 댓글쓰기(tbl_comment 테이블에 insert) === -->
 	<insert id="addBoardComment" parameterType="BoardCommentVO">
 	<!-- 첨부파일이 없는 경우 -->
-		insert into tbl_boardcomment(boardcommentseq, parentseq, comment_text, registerdate, fk_userid, status)
-		values(seq_boardcomment.nextval, #{parentseq}, #{comment_text}, default, #{fk_userid}, default)
+	<!-- 원글쓰기 -->
+		insert into tbl_boardcomment(boardcommentseq, parentseq, comment_text, registerdate, fk_userid, status, groupno, fk_boardcommentseq, depthno)
+		values(seq_boardcomment.nextval, #{parentseq}, #{comment_text}, default, #{fk_userid}, default, #{groupno}, default, default)	
 	</insert>
 
 
@@ -339,8 +340,9 @@
 
 	<!-- === 원게시물에 딸린 댓글들을 조회해오기 === -->
 	<select id="readComment" parameterType="String" resultType="BoardCommentVO">
-		select boardcommentseq, fk_userid, comment_text
+		select boardcommentseq, parentseq, comment_text
 		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') as registerdate
+		     , fk_userid, status, groupno, fk_boardcommentseq, depthno
 		from tbl_boardcomment
 		where status = 1 and parentseq = #{parentseq}
 		order by boardcommentseq desc
@@ -364,4 +366,18 @@
 		where boardcommentseq = to_number(#{boardcommentseq})
 	</update>	
 
+
+	<!--  groupno 컬럼의 최대값 알아오기 -->
+	<select id="getGroupnoMax" resultType="int">
+		select NVL(max(groupno), 0)
+		from tbl_boardcomment
+	</select>
+	
+	<!-- 답글쓰기 -->
+	<insert id="addReply" parameterType="BoardCommentVO">
+		insert into tbl_boardcomment(boardcommentseq, parentseq, comment_text, registerdate, fk_userid, status, groupno, fk_boardcommentseq, depthno)
+		values(seq_boardcomment.nextval, #{parentseq}, #{comment_text}, default, #{fk_userid}, default, #{groupno}, ${fk_boardcommentseq}, #{depthno}+1)	
+	</insert>
+	
+	
 </mapper>

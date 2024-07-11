@@ -261,16 +261,13 @@ public class ControllerSJ {
 	// === 댓글쓰기(Ajax 로 처리) === //
 	@ResponseBody
 	@PostMapping(value = "/addComment.do", produces = "text/plain;charset=UTF-8")
-	public String addComment(BoardCommentVO bdcmtvo) {
+	public String addComment(BoardCommentVO boardcommentvo) {
 		// 댓글쓰기에 첨부파일이 없는 경우
 
 		
 		int n = 0;
 		try {
-			n = service.addBoardComment(bdcmtvo);
-			// 댓글쓰기(insert) 및 원게시물(tbl_board 테이블)에 댓글의 개수 증가(update 1씩 증가)하기
-			// 이어서 회원의 포인트를 50점을 증가하도록 한다. (tbl_member 테이블에 point 컬럼의 값을 50 증가하도록 update
-			// 한다.)
+			n = service.addBoardComment(boardcommentvo);
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
@@ -278,6 +275,56 @@ public class ControllerSJ {
 		JSONObject jsonObject = new JSONObject(); // {}
 		jsonObject.put("n", n); // 정상일 경우 {"n":1} 문제가 생겼을 경우{"n":0}
 
+		return jsonObject.toString();
+		// 정상일 경우 {"n":1, "name":"엄정화"} 문제가 생겼을 경우(point 300 넘을 경우){"n":0, "name":"엄정화"}
+	}
+	
+	
+	
+	// === 답글쓰기(Ajax 로 처리) === //
+	@ResponseBody
+	@PostMapping(value = "/addReply.do", produces = "text/plain;charset=UTF-8")
+	public String addReply(HttpServletRequest request) {
+		// 댓글쓰기에 첨부파일이 없는 경우
+		String fk_boardcommentseq = request.getParameter("boardcommentseq");
+		String parentseq = request.getParameter("parentseq");
+		String groupno = request.getParameter("groupno");
+		String depthno = request.getParameter("depthno");
+		String fk_userid = request.getParameter("fk_userid");
+		String comment_text = request.getParameter("comment_text");
+		
+		System.out.println("~~ 확인용 fk_boardcommentseq : " + fk_boardcommentseq);
+		System.out.println("~~ 확인용 parentseq : " + parentseq);
+		System.out.println("~~ 확인용 groupno : " + groupno);
+		System.out.println("~~ 확인용 depthno : " + depthno);
+		System.out.println("~~ 확인용 fk_userid : " + fk_userid);
+		System.out.println("~~ 확인용 comment_text : " + comment_text);
+		
+ 		if (fk_userid == null) {
+ 			// 어차피 로그인 해야만 보이기 때문에 필요없는 과정이지만 혹시 모르니 만들었다.
+ 			fk_userid = " ";
+ 		}
+//		System.out.println("~~ 확인용 fk_userid : " + fk_userid);
+		
+		int n = 0;
+		
+		BoardCommentVO boardcommentvo = new BoardCommentVO();
+		
+		boardcommentvo.setFk_boardcommentseq(fk_boardcommentseq);
+		boardcommentvo.setGroupno(groupno);
+		boardcommentvo.setDepthno(depthno);
+		boardcommentvo.setParentseq(parentseq);
+		boardcommentvo.setComment_text(comment_text);
+		boardcommentvo.setFk_userid(fk_userid);
+
+		if(boardcommentvo != null) {
+			n = service.addReply(boardcommentvo); // 답글쓰기
+		}
+		
+		
+		JSONObject jsonObject = new JSONObject(); // {}
+		jsonObject.put("n", n); // 정상일 경우 {"n":1} 문제가 생겼을 경우{"n":0}
+		
 		return jsonObject.toString();
 		// 정상일 경우 {"n":1, "name":"엄정화"} 문제가 생겼을 경우(point 300 넘을 경우){"n":0, "name":"엄정화"}
 	}
@@ -289,7 +336,7 @@ public class ControllerSJ {
 	@GetMapping(value = "/readComment.do", produces = "text/plain;charset=UTF-8")
 	public String readComment(HttpServletRequest request) {
 		String parentseq = request.getParameter("parentseq");
-
+		
 		// 원게시물에 딸린 댓글들을 조회해오기
 		List<BoardCommentVO> bdcmtList = service.readComment(parentseq);
 
@@ -299,9 +346,13 @@ public class ControllerSJ {
 			for (BoardCommentVO bdcmtvo : bdcmtList) {
 				JSONObject jsonObj = new JSONObject(); // {}
 				jsonObj.put("boardcommentseq", bdcmtvo.getBoardcommentseq()); 
+				jsonObj.put("parentseq", bdcmtvo.getParentseq()); 
 				jsonObj.put("fk_userid", bdcmtvo.getFk_userid()); 
 				jsonObj.put("comment_text", bdcmtvo.getComment_text()); 
 				jsonObj.put("registerdate", bdcmtvo.getRegisterdate()); 
+				jsonObj.put("groupno", bdcmtvo.getGroupno()); 
+				jsonObj.put("fk_boardcommentseq", bdcmtvo.getFk_boardcommentseq()); 
+				jsonObj.put("depthno", bdcmtvo.getDepthno()); 
 				
 				jsonArr.put(jsonObj);
 			}
@@ -310,7 +361,10 @@ public class ControllerSJ {
 		return jsonArr.toString(); 
 	}
 	
-
+	
+	
+	
+	
 	
 	// === 댓글 삭제(Ajax 로 처리) === //
 	@ResponseBody

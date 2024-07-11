@@ -774,6 +774,7 @@ ALTER SESSION SET ddl_lock_timeout=60;
 rollback
 
 
+
 create table tbl_boardcomment    
 (boardcommentseq          NUMBER                                   -- 댓글번호(PK)
 ,parentseq                NUMBER                                   -- 게시판번호(FK)
@@ -813,6 +814,10 @@ alter table tbl_boardcomment add constraint CK_tbl_bdcmt_status check( status in
 
 select *
 from tbl_boardcomment
+order by boardcommentseq desc
+
+		select NVL(max(groupno), 0)
+		from tbl_boardcomment
 
 create sequence seq_boardcomment 
 start with 1
@@ -825,6 +830,13 @@ nocache;
 
 
 
+create sequence seq_fk_boardcommentseq
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
 
 
 

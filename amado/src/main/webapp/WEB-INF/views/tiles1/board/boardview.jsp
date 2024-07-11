@@ -62,6 +62,10 @@ a {
     #btnCancel:hover {
         background-color: lightgray; /* 마우스 오버 시 배경색 변경 */
     }
+    
+    .hidden {
+        display: none;
+    }    
 
 </style>
 
@@ -202,7 +206,6 @@ a {
 		
 		
 		
-		
 	}); // end of document
 	
 	function goAddWrite(){
@@ -248,57 +251,163 @@ a {
 
 		            if(json.length > 0) {
 		                $.each(json, function(index, item){
-		                    v_html += "<tr>";
-		                    v_html += "    <td>" + item.fk_userid + "</td>";
-		                    v_html += "    <td class='newcomment'>" + item.comment_text;
-
-		                    // 수정 삭제 버튼 추가
-		                    if("${sessionScope.loginuser != null}" && "${sessionScope.loginuser.userid}" == item.fk_userid) {
-		                        v_html += "        <div class='dropdown float-right'>";
-		                        v_html += "            <button class='btn dropdown-toggle' type='button' id='dropdownMenuButton' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
-		                        v_html += "            </button>";
-		                        v_html += "            <div class='dropdown-menu' aria-labelledby='dropdownMenuButton'>";
-		                        v_html += "                <button class='dropdown-item btnUpdateComment' type='button'>수정</button>"; // 수정 버튼
-		                        v_html += "                <input type='hidden' value='" + item.boardcommentseq + "' />"; // 숨겨진 입력 필드
-		                        v_html += "                <button class='dropdown-item btnDeleteComment' type='button'>삭제</button>"; // 삭제 버튼
-		                        v_html += "            </div>";
-		                        v_html += "        </div>";
-		                    }
-
-	                        v_html += "        <br>";
-	                        v_html += "        <div class='float-left'>";
-	                        v_html += "        	   <button type='button'>👍</button>"; 
-	                        v_html += "        	   <button type='button'>👎</button>"; 
-	                        v_html += "        	   <button type='button' onclick='addReply("+item.boardcommentseq+")'>답글</button>"; 
-	                        						// addReply(groupno, fk_boardcommentseq) fk_boardcommentseq 는 boardcommentseq 임
-	                        v_html += "        </div";
-		                    
-		                    v_html += "    </td>";
-		                    v_html += "    <td class='comment'>" + item.registerdate + "</td>";
-		                    v_html += "</tr>";
+		                	
+		                	// 댓글
+		                	if(item.depthno == 0) {
+			                    v_html += "<tr>";
+			                    v_html += "    <td>" + item.fk_userid + "</td>";
+			                    
+			                    v_html += "    <td class='newcomment'>" + item.comment_text;
+	
+			                    v_html += "<input type='hidden' name='boardcommentseq' value='" + item.boardcommentseq + "' />"; // 숨겨진 입력 필드
+			                    
+			                    // 수정 삭제 버튼 추가
+			                    if("${sessionScope.loginuser != null}" && "${sessionScope.loginuser.userid}" == item.fk_userid) {
+			                        v_html += "        <div class='dropdown float-right'>";
+			                        v_html += "            <button class='btn dropdown-toggle' type='button' id='dropdownMenuButton' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
+			                        v_html += "            </button>";
+			                        v_html += "            <div class='dropdown-menu' aria-labelledby='dropdownMenuButton'>";
+			                        v_html += "                <button class='dropdown-item btnUpdateComment' type='button'>수정</button>"; // 수정 버튼
+			                        v_html += "                <input type='hidden' value='" + item.boardcommentseq + "' />"; // 숨겨진 입력 필드
+			                        v_html += "                <button class='dropdown-item btnDeleteComment' type='button'>삭제</button>"; // 삭제 버튼
+			                        v_html += "            </div>";
+			                        v_html += "        </div>";
+			                    } // 로그인한 아이디와 댓글의 아이디가 같을 경우 수정 삭제 버튼 추가
+	
+			                    v_html += "        <br>";
+			                    
+		                        if($("input:text[name='fk_userid']").val() != null) {
+			                        v_html += "        <div class='float-left'>";
+			                        v_html += "        	   <button type='button'>👍</button>"; 
+			                        v_html += "        	   <button type='button'>👎</button>"; 
+			                        v_html += "        	   <button type='button' onclick='showAddReply("+item.boardcommentseq+")'>답글</button>"; 
+			                        v_html += "        	   <div class='hidden mt-3' id='"+item.boardcommentseq+"reply_comment'> ";
+			                        v_html += "        	   	<input type='text' size='70' maxlength='1000' class='"+item.boardcommentseq+"replyComment' />";
+			                        v_html += "			   	<br>";	
+			                        v_html += "        	   	<button type='button' class='float-right mt-3 mb-3' onclick='addReply(" + item.boardcommentseq + "," + item.groupno + "," + item.depthno + "," + item.parentseq + ")'>답글</button>";
+			                        v_html += "        	   </div>";
+			                        v_html += "        </div>";
+			                        v_html += "        <br>";
+			                        v_html += "        </div>";
+		                        } // 로그인 했을 경우 좋아요, 싫어요, 답글 버튼 보여주기
+		                        
+		                        v_html += "        <div id='"+item.boardcommentseq+"addReplyDisplay'></div>";
+			                    v_html += "    </td>";
+			                    v_html += "    <td class='comment'>" + item.registerdate + "</td>";
+			                    v_html += "</tr>";
+		                	}
 		                });
+		                
 		            } else {
 		                v_html += "<tr>";
 		                v_html += "    <td colspan='3'>댓글이 없습니다.</td>";
 		                v_html += "</tr>";
 		            }
-
-		            var v_html2 = "";
+		            
+		            let v_html2 = "";
 		            v_html2 += "<tr>";
 		            v_html2 += "    <th>작성자</th>";
 		            v_html2 += "    <th>내용</th>";
 		            v_html2 += "    <th class='comment'>작성일자</th>";
 		            v_html2 += "</tr>";
-
+		            
+		            
 		            $("thead#commentTheadDisplay").html(v_html2);
 		            $("tbody#commentDisplay").html(v_html);
 
+		            // 답글
+		            
+		            
+		            
+		            if(json.length > 0) {
+		            	let boardcommentseq = "";
+		            	
+	                    boardcommentseq = $("input:hidden[name='boardcommentseq']").val()
+	                    console.log(boardcommentseq);
+	                    
+			            let v_html3 = "<table><tbody>";
+
+		                $.each(json, function(index, item){
+							if(boardcommentseq == item.fk_boardcommentseq && item.depthno != 0) {
+									
+			            		v_html3 += "<tr>";
+			                	v_html3 += "	<td>";
+			                	v_html3 +=			 item.fk_userid;
+			                	v_html3 += "	</td>";
+			                	v_html3 += "	<td>";
+			                	v_html3 +=			 item.comment_text;
+			                	v_html3 += "	</td>";
+			                	v_html3 += "	<td>";
+			                	v_html3 +=			 item.registerdate;
+			                	v_html3 += "	</td>";
+			                	v_html3 += "</tr>";
+								
+								
+							}
+		                });
+			            v_html3 += "</tbody></table>";
+
+						$("div#"+boardcommentseq+"addReplyDisplay").html(v_html3);
+		            }
+		                
 		        },
 		        error: function(request, status, error){
 		            alert("code: " + request.status + "\n" + "message: " + request.responseText + "\n" + "error: " + error);
 		        }
 		    });
-		}
+		} // end of goReadComment
+		
+		
+		function showAddReply(boardcommentseq) {
+            const content = $("#"+boardcommentseq+"reply_comment");
+            if (content.hasClass("hidden")) {
+                content.removeClass("hidden");
+            } else {
+                content.addClass("hidden");
+            }
+		} // end of showAddReply()
+		
+		function addReply(boardcommentseq, groupno, depthno, parentseq) {
+
+<%-- 			alert(boardcommentseq);
+			alert(groupno);
+			alert(depthno);
+			alert("<%=ctxPath%>"); --%>
+			
+//			alert($("input."+boardcommentseq+"replyComment").val());
+			
+			const comment_text = $("input."+boardcommentseq+"replyComment").val();
+			
+//			alert(comment_text);
+			
+			if(comment_text == null || comment_text == "") {
+				alert("답변 내용이 없습니다.");
+			}
+			
+			if(comment_text != null && comment_text != "") {
+			    $.ajax({
+			        url: "<%=ctxPath%>/addReply.do",
+			        data: {"boardcommentseq":boardcommentseq,
+			        	   "groupno":groupno,
+			        	   "parentseq":parentseq,
+			        	   "depthno":depthno,
+			        	   "fk_userid":$("input:text[name='fk_userid']").val(),
+			        	   "comment_text":comment_text},
+			       	type: "post",		        	   
+			        dataType: "json",
+			        success: function(json){
+			        	if(json.n == 1) {
+			        		goReadComment();
+			        	}
+			        },
+			        error: function(request, status, error){
+			            alert("code: " + request.status + "\n" + "message: " + request.responseText + "\n" + "error: " + error);
+			        }
+			    });		
+			}
+		} // end of addReply(boardcommentseq)
+		
+	
 
 
 </script>
