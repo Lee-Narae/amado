@@ -27,5 +27,11 @@ public interface AmadoDAO_JH {
 
 	int updateReCommentCount(String fleamarketcommentseq);
 
+	int updateReComment(Map<String, String> paraMap);
+
+	int deleteReComment(String fleamarketcommentreplyseq);
+
+	int updateReCommentCount_decrease(String fleamarketcommentseq);
+
 
 }
