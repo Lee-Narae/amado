@@ -420,7 +420,13 @@
 		where matchingregseq = #{matchingregseq} and clubseq = #{clubseq}
 	</select>	
 	
+	<select id="findId" parameterType="HashMap" resultType="MemberVO">
+		select userid from tbl_member
+		where name = #{name} and email = #{email}
+	</select>
 	
-	
-	
+	<select id="findpw" parameterType="HashMap" resultType="MemberVO">
+		select userid from tbl_member
+		where name = #{name} and userid = #{userid} and email = #{email}
+	</select>
 </mapper>

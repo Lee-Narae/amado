@@ -354,4 +354,18 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		return n;
 	}
 
+	// id찾기 - 이름과 이메일에 유효한 정보가 있는지
+	@Override
+	public MemberVO findId(Map<String, String> paramap) {
+		MemberVO member = sqlsession.selectOne("NR.findId", paramap);
+		return member;
+	}
+
+	// 비번 찾기
+	@Override
+	public MemberVO findpw(Map<String, String> paramap) {
+		MemberVO member = sqlsession.selectOne("NR.findpw", paramap);
+		return member;
+	}
+
 }

@@ -275,7 +275,7 @@ cursor: pointer;
 background-color: #4da9ff;
 }
 
-#idFind:hover, #pwdFind:hover {
+.find:hover {
 cursor: pointer;
 text-decoration:underline; 
 }
@@ -298,6 +298,16 @@ $(document).ready(function(){
 			goLogin();
 		}
 	});
+	
+	
+	// 아이디 찾기
+	$("div.find").click(function(){
+		
+		const way = $(event.target).attr('id');
+		location.href = `IdPwfind.do?find=\${way}`;
+		
+	});
+	
 	
 });
 
@@ -347,13 +357,13 @@ function goLogin(){
                 <div class="text-wrapper-2">Password</div>
                 <input class="password-wrapper" name="password" type="password" maxlength="20" placeholder="비밀번호를 입력하세요"/>
               </div>
-              <div class="text-wrapper-4" id="idFind">아이디 찾기</div>
-              <div class="text-wrapper-5" id="pwdFind">비밀번호 찾기</div>
-              <div class="text-wrapper-6">/</div>
+              <div class="text-wrapper-4 find" id="id">아이디 찾기</div>
+              <div class="text-wrapper-5 find" id="pw">비밀번호 찾기</div>
+              <div class="text-wrapper-6">&nbsp;/</div>
             </div>
             <div class="group-5">
               <div class="overlap-2" onclick="goLogin()"><div class="text-wrapper-7">로그인</div></div>
-              <div class="overlap-3"><div class="text-wrapper-8" onclick="location.href='<%=ctxPath%>/member/memberRegister.do'">회원가입</div></div>
+              <div class="overlap-3" onclick="location.href='<%=ctxPath%>/member/memberRegister.do'"><div class="text-wrapper-8">회원가입</div></div>
             </div>
             </form>
           </div>
@@ -364,3 +374,8 @@ function goLogin(){
     </div>
   </div>
 </div>
+
+<form name="wayFrm">
+<input type="hidden" name="way" />
+<input type="text" style="display: none;" />
+</form>

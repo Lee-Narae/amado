@@ -140,6 +140,12 @@ public interface AmadoService_NR {
 
 	// loginuser가 특정 매치에 신청했는지 안했는지 알아보는 것
 	int searchApply(Map<String, String> paramap2);
+
+	// id찾기 - 이름과 이메일에 유효한 정보가 있는지
+	MemberVO findId(Map<String, String> paramap);
+
+	// 비번찾기
+	MemberVO findpw(Map<String, String> paramap);
 	
 
 
