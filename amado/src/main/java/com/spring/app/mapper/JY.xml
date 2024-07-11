@@ -34,7 +34,8 @@
 	</update>
 	
 	
-	<resultMap type="HashMap" id="sportname"> <!-- 리스트 안에 맵을 쓰든, 그냥 맵쓰는 경우에 resultMap -->
+	<resultMap type="HashMap" id="sportMap"> <!-- 리스트 안에 맵을 쓰든, 그냥 맵쓰는 경우에 resultMap -->
+		<result property="fleamarketseq" column="fleamarketseq" javaType="String"/>
 		<result property="sportseq" column="sportseq" javaType="String"/>
 		<result property="city" column="city" javaType="String"/>
 		<result property="local" column="local" javaType="String"/>
@@ -49,8 +50,8 @@
 		<result property="status" column="status" javaType="String"/>
 		<result property="imgfilename" column="imgfilename" javaType="String"/>
 	</resultMap>
-	<select id="getSportNameList" resultType="HashMap" parameterType="String">
-		select S.sportseq, city, local, title, content, cost, deal, fk_userid, registerdate, commentcount, viewcount, status, imgfilename
+	<select id="getSportNameList" resultMap="sportMap" parameterType="String">
+		select fleamarketseq, S.sportseq, city, local, title, content, cost, deal, fk_userid, to_char(registerdate,'yyyy-mm-dd hh24:mi:ss') AS registerdate, commentcount, viewcount, status, imgfilename
 		from tbl_sport S
 		JOIN tbl_fleamarket F
 		ON S.sportseq = F.sportseq

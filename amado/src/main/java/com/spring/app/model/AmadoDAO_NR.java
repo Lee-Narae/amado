@@ -128,5 +128,15 @@ public interface AmadoDAO_NR {
 
 	// 댓글 수정
 	int editNoticeComment(Map<String, String> paramap);
+
+	// sportseq 얻어오기
+	String getSportseq(String matchingregseq);
+	Map<String, String> getUserClubname(Map<String, String> paramap);
+
+	// 매치 요청하기
+	int applyMatch(Map<String, String> paramap);
+
+	// loginuser가 특정 매치에 신청했는지 안했는지 알아보는 것
+	int searchApply(Map<String, String> paramap2);
 	
 }

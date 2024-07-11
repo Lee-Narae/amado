@@ -12,6 +12,7 @@
 		<typeAlias type="com.spring.app.domain.FleamarketCommentReVO" alias="FleamarketCommentReVO"/>
 		<typeAlias type="com.spring.app.domain.BoardCommentVO" alias="BoardCommentVO"/>
 		<typeAlias type="com.spring.app.domain.NoticeVO" alias="NoticeVO"/>
+		<typeAlias type="com.spring.app.domain.PhotoVO" alias="PhotoVO"/>
 
 	</typeAliases>
 </configuration>
