@@ -21,6 +21,9 @@ commit
 select *
 from tbl_fleamarketcomment;
 
+select *
+from tbl_fleamarket;
+
 insert into tbl_fleamarketcomment(fleamarketcommentseq, fleamarketseq, comment_text, registerdate, fk_userid)
 values(1, 1, '구매하고 싶은데 에눌 가능할까요?ㅎㅎ', default, 'chaew');
 
@@ -72,6 +75,10 @@ from tbl_fleamarketcomment
 
 select *
 from tbl_sport
+
+select *
+from tbl_fleamarketcommentreply
+
 
 select fleamarketcommentseq, fk_userid, comment_text
 		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate

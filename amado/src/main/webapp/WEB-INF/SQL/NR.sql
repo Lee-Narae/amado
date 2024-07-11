@@ -193,3 +193,32 @@ select * from tbl_notice;
 alter table tbl_notice add commentcount number default 0;
 update tbl_notice set commentcount = 4 where noticeseq = 102;
 commit;
+
+update tbl_notice set 
+		title = '첨부파일 테스트 수정',
+		content = '테스트중 수정',
+		registerdate = sysdate 
+        where noticeseq = 104;
+        
+        
+rollback;
+
+
+ALTER TABLE tbl_notice MODIFY orgfilename nvarchar2(100);
+
+desc tbl_noticecomment;
+
+select * from tbl_noticecomment;
+delete from tbl_noticecomment;
+commit;
+
+select * from tbl_notice;
+update tbl_notice set commentcount = 4 where noticeseq = 103;
+commit;
+
+
+alter table tbl_matchingapply add status number(1) default 0;
+
+select * from tbl_matchingapply;
+
+select * from tbl_matchingreg;

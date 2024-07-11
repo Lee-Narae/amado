@@ -78,5 +78,23 @@ public class AmadoDAO_imple_JH implements AmadoDAO_JH {
 		return n;
 	}
 
+	@Override
+	public int updateReComment(Map<String, String> paraMap) {
+		int n = sqlsession.update("JH.updateReComment", paraMap);
+		return n;
+	}
+
+	@Override
+	public int deleteReComment(String fleamarketcommentreplyseq) {
+		int n = sqlsession.delete("JH.deleteReComment", fleamarketcommentreplyseq);
+		return n;
+	}
+
+	@Override
+	public int updateReCommentCount_decrease(String fleamarketcommentseq) {
+		int n = sqlsession.update("JH.updateReCommentCount_decrease", fleamarketcommentseq);
+		return n;
+	}
+
 
 }

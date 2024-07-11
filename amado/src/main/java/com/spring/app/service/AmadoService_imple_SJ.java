@@ -142,17 +142,20 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	// rollbackFor= {Throwable.class} 오류 뜨면 그냥 롤백해줌.
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor= {Throwable.class})
-	public int addBoardComment(BoardCommentVO bdcmtvo) throws Throwable {
+	public int addBoardComment(BoardCommentVO boardcommentvo) throws Throwable {
 		
 		int n = 0; int result = 0;
-		n = dao.addBoardComment(bdcmtvo); // 댓글쓰기(tbl_boardcomment 테이블에 insert)
+		
+		int groupno = dao.getGroupnoMax()+1;
+		boardcommentvo.setGroupno(Integer.toString(groupno));
+		
+		n = dao.addBoardComment(boardcommentvo); // 댓글쓰기(tbl_boardcomment 테이블에 insert)
 //		System.out.println("~~~ 확인용 n1 : " + n1);
 		
 
 	  if(n == 1) { 
-		  result = dao.updateBoardCommentCount(bdcmtvo.getParentseq()); 
+		  result = dao.updateBoardCommentCount(boardcommentvo.getParentseq()); 
 		  //tbl_board 테이블에 commentCount 컬럼이 1증가(update) //
-		  
 	  }
 	  
 		return result;
@@ -198,6 +201,29 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 
 		int n = dao.updateComment(paraMap);
 		return n;
+	}
+
+	
+	// 답글 쓰기
+	@Override
+	public int addReply(BoardCommentVO boardcommentvo) {
+
+		int n = 0;
+		int result = 0;
+		
+		int groupno = dao.getGroupnoMax()+1;
+		System.out.println("groupno 확인용~~ : " + groupno);
+		boardcommentvo.setGroupno(Integer.toString(groupno)); 
+		
+		boardcommentvo.setGroupno(String.valueOf(groupno));
+		n = dao.addReply(boardcommentvo);
+		
+		if(n == 1) { 
+			result = dao.updateBoardCommentCount(boardcommentvo.getParentseq()); 
+		    //tbl_board 테이블에 commentCount 컬럼이 1증가(update) //
+		}
+		
+		return result;
 	}
 
 }

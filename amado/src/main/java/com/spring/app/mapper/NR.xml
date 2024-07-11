@@ -386,4 +386,41 @@
 		update tbl_noticecomment set comment_text = #{comment_text}, registerdate = sysdate
 		where noticecommentseq = #{noticecommentseq}
 	</update>
+	
+	<select id="getSportseq" parameterType="String" resultType="String">
+		select sportseq from tbl_matchingreg where matchingregseq = #{matchingregseq}
+	</select>
+	
+	
+	<resultMap type="HashMap" id="resultmap">
+		<result property="clubname" column="clubname" javaType="String"/>
+		<result property="clubseq" column="clubseq" javaType="String"/>
+	</resultMap>
+	<select id="getUserClubname" parameterType="HashMap" resultMap="resultmap">
+		select clubname, A.clubseq
+		from tbl_clubmember A join tbl_club B
+		on A.clubseq = B.clubseq
+		where A.sportseq = #{sportseq} and A.fk_userid = #{fk_userid}
+	</select>
+	
+	<insert id="applyMatch" parameterType="HashMap">
+		<if test="message != ''">
+		insert into tbl_matchingapply(matchingapplyseq, matchingregseq, clubseq, membercount, message, status)
+		values (SEQ_MATCHINGAPPLY.nextval, #{matchingregseq}, #{appclubseq}, #{membercount}, #{message}, 0)
+		</if>
+		<if test="message == ''">
+		insert into tbl_matchingapply(matchingapplyseq, matchingregseq, clubseq, membercount, status)
+		values (SEQ_MATCHINGAPPLY.nextval, #{matchingregseq}, #{appclubseq}, #{membercount}, 0)
+		</if>
+	</insert>
+	
+	<select id="searchApply" parameterType="HashMap" resultType="int">
+		select count(*)
+		from tbl_matchingapply
+		where matchingregseq = #{matchingregseq} and clubseq = #{clubseq}
+	</select>	
+	
+	
+	
+	
 </mapper>
