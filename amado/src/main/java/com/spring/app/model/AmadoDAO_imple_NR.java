@@ -328,4 +328,30 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		return n;
 	}
 
+	// sportseq 얻어오기
+	@Override
+	public String getSportseq(String matchingregseq) {
+		String sportseq = sqlsession.selectOne("NR.getSportseq", matchingregseq);
+		return sportseq;
+	}
+	@Override
+	public Map<String, String> getUserClubname(Map<String, String> paramap) {
+		Map<String, String> resultmap = sqlsession.selectOne("NR.getUserClubname", paramap);
+		return resultmap;
+	}
+
+	// 매치 요청하기
+	@Override
+	public int applyMatch(Map<String, String> paramap) {
+		int n = sqlsession.insert("NR.applyMatch", paramap);
+		return n;
+	}
+
+	// loginuser가 특정 매치에 신청했는지 안했는지 알아보는 것
+	@Override
+	public int searchApply(Map<String, String> paramap2) {
+		int n = sqlsession.selectOne("NR.searchApply", paramap2);
+		return n;
+	}
+
 }

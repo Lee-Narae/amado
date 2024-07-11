@@ -213,7 +213,6 @@ $(function(){
 		searchMatch();	
 	});
 
-    
 });
   
 
@@ -297,16 +296,20 @@ function searchMatch(){
    		    		
    					v_html += `<tr>
 					   	 <td style="width: 10%;">\${item.matchtime}</td>
-					   	 <td style="width: 30%;">\${item.clubname}</td>
+					   	 <td style="width: 30%;" id="td_clubname">\${item.clubname}</td>
 					   	 <td style="width: 30%; height: 30px;"><div style="font-size: 10pt;">\${item.city} > \${item.local}</div>\${item.area}</td>
 					   	 <td style="width: 10%;">\${item.membercount}</td>`;
 
-					if(item.status == '0'){
-						v_html += `<td style="width: 20%;"><button class='btn btn-primary' data-toggle="modal" data-target="#matchApplyModal" onclick="modalInfo(\${item.matchingregseq}, '\${item.clubname}')">매치 신청하기</button></td>`;
+					if(item.status == '0' && item.applystatus != "1"){
+						v_html += `<td style="width: 20%;"><button class='btn btn-primary' data-toggle="modal" data-target="#matchApplyModal" onclick="modalInfo(\${item.matchingregseq}, '\${item.clubname}')"${sessionScope.loginuser == null?'disabled':''}>${sessionScope.loginuser == null?'로그인하세요':'매치 신청하기'}</button></td>`;
+					}
+					
+					else if(item.status == "0" && item.applystatus == "1"){
+						v_html += `<td style="width: 20%;"><button class='btn btn-light' disabled>수락 대기 중</button></td>`;
 					}
 					
 					else {
-						v_html += `<td style="width: 20%;"><button class='btn btn-secondary'>마감</button></td>`;
+						v_html += `<td style="width: 20%;"><button class='btn btn-secondary' disabled>마감</button></td>`;
 					}
 					
 					v_html += `</tr>`;
@@ -358,9 +361,60 @@ function searchMatch(){
 
 // 모달에 값 넣어주는 용도
 function modalInfo(matchingregseq, clubname){
-	console.log(matchingregseq);
-	console.log(clubname);
+	// console.log(matchingregseq);
+	// console.log(clubname);
+
+	$("span#teamA").text(clubname);
+	
+	// 시합등록번호로 종목 알아오기
+	$.ajax({
+		url: "<%=ctxPath%>/club/getSportseq.do",
+		data: {"matchingregseq": matchingregseq},
+		dataType: "json",
+		success: function(json){
+			
+			console.log(JSON.stringify(json));
+			
+			if(json.clubname == clubname){
+				swal("본인이 속한 동호회의 매치는 신청할 수 없습니다.");
+				$("#matchApplyModal").modal("hide");
+				return;
+			}
+			
+			if(json.clubname == null){
+				swal("해당 종목은 동호회에 가입하지 않았으므로 매치 신청이 불가합니다.");
+				$("#matchApplyModal").modal("hide");
+				return;
+			}
+			
+			$("input#appclubseq").val(json.clubseq);
+			$("input#matchingregseq").val(matchingregseq);
+			$("span#teamB").text(json.clubname);
+			
+		},
+		error: function(request, status, error){
+			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		}
+	});
+
 }
+
+
+function goMatchApply(){
+	
+	if($("input[name='membercount']").val() > 0){
+		const f = document.applyFrm;
+		f.action = "<%=ctxPath%>/club/goApply.do",
+		f.method = "post";
+		f.submit();
+	}
+	
+	else {
+		alert('인원이 올바르지 않습니다.');
+		return;
+	}
+}
+
 
 function goRegister(){
 	
@@ -510,7 +564,7 @@ function goRegister(){
 
 <!-- Modal -->
 <!-- Modal 구성 요소는 현재 페이지 상단에 표시되는 대화 상자/팝업 창입니다. -->
-<div class="modal fade" id="matchApplyModal" style="margin-top: 5%;">
+<div class="modal modalclass" id="matchApplyModal" style="margin-top: 5%;">
   <div class="modal-dialog">
     <div class="modal-content">
       
@@ -524,25 +578,28 @@ function goRegister(){
       <div class="modal-body" style="height: 250px;">
         
         <div style="font-size: 20pt; font-weight: bold; margin-top: 5%;">
-        	<span style="color: blue;">팀 A</span> vs <span style="color: red;">팀 B</span>
+        	<span style="color: blue;" id="teamA">팀 A</span> vs <span style="color: red;" id="teamB">팀 B</span>
         </div>
-        
-        <table id="modalTable" style="width: 95%; margin-top: 5%;">
-        	<tr>
-        		<td align="center">인원</td>
-        		<td><input type="text" class="spinner app_memberCount" value="0" style="height: 30px; width: 40px;"/></td>
-        	</tr>
-        	<tr>
-        		<td align="center">요청 메세지</td>
-        		<td><input type="text" id="message" maxlength="50" style="width: 90%; height: 50px; border-radius: 15px; border: solid 1px gray;" /></td>
-        	</tr>
-        </table>
+        <form name="applyFrm" >
+	        <table id="modalTable" style="width: 95%; margin-top: 5%;">
+	        	<tr>
+	        		<td align="center">인원</td>
+	        		<td><input type="text" name="membercount" class="spinner app_memberCount" value="0" style="height: 30px; width: 40px;"/></td>
+	        	</tr>
+	        	<tr>
+	        		<td align="center">요청 메세지</td>
+	        		<td><input type="text" id="message" name="message" maxlength="50" style="width: 90%; height: 50px; border-radius: 15px; border: solid 1px gray;" /></td>
+	        	</tr>
+	        </table>
+        	<input type="hidden" id="appclubseq" name="appclubseq" />
+        	<input type="hidden" id="matchingregseq" name="matchingregseq" />
+        </form>
       </div>
       
       <!-- Modal footer -->
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
-        <button type="button" class="btn btn-primary">신청하기</button>
+        <button type="button" class="btn btn-primary" onclick="goMatchApply()">신청하기</button>
       </div>
     </div>
   </div>
