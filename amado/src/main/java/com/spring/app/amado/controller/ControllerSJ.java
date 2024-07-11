@@ -260,7 +260,7 @@ public class ControllerSJ {
 	
 	// === 댓글쓰기(Ajax 로 처리) === //
 	@ResponseBody
-	@PostMapping(value = "/addComment.do", produces = "text/plain;charset=UTF-8")
+	@PostMapping(value = "/addCommentSJ.do", produces = "text/plain;charset=UTF-8")
 	public String addComment(BoardCommentVO boardcommentvo) {
 		// 댓글쓰기에 첨부파일이 없는 경우
 

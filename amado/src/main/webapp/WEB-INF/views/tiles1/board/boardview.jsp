@@ -221,7 +221,7 @@ a {
 		   
 		   $.ajax({
 		      
-		      url: "<%=ctxPath%>/addComment.do",
+		      url: "<%=ctxPath%>/addCommentSJ.do",
 		      data: queryString,
 		      type: "post",     
 		      dataType: "json",
