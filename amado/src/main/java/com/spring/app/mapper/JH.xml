@@ -64,5 +64,20 @@
 		update tbl_fleamarketcomment set recommentcount = recommentcount+1
 		where fleamarketcommentseq = #{fleamarketcommentseq}
 	</update>
+	
+	<update id="updateReComment" parameterType="HashMap">
+        update tbl_fleamarketcommentreply set commentreply_text = #{commentreply_text}, registerdate = sysdate, changestatus = 1
+        where fleamarketcommentreplyseq = #{fleamarketcommentreplyseq}
+    </update>
+    
+    <delete id="deleteReComment" parameterType="String">
+        delete from tbl_fleamarketcommentreply
+        where fleamarketcommentreplyseq = #{fleamarketcommentreplyseq}
+    </delete>
+    
+    <update id="updateReCommentCount_decrease" parameterType="String">
+        update tbl_fleamarketcomment set recommentcount = recommentcount - 1 
+        where fleamarketcommentseq = #{fleamarketcommentseq}
+    </update>
 
 </mapper>

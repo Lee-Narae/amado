@@ -271,12 +271,43 @@ public class ControllerNR {
 		paramap.put("localname", localname);
 		paramap.put("matchdate", matchdate);
 		
+		
+		
 		List<Map<String,String>> matchList = service.searchMatch(paramap);
 		
 		JSONArray jsonArr = new JSONArray();
 		
 		for(Map<String,String> item :matchList) {
+
 			JSONObject jsonObj = new JSONObject();
+			
+			HttpSession session = request.getSession();
+			MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+			if(loginuser != null) {
+				String matchingregseq = item.get("matchingregseq");
+				String sportseq = service.getSportseq_forReg(sportname);
+				
+				Map<String, String> paramap2 = new HashMap<String, String>();
+				paramap2.put("sportseq", sportseq);
+				paramap2.put("userid", loginuser.getUserid());
+				
+				String userclubseq = service.getClubseq(paramap2);
+
+				if(userclubseq != null) {
+					paramap2.put("clubseq", userclubseq);
+					paramap2.put("matchingregseq", matchingregseq);
+					
+					int n = service.searchApply(paramap2);
+					
+					if(n != 0) {
+						jsonObj.put("applystatus", "1");
+					}
+					
+					else {
+						jsonObj.put("applystatus", "0");
+					}
+				}
+			}
 			
 			jsonObj.put("matchingregseq", item.get("matchingregseq"));
 			jsonObj.put("clubname", item.get("clubname"));
@@ -1393,6 +1424,64 @@ public class ControllerNR {
 		return jsonObj.toString();
 	}
 	
+	
+	@ResponseBody
+	@GetMapping("/club/getSportseq.do")
+	public String getSportseq(HttpServletRequest request) {
+		
+		String matchingregseq = request.getParameter("matchingregseq");
+		
+		String sportseq = service.getSportseq(matchingregseq);
+		
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("sportseq", sportseq);
+		paramap.put("fk_userid", loginuser.getUserid());
+		
+		Map<String, String> resultmap = service.getUserClubname(paramap);
+
+		JSONObject jsonObj = new JSONObject();
+
+		if(resultmap != null) {
+			jsonObj.put("clubname", resultmap.get("clubname"));
+			jsonObj.put("clubseq", resultmap.get("clubseq"));
+		}
+		
+		
+		return jsonObj.toString();
+	}
+	
+	
+	@PostMapping("/club/goApply.do")
+	public ModelAndView goApply(ModelAndView mav, HttpServletRequest request) {
+		
+		String membercount = request.getParameter("membercount");
+		String message = request.getParameter("message");
+		String appclubseq = request.getParameter("appclubseq");
+		String matchingregseq = request.getParameter("matchingregseq");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("membercount", membercount);
+		paramap.put("message", message);
+		paramap.put("appclubseq", appclubseq);
+		paramap.put("matchingregseq", matchingregseq);
+		
+		int n = service.applyMatch(paramap);
+		
+		if(n==1) {
+			String message1 = "매치 신청이 완료되었습니다. 상대팀의 수락 여부에 따라 매치가 결정됩니다.";
+			String loc = "matchRegister.do";
+			
+			mav.addObject("message", message1);
+			mav.addObject("loc", loc);
+			
+			mav.setViewName("msg");	
+		}
+		
+		return mav;
+	}
 	
 	
 	

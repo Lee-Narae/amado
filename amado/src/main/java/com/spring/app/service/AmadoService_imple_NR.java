@@ -442,6 +442,32 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		
 		return n;
 	}
+
+	// sportseq 얻어오기
+	@Override
+	public String getSportseq(String matchingregseq) {
+		String sportseq = dao.getSportseq(matchingregseq);
+		return sportseq;
+	}
+	@Override
+	public Map<String, String> getUserClubname(Map<String, String> paramap) {
+		Map<String, String> resultmap = dao.getUserClubname(paramap);
+		return resultmap;
+	}
+
+	// 매치 요청하기
+	@Override
+	public int applyMatch(Map<String, String> paramap) {
+		int n = dao.applyMatch(paramap);
+		return n;
+	}
+
+	// loginuser가 특정 매치에 신청했는지 안했는지 알아보는 것
+	@Override
+	public int searchApply(Map<String, String> paramap2) {
+		int n = dao.searchApply(paramap2);
+		return n;
+	}
 	
 	
 }

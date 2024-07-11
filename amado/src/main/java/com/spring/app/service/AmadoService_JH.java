@@ -20,5 +20,9 @@ public interface AmadoService_JH {
 
 	int addReComment(FleamarketCommentReVO fmcommentrevo) throws Throwable;
 
+	int updateReComment(Map<String, String> paraMap);
+
+	int deleteReComment(Map<String, String> paraMap);
+
 	
 }
