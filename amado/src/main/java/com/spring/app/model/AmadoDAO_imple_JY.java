@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.spring.app.domain.ClubVO;
+import com.spring.app.domain.FleamarketVO;
 
 @Repository
 public class AmadoDAO_imple_JY implements AmadoDAO_JY {
@@ -66,6 +67,13 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 	public List<Map<String, String>> getSportNameList(String sportname) {
 		List<Map<String, String>> sportNameList = sqlsession.selectList("JY.getSportNameList", sportname);
 		return sportNameList;
+	}
+
+	// 상품등록  완료 요청(파일첨부ㅇ)
+	@Override
+	public int add_withFile(FleamarketVO fvo) {
+		int n = sqlsession.insert("JY.add_withFilee",fvo);
+		return n;
 	}
 
 

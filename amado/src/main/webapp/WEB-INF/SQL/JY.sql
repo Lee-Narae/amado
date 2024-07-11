@@ -41,6 +41,9 @@ where userid = 'test1'
 select *
 from tbl_fleamarket
 
+select *
+from tbl_club
+
 -- 플리마켓 게시글 insert
 insert into tbl_fleamarket(fleamarketseq, sportseq, city, title, content, cost, deal, fk_userid, registerdate, password, status)
 values(2, 3, '인천시', '다이소에서 사와 직접 기른 방울토마토 팝니다~', '창가에서 직접 기른 유기농 도마도! 면역력을 길러줘요', 1000, '직거래', 'leejy', default, '1234', 0);
@@ -59,7 +62,22 @@ JOIN tbl_fleamarket F
 ON S.sportseq = F.sportseq
 where sportname = '축구';
 
+alter table tbl_fleamarket add (wasfilename varchar2(100));
+
+ALTER TABLE tbl_fleamarket MODIFY commentcount DEFAULT 0;
+ALTER TABLE tbl_fleamarket MODIFY viewcount DEFAULT 0;
 
 
+select * from tbl_fleamarket;
 
+select * from user_sequences;
 
+drop sequence SEQ_FLEAMARKET;
+
+create sequence SEQ_FLEAMARKET 
+start with 6
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;

@@ -58,4 +58,13 @@
 		where sportname = #{sportname}
 	</select>
 
+
+	<!-- 상품등록  완료 요청(파일첨부ㅇ) -->
+	<insert id="add_withFilee"  parameterType="FleamarketVO">
+		insert into tbl_fleamarket(fleamarketseq, sportseq, city, local, title, content, cost, deal, fk_userid, registerdate, password, commentcount, viewcount, status, imgfilename)
+		values(seq_fleamarket.nextval, #{sportseq}, #{city}, #{local}, #{title}, #{content}, #{cost}, #{deal}, #{fk_userid}, default, #{password}, default, default, default, #{imgfilename})	
+	</insert>
+	
+
+
 </mapper>

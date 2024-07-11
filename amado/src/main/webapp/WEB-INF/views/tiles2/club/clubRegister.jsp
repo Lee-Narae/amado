@@ -141,14 +141,7 @@ $(document).ready(function(){
 	
 	
 	// ---------------------------------------------- //
-	
-	// 로컬 태그가 바뀌면
-	$("select[name='local']").change(function(e){
-		$("input:text[name='date']").val("");
-		searchMatch();
-	});
-	
-	
+
 	 $("button#btnRegister").click(function(){
 	 	 
 		  //폼(form)을 전송(submit)

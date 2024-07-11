@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.spring.app.common.FileManager;
 import com.spring.app.domain.ClubVO;
+import com.spring.app.domain.FleamarketVO;
 import com.spring.app.model.AmadoDAO_JY;
 
 @Service
@@ -67,6 +68,14 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 	public List<Map<String, String>> getSportNameList(String sportname) {
 		List<Map<String, String>> sportNameList = dao.getSportNameList(sportname);
 		return sportNameList;
+	}
+
+
+	// 상품등록  완료 요청(파일첨부ㅇ)
+	@Override
+	public int add_withFile(FleamarketVO fvo) {
+		int n = dao.add_withFile(fvo); //첨부파일이 있는경우
+		return n;
 	}
 
 

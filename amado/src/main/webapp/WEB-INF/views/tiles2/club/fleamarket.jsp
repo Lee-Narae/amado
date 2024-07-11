@@ -125,7 +125,7 @@ $(document).ready(function(){
 	        	
 	        	else if(json.length > 0) {
 		        	$.each(json, function(index, item) {
-			            v_html = `<div class='col-md- col-lg-2 offset-lg-1' >
+			            v_html += `<div class='col-md- col-lg-2 offset-lg-1' >
 						 			   <div class="card mb-3">
 										   <img src='<%= ctxPath%>/resources/images/zee/\${item.imgfilename}' class='card-img-top'/>
 										   <div class='card-body' style='padding: 0; font-size: 9pt;'>
