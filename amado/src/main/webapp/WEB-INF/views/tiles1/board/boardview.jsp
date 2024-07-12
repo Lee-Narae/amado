@@ -532,13 +532,11 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 </script>
 
 
-
 <div style="display: flex;">
+
 	<div style="margin: auto; padding-left: 3%;">
 		<h2 style="margin-bottom: 30px;">글내용보기</h2>
-
 		<c:if test="${not empty requestScope.boardvo}">
-
 			<table class="table table-bordered table-dark" style="width: 1024px; word-wrap: break-word; table-layout: fixed;">
 				<tr>
 					<th style="width: 15%">글번호</th>
