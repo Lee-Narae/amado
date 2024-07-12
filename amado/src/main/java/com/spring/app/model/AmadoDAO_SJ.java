@@ -71,6 +71,12 @@ public interface AmadoDAO_SJ {
 	// 답글쓰기
 	int addReply(BoardCommentVO boardcmtvo);
 
+	// 답글이 있는지 확인
+	int checkComment(String boardcommentseq);
+
+	// 답글 가져오기
+	List<BoardCommentVO> getCommentreList(String boardcommentseq);
+
 	
 
 }
