@@ -291,10 +291,12 @@ a {
 			                        v_html += "        </div>";
 		                        } // 로그인 했을 경우 좋아요, 싫어요, 답글 버튼 보여주기
 		                        
-		                        v_html += "        <div id='"+item.boardcommentseq+"addReplyDisplay'></div>";
+		                        v_html += "        <div id='"+item.boardcommentseq+"readReplyDisplay'></div>";
 			                    v_html += "    </td>";
 			                    v_html += "    <td class='comment'>" + item.registerdate + "</td>";
 			                    v_html += "</tr>";
+			                    
+			                    readReplyDisplay(item.boardcommentseq);
 		                	}
 		                });
 		                
@@ -315,41 +317,6 @@ a {
 		            $("thead#commentTheadDisplay").html(v_html2);
 		            $("tbody#commentDisplay").html(v_html);
 
-		            // 답글
-		            
-		            
-		            
-		            if(json.length > 0) {
-		            	let boardcommentseq = "";
-		            	
-	                    boardcommentseq = $("input:hidden[name='boardcommentseq']").val()
-	                    console.log(boardcommentseq);
-	                    
-			            let v_html3 = "<table><tbody>";
-
-		                $.each(json, function(index, item){
-							if(boardcommentseq == item.fk_boardcommentseq && item.depthno != 0) {
-									
-			            		v_html3 += "<tr>";
-			                	v_html3 += "	<td>";
-			                	v_html3 +=			 item.fk_userid;
-			                	v_html3 += "	</td>";
-			                	v_html3 += "	<td>";
-			                	v_html3 +=			 item.comment_text;
-			                	v_html3 += "	</td>";
-			                	v_html3 += "	<td>";
-			                	v_html3 +=			 item.registerdate;
-			                	v_html3 += "	</td>";
-			                	v_html3 += "</tr>";
-								
-								
-							}
-		                });
-			            v_html3 += "</tbody></table>";
-
-						$("div#"+boardcommentseq+"addReplyDisplay").html(v_html3);
-		            }
-		                
 		        },
 		        error: function(request, status, error){
 		            alert("code: " + request.status + "\n" + "message: " + request.responseText + "\n" + "error: " + error);
@@ -408,6 +375,50 @@ a {
 		} // end of addReply(boardcommentseq)
 		
 	
+		
+		
+		// 답글 읽기
+		function readReplyDisplay(boardcommentseq) {
+			
+//			alert(boardcommentseq);
+
+		  $.ajax({
+				url:"<%= ctxPath%>/readReplyCommentSJ.do",
+		    	data:{"boardcommentseq":boardcommentseq},
+		    	type:"post",
+	            dataType:"json",
+	            success:function(json){
+	            	
+	            	let v_html = "<div class='mt-3 mb-2' style='font-weight: bold;'>답글</div><table><tbody>";
+	            	
+		            if(json.length > 0) {
+		                $.each(json, function(index, item){
+		            		v_html += "<tr c>";
+		                	v_html += "	<td>";
+		                	v_html +=			 item.fk_userid;
+		                	v_html += "	</td>";
+		                	v_html += "	<td>";
+		                	v_html +=			 item.comment_text;
+		                	v_html += "	</td>";
+		                	v_html += "	<td>";
+		                	v_html +=			 item.registerdate;
+		                	v_html += "	</td>";
+		                	v_html += "</tr>";
+		                });
+		                
+		                
+			            v_html += "</tbody></table>";
+
+						$("div#"+boardcommentseq+"readReplyDisplay").html(v_html);
+		            }
+				},
+				error: function(request, status, error){
+				   alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				}
+			})
+			
+		} // end of readReplyDisplay
+		
 
 
 </script>
@@ -483,16 +494,13 @@ a {
 			
 			<%-- 댓글쓰기 폼 추가 --%>
 			<c:if test="${not empty sessionScope.loginuser}">
-				<h3 style="margin-top: 50px;">댓글쓰기</h3>
+			<div style="font-size: 11pt;" class="mt-4">
+				<img style="width: 3%; margin-bottom: 0.2%;" src="<%=ctxPath%>/resources/images/댓글.png">
+				댓글
+			</div>
 
 				<form name="addWriteFrm" id="addWriteFrm" style="margin-top: 20px;">
 					<table class="table" style="width: 1080px">
-						<tr style="height: 30px;">
-							<th>아이디</th>
-							<td>
-								<input type="text" name="fk_userid" value="${sessionScope.loginuser.userid}" readonly />
-							</td>
-						<tr>
 						<tr style="height: 30px;">
 							<th>댓글내용</th>
 							<td>
@@ -503,8 +511,8 @@ a {
 
 						<tr>
 							<th colspan="2">
-								<button type="button" class="btn btn-success btn-sm mr-3" onclick="goAddWrite()">댓글쓰기 확인</button>
-								<button type="reset" class="btn btn-success btn-sm">댓글쓰기 취소</button>
+								<button type="reset" class="btn btn-success btn-sm float-right">댓글쓰기 취소</button>
+								<button type="button" class="btn btn-success btn-sm mr-3 float-right" onclick="goAddWrite()">댓글쓰기 확인</button>
 							</th>
 						</tr>
 					</table>
@@ -528,7 +536,7 @@ a {
 
 
 
-<%-- === #138. 이전글제목, 다음글제목 보기 === --%>
+<%-- === 이전글제목, 다음글제목 보기 === --%>
 <form name="goViewFrm">
 	<input type="hidden" name="boardseq" /> 
 	<input type="hidden" name="goBackURL" /> 

@@ -226,4 +226,24 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		return result;
 	}
 
+	// 답글 읽기
+	@Override
+	public List<BoardCommentVO> getCommentreList(String boardcommentseq) {
+
+		List<BoardCommentVO> commentreList = null;
+		
+		// 답글이 있는지 없는지 확인
+		int totalCount = dao.checkComment(boardcommentseq);
+		
+		if (totalCount != 0) {
+			// 답글이 있을 경우
+			
+			// 댓글에 딸린 답글 가져오기
+			commentreList = dao.getCommentreList(boardcommentseq);
+			
+		}
+
+		return commentreList;
+	}
+
 }

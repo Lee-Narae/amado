@@ -22,6 +22,7 @@ import com.spring.app.common.MyUtil;
 import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
+import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.service.AmadoService_SJ;
 
@@ -416,8 +417,36 @@ public class ControllerSJ {
 	
 	
 	
-	
-	
+	// 답글 읽기
+	@ResponseBody
+	@PostMapping(value="/readReplyCommentSJ.do", produces="text/plain;charset=UTF-8")
+	public String addReplyComment(HttpServletRequest request) {
+		
+		String boardcommentseq = request.getParameter("boardcommentseq");
+		
+		// System.out.println(fleamarketcommentseq);
+		List<BoardCommentVO> commentreList = service.getCommentreList(boardcommentseq); 
+		
+		JSONArray jsonArr = new JSONArray(); // [] 
+		
+		if(commentreList != null) {
+			for(BoardCommentVO commentrevo : commentreList) {
+				JSONObject jsonObj = new JSONObject();          // {} 
+				jsonObj.put("boardcommentseq", commentrevo.getBoardcommentseq());             
+				jsonObj.put("comment_text", commentrevo.getComment_text()); 
+				jsonObj.put("depthno", commentrevo.getDepthno());           
+				jsonObj.put("fk_boardcommentseq", commentrevo.getFk_boardcommentseq());     
+				jsonObj.put("fk_userid", commentrevo.getFk_userid());
+				jsonObj.put("groupno", commentrevo.getGroupno());
+				jsonObj.put("parentseq", commentrevo.getParentseq());
+				jsonObj.put("registerdate", commentrevo.getRegisterdate());
+				
+				jsonArr.put(jsonObj);
+			}// end of for-----------------------
+		}
+		
+		return jsonArr.toString();
+	}
 	
 	
 	

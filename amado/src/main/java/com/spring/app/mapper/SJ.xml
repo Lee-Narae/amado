@@ -380,4 +380,23 @@
 	</insert>
 	
 	
+	<!-- 답글이 있는지 확인 -->
+	<select id="checkComment" parameterType="String" resultType="int">
+		select count(*) AS totalCount
+		from tbl_boardcomment
+		where status = 1 and FK_BOARDCOMMENTSEQ = #{boardcommentseq}
+	</select>
+	
+	
+	<!-- 댓글에 딸린 답글 가져오기 -->
+	<select id="getCommentreList" parameterType="String" resultType="BoardCommentVO">
+		select boardcommentseq, parentseq, comment_text
+		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') as registerdate
+		     , fk_userid, status, groupno, fk_boardcommentseq, depthno
+		from tbl_boardcomment
+		where status = 1 and fk_boardcommentseq = #{boardcommentseq}
+		order by boardcommentseq desc
+	</select>
+	
+	
 </mapper>
