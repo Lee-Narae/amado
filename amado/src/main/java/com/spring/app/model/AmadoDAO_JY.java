@@ -29,5 +29,8 @@ public interface AmadoDAO_JY {
 
 	// 상품등록  완료 요청(파일첨부ㅇ)
 	int add_withFile(FleamarketVO fvo);
+	
+	// 모든 상품 select 해오기
+	List<FleamarketVO> getAllItemList();
 		
 }

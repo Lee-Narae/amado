@@ -65,6 +65,12 @@
 		values(seq_fleamarket.nextval, #{sportseq}, #{city}, #{local}, #{title}, #{content}, #{cost}, #{deal}, #{fk_userid}, default, #{password}, default, default, default, #{imgfilename})	
 	</insert>
 	
+	
+	<!-- // 모든 상품 select 해오기 -->
+	<select id="getAllItemList" resultType="FleamarketVO"  parameterType="HashMap" >
+		select fleamarketseq,  city, local, title, content, cost, deal, fk_userid, to_char(registerdate,'yyyy-mm-dd hh24:mi:ss') AS registerdate, commentcount, viewcount, status, imgfilename
+		from tbl_fleamarket
+	</select>
 
 
 </mapper>
