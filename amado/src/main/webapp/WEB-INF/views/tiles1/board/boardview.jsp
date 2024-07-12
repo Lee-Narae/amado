@@ -35,7 +35,7 @@ a {
     }
 
     /* 완료 버튼의 기본 및 마우스 오버 배경색 */
-    #btnComplete {
+    #btnComplete, #btnComplete2 {
         background-color: transparent; /* 기본 배경색 투명 */
         border: 1px solid lightgray; /* 테두리 추가 */
         border-radius: 5px; /* 둥근 테두리 설정 */
@@ -82,10 +82,72 @@ a {
 		});		
 		
 		
+		
+		// === 답글 수정/삭제 === //
+$(document).on("click", "button.btnUpdateReply", function(e) {
+    const $btn = $(e.target);
+    const $dropdownMenu = $btn.closest('.dropdown-menu');
+    const boardcommentseq = $dropdownMenu.find('input[type=hidden]').val();
+    
+    const fullText = $btn.closest('tr').children("td:nth-child(2)").text();
+    const $content = $btn.closest('tr').children("td:nth-child(2)");
+    
+    let beforeEdit;
+    const lastIndex20 = fullText.lastIndexOf("(20");
+    const lastIndexModify = fullText.lastIndexOf("수정");
+
+    if (lastIndex20 == -1) {
+        beforeEdit = fullText.substring(0, lastIndexModify);
+    } else {
+        beforeEdit = fullText.substring(0, lastIndex20);
+    }
+
+    origin_comment_content = beforeEdit.trim();
+
+    $content.html(`<input id='comment_update' type='text' value='${origin_comment_content}' size='80' /><br>
+                   <button class='float-right' id='btnCancel' type='button'>취소</button>
+                   <input type='hidden' value='${boardcommentseq}' />
+                   <button class='btnUpdateComment float-right' id='btnComplete2' type='button'>완료</button>`); // 댓글 내용을 수정할 수 있도록 input 태그를 만들어준다.
+
+    document.getElementById('btnCancel').addEventListener('click', function() {
+    	goReadComment();
+    });
+
+    $(document).on("keyup", "input#comment_update", function(e) {
+        if (e.keyCode == 13) {
+            $("button#btnComplete").trigger("click");
+        }
+    });
+
+    // 완료 버튼 클릭 시
+    $(document).on("click", "button#btnComplete2", function() {
+        const content = $("#comment_update").val();
+        
+        alert(boardcommentseq);
+        alert(content);
+
+        $.ajax({
+            url: "${pageContext.request.contextPath}/updateCommentSJ.do",
+            type: "post",
+            data: { "boardcommentseq": boardcommentseq, "content": content },
+            dataType: "json",
+            success: function(json) {
+            	goReadComment();
+            },
+            error: function(request, status, error) {
+                alert("code: " + request.status + "\n" + "message: " + request.responseText + "\n" + "error: " + error);
+            }
+        });
+    });
+});		
+		
+
+		
+		
+		
+		
 		// ==== 댓글 수정/완료 ==== //
 		
-		
-		let origin_comment_content = "";
 		
 		$(document).on("click", "button.btnUpdateComment", function(e){
 			const $btn = $(e.target);
@@ -161,7 +223,9 @@ a {
 			}
 			
 		}); // 댓글 수정/확인
-
+		$(document).on("click", "div.rpyDp", function(e){
+			
+		});
 		
 		// ==== 댓글 삭제/취소 ==== //
 		$(document).on("click", "button.btnDeleteComment", function(e){
@@ -210,36 +274,47 @@ a {
 	
 	function goAddWrite(){
 		   
+//		alert("확인");
 		   <%--
 		    // 보내야할 데이터를 선정하는 또 다른 방법
 		    // jQuery에서 사용하는 것으로서,
 		    // form태그의 선택자.serialize(); 을 해주면 form 태그내의 모든 값들을 name값을 키값으로 만들어서 보내준다. 
 		       const queryString = $("form[name='addWriteFrm']").serialize();
 		    --%>
+		   
+			const comment_text = $("input:text[name='comment_text']").val();
+			
+//			alert(comment_text);
+			
+			if(comment_text == null || comment_text == "") {
+				alert("답변 내용이 없습니다.");
+			}
+			
+			if(comment_text != null && comment_text != "") {
 		    
 		    const queryString = $("form[name='addWriteFrm']").serialize();
 		   
-		   $.ajax({
-		      
-		      url: "<%=ctxPath%>/addCommentSJ.do",
-		      data: queryString,
-		      type: "post",     
-		      dataType: "json",
-		      success: function(json){
-		         console.log(JSON.stringify(json));
-		         
-		        	 goReadComment(); // 페이징 처리 안한 댓글 읽어오기
-		        	 // 페이징 처리한 댓글 읽어오기
-		         
-		         $("input:text[name='comment_text']").val("");
-		        	 
-		      },
-		      error: function(request, status, error){
-		             alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-		        }
-		   });
-		   
-		} // end of goAddWriteNoAttach
+			   $.ajax({
+			      
+			      url: "<%=ctxPath%>/addCommentSJ.do",
+			      data: queryString,
+			      type: "post",     
+			      dataType: "json",
+			      success: function(json){
+			         console.log(JSON.stringify(json));
+			         
+			        	 goReadComment(); // 페이징 처리 안한 댓글 읽어오기
+			        	 // 페이징 처리한 댓글 읽어오기
+			         
+			         $("input:text[name='comment_text']").val("");
+			        	 
+			      },
+			      error: function(request, status, error){
+			             alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			        }
+			   });
+			}
+		} // end of goAddWrite
 		
 		function goReadComment() { // 페이징 처리 안한 댓글 읽어오기
 		    $.ajax({
@@ -276,7 +351,11 @@ a {
 	
 			                    v_html += "        <br>";
 			                    
-		                        if($("input:text[name='fk_userid']").val() != null) {
+			                    let fk_userid = $("#userid").val();
+//			                    alert(fk_userid); // 값 확인용
+			                    
+			                    
+		                        if($("input:hidden[name='fk_userid']").val() != null) {
 			                        v_html += "        <div class='float-left'>";
 			                        v_html += "        	   <button type='button'>👍</button>"; 
 			                        v_html += "        	   <button type='button'>👎</button>"; 
@@ -284,14 +363,18 @@ a {
 			                        v_html += "        	   <div class='hidden mt-3' id='"+item.boardcommentseq+"reply_comment'> ";
 			                        v_html += "        	   	<input type='text' size='70' maxlength='1000' class='"+item.boardcommentseq+"replyComment' />";
 			                        v_html += "			   	<br>";	
-			                        v_html += "        	   	<button type='button' class='float-right mt-3 mb-3' onclick='addReply(" + item.boardcommentseq + "," + item.groupno + "," + item.depthno + "," + item.parentseq + ")'>답글</button>";
+			                        v_html += "    <button type='button' class='float-right mt-3 mb-3' onclick='addReply(" 
+					                            + item.boardcommentseq + "," 
+					                            + item.groupno + "," 
+					                            + item.depthno + "," 
+					                            + item.parentseq + "," 
+					                            + "\"" + fk_userid + "\")'>답글</button>";
 			                        v_html += "        	   </div>";
 			                        v_html += "        </div>";
 			                        v_html += "        <br>";
 			                        v_html += "        </div>";
 		                        } // 로그인 했을 경우 좋아요, 싫어요, 답글 버튼 보여주기
-		                        
-		                        v_html += "        <div id='"+item.boardcommentseq+"readReplyDisplay'></div>";
+		                        v_html += "        <div class='float-left' id='"+item.boardcommentseq+"readReplyDisplay'></div>";
 			                    v_html += "    </td>";
 			                    v_html += "    <td class='comment'>" + item.registerdate + "</td>";
 			                    v_html += "</tr>";
@@ -333,8 +416,10 @@ a {
                 content.addClass("hidden");
             }
 		} // end of showAddReply()
-		
-		function addReply(boardcommentseq, groupno, depthno, parentseq) {
+
+
+		// 답글 쓰기
+		function addReply(boardcommentseq, groupno, depthno, parentseq, fk_userid) {
 
 <%-- 			alert(boardcommentseq);
 			alert(groupno);
@@ -358,7 +443,7 @@ a {
 			        	   "groupno":groupno,
 			        	   "parentseq":parentseq,
 			        	   "depthno":depthno,
-			        	   "fk_userid":$("input:text[name='fk_userid']").val(),
+			        	   "fk_userid":fk_userid,
 			        	   "comment_text":comment_text},
 			       	type: "post",		        	   
 			        dataType: "json",
@@ -379,46 +464,64 @@ a {
 		
 		// 답글 읽기
 		function readReplyDisplay(boardcommentseq) {
-			
-//			alert(boardcommentseq);
+		    $.ajax({
+		        url: "<%= ctxPath %>/readReplyCommentSJ.do",
+		        data: { "boardcommentseq": boardcommentseq },
+		        type: "post",
+		        dataType: "json",
+		        success: function (json) {
+		            let replyCount = json.length;
+		            let v_html = "<div class='mt-3 mb-2 rpyDp' style='font-weight: bold; cursor: pointer;'>답글 " + replyCount + " 개 <span class='arrow'>▼</span></div>";
+		            v_html += "<table class='reply-table hidden'><tbody>";
 
-		  $.ajax({
-				url:"<%= ctxPath%>/readReplyCommentSJ.do",
-		    	data:{"boardcommentseq":boardcommentseq},
-		    	type:"post",
-	            dataType:"json",
-	            success:function(json){
-	            	
-	            	let v_html = "<div class='mt-3 mb-2' style='font-weight: bold;'>답글</div><table><tbody>";
-	            	
-		            if(json.length > 0) {
-		                $.each(json, function(index, item){
-		            		v_html += "<tr c>";
-		                	v_html += "	<td>";
-		                	v_html +=			 item.fk_userid;
-		                	v_html += "	</td>";
-		                	v_html += "	<td>";
-		                	v_html +=			 item.comment_text;
-		                	v_html += "	</td>";
-		                	v_html += "	<td>";
-		                	v_html +=			 item.registerdate;
-		                	v_html += "	</td>";
-		                	v_html += "</tr>";
+		            if (replyCount > 0) {
+		                $.each(json, function (index, item) {
+		                    v_html += "<tr>";
+		                    v_html += "    <td>" + item.fk_userid + "</td>";
+		                    v_html += "    <td>" + item.comment_text + "</td>";
+		                    v_html += "    <td>" + item.registerdate + "</td>";
+		                    
+	
+		                    
+		                    // 수정 삭제 버튼 추가
+		                    if ("${sessionScope.loginuser != null}" && "${sessionScope.loginuser.userid}" == item.fk_userid) {
+		                        v_html += "    <td>";
+		                        v_html += "        <div class='dropdown float-right'>";
+		                        v_html += "            <button class='btn dropdown-toggle' type='button' id='dropdownMenuButton' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
+		                        v_html += "                ⋮";
+		                        v_html += "            </button>";
+		                        v_html += "            <div class='dropdown-menu' aria-labelledby='dropdownMenuButton'>";
+		                        v_html += "                <button class='dropdown-item btnUpdateReply' type='button'>답글수정</button>"; // 수정 버튼
+		                        v_html += "                <input type='hidden' value='" + item.boardcommentseq + "' />"; // 숨겨진 입력 필드
+		                        v_html += "                <button class='dropdown-item btnDeleteComment' type='button'>삭제</button>"; // 삭제 버튼
+		                        v_html += "            </div>";
+		                        v_html += "        </div>";
+		                        v_html += "    </td>";
+		                    } // 로그인한 아이디와 댓글의 아이디가 같을 경우 수정 삭제 버튼 추가
+		                    v_html += "</tr>";
 		                });
-		                
-		                
-			            v_html += "</tbody></table>";
 
-						$("div#"+boardcommentseq+"readReplyDisplay").html(v_html);
+		                v_html += "</tbody></table>";
+		                $("div#" + boardcommentseq + "readReplyDisplay").html(v_html);
+
+		                // rpyDp 클래스를 가진 div에 클릭 이벤트 추가
+		                $("div#" + boardcommentseq + "readReplyDisplay .rpyDp").on("click", function () {
+		                    $(this).next(".reply-table").toggleClass("hidden");
+		                    let arrow = $(this).find(".arrow");
+		                    if ($(this).next(".reply-table").hasClass("hidden")) {
+		                        arrow.text("▼");
+		                    } else {
+		                        arrow.text("▲");
+		                    }
+		                });
 		            }
-				},
-				error: function(request, status, error){
-				   alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-				}
-			})
-			
+		        },
+		        error: function (request, status, error) {
+		            alert("code: " + request.status + "\n" + "message: " + request.responseText + "\n" + "error: " + error);
+		        }
+		    });
 		} // end of readReplyDisplay
-		
+
 
 
 </script>
@@ -504,8 +607,10 @@ a {
 						<tr style="height: 30px;">
 							<th>댓글내용</th>
 							<td>
-								<input type="text" name="comment_text" size="100" maxlength="1000" /> <%-- 댓글에 달리는 원게시물 글번호(즉, 댓글의 부모글 글번호) --%>
+								<input type="text" id="comment_text" name="comment_text" size="100" maxlength="1000" />
 	  							<input type="hidden" name="parentseq" value="${requestScope.boardvo.boardseq}" />  
+	  							<input type="hidden" name="fk_userid" value="${requestScope.boardvo.fk_userid}" />
+	  							<input type="hidden" id="userid" value="${sessionScope.loginuser.userid}">  
 							</td>
 						</tr>
 
