@@ -11,7 +11,7 @@ public class GymVO {
 	,address      nvarchar2(50)   NOT NULL    -- 주소
 	,detailaddress   nvarchar2(100)  NOT NULL    -- 상세주소
 	,extraaddress   nvarchar2(50)   NOT NULL    -- 주소참고항목
-	,status          number(1)       NOT NULL    -- 운영여부
+	,status          number(1)       NOT NULL    -- 운영여부 ===> 0: 승인 안 됨 / 1: 승인 완료(운영 중)
 	,info          nvarchar2(1000) NOT NULL    -- 정보
 	,imgfilename   nvarchar2(50)               -- 첨부파일
 	,cost          NUMBER                      -- 비용
@@ -19,7 +19,7 @@ public class GymVO {
 	,membercount   NUMBER                      -- 인원
 	,likecount       NUMBER                      -- 좋아요수
 */
-	private String ymseq; 		    //체육관번호(PK)
+	private String gymseq; 		    //체육관번호(PK)
 	private String gymname;         //체육관명
 	private String fk_userid;       //담당자아이디(FK)
 	private String postcode;        //우편번호
@@ -51,11 +51,11 @@ private MultipartFile attach;
 	
 	
 	
-	public String getYmseq() {
-		return ymseq;
+	public String getGymseq() {
+		return gymseq;
 	}
-	public void setYmseq(String ymseq) {
-		this.ymseq = ymseq;
+	public void setGymseq(String gymseq) {
+		this.gymseq = gymseq;
 	}
 	public String getGymname() {
 		return gymname;

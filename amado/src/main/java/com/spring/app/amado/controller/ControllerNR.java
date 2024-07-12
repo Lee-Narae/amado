@@ -40,6 +40,7 @@ import com.spring.app.common.FileManager;
 import com.spring.app.common.GoogleMail;
 import com.spring.app.common.MyUtil;
 import com.spring.app.common.Sha256;
+import com.spring.app.domain.GymVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.domain.NoticeVO;
 import com.spring.app.service.AmadoService_NR;
@@ -305,8 +306,11 @@ public class ControllerNR {
 		
 		else { // 이전과 일치하지 않는 ㄱㅊ은 비번일 때 비번 업데이트
 			
-			
 			n = service.findPwUpdatePw(paramap);
+			
+			if(n != 1) {
+				n = 2;
+			}
 			
 			jsonObj.put("n", n);
 		}
@@ -400,9 +404,10 @@ public class ControllerNR {
 		mav.addObject("rank0MemberCount", rank0MemberCount);
 		mav.addObject("adminMemberCount", adminMemberCount);
 		
-	
-		
-		
+		// 체육관 알림 관련 메소드
+		List<GymVO> gymList = service.getGymStatus(); // 아직 등록 승인 안 된 체육관 불러오기
+		mav.addObject("gymList", gymList);
+		mav.addObject("gymCount", gymList.size());
 		
 		mav.setViewName("adminMain.tiles3");
 		return mav;
@@ -1700,6 +1705,8 @@ public class ControllerNR {
 		
 		return mav;
 	}
+	
+	
 	
 	
 	

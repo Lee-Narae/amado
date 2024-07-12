@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
    String ctxPath = request.getContextPath();
 %>  
@@ -60,6 +60,17 @@ color: blue;
 width: 40%;
 height: 75px;
 display: flex;
+}
+
+#gym {
+width: 95%; height: 50px; margin-top: 5%; text-align: left; align-content: center; padding-left: 5%;
+}
+
+#gym:hover {
+text-decoration: underline;
+color: #0066ff;
+font-weight: bold;
+cursor: pointer;
 }
 
 /* highChart */
@@ -256,15 +267,17 @@ $(document).ready(function(){
 	</div>
 	<div class="verticalLine"></div>
 	<div id="alert" style="width: 30%; height: 400px; padding: 2%;">
-		<div style="margin-bottom: 5%; font-weight: bold; color: #6B6B6B;">알림</div>
+		<div style="margin-bottom: 5%; font-weight: bold; color: #6B6B6B;">알림&nbsp;<span style="display: inline-block; width: 25px; text-align: center; height: 25px; align-content: center; border-radius: 100%; color: white; background-color: #ffcc66;">${requestScope.gymCount}</span></div>
 		<div style="background-color: white; width: 100%; height: 300px; border-radius: 20px; padding-top: 3%; overflow: auto;" align="center">
-			<div style="width: 95%; height: 50px; margin-top: 5%; text-align: left; align-content: center; padding-left: 5%;">💌 ㅇㅇㅇ 님의 체육관 등록 신청</div>
-			<hr>
-			<div style="width: 95%; height: 50px; margin-top: 5%; text-align: left; align-content: center; padding-left: 5%;">💌 ㅇㅇㅇ 님의 체육관 등록 신청</div>
-			<hr>
-			<div style="width: 95%; height: 50px; margin-top: 5%; text-align: left; align-content: center; padding-left: 5%;">💌 ㅇㅇㅇ 님의 체육관 등록 신청</div>
-			<hr>
-			<div style="width: 95%; height: 50px; margin-top: 5%; text-align: left; align-content: center; padding-left: 5%;">💌 ㅇㅇㅇ 님의 체육관 등록 신청</div>
+			<c:forEach var="gym" items="${requestScope.gymList}" varStatus="status">
+				<c:if test="${status.index != (requestScope.gymCount-1)}">
+					<div id="gym">💌 ${gym.fk_userid}님의 체육관 등록 신청</div><input type="text" id="gymseq" value="${gym.gymseq}"/>
+					<hr>
+				</c:if>
+				<c:if test="${status.index == (requestScope.gymCount-1)}">
+					<div id="gym">💌 ${gym.fk_userid}님의 체육관 등록 신청</div><input type="text" id="gymseq" value="${gym.gymseq}"/>
+				</c:if>
+			</c:forEach>
 		</div>
 	</div>
 	

@@ -3,6 +3,7 @@ package com.spring.app.model;
 import java.util.List;
 import java.util.Map;
 
+import com.spring.app.domain.GymVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.domain.NoticeVO;
 
@@ -149,5 +150,8 @@ public interface AmadoDAO_NR {
 
 	// 이전과 일치하지 않는 ㄱㅊ은 비번일 때 비번 업데이트
 	int findPwUpdatePw(Map<String, String> paramap);
+
+	// 관리자 - 아직 등록 승인 안 된 체육관 불러오기
+	List<GymVO> getGymStatus();
 	
 }

@@ -438,4 +438,10 @@
 		update tbl_member set password = #{newpw}
 		where userid = #{userid}
 	</update>
+	
+	<select id="getGymStatus" resultType="GymVO">
+		select gymseq, gymname, fk_userid, postcode, address, detailaddress, status, info, imgfilename, cost, caution, membercount, likecount, insidestatus
+		from tbl_gym
+		where status = 0
+	</select>
 </mapper>
