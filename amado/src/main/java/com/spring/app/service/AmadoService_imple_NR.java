@@ -468,6 +468,34 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		int n = dao.searchApply(paramap2);
 		return n;
 	}
+
+	// id찾기 - 이름과 이메일에 유효한 정보가 있는지
+	@Override
+	public MemberVO findId(Map<String, String> paramap) {
+		MemberVO member = dao.findId(paramap);
+		return member;
+	}
+
+	// 비번 찾기
+	@Override
+	public MemberVO findpw(Map<String, String> paramap) {
+		MemberVO member = dao.findpw(paramap);
+		return member;
+	}
+
+	// 이전 비밀번호와 동일한지 확인
+	@Override
+	public int checkBeforePw(Map<String, String> paramap) {
+		int n = dao.checkBeforePw(paramap);
+		return n;
+	}
+
+	// 이전과 일치하지 않는 ㄱㅊ은 비번일 때 비번 업데이트
+	@Override
+	public int findPwUpdatePw(Map<String, String> paramap) {
+		int n = dao.findPwUpdatePw(paramap);
+		return n;
+	}
 	
 	
 }

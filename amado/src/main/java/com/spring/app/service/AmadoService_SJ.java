@@ -62,5 +62,8 @@ public interface AmadoService_SJ {
 	// 답글 쓰기
 	int addReply(BoardCommentVO boardcommentvo);
 
+	// 답글 읽기
+	List<BoardCommentVO> getCommentreList(String boardcommentseq);
+
 
 }

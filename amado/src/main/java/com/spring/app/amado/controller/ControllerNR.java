@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +37,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.app.common.AES256;
 import com.spring.app.common.FileManager;
+import com.spring.app.common.GoogleMail;
 import com.spring.app.common.MyUtil;
 import com.spring.app.common.Sha256;
 import com.spring.app.domain.MemberVO;
@@ -97,6 +99,222 @@ public class ControllerNR {
 		return mav;
 	}
 
+	
+	@GetMapping("/member/IdPwfind.do")
+	public ModelAndView IdPwfind(ModelAndView mav, HttpServletRequest request) {
+		
+		String way = request.getParameter("find");
+		
+		mav.addObject("way", way);		
+		mav.setViewName("member/idpwfind.tiles1");
+		
+		return mav;
+	}
+	
+	@ResponseBody
+	@PostMapping("/member/findId.do")
+	public String findId(HttpServletRequest request) {
+		
+		String name = request.getParameter("name");
+		String email = request.getParameter("email");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+
+		try {
+			paramap.put("name", name);
+			paramap.put("email", aES256.encrypt(email));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		MemberVO member = service.findId(paramap);
+		
+		JSONObject jsonObj = new JSONObject();
+		
+		if(member == null) {
+			jsonObj.put("exist", "no");
+		}
+		else {
+			jsonObj.put("userid", member.getUserid());
+			jsonObj.put("exist", "yes");
+		}
+		
+		return jsonObj.toString();
+	}
+	
+	
+	@ResponseBody
+	@PostMapping("/member/idFind_sendEmail.do")
+	public String idFind_sendEmail(HttpServletRequest request) {
+		
+		String name = request.getParameter("name");
+		String email = request.getParameter("email");
+		
+		boolean sendMailSuccess = false; // 메일이 정상적으로 전송되었는지 유무를 알아오기 위한 용도
+		
+        Random rnd = new Random();
+        
+        String certification_code = "";
+        
+        char randchar = ' ';
+        for(int i=0; i<5; i++) {
+           randchar = (char) (rnd.nextInt('z' - 'a' + 1) + 'a');
+           certification_code += randchar;
+        }// end of for---------------------
+        
+        int randnum = 0;
+        for(int i=0; i<7; i++) {
+           randnum = rnd.nextInt(9 - 0 + 1) + 0;
+           certification_code += randnum;
+        }// end of for---------------------
+        
+        // 랜덤하게 생성한 인증코드(certification_code)를 비밀번호 찾기를 하고자 하는 사용자의 email로 전송시킨다.
+        GoogleMail mail = new GoogleMail();
+        JSONObject jsonObj = new JSONObject();
+        
+        try {
+        	mail.send_certification_code(email, certification_code);
+        	sendMailSuccess = true;
+        	jsonObj.put("certification_code", certification_code);
+        	
+        } catch (Exception e) {
+        	e.printStackTrace();
+        	sendMailSuccess = false;
+        }
+        
+        
+        if(sendMailSuccess == true) {
+        	jsonObj.put("success", "yes");
+        }
+        else {
+        	jsonObj.put("success", "no");
+        }
+        
+		
+        
+		return jsonObj.toString();
+	}
+	
+	
+	@ResponseBody
+	@PostMapping("/member/findpw.do")
+	public String findpw(HttpServletRequest request) {
+		
+		String name = request.getParameter("name");
+		String email = request.getParameter("email");
+		String userid = request.getParameter("userid");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+
+		try {
+			paramap.put("name", name);
+			paramap.put("email", aES256.encrypt(email));
+			paramap.put("userid", userid);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		MemberVO member = service.findpw(paramap);
+		
+		JSONObject jsonObj = new JSONObject();
+		
+		jsonObj.put("userid", userid);
+		
+		if(member == null) {
+			jsonObj.put("exist", "no");
+		}
+		else {
+			jsonObj.put("exist", "yes");
+		}
+		
+		return jsonObj.toString();
+	}
+	
+	
+	@ResponseBody
+	@PostMapping("/member/pwFind_sendEmail.do")
+	public String pwFind_sendEmail(HttpServletRequest request) {
+		
+		String email = request.getParameter("email");
+		System.out.println("email: "+email);
+		
+		boolean sendMailSuccess = false; // 메일이 정상적으로 전송되었는지 유무를 알아오기 위한 용도
+		
+        Random rnd = new Random();
+        
+        String certification_code = "";
+        
+        char randchar = ' ';
+        for(int i=0; i<5; i++) {
+           randchar = (char) (rnd.nextInt('z' - 'a' + 1) + 'a');
+           certification_code += randchar;
+        }// end of for---------------------
+        
+        int randnum = 0;
+        for(int i=0; i<7; i++) {
+           randnum = rnd.nextInt(9 - 0 + 1) + 0;
+           certification_code += randnum;
+        }// end of for---------------------
+        
+        // 랜덤하게 생성한 인증코드(certification_code)를 비밀번호 찾기를 하고자 하는 사용자의 email로 전송시킨다.
+        GoogleMail mail = new GoogleMail();
+        JSONObject jsonObj = new JSONObject();
+        
+        try {
+        	mail.send_certification_code(email, certification_code);
+        	sendMailSuccess = true;
+        	jsonObj.put("certification_code2", certification_code);
+        	
+        } catch (Exception e) {
+        	e.printStackTrace();
+        	sendMailSuccess = false;
+        }
+        
+        
+        if(sendMailSuccess == true) {
+        	jsonObj.put("success", "yes");
+        }
+        else {
+        	jsonObj.put("success", "no");
+        }
+        
+		return jsonObj.toString();
+		
+	}
+	
+	
+	@ResponseBody
+	@PostMapping("/member/findPwUpdatePw.do")
+	public String findPwUpdatePw(HttpServletRequest request) {
+		
+		String newpw = request.getParameter("password");
+		String userid = request.getParameter("userid");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("userid", userid);
+		paramap.put("newpw", Sha256.encrypt(newpw));
+		
+		JSONObject jsonObj = new JSONObject();
+
+		// 이전 비밀번호와 동일한지 확인
+		int n = service.checkBeforePw(paramap);
+		
+		System.out.println("n: "+n);
+		
+		if(n == 1) {
+			jsonObj.put("n", 0);
+		}
+		
+		else { // 이전과 일치하지 않는 ㄱㅊ은 비번일 때 비번 업데이트
+			
+			
+			n = service.findPwUpdatePw(paramap);
+			
+			jsonObj.put("n", n);
+		}
+		
+		return jsonObj.toString();
+	}
+	
+	
 	
 	@GetMapping("/member/login.do")
 	public ModelAndView login(ModelAndView mav) {

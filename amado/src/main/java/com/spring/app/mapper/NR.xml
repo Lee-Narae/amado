@@ -420,7 +420,22 @@
 		where matchingregseq = #{matchingregseq} and clubseq = #{clubseq}
 	</select>	
 	
+	<select id="findId" parameterType="HashMap" resultType="MemberVO">
+		select userid from tbl_member
+		where name = #{name} and email = #{email}
+	</select>
 	
+	<select id="findpw" parameterType="HashMap" resultType="MemberVO">
+		select userid from tbl_member
+		where name = #{name} and userid = #{userid} and email = #{email}
+	</select>
 	
+	<select id="checkBeforePw" parameterType="HashMap" resultType="int">
+		select count(*) from tbl_member where userid = #{userid} and password = #{newpw}
+	</select>
 	
+	<update id="findPwUpdatePw" parameterType="HashMap">
+		update tbl_member set password = #{newpw}
+		where userid = #{userid}
+	</update>
 </mapper>

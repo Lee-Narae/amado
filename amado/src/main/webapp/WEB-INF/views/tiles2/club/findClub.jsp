@@ -135,13 +135,13 @@
     <c:if test="${requestScope.params == '4'}">
        <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">농구 동호회 찾기</div>
     </c:if>
-    <c:if test="${requestScope.params == '5'}">
+    <c:if test="${requestScope.params == '6'}">
        <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">테니스 동호회 찾기</div>
     </c:if>
-    <c:if test="${requestScope.params == '6'}">
+    <c:if test="${requestScope.params == '7'}">
        <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">볼링 동호회 찾기</div>
     </c:if>
-    <c:if test="${requestScope.params == '7'}">
+    <c:if test="${requestScope.params == '5'}">
        <div style="text-align: center; margin: 5% 0 4% 0; font-size: 30pt; font-weight: bolder;">족구 동호회 찾기</div>
     </c:if>
     <c:if test="${requestScope.params == '8'}">

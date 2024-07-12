@@ -148,12 +148,9 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		
 		int groupno = dao.getGroupnoMax()+1;
 		boardcommentvo.setGroupno(Integer.toString(groupno));
-		
 		n = dao.addBoardComment(boardcommentvo); // 댓글쓰기(tbl_boardcomment 테이블에 insert)
-//		System.out.println("~~~ 확인용 n1 : " + n1);
-		
 
-	  if(n == 1) { 
+		if(n == 1) { 
 		  result = dao.updateBoardCommentCount(boardcommentvo.getParentseq()); 
 		  //tbl_board 테이블에 commentCount 컬럼이 1증가(update) //
 	  }
@@ -196,9 +193,6 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	// 댓글 수정
 	@Override
 	public int updateComment(Map<String, String> paraMap) {
-		String boardcommentseq = paraMap.get("boardcommentseq");
-		String comment_text = paraMap.get("comment_text");
-
 		int n = dao.updateComment(paraMap);
 		return n;
 	}
@@ -224,6 +218,26 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		}
 		
 		return result;
+	}
+
+	// 답글 읽기
+	@Override
+	public List<BoardCommentVO> getCommentreList(String boardcommentseq) {
+
+		List<BoardCommentVO> commentreList = null;
+		
+		// 답글이 있는지 없는지 확인
+		int totalCount = dao.checkComment(boardcommentseq);
+		
+		if (totalCount != 0) {
+			// 답글이 있을 경우
+			
+			// 댓글에 딸린 답글 가져오기
+			commentreList = dao.getCommentreList(boardcommentseq);
+			
+		}
+
+		return commentreList;
 	}
 
 }

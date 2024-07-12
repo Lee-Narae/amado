@@ -354,4 +354,32 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		return n;
 	}
 
+	// id찾기 - 이름과 이메일에 유효한 정보가 있는지
+	@Override
+	public MemberVO findId(Map<String, String> paramap) {
+		MemberVO member = sqlsession.selectOne("NR.findId", paramap);
+		return member;
+	}
+
+	// 비번 찾기
+	@Override
+	public MemberVO findpw(Map<String, String> paramap) {
+		MemberVO member = sqlsession.selectOne("NR.findpw", paramap);
+		return member;
+	}
+
+	// 이전 비밀번호와 동일한지 확인
+	@Override
+	public int checkBeforePw(Map<String, String> paramap) {
+		int n = sqlsession.selectOne("NR.checkBeforePw", paramap);
+		return n;
+	}
+
+	// 이전과 일치하지 않는 ㄱㅊ은 비번일 때 비번 업데이트
+	@Override
+	public int findPwUpdatePw(Map<String, String> paramap) {
+		int n = sqlsession.update("NR.findPwUpdatePw", paramap);
+		return n;
+	}
+
 }
