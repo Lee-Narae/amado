@@ -76,5 +76,13 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 		return n;
 	}
 
+	// 모든 상품 select 해오기
+	@Override
+	public List<FleamarketVO> getAllItemList() { 
+		//리턴타입이 맵인경우 = 맵퍼에서 resultType이 map? 인경우에만 <result>쓴다.  지금은 x
+		List<FleamarketVO> allItemList = sqlsession.selectList("JY.getAllItemList");
+		return allItemList;
+	}
+
 
 }

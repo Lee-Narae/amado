@@ -22,11 +22,14 @@ public interface AmadoService_JY {
 	// 동호회 등록후 회원등급 동호회장으로  업데이트 해주기
 	void updateRank(String fk_userid);
 
-	// 상품 select 헤오기
+	// 카테고리 상품 select 해오기
 	List<Map<String, String>> getSportNameList(String sportname);
 
 	// 상품등록  완료 요청(파일첨부ㅇ)
 	int add_withFile(FleamarketVO fvo);
+
+	// 모든 상품 select 해오기
+	List<FleamarketVO> getAllItemList();
 
 	
 	

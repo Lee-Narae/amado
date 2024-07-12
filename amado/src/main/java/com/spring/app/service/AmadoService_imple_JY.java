@@ -79,6 +79,14 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 	}
 
 
+	// 모든 상품 select 해오기
+	@Override
+	public List<FleamarketVO> getAllItemList() {
+		List<FleamarketVO> allItemList = dao.getAllItemList();
+		return allItemList;
+	}
+
+
 	
 
 	

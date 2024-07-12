@@ -68,16 +68,34 @@ ALTER TABLE tbl_fleamarket MODIFY commentcount DEFAULT 0;
 ALTER TABLE tbl_fleamarket MODIFY viewcount DEFAULT 0;
 
 
-select * from tbl_fleamarket;
+select * from tbl_fleamarket
+order by fleamarketseq desc;
 
 select * from user_sequences;
 
 drop sequence SEQ_FLEAMARKET;
 
 create sequence SEQ_FLEAMARKET 
-start with 6
+start with 50
 increment by 1
 nomaxvalue
 nominvalue
 nocycle
 nocache;
+
+DELETE FROM tbl_fleamarket where fleamarketseq != 1;
+
+commit
+
+update tbl_fleamarket set imgfilename = '가평잣.png'
+where fleamarketseq = 1;
+commit;  
+
+
+select fleamarketseq,  city, local, title, content, cost, deal, fk_userid, to_char(registerdate,'yyyy-mm-dd hh24:mi:ss') AS registerdate, commentcount, viewcount, status, imgfilename
+from tbl_fleamarket;
+
+
+
+
+

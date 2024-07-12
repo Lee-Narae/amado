@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -220,23 +221,79 @@ public class ControllerJY {
 	// 플리마켓 페이지 보요주기
 	@RequestMapping(value="/club/fleamarket.do")
 	public ModelAndView fleamarket(ModelAndView mav) {
+		
+		// 모든 상품 select 해오기
+		List<FleamarketVO> allItemList = service.getAllItemList(); //디비에서 데이터를 불러만오는 거라 map에 넣어서 보낼게 없음!!!!
+		
+		mav.addObject("allItemList", allItemList);
+		
 		mav.setViewName("club/fleamarket.tiles2");
-		//    /WEB-INF/views/club/viewclub.jsp
 		return mav;
 		
 	}
+	
+	
+	
+	// 전체 상품 보여주기
+	@ResponseBody
+	@GetMapping(value="/allview.do")
+	public String allview() {
+		
+		List<FleamarketVO> allItemList = service.getAllItemList();
+		
+		JSONArray jsonArr = new JSONArray();
+		/*
+		if(sportNameList != null) {
+			for(Map<String, String> abc : sportNameList) {
+				JSONObject jsonObj = new JSONObject();     // {} 
+				jsonObj.put("no", vo.getNo());             // {"no":"101"} 
+				jsonObj.put("name", vo.getName());         // {"no":"101", "name":"이순신"}
+				jsonObj.put("writeday", vo.getWriteday()); // {"no":"101", "name":"이순신", "writeday":"2024-06-11 17:27:09"}
+				
+				jsonArr.put(jsonObj); // [{"no":"101", "name":"이순신", "writeday":"2024-06-11 17:27:09"}]
+			}// end of for------------------------
+		}
+		*/
+		
+		for(FleamarketVO fvo : allItemList) {
+			
+			JSONObject jsonObj = new JSONObject(); // {}
+			jsonObj.put("fleamarketseq", fvo.getFleamarketseq());
+			jsonObj.put("city", fvo.getCity());
+			jsonObj.put("cost", fvo.getCost());
+			jsonObj.put("imgfilename", fvo.getImgfilename());
+			jsonObj.put("local", fvo.getLocal());
+			jsonObj.put("title", fvo.getTitle());
+			
+			jsonArr.put(jsonObj);
+			System.out.println("aaa"+jsonArr);
+			/* 	
+			  	jsonArr => 
+				[{"deal":"직거래","cost":"5000000","city":"경기도","imgfilename":"가평잣.png",
+				  "sportseq":"3","title":"잣막걸리 공장을 물려드립니다","registerdate":"2024-07-10 14:18:38",
+				  "local":"가평군","content":"떼돈 벌 수 있는 기회는 지금뿐!","commentcount":"0","viewcount":"0",
+				  "fk_userid":"leejy","status":"0"}]
+			*/
+		
+		}	      
+		
+	   return jsonArr.toString();
+	}
+	
+	
+	
 	
 	// 플리마켓 등록된 상품 카테고리별로 띄우기
 	@ResponseBody
 	@GetMapping(value="/sportname.do", produces="text/plain;charset=UTF-8")
 	public String fleamarket(HttpServletRequest request) {
 		
-		String sportname = request.getParameter("sportname");
+		String sportname = request.getParameter("sportname");//가져온 where절 디비에 보내기
 		//System.out.println(sportname);
 		
-		// 상품 select 해오기
+		// 카테고리 상품 select 해오기
 		List<Map<String,String>> sportNameList = service.getSportNameList(sportname);
-		//FleamarketVO????
+		//FleamarketVO????x
 		
 		/*
 			List<Map<String,String>> sportList = service.getSportList(); 
@@ -291,10 +348,10 @@ public class ControllerJY {
 		}	      
 		
 	   return jsonArr.toString();
-
-		
 	}
-
+	
+	
+	
 
 	// 상품 상세보기
 	@GetMapping(value="/club/prodView.do", produces="text/plain;charset=UTF-8")
@@ -411,6 +468,8 @@ public class ControllerJY {
 			HttpSession session = mrequest.getSession(); 
 			String root = session.getServletContext().getRealPath("/");  
 			
+			//System.out.println("root: "+root);
+			//root: C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\amado\
 			//System.out.println("~~~ 확인용 webapp 의 절대경로 => " + root);  
 			//~~~ 확인용 webapp 의 절대경로 => C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\board\
 			
@@ -466,7 +525,7 @@ public class ControllerJY {
 			
 		}
 		
-			
+			/*
 			System.out.println("1"+fvo.getAttach());
 			System.out.println("2"+fvo.getImgfilename());
 			System.out.println("3"+fvo.getSportseq());
@@ -480,7 +539,7 @@ public class ControllerJY {
 			System.out.println("9"+fvo.getContent());
 			System.out.println("10"+fvo.getPassword());
 			System.out.println("10"+fvo.getDeal());
-			
+			*/
 		// === !!! 첨부파일이 있는 경우 작업 끝 !!! ===	
 
 		int n =0;
