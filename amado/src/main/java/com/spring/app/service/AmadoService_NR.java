@@ -146,6 +146,12 @@ public interface AmadoService_NR {
 
 	// 비번찾기
 	MemberVO findpw(Map<String, String> paramap);
+
+	// 이전 비밀번호와 동일한지 확인
+	int checkBeforePw(Map<String, String> paramap);
+
+	// 이전과 일치하지 않는 ㄱㅊ은 비번일 때 비번 업데이트
+	int findPwUpdatePw(Map<String, String> paramap);
 	
 
 

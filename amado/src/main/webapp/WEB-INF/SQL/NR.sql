@@ -222,3 +222,8 @@ alter table tbl_matchingapply add status number(1) default 0;
 select * from tbl_matchingapply;
 
 select * from tbl_matchingreg;
+
+select * from user_constraints
+where table_name = 'TBL_MEMBER';
+
+desc tbl_member;

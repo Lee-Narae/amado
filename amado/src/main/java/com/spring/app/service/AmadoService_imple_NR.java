@@ -482,6 +482,20 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		MemberVO member = dao.findpw(paramap);
 		return member;
 	}
+
+	// 이전 비밀번호와 동일한지 확인
+	@Override
+	public int checkBeforePw(Map<String, String> paramap) {
+		int n = dao.checkBeforePw(paramap);
+		return n;
+	}
+
+	// 이전과 일치하지 않는 ㄱㅊ은 비번일 때 비번 업데이트
+	@Override
+	public int findPwUpdatePw(Map<String, String> paramap) {
+		int n = dao.findPwUpdatePw(paramap);
+		return n;
+	}
 	
 	
 }

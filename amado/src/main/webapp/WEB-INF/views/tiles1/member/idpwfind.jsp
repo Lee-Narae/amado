@@ -44,6 +44,19 @@ margin-right: 3%;
 font-weight: bold;
 }
 
+.first_td2 {
+display: inline-block;
+background-color: #0066ff;
+color: white;
+width: 20%;
+height: 40px;
+border-radius: 30px;
+align-content: center;
+text-align: center;
+margin-right: 3%;
+font-weight: bold;
+}
+
 input[name='name'],
 input[name='name2']{
 height: 40px;
@@ -72,7 +85,8 @@ margin-right: 3%;
 }
 
 input[name='idCertCode'],
-input[name='pwCertCode']{
+input[name='pwCertCode'],
+input[name='newpw']{
 height: 40px;
 border-radius: 30px;
 width: 300px;
@@ -81,7 +95,7 @@ padding-left: 5%;
 margin-right: 3%;
 }
 
-#emailReg, #emailRegpw {
+#emailReg, #emailRegpw, #pwdReg {
 font-size: 10pt;
 color: red;
 margin-left: 25%;
@@ -158,6 +172,8 @@ font-size: 13pt;
 <script type="text/javascript">
 
 let idFindCert = '';
+let pwFindCert = '';
+let useridForPw = '';
 
 $(document).ready(function(){
 	
@@ -232,7 +248,93 @@ $(document).ready(function(){
 		}
 	});
 	
+	// pw 찾기 인증코드 확인
+	$(document).on("click", "button#codeCheck2", function(){
+		if($("input[name='pwCertCode']").val().trim() == pwFindCert){
+			let viewPw = `<div class="mt-3">
+				<span class="first_td2">새 비밀번호</span>
+				<input type="password" name="newpw" maxlength="20"/>
+				<button type="button" class="btn btn-danger btn-sm" id="newPwUpdate" onclick="newPwUpdate()">변경하기</button>
+			</div>
+<div id="pwdReg">비밀번호는 영문자, 숫자, 특수기호가 혼합된 8~15글자로 입력하세요.</div>`;
+			
+			$("div#PwDiv").html(viewPw);
+		}
+		else {
+			swal('인증코드가 일치하지 않습니다.');
+		}
+		
+	});
+	
+	// new pw 정규표현식
+	var regExp_pwd = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).*$/;
+	
+	$("div#pwdReg").hide();
+	
+	$(document).on("keyup", "input[name='newpw']", function(){
+		
+		if(!regExp_pwd.test($("input[name='newpw']").val().trim())){
+			$("div#pwdReg").show();
+		}
+		else{
+			$("div#pwdReg").hide();
+		}
+	});
+	
 });
+
+
+function newPwUpdate(){
+	
+	const newpw = $("input[name='newpw']").val().trim();
+	
+	// 유효성 검사
+	if(newpw == ''){
+		swal('비밀번호를 입력하세요.');
+		$("input[name='newpw']").focus();
+		return;
+	}
+	
+	// 정규표현식 검사
+	const regExp_pwd = new RegExp(/^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).*$/g);
+	if(!regExp_pwd.test(newpw)){
+		swal('올바르지 않은 비밀번호 형식입니다.');
+		$("input[name='newpw']").val('').focus();
+		return;
+	}
+	
+	
+	// ajax
+	$.ajax({
+		url: "<%=ctxPath%>/member/findPwUpdatePw.do",
+		type: "post",
+		data: {"password": newpw, "userid": useridForPw},
+		dataType: "json",
+		success: function(json){
+			
+			if(json.n == 1){
+				alert('새로운 비밀번호로 변경되었습니다. 다시 로그인하세요.');
+				location.href = "login.do";
+			}
+			
+			else if(json.n == 2){
+				alert('비밀번호 변경이 실패하였습니다. 다시 진행해주세요.');
+				location.href = "IdPwfind.do?find=pw";
+			}
+			
+			else{
+				alert('기존 비밀번호와 동일한 비밀번호로는 변경할 수 없습니다.');
+				$("input[name='newpw']").val('').focus();
+			}
+			
+		},
+		error: function(request, status, error){
+			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		}
+	});
+	
+	
+}
 
 function idFindSendEmail(){
 	// 유효성 검사
@@ -332,14 +434,14 @@ function pwFindSendEmail(){
 		swal('이름을 입력하세요.');
 		return;
 	}
-	
-	if(email2 == ''){
-		swal('이메일을 입력하세요.');
-		return;
-	}
 
 	if(userid2 == ''){
 		swal('아이디를 입력하세요.');
+		return;
+	}
+	
+	if(email2 == ''){
+		swal('이메일을 입력하세요.');
 		return;
 	}
 	
@@ -351,9 +453,6 @@ function pwFindSendEmail(){
 	}
 	
 	// ajax
-	
-	let pwuserid = '';
-	
 	$.ajax({
 		url: "<%=ctxPath%>/member/findpw.do",
 		data: {"name":name2, "userid": userid2, "email":email2},
@@ -361,6 +460,8 @@ function pwFindSendEmail(){
 		type: "post",
 		success: function(json){
 
+			useridForPw = json.userid;
+			
 			if(json.exist == 'no'){
 				swal(`입력하신 내용에 해당하는
 						회원 정보가 없습니다.`);
@@ -387,8 +488,8 @@ function pwFindSendEmail(){
 							// console.log(JSON.stringify(json));
 							// {"success":"yes","certification_code":"igoeq7711504"}
 							
-							idFindCert = json.certification_code;
-							let html = `<div class="mt-5">
+							pwFindCert = json.certification_code2;
+							let html = `<div class="mt-3">
 								<div align="center" class="mb-2">이메일로 인증코드가 발송되었습니다. 인증코드를 입력하세요.</div>
 								<span class="first_td">인증코드</span>
 								<input type="text" name="pwCertCode" maxlength="20" />
@@ -416,7 +517,7 @@ function pwFindSendEmail(){
 </script>
 
 
-<div id="wrap" style="border: solid 1px red; width: 100%; height: 700px; background-color: #f8fcff; align-content: center; " align="center">
+<div id="wrap" style="width: 100%; height: 700px; background-color: #f8fcff; align-content: center; " align="center">
 
 <div id="idpwfind" style="border-radius: 30px; background-color: white; width: 40%; height: 550px; box-shadow: 0px 4px 35px #00000014; padding-top: 1.5%;">
 
@@ -448,7 +549,7 @@ function pwFindSendEmail(){
 </div>
 
 
-<div id="findcontent_pw" style="border: solid 1px red; width: 80%; height: 400px; margin-top: 3%; padding: 5% 0 0 5%;" align="left">
+<div id="findcontent_pw" style="width: 80%; height: 400px; margin-top: 3%; padding: 5% 0 0 5%;" align="left">
 
 <div>
 	<span class="first_td">이름</span>
@@ -468,8 +569,8 @@ function pwFindSendEmail(){
 <div id="afterPwFindEmail">
 
 </div>
-<div id="PwDiv" align="center">
-	
+<div id="PwDiv">
+
 </div>
 </div>
 

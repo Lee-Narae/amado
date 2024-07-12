@@ -216,6 +216,8 @@ public class ControllerNR {
 		
 		JSONObject jsonObj = new JSONObject();
 		
+		jsonObj.put("userid", userid);
+		
 		if(member == null) {
 			jsonObj.put("exist", "no");
 		}
@@ -259,7 +261,7 @@ public class ControllerNR {
         try {
         	mail.send_certification_code(email, certification_code);
         	sendMailSuccess = true;
-        	jsonObj.put("certification_code", certification_code);
+        	jsonObj.put("certification_code2", certification_code);
         	
         } catch (Exception e) {
         	e.printStackTrace();
@@ -278,6 +280,39 @@ public class ControllerNR {
 		
 	}
 	
+	
+	@ResponseBody
+	@PostMapping("/member/findPwUpdatePw.do")
+	public String findPwUpdatePw(HttpServletRequest request) {
+		
+		String newpw = request.getParameter("password");
+		String userid = request.getParameter("userid");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("userid", userid);
+		paramap.put("newpw", Sha256.encrypt(newpw));
+		
+		JSONObject jsonObj = new JSONObject();
+
+		// 이전 비밀번호와 동일한지 확인
+		int n = service.checkBeforePw(paramap);
+		
+		System.out.println("n: "+n);
+		
+		if(n == 1) {
+			jsonObj.put("n", 0);
+		}
+		
+		else { // 이전과 일치하지 않는 ㄱㅊ은 비번일 때 비번 업데이트
+			
+			
+			n = service.findPwUpdatePw(paramap);
+			
+			jsonObj.put("n", n);
+		}
+		
+		return jsonObj.toString();
+	}
 	
 	
 	
