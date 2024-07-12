@@ -117,13 +117,13 @@ $(document).ready(function() {
 	<c:if test="${requestScope.params == '4'}">
 		<h2 style="text-align:center; margin-bottom: 30px;">농구 게시판</h2>
 	</c:if>		
-	<c:if test="${requestScope.params == '5'}">
+	<c:if test="${requestScope.params == '6'}">
 		<h2 style="text-align:center; margin-bottom: 30px;">테니스 게시판</h2>
 	</c:if>		
-	<c:if test="${requestScope.params == '6'}">
+	<c:if test="${requestScope.params == '7'}">
 		<h2 style="text-align:center; margin-bottom: 30px;">볼링 게시판</h2>
 	</c:if>		
-	<c:if test="${requestScope.params == '7'}">
+	<c:if test="${requestScope.params == '5'}">
 		<h2 style="text-align:center; margin-bottom: 30px;">족구 게시판</h2>
 	</c:if>		
 	<c:if test="${requestScope.params == '8'}">
@@ -208,7 +208,7 @@ $(document).ready(function() {
 								<td align="center">${boardvo.viewcount}</td>
 							</tr>
 						</c:if>
-						<c:if test="${boardvo.fk_sportseq == 5}">
+						<c:if test="${boardvo.fk_sportseq == 6}">
 							<tr>
 								<td align="center">${boardvo.boardseq}</td>
 								<td>
@@ -220,7 +220,7 @@ $(document).ready(function() {
 								<td align="center">${boardvo.viewcount}</td>
 							</tr>
 						</c:if>
-						<c:if test="${boardvo.fk_sportseq == 6}">
+						<c:if test="${boardvo.fk_sportseq == 7}">
 							<tr>
 								<td align="center">${boardvo.boardseq}</td>
 								<td>
@@ -232,7 +232,7 @@ $(document).ready(function() {
 								<td align="center">${boardvo.viewcount}</td>
 							</tr>
 						</c:if>
-						<c:if test="${boardvo.fk_sportseq == 7}">
+						<c:if test="${boardvo.fk_sportseq == 5}">
 							<tr>
 								<td align="center">${boardvo.boardseq}</td>
 								<td>
