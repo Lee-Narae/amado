@@ -22,6 +22,7 @@ import com.spring.app.common.MyUtil;
 import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
+import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.service.AmadoService_SJ;
 
@@ -239,17 +240,17 @@ public class ControllerSJ {
 	
 	
 			if (boardvo == null) {
-				mav.setViewName("redirect:/list.do");
+				mav.setViewName("redirect:/community/list.do");
 				return mav;
 			}
 
 			mav.addObject("boardvo", boardvo);
-			// === #140. 이전글제목, 다음글제목 보기 === //
+			// === 이전글제목, 다음글제목 보기 === //
 			mav.addObject("paraMap", paraMap);
 			mav.setViewName("board/boardview.tiles1");
 			// /WEB-INF/views/tiles1/board/view.jsp 파일을 생성한다.
 		} catch (NumberFormatException e) {
-			mav.setViewName("redirect:/list.do");
+			mav.setViewName("redirect:/community/list.do");
 		}
 	return mav;
 	}
@@ -264,7 +265,6 @@ public class ControllerSJ {
 	public String addComment(BoardCommentVO boardcommentvo) {
 		// 댓글쓰기에 첨부파일이 없는 경우
 
-		
 		int n = 0;
 		try {
 			n = service.addBoardComment(boardcommentvo);
@@ -414,10 +414,57 @@ public class ControllerSJ {
 		return jsonObj.toString(); // {"n":1}
 	}
 	
+	// 답글 수정(Ajax 로 처리) //
+	@ResponseBody
+	@PostMapping(value = "/updateCommentSJ.do", produces = "text/plain;charset=UTF-8")
+	public String updateCommentSJ(HttpServletRequest request) {
+		String boardcommentseq = request.getParameter("boardcommentseq");
+		String content = request.getParameter("content");
+		
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("boardcommentseq", boardcommentseq);
+		paraMap.put("comment_text", content);
+		
+		int n = service.updateComment(paraMap);
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+		
+		return jsonObj.toString(); // {"n":1}
+	}
 	
 	
 	
-	
+	// 답글 읽기
+	@ResponseBody
+	@PostMapping(value="/readReplyCommentSJ.do", produces="text/plain;charset=UTF-8")
+	public String addReplyComment(HttpServletRequest request) {
+		
+		String boardcommentseq = request.getParameter("boardcommentseq");
+		
+		// System.out.println(fleamarketcommentseq);
+		List<BoardCommentVO> commentreList = service.getCommentreList(boardcommentseq); 
+		
+		JSONArray jsonArr = new JSONArray(); // [] 
+		
+		if(commentreList != null) {
+			for(BoardCommentVO commentrevo : commentreList) {
+				JSONObject jsonObj = new JSONObject();          // {} 
+				jsonObj.put("boardcommentseq", commentrevo.getBoardcommentseq());             
+				jsonObj.put("comment_text", commentrevo.getComment_text()); 
+				jsonObj.put("depthno", commentrevo.getDepthno());           
+				jsonObj.put("fk_boardcommentseq", commentrevo.getFk_boardcommentseq());     
+				jsonObj.put("fk_userid", commentrevo.getFk_userid());
+				jsonObj.put("groupno", commentrevo.getGroupno());
+				jsonObj.put("parentseq", commentrevo.getParentseq());
+				jsonObj.put("registerdate", commentrevo.getRegisterdate());
+				
+				jsonArr.put(jsonObj);
+			}// end of for-----------------------
+		}
+		
+		return jsonArr.toString();
+	}
 	
 	
 	
@@ -491,7 +538,6 @@ public class ControllerSJ {
 			// /list.do 페이지로 redirect(페이지이동)해라는 말이다.
 		} else {
 			mav.setViewName("redirect:/community/add.do");
-			// /WEB-INF/views/tiles1/board/error/add_error.jsp 파일을 생성한다.
 		}
 
 		return mav;

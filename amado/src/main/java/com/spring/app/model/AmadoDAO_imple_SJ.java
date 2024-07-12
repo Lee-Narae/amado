@@ -162,6 +162,21 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 		return n;
 	}
 
+	// 답글이 있는지 확인
+	@Override
+	public int checkComment(String boardcommentseq) {
+		int totalCount = sqlsession.selectOne("SJ.checkComment", boardcommentseq);
+	    return totalCount;
+	}
+
+	
+	// 답글 가져오기
+	@Override
+	public List<BoardCommentVO> getCommentreList(String boardcommentseq) {
+		List<BoardCommentVO> commentreList = sqlsession.selectList("SJ.getCommentreList", boardcommentseq);
+		return commentreList;
+	}
+
 
 
 }
