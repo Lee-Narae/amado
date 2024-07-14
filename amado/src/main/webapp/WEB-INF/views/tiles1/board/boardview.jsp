@@ -579,6 +579,30 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 					<th>작성일자</th>
 					<td>${requestScope.boardvo.registerdate}</td>
 				</tr>
+			
+		   	    <tr>
+		   		    <th>첨부파일</th>
+		   	        <td>
+		   	          <c:if test="${sessionScope.loginuser != null && requestScope.boardvo.orgfilename != null}">
+		   	             <a href="<%= ctxPath%>/download.do?boardseq=${requestScope.boardvo.boardseq}">${requestScope.boardvo.orgfilename}</a>  
+		   	          </c:if>
+		   	          <c:if test="${sessionScope.loginuser == null && requestScope.boardvo.orgfilename != null}">
+		   	             ${requestScope.boardvo.orgfilename}
+		   	          </c:if>
+		   	          <c:if test="${requestScope.boardvo.orgfilename == null}">
+		   	          </c:if>
+		   	        </td>
+		   	    </tr>
+		   	    <tr>
+		   	    	<c:if test="${requestScope.boardvo.orgfilename != null}">
+		   		    	<th>파일크기(bytes)</th>
+		   	      	  <td><fmt:formatNumber value="${requestScope.boardvo.filesize}" pattern="#,###" /></td>
+		   	        </c:if>
+		   	    	<c:if test="${requestScope.boardvo.orgfilename == null}">
+		   		    	<th>파일크기(bytes)</th>
+		   	        </c:if>
+		   	    </tr>				
+				
 			</table>
 
 		</c:if>

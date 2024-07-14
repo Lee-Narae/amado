@@ -1,6 +1,8 @@
 package com.spring.app.amado.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -370,6 +372,111 @@ public class ControllerSJ {
 		
 		return jsonArr.toString(); 
 	}
+	
+	
+	
+	
+	// === #183. 첨부파일 다운로드 받기 === //
+	@GetMapping("/download.do")
+	public void requiredLogin_download(HttpServletRequest request, HttpServletResponse response) {
+		
+		String boardseq = request.getParameter("boardseq");
+		// 첨부파일이 있는 글번호 
+		
+		/*
+		    첨부파일이 있는 글번호에서
+		  20240628092043154731282615400.jpg 처럼
+		    이러한 fileName 값을 DB에서 가져와야 한다.
+		    또한 orgFilename 값도 DB에서 가져와야 한다.
+		*/
+		
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("boardseq", boardseq);
+		paraMap.put("searchType", "");
+		paraMap.put("searchWord", "");
+		
+		// **** 웹브라우저에 출력하기 시작 **** //
+		// HttpServletResponse response 객체는 전송되어져온 데이터를 조작해서 결과물을 나타내고자 할때 쓰인다.
+		response.setContentType("text/html; charset=UTF-8");
+		
+		PrintWriter out = null;
+		// out 은 웹브라우저에 기술하는 대상체라고 생각하자.
+		
+		try {
+			Integer.parseInt(boardseq);
+			BoardVO boardvo = service.getView_no_increase_readCount(paraMap); 
+			
+			if(boardvo == null || (boardvo != null && boardvo.getFilename() == null) ) {
+				out = response.getWriter();
+				// out 은 웹브라우저에 기술하는 대상체라고 생각하자.
+				
+				out.println("<script type='text/javascript'>alert('존재하지 않는 글번호 이거나 첨부파일이 없으므로 파일다운로드가 불가합니다.'); history.back();</script>");
+		    	return;
+			}
+			
+			else {
+				// 정상적으로 다운로드를 할 경우 
+				
+				String filename = boardvo.getFilename();
+				// 20240628092043154731282615400.jpg  이것이 바로 WAS(톰캣) 디스크에 저장된 파일명이다.
+				
+				String orgfilename = boardvo.getOrgfilename();
+				// 쉐보레전면.jpg   다운로드시 보여줄 파일명
+				
+				
+				// 첨부파일이 저장되어 있는 WAS(톰캣) 디스크 경로명을 알아와야만 다운로드를 해줄 수 있다.
+		    	// 이 경로는 우리가 파일첨부를 위해서 /addEnd.action 에서 설정해두었던 경로와 똑같아야 한다.  
+				// WAS 의 webapp 의 절대경로를 알아와야 한다. 
+				HttpSession session = request.getSession(); 
+				String root = session.getServletContext().getRealPath("/");  
+				
+			//	System.out.println("~~~ 확인용 webapp 의 절대경로 => " + root);
+				// ~~~ 확인용 webapp 의 절대경로 => C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\board\ 
+				
+				String path = root+"resources"+File.separator+"files";
+				/* File.separator 는 운영체제에서 사용하는 폴더와 파일의 구분자이다.
+				      운영체제가 Windows 이라면 File.separator 는  "\" 이고,
+				      운영체제가 UNIX, Linux, 매킨토시(맥) 이라면  File.separator 는 "/" 이다. 
+				*/
+				
+				// path 가 첨부파일이 저장될 WAS(톰캣)의 폴더가 된다.
+				// System.out.println("~~~ 확인용 path => " + path);
+				// ~~~ 확인용 path => C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\board\resources\files
+				
+				// ***** file 다운로드 하기 ***** //
+				boolean flag = false; // file 다운로드 성공, 실패인지 여부를 알려주는 용도 
+				flag = fileManager.doFileDownload(filename, orgfilename, path, response); 
+				// file 다운로드 성공시 flag 는 true,
+				// file 다운로드 실패시 flag 는 false 를 가진다.
+				
+				if(!flag) {
+					// 다운로드가 실패한 경우 메시지를 띄워준다. 
+					out = response.getWriter();
+			    	// out 은 웹브라우저에 기술하는 대상체라고 생각하자.
+			    	
+			    	out.println("<script type='text/javascript'>alert('파일다운로드가 실패되었습니다.'); history.back();</script>");
+				}
+				
+			}
+			
+		} catch (NumberFormatException | IOException e) {
+			
+			try {
+				out = response.getWriter();
+				// out 은 웹브라우저에 기술하는 대상체라고 생각하자.
+				
+				out.println("<script type='text/javascript'>alert('파일다운로드가 불가합니다.'); history.back();</script>"); 
+			} catch (IOException e2) {
+				e2.printStackTrace();
+			}
+			
+		}
+		
+	}	
+	
+	
+	
+	
 	
 	
 	

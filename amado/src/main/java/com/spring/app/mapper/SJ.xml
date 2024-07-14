@@ -306,6 +306,7 @@
 	<select id="getView" parameterType="HashMap" resultType="BoardVO">
 	   select previousseq, previoussubject, boardseq, fk_userid, 
 	   		  title, content, viewcount, registerdate, password, nextseq, nextsubject, fk_sportseq
+	   		, orgfilename, filename, filesize
 	    FROM
 	    (
 	        select lag (boardseq, 1) over(order by boardseq desc) AS previousseq
@@ -315,6 +316,7 @@
 	             , lead (boardseq, 1) over(order by boardseq desc) AS nextseq
 	             , lead (title, 1) over(order by boardseq desc) AS nextsubject
 	             , fk_sportseq
+	             , orgfilename, filename, filesize
 	        from tbl_board
 	        where status = 1 
 	    ) V
