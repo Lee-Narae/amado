@@ -79,6 +79,49 @@
 
 $(document).ready(function(){
 	
+	$.ajax({
+        url:"<%= ctxPath%>/allview.do",
+        dataType:"json",
+        success:function(json){
+        	//alert("전체보여주기 성공하나요~~~???")
+        	
+        	let v_html=``;
+        	
+        	$.each(json, function(index, item) {
+        		
+        		if((index+1)%4==1){
+        			v_html += `<div style='display:flex;' >`;
+        			
+        		}
+	            v_html += `<div class='col-md-6 col-lg-2 offset-lg-1'>
+				 			   <div class="card mb-3" >
+								   <img style="height: 140px;" src='<%= ctxPath%>/resources/images/zee/\${item.imgfilename}' class='card-img-top'/>
+								   <div class='card-body' style='padding: 0; font-size: 9pt;'>
+									  <ul class='list-unstyled mt-3 pl-3'> 
+							             <li><label class='prodInfo' style="font-weight: bold;">글제목: <span style="font-weight: normal;">\${item.title}</sapn></label></li>
+							             <li><label class='prodInfo' style="font-weight: bold;">가격: <span style="font-weight: normal;">\${Number(item.cost).toLocaleString('en')}원</sapn></label></li> 
+							             <li><label class='prodInfo' style="font-weight: bold;">장소: <span style="font-weight: normal;">\${item.city}&nbsp;\${item.local}</sapn></label><span style="color: red;"></span></li> 
+							             <li class='text-center'><a href='/amado/club/prodView.do?fleamarketseq=\${item.fleamarketseq}' class='stretched-link btn btn-outline-dark btn-sm' role='button'>자세히보기</a></li> 
+						            	         <%-- 카드 내부의 링크에 .stretched-link 클래스를 추가하면 전체 카드를 클릭할 수 있고 호버링할 수 있습니다(카드가 링크 역할을 함). --%>
+							          </ul>
+							       </div>
+						      	</div>
+					      	</div>`;
+        			      	
+	            if((index+1)%4==0 || (json.length-1)==index){ //json.length는 전체 개수, item은 json 안의 하나하나
+        			v_html += `</div>`;
+        		}
+        	});
+    	
+			$("div#product").html(v_html);
+        	
+        
+		},
+        error: function(request, status, error){
+			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		} 
+    });
+	
 	$(document).on("click","button#all", function(e){
 		 
 		$.ajax({
@@ -110,7 +153,7 @@ $(document).ready(function(){
 							      	</div>
 						      	</div>`;
 	        			      	
-		            if((index+1)%4==0 || (json.length-1)==index){
+		            if((index+1)%4==0 || (json.length-1)==index){ //json.length는 전체 개수, item은 json 안의 하나하나
 	        			v_html += `</div>`;
 	        		}
 	        	});
@@ -216,8 +259,6 @@ $(document).ready(function(){
 			alert('상품판매등록은 로그인 후에 가능합니다.');
 			return; 
 		}
-		
-		
 	 	  
 	});
 	
@@ -267,28 +308,7 @@ $(document).ready(function(){
 		<div><a id="itemRegister" href='/amado/club/itemRegister.do'>판매 등록하기</a></div>
 		
 		<!-- 상품  -->
-		<div id="product" style="margin-top: 5%; margin-right: 8%; border:solid 0px red; ">
-			<c:forEach var="item" items="${requestScope.allItemList}">
-			<div id="product" style=" margin-top: 5%; border:solid 0px red; ">
-				<div class='col-md-6 col-lg-2 offset-lg-1'>
-	 			   <div class="card mb-3" >
-					   <img style="height: 140px;" src='<%= ctxPath%>/resources/images/zee/${item.imgfilename}' class='card-img-top'/>
-					   <div class='card-body' style='padding: 0; font-size: 9pt;'>
-						  <ul class='list-unstyled mt-3 pl-3'> 
-				             <li><label class='prodInfo' style="font-weight: bold;">글제목: <span style="font-weight: normal;">${item.title}</sapn></label></li>
-				             <li>
-				             	<label class='prodInfo' style="font-weight: bold;">가격: <span style="font-weight: normal;"><fmt:formatNumber value="${item.cost}" pattern="#,###" />원</span></label>
-				             </li> 
-				             <li><label class='prodInfo' style="font-weight: bold;">장소: <span style="font-weight: normal;">${item.city}&nbsp;${item.local}</sapn></label><span style="color: red;"></span></li> 
-				             <li class='text-center'><a href='/amado/club/prodView.do?fleamarketseq=${item.fleamarketseq}' class='stretched-link btn btn-outline-dark btn-sm' role='button'>자세히보기</a></li> 
-			            	         <%-- 카드 내부의 링크에 .stretched-link 클래스를 추가하면 전체 카드를 클릭할 수 있고 호버링할 수 있습니다(카드가 링크 역할을 함). --%>
-				          </ul>
-				       </div>
-			      	</div>
-		      	</div>
-			</div>
-			</c:forEach>
-		</div>
+		<div id="product" style="margin-top: 5%; margin-right: 8%; border:solid 0px red; "></div>
 	    
 		<%-- 페이지 바
 		<div aria-label="Page navigation" class="pn" style="border:solid 0px red; padding: 10% 35%;">
