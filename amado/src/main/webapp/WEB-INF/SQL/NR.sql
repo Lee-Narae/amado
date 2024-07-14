@@ -227,3 +227,6 @@ select * from user_constraints
 where table_name = 'TBL_MEMBER';
 
 desc tbl_member;
+
+
+select * from tbl_gym;
