@@ -159,7 +159,14 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 				// 수정 전 댓글 내용(btnUpdateComment 버튼(button) (tr) 의 부모 (td) 의 (tr)첫번째 자식에 있다.)
 //				alert($(e.target).parent().parent().children("td:nth-child(2)").text());
 				
-				const fullText = $(e.target).parent().parent().parent().text();
+				var fullText = $(e.target).parent().parent().parent().text();
+				
+				const lastgoodIndex = fullText.lastIndexOf("👍");
+				
+				if(lastgoodIndex != -1) {
+					fullText = fullText.substring(0, lastgoodIndex);
+				}
+				
 				const lastIndex20 = fullText.lastIndexOf("(20"); // "(20"이 마지막으로 등장하는 위치를 찾습니다.
 				const lastIndexModify = fullText.lastIndexOf("수정"); // "(수정)"이 마지막으로 등장하는 위치를 찾습니다.
 
@@ -625,13 +632,18 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 			</c:if>
 			
 			
-			<%-- === #94. 댓글 내용 보여주기 === --%>
+			<%-- === 댓글 내용 보여주기 === --%>
 	       <h3 style="margin-top: 50px;">댓글내용</h3>
 	       <table class="table" style="width: 1024px; margin-top: 2%; margin-bottom: 3%;">
 	          <thead id="commentTheadDisplay"></thead>
 	          <tbody id="commentDisplay"></tbody>
 	        </table>
-			
+	        
+       	 	<%-- === 댓글페이지바가 보여지는 곳 === --%> 
+		 	<div style="display: flex; margin-bottom: 50px;">
+	    	   <div id="pageBar" style="margin: auto; text-align: center;"></div>
+	    	</div>
+				
 			
 		</div>
 	</div>

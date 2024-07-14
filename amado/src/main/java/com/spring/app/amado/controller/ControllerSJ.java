@@ -301,12 +301,14 @@ public class ControllerSJ {
 		String fk_userid = request.getParameter("fk_userid");
 		String comment_text = request.getParameter("comment_text");
 		
+		/*
 		System.out.println("~~ 확인용 fk_boardcommentseq : " + fk_boardcommentseq);
 		System.out.println("~~ 확인용 parentseq : " + parentseq);
 		System.out.println("~~ 확인용 groupno : " + groupno);
 		System.out.println("~~ 확인용 depthno : " + depthno);
 		System.out.println("~~ 확인용 fk_userid : " + fk_userid);
 		System.out.println("~~ 확인용 comment_text : " + comment_text);
+		*/
 		
  		if (fk_userid == null) {
  			// 어차피 로그인 해야만 보이기 때문에 필요없는 과정이지만 혹시 모르니 만들었다.
@@ -752,13 +754,13 @@ public class ControllerSJ {
 				String originalFilename = attach.getOriginalFilename();
 				// attach.getOriginalFilename() 이 첨부파일명의 파일명(예: 강아지.png) 이다. 
 				
-             	System.out.println("~~~ 확인용 originalFilename => " + originalFilename); 
+//             	System.out.println("~~~ 확인용 originalFilename => " + originalFilename); 
 				// ~~~ 확인용 originalFilename => LG_싸이킹청소기_사용설명서.pdf 
 				
 				newFileName = fileManager.doFileUpload(bytes, originalFilename, path);
 				// 첨부되어진 파일을 업로드 하는 것이다. 
 				
-				System.out.println("~~~ 확인용 newFileName => " + newFileName);  
+//				System.out.println("~~~ 확인용 newFileName => " + newFileName);  
 			//	~~~ 확인용 newFileName => 2024062712072778335865583700.jpg
 				
 			
