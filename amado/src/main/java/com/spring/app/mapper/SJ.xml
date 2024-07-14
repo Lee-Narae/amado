@@ -233,6 +233,13 @@
 		select count(*) AS totalCount
 		from tbl_board
 		where status = 1 
+		
+	    <choose>
+		    <when test="params == '/community/list.do'">
+		    </when>
+		    <otherwise>and fk_sportseq = to_number(#{params})</otherwise>
+	    </choose>		
+		
 		<choose>
 			<when test='searchType == "title" and searchWord != "" '>
 				and lower(title) like '%'||lower(#{searchWord})||'%'
@@ -298,7 +305,7 @@
 
 	<select id="getView" parameterType="HashMap" resultType="BoardVO">
 	   select previousseq, previoussubject, boardseq, fk_userid, 
-	   		  title, content, viewcount, registerdate, password, nextseq, nextsubject
+	   		  title, content, viewcount, registerdate, password, nextseq, nextsubject, fk_sportseq
 	    FROM
 	    (
 	        select lag (boardseq, 1) over(order by boardseq desc) AS previousseq
@@ -307,8 +314,9 @@
 	             , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate, password
 	             , lead (boardseq, 1) over(order by boardseq desc) AS nextseq
 	             , lead (title, 1) over(order by boardseq desc) AS nextsubject
+	             , fk_sportseq
 	        from tbl_board
-	        where status = 1
+	        where status = 1 
 	    ) V
 	    WHERE V.boardseq = #{boardseq}		
 	</select>	
@@ -398,5 +406,35 @@
 		order by boardcommentseq desc
 	</select>
 	
+	
+	<insert id="add_withFile" parameterType="BoardVO">
+		<!-- 원글쓰기인 경우 -->
+		insert into tbl_board(boardseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status, orgfilename, filename, filesize, fk_sportseq)
+		values(seq_board.nextval, #{title}, #{content}, #{fk_userid}, default, #{password}, 0, 0, default, #{orgfilename}, #{filename} , to_number(#{filesize}), to_number(#{fk_sportseq}) )
+
+	</insert>
+	
+	<!-- ===  1개글 수정하기 === -->
+    <update id="edit" parameterType="BoardVO">
+        update tbl_board set title = #{title} || ' (' || to_char(sysdate, 'yyyy-mm-dd hh24:mi:ss') || ') (수정됨)'
+                           , content = #{content}
+        where boardseq = #{boardseq}                      
+    </update>
+    
+	<!-- ===  첨부파일이 있는 1개글 수정하기 === -->
+    <update id="edit_withFile" parameterType="BoardVO">
+        update tbl_board set title = #{title} || ' (' || to_char(sysdate, 'yyyy-mm-dd hh24:mi:ss') || ') (수정됨)'
+                           , content = #{content}
+                           , orgfilename = #{orgfilename}
+                           , filename = #{filename}
+                           , filesize = to_number(#{filesize})
+        where boardseq = #{boardseq}                      
+    </update>
+    
+	<!-- ===  1개글 삭제하기 === -->
+    <update id="del" parameterType="BoardVO">
+        update tbl_board set status = 0
+        where boardseq = #{boardseq}                      
+    </update>
 	
 </mapper>

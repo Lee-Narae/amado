@@ -287,7 +287,7 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 //			alert(comment_text);
 			
 			if(comment_text == null || comment_text == "") {
-				alert("답변 내용이 없습니다.");
+				alert("댓글 내용이 없습니다.");
 			}
 			
 			if(comment_text != null && comment_text != "") {
@@ -433,7 +433,7 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 //			alert(comment_text);
 			
 			if(comment_text == null || comment_text == "") {
-				alert("답변 내용이 없습니다.");
+				alert("답글 내용이 없습니다.");
 			}
 			
 			if(comment_text != null && comment_text != "") {
@@ -591,8 +591,8 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 			<button type="button" class="btn btn-secondary btn-sm mr-3" onclick="javascript:location.href='<%=ctxPath%>/community/list.do'">전체목록보기</button>
 
 			<c:if test="${not empty sessionScope.loginuser && sessionScope.loginuser.userid == requestScope.boardvo.fk_userid}">
-				<button type="button" class="btn btn-secondary btn-sm mr-3" onclick="javascript:location.href='<%= ctxPath%>/edit.do?seq=${requestScope.boardvo.boardseq}'">글수정하기</button>
-				<button type="button" class="btn btn-secondary btn-sm mr-3" onclick="javascript:location.href='<%= ctxPath%>/del.do?seq=${requestScope.boardvo.boardseq}'">글삭제하기</button>
+				<button type="button" class="btn btn-secondary btn-sm mr-3" onclick="javascript:location.href='<%= ctxPath%>/board/edit.do?boardseq=${requestScope.boardvo.boardseq}&sportseq=${requestScope.boardvo.fk_sportseq}'">글수정하기</button>
+				<button type="button" class="btn btn-secondary btn-sm mr-3" onclick="javascript:location.href='<%= ctxPath%>/board/del.do?boardseq=${requestScope.boardvo.boardseq}'">글삭제하기</button>
 			</c:if>
 			
 			<%-- 댓글쓰기 폼 추가 --%>

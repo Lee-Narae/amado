@@ -58,6 +58,8 @@ public class FileManager {
 		
 		// 업로드할 경로가 존재하지 않는 경우 폴더를 생성한다.
 		File dir = new File(path);
+		
+		System.out.println("path 여기 : " + path);
 		// 파라미터로 입력받은 문자열인 path(파일을 저장할 경로)를 실제 폴더로 만든다.
 		// 자바에서는 File 클래스를 사용하여 폴더 또는 파일을 생성 및 관리를 하게 된다.
 		
