@@ -155,9 +155,9 @@ $(document).ready(function(){
 			<div onclick="location.href='<%=ctxPath%>/index.do'">Home</div>
 		</div>
 		<div class="tabs" style="margin-right: 2%;">
-			<div onclick="location.href='<%=ctxPath%>/club/viewClub.do'">동호회 찾기</div>
+			<div onclick="location.href='<%=ctxPath%>/club/viewclub.do'">동호회 찾기</div>
 			<div onclick="location.href='<%=ctxPath%>/club/myClub.do?sportseq=1'">My 동호회</div>
-			<div onclick="location.href='#'">동호회 등록하기</div>
+			<div onclick="location.href='<%=ctxPath%>/club/clubRegister.do'">동호회 등록하기</div>
 			<div onclick="location.href='<%=ctxPath%>/club/matchRegister.do'">매치 등록하기</div>
 			<div onclick="location.href='<%=ctxPath%>/club/fleamarket.do'">플리마켓</div>
 		</div>

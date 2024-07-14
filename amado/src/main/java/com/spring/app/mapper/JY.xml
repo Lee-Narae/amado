@@ -66,11 +66,22 @@
 	</insert>
 	
 	
-	<!-- // 모든 상품 select 해오기 -->
-	<select id="getAllItemList" resultType="FleamarketVO"  parameterType="HashMap" >
+	<!-- 모든 상품 select 해오기 -->
+	<select id="getAllItemList" resultType="FleamarketVO" >
 		select fleamarketseq,  city, local, title, content, cost, deal, fk_userid, to_char(registerdate,'yyyy-mm-dd hh24:mi:ss') AS registerdate, commentcount, viewcount, status, imgfilename
 		from tbl_fleamarket
 	</select>
+	
+	<!-- 상품 전체 개수 불러오기 -->
+	<select id="getItemCnt" resultType="String" >
+		select count(*)
+		from tbl_fleamarket
+	</select>
 
+	<!-- 쿠키 
+	<select id="goodsDetailData" resultType="FleamarketVO" parameterType="Int">
+		
+	</select>
+	-->
 
 </mapper>

@@ -4,10 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -223,9 +225,13 @@ public class ControllerJY {
 	public ModelAndView fleamarket(ModelAndView mav) {
 		
 		// 모든 상품 select 해오기
-		List<FleamarketVO> allItemList = service.getAllItemList(); //디비에서 데이터를 불러만오는 거라 map에 넣어서 보낼게 없음!!!!
+		List<FleamarketVO> allItemList = service.getAllItemList(); //where조건 없이 디비에서 데이터를 불러만오는 거라  map에 넣어서 보낼게 없음!!!!  //(); 괄호에 뭐가 들어갈땐 조건이 있어서 그 조건을 디비에보내서 결과물 가져올때임
+		
+		// 상품 전체 개수 불러오기
+		String cnt = service.getItemCnt();
 		
 		mav.addObject("allItemList", allItemList);
+		mav.addObject("cnt", cnt);
 		
 		mav.setViewName("club/fleamarket.tiles2");
 		return mav;
@@ -266,7 +272,7 @@ public class ControllerJY {
 			jsonObj.put("title", fvo.getTitle());
 			
 			jsonArr.put(jsonObj);
-			System.out.println("aaa"+jsonArr);
+			// System.out.println("aaa"+jsonArr);
 			/* 	
 			  	jsonArr => 
 				[{"deal":"직거래","cost":"5000000","city":"경기도","imgfilename":"가평잣.png",
@@ -550,15 +556,51 @@ public class ControllerJY {
 			
 		}
 		
-		mav.setViewName("redirect:/club/fleamarket.do");
+		mav.setViewName("redirect:/club/fleamarket.do"); //상품 등록이 완료되면 결과가 적용된 페이지로 가야하기때문에 redirect를 써줘여 함.
 		//  /WEB-INF/views/tiles1/board/error/add_error.jsp 파일을 생성한다.
 
 			
 		return mav;
 		
-		
 	}
 
 		
+	
+	
+	/* ===== 쿠키로 최근 본 상품 목록 불러오기 =====
+	@GetMapping("club/recentlist.do")
+	public ModelAndView goods_list(HttpServletRequest request, ModelAndView mav) {
+	    List<FleamarketVO> cList = new ArrayList<>();
+
+	    // 쿠키 가져오기
+	    Cookie[] cookies = request.getCookies();
+
+	    if (cookies != null) {
+	        for (int i = cookies.length - 1; i >= 0; i--) {
+	            if (cookies[i].getName().startsWith("goods")) {
+	                try {
+	                    String no = cookies[i].getValue();
+	                    int goodsSeq = Integer.parseInt(no);
+
+	                    // 유효한 상품 번호인지 확인
+	                    if (goodsSeq > 0) {
+	                        FleamarketVO fvo = service.goodsDetailData(goodsSeq);
+	                        if (fvo != null) {
+	                            cList.add(fvo);
+	                        }
+	                    }
+	                } catch (NumberFormatException e) {
+	                    // 상품 번호 파싱 오류 처리
+	                    // 로깅하거나 예외 처리 필요
+	                    e.printStackTrace();
+	                }
+	            }
+	        }
+	    }
+
+	    mav.addObject("cList", cList);
+	    return mav;
+	}
+	*/
 	
 }

@@ -32,5 +32,11 @@ public interface AmadoDAO_JY {
 	
 	// 모든 상품 select 해오기
 	List<FleamarketVO> getAllItemList();
+
+	// 상품 전체 개수 불러오기
+	String getItemCnt();
+
+	// 쿠키
+	FleamarketVO goodsDetailData(int goodsSeq);
 		
 }
