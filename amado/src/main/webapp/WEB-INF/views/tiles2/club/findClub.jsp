@@ -114,7 +114,7 @@
 	
 	
 	function goView(clubseq, fk_sportseq) {
-//		alert('ClubSeq: ' + clubseq + ', FK_SportSeq: ' + fk_sportseq);
+		//alert('ClubSeq: ' + clubseq + ', FK_SportSeq: ' + fk_sportseq);
 		location.href = "<%=ctxPath%>/club/myClub_plus.do?clubseq="+clubseq+"&sportseq="+fk_sportseq;
 	}
 

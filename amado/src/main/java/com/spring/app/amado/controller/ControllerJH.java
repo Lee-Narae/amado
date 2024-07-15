@@ -1,10 +1,13 @@
 package com.spring.app.amado.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -14,7 +17,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
 import com.spring.app.service.AmadoService_JH;
@@ -373,9 +378,54 @@ public class ControllerJH {
 	
 	
 	@GetMapping("/club/myClub_plus.do")
-	public ModelAndView myClub_plus(ModelAndView mav) {
+	public ModelAndView myClub_plus(ModelAndView mav, HttpServletRequest request) {
+		
+		// 조회하고자 하는 글번호 받아오기
+		String clubseq = request.getParameter("clubseq");
+		String sportseq = request.getParameter("sportseq");
 
+		// System.out.println("확인용  clubseq" + clubseq);
+		// System.out.println("확인용  sportseq" + sportseq);
+
+		
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("clubseq", clubseq);
+		paraMap.put("sportseq", sportseq);
+
+		ClubVO clubvo = service.getMyClub(paraMap);
+		
+		if(clubvo != null) {
+			service.updateviewcount(clubseq);
+		}
+		
+		/*
+			System.out.println(clubvo.getClubseq());
+			System.out.println(clubvo.getClubname());
+			System.out.println(clubvo.getClubimg());
+			System.out.println(clubvo.getFk_sportseq());
+			System.out.println(clubvo.getFk_userid());
+			System.out.println(clubvo.getClubtel());
+			System.out.println(clubvo.getCity());
+			System.out.println(clubvo.getLocal());
+			System.out.println(clubvo.getClubtime());
+			System.out.println(clubvo.getMembercount());
+			System.out.println(clubvo.getClubpay());
+			System.out.println(clubvo.getClubstatus());
+			System.out.println(clubvo.getClubscore());
+		*/
+		mav.addObject("clubvo", clubvo);
 		mav.setViewName("club/myClub_plus.tiles2");
+		// /WEB-INF/views/tiles2/main/index.jsp
+		
+		return mav;
+	}	
+	
+	
+
+	@GetMapping("/gym/gymPay.do")
+	public ModelAndView gymPay(ModelAndView mav) {
+
+		mav.setViewName("gym/gymPay.tiles2");
 		// /WEB-INF/views/tiles2/main/index.jsp
 		
 		return mav;

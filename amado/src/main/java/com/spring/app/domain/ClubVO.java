@@ -37,6 +37,8 @@ public class ClubVO {
 	private String clubpay; 		// 회비
 	private String clubstatus;		// 운영 상태
 	private String clubscore;		// 점수
+	private String viewcount;		// 조회수
+	
 	
 	private String rank; // select 용 랭킹  
 	
@@ -155,7 +157,12 @@ public class ClubVO {
 	public void setFk_userid(String fk_userid) {
 		this.fk_userid = fk_userid;
 	}
-
+	public String getViewcount() {
+		return viewcount;
+	}
+	public void setViewcount(String viewcount) {
+		this.viewcount = viewcount;
+	}
 	
 	
 	

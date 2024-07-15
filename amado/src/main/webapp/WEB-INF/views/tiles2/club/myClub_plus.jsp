@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% String ctxPath = request.getContextPath(); %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <link rel="stylesheet" href="<%=ctxPath%>/resources/bootstrap-4.6.2-dist/css/bootstrap.min.css" type="text/css">
 <style type="text/css">
 
@@ -81,44 +83,110 @@ text-align: center;
 margin-left: 2%;
 }
 
-
+.uniform-size {
+    width: 90px;
+    height: 100px;
+    object-fit: cover; /* 이미지 비율을 유지하면서 크기를 맞춤 */
+}
+.uniform-size1{
+	width: 320px;
+    height: 300px;
+    object-fit: cover; /* 이미지 비율을 유지하면서 크기를 맞춤 */
+}
 </style>
 
 <div id="container">
 <div  style="background-color: #4040bf">
 <div class="board_header"  style="display: flex; margin-left: 15%; color: white; padding: 3%;">
     <div class="tit">
-        <h1>호우마드리드</h1>
+        <h1>${requestScope.clubvo.clubname}</h1>
         <div class="desc">호날두가 속한 동호회 입니다.</div>
     </div>
     
 
     <div class="coach_area" >
         <div class="wrap">
-            <div class="coach_info" style="display: flex; margin-left: 200%;">
+            <div class="coach_info" style="display: flex; margin-left: 190%;">
             	<div style="display: inline;">
 	                <div class="name">
-	                	<span style="font-size: 12pt;">동호회장</span>
-	                    <a href="#" class="btn_profile_link">
-	                        <span class="coach">HYEOKKKK</span>
-	                        <span class="ico ico_profile_link"></span>
-	                    </a>
+		                <div style="font-size: 12pt; width: 230%;">
+		                	동호회장
+		                </div>
+		                <div>
+		                    <a href="#" class="btn_profile_link">
+		                        <span class="coach" style="font-size: 15pt;">${requestScope.clubvo.fk_userid}</span>
+		                        <span class="ico ico_profile_link"></span>
+		                    </a>
+		                </div>
 	                </div>
 	                <div class="info" style="margin-top: 15%;">
-	                    <div class="visit">
+	                    <div class="visit" style="width: 230%;">
 	                        <span class="txt">방문자 수</span>
-	                        <span class="num">1(오늘 0)</span>
+	                        <span class="num" style="font-weight: bold;">${requestScope.clubvo.viewcount}</span>
 	                    </div>
 	                </div>
                 </div>
                 <div class="rank">
                     <div class="img">
-                    	<img style="margin-left: 37%;" src="https://ssl.nexon.com/s2/game/fo4/obt/rank/large/update_2009/ico_rank9.png" />
+                    	<c:if test="${requestScope.clubvo.clubscore < 100}">
+                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank17.png" />
+                    	</c:if>
+                    	<c:if test="${requestScope.clubvo.clubscore >= 100 && requestScope.clubvo.clubscore < 200}">
+                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank16.png" />
+                    	</c:if>
+                    	<c:if test="${requestScope.clubvo.clubscore >= 200 && requestScope.clubvo.clubscore < 300}">
+                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank15.png" />
+                    	</c:if>
+                    	<c:if test="${requestScope.clubvo.clubscore >= 300 && requestScope.clubvo.clubscore < 400}">
+                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank14.png" />
+                    	</c:if>
+                    	<c:if test="${requestScope.clubvo.clubscore >= 400 && requestScope.clubvo.clubscore < 500}">
+                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank13.png" />
+                    	</c:if>
+                    	<c:if test="${requestScope.clubvo.clubscore >= 500 && requestScope.clubvo.clubscore < 600}">
+                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank12.png" />
+                    	</c:if>
+                    	<c:if test="${requestScope.clubvo.clubscore >= 600 && requestScope.clubvo.clubscore < 700}">
+                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank11.png" />
+                    	</c:if>
+                    	<c:if test="${requestScope.clubvo.clubscore >= 700 && requestScope.clubvo.clubscore < 800}">
+                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank10.png" />
+                    	</c:if>
+                    	<c:if test="${requestScope.clubvo.clubscore >= 800 && requestScope.clubvo.clubscore < 900}">
+                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank9.png" />
+                    	</c:if>
+                    	<c:if test="${requestScope.clubvo.clubscore >= 900 && requestScope.clubvo.clubscore < 1000}">
+                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank8.png" />
+                    	</c:if>
+                    	<c:if test="${requestScope.clubvo.clubscore >= 1000 && requestScope.clubvo.clubscore < 1100}">
+                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank7.png" />
+                    	</c:if>
+                    	<c:if test="${requestScope.clubvo.clubscore >= 1100 && requestScope.clubvo.clubscore < 1200}">
+                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank6.png" />
+                    	</c:if>
+                    	<c:if test="${requestScope.clubvo.clubscore >= 1200 && requestScope.clubvo.clubscore < 1300}">
+                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank5.png" />
+                    	</c:if>
+                    	<c:if test="${requestScope.clubvo.clubscore >= 1300 && requestScope.clubvo.clubscore < 1400}">
+                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank4.png" />
+                    	</c:if>
+                    	<c:if test="${requestScope.clubvo.clubscore >= 1400 && requestScope.clubvo.clubscore < 1500}">
+                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank3.png" />
+                    	</c:if>
+                    	<c:if test="${requestScope.clubvo.clubscore >= 1500 && requestScope.clubvo.clubscore < 1600}">
+                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank2.png" />
+                    	</c:if>
+                    	<c:if test="${requestScope.clubvo.clubscore >= 1600 && requestScope.clubvo.clubscore < 1700}">
+                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank1.png" />
+                    	</c:if>
+                    	<c:if test="${requestScope.clubvo.clubscore > 1700}">
+                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank0.png" />
+                    	</c:if>
                     </div>
                 </div>
                 <div class="crest">
                     <div class="img">
-                        <img style="margin-left: 22%;" src="https://fco.dn.nexoncdn.co.kr/live/externalAssets/common/crests/light/medium/l18.png" alt="">
+                        <img class='uniform-size' style="margin-left: 90%;" src="<%=ctxPath%>/resources/images/zee/${requestScope.clubvo.clubimg}">
                     </div>
                 </div>
             </div>
@@ -130,26 +198,28 @@ margin-left: 2%;
 </div>
 	<div id="top2" style="display: flex; height: 500px; margin-top: 5%;">
 		<!-- 동호회 여러개 가입시 캐러셀 적용 -->
-		<div id="myclub" style="width: 38%; margin: 1% 0 0 8%;">
-			<img style="margin-left: 15%;" src="<%=ctxPath%>/resources/images/real_madrid.png" />
-			<div style="text-align: center; margin: 5% 13% 0 0; font-size: 25px; font-weight: bold;">호우마드리드</div>
+		<div id="myclub" style="width: 38%; margin: 5% 0 0 8%;">
+			<div style="text-align: center;">
+				<img class='uniform-size1' src="<%=ctxPath%>/resources/images/zee/${requestScope.clubvo.clubimg}">
+			</div>
+			<div style="text-align: center; margin-top: 5%; font-size: 25px; font-weight: bold;">${requestScope.clubvo.clubname}</div>
 		</div>
 		
 		
 		<div id="clubmatch" style="width: 43%; margin: 2% 0 0 0; border-radius: 70px; background-color: #e6f7ff; box-shadow: 0px 0px 10px #9ac5db;">
-			<div id="clubTitle" style="text-align: center; margin: 3% 0 3% 0; font-size: 30pt; font-weight: bolder;">호날두 스탯</div>
+			<div id="clubTitle" style="text-align: center; margin: 3% 0 3% 0; font-size: 30pt; font-weight: bolder;">${requestScope.clubvo.clubname} 스탯</div>
 			<div style="width: 100%; display: flex;" >
 				<div>
 					<img style="width: 70%; margin: 5% 20%;" src="<%=ctxPath%>/resources/images/스탯.png">
 				</div>
 				<ul style="list-style: none; width: 50%; margin: 4% 10% 0 0; font-family: 'Roboto', sans-serif;">
-					<li><span style="font-weight: bolder;">대표 연락처:  </span>010-1234-5678</li>
-					<li style="margin-top: 4%;"><span style="font-weight: bolder;">지역:  </span>미국 뉴욕주</li>
-					<li style="margin-top: 4%;"><span style="font-weight: bolder;">활동구장:  </span>토트넘 스타디움</li>
-					<li style="margin-top: 4%;"><span style="font-weight: bolder;">운영시간:  </span>24시간 연중무휴</li>
-					<li style="margin-top: 4%;"><span style="font-weight: bolder;">정원:  </span>5명</li>
-					<li style="margin-top: 4%;"><span style="font-weight: bolder;">회비:  </span>500원</li>
-					<li style="margin-top: 4%;"><span style="font-weight: bolder;">랭크 점수:  </span>1000점</li>
+					<li><span style="font-weight: bolder;">대표 연락처:  </span>${requestScope.clubvo.clubtel}</li>
+					<li style="margin-top: 4%;"><span style="font-weight: bolder;">지역:  </span>${requestScope.clubvo.city} ${requestScope.clubvo.local}</li>
+					<li style="margin-top: 4%;"><span style="font-weight: bolder;">활동구장:  </span>${requestScope.clubvo.clubgym}</li>
+					<li style="margin-top: 4%;"><span style="font-weight: bolder;">운영시간:  </span>${requestScope.clubvo.clubtime}</li>
+					<li style="margin-top: 4%;"><span style="font-weight: bolder;">정원:  </span>${requestScope.clubvo.membercount}</li>
+					<li style="margin-top: 4%;"><span style="font-weight: bolder;">회비:  </span>${requestScope.clubvo.clubpay}원</li>
+					<li style="margin-top: 4%;"><span style="font-weight: bolder;">랭크 점수:  </span>${requestScope.clubvo.clubscore}</li>
 				</ul>
 			</div>
 			<div id="more" style="text-align: right; margin: 1% 7% 0 0; color: #8a8a8a;">우리 팀 매치 일정 더보기 ▶</div>
@@ -164,8 +234,8 @@ margin-left: 2%;
 		<div style="display: flex;">
 		
 			<div style="display: flex; margin-left: 4%;">
-				<img style="width: 20%;" src="<%=ctxPath%>/resources/images/real_madrid.png">
-				<div style="font-family: 'Roboto', sans-serif; font-weight: bold; font-size: 45px; margin-top: 4.5%; color: #2929a3;">호우마드리드</div>
+				<img class='uniform-size' style="margin-left: 90%;" src="<%=ctxPath%>/resources/images/zee/${requestScope.clubvo.clubimg}">
+				<div style="font-family: 'Roboto', sans-serif; font-weight: bold; font-size: 45px; margin-top: 8%; color: #2929a3;">${requestScope.clubvo.clubname}</div>
 			</div>
 			
 			<div style="display: inline; margin-top: 2%; margin-left: 15%;">

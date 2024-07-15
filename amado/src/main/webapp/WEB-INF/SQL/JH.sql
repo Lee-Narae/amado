@@ -46,6 +46,7 @@ ALTER TABLE tbl_member ADD (memberImg VARCHAR2(50));
 ALTER TABLE tbl_gym ADD (insidestatus number(1));
 ALTER TABLE tbl_fleamarketcomment ADD (changestatus number(1) default 0);
 ALTER TABLE tbl_fleamarketcomment ADD (recommentcount number(5) default 0);
+ALTER TABLE tbl_club ADD (viewcount number(10) default 0);
 
 update tbl_fleamarket set commentCount = commentCount+1
 where fleamarketseq = 1
@@ -147,3 +148,18 @@ from tbl_fleamarketcommentreply A join tbl_member V
 ON A.fk_userid = V.userid
 where A.fleamarketcommentseq = #{fleamarketcommentseq}
 order by fleamarketcommentreplyseq desc
+
+
+
+
+select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, local, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, viewcount
+from tbl_club
+where clubseq = 3
+
+update tbl_club set clubimg = 'real_madrid.png'
+where clubseq = 17;
+
+commit
+
+select *
+from tbl_matching
