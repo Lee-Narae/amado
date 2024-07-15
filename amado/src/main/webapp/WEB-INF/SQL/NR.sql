@@ -263,11 +263,20 @@ select * from user_constraints where constraint_type = 'R' order by table_name;
 alter table tbl_clubmember foreign key FK_TBL_CLUBMEMBER_CLUBSEQ;
 alter table TBL_CLUBMEMBER drop constraint FK_TBL_CLUBMEMBER_FK_USERID;
 
-select * from tbl_boardcomment;
+select * from TBL_CATEGORY;
 
 purge recyclebin;
 
- select A.constraint_name, A.constraint_type, A.search_condition, 
-           B.column_name, B.position 
+ select A.table_name, A.constraint_name, A.delete_rule, A.constraint_type, A.search_condition, 
+           B.column_name, B.position
     from user_constraints A join user_cons_columns B 
-    on A.constraint_name = B.constraint_name;
+    on A.constraint_name = B.constraint_name
+    where constraint_type = 'R'
+    order by 1;
+    
+desc TBL_MATCHINGAPPLY;
+
+alter table 테이블명 add constraint 제약조건명 foreign key(컬럼명) references 부모테이블명(식별자컬럼명) on delete cascade;
+
+alter table TBL_NOTICECOMMENT drop constraint FK_TBL_NTCMT_FK_USERID;
+alter table TBL_NOTICECOMMENT add constraint FK_TBL_NTCMT_FK_USERID foreign key(FK_USERID) references tbl_member(userid) on delete cascade;
