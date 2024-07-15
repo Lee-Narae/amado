@@ -79,5 +79,15 @@
         update tbl_fleamarketcomment set recommentcount = recommentcount - 1 
         where fleamarketcommentseq = #{fleamarketcommentseq}
     </update>
+    
+    <select id="getMyClub" resultType="ClubVO" parameterType="HashMap">
+		select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, local, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, viewcount
+		from tbl_club
+		where clubseq = #{clubseq}
+	</select>
 
+	<update id="updateviewcount" parameterType="String">
+		update tbl_club set viewcount = viewcount+1
+		where clubseq = #{clubseq}
+	</update>
 </mapper>

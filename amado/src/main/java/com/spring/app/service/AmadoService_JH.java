@@ -3,6 +3,7 @@ package com.spring.app.service;
 import java.util.List;
 import java.util.Map;
 
+import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
 
@@ -23,6 +24,10 @@ public interface AmadoService_JH {
 	int updateReComment(Map<String, String> paraMap);
 
 	int deleteReComment(Map<String, String> paraMap);
+
+	ClubVO getMyClub(Map<String, String> paraMap);
+
+	void updateviewcount(String clubseq);
 
 	
 }

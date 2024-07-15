@@ -4,6 +4,7 @@ package com.spring.app.model;
 import java.util.List;
 import java.util.Map;
 
+import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
 
@@ -32,6 +33,10 @@ public interface AmadoDAO_JH {
 	int deleteReComment(String fleamarketcommentreplyseq);
 
 	int updateReCommentCount_decrease(String fleamarketcommentseq);
+
+	ClubVO getMyClub(Map<String, String> paraMap);
+
+	void updateviewcount(String clubseq);
 
 
 }
