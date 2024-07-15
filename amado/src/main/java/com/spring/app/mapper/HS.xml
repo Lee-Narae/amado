@@ -16,5 +16,12 @@ insert into tbl_gym_photos(photo_id,fk_gymseq,several_photos)
 values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
 
 </insert>
-	
+
+
+<!--  모든 상품 select 해오기  -->
+	<select id="getAllGymList" resultType="GymVO" >
+		select gymseq ,gymname,fk_userid,postcode,address,detailaddress,status,info,orgfilename,filename,filesize,cost,caution,membercount,likecount,insidestatus
+		from tbl_gym
+	</select>
+
 </mapper>

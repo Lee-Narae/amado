@@ -860,15 +860,29 @@ delete from tbl_boardcomment
 
 commit
 
-select *
-from tbl_boardcomment
+ALTER TABLE tbl_gym_photos CHANGE several_photos fileDrop NVARCHAR2(200);
 
+desc tbl_gym_photos
+
+delete from tbl_gym_photos
+
+drop table tbl_gym_photos
+
+select *
+from tbl_gym;
+
+select *
+from tbl_gym_photos
 
 delete from tbl_boardcomment
 where fk_userid = 'TestID'
 
 commit;
 
+orgfilename 
 
+filename
+
+filesize
 
 
