@@ -42,6 +42,53 @@ select{
 
 $(document).ready(function(){
 	
+	
+	 let b_requiredInfo = false;
+		
+		$(document).on("click", "button#btnRegister", function(e) {
+			
+		    const category = $("select#category").val();
+		    const city = $("select#city").val();
+		    
+		    if (category === "종목") {
+		        alert("종목을 선택해주세요!");
+		        b_requiredInfo = true;
+		    }
+		   	if (city ==="선택해주세요") {
+		        alert("지역을 선택해주세요!");
+		        b_requiredInfo = true;
+		        
+		    }
+		    const mcnt = $("input[name='membercount']").val();
+		    if( Number(mcnt) < 1 || Number(mcnt) > 30 ){
+		    	alert("정원은 최소 1 부터, 최대 30 까지입니다.");
+		    	b_requiredInfo = true;
+		    	
+		    }
+		    
+		    if($("input.img_file").val() == ""){
+		    	alert("사진을 추가해주세요");
+		    	b_requiredInfo = true;
+		    }
+		    
+		    
+		    $("input").each(function() {
+		    	if ($(this).val().trim() === "") {
+		            alert("데이터를 입력해주세요!");
+		            b_requiredInfo = true; // 값이 하나라도 비어 있으면 true로 변경
+		            break; // 순회 중단
+		        }
+		    });
+		    
+		    if( b_requiredInfo ){
+		    	return;
+		    }
+		    
+		});
+	 
+	
+	
+	
 	// ==>> 제품이미지 파일선택을 선택하면 화면에 이미지를 미리 보여주기 시작 <<== //
 	 $(document).on("change", "input.img_file", function(e){
 		
@@ -143,6 +190,9 @@ $(document).ready(function(){
 	// ---------------------------------------------- //
 
 	 $("button#btnRegister").click(function(){
+		 
+		 
+		
 	 	 
 		  //폼(form)을 전송(submit)
 	 	  const frm = document.registerClubFrm;
@@ -183,8 +233,8 @@ function goTop() {
 					
 				<!-- 종목  -->
 				<div id="infoo">
-					<select name="fk_sportseq" style="width:80%;" class="form-select-lg mb-3" aria-label="Large select example">
-						<option selected>종목</option>
+					<select name="fk_sportseq" style="width:80%;" id="category" class="form-select-lg mb-3" aria-label="Large select example">
+						<option value="종목">종목</option>
 						<option value="1">축구</option>
 						<option value="2">야구</option>
 						<option value="3">배구</option>
@@ -240,14 +290,18 @@ function goTop() {
 			
 			<h3 id="simple-list-item-5" style="font-weight: bolder;">정원<span style="color: red;">*</span></h3>
 			<hr>
-			<!-- 
+			
 			<label for="customRange3" class="form-label">최대 정원은 30명 까지입니다.</label>
 			<br>
+			<div style="display: flex;">
+				<input name="membercount" class="form-control form-control-lg" type="text" placeholder="" aria-label="" style="width: 20%;"><div style="font-weight: bold; padding-top: 20px; margin-left: 10px;">명</div>
+			</div>
+			<!--  
 			    1
-		        <input name="memberCnt" style="width:80%;" value="1" type="range" class="form-range slider" min="0" max="30" step="1" id="customRange3">
-		        30
+		        <input name="membercount" style="width:80%;" value="1" type="range" class="form-range slider" min="0" max="30" step="1" id="customRange3">
+		        ${requestScope.membercnt}
 		        <span class="value" id="rangeValue"></span>
-			 -->
+			-->
 			 
 			<br><br><br><br>
 			
