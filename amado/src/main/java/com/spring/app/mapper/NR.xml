@@ -440,8 +440,19 @@
 	</update>
 	
 	<select id="getGymStatus" resultType="GymVO">
-		select gymseq, gymname, fk_userid, postcode, address, detailaddress, status, info, imgfilename, cost, caution, membercount, likecount, insidestatus
+		select gymseq, gymname, fk_userid, postcode, address, detailaddress, status, info, cost, caution, membercount, likecount, insidestatus, orgfilename, filename, filesize
 		from tbl_gym
 		where status = 0
 	</select>
+	
+	<select id="getGymInfo" parameterType="String" resultType="GymVO">
+		select gymseq, gymname, fk_userid, postcode, address, detailaddress, status, info, cost, caution, membercount, likecount, insidestatus, orgfilename, filename, filesize
+		from tbl_gym
+		where gymseq = #{gymseq}
+	</select>
+	
+	<update id="gymPermit" parameterType="String">
+		update tbl_gym set status = 1 where gymseq = #{gymseq}
+	</update>
+	
 </mapper>

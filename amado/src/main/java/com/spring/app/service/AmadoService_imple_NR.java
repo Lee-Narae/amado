@@ -504,6 +504,20 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		List<GymVO> gymList = dao.getGymStatus();
 		return gymList;
 	}
+
+	// gymVO 한 개 가져오기
+	@Override
+	public GymVO getGymInfo(String gymseq) {
+		GymVO gym = dao.getGymInfo(gymseq);
+		return gym;
+	}
+
+	// 체육관 승인하기
+	@Override
+	public int gymPermit(String gymseq) {
+		int n = dao.gymPermit(gymseq);
+		return n;
+	}
 	
 	
 }

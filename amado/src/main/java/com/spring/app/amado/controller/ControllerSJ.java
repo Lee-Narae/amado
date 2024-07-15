@@ -1240,5 +1240,35 @@ public class ControllerSJ {
 	}
 	
 	
+	
+	// 1:1 문의하기
+	
+	@GetMapping(value = "/community/inquiry.do")
+	public String inquiry(HttpServletRequest request) {
+		
+		return "community/inquiry.tiles2";
+	}
+
+	@PostMapping(value = "/community/inquiryEnd.do")
+	public ModelAndView inquiryEnd(ModelAndView mav, HttpServletRequest request, MultipartHttpServletRequest mrequest) {
+		
+		String searchType_a = request.getParameter("searchType_a");
+		String searchType_b = request.getParameter("searchType_b");
+		String content = request.getParameter("content");
+		String email = request.getParameter("email");
+		String phone = request.getParameter("phone");
+		System.out.println("확인용~~ searchType_a : " + searchType_a);
+		System.out.println("확인용~~ searchType_b : " + searchType_b);
+		System.out.println("확인용~~ content : " + content);
+		System.out.println("확인용~~ email : " + email);
+		System.out.println("확인용~~ phone : " + phone);
+
+		mav.setViewName("community/inquiryList.tiles2");
+
+		
+		return mav;
+	}
+	
+	
 
 }

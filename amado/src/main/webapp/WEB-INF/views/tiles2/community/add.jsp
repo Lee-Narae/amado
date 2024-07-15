@@ -15,13 +15,6 @@
 
   $(document).ready(function(){
      
-	  
-	  
-	  // 검색시 검색조건 및 검색어 값 유지시키기
-	  $("select#searchType_a").val("${requestScope.params}");
-	  
-	  
-	  
 	  <%-- === #167-2. 스마트 에디터 구현 시작 === --%>
       //전역변수
       var obj = [];
@@ -44,6 +37,8 @@
      
      // 글쓰기 버튼
      $("button#btnWrite").click(function(){
+    	 
+    	 alert( $("textarea[name='content']").val().trim());
     	 
     	 <%-- === 스마트 에디터 구현 시작 === --%>
          // id가 content인 textarea에 에디터에서 대입
@@ -129,6 +124,10 @@
 	    var ctxPath = "<%=ctxPath %>"; // ctxPath 변수가 정의되어 있다고 가정
 
 	    switch (selectedValue) {
+	        case "0":
+	            // 전체 선택 시 처리할 URL
+	            location.href = "?sportseq=/community/list.do";
+	            break;
 	        case "1":
 	            // 축구 선택 시 처리할 URL
 	            location.href = "?sportseq=1";
@@ -163,7 +162,7 @@
 	            break;
 	        default:
 	            // 기본적으로는 전체로 처리
-	            location.href = ctxPath + "?sportseq=1";
+	            location.href = ctxPath + "/community/list.do";
 	            break;
 	    }
 
@@ -224,6 +223,7 @@
          	<th style="width: 15%; background-color: #DDDDDD;">게시판</th>
          <td>
 		     <select id="searchType_a" name="searchType_a" style="width: 30%;" onchange="navigate()">
+		         <option value="0">전체</option>
 		         <option value="1">축구</option>
 		         <option value="2">야구</option>
 		         <option value="3">배구</option>
