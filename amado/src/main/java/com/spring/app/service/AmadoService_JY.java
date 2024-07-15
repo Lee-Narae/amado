@@ -32,7 +32,7 @@ public interface AmadoService_JY {
 	List<FleamarketVO> getAllItemList();
 
 	// 상품 전체 개수 불러오기
-	String getItemCnt();
+	int getItemCnt(Map<String, String> paraMap);
 
 	// 쿠키
 	FleamarketVO goodsDetailData(int goodsSeq);

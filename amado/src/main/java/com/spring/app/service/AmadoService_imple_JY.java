@@ -89,20 +89,22 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 
 	// 상품 전체 개수 불러오기
 	@Override
-	public String getItemCnt() {
-		
-		String itemCnt = dao.getItemCnt();
+	public int getItemCnt(Map<String, String> paraMap) {
+		int itemCnt = dao.getItemCnt(paraMap);
 		return itemCnt;
 	}
 
-
-
+	
 	// 쿠키
 	@Override
 	public FleamarketVO goodsDetailData(int goodsSeq) {
 		FleamarketVO gDetailData = dao.goodsDetailData(goodsSeq);
 		return gDetailData;
 	}
+
+
+
+
 
 
 	

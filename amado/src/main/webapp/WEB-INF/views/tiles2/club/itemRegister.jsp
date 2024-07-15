@@ -59,6 +59,39 @@ $(document).ready(function(){
     // 글쓰기 버튼
     $("button#btnWrite").click(function(){
       
+    	
+    	 let b_requiredInfo = true;
+			
+		    const category = $("select#category").val();
+		    const city = $("select#city").val();
+		    
+		    if($("input.img_file").val() == ""){
+		    	alert("사진을 추가해주세요");
+		    	b_requiredInfo = false;
+		    	return false;
+		    }
+		    
+		    if (category == "종목") {
+		        alert("종목을 선택해주세요!");
+		        b_requiredInfo = false;
+		        return false;
+		    }
+		    if (city =="선택해주세요") {
+		        alert("지역을 선택해주세요!");
+		        b_requiredInfo = false;
+		        return false;
+		    }
+		    /*
+		    $("input").each(function() {
+		    	if ($(this).val().trim() === "") {
+		            alert("데이터를 입력해주세요!");
+		            b_requiredInfo = false; // 값이 하나라도 비어 있으면 true로 변경
+		            break; // 순회 중단
+		        }
+		    });
+		    */
+		    
+		   
        <%-- === 스마트 에디터 구현 시작 === --%>
         // id가 content인 textarea에 에디터에서 대입
           obj.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
@@ -103,11 +136,13 @@ $(document).ready(function(){
              return; // 종료
           }
           
-          // 폼(form)을 전송(submit)
-          const frm = document.addFrm;
-          frm.method = "post";
-          frm.action = "<%= ctxPath%>/club/addEnd.do";
-          frm.submit();
+          if(b_requiredInfo){
+	          // 폼(form)을 전송(submit)
+	          const frm = document.addFrm;
+	          frm.method = "post";
+	          frm.action = "<%= ctxPath%>/club/addEnd.do";
+	          frm.submit();
+          }
     });
     
     
@@ -116,12 +151,8 @@ $(document).ready(function(){
 	// ==>> 제품이미지 파일선택을 선택하면 화면에 이미지를 미리 보여주기 시작 <<== //
 	 $(document).on("change", "input.img_file", function(e){
 		
-		 const scrollSpy = new bootstrap.ScrollSpy(document.body, {
-			  target: '#navbar-example'
-			})
-		 
 		 $("div#pview").hide();
-		 
+		
 		 const input_file =  $(e.target).get(0);
 		 // jQuery선택자.get(0) 은 jQuery 선택자인 jQuery Object 를 DOM(Document Object Model) element 로 바꿔주는 것이다. 
 		 // DOM element 로 바꿔주어야 순수한 javascript 문법과 명령어를 사용할 수 있게 된다. 
