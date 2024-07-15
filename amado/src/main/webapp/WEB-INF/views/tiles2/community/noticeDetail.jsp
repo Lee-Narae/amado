@@ -365,14 +365,14 @@ function viewCommentOnly(){
 	</div>
 	
 	<div id="pre_next_notice" class="mt-3 p-3" style="width: 75%" align="left">
-		<div id="next">
-		<span style="font-weight: bold;">다음 글</span>&nbsp;&nbsp;&nbsp;
-		<c:if test="${not empty requestScope.notice.previoustitle}"><span class="move" onclick="goPrevOrNext('${requestScope.notice.nextseq}')">${requestScope.notice.nexttitle}</span></c:if>
-		<c:if test="${empty requestScope.notice.previoustitle}"><span>다음 글이 없습니다.</span></c:if>
-		</div>
 		<div id="prev">
 		<span style="font-weight: bold;">이전 글</span>&nbsp;&nbsp;&nbsp;
-		<c:if test="${not empty requestScope.notice.nexttitle}"><span class="move" onclick="goPrevOrNext('${requestScope.notice.previousseq}')">${requestScope.notice.previoustitle}</span></c:if>
+		<c:if test="${not empty requestScope.notice.previoustitle}"><span class="move" onclick="goPrevOrNext('${requestScope.notice.previousseq}')">${requestScope.notice.previoustitle}</span></c:if>
+		<c:if test="${empty requestScope.notice.previoustitle}"><span>다음 글이 없습니다.</span></c:if>
+		</div>
+		<div id="next">
+		<span style="font-weight: bold;">다음 글</span>&nbsp;&nbsp;&nbsp;
+		<c:if test="${not empty requestScope.notice.nexttitle}"><span class="move" onclick="goPrevOrNext('${requestScope.notice.nextseq}')">${requestScope.notice.nexttitle}</span></c:if>
 		<c:if test="${empty requestScope.notice.nexttitle}"><span>이전 글이 없습니다.</span></c:if>
 		</div>
 	</div>

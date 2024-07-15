@@ -147,7 +147,6 @@ public class ControllerNR {
 	@PostMapping("/member/idFind_sendEmail.do")
 	public String idFind_sendEmail(HttpServletRequest request) {
 		
-		String name = request.getParameter("name");
 		String email = request.getParameter("email");
 		
 		boolean sendMailSuccess = false; // 메일이 정상적으로 전송되었는지 유무를 알아오기 위한 용도
@@ -1706,6 +1705,53 @@ public class ControllerNR {
 		return mav;
 	}
 	
+	
+	
+	@ResponseBody
+	@GetMapping("/admin/getGymInfo")
+	public String getGymInfo(HttpServletRequest request) {
+		
+		String gymseq = request.getParameter("gymseq");
+		
+		GymVO gym = service.getGymInfo(gymseq);
+		
+		JSONObject jsonObj = new JSONObject();
+		
+		jsonObj.put("gymseq", gym.getGymseq());
+		jsonObj.put("gymname", gym.getGymname());
+		jsonObj.put("fk_userid", gym.getFk_userid());
+		jsonObj.put("postcode", gym.getPostcode());
+		jsonObj.put("address", gym.getAddress());
+		jsonObj.put("detailaddress", gym.getDetailaddress());
+		jsonObj.put("status", gym.getStatus());
+		jsonObj.put("info", gym.getInfo());
+		jsonObj.put("cost", gym.getCost());
+		jsonObj.put("caution", gym.getCaution());
+		jsonObj.put("membercount", gym.getMembercount());
+		jsonObj.put("likecount", gym.getLikecount());
+		jsonObj.put("insidestatus", gym.getInsidestatus());
+		jsonObj.put("orgfilename", gym.getOrgfilename());
+		jsonObj.put("filename", gym.getFilename());
+		jsonObj.put("filesize", gym.getFilesize());
+		
+		return jsonObj.toString();
+	}
+	
+	
+	@ResponseBody
+	@PostMapping("/admin/gymPermit")
+	public String gymPermit(HttpServletRequest request) {
+		
+		String gymseq = request.getParameter("gymseq");
+		
+		int n = service.gymPermit(gymseq);
+		
+		JSONObject jsonObj = new JSONObject();
+		
+		jsonObj.put("n", n);
+		
+		return jsonObj.toString();
+	}
 	
 	
 	
