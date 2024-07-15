@@ -156,13 +156,18 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 				const $dropdownMenu = $btn.closest('.dropdown-menu');
 				const boardcommentseq = $dropdownMenu.find('input[type=hidden]').val();
 				
-				// 수정 전 댓글 내용(btnUpdateComment 버튼(button) (tr) 의 부모 (td) 의 (tr)첫번째 자식에 있다.)
-//				alert($(e.target).parent().parent().children("td:nth-child(2)").text());
+				var fullText = $(e.target).parent().parent().parent().text();
+
+				const lastgoodIndex = fullText.lastIndexOf("👍");
 				
-				const fullText = $(e.target).parent().parent().parent().text();
+				if(lastgoodIndex != -1) {
+					fullText = fullText.substring(0, lastgoodIndex);
+				}
+				
 				const lastIndex20 = fullText.lastIndexOf("(20"); // "(20"이 마지막으로 등장하는 위치를 찾습니다.
 				const lastIndexModify = fullText.lastIndexOf("수정"); // "(수정)"이 마지막으로 등장하는 위치를 찾습니다.
 
+				
 				if (lastIndex20 == -1) {
 				    // "(20"이 문자열에 없는 경우
 				    beforeEdit = fullText.substring(0, lastIndexModify); // "(수정)" 이전까지의 부분을 가져옵니다.
@@ -527,13 +532,11 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 </script>
 
 
-
 <div style="display: flex;">
+
 	<div style="margin: auto; padding-left: 3%;">
 		<h2 style="margin-bottom: 30px;">글내용보기</h2>
-
 		<c:if test="${not empty requestScope.boardvo}">
-
 			<table class="table table-bordered table-dark" style="width: 1024px; word-wrap: break-word; table-layout: fixed;">
 				<tr>
 					<th style="width: 15%">글번호</th>
