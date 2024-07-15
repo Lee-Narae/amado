@@ -15,6 +15,11 @@
 
   $(document).ready(function(){
 	  
+	  // 검색시 검색조건 및 검색어 값 유지시키기
+	  $("select#searchType_a").val("${requestScope.boardvo.fk_sportseq}");
+	  
+	  
+	  
 	  <%-- === #167.-2 스마트 에디터 구현 시작 === --%>
 	 	//전역변수
 	    var obj = [];
