@@ -440,7 +440,7 @@
 	</update>
 	
 	<select id="getGymStatus" resultType="GymVO">
-		select gymseq, gymname, fk_userid, postcode, address, detailaddress, status, info, imgfilename, cost, caution, membercount, likecount, insidestatus
+		select gymseq, gymname, fk_userid, postcode, address, detailaddress, status, info, cost, caution, membercount, likecount, insidestatus, orgfilename, filename, filesize
 		from tbl_gym
 		where status = 0
 	</select>

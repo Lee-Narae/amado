@@ -223,6 +223,13 @@ $(document).ready(function(){
 
 
 }); // document.ready
+
+
+function getGymVO(){
+	
+	alert($(event.target).next().val());
+	
+}
 </script>
 
 
@@ -287,11 +294,11 @@ $(document).ready(function(){
 		<div style="background-color: white; width: 100%; height: 300px; border-radius: 20px; padding-top: 3%; overflow: auto;" align="center">
 			<c:forEach var="gym" items="${requestScope.gymList}" varStatus="status">
 				<c:if test="${status.index != (requestScope.gymCount-1)}">
-					<div id="gym" data-toggle="modal" data-target="#gymPermitModal">💌 ${gym.fk_userid}님의 체육관 등록 신청</div><input type="hidden" id="gymseq" value="${gym.gymseq}"/>
+					<div id="gym" data-toggle="modal" data-target="#gymPermitModal" onclick="getGymVO()">💌 ${gym.fk_userid}님의 체육관 등록 신청</div><input type="hidden" id="gymseq" value="${gym.gymseq}"/>
 					<hr style="margin: 0.5%;">
 				</c:if>
 				<c:if test="${status.index == (requestScope.gymCount-1)}">
-					<div id="gym" data-toggle="modal" data-target="#gymPermitModal">💌 ${gym.fk_userid}님의 체육관 등록 신청</div><input type="hidden" id="gymseq" value="${gym.gymseq}"/>
+					<div id="gym" data-toggle="modal" data-target="#gymPermitModal" onclick="getGymVO()">💌 ${gym.fk_userid}님의 체육관 등록 신청</div><input type="hidden" id="gymseq" value="${gym.gymseq}"/>
 				</c:if>
 			</c:forEach>
 		</div>
@@ -316,31 +323,31 @@ $(document).ready(function(){
 		  <div align="left">
 			  <div class="spanWrap">
 			  	<span class="title">등록자 ID</span>
-			  	<span class="gymContent" id="regId">이나래</span>
+			  	<span class="gymContent" id="regId"></span>
 			  </div>
 			  <div class="spanWrap">
 			  	<span class="title">체육관 명</span>
-			  	<span class="gymContent" id="regName">부산체육관</span>
+			  	<span class="gymContent" id="regName"></span>
 			  </div>
 			  <div class="spanWrap">
 			  	<span class="title">주소</span>
-			  	<span class="gymContent" id="regAddress">이나래</span>
+			  	<span class="gymContent" id="regAddress"></span>
 			  </div>
 			  <div class="spanWrap">
 			  	<span class="title">공간정보</span>
-			  	<span class="gymContent" id="regInfo">이나래</span>
+			  	<span class="gymContent" id="regInfo"></span>
 			  </div>
 			  <div class="spanWrap">
 			  	<span class="title">대관 비용</span>
-			  	<span class="gymContent" id="regCost">이나래</span>
+			  	<span class="gymContent" id="regCost"></span>
 			  </div>
 			  <div class="spanWrap">
 			  	<span class="title">수용 인원</span>
-			  	<span class="gymContent" id="regMC">이나래</span>
+			  	<span class="gymContent" id="regMC"></span>
 			  </div>
 			  <div class="spanWrap">
 			  	<span class="title">대표 이미지</span>
-			  	<span class="gymContent" id="regImg">이나래</span>
+			  	<span class="gymContent" id="regImg"></span>
 			  </div>
 		  </div>
       </div>
