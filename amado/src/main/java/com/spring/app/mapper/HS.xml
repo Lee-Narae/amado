@@ -6,13 +6,13 @@
 
 <insert id="add_withFile" parameterType="GymVO">
 	
-	insert into tbl_gym(gymseq ,gymname,fk_userid,postcode,address,detailaddress,status,info,imgfilename,cost,caution,membercount,likecount,insidestatus)
-	values(seq_gym.nextval, #{gymname}, #{fk_userid}, #{postcode}, #{address}, #{detailaddress}, 0,#{info},#{imgfilename},to_number(#{cost}),#{caution},to_number(#{membercount}),0 ,to_number(#{insidestatus}))
+	insert into tbl_gym(gymseq ,gymname,fk_userid,postcode,address,detailaddress,status,info,orgfilename,filename,filesize,cost,caution,membercount,likecount,insidestatus)
+	values(seq_gym.nextval, #{gymname}, #{fk_userid}, #{postcode}, #{address}, #{detailaddress}, 0,#{info},#{orgfilename},#{filename},#{filesize},to_number(#{cost}),#{caution},to_number(#{membercount}),0 ,to_number(#{insidestatus}))
 </insert>
 
 
 <insert id="add_photofile" parameterType="PhotoVO">
-insert into tbl_gym(photo_id,fk_gymseq,several_photos)
+insert into tbl_gym_photos(photo_id,fk_gymseq,several_photos)
 values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
 
 </insert>

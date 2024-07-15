@@ -119,7 +119,7 @@ public class ControllerHS {
 				
 				gymvo.setFilename(newFileName);
 				//was(톰캣)에 저장된 파일명(2024062712075997631067179400.jpg)
-				gymvo.setImgfilename(originalFilename);
+				gymvo.setOrgfilename(originalFilename);
 				// 게시판 페이지에서 첨부된 파일(LG_싸이킹청소기_사용설명서.pdf)을 보여줄 때 사용.
 	            // 또한 사용자가 파일을 다운로드 할때 사용되어지는 파일명으로 사용.
 				fileSize = attach.getSize(); // 첨부파일의 크기 
@@ -149,7 +149,7 @@ public class ControllerHS {
 	  
 	  System.out.println("7 "+gymvo.getInsidestatus());
 	  System.out.println("8 "+gymvo.getInfo());
-	  System.out.println("9 "+gymvo.getImgfilename());
+	  System.out.println("9 "+gymvo.getOrgfilename());
 	  
 	  System.out.println("10"+gymvo.getCost());
 	  System.out.println("11 "+gymvo.getCaution());
