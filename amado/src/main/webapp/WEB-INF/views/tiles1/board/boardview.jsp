@@ -159,7 +159,14 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 				// 수정 전 댓글 내용(btnUpdateComment 버튼(button) (tr) 의 부모 (td) 의 (tr)첫번째 자식에 있다.)
 //				alert($(e.target).parent().parent().children("td:nth-child(2)").text());
 				
-				const fullText = $(e.target).parent().parent().parent().text();
+				var fullText = $(e.target).parent().parent().parent().text();
+				
+				const lastgoodIndex = fullText.lastIndexOf("👍");
+				
+				if(lastgoodIndex != -1) {
+					fullText = fullText.substring(0, lastgoodIndex);
+				}
+				
 				const lastIndex20 = fullText.lastIndexOf("(20"); // "(20"이 마지막으로 등장하는 위치를 찾습니다.
 				const lastIndexModify = fullText.lastIndexOf("수정"); // "(수정)"이 마지막으로 등장하는 위치를 찾습니다.
 
@@ -287,7 +294,7 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 //			alert(comment_text);
 			
 			if(comment_text == null || comment_text == "") {
-				alert("답변 내용이 없습니다.");
+				alert("댓글 내용이 없습니다.");
 			}
 			
 			if(comment_text != null && comment_text != "") {
@@ -433,7 +440,7 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 //			alert(comment_text);
 			
 			if(comment_text == null || comment_text == "") {
-				alert("답변 내용이 없습니다.");
+				alert("답글 내용이 없습니다.");
 			}
 			
 			if(comment_text != null && comment_text != "") {
@@ -572,6 +579,30 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 					<th>작성일자</th>
 					<td>${requestScope.boardvo.registerdate}</td>
 				</tr>
+			
+		   	    <tr>
+		   		    <th>첨부파일</th>
+		   	        <td>
+		   	          <c:if test="${sessionScope.loginuser != null && requestScope.boardvo.orgfilename != null}">
+		   	             <a href="<%= ctxPath%>/download.do?boardseq=${requestScope.boardvo.boardseq}">${requestScope.boardvo.orgfilename}</a>  
+		   	          </c:if>
+		   	          <c:if test="${sessionScope.loginuser == null && requestScope.boardvo.orgfilename != null}">
+		   	             ${requestScope.boardvo.orgfilename}
+		   	          </c:if>
+		   	          <c:if test="${requestScope.boardvo.orgfilename == null}">
+		   	          </c:if>
+		   	        </td>
+		   	    </tr>
+		   	    <tr>
+		   	    	<c:if test="${requestScope.boardvo.orgfilename != null}">
+		   		    	<th>파일크기(bytes)</th>
+		   	      	  <td><fmt:formatNumber value="${requestScope.boardvo.filesize}" pattern="#,###" /></td>
+		   	        </c:if>
+		   	    	<c:if test="${requestScope.boardvo.orgfilename == null}">
+		   		    	<th>파일크기(bytes)</th>
+		   	        </c:if>
+		   	    </tr>				
+				
 			</table>
 
 		</c:if>
@@ -591,8 +622,8 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 			<button type="button" class="btn btn-secondary btn-sm mr-3" onclick="javascript:location.href='<%=ctxPath%>/community/list.do'">전체목록보기</button>
 
 			<c:if test="${not empty sessionScope.loginuser && sessionScope.loginuser.userid == requestScope.boardvo.fk_userid}">
-				<button type="button" class="btn btn-secondary btn-sm mr-3" onclick="javascript:location.href='<%= ctxPath%>/edit.do?seq=${requestScope.boardvo.boardseq}'">글수정하기</button>
-				<button type="button" class="btn btn-secondary btn-sm mr-3" onclick="javascript:location.href='<%= ctxPath%>/del.do?seq=${requestScope.boardvo.boardseq}'">글삭제하기</button>
+				<button type="button" class="btn btn-secondary btn-sm mr-3" onclick="javascript:location.href='<%= ctxPath%>/board/edit.do?boardseq=${requestScope.boardvo.boardseq}&sportseq=${requestScope.boardvo.fk_sportseq}'">글수정하기</button>
+				<button type="button" class="btn btn-secondary btn-sm mr-3" onclick="javascript:location.href='<%= ctxPath%>/board/del.do?boardseq=${requestScope.boardvo.boardseq}'">글삭제하기</button>
 			</c:if>
 			
 			<%-- 댓글쓰기 폼 추가 --%>
@@ -625,13 +656,18 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 			</c:if>
 			
 			
-			<%-- === #94. 댓글 내용 보여주기 === --%>
+			<%-- === 댓글 내용 보여주기 === --%>
 	       <h3 style="margin-top: 50px;">댓글내용</h3>
 	       <table class="table" style="width: 1024px; margin-top: 2%; margin-bottom: 3%;">
 	          <thead id="commentTheadDisplay"></thead>
 	          <tbody id="commentDisplay"></tbody>
 	        </table>
-			
+	        
+       	 	<%-- === 댓글페이지바가 보여지는 곳 === --%> 
+		 	<div style="display: flex; margin-bottom: 50px;">
+	    	   <div id="pageBar" style="margin: auto; text-align: center;"></div>
+	    	</div>
+				
 			
 		</div>
 	</div>

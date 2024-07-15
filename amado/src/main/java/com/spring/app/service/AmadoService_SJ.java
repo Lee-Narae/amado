@@ -65,5 +65,20 @@ public interface AmadoService_SJ {
 	// 답글 읽기
 	List<BoardCommentVO> getCommentreList(String boardcommentseq);
 
+	// 첨부파일 있는 글쓰기
+	int add_withFile(BoardVO boardvo);
+
+	// 글 조회수 증가는 없고 단순히 글 1개만 조회를 해오는 것
+	BoardVO getView_no_increase_readCount(Map<String, String> paraMap);
+
+	// 글 수정하기
+	int edit(BoardVO boardvo);
+
+	// 글 삭제하기
+	int del(Map<String, String> paraMap);
+
+	// 파일첨부가 있는 글 수정하기
+	int edit_withFile(BoardVO boardvo);
+
 
 }

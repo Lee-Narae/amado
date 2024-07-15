@@ -854,6 +854,7 @@ commit
 
 select *
 from tbl_board
+order by boardseq desc
 
 delete from tbl_boardcomment
 
@@ -864,7 +865,7 @@ from tbl_boardcomment
 
 
 delete from tbl_boardcomment
-where fk_userid = 'ksj1024sj'
+where fk_userid = 'TestID'
 
 commit;
 
