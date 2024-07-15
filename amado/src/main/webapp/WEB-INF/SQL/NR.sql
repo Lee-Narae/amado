@@ -226,4 +226,48 @@ select * from tbl_matchingreg;
 select * from user_constraints
 where table_name = 'TBL_MEMBER';
 
-desc tbl_member;
+desc tbl_gym;
+
+
+select * from tbl_gym;
+delete from tbl_gym;
+commit;
+
+alter table tbl_gym drop column imgfilename;
+alter table tbl_gym add filesize number;
+
+insert into tbl_gym(gymseq, gymname, fk_userid, postcode, address, detailaddress, status, info, cost, caution, membercount, likecount, insidestatus, orgfilename, filename, filesize)
+values (SEQ_GYM.nextval, '서면체육관', 'leess', '10111', '부산시 가나다구', '가나다동', 0, '좋은 체육관입니다.', '120000', '대관 시간을 잘 지켜주세요', 50, 0, 1, 'casual-life-3d-pink-basketball.png', '234234234893.png', '1233');
+commit;
+
+update tbl_gym set status = 0;
+commit;
+
+select * from tbl_member;
+
+insert into tbl_clubmember(fk_userid, sportseq, clubseq)
+values('leejy', 3, 4);
+
+select * from tbl_club order by fk_sportseq;
+select * from tbl_clubmember;
+delete from tbl_club where clubseq = 24;
+
+alter table tbl_clubmember
+add constraint FK_TBL_CLUBMEMBER_FK_USERID
+foreign key (fk_userid)
+references tbl_member(userid)
+on delete cascade;
+
+select * from user_constraints where constraint_type = 'R' order by table_name;
+
+alter table tbl_clubmember foreign key FK_TBL_CLUBMEMBER_CLUBSEQ;
+alter table TBL_CLUBMEMBER drop constraint FK_TBL_CLUBMEMBER_FK_USERID;
+
+select * from tbl_boardcomment;
+
+purge recyclebin;
+
+ select A.constraint_name, A.constraint_type, A.search_condition, 
+           B.column_name, B.position 
+    from user_constraints A join user_cons_columns B 
+    on A.constraint_name = B.constraint_name;

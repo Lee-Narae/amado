@@ -1,11 +1,15 @@
 package com.spring.app.domain;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class BoardVO {
 
 	private String boardseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status,
 			orgfilename, filename, filesize;
 
 	private String fk_sportseq;
+	
+	private MultipartFile attach;
 	
 	// select 용 //
 	private String previousseq; // 이전글번호
@@ -177,6 +181,15 @@ boardseq                    NUMBER   not null                -- 전체게시판�
 		this.rno = rno;
 	}
 
+	public MultipartFile getAttach() {
+		return attach;
+	}
+
+	public void setAttach(MultipartFile attach) {
+		this.attach = attach;
+	}
+
+	
 	
 	
 	

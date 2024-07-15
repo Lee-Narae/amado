@@ -4,20 +4,20 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class GymVO {
 /*
-	ymseq          NUMBER          NOT NULL    -- 체육관번호(PK)
-	,gymname      nvarchar2(30)   NOT NULL    -- 체육관명
-	,fk_userid      nvarchar2(20)   NOT NULL    -- 담당자아이디(FK)
-	,postcode      nvarchar2(5)    NOT NULL    -- 우편번호
-	,address      nvarchar2(50)   NOT NULL    -- 주소
-	,detailaddress   nvarchar2(100)  NOT NULL    -- 상세주소
-	,extraaddress   nvarchar2(50)   NOT NULL    -- 주소참고항목
-	,status          number(1)       NOT NULL    -- 운영여부 ===> 0: 승인 안 됨 / 1: 승인 완료(운영 중)
-	,info          nvarchar2(1000) NOT NULL    -- 정보
-	,imgfilename   nvarchar2(50)               -- 첨부파일
-	,cost          NUMBER                      -- 비용
-	,caution      nvarchar2(500)              -- 주의사항
-	,membercount   NUMBER                      -- 인원
-	,likecount       NUMBER                      -- 좋아요수
+GYMSEQ        NOT NULL NUMBER          
+GYMNAME       NOT NULL NVARCHAR2(30)   
+FK_USERID     NOT NULL NVARCHAR2(20)   
+POSTCODE      NOT NULL NVARCHAR2(5)    
+ADDRESS       NOT NULL NVARCHAR2(50)   
+DETAILADDRESS NOT NULL NVARCHAR2(100)  
+STATUS        NOT NULL NUMBER(1)       
+INFO          NOT NULL NVARCHAR2(1000) 
+IMGFILENAME            NVARCHAR2(50)   
+COST                   NUMBER          
+CAUTION                NVARCHAR2(500)  
+MEMBERCOUNT            NUMBER          
+LIKECOUNT              NUMBER          
+INSIDESTATUS           NUMBER(1)    
 */
 	private String gymseq; 		    //체육관번호(PK)
 	private String gymname;         //체육관명
@@ -27,17 +27,12 @@ public class GymVO {
 	private String detailaddress;   //상세주소
 	private String status;          //운영여부
 	private String info;            //정보
-	private String imgfilename;     //첨부파일
 	private String cost;            //비용
 	private String caution;         //주의사항
 	private String membercount;     //인원
 	private String likecount;       //좋아요수
 	private String insidestatus;
 
-	
-	
-	
-	
 	private String orgfilename;       //좋아요수
 	private String filename;       //좋아요수
 	private String filesize;       //좋아요수
@@ -98,12 +93,6 @@ private MultipartFile attach;
 	}
 	public void setInfo(String info) {
 		this.info = info;
-	}
-	public String getImgfilename() {
-		return imgfilename;
-	}
-	public void setImgfilename(String imgfilename) {
-		this.imgfilename = imgfilename;
 	}
 	public String getCost() {
 		return cost;

@@ -156,6 +156,12 @@ public interface AmadoService_NR {
 
 	// 관리자 - 아직 등록 승인 안 된 체육관 불러오기
 	List<GymVO> getGymStatus();
+
+	// gymVO 한 개 가져오기
+	GymVO getGymInfo(String gymseq);
+
+	// 체육관 승인하기
+	int gymPermit(String gymseq);
 	
 
 
