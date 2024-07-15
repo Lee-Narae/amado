@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.app.common.FileManager;
+import com.spring.app.common.MyUtil;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketVO;
@@ -222,19 +223,159 @@ public class ControllerJY {
 	// ========== 플리마켓  ==========
 	// 플리마켓 페이지 보요주기
 	@RequestMapping(value="/club/fleamarket.do")
-	public ModelAndView fleamarket(ModelAndView mav) {
+	public ModelAndView fleamarket(ModelAndView mav, HttpServletRequest request) {
 		
 		// 모든 상품 select 해오기
 		List<FleamarketVO> allItemList = service.getAllItemList(); //where조건 없이 디비에서 데이터를 불러만오는 거라  map에 넣어서 보낼게 없음!!!!  //(); 괄호에 뭐가 들어갈땐 조건이 있어서 그 조건을 디비에보내서 결과물 가져올때임
 		
-		// 상품 전체 개수 불러오기
-		String cnt = service.getItemCnt();
-		
 		mav.addObject("allItemList", allItemList);
-		mav.addObject("cnt", cnt);
+		// ----------------------------------
+		
+		
+		String searchType = request.getParameter("searchType");
+		String searchWord = request.getParameter("searchWord");
+		String str_currentShowPageNo = request.getParameter("currentShowPageNo");
+		
+		if (searchType == null) {
+			searchType = "";
+		}
+		if (searchWord == null) {
+			searchWord = "";
+		}
+
+		if (searchWord != null) {
+			searchWord = searchWord.trim();
+			// " 연 습" ==> "연 습"
+		}
+		
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("searchType", searchType);
+		paraMap.put("searchWord", searchWord);
+		
+		int cnt = 0; // 총 게시물 건수
+		int sizePerPage = 10; // 한 페이지당 보여줄 게시물 건수
+		int currentShowPageNo = 0; // 현재 보여주는 페이지 번호로서, 초기치로는 1페이지로 설정함.
+		int totalPage = 0; // 총 페이지수(웹브라우저상에서 보여줄 총 페이지 개수, 페이지바)
+		
+		
+		// 상품 전체 개수 불러오기
+		cnt = service.getItemCnt(paraMap);
+		
+		cnt = (int) Math.ceil((double) cnt / sizePerPage);
+		
+		if (str_currentShowPageNo == null) {
+			// 게시판에 보여지는 초기화면
+			currentShowPageNo = 1;
+		}
+
+		else {
+			try {
+				currentShowPageNo = Integer.parseInt(str_currentShowPageNo);
+				if (currentShowPageNo < 1 || currentShowPageNo > cnt) {
+					// get 방식이므로 사용자가 str_currentShowPageNo 에 입력한 값이 0 또는 음수를 입력하여 장난친 경우
+					// get 방식이므로 사용자가 str_currentShowPageNo 에 입력한 값이 실제 데이터베이스에 존재하는 페이지수 보다 더 큰값을
+					// 입력하여 장난친 경우
+					currentShowPageNo = 1;
+				}
+			} catch (NumberFormatException e) {
+				// get 방식이므로 사용자가 str_currentShowPageNo 에 입력한 값이 숫자가 아닌 문자를 입력하여 장난친 경우
+				currentShowPageNo = 1;
+			}
+		}
+		
+		int startRno = ((currentShowPageNo - 1) * sizePerPage) + 1; // 시작 행번호
+		int endRno = startRno + sizePerPage - 1; // 끝 행번호
+		paraMap.put("startRno", Integer.toString(startRno));
+		paraMap.put("endRno", Integer.toString(endRno));
+		
+		// 검색시 검색조건 및 검색어 값 유지시키기
+		// 1. equals: 문자열비교 / 대소문자 구분을 하여 비교한다. 2. equalsIgnoreCase: 문자열비교 / 대소문자 구분을 하지
+		// 않고 비교한다.
+		if ("subject".equals(searchType) || "content".equals(searchType) || "subject_content".equals(searchType)
+				|| "name".equals(searchType)) {
+			mav.addObject("paraMap", paraMap);
+		}
+		
+		// === #129. 페이지바 만들기 === //
+		int blockSize = 10;
+		// blockSize 는 1개 블럭(토막)당 보여지는 페이지번호의 개수이다.
+		/*
+		 * 1 2 3 4 5 6 7 8 9 10 [다음][마지막] -- 1개블럭 [맨처음][이전] 11 12 13 14 15 16 17 18 19
+		 * 20 [다음][마지막] -- 1개블럭 [맨처음][이전] 21 22 23
+		 */
+		
+		int loop = 1;
+		/*
+		 * loop는 1부터 증가하여 1개 블럭을 이루는 페이지번호의 개수[ 지금은 10개(== blockSize) ] 까지만 증가하는 용도이다.
+		 */
+		
+		int pageNo = ((currentShowPageNo - 1) / blockSize) * blockSize + 1;
+		// *** !! 공식이다. !! *** //
+		
+		String pageBar = "<ul style='list-style:none;'>";
+		String url = "list.action";
+		
+		// === [맨처음][이전] 만들기 === //
+		if (pageNo != 1) {
+			pageBar += "<li style='display:inline-block; width: 70px; font-size=12pt;'><a href='" + url + "?searchType="
+					+ searchType + "&searchWord=" + searchWord + "&currentShowPageNo=1'><<</a></li>";
+			pageBar += "<li style='display:inline-block; width: 50px; font-size=12pt;'><a href='" + url + "?searchType="
+					+ searchType + "&searchWord=" + searchWord + "&currentShowPageNo=" + (pageNo - 1)
+					+ "'><</a></li>";
+		}
+
+		while (!(loop > blockSize || pageNo > totalPage)) {
+
+			if (pageNo == currentShowPageNo) {
+				// 페이징 번호를 누른 상태일 때는 어차피 같은 번호로 이동할 필요가 없기 때문에 (예를들어 3 을 눌렀을 때 다시 3을 누른다고 페이지
+				// 이동을 할 필요는 없고 다른 페이지 번호를 누르면 이동하게 된다.)
+				pageBar += "<li style='display:inline-block; width: 30px; font-size=12pt; border:solid 1px gray; color:red; padding:2px 4px;'>"
+						+ pageNo + "</li>";
+			} else {
+				pageBar += "<li style='display:inline-block; width: 30px; font-size=12pt;'><a href='" + url
+						+ "?searchType=" + searchType + "&searchWord=" + searchWord + "&currentShowPageNo=" + pageNo
+						+ "'>" + pageNo + "</a></li>";
+			}
+
+			loop++;
+			pageNo++;
+		} // end of while-------------------------
+		
+		// === [다음][마지막] 만들기 === //
+		if (pageNo <= totalPage) {
+			pageBar += "<li style='display:inline-block; width: 50px; font-size=12pt;'><a href='" + url + "?searchType="
+					+ searchType + "&searchWord=" + searchWord + "&currentShowPageNo=" + pageNo + "'>></a></li>";
+			pageBar += "<li style='display:inline-block; width: 70px; font-size=12pt;'><a href='" + url + "?searchType="
+					+ searchType + "&searchWord=" + searchWord + "&currentShowPageNo=" + totalPage + "'>>></a></li>";
+		}
+		
+		pageBar += "</ul>";
+
+		mav.addObject("pageBar", pageBar);
+		
+		String goBackURL = MyUtil.getCurrentURL(request);
+		System.out.println("~~~ 확인용(list.action) goBackURL : " + goBackURL);
+//		~~~ 확인용(list.action) goBackURL : /list.action
+//		~~~ 확인용(list.action) goBackURL : /list.action?searchType=&searchWord=&currentShowPageNo=5
+//		~~~ 확인용(list.action) goBackURL : /list.action?searchType=subject&searchWord=java
+//		~~~ 확인용(list.action) goBackURL : /list.action?searchType=subject&searchWord=%EC%A0%95%ED%99%94&currentShowPageNo=3
+//	 %EC%A0%95%ED%99%94 == 정화 (한글이라 변환된거임)
+		
+		
+		///////////////////////////////////////////////////////////////
+		
+		mav.addObject("cnt", cnt); // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.
+		mav.addObject("currentShowPageNo", currentShowPageNo); // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.
+		mav.addObject("sizePerPage", sizePerPage); // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.
+		
+		///////////////////////////////////////////////////////////////
+
+		mav.addObject("goBackURL", goBackURL);
 		
 		mav.setViewName("club/fleamarket.tiles2");
 		return mav;
+		
+		
 		
 	}
 	
@@ -355,6 +496,15 @@ public class ControllerJY {
 		
 	   return jsonArr.toString();
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

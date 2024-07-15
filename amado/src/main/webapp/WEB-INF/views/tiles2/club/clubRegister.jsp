@@ -43,48 +43,6 @@ select{
 $(document).ready(function(){
 	
 	
-	 let b_requiredInfo = false;
-		
-		$(document).on("click", "button#btnRegister", function(e) {
-			
-		    const category = $("select#category").val();
-		    const city = $("select#city").val();
-		    
-		    if (category === "종목") {
-		        alert("종목을 선택해주세요!");
-		        b_requiredInfo = true;
-		    }
-		   	if (city ==="선택해주세요") {
-		        alert("지역을 선택해주세요!");
-		        b_requiredInfo = true;
-		        
-		    }
-		    const mcnt = $("input[name='membercount']").val();
-		    if( Number(mcnt) < 1 || Number(mcnt) > 30 ){
-		    	alert("정원은 최소 1 부터, 최대 30 까지입니다.");
-		    	b_requiredInfo = true;
-		    	
-		    }
-		    
-		    if($("input.img_file").val() == ""){
-		    	alert("사진을 추가해주세요");
-		    	b_requiredInfo = true;
-		    }
-		    
-		    
-		    $("input").each(function() {
-		    	if ($(this).val().trim() === "") {
-		            alert("데이터를 입력해주세요!");
-		            b_requiredInfo = true; // 값이 하나라도 비어 있으면 true로 변경
-		            break; // 순회 중단
-		        }
-		    });
-		    
-		    if( b_requiredInfo ){
-		    	return;
-		    }
-		    
-		});
 	 
 	
 	
@@ -92,10 +50,7 @@ $(document).ready(function(){
 	// ==>> 제품이미지 파일선택을 선택하면 화면에 이미지를 미리 보여주기 시작 <<== //
 	 $(document).on("change", "input.img_file", function(e){
 		
-		 const scrollSpy = new bootstrap.ScrollSpy(document.body, {
-			  target: '#navbar-example'
-			})
-		 
+		
 		 $("div#pview").hide();
 		 
 		 const input_file =  $(e.target).get(0);
@@ -191,15 +146,54 @@ $(document).ready(function(){
 
 	 $("button#btnRegister").click(function(){
 		 
-		 
-		
-	 	 
-		  //폼(form)을 전송(submit)
-	 	  const frm = document.registerClubFrm;
-	 	  frm.method = "post";
-	 	  frm.action = "<%= ctxPath%>/club/clubRegisterEnd.do";
-	 	  frm.submit();
-	 	  
+		 let b_requiredInfo = true;
+				
+		    const category = $("select#category").val();
+		    const city = $("select#city").val();
+		    
+		    if (category == "종목") {
+		        alert("종목을 선택해주세요!");
+		        b_requiredInfo = false;
+		        return false;
+		    }
+		    if (city =="선택해주세요") {
+		        alert("지역을 선택해주세요!");
+		        b_requiredInfo = false;
+		        return false;
+		    }
+		    const mcnt = $("input[name='membercount']").val();
+		    if( Number(mcnt) < 1 || Number(mcnt) > 30 ){
+		    	alert("정원은 최소 1 부터, 최대 30 까지입니다.");
+		    	b_requiredInfo = false;
+		    	return false;
+		    }
+		    
+		    if($("input.img_file").val() == ""){
+		    	alert("사진을 추가해주세요");
+		    	b_requiredInfo = false;
+		    	return false;
+		    }
+		    /*
+		    $("input").each(function() {
+		    	if ($(this).val().trim() === "") {
+		            alert("데이터를 입력해주세요!");
+		            b_requiredInfo = false; // 값이 하나라도 비어 있으면 true로 변경
+		            break; // 순회 중단
+		        }
+		    });
+		    */ 
+		    
+		    if(b_requiredInfo){
+		    	
+		    	//폼(form)을 전송(submit)
+			 	  const frm = document.registerClubFrm;
+			 	  frm.method = "post";
+			 	  frm.action = "<%= ctxPath%>/club/clubRegisterEnd.do";
+			 	  frm.submit();
+		    	
+		    }
+			   
+			    
 	 });
 	
 });// end of $(document).ready(function(){})---------------------------

@@ -86,12 +86,11 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 
 	// 상품 전체 개수 불러오기
 	@Override
-	public String getItemCnt() {
-		
-		String itemCnt = sqlsession.selectOne("JY.getItemCnt");
+	public int getItemCnt(Map<String, String> paraMap) {
+		int itemCnt = sqlsession.selectOne("JY.getItemCnt", paraMap);
 		return itemCnt;
 	}
-
+	
 	
 	// 쿠키
 	@Override
@@ -99,6 +98,8 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 		FleamarketVO gDetailData = sqlsession.selectOne("JY.goodsDetailData", goodsSeq);
 		return gDetailData;
 	}
+
+
 
 
 }
