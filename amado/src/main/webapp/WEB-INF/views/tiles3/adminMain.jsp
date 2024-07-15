@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
    String ctxPath = request.getContextPath();
 %>  
-    
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style type="text/css">
 .verticalLine {
 border-left: solid 1px grey;
@@ -219,16 +220,147 @@ $(document).ready(function(){
             }
 	});
 	
+	$('.modal').on('hidden.bs.modal', function (e) {
+	    $(this).find('form')[0].reset();
+	});
+
+
+	$()
 	
-
-
+	
+	
+	
+	
 }); // document.ready
 
 
 function getGymVO(){
 	
-	alert($(event.target).next().val());
+	const gymseq = $(event.target).next().val();
 	
+	$.ajax({
+		url: "<%=ctxPath%>/admin/getGymInfo",
+		data: {"gymseq": gymseq},
+		dataType: "json",
+		async: "false",
+		success: function(json){
+			console.log(JSON.stringify(json));
+			/*
+			{"membercount":"50","detailaddress":"가나다동","address":"부산시 가나다구","cost":"120000",
+			 "insidestatus":"1","postcode":"10111","gymname":"서면체육관","filesize":"1233","likecount":"0",
+			 "orgfilename":"casual-life-3d-pink-basketball.png","filename":"234234234893.png","gymseq":"60",
+			 "fk_userid":"leess","caution":"대관 시간을 잘 지켜주세요","status":"0","info":"좋은 체육관입니다."}
+			*/
+			
+			let modal_html = `     
+			      <!-- Modal header -->
+			      <div class="modal-header" style="width: 100%; align-content: center;">
+			      <h3 style="width: 100%; font-weight: bold; text-align: center; margin: 0;">체육관 승인 요청</h3>
+			      </div>
+			      
+			      <!-- Modal body -->
+			      <div class="modal-body" style="width: 80%; margin-left: 10%;">
+					  <h5 style="width: 100%; font-weight: bold; text-align: center; margin: 0;">체육관 정보</h5>
+					  <div align="left">
+						  <div class="spanWrap">
+						  	<span class="title">등록자 ID</span>
+						  	<span class="gymContent" id="regId">\${json.fk_userid}</span>
+						  </div>
+						  <div class="spanWrap">
+						  	<span class="title">체육관 명</span>
+						  	<span class="gymContent" id="regName">\${json.gymname}</span>
+						  </div>
+						  <div class="spanWrap">
+						  	<span class="title">주소</span>
+						  	<span class="gymContent" id="regAddress">\${json.address}&nbsp;\${json.detailaddress}&nbsp;(우)\${json.postcode}</span>
+						  </div>
+						  <div class="spanWrap">
+						  	<span class="title">공간정보</span>
+						  	<span class="gymContent" id="regInfo">\${json.info}</span>
+						  </div>
+						  <div class="spanWrap">
+						  	<span class="title">대관 비용</span>
+						  	<span class="gymContent" id="regCost">\${Number(json.cost).toLocaleString('en')}원</span>
+						  </div>
+						  <div class="spanWrap">
+						  	<span class="title">수용 인원</span>
+						  	<span class="gymContent" id="regMC">\${json.membercount}명</span>
+						  </div>
+						  <div class="spanWrap">
+						  	<span class="title">대표 이미지</span>
+						  	<span class="gymContent" id="regImg"><img width="130" src="<%=ctxPath%>/resources/images/gym_img/\${json.filename}"/></span>
+						  </div>
+					  </div>
+			      </div>
+			      
+			      <!-- Modal footer -->
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+			        <button type="button" class="btn btn-primary" onclick="goPermit(\${json.gymseq})">승인하기</button>
+			      </div>`;
+			
+			
+			$("div.modal-content").html(modal_html);
+
+		},
+		error: function(request, status, error){
+            alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+        }
+	});
+	
+}
+
+
+function goPermit(gymseq){
+	
+	Swal.fire({
+		  title: "체육관을 승인하시겠습니까?",
+		  html: "체육관 승인 시 Home > 체육관 찾기에 표출되며,<br>대관 결제가 가능합니다.",
+		  icon: "warning",
+		  showCancelButton: true,
+		  confirmButtonColor: "#3085d6",
+		  cancelButtonColor: "#d33",
+		  confirmButtonText: "승인하기",
+		  cancelButtonText: "취소"
+		}).then((result) => {
+		  if (result.isConfirmed) {
+
+			  $.ajax({
+				  url: "<%=ctxPath%>/admin/gymPermit",
+				  data: {"gymseq": gymseq},
+				  type: "post",
+				  dataType: "json",
+				  success:function(json){
+					 
+					  if(json.n == 1){
+						  
+						  Swal.fire({
+						      title: "승인 완료!",
+						      icon: "success"
+						  });
+						
+						  $('#gymPermitModal').modal('hide');
+						  
+					  }
+					  
+					  else {
+						  
+						  Swal.fire({
+							  icon: "error",
+							  title: "승인 실패",
+							  html: "내부 오류로 인해 승인이 실패하였습니다.<br>다시 시도해 주세요.",
+						  });
+						  
+					  }
+					  
+				  },
+				  error: function(request, status, error){
+	            	  alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		          }
+			  });
+			  
+		  }
+		});
 }
 </script>
 
@@ -311,52 +443,7 @@ function getGymVO(){
 <div class="modal modalclass" id="gymPermitModal" style="margin-top: 5%;">
   <div class="modal-dialog modal-lg modal-dialog-scrollable">
     <div class="modal-content">
-      
-      <!-- Modal header -->
-      <div class="modal-header" style="width: 100%; align-content: center;">
-      <h3 style="width: 100%; font-weight: bold; text-align: center; margin: 0;">체육관 승인 요청</h3>
-      </div>
-      
-      <!-- Modal body -->
-      <div class="modal-body" style="width: 80%; margin-left: 10%; border: solid 1px red;">
-		  <h5 style="width: 100%; font-weight: bold; text-align: center; margin: 0;">체육관 정보</h5>
-		  <div align="left">
-			  <div class="spanWrap">
-			  	<span class="title">등록자 ID</span>
-			  	<span class="gymContent" id="regId"></span>
-			  </div>
-			  <div class="spanWrap">
-			  	<span class="title">체육관 명</span>
-			  	<span class="gymContent" id="regName"></span>
-			  </div>
-			  <div class="spanWrap">
-			  	<span class="title">주소</span>
-			  	<span class="gymContent" id="regAddress"></span>
-			  </div>
-			  <div class="spanWrap">
-			  	<span class="title">공간정보</span>
-			  	<span class="gymContent" id="regInfo"></span>
-			  </div>
-			  <div class="spanWrap">
-			  	<span class="title">대관 비용</span>
-			  	<span class="gymContent" id="regCost"></span>
-			  </div>
-			  <div class="spanWrap">
-			  	<span class="title">수용 인원</span>
-			  	<span class="gymContent" id="regMC"></span>
-			  </div>
-			  <div class="spanWrap">
-			  	<span class="title">대표 이미지</span>
-			  	<span class="gymContent" id="regImg"></span>
-			  </div>
-		  </div>
-      </div>
-      
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
-        <button type="button" class="btn btn-primary" onclick="goPermit()">승인하기</button>
-      </div>
+ 
     </div>
   </div>
 </div>

@@ -390,4 +390,18 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		return gymList;
 	}
 
+	// gymVO 한 개 가져오기
+	@Override
+	public GymVO getGymInfo(String gymseq) {
+		GymVO gym = sqlsession.selectOne("NR.getGymInfo", gymseq);
+		return gym;
+	}
+
+	// 체육관 승인하기
+	@Override
+	public int gymPermit(String gymseq) {
+		int n = sqlsession.update("NR.gymPermit", gymseq);
+		return n;
+	}
+
 }
