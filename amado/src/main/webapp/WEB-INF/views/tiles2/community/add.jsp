@@ -51,6 +51,11 @@
     		 return; // 종료
     	 }
     	 
+    	 if(title.length >= 50) {
+    		 alert("글제목은 50글자를 넘길 수 없습니다.");
+    		 return; // 종료
+    	 }
+    	 
     	 // 글내용 유효성 검사(스마트에디터를 사용할 경우)
     	 // 위와 같은 방식으로 처리를 하면 공백을 넣을 때 html 에서는 &nbsp; 이렇게 들어가서 공백처리가 안된다.
     	 // 고로 아래와 같은 방식으로 처리를 해야한다.
@@ -79,10 +84,21 @@
     		 return;
     	 }
     	 
+    	 if(content_val.length >= 1000){
+    		 alert("글내용은 1000글자를 넘길 수 없습니다.");
+    		 return;
+    	 }
+    	 
     	// 글암호 유효성 검사
     	 const password = $("input:password[name='password']").val().trim();
     	 if(password == "") {
     		 alert("글암호를 입력하세요!!");
+    		 $("input:text[name='password']").val("");
+    		 return; // 종료
+    	 }
+    	 
+    	 if(password.length >= 1000) {
+    		 alert("글암호는 20글자를 넘길 수 없습니다.");
     		 $("input:text[name='password']").val("");
     		 return; // 종료
     	 }
@@ -97,6 +113,61 @@
      
   });// end of $(document).ready(function(){})-----------
 
+  
+	function navigate() {
+	    var selectBox = document.getElementById("searchType_a");
+	    var selectedValue = selectBox.value;
+
+	    // URL을 설정할 때 여기서 사용할 변수나 경로를 정의합니다.
+	    var ctxPath = "<%=ctxPath %>"; // ctxPath 변수가 정의되어 있다고 가정
+
+	    switch (selectedValue) {
+	        case "0":
+	            // 전체 선택 시 처리할 URL
+	            location.href = "?sportseq=/community/list.do";
+	            break;
+	        case "1":
+	            // 축구 선택 시 처리할 URL
+	            location.href = "?sportseq=1";
+	            break;
+	        case "2":
+	            // 야구 선택 시 처리할 URL
+	            location.href = "?sportseq=2";
+	            break;
+	        case "3":
+	            // 배구 선택 시 처리할 URL
+	            location.href = "?sportseq=3";
+	            break;
+	        case "4":
+	            // 농구 선택 시 처리할 URL
+	            location.href = "?sportseq=4";
+	            break;
+	        case "5":
+	            // 테니스 선택 시 처리할 URL
+	            location.href = "?sportseq=5";
+	            break;
+	        case "6":
+	            // 볼링 선택 시 처리할 URL
+	            location.href = "?sportseq=6";
+	            break;
+	        case "7":
+	            // 족구 선택 시 처리할 URL
+	            location.href = "?sportseq=7";
+	            break;
+	        case "8":
+	            // 배드민턴 선택 시 처리할 URL
+	            location.href = "?sportseq=8";
+	            break;
+	        default:
+	            // 기본적으로는 전체로 처리
+	            location.href = ctxPath + "/community/list.do";
+	            break;
+	    }
+
+	    // 선택한 값을 localStorage에 저장하여 페이지 새로고침 후에도 유지
+	    localStorage.setItem("selectedSport", selectedValue);
+	}
+  
 </script>
 
 
@@ -131,29 +202,50 @@
 			<h2 style="margin-bottom: 30px;">배드민턴 글쓰기</h2>
 		</c:if>
      
-       <form name="addFrm"> 
-        <table style="width: 1024px" class="table table-bordered">
-         <tr>
+       <form name="addFrm" enctype="multipart/form-data"> 
+        <table style="width: 1024px;" class="board">
+         <tr style="margin-bottom: 10px;">
             <th style="width: 15%; background-color: #DDDDDD;">아이디</th>
             <td>
                 <input type="text" name="fk_userid" value="${sessionScope.loginuser.userid}" readonly />
-                <%-- <input type="text" name="name" value="${sessionScope.loginuser.name}" readonly /> --%> 
             </td>
          </tr>
          
          <tr>
             <th style="width: 15%; background-color: #DDDDDD;">제목</th>
             <td>
-                    <input type="text" name="title" size="100" maxlength="200" /> 
+                 <input type="text" name="title" size="100" maxlength="200" /> 
             </td>
          </tr>
-         
+         <tr>
+         	<th style="width: 15%; background-color: #DDDDDD;">게시판</th>
+         <td>
+		     <select id="searchType_a" name="searchType_a" style="width: 30%;" onchange="navigate()">
+		         <option value="0">전체</option>
+		         <option value="1">축구</option>
+		         <option value="2">야구</option>
+		         <option value="3">배구</option>
+		         <option value="4">농구</option>
+		         <option value="6">테니스</option>
+		         <option value="7">볼링</option>
+		         <option value="5">족구</option>
+		         <option value="8">배드민턴</option>
+		     </select>
+	     </td>
+         <tr>
          <tr>
             <th style="width: 15%; background-color: #DDDDDD;">내용</th> 
             <td>
                 <textarea style="width: 100%; height: 612px;" name="content" id="content"></textarea>
             </td>
          </tr>
+         
+		 <tr>
+			 <th style="width: 15%; background-color: #DDDDDD;">파일첨부</th>  
+			 <td>
+			     <input type="file" name="attach" />
+			 </td>
+		 </tr>
          
          <tr>
             <th style="width: 15%; background-color: #DDDDDD;">글암호</th> 

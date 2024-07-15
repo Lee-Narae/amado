@@ -77,6 +77,19 @@ public interface AmadoDAO_SJ {
 	// 답글 가져오기
 	List<BoardCommentVO> getCommentreList(String boardcommentseq);
 
+	// 첨부파일 있는 글쓰기
+	int add_withFile(BoardVO boardvo);
+
+	// 글 수정하기
+	int edit(BoardVO boardvo);
+
+	// 글 삭제하기
+	int del(String boardseq);
+
+	// 파일첨부가 있는 글 수정하기
+	int edit_withFile(BoardVO boardvo);
+
+
 	
 
 }

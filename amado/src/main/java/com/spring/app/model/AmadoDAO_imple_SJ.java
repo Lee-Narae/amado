@@ -177,6 +177,37 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 		return commentreList;
 	}
 
+	// 첨부파일 있는 글쓰기
+	@Override
+	public int add_withFile(BoardVO boardvo) {
+		int n = sqlsession.insert("SJ.add_withFile", boardvo);
+		return n;
+	}
+
+	
+	// 글 수정하기
+	@Override
+	public int edit(BoardVO boardvo) {
+		int n = sqlsession.update("SJ.edit", boardvo);
+		return n;
+	}
+
+	
+	// 글 삭제하기
+	@Override
+	public int del(String boardseq) {
+		int n = sqlsession.update("SJ.del", boardseq);
+		return n;
+	}
+
+	
+	// 파일첨부가 있는 글 수정하기
+	@Override
+	public int edit_withFile(BoardVO boardvo) {
+		int n = sqlsession.update("SJ.edit_withFile", boardvo);
+		return n;
+	}
+
 
 
 }

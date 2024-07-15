@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.app.common.AES256;
+import com.spring.app.common.FileManager;
 import com.spring.app.common.Sha256;
 import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
@@ -28,6 +29,9 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 
 	@Autowired
 	private AES256 aES256;
+	
+ 	@Autowired  
+	private FileManager fileManager;
 
 	// 아이디 중복 체크
 	@Override
@@ -238,6 +242,60 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		}
 
 		return commentreList;
+	}
+
+	// 첨부파일 있는 글쓰기
+	@Override
+	public int add_withFile(BoardVO boardvo) {
+		int n = dao.add_withFile(boardvo); // 첨부파일이 있는 경우 
+		return n;
+	}
+
+	
+	// 글 조회수 증가는 없고 단순히 글 1개만 조회를 해오는 것
+	@Override
+	public BoardVO getView_no_increase_readCount(Map<String, String> paraMap) {
+		BoardVO boardvo = dao.getView(paraMap); // 글 1개 조회하기
+		return boardvo;
+	}
+
+	
+	// 글 수정하기
+	@Override
+	public int edit(BoardVO boardvo) {
+		int n = dao.edit(boardvo);
+		return n;
+	}
+
+	
+	// 글 삭제하기
+	@Override
+	public int del(Map<String, String> paraMap) {
+		
+		int n = dao.del(paraMap.get("boardseq"));
+		
+		if(n==1) {
+			String path = paraMap.get("path");
+			String filename = paraMap.get("filename");
+			
+			if(filename != null && !"".equals(filename)) {
+				try {
+					fileManager.doFileDelete(filename, path);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return n;
+	}
+
+	
+	// 파일첨부가 있는 글 수정하기
+	@Override
+	public int edit_withFile(BoardVO boardvo) {
+		int n = dao.edit_withFile(boardvo); // 첨부파일이 있는 경우 
+		return n;
 	}
 
 }

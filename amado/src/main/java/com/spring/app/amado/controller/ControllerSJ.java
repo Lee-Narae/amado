@@ -1,5 +1,8 @@
 package com.spring.app.amado.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,13 +19,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.spring.app.common.FileManager;
 import com.spring.app.common.MyUtil;
 import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
-import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.service.AmadoService_SJ;
 
@@ -32,6 +37,9 @@ public class ControllerSJ {
 
 	@Autowired
 	private AmadoService_SJ service;
+	
+	@Autowired  
+	private FileManager fileManager;
 
 	// 게시판 목록보기
 	@GetMapping("/community/list.do")
@@ -189,10 +197,12 @@ public class ControllerSJ {
 		String searchType = "";
 		String searchWord = "";
 
+		
 		boardseq = request.getParameter("boardseq");
 		goBackURL = request.getParameter("goBackURL");
 		searchType = request.getParameter("searchType");
 		searchWord = request.getParameter("searchWord");
+		
 
 		if (searchType == null) {
 			searchType = "";
@@ -200,6 +210,7 @@ public class ControllerSJ {
 		if (searchWord == null) {
 			searchWord = "";
 		}
+
 
 /*
 		System.out.println("확인용 ~~ boardseq : " + boardseq);
@@ -235,10 +246,9 @@ public class ControllerSJ {
 			
 			BoardVO boardvo = null;
 	
-	
 			boardvo = service.getView(paraMap);
 	
-	
+			
 			if (boardvo == null) {
 				mav.setViewName("redirect:/community/list.do");
 				return mav;
@@ -293,12 +303,14 @@ public class ControllerSJ {
 		String fk_userid = request.getParameter("fk_userid");
 		String comment_text = request.getParameter("comment_text");
 		
+		/*
 		System.out.println("~~ 확인용 fk_boardcommentseq : " + fk_boardcommentseq);
 		System.out.println("~~ 확인용 parentseq : " + parentseq);
 		System.out.println("~~ 확인용 groupno : " + groupno);
 		System.out.println("~~ 확인용 depthno : " + depthno);
 		System.out.println("~~ 확인용 fk_userid : " + fk_userid);
 		System.out.println("~~ 확인용 comment_text : " + comment_text);
+		*/
 		
  		if (fk_userid == null) {
  			// 어차피 로그인 해야만 보이기 때문에 필요없는 과정이지만 혹시 모르니 만들었다.
@@ -360,6 +372,111 @@ public class ControllerSJ {
 		
 		return jsonArr.toString(); 
 	}
+	
+	
+	
+	
+	// === #183. 첨부파일 다운로드 받기 === //
+	@GetMapping("/download.do")
+	public void requiredLogin_download(HttpServletRequest request, HttpServletResponse response) {
+		
+		String boardseq = request.getParameter("boardseq");
+		// 첨부파일이 있는 글번호 
+		
+		/*
+		    첨부파일이 있는 글번호에서
+		  20240628092043154731282615400.jpg 처럼
+		    이러한 fileName 값을 DB에서 가져와야 한다.
+		    또한 orgFilename 값도 DB에서 가져와야 한다.
+		*/
+		
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("boardseq", boardseq);
+		paraMap.put("searchType", "");
+		paraMap.put("searchWord", "");
+		
+		// **** 웹브라우저에 출력하기 시작 **** //
+		// HttpServletResponse response 객체는 전송되어져온 데이터를 조작해서 결과물을 나타내고자 할때 쓰인다.
+		response.setContentType("text/html; charset=UTF-8");
+		
+		PrintWriter out = null;
+		// out 은 웹브라우저에 기술하는 대상체라고 생각하자.
+		
+		try {
+			Integer.parseInt(boardseq);
+			BoardVO boardvo = service.getView_no_increase_readCount(paraMap); 
+			
+			if(boardvo == null || (boardvo != null && boardvo.getFilename() == null) ) {
+				out = response.getWriter();
+				// out 은 웹브라우저에 기술하는 대상체라고 생각하자.
+				
+				out.println("<script type='text/javascript'>alert('존재하지 않는 글번호 이거나 첨부파일이 없으므로 파일다운로드가 불가합니다.'); history.back();</script>");
+		    	return;
+			}
+			
+			else {
+				// 정상적으로 다운로드를 할 경우 
+				
+				String filename = boardvo.getFilename();
+				// 20240628092043154731282615400.jpg  이것이 바로 WAS(톰캣) 디스크에 저장된 파일명이다.
+				
+				String orgfilename = boardvo.getOrgfilename();
+				// 쉐보레전면.jpg   다운로드시 보여줄 파일명
+				
+				
+				// 첨부파일이 저장되어 있는 WAS(톰캣) 디스크 경로명을 알아와야만 다운로드를 해줄 수 있다.
+		    	// 이 경로는 우리가 파일첨부를 위해서 /addEnd.action 에서 설정해두었던 경로와 똑같아야 한다.  
+				// WAS 의 webapp 의 절대경로를 알아와야 한다. 
+				HttpSession session = request.getSession(); 
+				String root = session.getServletContext().getRealPath("/");  
+				
+			//	System.out.println("~~~ 확인용 webapp 의 절대경로 => " + root);
+				// ~~~ 확인용 webapp 의 절대경로 => C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\board\ 
+				
+				String path = root+"resources"+File.separator+"files";
+				/* File.separator 는 운영체제에서 사용하는 폴더와 파일의 구분자이다.
+				      운영체제가 Windows 이라면 File.separator 는  "\" 이고,
+				      운영체제가 UNIX, Linux, 매킨토시(맥) 이라면  File.separator 는 "/" 이다. 
+				*/
+				
+				// path 가 첨부파일이 저장될 WAS(톰캣)의 폴더가 된다.
+				// System.out.println("~~~ 확인용 path => " + path);
+				// ~~~ 확인용 path => C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\board\resources\files
+				
+				// ***** file 다운로드 하기 ***** //
+				boolean flag = false; // file 다운로드 성공, 실패인지 여부를 알려주는 용도 
+				flag = fileManager.doFileDownload(filename, orgfilename, path, response); 
+				// file 다운로드 성공시 flag 는 true,
+				// file 다운로드 실패시 flag 는 false 를 가진다.
+				
+				if(!flag) {
+					// 다운로드가 실패한 경우 메시지를 띄워준다. 
+					out = response.getWriter();
+			    	// out 은 웹브라우저에 기술하는 대상체라고 생각하자.
+			    	
+			    	out.println("<script type='text/javascript'>alert('파일다운로드가 실패되었습니다.'); history.back();</script>");
+				}
+				
+			}
+			
+		} catch (NumberFormatException | IOException e) {
+			
+			try {
+				out = response.getWriter();
+				// out 은 웹브라우저에 기술하는 대상체라고 생각하자.
+				
+				out.println("<script type='text/javascript'>alert('파일다운로드가 불가합니다.'); history.back();</script>"); 
+			} catch (IOException e2) {
+				e2.printStackTrace();
+			}
+			
+		}
+		
+	}	
+	
+	
+	
+	
 	
 	
 	
@@ -480,7 +597,6 @@ public class ControllerSJ {
 		
 		String url = MyUtil.getCurrentURL(request);
 		String params = url.substring(url.indexOf('=') + 1);
-		// sportseq 값(사이드 선택시)
 		
 		if(request.getParameter("sportseq") != null) {
 			params = request.getParameter("sportseq");
@@ -494,7 +610,7 @@ public class ControllerSJ {
 
 	// 게시판 글쓰기 완료 요청
 	@PostMapping("/community/addEnd.do")
-	public ModelAndView addEnd(ModelAndView mav, BoardVO boardvo, HttpServletRequest request) { // <== After Advice 를 사용하기 전
+	public ModelAndView addEnd(Map<String, String> paraMap, ModelAndView mav, BoardVO boardvo, HttpServletRequest request, MultipartHttpServletRequest mrequest) {	
 		/*
 		 * form 태그의 name 명과 BoardVO 의 필드명이 같다라면 request.getParameter("form 태그의 name명");
 		 * 을 사용하지 않더라도 자동적으로 BoardVO boardvo 에 set 되어진다.
@@ -512,26 +628,89 @@ public class ControllerSJ {
 		
 		mav.addObject("params", params);		
 
-		String filename = boardvo.getFilename();
-		if (filename == null) {
-			boardvo.setOrgfilename("");
-			boardvo.setFilename("");
-			boardvo.setFilesize("0");
-		}
-//		System.out.println(boardvo.getBoardseq());
-//		System.out.println(boardvo.getTitle());
-//		System.out.println(boardvo.getContent());
-//		System.out.println(boardvo.getFk_userid());
-//		System.out.println(boardvo.getRegisterdate());
-//		System.out.println(boardvo.getPassword());
-//		System.out.println(boardvo.getCommentcount());
-//		System.out.println(boardvo.getViewcount());
-//		System.out.println(boardvo.getStatus());
-//		System.out.println(boardvo.getOrgfilename());
-//		System.out.println(boardvo.getFilename());
-//		System.out.println(boardvo.getFilesize());
+		
+		// ===  첨부파일이 있는 경우 작업 시작 !!! ===	
+		MultipartFile attach = boardvo.getAttach();
+		
+		if(attach != null) {
+			// attach(첨부파일)가 비어 있지 않으면(즉, 첨부파일이 있는 경우라면) 
 
-		int n = service.add(boardvo); // <== 파일첨부가 없는 글쓰기
+			// WAS 의 webapp 의 절대경로를 알아와야 한다. 
+			HttpSession session = mrequest.getSession(); 
+			String root = session.getServletContext().getRealPath("/");  
+			
+		//	System.out.println("~~~ 확인용 webapp 의 절대경로 => " + root);
+			// ~~~ 확인용 webapp 의 절대경로 => C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\board\ 
+			
+			String path = root+"resources"+File.separator+"files";
+
+			
+			//  2. 파일첨부를 위한 변수의 설정 및 값을 초기화 한 후 파일 올리기 
+			
+			String newFileName = "";
+			// WAS(톰캣)의 디스크에 저장될 파일명
+			
+			byte[] bytes = null;
+			// 첨부파일의 내용물을 담는 것 
+			
+			long fileSize = 0;
+			// 첨부파일의 크기 
+			
+			try {
+				bytes = attach.getBytes();
+				// 첨부파일의 내용물을 읽어오는 것 
+				
+				String originalFilename = attach.getOriginalFilename();
+				// attach.getOriginalFilename() 이 첨부파일명의 파일명(예: 강아지.png) 이다. 
+				
+             	System.out.println("~~~ 확인용 originalFilename => " + originalFilename); 
+				// ~~~ 확인용 originalFilename => LG_싸이킹청소기_사용설명서.pdf 
+				
+				newFileName = fileManager.doFileUpload(bytes, originalFilename, path);
+				// 첨부되어진 파일을 업로드 하는 것이다. 
+				
+				System.out.println("~~~ 확인용 newFileName => " + newFileName);  
+			//	~~~ 확인용 newFileName => 2024062712072778335865583700.jpg
+				
+			
+			    // 3. BoardVO boardvo 에 fileName 값과 orgFilename 값과 fileSize 값을 넣어주기  
+			
+				boardvo.setFilename(newFileName);
+				// WAS(톰캣)에 저장된 파일명(2024062712072778335865583700.jpg)
+				
+				boardvo.setOrgfilename(originalFilename);
+				// 게시판 페이지에서 첨부된 파일(쉐보레전면.jpg)을 보여줄 때 사용.
+				// 또한 사용자가 파일을 다운로드 할때 사용되어지는 파일명으로 사용.
+				
+				fileSize = attach.getSize(); // 첨부파일의 크기(단위는 byte임) 
+				boardvo.setFilesize(String.valueOf(fileSize)); 
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+	// === 첨부파일이 있는 경우 작업 끝 !!! ===	
+		
+
+		int n = 0;
+		
+		if(attach.isEmpty()) {
+			// 파일첨부가 없는 경우라면
+
+			String filename = boardvo.getFilename();
+			if (filename == null) {
+				boardvo.setOrgfilename("");
+				boardvo.setFilename("");
+				boardvo.setFilesize("0");
+			}
+			
+			n = service.add(boardvo); // <== 파일첨부가 없는 글쓰기 
+		}
+		else {
+			// 파일첨부가 있는 경우라면
+			n = service.add_withFile(boardvo);
+		}
 
 		if (n == 1) {
 			mav.setViewName("redirect:/community/list.do");
@@ -583,6 +762,283 @@ public class ControllerSJ {
 
 		return mav;
 	}
+	
+	
+	
+	
+	// === 글을 수정하는 페이지 요청 === //
+	@GetMapping("/board/edit.do")
+	public ModelAndView requiredLogin_edit(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+		
+		// 글 수정해야 할 글번호 가져오기
+		String boardseq = request.getParameter("boardseq");
+		String fk_sportseq = request.getParameter("sportseq");
+		
+		String message = "";
+		
+		try {
+			Integer.parseInt(boardseq);
+			
+			// 글 수정해야 할 글 1개 내용가져오기
+			Map<String, String> paraMap = new HashMap<>();
+			paraMap.put("boardseq", boardseq);
+			paraMap.put("fk_sportseq", fk_sportseq);
+			
+			BoardVO boardvo = service.getView_no_increase_readCount(paraMap);
+			// 글 조회수 증가는 없고 단순히 글 1개만 조회를 해오는 것
+			
+			if(boardvo == null) {
+				message = "글 수정이 불가합니다.";
+			}
+			else {
+				HttpSession session = request.getSession();
+				MemberVO loginuser = (MemberVO) session.getAttribute("loginuser"); 
+				
+				if( !loginuser.getUserid().equals(boardvo.getFk_userid()) ) {
+					message = "다른 사용자의 글은 수정이 불가합니다.";
+				}
+				else {
+					// 자신의 글을 수정할 경우
+					// 가져온 1개글을 글수정할 폼이 있는 view 단으로 보내준다.
+					mav.addObject("boardvo", boardvo);
+					mav.setViewName("board/edit.tiles1");
+					
+					return mav;
+				}
+			}
+			
+		} catch (NumberFormatException e) {
+			message = "글 수정이 불가합니다.";
+		}
+		
+		String loc = "javascript:history.back()";
+		mav.addObject("message", message);
+		mav.addObject("loc", loc);
+		
+		mav.setViewName("msg");
+		
+		return mav;
+	}	
+	
+	
+	
+	// === 글을 수정하는 페이지 완료하기 === //
+	@PostMapping("/board/editEnd.do")
+	public ModelAndView editEnd(ModelAndView mav, BoardVO boardvo, HttpServletRequest request, MultipartHttpServletRequest mrequest) {
+		
+		
+		// ===  첨부파일이 있는 경우 작업 시작 !!! ===	
+		MultipartFile attach = boardvo.getAttach();
+		
+		if(attach != null) {
+			// attach(첨부파일)가 비어 있지 않으면(즉, 첨부파일이 있는 경우라면) 
+
+			// WAS 의 webapp 의 절대경로를 알아와야 한다. 
+			HttpSession session = mrequest.getSession(); 
+			String root = session.getServletContext().getRealPath("/");  
+			
+		//	System.out.println("~~~ 확인용 webapp 의 절대경로 => " + root);
+			// ~~~ 확인용 webapp 의 절대경로 => C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\board\ 
+			
+			String path = root+"resources"+File.separator+"files";
+
+			
+			//  2. 파일첨부를 위한 변수의 설정 및 값을 초기화 한 후 파일 올리기 
+			
+			String newFileName = "";
+			// WAS(톰캣)의 디스크에 저장될 파일명
+			
+			byte[] bytes = null;
+			// 첨부파일의 내용물을 담는 것 
+			
+			long fileSize = 0;
+			// 첨부파일의 크기 
+			
+			try {
+				bytes = attach.getBytes();
+				// 첨부파일의 내용물을 읽어오는 것 
+				
+				String originalFilename = attach.getOriginalFilename();
+				// attach.getOriginalFilename() 이 첨부파일명의 파일명(예: 강아지.png) 이다. 
+				
+//             	System.out.println("~~~ 확인용 originalFilename => " + originalFilename); 
+				// ~~~ 확인용 originalFilename => LG_싸이킹청소기_사용설명서.pdf 
+				
+				newFileName = fileManager.doFileUpload(bytes, originalFilename, path);
+				// 첨부되어진 파일을 업로드 하는 것이다. 
+				
+//				System.out.println("~~~ 확인용 newFileName => " + newFileName);  
+			//	~~~ 확인용 newFileName => 2024062712072778335865583700.jpg
+				
+			
+			    // 3. BoardVO boardvo 에 fileName 값과 orgFilename 값과 fileSize 값을 넣어주기  
+			
+				boardvo.setFilename(newFileName);
+				// WAS(톰캣)에 저장된 파일명(2024062712072778335865583700.jpg)
+				
+				boardvo.setOrgfilename(originalFilename);
+				// 게시판 페이지에서 첨부된 파일(쉐보레전면.jpg)을 보여줄 때 사용.
+				// 또한 사용자가 파일을 다운로드 할때 사용되어지는 파일명으로 사용.
+				
+				fileSize = attach.getSize(); // 첨부파일의 크기(단위는 byte임) 
+				boardvo.setFilesize(String.valueOf(fileSize)); 
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+	// === 첨부파일이 있는 경우 작업 끝 !!! ===	
+		
+
+		int n = 0;
+		
+		if(attach.isEmpty()) {
+			// 파일첨부가 없는 경우라면
+
+			String filename = boardvo.getFilename();
+			if (filename == null) {
+				boardvo.setOrgfilename("");
+				boardvo.setFilename("");
+				boardvo.setFilesize("0");
+			}
+			
+			n = service.edit(boardvo); // <== 파일첨부가 없는 글쓰기 
+		}
+		else {
+			// 파일첨부가 있는 경우라면
+			n = service.edit_withFile(boardvo);
+		}
+		
+		
+		if(n==1) {
+			mav.addObject("message", "글 수정 성공!!");
+			mav.addObject("loc", request.getContextPath()+"/board/boardview.do?boardseq="+boardvo.getBoardseq());
+			mav.setViewName("msg");
+		}
+		
+		return mav;
+	}
+	
+	
+	
+	
+	// === #76. 글을 삭제하는 페이지 요청 === //
+	@GetMapping("/board/del.do")
+	public ModelAndView requiredLogin_del(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+		
+		// 글 삭제해야 할 글번호 가져오기
+		String boardseq = request.getParameter("boardseq");
+		
+		String message = "";
+		
+		try {
+			Integer.parseInt(boardseq);
+			
+			// 글 삭제해야 할 글 1개 내용가져오기
+			Map<String, String> paraMap = new HashMap<>();
+			paraMap.put("boardseq", boardseq);
+			
+			BoardVO boardvo = service.getView_no_increase_readCount(paraMap);
+			// 글 조회수 증가는 없고 단순히 글 1개만 조회를 해오는 것
+			
+			if(boardvo == null) {
+				message = "글 삭제가 불가합니다.";
+			}
+			else {
+				HttpSession session = request.getSession();
+				MemberVO loginuser = (MemberVO) session.getAttribute("loginuser"); 
+				
+				if( !loginuser.getUserid().equals(boardvo.getFk_userid()) ) {
+					message = "다른 사용자의 글은 삭제가 불가합니다.";
+				}
+				else {
+					// 자신의 글을 삭제할 경우
+					// 가져온 1개글을 글삭제할 폼이 있는 view 단으로 보내준다.
+					mav.addObject("boardvo", boardvo);
+					mav.setViewName("board/del.tiles1");
+					
+					return mav;
+				}
+			}
+			
+		} catch (NumberFormatException e) {
+			message = "글 삭제가 불가합니다.";
+		}
+		
+		String loc = "javascript:history.back()";
+		mav.addObject("message", message);
+		mav.addObject("loc", loc);
+		
+		mav.setViewName("msg");
+		
+		return mav;
+	}
+	
+	
+	
+	
+	// === 글을 삭제하는 페이지 완료하기 === //
+	@PostMapping("/board/delEnd.do")
+	public ModelAndView delEnd(ModelAndView mav, HttpServletRequest request) {
+		
+		String boardseq = request.getParameter("boardseq");
+		
+		/////////////////////////////////////////////////
+		// === #184. 파일첨부가 된 글이라면 글 삭제시 먼저 첨부파일을 삭제해주어야 한다. 시작 === //
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("searchType", "");
+		paraMap.put("searchWord", "");
+		paraMap.put("boardseq", boardseq);
+		
+		BoardVO boardvo = service.getView_no_increase_readCount(paraMap);
+		
+		String filename = boardvo.getFilename();
+		// 20240701090317412881263349800.pdf  이것이 바로 WAS(톰캣) 디스크에 저장된 파일명이다.
+		
+		if(filename != null && !"".equals(filename)) {
+			
+			// 첨부파일이 저장되어 있는 WAS(톰캣) 디스크 경로명을 알아와야만 다운로드를 해줄 수 있다.
+	    	// 이 경로는 우리가 파일첨부를 위해서 /addEnd.action 에서 설정해두었던 경로와 똑같아야 한다.  
+			// WAS 의 webapp 의 절대경로를 알아와야 한다. 
+			HttpSession session = request.getSession(); 
+			String root = session.getServletContext().getRealPath("/");  
+			
+		//	System.out.println("~~~ 확인용 webapp 의 절대경로 => " + root);
+			// ~~~ 확인용 webapp 의 절대경로 => C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\board\ 
+			
+			String path = root+"resources"+File.separator+"files";
+			/* File.separator 는 운영체제에서 사용하는 폴더와 파일의 구분자이다.
+			      운영체제가 Windows 이라면 File.separator 는  "\" 이고,
+			      운영체제가 UNIX, Linux, 매킨토시(맥) 이라면  File.separator 는 "/" 이다. 
+			*/
+			
+			// path 가 첨부파일이 저장될 WAS(톰캣)의 폴더가 된다.
+			// System.out.println("~~~ 확인용 path => " + path);
+			// ~~~ 확인용 path => C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\board\resources\files 
+			
+			paraMap.put("path", path); // 삭제해야할 파일이 저장된 경로
+			paraMap.put("filename", filename); // 삭제해야할 파일명
+		}
+		// === 파일첨부가 된 글이라면 글 삭제시 먼저 첨부파일을 삭제해주어야 한다. 끝 === // 
+		
+		/////////////////////////////////////////////////
+		
+		int n = service.del(paraMap);
+		
+		if(n==1) {
+			mav.addObject("message", "글 삭제 성공!!");
+			mav.addObject("loc", request.getContextPath()+"/community/list.do");
+			mav.setViewName("msg");
+		}
+		
+		return mav;
+	}	
+	
+	
+	
+	
+	
 
 	@ResponseBody
 	@PostMapping(value = "/idDuplicateCheck.do", produces = "text/plain;charset=UTF-8")
