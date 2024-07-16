@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
+import com.spring.app.domain.MatchingVO;
 import com.spring.app.service.AmadoService_JH;
 
 
@@ -393,7 +394,7 @@ public class ControllerJH {
 		paraMap.put("sportseq", sportseq);
 
 		ClubVO clubvo = service.getMyClub(paraMap);
-		
+		clubvo.setClubseq(clubseq);
 		if(clubvo != null) {
 			service.updateviewcount(clubseq);
 		}
@@ -413,7 +414,21 @@ public class ControllerJH {
 			System.out.println(clubvo.getClubstatus());
 			System.out.println(clubvo.getClubscore());
 		*/
+		
+		List<MatchingVO> matchingList = service.getmatchingList(clubseq);
+		
+		
+		System.out.println(matchingList.get(0).getClubname1());
+		
+		for(MatchingVO matchingvo : matchingList) {
+			if(matchingvo.getClubseq1() == clubseq) {
+				
+			}
+		}
+		
+		
 		mav.addObject("clubvo", clubvo);
+		mav.addObject("matchingList", matchingList);
 		mav.setViewName("club/myClub_plus.tiles2");
 		// /WEB-INF/views/tiles2/main/index.jsp
 		

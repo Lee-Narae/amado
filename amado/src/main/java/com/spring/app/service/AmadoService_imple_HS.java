@@ -1,5 +1,7 @@
 package com.spring.app.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +47,16 @@ public class AmadoService_imple_HS implements AmadoService_HS {
 	public int add_photofile(PhotoVO photovo) {
 		int n = dao.add_photofile(photovo);
 		return n;
+	}
+
+
+
+
+
+	@Override
+	public List<GymVO> getAllGymList() {
+		 List<GymVO> allGymList = dao.getAllGymList();
+		return allGymList;
 	}
 
 
