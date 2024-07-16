@@ -120,14 +120,7 @@ $(document).ready(function() {
            previewImagesContainer.appendChild(imgElement);
        }
    });
-    // 폼 제출 시 알림 및 폼 전송
-    $("button#submit").click(function() {
-        alert("관리자가 승인해야 정상등록 됩니다");
-        const frm = document.addFrm;
-        frm.method = "post";
-        frm.action = "<%= ctxPath%>/gym/registerGymend.do";
-        frm.submit();
-    });
+
 
     // 비용(input[type="number"]) 입력 필드에 대한 숫자만 입력 유효성 검사
     var costInput = document.getElementById("cost");
@@ -322,6 +315,22 @@ $(document).ready(function() {
       });
       
   <%-- === jQuery 를 사용하여 드래그앤드롭(DragAndDrop)을 통한 파일 업로드 끝 === --%>
+  
+  
+  
+  // 폼 제출 시 알림 및 폼 전송
+  $("button#submit").click(function() {
+      alert("관리자가 승인해야 정상등록 됩니다");
+      const frm = document.addFrm;
+      frm.method = "post";
+      frm.action = "<%= ctxPath%>/gym/registerGymend.do";
+      frm.submit();
+  });
+
+
+
+
+
 });
 
 
@@ -383,7 +392,7 @@ $(document).ready(function() {
    
        
    <%-- ==== 추가이미지파일을 마우스 드래그앤드롭(DragAndDrop)으로 추가하기 ==== --%>
-    <tr>
+   <!--  <tr>
           <td width="25%" class="prodInputName" style="padding-bottom: 10px;">추가이미지파일(선택)</td>
           <td>
              <span style="font-size: 10pt;">파일을 1개씩 마우스로 끌어 오세요</span>
@@ -391,7 +400,7 @@ $(document).ready(function() {
           </td>
     </tr>
     
-    
+     -->
    <%--
     <div class="form-group">
      <label for="attachment">여러 파일</label>

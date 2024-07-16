@@ -11,11 +11,11 @@
 </insert>
 
 
-<insert id="add_photofile" parameterType="PhotoVO">
+<!-- <insert id="add_photofile" parameterType="PhotoVO">
 insert into tbl_gym_photos(photo_id,fk_gymseq,several_photos)
 values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
 
-</insert>
+</insert> -->
 
 
 <!--  모든 상품 select 해오기  -->

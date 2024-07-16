@@ -168,9 +168,9 @@ public class ControllerHS {
 		if(!(attach.isEmpty())) {
 			//파일 첨부가  있는 경우라면 
 			n=service.add_withFile(gymvo);
-			if(n==1) {
-				n=service.add_photofile(photovo);
-		}
+			/*
+			 * if(n==1) { n=service.add_photofile(photovo); }
+			 */
 			
 		}
 		
