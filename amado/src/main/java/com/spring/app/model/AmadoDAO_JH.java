@@ -7,6 +7,7 @@ import java.util.Map;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
+import com.spring.app.domain.MatchingVO;
 
 public interface AmadoDAO_JH {
 
@@ -37,6 +38,8 @@ public interface AmadoDAO_JH {
 	ClubVO getMyClub(Map<String, String> paraMap);
 
 	void updateviewcount(String clubseq);
+
+	List<MatchingVO> getmatchingList(String clubseq);
 
 
 }
