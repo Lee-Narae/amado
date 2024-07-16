@@ -97,7 +97,7 @@ margin-left: 2%;
 
 <div id="container">
 <div  style="background-color: #4040bf">
-<div class="board_header"  style="display: flex; margin-left: 15%; color: white; padding: 3%;">
+<div class="board_header"  style="display: flex; margin-left: 16.5%; color: white; padding: 3%;">
     <div class="tit">
         <h1>${requestScope.clubvo.clubname}</h1>
         <div class="desc">호날두가 속한 동호회 입니다.</div>
@@ -106,7 +106,7 @@ margin-left: 2%;
 
     <div class="coach_area" >
         <div class="wrap">
-            <div class="coach_info" style="display: flex; margin-left: 190%;">
+            <div class="coach_info" style="display: flex; margin-left: 220%;">
             	<div style="display: inline;">
 	                <div class="name">
 		                <div style="font-size: 12pt; width: 230%;">
@@ -186,7 +186,7 @@ margin-left: 2%;
                 </div>
                 <div class="crest">
                     <div class="img">
-                        <img class='uniform-size' style="margin-left: 90%;" src="<%=ctxPath%>/resources/images/zee/${requestScope.clubvo.clubimg}">
+                        <img class='uniform-size' style="margin-left: 120%;" src="<%=ctxPath%>/resources/images/zee/${requestScope.clubvo.clubimg}">
                     </div>
                 </div>
             </div>
@@ -233,12 +233,14 @@ margin-left: 2%;
 		
 		<div style="display: flex;">
 		
-			<div style="display: flex; margin-left: 4%;">
-				<img class='uniform-size' style="margin-left: 90%;" src="<%=ctxPath%>/resources/images/zee/${requestScope.clubvo.clubimg}">
-				<div style="font-family: 'Roboto', sans-serif; font-weight: bold; font-size: 45px; margin-top: 8%; color: #2929a3;">${requestScope.clubvo.clubname}</div>
+			<div style="display: flex; margin-left: 3%; width: 56%;">
+				<div>
+					<img class='uniform-size' style="margin-left: 90%;" src="<%=ctxPath%>/resources/images/zee/${requestScope.clubvo.clubimg}">
+				</div>
+				<div style="font-family: 'Roboto', sans-serif; font-weight: bold; font-size: 45px; margin-top: 2%; margin-left:15%; color: #2929a3;">${requestScope.clubvo.clubname}</div>
 			</div>
 			
-			<div style="display: inline; margin-top: 2%; margin-left: 15%;">
+			<div style="display: inline; margin-top: 0%; margin-left: 16%;">
 				<div style="margin: 1% 0 5% 7%; font-size: 17pt; font-weight: bold; width: 100%;">최근 5게임 전적</div>
 				<div style="display: flex; color: white; margin-left: 5%;">
 					<div style="border: solid 1px #ff3333; padding: 4% 8%; background-color: #ff3333;">패</div>
@@ -250,7 +252,7 @@ margin-left: 2%;
 			</div>
 		
 		</div>
-		<div id="table" style="width: 90%; margin-left: 5%; margin-top: 4%;">
+		<div id="table" style="width: 90%; margin-left: 5%; margin-top: 3.5%;">
 			<div class="tbl-header">
 			  <table cellpadding="0" cellspacing="0" border="0">
 			    <thead>
@@ -306,7 +308,7 @@ margin-left: 2%;
 			  </table>
 			</div>
 		</div>
-		<div id="more" style="text-align: right; margin: 5% 5% 2% 0; color: #8a8a8a;">최근 전적 더보기 ▶</div>
+		<div id="more" style="text-align: right; margin: 4% 5% 2% 0; color: #8a8a8a;">최근 전적 더보기 ▶</div>
 	</div>
 	
 

@@ -327,8 +327,8 @@ create table tbl_matching
 (matchingseq         NUMBER   not null        -- 시합번호
 ,matchingregseq      NUMBER                   -- 시합등록번호(FK)
 ,clubseq2            NUMBER                   -- 동호회A(FK)
-,clubseq            NUMBER                   -- 동호회B(FK)
-,result                nvarchar2(10)            -- 시합결과
+,clubseq             NUMBER                   -- 동호회B(FK)
+,result              NUMBER   default 0       -- 시합결과(시합전:0, 승:1, 패:2)
 
 ,constraint PK_tbl_matching_matchingseq primary key(matchingseq)
 ,constraint FK_tbl_matching_matchingregseq foreign key(matchingregseq) references tbl_matchingreg(matchingregseq)
