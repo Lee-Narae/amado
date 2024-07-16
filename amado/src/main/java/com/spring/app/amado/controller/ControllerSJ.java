@@ -28,6 +28,7 @@ import com.spring.app.common.MyUtil;
 import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
+import com.spring.app.domain.ClubmemberVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.service.AmadoService_SJ;
 
@@ -1165,6 +1166,39 @@ public class ControllerSJ {
 		// 검색타입 있는 리스트 가져오기(페이징)
 		clubPagingList = service.searchPaging(paraMap);
 		
+		
+        // == 동호회 가입하기 만들기 == //
+        
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
+		if(loginuser != null) {
+			String fk_userid = loginuser.getUserid();
+			request.setAttribute("fk_userid", fk_userid);
+			
+			// 내가 가입한 클럽 가져오기
+			try {
+				List<ClubmemberVO> clubmemberList = service.getClubmemberList(fk_userid);
+				
+				for(ClubVO clubvo : clubPagingList) {
+					for (ClubmemberVO clubmembervo : clubmemberList) {
+						if(clubvo.getClubseq().equals(clubmembervo.getClubseq())) {
+							clubvo.setClubmembervo(clubmembervo);
+						}
+					}
+				}
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
+		}
+		
+		
+        
+        
+        // == 동호회 가입하기 만들기 끝 == //		
+		
+		
 		mav.addObject("clubPagingList", clubPagingList);
 		
 		// 검색시 검색조건 및 검색어 값 유지시키기
@@ -1221,6 +1255,7 @@ public class ControllerSJ {
         
         // *** ======= 페이지바 만들기 끝 ======= *** //           
         
+        
         String currentURL = MyUtil.getCurrentURL(request);
 
 		// === 페이징 처리를 안한 검색어가 없는 전체 동호회 보여주기 (랭킹 3위까지 사진보여주기 위한 것) === //
@@ -1268,6 +1303,35 @@ public class ControllerSJ {
 		
 		return mav;
 	}
+	
+	
+	@ResponseBody
+	@PostMapping(value = "/club/clubMRegisterSJ.do", produces = "text/plain;charset=UTF-8") 
+	public String clubMRegisterSJ(HttpServletRequest request) {
+		
+		String clubseq = request.getParameter("clubseq");
+		String sportseq = request.getParameter("fk_sportseq");
+		String fk_userid = request.getParameter("fk_userid");
+		
+		ClubmemberVO clubmembervo = new ClubmemberVO();
+		
+		clubmembervo.setClubseq(clubseq);
+		clubmembervo.setFk_userid(fk_userid);
+		clubmembervo.setSportseq(sportseq);
+		
+		int n = 0;
+		
+		// 클럽 가입신청(멤버)
+		n = service.clubMRegisterSJ(clubmembervo);
+
+		
+		JSONObject jsonObject = new JSONObject(); // {}
+		jsonObject.put("n", n); // 정상일 경우 {"n":1} 문제가 생겼을 경우{"n":0}
+
+		return jsonObject.toString();
+	}
+	
+	
 	
 	
 

@@ -120,14 +120,7 @@ $(document).ready(function() {
            previewImagesContainer.appendChild(imgElement);
        }
    });
-    // 폼 제출 시 알림 및 폼 전송
-    $("button#submit").click(function() {
-        alert("관리자가 승인해야 정상등록 됩니다");
-        const frm = document.addFrm;
-        frm.method = "post";
-        frm.action = "<%= ctxPath%>/gym/registerGymend.do";
-        frm.submit();
-    });
+
 
     // 비용(input[type="number"]) 입력 필드에 대한 숫자만 입력 유효성 검사
     var costInput = document.getElementById("cost");
@@ -152,25 +145,25 @@ $(document).ready(function() {
     
     
     <%-- === jQuery 를 사용하여 드래그앤드롭(DragAndDrop)을 통한 파일 업로드 시작 === --%>
-<%--       let file_arr = []; // 첨부되어진 파일 정보를 담아둘 배열 
+      let file_arr = []; // 첨부되어진 파일 정보를 담아둘 배열 
       
       // == 파일 Drag & Drop 만들기 == //
       $("div#fileDrop").on("dragenter", function(e){ /* "dragenter" 이벤트는 드롭대상인 박스 안에 Drag 한 파일이 최초로 들어왔을 때 */ 
           e.preventDefault();
-           
+           <%-- 
                 브라우저에 어떤 파일을 drop 하면 브라우저 기본 동작이 실행된다. 
                 이미지를 drop 하면 바로 이미지가 보여지게되고, 만약에 pdf 파일을 drop 하게될 경우도 각 브라우저의 pdf viewer 로 브라우저 내에서 pdf 문서를 열어 보여준다. 
                 이것을 방지하기 위해 preventDefault() 를 호출한다. 
                 즉, e.preventDefault(); 는 해당 이벤트 이외에 별도로 브라우저에서 발생하는 행동을 막기 위해 사용하는 것이다.
-          
+           --%>
            
            e.stopPropagation();
-           
+           <%--
                propagation 의 사전적의미는 전파, 확산이다.
                stopPropagation 은 부모태그로의 이벤트 전파를 stop 중지하라는 의미이다.
                즉, 이벤트 버블링을 막기위해서 사용하는 것이다. 
                사용예제 사이트 https://devjhs.tistory.com/142 을 보면 이해가 될 것이다. 
-          
+           --%>
       }).on("dragover", function(e){ /* "dragover" 이벤트는 드롭대상인 박스 안에 Drag 한 파일이 머물러 있는 중일 때. 필수이벤트이다. dragover 이벤트를 적용하지 않으면 drop 이벤트가 작동하지 않음 */ 
            e.preventDefault();
            e.stopPropagation();
@@ -183,12 +176,12 @@ $(document).ready(function() {
            e.preventDefault();
           
            var files = e.originalEvent.dataTransfer.files;  
-            
+           <%--  
                jQuery 에서 이벤트를 처리할 때는 W3C 표준에 맞게 정규화한 새로운 객체를 생성하여 전달한다.
                이 전달된 객체는 jQuery.Event 객체 이다. 이렇게 정규화된 이벤트 객체 덕분에, 
                웹브라우저별로 차이가 있는 이벤트에 대해 동일한 방법으로 사용할 수 있습니다. (크로스 브라우징 지원)
                순수한 dom 이벤트 객체는 실제 웹브라우저에서 발생한 이벤트 객체로, 네이티브 객체 또는 브라우저 내장 객체 라고 부른다.
-          
+           --%>
            /*  Drag & Drop 동작에서 파일 정보는 DataTransfer 라는 객체를 통해 얻어올 수 있다. 
                jQuery를 이용하는 경우에는 event가 순수한 DOM 이벤트(각기 다른 웹브라우저에서 해당 웹브라우저의 객체에서 발생되는 이벤트)가 아니기 때문에,
                event.originalEvent를 사용해서 순수한 원래의 DOM 이벤트 객체를 가져온다.
@@ -198,7 +191,7 @@ $(document).ready(function() {
          */
       //  console.log(typeof files); // object
        //  console.log(files);
-           
+           <%--
             FileList {0: File, length: 1}
             0: File {name: 'berkelekle단가라포인트03.jpg', lastModified: 1605506138000, lastModifiedDate: Mon Nov 16 2020 14:55:38 GMT+0900 (한국 표준시), webkitRelativePath: '', size: 57641, …}
                length: 1
@@ -213,15 +206,15 @@ $(document).ready(function() {
             3: File {name: 'berkelekle단가라포인트03.jpg', lastModified: 1605506138000, lastModifiedDate: Mon Nov 16 2020 14:55:38 GMT+0900 (GMT+09:00), webkitRelativePath: '', size: 57641, …}
                length: 4
             [[Prototype]]: FileList
-          
+           --%>
             
          if(files != null && files != undefined) {
-            console.log("files.length 는 => " + files.length);  
+            <%-- console.log("files.length 는 => " + files.length);  
                    // files.length 는 => 1 이 나온다.
                    // files.length 는 => 4 가 나온다. 
+              --%>    
                  
-                 
-              
+              <%--
                  for(let i=0; i<files.length; i++){
                       const f = files[i];
                       const fileName = f.name;  // 파일명
@@ -229,7 +222,7 @@ $(document).ready(function() {
                       console.log("파일명 : " + fileName);
                       console.log("파일크기 : " + fileSize);
                   } // end of for------------------------
-             
+              --%>
                
               let html = "";
               const f = files[0]; // 어차피 files.length 의 값이 1 이므로 위의 for문을 사용하지 않고 files[0] 을 사용하여 1개만 가져오면 된다. 
@@ -305,7 +298,7 @@ $(document).ready(function() {
          
          file_arr.splice(idx, 1);
       // console.log(file_arr);
-        
+        <%-- 
               배열명.splice() : 배열의 특정 위치에 배열 요소를 추가하거나 삭제하는데 사용한다. 
                               삭제할 경우 리턴값은 삭제한 배열 요소이다. 삭제한 요소가 없으면 빈 배열( [] )을 반환한다.
       
@@ -317,11 +310,27 @@ $(document).ready(function() {
               배열명.splice(start, deleteCount); // 배열의 특정 위치의 배열 요소를 삭제하는 경우    
                            start   - 수정할 배열 요소의 인덱스
                            deleteCount - 삭제할 요소 개수
-     
+      --%>
          $(e.target).parent().remove();
       });
-       --%>
+      
   <%-- === jQuery 를 사용하여 드래그앤드롭(DragAndDrop)을 통한 파일 업로드 끝 === --%>
+  
+  
+  
+  // 폼 제출 시 알림 및 폼 전송
+  $("button#submit").click(function() {
+      alert("관리자가 승인해야 정상등록 됩니다");
+      const frm = document.addFrm;
+      frm.method = "post";
+      frm.action = "<%= ctxPath%>/gym/registerGymend.do";
+      frm.submit();
+  });
+
+
+
+
+
 });
 
 
@@ -382,16 +391,16 @@ $(document).ready(function() {
    </div>
    
        
-   <%-- ==== 추가이미지파일을 마우스 드래그앤드롭(DragAndDrop)으로 추가하기 ==== --%> 
-<!--     <tr>
+   <%-- ==== 추가이미지파일을 마우스 드래그앤드롭(DragAndDrop)으로 추가하기 ==== --%>
+   <!--  <tr>
           <td width="25%" class="prodInputName" style="padding-bottom: 10px;">추가이미지파일(선택)</td>
           <td>
              <span style="font-size: 10pt;">파일을 1개씩 마우스로 끌어 오세요</span>
           <div id="fileDrop" class="fileDrop border border-secondary"></div>
           </td>
     </tr>
-     -->
     
+     -->
    <%--
     <div class="form-group">
      <label for="attachment">여러 파일</label>
