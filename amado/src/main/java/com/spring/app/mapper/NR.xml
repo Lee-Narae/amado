@@ -53,10 +53,11 @@
 		<result property="clubscore" 		column="clubscore" 		javaType="String" />
 		<result property="name" 		column="name" 		javaType="String" />
 		<result property="sportname" 		column="sportname" 		javaType="String" />
+		<result property="wasfilename" 		column="wasfilename" 		javaType="String" />
 	</resultMap>
 	
 	<select id="getClubInfo" parameterType="String" resultMap="club">
-		select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, local, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, name, sportname
+		select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, local, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, name, sportname, wasfilename
 		from tbl_club A join tbl_member B
 		on A.fk_userid = B.userid
 		join tbl_sport C
@@ -453,6 +454,52 @@
 	
 	<update id="gymPermit" parameterType="String">
 		update tbl_gym set status = 1 where gymseq = #{gymseq}
+	</update>
+	
+	
+	
+	<resultMap type="HashMap" id="alarmMap">
+		<result property="matchingapplyseq" column="matchingapplyseq" javaType="String"/>
+		<result property="matchingregseq" column="matchingregseq" javaType="String"/>
+		<result property="sportname" column="sportname" javaType="String"/>
+		<result property="Aseq" column="Aseq" javaType="String"/>
+		<result property="A_name" column="A-name" javaType="String"/>
+		<result property="fk_userid" column="fk_userid" javaType="String"/>
+		<result property="Bseq" column="Bseq" javaType="String"/>
+		<result property="B_name" column="B-name" javaType="String"/>
+		<result property="message" column="message" javaType="String"/>
+		<result property="membercount" column="membercount" javaType="String"/>
+		<result property="matchdate" column="matchdate" javaType="String"/>
+		<result property="city" column="city" javaType="String"/>
+		<result property="local" column="local" javaType="String"/>
+		<result property="area" column="area" javaType="String"/>
+		<result property="status" column="status" javaType="String"/>
+	</resultMap>
+	<select id="getClubAlarm" parameterType="String" resultMap="alarmMap">
+		select matchingapplyseq, B.matchingregseq, E.sportname, B.clubseq Aseq, D.clubname "A-name", D.fk_userid, A.clubseq Bseq,
+			   C.clubname "B-name", A.message, A.membercount, to_char(B.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, B.city, B.local, B.area, B.status
+		from tbl_matchingapply A join tbl_matchingreg B
+		on A.matchingregseq = B.matchingregseq
+		join tbl_club C
+		on A.clubseq = C.clubseq
+		join tbl_club D
+		on B.clubseq = D.clubseq
+		join tbl_sport E
+		on B.sportseq = E.sportseq
+		where D.fk_userid = #{userid} and A.status = 0
+	</select>
+	
+	
+	<update id="updateMatchingApply1" parameterType="HashMap">
+		update tbl_matchingapply set status = 1 where matchingapplyseq = #{matchingapplyseq}
+	</update>
+	
+	<update id="updateMatchingApply2">
+		update tbl_matchingapply set status = 2 where matchingregseq = #{matchingregseq} and matchingapplyseq != #{matchingapplyseq}
+	</update>
+	
+	<update id="updateMatchingReg">
+		update tbl_matchingreg set status = 1 where matchingregseq = #{matchingregseq}
 	</update>
 	
 </mapper>

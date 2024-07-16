@@ -95,6 +95,13 @@ public class ControllerNR {
 			mav.addObject("club", club);
 		}
 		
+		
+		// 동호회장 한정 알림 불러오기
+		if("1".equals(loginuser.getMemberrank())) {
+			List<Map<String,String>> alarmList = service.getClubAlarm(loginuser.getUserid());
+			mav.addObject("alarmList", alarmList);
+		}
+		
 		mav.setViewName("club/myClub.tiles2");
 		// /WEB-INF/views/tiles2/club/myClub.jsp
 		return mav;
@@ -553,6 +560,8 @@ public class ControllerNR {
 	public String getClubseq(HttpServletRequest request) {
 		
 		String sportname = request.getParameter("sportname");
+		
+		System.out.println("sportname: "+sportname);
 		
 		HttpSession session = request.getSession();
 		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
@@ -1755,6 +1764,34 @@ public class ControllerNR {
 	
 	
 	
+	@ResponseBody
+	@PostMapping("/club/matching.do")
+	public String matching (HttpServletRequest request) {
+		
+		String matchingapplyseq = request.getParameter("matchingapplyseq");
+		String matchingregseq = request.getParameter("matchingregseq");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("matchingapplyseq", matchingapplyseq);
+		paramap.put("matchingregseq", matchingregseq);
+		
+		// 선택된 동호회의 tbl_matchingapplyseq 행 status는 1로, 선택받지 못한 동호회는 2로, tbl_matchingreg의  matchingregseq 행 status는 1로
+		// 1. tbl_matchingapply
+		int n = service.updateMatchingApply(paramap);
+		
+		if(n == 1) {
+			// 2. tbl_matchingreg
+			n = service.updateMatchingReg(matchingregseq);
+		}
+		
+		JSONObject jsonObj = new JSONObject();
+		
+		jsonObj.put("n", n);
+		
+		return jsonObj.toString();
+	}
+	
+
 	
 }
 
