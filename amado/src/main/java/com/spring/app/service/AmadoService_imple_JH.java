@@ -13,6 +13,7 @@ import com.spring.app.common.AES256;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
+import com.spring.app.domain.MatchingVO;
 import com.spring.app.model.AmadoDAO_JH;
 
 @Service
@@ -143,6 +144,14 @@ public class AmadoService_imple_JH implements AmadoService_JH {
 	@Override
 	public void updateviewcount(String clubseq) {
 		dao.updateviewcount(clubseq);
+	}
+
+
+
+	@Override
+	public List<MatchingVO> getmatchingList(String clubseq) {
+		List<MatchingVO> getmatchingList = dao.getmatchingList(clubseq);
+		return getmatchingList;
 	}
 
 }

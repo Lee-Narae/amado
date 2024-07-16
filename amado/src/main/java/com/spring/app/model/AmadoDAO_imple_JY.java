@@ -48,9 +48,15 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 	
 	// 동호회 등록후 회원등급 동호회장으로  업데이트 해주기
 	@Override
-	public void updateRank(String fk_userid) {
-		sqlsession.update("JY.updateRank",fk_userid);
-		
+	public int updateRank(String fk_userid) {
+		int n = sqlsession.update("JY.updateRank",fk_userid);
+		return n;
+	}
+	
+	// 동호회 등록완료 하면 tbl_clubmember 에 insert 하기
+	@Override
+	public void insertCmemberTbl(ClubVO clubvo) {
+		sqlsession.insert("JY.insertCmemberTbl",clubvo);
 	}
 
 	
@@ -98,6 +104,15 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 		FleamarketVO gDetailData = sqlsession.selectOne("JY.goodsDetailData", goodsSeq);
 		return gDetailData;
 	}
+
+	// 동일한 종목의 동호회 가입하는지 확인
+	@Override
+	public String checkseq(Map<String, String> paraMap) {
+		String checkseq = sqlsession.selectOne("JY.checkseq", paraMap);
+		return checkseq;
+	}
+
+	
 
 
 

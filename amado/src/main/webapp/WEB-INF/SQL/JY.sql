@@ -99,8 +99,14 @@ from tbl_fleamarket;
 -- 동호회등록 할 때 동호회장 소속 indert하기
 select *
 from tbl_clubmember;
+
+
 -- insert 하기 전에 이미 동호회장으로 가입한 sportseq 가 존재한다면 가입 안되게 하기
 select *
 from tbl_clubmember
 where fk_userid = 'leenr';
+
+select count(*)
+from tbl_clubmember
+where fk_userid = #{userid} and sportseq = #{category}
 

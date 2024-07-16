@@ -97,7 +97,7 @@ margin-left: 2%;
 
 <div id="container">
 <div  style="background-color: #4040bf">
-<div class="board_header"  style="display: flex; margin-left: 15%; color: white; padding: 3%;">
+<div class="board_header"  style="display: flex; margin-left: 16.5%; color: white; padding: 3%;">
     <div class="tit">
         <h1>${requestScope.clubvo.clubname}</h1>
         <div class="desc">호날두가 속한 동호회 입니다.</div>
@@ -106,7 +106,7 @@ margin-left: 2%;
 
     <div class="coach_area" >
         <div class="wrap">
-            <div class="coach_info" style="display: flex; margin-left: 190%;">
+            <div class="coach_info" style="display: flex; margin-left: 220%;">
             	<div style="display: inline;">
 	                <div class="name">
 		                <div style="font-size: 12pt; width: 230%;">
@@ -186,7 +186,7 @@ margin-left: 2%;
                 </div>
                 <div class="crest">
                     <div class="img">
-                        <img class='uniform-size' style="margin-left: 90%;" src="<%=ctxPath%>/resources/images/zee/${requestScope.clubvo.clubimg}">
+                        <img class='uniform-size' style="margin-left: 120%;" src="<%=ctxPath%>/resources/images/zee/${requestScope.clubvo.clubimg}">
                     </div>
                 </div>
             </div>
@@ -233,80 +233,103 @@ margin-left: 2%;
 		
 		<div style="display: flex;">
 		
-			<div style="display: flex; margin-left: 4%;">
-				<img class='uniform-size' style="margin-left: 90%;" src="<%=ctxPath%>/resources/images/zee/${requestScope.clubvo.clubimg}">
-				<div style="font-family: 'Roboto', sans-serif; font-weight: bold; font-size: 45px; margin-top: 8%; color: #2929a3;">${requestScope.clubvo.clubname}</div>
+			<div style="display: flex; margin-left: 3%; width: 56%;">
+				<div>
+					<img class='uniform-size' style="margin-left: 90%;" src="<%=ctxPath%>/resources/images/zee/${requestScope.clubvo.clubimg}">
+				</div>
+				<div style="font-family: 'Roboto', sans-serif; font-weight: bold; font-size: 45px; margin-top: 2%; margin-left:15%; color: #2929a3;">${requestScope.clubvo.clubname}</div>
 			</div>
 			
-			<div style="display: inline; margin-top: 2%; margin-left: 15%;">
+			<div style="display: inline; margin-top: 0%; margin-left: 16%;">
 				<div style="margin: 1% 0 5% 7%; font-size: 17pt; font-weight: bold; width: 100%;">최근 5게임 전적</div>
 				<div style="display: flex; color: white; margin-left: 5%;">
-					<div style="border: solid 1px #ff3333; padding: 4% 8%; background-color: #ff3333;">패</div>
-					<div style="border: solid 1px #ff3333; padding: 4% 8%; background-color: #ff3333;">패</div>
-					<div style="border: solid 1px #4d4dff; padding: 4% 8%; background-color: #4d4dff;">승</div>
-					<div style="border: solid 1px #4d4dff; padding: 4% 8%; background-color: #4d4dff;">승</div>
-					<div style="border: solid 1px #ff3333; padding: 4% 8%; background-color: #ff3333;">패</div>
+					<c:set var="count" value="0" />
+						<c:forEach var='matchingvo' items="${requestScope.matchingList}">
+						    <c:if test="${count < 5}">
+					            <c:if test="${requestScope.clubvo.clubseq == matchingvo.clubseq1 && matchingvo.result1 == 1}">
+					                <div style="border: solid 1px #4d4dff; padding: 4% 8%; background-color: #4d4dff;">승</div>
+					            </c:if>
+					            <c:if test="${requestScope.clubvo.clubseq == matchingvo.clubseq1 && matchingvo.result1 == 2}">
+					                <div style="border: solid 1px #ff3333; padding: 4% 8%; background-color: #ff3333;">패</div>
+					            </c:if>
+					            <c:if test="${requestScope.clubvo.clubseq == matchingvo.clubseq1 && matchingvo.result1 == 3}">
+					                <div style="border: solid 1px #999999; padding: 4% 8%; background-color: #999999;">무</div>
+					            </c:if>
+					            <c:if test="${requestScope.clubvo.clubseq == matchingvo.clubseq2 && matchingvo.result2 == 1}">
+					                <div style="border: solid 1px #4d4dff; padding: 4% 8%; background-color: #4d4dff;">승</div>
+					            </c:if>
+					            <c:if test="${requestScope.clubvo.clubseq == matchingvo.clubseq2 && matchingvo.result2 == 2}">
+					                <div style="border: solid 1px #ff3333; padding: 4% 8%; background-color: #ff3333;">패</div>
+					            </c:if>
+					            <c:if test="${requestScope.clubvo.clubseq == matchingvo.clubseq2 && matchingvo.result2 == 3}">
+					                <div style="border: solid 1px #999999; padding: 4% 8%; background-color: #999999;">무</div>
+					            </c:if>
+					        	<c:set var="count" value="${count + 1}" />
+					    	</c:if>
+						</c:forEach>
 				</div>
 			</div>
 		
 		</div>
-		<div id="table" style="width: 90%; margin-left: 5%; margin-top: 4%;">
+		<div id="table" style="width: 90%; margin-left: 5%; margin-top: 3.5%;">
+			
 			<div class="tbl-header">
 			  <table cellpadding="0" cellspacing="0" border="0">
 			    <thead>
 			      <tr>
-			        <th style="width: 7%;">글번호</th>
-					<th style="width: 41%;">제목</th>
-					<th style="width: 20%;">작성자</th>
-					<th style="width: 25%;">작성일자</th>
-					<th style="width: 7%;">조회수</th>
+			        <th style="width: 7%;">경기날짜</th>
+					<th style="width: 41%;">상대팀</th>
+					<th style="width: 20%;">경기장</th>
+					<th style="width: 25%;">스코어</th>
+					<th style="width: 7%;">경기결과 </th>
 			      </tr>
 			    </thead>
 			  </table>
 			</div>
+			
 			<div class="tbl-content">
 			  <table cellpadding="0" cellspacing="0" border="0">
 			    <tbody>
-			      <tr>
-					<td style="width: 7%;">1</td>
-					<td style="width: 41%;">제목</td>
-					<td style="width: 20%;">작성자</td>
-					<td style="width: 25%;">작성일자</td>
-					<td style="width: 7%;">조회수</td>
-				</tr>
-				<tr>
-					<td style="width: 7%;">2</td>
-					<td style="width: 41%;">제목</td>
-					<td style="width: 20%;">작성자</td>
-					<td style="width: 25%;">작성일자</td>
-					<td style="width: 7%;">조회수</td>
-				</tr>
-				<tr>
-					<td style="width: 7%;">3</td>
-					<td style="width: 41%;">제목</td>
-					<td style="width: 20%;">작성자</td>
-					<td style="width: 25%;">작성일자</td>
-					<td style="width: 7%;">조회수</td>
-				</tr>
-				<tr>
-					<td style="width: 7%;">4</td>
-					<td style="width: 41%;">제목</td>
-					<td style="width: 20%;">작성자</td>
-					<td style="width: 25%;">작성일자</td>
-					<td style="width: 7%;">조회수</td>
-				</tr>
-				<tr>
-					<td style="width: 7%;">5</td>
-					<td style="width: 41%;">제목</td>
-					<td style="width: 20%;">작성자</td>
-					<td style="width: 25%;">작성일자</td>
-					<td style="width: 7%;">조회수</td>
-				</tr>
+			    	<c:set var="count" value="0" />
+						<c:forEach var='matchingvo' items="${requestScope.matchingList}">
+						    <c:if test="${count < 5}">
+						        <tr>
+						            <td style="width: 11%;">${matchingvo.matchdate}</td>
+						            <c:if test="${requestScope.clubvo.clubseq == matchingvo.clubseq2}">
+						                <td style="width: 20%;"><a style="text-decoration: none; color: black;" href="<%=ctxPath%>/club/myClub_plus.do?clubseq=${matchingvo.clubseq1}">${matchingvo.clubname1}</a></td>
+						            </c:if>
+						            <c:if test="${requestScope.clubvo.clubseq == matchingvo.clubseq1}">
+						                <td style="width: 20%;"><a style="text-decoration: none; color: black;" href="<%=ctxPath%>/club/myClub_plus.do?clubseq=${matchingvo.clubseq2}">${matchingvo.clubname2}</a></td>
+						            </c:if>
+						            <td style="width: 20%;">${matchingvo.area}</td>
+						            <td style="width: 35%;">${matchingvo.clubname1} ${matchingvo.score1}:${matchingvo.score2} ${matchingvo.clubname2}</td>
+						            <c:if test="${requestScope.clubvo.clubseq == matchingvo.clubseq1 && matchingvo.result1 == 1}">
+						                <td style="width: 7%;">승</td>
+						            </c:if>
+						            <c:if test="${requestScope.clubvo.clubseq == matchingvo.clubseq1 && matchingvo.result1 == 2}">
+						                <td style="width: 7%;">패</td>
+						            </c:if>
+						            <c:if test="${requestScope.clubvo.clubseq == matchingvo.clubseq1 && matchingvo.result1 == 3}">
+						                <td style="width: 7%;">무</td>
+						            </c:if>
+						            <c:if test="${requestScope.clubvo.clubseq == matchingvo.clubseq2 && matchingvo.result1 == 2}">
+						                <td style="width: 7%;">승</td>
+						            </c:if>
+						            <c:if test="${requestScope.clubvo.clubseq == matchingvo.clubseq2 && matchingvo.result1 == 1}">
+						                <td style="width: 7%;">패</td>
+						            </c:if>
+						            <c:if test="${requestScope.clubvo.clubseq == matchingvo.clubseq2 && matchingvo.result2 == 3}">
+						                <td style="width: 7%;">무</td>
+						            </c:if>
+						        </tr>
+						        <c:set var="count" value="${count + 1}" />
+						    </c:if>
+						</c:forEach>
 			    </tbody>
 			  </table>
 			</div>
 		</div>
-		<div id="more" style="text-align: right; margin: 5% 5% 2% 0; color: #8a8a8a;">최근 전적 더보기 ▶</div>
+		<div id="more" style="text-align: right; margin: 4% 5% 2% 0; color: #8a8a8a;">최근 전적 더보기 ▶</div>
 	</div>
 	
 

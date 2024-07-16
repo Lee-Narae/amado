@@ -158,7 +158,7 @@ create table tbl_gym
 CREATE TABLE tbl_gym_photos (
     photo_id      NUMBER          NOT NULL,      -- 사진 고유 ID
     fk_gymseq        NUMBER          NOT NULL,      -- 체육관 번호 (FK)
-    several_photos     NVARCHAR2(200)  NOT NULL,      -- 여러개 사진첨부
+    filedrop     NVARCHAR2(200)  NOT NULL,      -- 여러개 사진첨부
     CONSTRAINT PK_tbl_gym_photos PRIMARY KEY (photo_id),
     CONSTRAINT FK_tbl_gym_photos_gymseq FOREIGN KEY (gymseq) REFERENCES tbl_gym(gymseq)
 );

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
+import com.spring.app.domain.MatchingVO;
 
 
 @Repository
@@ -106,6 +107,12 @@ public class AmadoDAO_imple_JH implements AmadoDAO_JH {
 	@Override
 	public void updateviewcount(String clubseq) {
 		sqlsession.update("JH.updateviewcount", clubseq);
+	}
+
+	@Override
+	public List<MatchingVO> getmatchingList(String clubseq) {
+		List<MatchingVO> getmatchingList = sqlsession.selectList("JH.getmatchingList", clubseq);
+		return getmatchingList;
 	}
 
 

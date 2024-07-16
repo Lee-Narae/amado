@@ -79,9 +79,7 @@ public class ControllerJY {
 	}	
 	
 	
-
-	
-	
+	// 지역가져오기
 	@ResponseBody
 	@GetMapping(value="/club/getLocation.do", produces="text/plain;charset=UTF-8")
 	public String getLocation(HttpServletRequest request) {
@@ -95,6 +93,28 @@ public class ControllerJY {
 			jsonObj.put("localname", localname);
 		}	      
 	   return jsonObj.toString();
+	}
+	
+	
+	// 동일한 종목의 동호회 가입하는지 확인
+	@ResponseBody
+	@GetMapping("/club/checksportseq.do")
+	public String checksportseq (HttpServletRequest request) { // userid, category가져옴
+		
+		String userid = request.getParameter("userid");
+		String category = request.getParameter("category");
+		
+		Map<String,String> paraMap = new HashMap<>();
+		
+		paraMap.put("userid", userid);
+		paraMap.put("category", category);
+		
+		String checkseq = service.checkseq(paraMap);
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("checkseq", checkseq);
+		
+		return jsonObj.toString();
 	}
 	
 	
@@ -193,18 +213,23 @@ public class ControllerJY {
 			*/
 		// === !!! 첨부파일이 있는 경우 작업 끝 !!! ===	
 
-		int n =0;
+		int n =0, n1=0;
 		
 		if(!(attach.isEmpty())) {
 			//파일첨부가 있는 경우라면
 			n=service.add_withFile(clubvo);
+			
 		}
 		
 		if(n==1) {
 			
 			// 동호회 등록후 회원등급 동호회장으로  업데이트 해주기
-			service.updateRank(clubvo.getFk_userid()); 
-			mav.setViewName("club/findClub.tiles2");
+			n1 = service.updateRank(clubvo.getFk_userid()); // update만 해줄거면 리턴없어도되는데 업뎃하고 밑에서 insert 해줘여하니까 n1 만드러줌.
+		}
+		if(n1==1) {
+			
+			service.insertCmemberTbl(clubvo); 
+			mav.setViewName("redirect:/club/findClub.tiles2");  // 결과물 보여줘야하니까 "club/findClub.tiles2" 아님!!!
 		    //  /list.action 페이지로 redirect(페이지이동)해라는 말이다.
 		}
 		else {
@@ -498,16 +523,6 @@ public class ControllerJY {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 	// 상품 상세보기
 	@GetMapping(value="/club/prodView.do", produces="text/plain;charset=UTF-8")
@@ -752,5 +767,20 @@ public class ControllerJY {
 	    return mav;
 	}
 	*/
+	
+
+	
+	
+	// ========== 마이페이지 ==========
+	// 마이페이지 보여주기
+	// public ModelAndView requiredLogin_viewMypage(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+	@RequestMapping(value="/member/viewMypage.do")
+	public ModelAndView viewMypage(ModelAndView mav) {
+		mav.setViewName("member/viewMypage.tiles1");
+		return mav;
+		
+	}
+
+	
 	
 }
