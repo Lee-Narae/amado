@@ -184,22 +184,25 @@ select *
 from tbl_club
 
 insert into tbl_matching(matchingseq, matchingregseq, clubseq1, clubseq2, result1, result2, score1, score2)
-values(seq_matching.nextval, 1, 2, 3, 2, 1, 2, 1)
+values(seq_matching.nextval, 1, 2, 3, 1, 2, 2, 1)
 
 insert into tbl_matching(matchingseq, matchingregseq, clubseq1, clubseq2, result1, result2, score1, score2)
-values(seq_matching.nextval, 2, 2, 3, 2, 1, 3, 1)
+values(seq_matching.nextval, 2, 2, 3, 1, 2, 3, 1)
 
 insert into tbl_matching(matchingseq, matchingregseq, clubseq1, clubseq2, result1, result2, score1, score2)
-values(seq_matching.nextval, 9, 2, 3, 2, 1, 1, 0)
+values(seq_matching.nextval, 9, 2, 3, 1, 2, 1, 0)
 
 insert into tbl_matching(matchingseq, matchingregseq, clubseq1, clubseq2, result1, result2, score1, score2)
-values(seq_matching.nextval, 10, 2, 3, 1, 2, 0, 2)
+values(seq_matching.nextval, 10, 2, 3, 2, 1, 0, 2)
 
 insert into tbl_matching(matchingseq, matchingregseq, clubseq1, clubseq2, result1, result2, score1, score2)
 values(seq_matching.nextval, 13, 15, 3, 3, 3, 1, 1)
 
 insert into tbl_matching(matchingseq, matchingregseq, clubseq1, clubseq2, result1, result2, score1, score2)
 values(seq_matching.nextval, 14, 29, 3, 1, 2, 2, 1)
+
+insert into tbl_matching(matchingseq, matchingregseq, clubseq1, clubseq2, result1, result2, score1, score2)
+values(seq_matching.nextval, 15, 3, 9, 2, 1, 1, 3)
 
 
 
@@ -234,3 +237,4 @@ JOIN tbl_club c1 ON m.clubseq1 = c1.clubseq
 JOIN tbl_club c2 ON m.clubseq2 = c2.clubseq
 JOIN tbl_matchingreg r ON m.matchingregseq = r.matchingregseq
 where m.clubseq2 = 3 or m.clubseq1 = 3
+order by matchingseq asc;
