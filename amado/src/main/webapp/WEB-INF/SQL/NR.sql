@@ -280,3 +280,67 @@ alter table 테이블명 add constraint 제약조건명 foreign key(컬럼명) r
 
 alter table TBL_NOTICECOMMENT drop constraint FK_TBL_NTCMT_FK_USERID;
 alter table TBL_NOTICECOMMENT add constraint FK_TBL_NTCMT_FK_USERID foreign key(FK_USERID) references tbl_member(userid) on delete cascade;
+
+select * from tbl_club order by fk_sportseq, fk_userid;
+
+delete from tbl_club where clubseq = 23;
+commit;
+rollback;
+
+
+
+select count(*) from tbl_clubmember where fk_userid ='leejy' and sportseq = 1;
+
+
+
+select * from tbl_clubmember;
+select * from tbl_club;
+
+insert into tbl_clubmember(fk_userid, sportseq, clubseq, status) values ('test3', 8, 31, 1);
+update tbl_member set memberrank = 1 where userid = 'test3';
+commit;
+
+select matchingapplyseq, B.matchingregseq, E.sportname, B.clubseq A, D.clubname "A-name", D.fk_userid, A.clubseq B, C.clubname "B-name", A.message, A.membercount, to_char(B.matchdate, 'yyyy-mm-dd hh24:mi'), B.city, B.local, B.area, B.status
+from tbl_matchingapply A join tbl_matchingreg B
+on A.matchingregseq = B.matchingregseq
+join tbl_club C
+on A.clubseq = C.clubseq
+join tbl_club D
+on B.clubseq = D.clubseq
+join tbl_sport E
+on B.sportseq = E.sportseq
+where D.fk_userid = 'test3';
+
+select *
+from tbl_clubmember A join tbl_sport B
+on A.sportseq = B.sportseq
+join tbl_club C
+on A.clubseq = C.clubseq
+where A.fk_userid = 'ksj1024sj' and sportname = '배드민턴';
+
+update tbl_clubmember set fk_userid = 'ksj1024sj' where sportseq = 8 and clubseq = 30;
+commit;
+
+select * from tbl_sport where sportname = '배드민턴';
+
+desc tbl_matching;        
+
+
+select matchingapplyseq, B.matchingregseq, E.sportname, B.clubseq Aseq, D.clubname "A-name", D.fk_userid, A.clubseq Bseq,
+       C.clubname "B-name", A.message, A.membercount, to_char(B.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, B.city, B.local, B.area, B.status
+from tbl_matchingapply A join tbl_matchingreg B
+on A.matchingregseq = B.matchingregseq
+join tbl_club C
+on A.clubseq = C.clubseq
+join tbl_club D
+on B.clubseq = D.clubseq
+join tbl_sport E
+on B.sportseq = E.sportseq
+where A.status = 0;
+
+select * from tbl_matchingapply;
+
+select * from tbl_matchingreg;
+
+update tbl_matchingapply set status = 0;
+commit;
