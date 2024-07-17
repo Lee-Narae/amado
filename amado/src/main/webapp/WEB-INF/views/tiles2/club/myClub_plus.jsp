@@ -206,7 +206,7 @@ margin-left: 2%;
 		</div>
 		
 		
-		<div id="clubmatch" style="width: 43%; margin: 2% 0 0 0; border-radius: 70px; background-color: #e6f7ff; box-shadow: 0px 0px 10px #9ac5db;">
+		<div id="clubmatch" style="width: 43%; margin: 2% 0 0 0; border-radius: 20px; box-shadow: 0px 11px 22px #9e9e9e6b;">
 			<div id="clubTitle" style="text-align: center; margin: 3% 0 3% 0; font-size: 30pt; font-weight: bolder;">${requestScope.clubvo.clubname} 스탯</div>
 			<div style="width: 100%; display: flex;" >
 				<div>
@@ -229,7 +229,7 @@ margin-left: 2%;
 
 
 <div id="clubTitle" style="text-align: center; margin: 8% 0 0 0; font-size: 30pt; font-weight: bolder;">최근 전적</div>
-	<div id="clubboard" style="width: 88%; padding: 4% 3% 1% 3%; margin: 2% auto 5% auto; border-radius: 70px; background-color: #e6f7ff; box-shadow: 0px 0px 10px #9ac5db;">
+	<div id="clubboard" style="width: 88%; padding: 4% 3% 1% 3%; margin: 2% auto 5% auto; border-radius: 20px; box-shadow: 0px 11px 22px #9e9e9e6b;">
 		
 		<div style="display: flex;">
 		
@@ -276,12 +276,12 @@ margin-left: 2%;
 			<div class="tbl-header">
 			  <table cellpadding="0" cellspacing="0" border="0">
 			    <thead>
-			      <tr>
-			        <th style="width: 7%;">경기날짜</th>
-					<th style="width: 41%;">상대팀</th>
-					<th style="width: 20%;">경기장</th>
-					<th style="width: 25%;">스코어</th>
-					<th style="width: 7%;">경기결과 </th>
+			      <tr style="border-bottom: solid 3px #1264b970;">
+			        <th style="width: 9%;">경기날짜</th>
+					<th style="width: 13%;">상대팀</th>
+					<th style="width: 17%;">경기장</th>
+					<th style="width: 24%;">스코어</th>
+					<th style="width: 6%;">경기결과 </th>
 			      </tr>
 			    </thead>
 			  </table>
