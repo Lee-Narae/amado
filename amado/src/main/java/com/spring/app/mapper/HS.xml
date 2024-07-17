@@ -23,5 +23,84 @@ values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
 		select gymseq ,gymname,fk_userid,postcode,address,detailaddress,status,info,orgfilename,filename,filesize,cost,caution,membercount,likecount,insidestatus
 		from tbl_gym
 	</select>
+	
+<!-- #88. 댓글쓰기 (tbl_comment 테이블에 insert) -->
+	<insert id="addComment" parameterType="FleamarketCommentVO">
+		insert into tbl_fleamarketcomment(fleamarketcommentseq, fleamarketseq, comment_text, registerdate, fk_userid)
+		values(seq_fleamarketcomment.nextval, 1, #{comment_text}, default, #{fk_userid})
+	</insert>
+	
+	<!-- #89-1. tbl_board 테이블에 commentCount 컬럼이 1증가(update) -->
+	<update id="updateCommentCount" parameterType="String">
+		update tbl_fleamarket set commentcount = commentcount+1
+		where fleamarketseq = 1
+	</update>
+	
+	<!-- === #93. 원게시물에 딸린 댓글들을 조회해오기 === -->
+    <!-- 첨부파일이 없는 경우  -->
+    <select id="getCommentList" parameterType="String" resultType="FleamarketCommentVO">
+		select fleamarketcommentseq, fk_userid, comment_text, changestatus
+		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
+             , V.memberimg
+		from tbl_fleamarketcomment A join tbl_member V
+		ON A.fk_userid = V.userid
+		where A.fleamarketseq = #{parentSeq}
+		order by fleamarketcommentseq desc
+    </select>
+
+
+	<update id="updateComment" parameterType="HashMap">
+        update tbl_fleamarketcomment set comment_text = #{comment_text}, registerdate = sysdate, changestatus = 1
+        where fleamarketcommentseq = #{fleamarketcommentseq}
+    </update>
+
+    <delete id="deleteComment" parameterType="String">
+        delete from tbl_fleamarketcomment
+        where fleamarketcommentseq = #{fleamarketcommentseq}
+    </delete>
+    
+    <update id="updateCommentCount_decrease" parameterType="String">
+        update tbl_fleamarket set commentcount = commentcount - 1 
+        where fleamarketseq = #{fleamarketseq}
+    </update>
+
+
+	<select id="getCommentreList" parameterType="String" resultType="FleamarketCommentReVO">
+		select fleamarketcommentreplyseq, fk_userid, commentreply_text, changestatus
+		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
+             , V.memberimg
+		from tbl_fleamarketcommentreply A join tbl_member V
+		ON A.fk_userid = V.userid
+		where A.fleamarketcommentseq = #{fleamarketcommentseq}
+		order by fleamarketcommentreplyseq desc
+    </select>
+
+	<insert id="addReComment" parameterType="FleamarketCommentReVO">
+		insert into tbl_fleamarketcommentreply(fleamarketcommentreplyseq, fleamarketcommentseq, commentreply_text, fk_userid)
+		values(seq_fleamarketcommentreplyseq.nextval, #{fleamarketcommentseq}, #{commentreply_text}, #{fk_userid})
+	</insert>
+	
+	<update id="updateReCommentCount" parameterType="String">
+		update tbl_fleamarketcomment set recommentcount = recommentcount+1
+		where fleamarketcommentseq = #{fleamarketcommentseq}
+	</update>
+	
+	<update id="updateReComment" parameterType="HashMap">
+        update tbl_fleamarketcommentreply set commentreply_text = #{commentreply_text}, registerdate = sysdate, changestatus = 1
+        where fleamarketcommentreplyseq = #{fleamarketcommentreplyseq}
+    </update>
+    
+    <delete id="deleteReComment" parameterType="String">
+        delete from tbl_fleamarketcommentreply
+        where fleamarketcommentreplyseq = #{fleamarketcommentreplyseq}
+    </delete>
+    
+    <update id="updateReCommentCount_decrease" parameterType="String">
+        update tbl_fleamarketcomment set recommentcount = recommentcount - 1 
+        where fleamarketcommentseq = #{fleamarketcommentseq}
+    </update>
+    
+	
+	
 
 </mapper>

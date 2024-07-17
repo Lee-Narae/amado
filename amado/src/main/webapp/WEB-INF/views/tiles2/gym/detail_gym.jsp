@@ -350,7 +350,13 @@ rotate(
         height: auto;
         z-index: -1;
         overflow: hidden;}
-
+		
+.profile-img {
+      width: 35px; /* 원하는 너비 */
+      height: 35px; /* 원하는 높이 */
+      border-radius: 50%; /* 원형으로 만들기 */
+      object-fit: cover; /* 이미지를 컨테이너에 맞추어 자르기 */
+  }
 
 
 
@@ -364,6 +370,8 @@ rotate(
 
 
 	$(document).ready(function(){
+		goReadComment();
+		
 		
 		// ======= 추가이미지 캐러젤로 보여주기(Bootstrap Carousel 4개 표시 하되 1번에 1개 진행) 시작 ======= //
 	 	   $('div#recipeCarousel').carousel({
@@ -442,6 +450,252 @@ rotate(
 	    
 	    $("div.loader").hide(); // CSS 로딩화면 감추기 
 	    
+    	
+    	
+    	// ===== 댓글 수정 ===== //
+		let origin_comment_content = "";
+		
+		$(document).on("click", "button.btnUpdateComment", function(e){
+		    
+			const $btn = $(e.target);
+			
+			if($(e.target).text() == "수정"){
+			 // alert("댓글수정");
+			 //	alert($(e.target).parent().parent().children().children('#comment_text').text()); // 수정전 댓글내용
+			    const $content = $(e.target).parent().parent().children().children('#comment_text');
+			    origin_comment_content = $(e.target).parent().parent().children().children('#comment_text').text();
+			    $content.html(`<input id='comment_update' type='text' value='\${origin_comment_content}' size='40' />`); // 댓글내용을 수정할 수 있도록 input 태그를 만들어 준다.
+			    
+			    $(e.target).text("완료");
+			    $(e.target).next().text("취소"); 
+			    
+			    $(document).on("keyup", "input#comment_update", function(e){
+			    	if(e.keyCode == 13){
+			    	  // alert("엔터했어요~~");
+			    	  // alert($btn.text()); // "완료"
+			    		 $btn.click();
+			    	}
+			    });
+			}
+			
+			else if($(e.target).text() == "완료"){
+			  // alert("댓글수정완료");
+			  // alert($(e.target).parent().children("input").val()); // 수정해야할 댓글시퀀스 번호 
+			  // alert($(e.target).parent().parent().children("div:nth-child(2)").children().children("input").val()); // 수정후 댓글내용
+			     const content = $(e.target).parent().parent().children("div:nth-child(2)").children().children("input").val(); 
+			  
+			     $.ajax({
+			    	 url:"${pageContext.request.contextPath}/updateComment2.action",
+			    	 type:"post",
+			    	 data:{"fleamarketcommentseq":$(e.target).parent().children("input").val(),
+			    		   "content":content},
+			    	 dataType:"json",
+			    	 success:function(json){
+			    	   $(e.target).parent().parent().children().children('#comment_text').html(content);
+
+			           goReadComment();  // 페이징 처리 안한 댓글 읽어오기
+			    		
+			          ////////////////////////////////////////////////////
+			          // goViewComment(1); // 페이징 처리 한 댓글 읽어오기   
+			             
+			          // const currentShowPageNo = $(e.target).parent().parent().find("input.currentShowPageNo").val(); 
+	                  // alert("currentShowPageNo : "+currentShowPageNo);		          
+	                  // goViewComment(currentShowPageNo); // 페이징 처리 한 댓글 읽어오기
+			    	  ////////////////////////////////////////////////////
+			    	  
+			    	     $(e.target).text("수정");
+			    		 $(e.target).next().text("삭제");
+			    		 
+			    		 
+			    	 },
+			    	 error: function(request, status, error){
+					    alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					 }
+			     });
+			}
+			
+			
+		}); 
+		
+		
+		// ===== 댓글수정취소 / 댓글삭제 ===== //
+		$(document).on("click", "button.btnDeleteComment", function(e){
+			if($(e.target).text() == "취소"){
+			 // alert("댓글수정취소");
+			 	alert($(e.target).parent().parent().children("div:nth-child(2)").children().html());
+			    const $content = $(e.target).parent().parent().children("div:nth-child(2)").children(); 
+			    $content.html(`\${origin_comment_content}`);
+			 
+			    $(e.target).text("삭제");
+		    	$(e.target).prev().text("수정"); 
+			}
+			
+			else if($(e.target).text() == "삭제"){
+			  // alert("댓글삭제");
+			  // alert($(e.target).next().val()); // 삭제해야할 댓글시퀀스 번호 
+				
+			     if(confirm("정말로 삭제하시겠습니까?")){
+				     $.ajax({
+				    	 url:"${pageContext.request.contextPath}/deleteComment2.action",
+				    	 type:"post",
+				    	 data:{"fleamarketcommentseq":$(e.target).next().val(),
+				    		   "parentSeq":"1"},
+				    	 dataType:"json",
+				    	 success:function(json){
+				    	 	 goReadComment();  // 페이징 처리 안한 댓글 읽어오기
+				    	 //  goViewComment(1); // 페이징 처리 한 댓글 읽어오기
+				    	 },
+				    	 error: function(request, status, error){
+						    alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+						 }
+				     });
+			     }
+			}
+		}); 
+		
+		
+		
+		
+		
+		// ===== 답글쓰기 ===== //
+		$(document).on("click", "button.btnReply", function(e){
+			
+			   // alert("답글쓰기");
+			  
+			   const fleamarketcommentseq = $(e.target).parent().children("input").val();
+			   //alert(fleamarketcommentseq);
+			   let v_html = "";
+			   
+			   if($(e.target).parent().children(".input_reply").html() == ""){
+				   $(".input_reply").html("");
+				   v_html += "<div>";
+				   v_html += "<form name='recommentFrm'>";
+    			   v_html += "<textarea name='commentreply_text' style='font-size: 12pt; width: 100%; height: 60px;'></textarea>";
+    			   v_html += "<div style='text-align: right; font-size: 12pt;'>";
+    			   v_html += "<button type='button' class='btn btn-outline-secondary' id='btnCommentOK' style='margin: auto; padding: 0.5% 1.5%;' onclick='goAddWritere("+fleamarketcommentseq+")'>";
+			       v_html += "<span style='font-size: 8pt;'>등록</span>";
+			       v_html += "</button>";
+			       v_html += "</div>";
+			       v_html += "</form>";
+			       v_html += "</div>";
+			   }
+			   else{
+				   $(e.target).parent().children(".input_reply").html("");
+			   }
+			   $(e.target).parent().children(".input_reply").html(v_html); 
+			   
+		}); 
+		
+		
+		
+		
+		
+		// ===== 답글 수정 ===== //
+		let origin_recomment_content = "";
+		
+		$(document).on("click", "button.btnUpdateReComment", function(e){
+		    
+			const $btn = $(e.target);
+			
+			if($(e.target).text() == "수정"){
+			 // alert("답글수정");
+			 //	alert($(e.target).parent().parent().children('div#commentreply_text').text()); // 수정전 답글내용
+			    const $content = $(e.target).parent().parent().children('div#commentreply_text');
+			    origin_recomment_content = $(e.target).parent().parent().children('div#commentreply_text').text();
+			    $content.html(`<input id='recomment_update' type='text' value='\${origin_recomment_content}' size='30' />`); // 댓글내용을 수정할 수 있도록 input 태그를 만들어 준다.
+			    
+			    $(e.target).text("완료");
+			    $(e.target).next().text("취소"); 
+			    
+			    $(document).on("keyup", "input#recomment_update", function(e){
+			    	if(e.keyCode == 13){
+			    	  // alert("엔터했어요~~");
+			    	  // alert($btn.text()); // "완료"
+			    		 $btn.click();
+			    	}
+			    });
+			}
+			
+			else if($(e.target).text() == "완료"){
+			  // alert("답글수정완료");
+			  // alert($(e.target).parent().parent().parent().parent().children("form").children("input").val()); // 수정해야할 댓글시퀀스 번호 
+			  // alert($(e.target).parent().parent().children("div:nth-child(2)").children("input").val()); // 수정후 댓글내용
+			     const fleamarketcommentseq = $(e.target).parent().parent().parent().parent().children("form").children("input").val()
+			     const content = $(e.target).parent().parent().children("div:nth-child(2)").children("input").val(); 
+			  
+			     $.ajax({
+			    	 url:"${pageContext.request.contextPath}/updateReComment2.do",
+			    	 type:"post",
+			    	 data:{"fleamarketcommentreplyseq":$(e.target).parent().children("input").val(),
+			    		   "content":content},
+			    	 dataType:"json",
+			    	 success:function(json){
+			    	   $(e.target).parent().parent().children('#commentreply_text').html(content);
+
+			    	   readcommentreply(fleamarketcommentseq)  // 페이징 처리 안한 댓글 읽어오기
+			    		
+			          ////////////////////////////////////////////////////
+			          // goViewComment(1); // 페이징 처리 한 댓글 읽어오기   
+			             
+			          // const currentShowPageNo = $(e.target).parent().parent().find("input.currentShowPageNo").val(); 
+	                  // alert("currentShowPageNo : "+currentShowPageNo);		          
+	                  // goViewComment(currentShowPageNo); // 페이징 처리 한 댓글 읽어오기
+			    	  ////////////////////////////////////////////////////
+			    	  
+			    	     $(e.target).text("수정");
+			    		 $(e.target).next().text("삭제");
+			    		 
+			    		 
+			    	 },
+			    	 error: function(request, status, error){
+					    alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					 }
+			     });
+			}
+			
+		}); 
+		
+		
+		// ===== 답글수정취소 / 댓글삭제 ===== //
+		$(document).on("click", "button.btnDeleteReComment", function(e){
+			if($(e.target).text() == "취소"){
+			 // alert("댓글수정취소");
+			 //	alert($(e.target).parent().parent().children("div:nth-child(2)").html());
+			    const $content = $(e.target).parent().parent().children("div:nth-child(2)"); 
+			    $content.html(`\${origin_comment_content}`);
+			 
+			    $(e.target).text("삭제");
+		    	$(e.target).prev().text("수정"); 
+			}
+			
+			else if($(e.target).text() == "삭제"){
+			  // alert("댓글삭제");
+			  // alert($(e.target).next().val()); // 삭제해야할 답글시퀀스 번호 
+			  // alert($(e.target).parent().parent().parent().parent().children("form").children("input").val()); // 삭제해야할 댓글시퀀스 번호
+			  
+			  const fleamarketcommentseq = $(e.target).parent().parent().parent().parent().children("form").children("input").val();
+			  
+			     if(confirm("정말로 삭제하시겠습니까?")){
+				     $.ajax({
+				    	 url:"${pageContext.request.contextPath}/deleteReComment2.do",
+				    	 type:"post",
+				    	 data:{"fleamarketcommentreplyseq":$(e.target).next().val(),
+				    		   "fleamarketcommentseq":$(e.target).parent().parent().parent().parent().children("form").children("input").val()},
+				    	 dataType:"json",
+				    	 success:function(json){
+				    		 readcommentreply(fleamarketcommentseq);  // 페이징 처리 안한 댓글 읽어오기
+				    	 //  goViewComment(1); // 페이징 처리 한 댓글 읽어오기
+				    	 },
+				    	 error: function(request, status, error){
+						    alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+						 }
+				     });
+			     }
+			}
+		}); 
+		
+		
+
 	    
 	    
 
@@ -628,6 +882,9 @@ rotate(
 	});// end of $(document).ready(function(){})-----------------
 
 	
+	
+	
+	
    let popup; // 추가이미지 파일을 클릭했을때 기존에 띄어진 팝업창에 추가이미지가 또 추가되지 않도록 하기 위해 밖으로 뺌.   
 	   
    function openPopup() {
@@ -741,6 +998,273 @@ $(function(){
      })
 })
 
+ 	
+//== 댓글쓰기 == //
+function goAddWrite(){
+   
+	const comment_content = $("textarea[name='comment_text']").val().trim();
+	if(comment_content == ""){
+		alert("댓글 내용을 입력하세요!!");
+		return; // 종료
+	}
+	
+	
+	goAddWrite_noAttach();
+	
+	
+}// end of fucntion goAddWrite(){}------------------
+
+
+
+
+function goAddWrite_noAttach(){
+	
+	<%--
+        // 보내야할 데이터를 선정하는 또 다른 방법
+        // jQuery에서 사용하는 것으로써,
+        // form태그의 선택자.serialize(); 을 해주면 form 태그내의 모든 값들을 name값을 키값으로 만들어서 보내준다. 
+        const queryString = $("form[name='addWriteFrm']").serialize();
+    --%>
+
+    const queryString = $("form[name='commentFrm']").serialize();
+    
+	$.ajax({
+		url:"<%= ctxPath%>/addComment2.do",
+	/*
+		data:{"fk_userid":$("input:hidden[name='fk_userid']").val() 
+             ,"name":$("input:text[name='name']").val() 
+             ,"content":$("input:text[name='content']").val()
+             ,"parentSeq":$("input:hidden[name='parentSeq']").val()},
+    */
+    	// 또는
+    	data:queryString,
+    	type:"post",
+        dataType:"json",
+        success:function(json){
+       		//console.log(JSON.stringify(json));
+           	//{"name":"최준혁","n":1}
+           	//또는
+           	//{"name":"최준혁","n":0}
+           	
+           	if(json.n == 0){
+           		alert(json.name + "님의 포인트는 300점을 초과할 수 없으므로 댓글쓰기가 불가합니다.");
+           	}
+           	else{
+           		goReadComment(); 					// 페이징 처리 안한 댓글 읽어오기
+           		//goViewComment(1)	// 페이징 처리한 댓글 읽어오기
+           	}
+           	
+           	$("textarea[name='comment_text']").val("");
+       },
+       error: function(request, status, error){
+           alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+       }
+	})
+}// end of function goAddWrite_noAttach(){}--------------------------
+
+
+
+
+
+
+function goReadComment(){
+	
+	$.ajax({
+		url:"<%= ctxPath%>/readComment2.action",
+		data:{"parentSeq":"1"},
+		dataType:"json",
+		success:function(json){
+			// console.log(JSON.stringify(json));
+		    // [{"name":"서영학","regdate":"2024-06-18 16:09:06","fk_userid":"seoyh","seq":"6","content":"여섯번째로 쓰는 댓글입니다."},{"name":"서영학","regdate":"2024-06-18 16:08:56","fk_userid":"seoyh","seq":"5","content":"다섯번째로 쓰는 댓글입니다."},{"name":"서영학","regdate":"2024-06-18 16:08:49","fk_userid":"seoyh","seq":"4","content":"네번째로 쓰는 댓글입니다."},{"name":"서영학","regdate":"2024-06-18 16:08:43","fk_userid":"seoyh","seq":"3","content":"세번째로 쓰는 댓글입니다."},{"name":"서영학","regdate":"2024-06-18 16:05:51","fk_userid":"seoyh","seq":"2","content":"두번째로 쓰는 댓글입니다."},{"name":"서영학","regdate":"2024-06-18 15:36:31","fk_userid":"seoyh","seq":"1","content":"첫번째 댓글입니다. ㅎㅎㅎ"}]
+		    // 또는
+		    // []
+		    
+		    let v_html = "";
+		    if(json.length > 0){
+		    	$.each(json, function(index, item) {
+		    		v_html += "<div style='border-bottom:solid 1px #f2f2f2;'>";
+		    	    v_html += "<div style='display: flex; margin: 5% 0 3% 0;' >";
+		    	    if (item.memberimg == null) {
+		    	        v_html += "<div style='width: 6%;'><img class='profile-img' src='<%=ctxPath%>/resources/images/기본이미지.png'></div>";
+		    	    }
+		    	    if (item.memberimg != null) {
+		    	        v_html += "<div style='width: 6%;'><img class='profile-img' src='<%=ctxPath%>/resources/images/" + item.memberimg + "'></div>";
+		    	    }
+		    	    v_html += "<div style='width: 85%;'>";
+		    	    v_html += "<div style='font-size:12pt; font-weight: bold; margin-bottom: 2.3%;'>" + item.fk_userid + "</div>";
+		    	    v_html += "<div style='width: 100%;'>";
+		    	    v_html += "<div id='comment_text'>" + item.comment_text + "</div>";
+		    	    v_html += "</div>";
+		    	    v_html += "<div class='comment' style='color:#999999; font-size:10pt; margin-top: 2%;'>" + item.registerdate; 
+		    	    if(item.changestatus > 0){
+		    	    	v_html += " (수정됨)";
+		    	    }
+		    	    v_html += " &nbsp;&nbsp;<button class='btnReply' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>답글쓰기</button>";
+		    	    if (${sessionScope.loginuser != null} && "${sessionScope.loginuser.userid}" == item.fk_userid) {
+		    	        v_html += "<br><button class='btnUpdateComment' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>수정</button>&nbsp;&nbsp;<button class='btnDeleteComment' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>삭제</button>";
+		    	    }
+		    	    v_html += "<input type='hidden' value='"+item.fleamarketcommentseq+"' />"
+		    	    v_html += "<div class='input_reply' style='width: 100%;'>";
+		    	    v_html += "</div>";
+		    	    
+		    	    
+		    	    
+		    	    v_html += "</div>";
+		    	    v_html += "</div>";
+		    	    v_html += "</div>";
+		    	    
+		    	    v_html += "<form name='commentreFrm'>";
+		    	    v_html += "<input type='hidden' id='flmkcmseq' name='fleamarketcommentseq' value='"+item.fleamarketcommentseq+"' />";
+		    	    v_html += "</form>";
+
+		    	    
+		    	    
+		    	    v_html += "<div class='comment_reply"+item.fleamarketcommentseq+"'>";
+		    	    v_html += "</div>";
+		    	    v_html += "</div>";
+		    	    
+		    	    readcommentreply(item.fleamarketcommentseq);
+		    	});
+		    }
+		    
+		    
+		    else {
+		    	v_html += "<div colspan='4'>댓글이 없습니다</td>";
+		    }
+		    
+		    $("div#commentView").html(v_html);
+		    
+		    
+		},
+		error: function(request, status, error){
+		   alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		}
+	});
+	
+}// end of function goReadComment()----------------- 
+
+
+function readcommentreply(fleamarketcommentseq){
+	
+	  //alert(fleamarketcommentseq);
+	  
+	  $.ajax({
+			url:"<%= ctxPath%>/addReplyComment2.action",
+		
+			//data:{"fk_userid":$("input:hidden[name='fk_userid']").val()},
+	    
+	    	// 또는
+	    	data:{"fleamarketcommentseq":fleamarketcommentseq},
+	    	type:"post",
+            dataType:"json",
+            success:function(json){
+           	//console.log(JSON.stringify(json));
+           	//{"name":"최준혁","n":1}
+           	//또는
+           	//{"name":"최준혁","n":0}
+           	
+            	let v_html = "";
+			    if(json.length > 0){
+			    	$.each(json, function(index, item) {
+			    	    v_html += "<div style='display: flex; margin: 4% 0 4% 5%;'>";
+			    	    v_html += "<div style='width: 6%;'><img class='profile-img' style='width: 50%; height: 50%;' src='<%=ctxPath%>/resources/images/reply.png'></div>";
+			    	    if (item.memberimg == null) {
+			    	        v_html += "<div style='width: 6%;'><img class='profile-img' src='<%=ctxPath%>/resources/images/기본이미지.png'></div>";
+			    	    }
+			    	    if (item.memberimg != null) {
+			    	        v_html += "<div style='width: 6%;'><img class='profile-img' src='<%=ctxPath%>/resources/images/" + item.memberimg + "'></div>";
+			    	    }
+			    	    v_html += "<div style='display: flex; margin-top:0.7%; margin-left: 2%; width: 120%'>";
+			    	    v_html += "<div style='font-size:12pt; font-weight: bold; margin-bottom: 1.5%;'>" + item.fk_userid + "</div>";
+			    	    v_html += "<div id='commentreply_text' style='margin-left: 2%;'>" + item.commentreply_text + "</div>";
+			    	    v_html += "<div class='comment' style='color:#999999; font-size:10pt; margin-top: 0.4%; margin-left: 1.5%; display: flex; width: 50%;'>" + item.registerdate; 
+			    	    if(item.changestatus > 0){
+			    	    	v_html += " (수정됨)";
+			    	    }
+			    	    
+			    	    if (${sessionScope.loginuser != null} && "${sessionScope.loginuser.userid}" == item.fk_userid) {
+			    	        v_html += "<button class='btnUpdateReComment' style='margin-left: 3%; margin-bottom: 4.5%; background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>수정</button>&nbsp;&nbsp;<button class='btnDeleteReComment' style='margin-bottom: 4.5%; background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>삭제</button>";
+			    	    }
+			    	    v_html += "<input type='hidden' value='"+item.fleamarketcommentreplyseq+"' />"
+			    	    v_html += "</div>";
+			    	    v_html += "</div>";
+			    	    v_html += "</div>";
+			    	    
+			    	    v_html += "<form name='commentreFrm'>";
+			    	    v_html += "<input type='hidden' name='fleamarketcommentseq' value='"+fleamarketcommentseq+"' />";
+			    	    v_html += "</form>";
+			    	    
+			    	    v_html += "<div class='comment_reply'>";
+			    	    v_html += "</div>";
+			    	});
+			    }
+			    
+			    $("div.comment_reply"+fleamarketcommentseq+"").html(v_html);
+			},
+			error: function(request, status, error){
+			   alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+		})
+}
+
+
+
+// == 딥글쓰기 == //
+function goAddWritere(fleamarketcommentseq){
+   
+	// alert($("input[name='fleamarketcommentseq']").val());
+	// const fleamarketcommentseq = $("input[name='fleamarketcommentseq']").val();
+	const commentreply_text = $("textarea[name='commentreply_text']").val().trim();
+	if(commentreply_text == ""){
+		alert("댓글 내용을 입력하세요!!");
+		return; // 종료
+	}
+	if($("input:hidden[name='fk_userid']").val()==""){
+		alert("로그인을 먼저 하셔야합니다!");
+		return;
+	}
+	
+	
+	goAddWrite_reply(fleamarketcommentseq);
+	
+	
+}// end of fucntion goAddWrite(){}------------------
+
+
+function goAddWrite_reply(fleamarketcommentseq){
+	
+	const queryString = $("form[name='recommentFrm']").serialize();
+    //console.log(fleamarketcommentseq);
+	$.ajax({
+		url:"<%= ctxPath%>/addReComment2.do",
+	
+		data:{"fk_userid":$("input:hidden[name='fk_userid']").val() 
+             ,"commentreply_text":$("textarea[name='commentreply_text']").val() 
+             ,"fleamarketcommentseq":fleamarketcommentseq},
+    
+    	type:"post",
+        dataType:"json",
+        success:function(json){
+       	//console.log(JSON.stringify(json));
+       	//{"name":"최준혁","n":1}
+       	//또는
+       	//{"name":"최준혁","n":0}
+       	
+       	if(json.n == 0){
+       		alert(json.name + "오류가 발생했습니다.");
+       	}
+       	else{
+       		readcommentreply(fleamarketcommentseq);
+       		$(".input_reply").html("");
+       	}
+       	
+       	$("textarea[name='commentreply_text']").val("");
+       },
+       error: function(request, status, error){
+           alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+       }
+	})
+}
  	
 </script>
 
@@ -992,38 +1516,49 @@ $(function(){
 			<h3 style="margin-top: 50px;">문의</h3>
 	 		 	<select name="" id="">
 	 		    <option value="default">문의 유형을 선택하세요</option>
-   			 	<option value="">가격문의</option>
-    			<option value="">일정문의</option>
-    			<option value="">공간정보문의</option>
-   				<option value="">물품이용문의</option>
-   				<option value="">기타	</option>
+   			 	<option value="0">가격문의</option>
+    			<option value="1">일정문의</option>
+    			<option value="2">공간정보문의</option>
+   				<option value="3">물품이용문의</option>
+   				<option value="4">기타</option>
    			 </select>
    			 <br>
-	<div class="row">
-		<div class="col-lg-10">
-			<form name="commentFrm">
-				<textarea name="contents"
-					style="font-size: 12pt; width: 100%; height: 150px;"></textarea>
-				<input type="hidden" name="fk_userid"
-					value="${sessionScope.loginuser.userid}" /> <input type="hidden"
-					name="fk_pnum" value="${requestScope.pvo.pnum}" />
-			</form>
-		</div>
-		<div class="col-lg-2" style="display: flex;">
-			<button type="button" class="btn btn-outline-secondary w-100 h-100"
-				id="btnCommentOK" style="margin: auto;">
-				<span class="h5">등록</span>
-			</button>
-		</div>
+		
+	<%-- === #94. 댓글 내용 보여주기 === --%>
+     
+     <div>
+		<form name="commentFrm">
+			<div>
+				<textarea name="comment_text" style="font-size: 12pt; width: 100%; height: 100px;"></textarea>
+				<input type="hidden" name="fk_userid" value="${sessionScope.loginuser.userid}" />
+				<input type="hidden" name="name" value="${sessionScope.loginuser.name}" />
+				<input type="hidden" name="gymseq" value="${requestScope.pvo.pnum}" />
+			</div>
+			<div style="text-align: right; font-size: 12pt;">
+				<button type="button" class="btn btn-outline-secondary"
+					id="btnCommentOK" style="margin: auto;" onclick="goAddWrite()">
+					<span style="font-size: 10pt;">등록</span>
+				</button>
+			</div>
+		</form>
 	</div>
 
 		<%-- === 댓글 내용 보여주기 === --%>
-      <h3 style="margin-top: 50px;">문의내용</h3>
+   	     <div id="commentView" >
+    
+		</div>
+	
+   
+   
+   
+   
+    <%--  <h3 style="margin-top: 50px;">문의내용</h3>
       <div>
 	      <table class="table" style="font-size: 12px;">
 	         <thead>
 	         	<tr>
-	         		<th style="twidth: 6%;">순번</th>
+	         		<th style="twidth: 1%;">순번</th>
+		            <th style="width: 1%; text-align: center;">작성유형</th>
 		            <th style="text-align: center;">내용</th>
 		            <th style="width: 8%; text-align: center;">작성자</th>
 		            <th style="width: 12%; text-align: center;">작성일자</th>
@@ -1032,7 +1567,7 @@ $(function(){
 	         </thead>
 	         <tbody id="commentDisplay"></tbody>
 	      </table>
-      </div>
+      </div> --%> 
       
       <%-- #155. 댓글페이지바가 보여지는 곳 === --%>
       <div style="display: flex; margin-bottom: 50px;">
@@ -1049,18 +1584,6 @@ $(function(){
 
 	<%-- === 추가이미지 보여주기 시작 === --%>
 	<c:if test="${not empty requestScope.imgList}">
-		<%-- === 그냥 이미지로 보여주는 것 시작 === --%>
-		<%-- 
-	   <div class="row">
-		  <c:forEach var="imgfilename" items="${requestScope.imgList}">
-			 <div class="col-md-6 my-3">
-			    <img src="${pageContext.request.contextPath}/images/${imgfilename}" class="img-fluid" style="width:100%;" />
-			 </div>
-		  </c:forEach>
-	   </div>
-	   --%>
-		<%-- === 그냥 이미지로 보여주는 것 끝 === --%>
-
 		<%-- /////// 추가이미지 캐러젤로 보여주는 것 시작 //////// --%>
 		<div class="row mx-auto my-auto" style="width: 100%;">
 			<div id="recipeCarousel" class="carousel slide w-100"
@@ -1100,12 +1623,7 @@ $(function(){
 					class="sr-only">Next</span>
 				</a>
 			</div>
-
-
-
 		</div>
-
-
 		<%-- /////// 추가이미지 캐러젤로 보여주는 것 끝 //////// --%>
 	</c:if>
 	<%-- === 추가이미지 보여주기 끝 === --%>
