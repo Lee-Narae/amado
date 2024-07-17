@@ -122,7 +122,9 @@ $(document).ready(function(){
 		} 
     });
 	
-
+	
+	
+	// 검색
 	$("input:text[name='searchWord']").bind("keyup", function(e){ // 키뗄때 자동검색
 		if(e.keyCode == 13){
 			goSearch();
@@ -493,7 +495,7 @@ function goSearch() {
 	</div>
 	
 	
-	<%-- 최근 본 상품 
+	<%-- 최근 본 상품 --%>
 	<div id="item2" style="border-left:solid 1px lightgray ; width: 20%; height: 400px; ">
 		<div style="background-color: #f1f5f9; width: 60%; height: 40px; border-radius: 20px; margin-left: 3%;" ><!-- 스크롤할때 같이 움직이기 -->
 			<div id="recentItem" style="text-align: center; padding-top: 3%;">
@@ -512,7 +514,7 @@ function goSearch() {
 		    </div>
 	    </div>
 	</div>
-	--%>
+	
 <form name="goViewFrm">
 	<input type="text" name="seq" /> 
 	<input type="text" name="goBackURL" /> 
