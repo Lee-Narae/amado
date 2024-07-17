@@ -166,8 +166,12 @@ public interface AmadoDAO_NR {
 	// 선택된 동호회의 tbl_matchingapplyseq 행 status는 1로, 선택받지 못한 동호회는 2로, tbl_matchingreg의  matchingregseq 행 status는 1로
 	// 1. tbl_matchingapply
 	int updateMatchingApply(Map<String, String> paramap);
-
 	// 2. tbl_matchingreg
 	int updateMatchingReg(String matchingregseq);
+	// 3. tbl_matching
+	int insertMatching(Map<String, String> paramap);
+
+	// 우리팀 매치일정 불러오기
+	List<Map<String, String>> getMatchList(String clubseq);
 	
 }

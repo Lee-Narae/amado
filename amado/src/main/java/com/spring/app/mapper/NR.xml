@@ -502,4 +502,33 @@
 		update tbl_matchingreg set status = 1 where matchingregseq = #{matchingregseq}
 	</update>
 	
+	<insert id="insertMatching">
+		insert into tbl_matching(matchingseq, matchingregseq, clubseq1, clubseq2, result1, result2, score1, score2)
+		values(SEQ_MATCHING.nextval, #{matchingregseq}, #{Aseq}, #{Bseq}, 0, 0, 0, 0)
+	</insert>
+	
+	<resultMap type="HashMap" id="matchMap2">
+		<result property="matchingseq" column="matchingseq" javaType="String"/>
+		<result property="matchingregseq" column="matchingregseq" javaType="String"/>
+		<result property="sportname" column="sportname" javaType="String"/>
+		<result property="teamA" column="teamA" javaType="String"/>
+		<result property="teamB" column="teamB" javaType="String"/>
+		<result property="matchdate" column="matchdate" javaType="String"/>
+		<result property="area" column="area" javaType="String"/>
+		<result property="status" column="status" javaType="String"/>
+	</resultMap>
+	<select id="getMatchList" parameterType="String" resultMap="matchMap2">
+		select A.matchingseq, A.matchingregseq, E.sportname, C.clubname teamA, D.clubname teamB,
+			   to_char(B.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, B.area, B.status
+		from tbl_matching A join tbl_matchingreg B
+		on A.matchingregseq = B.matchingregseq
+		join tbl_club C
+		on A.clubseq1 = C.clubseq
+		join tbl_club D
+		on A.clubseq2 = D.clubseq
+		join tbl_sport E
+		on B.sportseq = E.sportseq
+		where B.status = 1 and B.matchdate >= sysdate and A.clubseq1 = #{clubseq} or A.clubseq2 = #{clubseq}
+	</select>
+	
 </mapper>
