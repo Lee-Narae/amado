@@ -117,6 +117,30 @@
 		//alert('ClubSeq: ' + clubseq + ', FK_SportSeq: ' + fk_sportseq);
 		location.href = "<%=ctxPath%>/club/myClub_plus.do?clubseq="+clubseq+"&sportseq="+fk_sportseq;
 	}
+ 	
+	function clubMRegister(clubseq, fk_sportseq, fk_userid) {
+		//alert('clubseq: ' + clubseq + ', fk_sportseq: ' + fk_sportseq + ', fk_userid: ' + fk_userid);
+		
+			$.ajax({
+			url: "<%=ctxPath%>/club/clubMRegisterSJ.do",
+			data: {"clubseq": clubseq,
+				   "fk_sportseq":fk_sportseq,
+				   "fk_userid":fk_userid},
+			type: "post",
+			dataType: "json",
+			success: function(json){
+				if(json.n == 1) {
+					alert("가입신청중입니다.");	
+					goSearch();
+				}
+				
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+		 });
+		
+	} 	
 
 </script>
 
@@ -284,6 +308,10 @@
                 <th style="width: 100px; text-align: center;">카테고리</th>
                 <th style="width: 150px; text-align: center;">지역</th>
                 <th style="width: 100px; text-align: center;">멤버수</th>
+                <c:if test="${not empty requestScope.fk_userid}">
+                	<th style="width: 100px; text-align: center;">가입여부</th>
+                </c:if>
+                
             </tr>
         </thead>
         <tbody id="this">
@@ -324,9 +352,29 @@
 					    
 					    <td class="align-middle text-center">${clubvo.city}&nbsp;${clubvo.local}</td>
 					    <td class="align-middle text-center">${clubvo.membercount}명</td>
+					    
+					    <c:if test="${not empty requestScope.fk_userid}">
+					    	<c:if test="${clubvo.clubmembervo.status == 1}">
+								<td class="align-middle text-center">
+									<input type="button" value="가입함" />
+								</td>
+					    	</c:if>
+					    	<c:if test="${clubvo.clubmembervo.status == 0}">
+								<td class="align-middle text-center">
+									<input type="button" value="가입대기" />
+								</td>
+					    	</c:if>
+					    	<c:if test="${clubvo.clubmembervo == null}">
+								<td class="align-middle text-center">
+									<input type="button" onclick="clubMRegister(${clubvo.clubseq}, ${clubvo.fk_sportseq}, '${sessionScope.loginuser.userid}')" value="가입하기" />
+								</td>
+					    	</c:if>
+					    </c:if>
+					    
 					</tr>
 	            </c:forEach>
             </c:if>
+            
         </tbody>
     </table>
 	<nav aria-label="Page navigation example">

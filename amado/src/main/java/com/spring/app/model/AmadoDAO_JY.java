@@ -19,7 +19,10 @@ public interface AmadoDAO_JY {
 	int add_withFile(ClubVO clubvo);
 
 	// 동호회 등록후 회원등급 동호회장으로  업데이트 해주기
-	void updateRank(String fk_userid);
+	int updateRank(String fk_userid);
+	
+	// 동호회 등록완료 하면 tbl_clubmember 에 insert 하기
+	void insertCmemberTbl(ClubVO clubvo);
 
 	// 운동 종목 시퀀스가져오기
 	List<String> getSportList();
@@ -38,6 +41,11 @@ public interface AmadoDAO_JY {
 	
 	// 쿠키
 	FleamarketVO goodsDetailData(int goodsSeq);
+
+	// 동일한 종목의 동호회 가입하는지 확인
+	String checkseq(Map<String, String> paraMap);
+
+	
 
 	
 		

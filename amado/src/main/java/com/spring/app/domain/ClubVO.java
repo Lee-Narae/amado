@@ -53,6 +53,7 @@ public class ClubVO {
 	   private String wasfileName;    // WAS(톰캣)에 저장될 파일명(2024070109291535243254235235234.png) 
 
 	
+	   private ClubmemberVO clubmembervo;
 	
 
 	public String getWasfileName() {
@@ -162,6 +163,12 @@ public class ClubVO {
 	}
 	public void setViewcount(String viewcount) {
 		this.viewcount = viewcount;
+	}
+	public ClubmemberVO getClubmembervo() {
+		return clubmembervo;
+	}
+	public void setClubmembervo(ClubmemberVO clubmembervo) {
+		this.clubmembervo = clubmembervo;
 	}
 	
 	

@@ -143,12 +143,35 @@ $(document).ready(function(){
 	
 	
 	// ---------------------------------------------- //
-
+	
 	 $("button#btnRegister").click(function(){
+		 
+		 const category = $("select#category").val();
+		 $.ajax({
+				url: "<%=ctxPath%>/club/checksportseq.do",
+				data: {"userid": '${sessionScope.loginuser.userid}',
+					   "category": category},
+				dataType: "json",
+				success: function(json){
+					console.log(JSON.stringify(json));
+					// {"checkseq":"1"} // 가입한 이력이있는
+					
+					if(json.checkseq == "1"){ //동일한 시퀀스로 가입ㅎ한 동회가 있을때
+						alert("이미 가입한 이력이 있는 종목은 가입이 불가합니다😰");
+						return;
+					}
+					
+					
+				},
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				}
+			 });
+		 
 		 
 		 let b_requiredInfo = true;
 				
-		    const category = $("select#category").val();
+		   
 		    const city = $("select#city").val();
 		    
 		    if (category == "종목") {
@@ -182,7 +205,7 @@ $(document).ready(function(){
 		        }
 		    });
 		    */ 
-		    
+		    /*
 		    if(b_requiredInfo){
 		    	
 		    	//폼(form)을 전송(submit)
@@ -192,7 +215,7 @@ $(document).ready(function(){
 			 	  frm.submit();
 		    	
 		    }
-			   
+		*/	   
 			    
 	 });
 	
