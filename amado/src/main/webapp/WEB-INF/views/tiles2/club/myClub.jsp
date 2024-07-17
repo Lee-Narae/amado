@@ -438,7 +438,7 @@ function goPermit(matchingapplyseq, matchingregseq, Aseq, Bseq){
 		<div id="clubmatch" style="width: 43%; margin: 2% 0 0 2%; border-radius: 70px; background-color: #e6f7ff; box-shadow: 0px 0px 10px #9ac5db;">
 			<div id="clubTitle" style="text-align: center; margin-top: 5%; font-size: 30pt; font-weight: bolder;">우리 팀 매치 일정</div>
 			<div style="margin: 5% 0 1% 5%; font-size: 10pt;">※ 팀 매치 일정은 상위 3개까지 노출됩니다.</div>
-			<div id="table" style="width: 90%; margin-left: 5%;">
+			<div id="table" style="width: 90%; margin-left: 5%; min-height: 220px;">
 				<div class="tbl-header">
 				  <table cellpadding="0" cellspacing="0" border="0">
 				    <thead>
@@ -454,24 +454,26 @@ function goPermit(matchingapplyseq, matchingregseq, Aseq, Bseq){
 				<div class="tbl-content">
 				  <table cellpadding="0" cellspacing="0" border="0">
 				    <tbody>
-				      <tr>
-						<td style="width: 10%;">1</td>
-						<td style="width: 20%;">2024-08-09 14:30</td>
-						<td style="width: 35%;">마산쌍칼</td>
-						<td style="width: 35%;">동작구 체육관</td>
-					</tr>
-					<tr>
-						<td style="width: 10%;">2</td>
-						<td style="width: 20%;">2024-08-20 13:00</td>
-						<td style="width: 35%;">공릉동 불꽃 스파이크</td>
-						<td style="width: 35%;">동해 해수욕장</td>
-					</tr>
-					<tr>
-						<td style="width: 10%;">-</td>
-						<td style="width: 20%;">-</td>
-						<td style="width: 35%;">-</td>
-						<td style="width: 35%;">-</td>
-					</tr>
+				    	<c:if test="${empty requestScope.matchList}">
+				    		<tr>
+				    			<td colspan="4" align="center">매치 일정이 없습니다.</td>
+				    		</tr>
+				    	</c:if>
+				    	<c:if test="${not empty requestScope.matchList}">
+				    		<c:forEach var="match" items="${requestScope.matchList}" varStatus="status">
+				    			<c:if test="${status.index < 3}">
+									<tr>
+										<td style="width: 10%;">${status.count}</td>
+										<td style="width: 20%;">${match.matchdate}</td>
+										<td style="width: 35%;">
+											<c:if test="${match.teamA == requestScope.club.clubname}">${match.teamB}</c:if>
+											<c:if test="${match.teamA != requestScope.club.clubname}">${match.teamA}</c:if>
+										</td>
+										<td style="width: 35%;">${match.area}</td>
+									</tr>			    			
+				    			</c:if>
+				    		</c:forEach>
+				    	</c:if>
 				    </tbody>
 				  </table>
 				</div>

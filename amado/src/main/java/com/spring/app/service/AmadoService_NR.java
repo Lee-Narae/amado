@@ -173,6 +173,9 @@ public interface AmadoService_NR {
 	int updateMatchingReg(String matchingregseq);
 	// 3. tbl_matching
 	int insertMatching(Map<String, String> paramap);
+
+	// 우리팀 매치일정 불러오기
+	List<Map<String, String>> getMatchList(String clubseq);
 	
 
 

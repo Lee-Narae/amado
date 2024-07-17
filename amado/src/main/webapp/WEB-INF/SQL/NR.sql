@@ -342,5 +342,26 @@ select * from tbl_matchingapply;
 
 select * from tbl_matchingreg;
 
-update tbl_matchingapply set status = 0;
+update tbl_matchingreg set status = 0;
 commit;
+
+select * from tbl_clubmember order by 1,2;
+update tbl_clubmember set clubseq=15 where fk_userid = 'ksj1024sj' and clubseq=29;
+delete from tbl_clubmember where fk_userid = 'ksj1024sj' and clubseq in(15,2);
+commit;
+select * from tbl_club;
+
+select * from tbl_matching;
+desc tbl_matching;
+delete from tbl_matching where matchingseq = 19;
+commit;
+
+insert into tbl_matching(matchingseq, matchingregseq, clubseq1, clubseq2, result1, result2, score1, score2)
+values(SEQ_MATCHING.nextval, #{matchingregseq}, #{clubseq1}, #{clubseq2}, 0, 0, 0, 0);
+
+select * from tbl_matchingreg;
+select * from tbl_matching;
+
+select A.matchingseq, A.matchingregseq, A.clubseq1, A.clubseq2, B.sportseq, to_char(B.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, B.city, B.local, B.status
+from tbl_matching A join tbl_matchingreg B
+on A.matchingregseq = B.matchingregseq;

@@ -95,16 +95,17 @@ public class ControllerNR {
 			mav.addObject("club", club);
 		}
 		
-		
 		// 동호회장 한정 알림 불러오기
 		if("1".equals(loginuser.getMemberrank())) {
 			List<Map<String,String>> alarmList = service.getClubAlarm(loginuser.getUserid());
 			mav.addObject("alarmList", alarmList);
 		}
 		
-		
 		// 우리팀 매치일정 불러오기
-		
+		if(clubseq != null) {
+			List<Map<String, String>> matchList = service.getMatchList(clubseq);
+			mav.addObject("matchList", matchList);
+		}
 		
 		mav.setViewName("club/myClub.tiles2");
 		// /WEB-INF/views/tiles2/club/myClub.jsp
@@ -1798,8 +1799,6 @@ public class ControllerNR {
 			
 		}
 		
-		
-		
 		JSONObject jsonObj = new JSONObject();
 		
 		jsonObj.put("n", n);
@@ -1808,6 +1807,21 @@ public class ControllerNR {
 	}
 	
 
+	@GetMapping("admin/reg/gym")
+	public ModelAndView AdminGymRegister(ModelAndView mav) {
+		
+		
+		mav.setViewName("reg/gym.tiles3");
+		
+		return mav;
+		
+	}
+	
+	
+	
+	
+	
+	
 	
 }
 
