@@ -540,6 +540,13 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		int n = dao.updateMatchingReg(matchingregseq);
 		return n;
 	}
+
+	// 3. tbl_matching ★★★★★★★★★★★★★★★★★★★★ 여기서부터 ★★★★★★★★★★★★★★★★★★★★★★★★★
+	@Override
+	public int insertMatching(Map<String, String> paramap) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 	
 }

@@ -171,6 +171,8 @@ public interface AmadoService_NR {
 	int updateMatchingApply(Map<String, String> paramap);
 	// 2. tbl_matchingreg
 	int updateMatchingReg(String matchingregseq);
+	// 3. tbl_matching
+	int insertMatching(Map<String, String> paramap);
 	
 
 

@@ -190,16 +190,19 @@ $(document).ready(function(){
 
 function openModal(){
 	
-	const sportname = $(event.target).parent().find("input#sportname").val();
-	const matchdate = $(event.target).parent().find("input#matchdate").val();
-	const city = $(event.target).parent().find("input#city").val();
-	const local = $(event.target).parent().find("input#local").val();
-	const area = $(event.target).parent().find("input#area").val();
-	const B_name = $(event.target).parent().find("input#B_name").val();
-	const message = $(event.target).parent().find("input#message").val();
-	const membercount = $(event.target).parent().find("input#membercount").val();
-	const matchingapplyseq = $(event.target).parent().find("input#matchingapplyseq").val();
-	const matchingregseq = $(event.target).parent().find("input#matchingregseq").val();
+	const sportname = $(event.target).parent().parent().find("input#sportname").val();
+	const matchdate = $(event.target).parent().parent().find("input#matchdate").val();
+	const city = $(event.target).parent().parent().find("input#city").val();
+	const local = $(event.target).parent().parent().find("input#local").val();
+	const area = $(event.target).parent().parent().find("input#area").val();
+	const B_name = $(event.target).parent().parent().find("input#B_name").val();
+	const message = $(event.target).parent().parent().find("input#message").val();
+	const membercount = $(event.target).parent().parent().find("input#membercount").val();
+	const matchingapplyseq = $(event.target).parent().parent().find("input#matchingapplyseq").val();
+	const matchingregseq = $(event.target).parent().parent().find("input#matchingregseq").val();
+	
+	const Aseq = $(event.target).parent().parent().find("input#Aseq").val();
+	const Bseq = $(event.target).parent().parent().find("input#Bseq").val();
 	
 	let modal_html = `
 		<div class="modal-header" align="center">
@@ -248,19 +251,20 @@ function openModal(){
     </div>
     <div class="modal-footer">
     <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
-    <button type="button" class="btn btn-primary" onclick="goPermit(\${matchingapplyseq}, \${matchingregseq})">승인하기</button>
+    <button type="button" class="btn btn-primary" onclick="goPermit(\${matchingapplyseq}, \${matchingregseq}, \${Aseq}, \${Bseq})">승인하기</button>
   </div>
     `;
     
     $("div.modal-content").html(modal_html);
 }
 
-function goPermit(matchingapplyseq, matchingregseq){
+function goPermit(matchingapplyseq, matchingregseq, Aseq, Bseq){
 	
 	// 선택된 동호회의 tbl_matchingapplyseq 행 status는 1로, 선택받지 못한 동호회는 2로, tbl_matchingreg의  matchingregseq 행 status는 1로
 	$.ajax({
 		url: "<%=ctxPath%>/club/matching.do",
-		data: {"matchingapplyseq": matchingapplyseq, "matchingregseq": matchingregseq},
+		data: {"matchingapplyseq": matchingapplyseq, "matchingregseq": matchingregseq,
+			   "Aseq": Aseq, "Bseq": Bseq},
 		dataType: "json",
 		type: "post",
 		success: function(json){
@@ -269,20 +273,17 @@ function goPermit(matchingapplyseq, matchingregseq){
 			
 			if(json.n == 1){
 				  
-				Swal.fire({
-				      title: "승인 완료!",
-				      icon: "success"
-				});
+				alert('승인 완료!');
 				
 				$('#matchPermitModal').modal('hide');
+				location.reload(true);
 			}
 			
 			else {
-				Swal.fire({
-					  icon: "error",
-					  title: "승인 실패",
-					  html: "내부 오류로 인해 승인이 실패하였습니다.<br>다시 시도해 주세요.",
-				});
+				alert('내부 오류로 인해 승인이 실패하였습니다. 다시 시도해주세요.');
+
+				$('#matchPermitModal').modal('hide');
+				location.reload(true);
 			}
 			
 		},
@@ -321,6 +322,7 @@ function goPermit(matchingapplyseq, matchingregseq){
 							<input type="hidden" id="matchingapplyseq" value="${alarm.matchingapplyseq}" />
 							<input type="hidden" id="matchingregseq" value="${alarm.matchingregseq}" />
 							<input type="hidden" id="sportname" value="${alarm.sportname}" />
+							<input type="hidden" id="Aseq" value="${alarm.Aseq}" />
 							<input type="hidden" id="Bseq" value="${alarm.Bseq}" />
 							<input type="hidden" id="B_name" value="${alarm.B_name}" />
 							<input type="hidden" id="message" value="${alarm.message}" />
@@ -339,6 +341,7 @@ function goPermit(matchingapplyseq, matchingregseq){
 							<input type="hidden" id="matchingapplyseq" value="${alarm.matchingapplyseq}" />
 							<input type="hidden" id="matchingregseq" value="${alarm.matchingregseq}" />
 							<input type="hidden" id="sportname" value="${alarm.sportname}" />
+							<input type="hidden" id="Aseq" value="${alarm.Aseq}" />
 							<input type="hidden" id="Bseq" value="${alarm.Bseq}" />
 							<input type="hidden" id="B_name" value="${alarm.B_name}" />
 							<input type="hidden" id="message" value="${alarm.message}" />

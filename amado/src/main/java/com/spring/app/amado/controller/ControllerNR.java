@@ -102,6 +102,10 @@ public class ControllerNR {
 			mav.addObject("alarmList", alarmList);
 		}
 		
+		
+		// 우리팀 매치일정 불러오기
+		
+		
 		mav.setViewName("club/myClub.tiles2");
 		// /WEB-INF/views/tiles2/club/myClub.jsp
 		return mav;
@@ -1770,10 +1774,14 @@ public class ControllerNR {
 		
 		String matchingapplyseq = request.getParameter("matchingapplyseq");
 		String matchingregseq = request.getParameter("matchingregseq");
+		String Aseq = request.getParameter("Aseq");
+		String Bseq = request.getParameter("Bseq");
 		
 		Map<String, String> paramap = new HashMap<String, String>();
 		paramap.put("matchingapplyseq", matchingapplyseq);
 		paramap.put("matchingregseq", matchingregseq);
+		paramap.put("Aseq", Aseq);
+		paramap.put("Bseq", Bseq);
 		
 		// 선택된 동호회의 tbl_matchingapplyseq 행 status는 1로, 선택받지 못한 동호회는 2로, tbl_matchingreg의  matchingregseq 행 status는 1로
 		// 1. tbl_matchingapply
@@ -1782,7 +1790,15 @@ public class ControllerNR {
 		if(n == 1) {
 			// 2. tbl_matchingreg
 			n = service.updateMatchingReg(matchingregseq);
+			
+			if(n == 1) {
+				// 3. tbl_matching
+				n = service.insertMatching(paramap);
+			}
+			
 		}
+		
+		
 		
 		JSONObject jsonObj = new JSONObject();
 		
