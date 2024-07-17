@@ -60,7 +60,7 @@
 	#rItem img{
 		border-radius: 20px;
 	}
-	div#notready{
+	div#notready{ 
 		font-size: 15pt;
 		padding-left: 38%;
 	}    
