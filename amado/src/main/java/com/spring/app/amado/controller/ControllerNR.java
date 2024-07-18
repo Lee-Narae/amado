@@ -1,8 +1,10 @@
 package com.spring.app.amado.controller;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
@@ -26,6 +28,8 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -1888,6 +1892,108 @@ public class ControllerNR {
 		
 		return jsonObj.toString();
 	}
+	
+	
+	@GetMapping("/opendata/opendata_JSON.do")
+	public String opendata(HttpServletRequest request) throws IOException, ParseException {
+		
+		return "opendata.tiles1";
+	}
+	
+	@ResponseBody
+	@GetMapping("/opendata/insertData.do")
+	public String insertData(HttpServletRequest request) {
+		
+		String city = request.getParameter("city");
+		String newAdd = request.getParameter("newAdd");
+		String oldAdd = request.getParameter("oldAdd");
+		String postcode = request.getParameter("postcode");
+		String status = request.getParameter("status");
+		String type = request.getParameter("type");
+		String name = request.getParameter("name");
+		
+		if(city == null) {
+			city = "없음";
+		}
+		if(newAdd == null) {
+			newAdd = "없음";
+		}
+		if(oldAdd == null) {
+			oldAdd = "없음";
+		}
+		if(postcode == null) {
+			postcode = "없음";
+		}
+		if(status == null) {
+			status = "없음";
+		}
+		if(type == null) {
+			type = "없음";
+		}
+		if(name == null) {
+			name = "없음";
+		}
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+        paramap.put("city", city);
+        paramap.put("newAdd", newAdd);
+        paramap.put("oldAdd", oldAdd);
+        paramap.put("postcode", postcode);
+        paramap.put("status", status);
+        paramap.put("type", type);
+        paramap.put("name", name);
+        
+        int n = service.insertOpendata(paramap);
+		
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("n", n);
+        
+		return jsonObj.toString();
+	}
+
+	
+	@GetMapping("/community/SportsFacilitiesInfo.do")
+	public ModelAndView SportsFacilitiesInfo(ModelAndView mav) {
+		
+		
+		
+		mav.setViewName("opendata/SportsFacilitiesInfo.tiles1");
+		
+		return mav;
+	}
+	
+	
+	@ResponseBody
+	@GetMapping(value="/community/searchFacByLocal.do", produces="text/plain;charset=UTF-8")
+	public String searchFacByLocal() {
+		
+		// 지역별 체육시설 현황
+		List<Map<String, String>> localFacList = service.searchFacByLocal();
+		
+		JSONArray jsonArr = new JSONArray();
+		
+		for(Map<String, String> localMap : localFacList) {
+			
+			JSONObject jsonObj = new JSONObject();
+			jsonObj.put("city", localMap.get("city"));
+			jsonObj.put("local", localMap.get("local"));
+			jsonObj.put("cnt", localMap.get("cnt"));
+			jsonArr.put(jsonObj);
+		}
+		
+		
+		
+		return jsonArr.toString();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

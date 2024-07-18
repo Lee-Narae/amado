@@ -185,6 +185,12 @@ public interface AmadoService_NR {
 	// 관리자 - 체육관 등록하기(추가이미지)
 	int insertGymImg(Map<String, String> paramap);
 
+	// opendata db insert
+	int insertOpendata(Map<String, String> paramap);
+
+	// 지역별 체육시설 현황
+	List<Map<String, String>> searchFacByLocal();
+
 	
 
 
