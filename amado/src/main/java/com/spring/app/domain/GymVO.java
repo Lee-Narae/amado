@@ -32,10 +32,14 @@ INSIDESTATUS           NUMBER(1)
 	private String membercount;     //인원
 	private String likecount;       //좋아요수
 	private String insidestatus;
+	private String lat;				//위도
+	private String lng;				//경도
 
+	
 	private String orgfilename;       //좋아요수
 	private String filename;       //좋아요수
 	private String filesize;       //좋아요수
+	
 	
 	public GymVO() {}
 	/*
@@ -148,7 +152,18 @@ private MultipartFile attach;
 	public void setInsidestatus(String insidestatus) {
 		this.insidestatus = insidestatus;
 	}
-	
+	public String getLat() {
+		return lat;
+	}
+	public void setLat(String lat) {
+		this.lat = lat;
+	}
+	public String getLng() {
+		return lng;
+	}
+	public void setLng(String lng) {
+		this.lng = lng;
+	}
 	
 	
 

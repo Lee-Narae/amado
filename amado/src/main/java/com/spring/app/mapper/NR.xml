@@ -531,4 +531,20 @@
 		where B.status = 1 and B.matchdate >= sysdate and A.clubseq1 = #{clubseq} or A.clubseq2 = #{clubseq}
 	</select>
 	
+	<select id="getGymseq" resultType="String">
+		select SEQ_GYM.nextval from dual
+	</select>
+	
+	<insert id="adminGymreg" parameterType="GymVO">
+	insert into tbl_gym(gymseq, gymname, fk_userid, postcode, address, detailaddress, status, info, cost, caution,
+						membercount, likecount, insidestatus, orgfilename, filename, filesize, lat, lng)
+	values(#{gymseq}, #{gymname}, 'admin', #{postcode}, #{address}, #{detailaddress}, 1, #{info}, #{cost}, #{caution},
+  		   #{membercount}, 0, #{insidestatus}, #{orgfilename}, #{filename}, #{filesize}, #{lat}, #{lng})
+	</insert>
+	
+	<insert id="insertGymImg" parameterType="HashMap">
+		insert into tbl_gymimg(gymimgseq, gymseq, filename, orgfilename, filesize)
+		values(SEQ_GYMIMG.nextval, #{gymseq}, #{filename}, #{orgfilename}, #{filesize})
+	</insert>
+	
 </mapper>

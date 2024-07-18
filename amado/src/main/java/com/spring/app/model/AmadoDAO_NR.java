@@ -173,5 +173,13 @@ public interface AmadoDAO_NR {
 
 	// 우리팀 매치일정 불러오기
 	List<Map<String, String>> getMatchList(String clubseq);
+
+	// gymseq 채번
+	String getGymseq();
+
+	// 관리자 - 체육관 등록하기(대표이미지)
+	int adminGymreg(GymVO gym);
+	// 관리자 - 체육관 등록하기(추가이미지)
+	int insertGymImg(Map<String, String> paramap);
 	
 }

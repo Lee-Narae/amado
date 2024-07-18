@@ -555,5 +555,26 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		return matchList;
 	}
 	
+	// gymseq 채번
+	@Override
+	public String getGymseq() {
+		String gymseq = dao.getGymseq();
+		return gymseq;
+	}
+
+	// 관리자 - 체육관 등록하기(대표이미지)
+	@Override
+	public int adminGymreg(GymVO gym) {
+		int n = dao.adminGymreg(gym);
+		return n;
+	}
+
+	// 관리자 - 체육관 등록하기(추가이미지)
+	@Override
+	public int insertGymImg(Map<String, String> paramap) {
+		int n = dao.insertGymImg(paramap);
+		return n;
+	}
+	
 	
 }
