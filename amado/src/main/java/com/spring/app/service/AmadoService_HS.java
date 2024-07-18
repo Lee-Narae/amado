@@ -40,6 +40,14 @@ public interface AmadoService_HS {
 
 	int deleteReComment(Map<String, String> paraMap);
 
+	// gymseq 채번
+	String getGymseq();
+	
+	// 체육관 등록하기(대표이미지)
+	int Gymreg(GymVO gym);
+	//  체육관 등록하기(추가이미지)
+	int insertGymImg(Map<String, String> paramap);
+
 
 
 

@@ -47,6 +47,14 @@ public interface AmadoDAO_HS {
 
 	int updateReCommentCount_decrease(String fleamarketcommentseq);
 	// 댓글  끝
+
+	// gymseq 채번
+		String getGymseq();
+
+	// 체육관 등록하기(대표이미지)
+	int Gymreg(GymVO gym);
+	// 체육관 등록하기(추가이미지)
+	int insertGymImg(Map<String, String> paramap);
 	
 
 }

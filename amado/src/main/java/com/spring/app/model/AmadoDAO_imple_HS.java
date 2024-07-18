@@ -130,6 +130,27 @@ public class AmadoDAO_imple_HS implements AmadoDAO_HS {
 	}
 	
 	
+	// gymseq 채번
+		@Override
+		public String getGymseq() {
+			String gymseq = sqlsession.selectOne("HS.getGymseq");
+			return gymseq;
+		}
+
+		// 관리자 - 체육관 등록하기(대표이미지)
+		@Override
+		public int Gymreg(GymVO gym) {
+			int n = sqlsession.insert("HS.Gymreg", gym);
+			return n;
+		}
+		// 관리자 - 체육관 등록하기(추가이미지)
+		@Override
+		public int insertGymImg(Map<String, String> paramap) {
+			int n = sqlsession.insert("HS.insertGymImg", paramap);
+			return n;
+		}
+
+	
 	
 
 

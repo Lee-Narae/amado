@@ -4,11 +4,7 @@
 
 <mapper namespace="HS">
 
-<insert id="add_withFile" parameterType="GymVO">
-	
-	insert into tbl_gym(gymseq ,gymname,fk_userid,postcode,address,detailaddress,status,info,orgfilename,filename,filesize,cost,caution,membercount,likecount,insidestatus)
-	values(seq_gym.nextval, #{gymname}, #{fk_userid}, #{postcode}, #{address}, #{detailaddress}, 0,#{info},#{orgfilename},#{filename},#{filesize},to_number(#{cost}),#{caution},to_number(#{membercount}),0 ,to_number(#{insidestatus}))
-</insert>
+
 
 
 <!-- <insert id="add_photofile" parameterType="PhotoVO">
@@ -47,41 +43,40 @@ values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
 		select gymquestionseq, fk_userid,category, content, changestatus
 		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
              , V.memberimg
-		from tbl_fleamarketcomment A join tbl_member V
+		from tbl_gymquestion A join tbl_member V
 		ON A.fk_userid = V.userid
-		where A.fleamarketseq = #{parentSeq}
-		order by fleamarketcommentseq desc
+		where A.gymseq = #{parentSeq}
+		order by gymquestionseq desc
     </select>
 
 
 	<update id="updateComment" parameterType="HashMap">
-        update tbl_fleamarketcomment set comment_text = #{comment_text}, registerdate = sysdate, changestatus = 1
-        where fleamarketcommentseq = #{fleamarketcommentseq}
+        update tbl_gymquestion set content = #{content}, registerdate = sysdate, changestatus = 1
+        where gymquestionseq = #{gymquestionseq}
     </update>
 
     <delete id="deleteComment" parameterType="String">
-        delete from tbl_fleamarketcomment
-        where fleamarketcommentseq = #{fleamarketcommentseq}
+        delete from tbl_gymquestion
+        where gymquestionseq = #{gymquestionseq}
     </delete>
     
     <update id="updateCommentCount_decrease" parameterType="String">
-        update tbl_fleamarket set commentcount = commentcount - 1 
-        where fleamarketseq = #{fleamarketseq}
+        update tbl_gym set commentcount = commentcount - 1 
+        where gymseq = #{gymseq}
     </update>
 
-
-	<select id="getCommentreList" parameterType="String" resultType="AnswerVO">
-		select fleamarketcommentreplyseq, fk_userid, commentreply_text, changestatus
+ 	<select id="getCommentreList" parameterType="String" resultType="AnswerVO">
+		select gymanswerseq, fk_userid, content_reply, changestatus
 		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
              , V.memberimg
-		from tbl_fleamarketcommentreply A join tbl_member V
+		from tbl_gymanswer A join tbl_member V
 		ON A.fk_userid = V.userid
-		where A.fleamarketcommentseq = #{fleamarketcommentseq}
-		order by fleamarketcommentreplyseq desc
-    </select>
+		where A.gymquestionseq = #{gymquestionseq}
+		order by gymanswerseq desc
+    </select> 
 
 	<insert id="addReComment" parameterType="AnswerVO">
-		insert into tbl_fleamarketcommentreply(fleamarketcommentreplyseq, fleamarketcommentseq, commentreply_text, fk_userid)
+		insert into  tbl_gymanswer(fleamarketcommentreplyseq, fleamarketcommentseq, commentreply_text, fk_userid)
 		values(seq_fleamarketcommentreplyseq.nextval, #{fleamarketcommentseq}, #{commentreply_text}, #{fk_userid})
 	</insert>
 	
@@ -105,7 +100,26 @@ values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
         where fleamarketcommentseq = #{fleamarketcommentseq}
     </update>
     
+    
+    
+    
+    
+    
+	<select id="getGymseq" resultType="String">
+		select SEQ_GYM.nextval from dual
+	</select>
 	
+	<insert id="Gymreg" parameterType="GymVO">
+	insert into tbl_gym(gymseq, gymname, fk_userid, postcode, address, detailaddress, status, info, cost, caution,
+						membercount, likecount, insidestatus, orgfilename, filename, filesize, lat, lng)
+	values(#{gymseq}, #{gymname}, #{fk_userid}, #{postcode}, #{address}, #{detailaddress}, 0, #{info}, #{cost}, #{caution},
+  		   #{membercount}, 0, #{insidestatus}, #{orgfilename}, #{filename}, #{filesize}, #{lat}, #{lng})
+	</insert>
+	
+	<insert id="insertGymImg" parameterType="HashMap">
+		insert into tbl_gymimg(gymimgseq, gymseq, filename, orgfilename, filesize)
+		values(SEQ_GYMIMG.nextval, #{gymseq}, #{filename}, #{orgfilename}, #{filesize})
+	</insert>
 	
 
 </mapper>

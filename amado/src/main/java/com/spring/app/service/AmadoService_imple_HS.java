@@ -171,6 +171,29 @@ public class AmadoService_imple_HS implements AmadoService_HS {
 		
 		return n*m;
 	}
+	
+	
+	// gymseq 채번
+		@Override
+		public String getGymseq() {
+			String gymseq = dao.getGymseq();
+			return gymseq;
+		}
+
+		// 관리자 - 체육관 등록하기(대표이미지)
+		@Override
+		public int Gymreg(GymVO gym) {
+			int n = dao.Gymreg(gym);
+			return n;
+		}
+
+		// 관리자 - 체육관 등록하기(추가이미지)
+		@Override
+		public int insertGymImg(Map<String, String> paramap) {
+			int n = dao.insertGymImg(paramap);
+			return n;
+		}
+		
 
 
 
