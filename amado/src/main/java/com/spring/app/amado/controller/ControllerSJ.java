@@ -1314,7 +1314,7 @@ public class ControllerSJ {
 		
 		HttpSession session = mrequest.getSession();
 		String root = session.getServletContext().getRealPath("/");
-		String path = root + "resources" + File.separator + "email_attach_file";
+		String path = root + "resources" + File.separator + "inquiry_file";
 
 		File dir = new File(path);
 		if (!dir.exists()) {
