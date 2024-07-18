@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.app.common.FileManager;
+import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketVO;
 import com.spring.app.model.AmadoDAO_JY;
@@ -116,6 +117,20 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 		String checkseq = dao.checkseq(paraMap);
 		return checkseq;
 	}
+
+
+
+	@Override
+	public int getNoticeTotalPage(Map<String, String> paramap) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	
+	
+
+
 
 
 
