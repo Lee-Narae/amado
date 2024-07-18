@@ -1,5 +1,9 @@
 package com.spring.app.amado.controller;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -11,6 +15,8 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
+import com.spring.app.domain.GymVO;
 import com.spring.app.domain.MatchingVO;
 import com.spring.app.service.AmadoService_JH;
 
@@ -446,6 +453,32 @@ public class ControllerJH {
 		return mav;
 	}	
 	
+	
+	@ResponseBody
+	@GetMapping(value="/gym/gymPay_JSON.do", produces="text/plain;charset=UTF-8") 
+	public String gymPay_JSON(HttpServletRequest request) throws IOException, ParseException {
+
+		// System.out.println(fleamarketcommentseq);
+		List<GymVO> GymAddList = service.getGymAdd(); 
+		
+		JSONArray jsonArr = new JSONArray(); // [] 
+		/*
+		if(GymAddList != null) {
+			for(GymVO gvo : GymAddList) {
+				JSONObject jsonObj = new JSONObject();          // {} 
+				jsonObj.put("fleamarketcommentreplyseq", fmcommentrevo.getFleamarketcommentreplyseq());             // {"seq":1}
+				jsonObj.put("fk_userid", fmcommentrevo.getFk_userid()); // {"seq":1, "fk_userid":"seoyh"}
+				jsonObj.put("commentreply_text", fmcommentrevo.getCommentreply_text());           // {"seq":1, "fk_userid":"seoyh","name":"서영학"}
+				jsonObj.put("registerdate", fmcommentrevo.getRegisterdate());     // {"seq":1, "fk_userid":"seoyh","name":서영학,"content":"첫번째 댓글입니다. ㅎㅎㅎ","regdate":"2024-06-18 15:36:31"}
+				jsonObj.put("memberimg", fmcommentrevo.getMemberimg());
+				jsonObj.put("changestatus", fmcommentrevo.getChangestatus());
+				
+				jsonArr.put(jsonObj);
+			}// end of for-----------------------
+		}
+		*/
+		return jsonArr.toString();
+	}
 	
 	
 	
