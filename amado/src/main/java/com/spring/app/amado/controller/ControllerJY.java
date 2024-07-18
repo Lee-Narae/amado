@@ -31,6 +31,7 @@ import com.spring.app.common.MyUtil;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketVO;
+import com.spring.app.domain.NoticeVO;
 import com.spring.app.service.AmadoService_JY;
 
 
@@ -732,55 +733,33 @@ public class ControllerJY {
 		
 	
 	
-	/* ===== 쿠키로 최근 본 상품 목록 불러오기 =====
-	@GetMapping("club/recentlist.do")
-	public ModelAndView goods_list(HttpServletRequest request, ModelAndView mav) {
-	    List<FleamarketVO> cList = new ArrayList<>();
-
-	    // 쿠키 가져오기
-	    Cookie[] cookies = request.getCookies();
-
-	    if (cookies != null) {
-	        for (int i = cookies.length - 1; i >= 0; i--) {
-	            if (cookies[i].getName().startsWith("goods")) {
-	                try {
-	                    String no = cookies[i].getValue();
-	                    int goodsSeq = Integer.parseInt(no);
-
-	                    // 유효한 상품 번호인지 확인
-	                    if (goodsSeq > 0) {
-	                        FleamarketVO fvo = service.goodsDetailData(goodsSeq);
-	                        if (fvo != null) {
-	                            cList.add(fvo);
-	                        }
-	                    }
-	                } catch (NumberFormatException e) {
-	                    // 상품 번호 파싱 오류 처리
-	                    // 로깅하거나 예외 처리 필요
-	                    e.printStackTrace();
-	                }
-	            }
-	        }
-	    }
-
-	    mav.addObject("cList", cList);
-	    return mav;
-	}
-	*/
-	
-
-	
-	
 	// ========== 마이페이지 ==========
-	// 마이페이지 보여주기
-	// public ModelAndView requiredLogin_viewMypage(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+	// 마이페이지 뷰단
 	@RequestMapping(value="/member/viewMypage.do")
-	public ModelAndView viewMypage(ModelAndView mav) {
+	public ModelAndView requiredLogin_viewMypage(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
 		mav.setViewName("member/viewMypage.tiles1");
 		return mav;
 		
 	}
 
+
+	// ========== 팀별 게시판 ==========
+	// 동호회 게시판 뷰단
+	@GetMapping(value="/club/clubBoard.do")
+	public ModelAndView requiredLogin_clubBoard(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+		
+		
+		
+		mav.setViewName("club/clubBoard.tiles2");
+		return mav;
+	}
+
+	
+	
+
+	
+	
+	
 	
 	
 }

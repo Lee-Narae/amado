@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
+import com.spring.app.domain.GymVO;
 import com.spring.app.domain.MatchingVO;
 
 
@@ -113,6 +114,18 @@ public class AmadoDAO_imple_JH implements AmadoDAO_JH {
 	public List<MatchingVO> getmatchingList(String clubseq) {
 		List<MatchingVO> getmatchingList = sqlsession.selectList("JH.getmatchingList", clubseq);
 		return getmatchingList;
+	}
+
+	@Override
+	public List<GymVO> getGymAdd() {
+		List<GymVO> GymAddList = sqlsession.selectList("JH.getGymAdd");
+		return GymAddList;
+	}
+
+	@Override
+	public GymVO getGymInfo(String gymseq) {
+		GymVO gymvo = sqlsession.selectOne("JH.getGymInfo", gymseq);
+		return gymvo;
 	}
 
 

@@ -95,16 +95,17 @@ public class ControllerNR {
 			mav.addObject("club", club);
 		}
 		
-		
 		// 동호회장 한정 알림 불러오기
 		if("1".equals(loginuser.getMemberrank())) {
 			List<Map<String,String>> alarmList = service.getClubAlarm(loginuser.getUserid());
 			mav.addObject("alarmList", alarmList);
 		}
 		
-		
 		// 우리팀 매치일정 불러오기
-		
+		if(clubseq != null) {
+			List<Map<String, String>> matchList = service.getMatchList(clubseq);
+			mav.addObject("matchList", matchList);
+		}
 		
 		mav.setViewName("club/myClub.tiles2");
 		// /WEB-INF/views/tiles2/club/myClub.jsp
@@ -124,7 +125,7 @@ public class ControllerNR {
 	}
 	
 	@ResponseBody
-	@PostMapping("/member/findId.do")
+	@PostMapping(value="/member/findId.do", produces="text/plain;charset=UTF-8")
 	public String findId(HttpServletRequest request) {
 		
 		String name = request.getParameter("name");
@@ -155,7 +156,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/member/idFind_sendEmail.do")
+	@PostMapping(value="/member/idFind_sendEmail.do", produces="text/plain;charset=UTF-8")
 	public String idFind_sendEmail(HttpServletRequest request) {
 		
 		String email = request.getParameter("email");
@@ -207,7 +208,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/member/findpw.do")
+	@PostMapping(value="/member/findpw.do", produces="text/plain;charset=UTF-8")
 	public String findpw(HttpServletRequest request) {
 		
 		String name = request.getParameter("name");
@@ -241,7 +242,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/member/pwFind_sendEmail.do")
+	@PostMapping(value="/member/pwFind_sendEmail.do", produces="text/plain;charset=UTF-8")
 	public String pwFind_sendEmail(HttpServletRequest request) {
 		
 		String email = request.getParameter("email");
@@ -293,7 +294,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/member/findPwUpdatePw.do")
+	@PostMapping(value="/member/findPwUpdatePw.do", produces="text/plain;charset=UTF-8")
 	public String findPwUpdatePw(HttpServletRequest request) {
 		
 		String newpw = request.getParameter("password");
@@ -425,7 +426,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@GetMapping("/admin/getMemberStatic")
+	@GetMapping(value="/admin/getMemberStatic", produces="text/plain;charset=UTF-8")
 	public String getMemberStatic() {
 		
 		JSONArray jsonArr = new JSONArray();
@@ -893,7 +894,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/admin/memberInsert")
+	@PostMapping(value="/admin/memberInsert", produces="text/plain;charset=UTF-8")
 	public String memberInsert(MultipartHttpServletRequest mrequest) {
 		
 		MultipartFile mtpExcelFile = mrequest.getFile("excelsheet"); // input:file 태그의 태그 name을 넣는다.
@@ -1548,7 +1549,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/community/regComment.do")
+	@PostMapping(value="/community/regComment.do", produces="text/plain;charset=UTF-8")
 	public String requiredLogin_regComment(HttpServletRequest request, HttpServletResponse response) {
 		
 		HttpSession session = request.getSession();
@@ -1596,7 +1597,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/community/delNoticeComment.do")
+	@PostMapping(value="/community/delNoticeComment.do", produces="text/plain;charset=UTF-8")
 	public String delNoticeComment(HttpServletRequest request) {
 		
 		String noticecommentseq = request.getParameter("noticecommentseq");
@@ -1614,7 +1615,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@GetMapping("/community/viewCommentOnly.do")
+	@GetMapping(value="/community/viewCommentOnly.do", produces="text/plain;charset=UTF-8")
 	public String viewCommentOnly(HttpServletRequest request) {
 		String parentseq = request.getParameter("parentseq");
 		
@@ -1640,7 +1641,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/community/editNoticeComment.do")
+	@PostMapping(value="/community/editNoticeComment.do", produces="text/plain;charset=UTF-8")
 	public String editNoticeComment(HttpServletRequest request) {
 		
 		String comment_text = request.getParameter("edit_comment_text");
@@ -1661,7 +1662,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@GetMapping("/club/getSportseq.do")
+	@GetMapping(value="/club/getSportseq.do", produces="text/plain;charset=UTF-8")
 	public String getSportseq(HttpServletRequest request) {
 		
 		String matchingregseq = request.getParameter("matchingregseq");
@@ -1721,7 +1722,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@GetMapping("/admin/getGymInfo")
+	@GetMapping(value="/admin/getGymInfo", produces="text/plain;charset=UTF-8")
 	public String getGymInfo(HttpServletRequest request) {
 		
 		String gymseq = request.getParameter("gymseq");
@@ -1752,7 +1753,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/admin/gymPermit")
+	@PostMapping(value="/admin/gymPermit", produces="text/plain;charset=UTF-8")
 	public String gymPermit(HttpServletRequest request) {
 		
 		String gymseq = request.getParameter("gymseq");
@@ -1769,7 +1770,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/club/matching.do")
+	@PostMapping(value="/club/matching.do", produces="text/plain;charset=UTF-8")
 	public String matching (HttpServletRequest request) {
 		
 		String matchingapplyseq = request.getParameter("matchingapplyseq");
@@ -1798,8 +1799,6 @@ public class ControllerNR {
 			
 		}
 		
-		
-		
 		JSONObject jsonObj = new JSONObject();
 		
 		jsonObj.put("n", n);
@@ -1808,6 +1807,89 @@ public class ControllerNR {
 	}
 	
 
+	@GetMapping("admin/reg/gym")
+	public ModelAndView AdminGymRegister(ModelAndView mav) {
+		
+		
+		mav.setViewName("reg/gym.tiles3");
+		
+		return mav;
+		
+	}
+	
+	
+	@ResponseBody
+	@PostMapping(value="/admin/reg/gymReg", produces="text/plain;charset=UTF-8")
+	public String gymReg(GymVO gym, MultipartHttpServletRequest mrequest) {
+		
+		// gymseq 채번
+		String gymseq = service.getGymseq();
+		
+		gym.setGymseq(gymseq);
+		
+		// 대표이미지
+		MultipartFile attach = gym.getAttach();
+		
+		HttpSession session = mrequest.getSession(); 
+        String root = session.getServletContext().getRealPath("/");
+        String path = root+"resources"+File.separator+"files";
+        
+        String newFileName = "";
+        byte[] bytes = null;
+        long fileSize = 0;
+        
+        try {
+            bytes = attach.getBytes();
+            String originalFilename = attach.getOriginalFilename();
+            newFileName = fileManager.doFileUpload(bytes, originalFilename, path); 
+            fileSize = attach.getSize();  // 첨부파일의 크기(단위는 byte임)
+            
+            gym.setFilename(newFileName);
+            gym.setOrgfilename(originalFilename);
+            gym.setFilesize(String.valueOf(fileSize));
+                     
+        } catch (Exception e) {
+           e.printStackTrace();
+        }   
+        
+        int n = service.adminGymreg(gym);
+        int n2 = 0;
+        
+        if(n == 1) {
+        
+			// 추가이미지
+			List<MultipartFile> fileList = mrequest.getFiles("file_arr");
+			
+		    for(MultipartFile mtfile : fileList) {
+		    	try {
+		            bytes = mtfile.getBytes();
+		            String originalFilename = mtfile.getOriginalFilename();
+		            newFileName = fileManager.doFileUpload(bytes, originalFilename, path); 
+		            fileSize = mtfile.getSize();  // 첨부파일의 크기(단위는 byte임)
+		            
+		            Map<String, String> paramap = new HashMap<String, String>();
+		            paramap.put("gymseq", gymseq);
+		            paramap.put("filename", newFileName);
+		            paramap.put("orgfilename", originalFilename);
+		            paramap.put("filesize", String.valueOf(fileSize));
+		            
+		            // tbl_gymimg DB insert
+		            n2 = service.insertGymImg(paramap);
+		            
+		        } catch (Exception e) {
+		           e.printStackTrace();
+		        }  
+		    }
+		
+        }	
+	    	
+	    JSONObject jsonObj = new JSONObject();
+	    jsonObj.put("n", n*n2);
+		
+		return jsonObj.toString();
+	}
+	
+	
 	
 }
 

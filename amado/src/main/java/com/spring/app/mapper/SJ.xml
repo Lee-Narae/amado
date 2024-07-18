@@ -462,5 +462,27 @@
 		values(#{fk_userid}, to_number(#{sportseq}), to_number(#{clubseq}), default)
     </insert>
     
+    
+	<insert id="Inquiry" parameterType="HashMap">
+		insert into tbl_inquiry(inquiryseq, content, fk_userid, email, phone, registerdate, searchType_a, searchType_b, status)
+		values(seq_inquiry.nextval, #{content}, #{fk_userid}, #{email}, #{phone}, default, to_number(#{searchType_a}), to_number(#{searchType_b}), default)
+    </insert>
+    
+    <select id="findseq_inquiry" parameterType="HashMap" resultType="int">
+	    SELECT inquiryseq
+	    FROM (
+	        SELECT inquiryseq
+	        FROM tbl_inquiry
+	        ORDER BY inquiryseq DESC
+	    )
+	    WHERE ROWNUM = 1
+    </select>
+    
+    
+    <insert id="InquiryFileTable" parameterType="HashMap">
+		insert into tbl_inquiryFile(inquiryseq, orgfilename, filename, filesize)
+		values(#{inquiryseq}, #{orgfilename}, #{filename} , to_number(#{filesize}))
+    </insert>
+    
 	
 </mapper>

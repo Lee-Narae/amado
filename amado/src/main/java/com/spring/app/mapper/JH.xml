@@ -101,5 +101,15 @@
 		order by matchingseq desc
 	</select>
 	
+	<select id="getGymAdd" resultType="GymVO">
+		select lng, lat
+		from tbl_gym
+	</select>
+	
+	<select id="getGymInfo" resultType="GymVO" parameterType="String">
+		select gymname, address, detailaddress, cost, orgfilename, lat, lng
+		from tbl_gym
+		where gymseq = #{gymseq}
+	</select>
 	
 </mapper>

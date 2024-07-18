@@ -541,11 +541,39 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		return n;
 	}
 
-	// 3. tbl_matching ★★★★★★★★★★★★★★★★★★★★ 여기서부터 ★★★★★★★★★★★★★★★★★★★★★★★★★
+	// 3. tbl_matching
 	@Override
 	public int insertMatching(Map<String, String> paramap) {
-		// TODO Auto-generated method stub
-		return 0;
+		int n = dao.insertMatching(paramap);
+		return n;
+	}
+
+	// 우리팀 매치일정 불러오기
+	@Override
+	public List<Map<String, String>> getMatchList(String clubseq) {
+		List<Map<String, String>> matchList = dao.getMatchList(clubseq);
+		return matchList;
+	}
+	
+	// gymseq 채번
+	@Override
+	public String getGymseq() {
+		String gymseq = dao.getGymseq();
+		return gymseq;
+	}
+
+	// 관리자 - 체육관 등록하기(대표이미지)
+	@Override
+	public int adminGymreg(GymVO gym) {
+		int n = dao.adminGymreg(gym);
+		return n;
+	}
+
+	// 관리자 - 체육관 등록하기(추가이미지)
+	@Override
+	public int insertGymImg(Map<String, String> paramap) {
+		int n = dao.insertGymImg(paramap);
+		return n;
 	}
 	
 	

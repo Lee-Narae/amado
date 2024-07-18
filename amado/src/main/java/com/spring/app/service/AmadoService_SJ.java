@@ -87,5 +87,13 @@ public interface AmadoService_SJ {
 	// 클럽 가입 신청
 	int clubMRegisterSJ(ClubmemberVO clubmembervo);
 
+	// 파일첨부가 있는 1대1 문의
+	int InquiryFile(Map<String, Object> paraMap);
+
+	// 파일첨부가 없는 1대1 문의
+	int Inquiry(Map<String, Object> paraMap);
+
+	int findseq_inquiry(Map<String, Object> paraMap);
+
 
 }
