@@ -16,6 +16,8 @@
 		<typeAlias type="com.spring.app.domain.FleamarketVO" alias="FleamarketVO"/>
 		<typeAlias type="com.spring.app.domain.ClubmemberVO" alias="ClubmemberVO"/>
 		<typeAlias type="com.spring.app.domain.MatchingVO" alias="MatchingVO"/>
+		<typeAlias type="com.spring.app.domain.QuestionVO" alias="QuestionVO"/>
+		<typeAlias type="com.spring.app.domain.AnswerVO" alias="AnswerVO"/>
 
 	</typeAliases>
 </configuration>

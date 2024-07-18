@@ -36,10 +36,15 @@ values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
 		where fleamarketseq = 1
 	</update>
 	
+	
+	
+	
+	
+
 	<!-- === #93. 원게시물에 딸린 댓글들을 조회해오기 === -->
     <!-- 첨부파일이 없는 경우  -->
-    <select id="getCommentList" parameterType="String" resultType="FleamarketCommentVO">
-		select fleamarketcommentseq, fk_userid, comment_text, changestatus
+    <select id="getCommentList" parameterType="String" resultType="QuestionVO">
+		select gymquestionseq, fk_userid,category, content, changestatus
 		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
              , V.memberimg
 		from tbl_fleamarketcomment A join tbl_member V
@@ -65,7 +70,7 @@ values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
     </update>
 
 
-	<select id="getCommentreList" parameterType="String" resultType="FleamarketCommentReVO">
+	<select id="getCommentreList" parameterType="String" resultType="AnswerVO">
 		select fleamarketcommentreplyseq, fk_userid, commentreply_text, changestatus
 		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
              , V.memberimg
@@ -75,7 +80,7 @@ values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
 		order by fleamarketcommentreplyseq desc
     </select>
 
-	<insert id="addReComment" parameterType="FleamarketCommentReVO">
+	<insert id="addReComment" parameterType="AnswerVO">
 		insert into tbl_fleamarketcommentreply(fleamarketcommentreplyseq, fleamarketcommentseq, commentreply_text, fk_userid)
 		values(seq_fleamarketcommentreplyseq.nextval, #{fleamarketcommentseq}, #{commentreply_text}, #{fk_userid})
 	</insert>

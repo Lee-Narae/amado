@@ -3,10 +3,12 @@ package com.spring.app.model;
 import java.util.List;
 import java.util.Map;
 
+import com.spring.app.domain.AnswerVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
 import com.spring.app.domain.GymVO;
 import com.spring.app.domain.PhotoVO;
+import com.spring.app.domain.QuestionVO;
 
 public interface AmadoDAO_HS {
 
@@ -20,11 +22,11 @@ public interface AmadoDAO_HS {
 	
 	
 	// 댓글 시작 
-	int addComment(FleamarketCommentVO fmcommentvo);
+	int addComment(QuestionVO questionvo);
 
 	int updateCommentCount(String fleamarketseq);
 
-	List<FleamarketCommentVO> getCommentList(String parentSeq);
+	List<QuestionVO> getCommentList(String parentSeq);
 	
 	
 	int updateComment(Map<String, String> paraMap);
@@ -33,9 +35,9 @@ public interface AmadoDAO_HS {
 
 	int updateCommentCount_decrease(String string);
 
-	List<FleamarketCommentReVO> getCommentreList(String fleamarketcommentseq);
+	List<AnswerVO> getCommentreList(String gymquestionseq);
 
-	int addReComment(FleamarketCommentReVO fmcommentrevo);
+	int addReComment(AnswerVO answervo);
 
 	int updateReCommentCount(String fleamarketcommentseq);
 

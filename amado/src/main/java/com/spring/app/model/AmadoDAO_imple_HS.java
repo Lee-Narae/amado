@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import com.spring.app.domain.AnswerVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
 import com.spring.app.domain.GymVO;
 import com.spring.app.domain.PhotoVO;
+import com.spring.app.domain.QuestionVO;
 
 @Repository
 public class AmadoDAO_imple_HS implements AmadoDAO_HS {
@@ -55,20 +57,20 @@ public class AmadoDAO_imple_HS implements AmadoDAO_HS {
 	
 	
 	@Override
-	public int addComment(FleamarketCommentVO fmcommentvo) {
-		int n = sqlsession.insert("HS.addComment", fmcommentvo);
+	public int addComment(QuestionVO questionvo) {
+		int n = sqlsession.insert("HS.addComment", questionvo);
 		return n;
 	}
 
 	@Override
-	public int updateCommentCount(String fleamarketseq) {
-		int n = sqlsession.update("HS.updateCommentCount", fleamarketseq);
+	public int updateCommentCount(String gymseq) {
+		int n = sqlsession.update("HS.updateCommentCount", gymseq);
 		return n;
 	}
 
 	@Override
-	public List<FleamarketCommentVO> getCommentList(String parentSeq) {
-		List<FleamarketCommentVO> commentList = sqlsession.selectList("HS.getCommentList", parentSeq);
+	public List<QuestionVO> getCommentList(String parentSeq) {
+		List<QuestionVO> commentList = sqlsession.selectList("HS.getCommentList", parentSeq);
 		return commentList;
 	}
 
@@ -79,33 +81,33 @@ public class AmadoDAO_imple_HS implements AmadoDAO_HS {
 	}
 
 	@Override
-	public int deleteComment(String fleamarketcommentseq) {
-		int n = sqlsession.delete("HS.deleteComment", fleamarketcommentseq);
+	public int deleteComment(String gymquestionseq) {
+		int n = sqlsession.delete("HS.deleteComment", gymquestionseq);
 		return n;
 	}
 
 	// === #102.-2  댓글삭제시 tbl_board 테이블에 commentCount 컬럼이 1감소(update) === //
 	@Override
-	public int updateCommentCount_decrease(String fleamarketseq) {
-		int n = sqlsession.update("HS.updateCommentCount_decrease", fleamarketseq);
+	public int updateCommentCount_decrease(String gymseq) {
+		int n = sqlsession.update("HS.updateCommentCount_decrease", gymseq);
 		return n;
 	}
 
 	@Override
-	public List<FleamarketCommentReVO> getCommentreList(String fleamarketcommentseq) {
-		List<FleamarketCommentReVO> commentreList = sqlsession.selectList("HS.getCommentreList", fleamarketcommentseq);
+	public List<AnswerVO> getCommentreList(String gymquestionseq) {
+		List<AnswerVO> commentreList = sqlsession.selectList("HS.getCommentreList", gymquestionseq);
 		return commentreList;
 	}
 
 	@Override
-	public int addReComment(FleamarketCommentReVO fmcommentrevo) {
-		int n = sqlsession.insert("HS.addReComment", fmcommentrevo);
+	public int addReComment(AnswerVO answervo) {
+		int n = sqlsession.insert("HS.addReComment", answervo);
 		return n;
 	}
 
 	@Override
-	public int updateReCommentCount(String fleamarketcommentseq) {
-		int n = sqlsession.update("HS.updateReCommentCount", fleamarketcommentseq);
+	public int updateReCommentCount(String gymquestionseq) {
+		int n = sqlsession.update("HS.updateReCommentCount", gymquestionseq);
 		return n;
 	}
 
@@ -116,14 +118,14 @@ public class AmadoDAO_imple_HS implements AmadoDAO_HS {
 	}
 
 	@Override
-	public int deleteReComment(String fleamarketcommentreplyseq) {
-		int n = sqlsession.delete("HS.deleteReComment", fleamarketcommentreplyseq);
+	public int deleteReComment(String gymanswerseq) {
+		int n = sqlsession.delete("HS.deleteReComment", gymanswerseq);
 		return n;
 	}
 
 	@Override
-	public int updateReCommentCount_decrease(String fleamarketcommentseq) {
-		int n = sqlsession.update("HS.updateReCommentCount_decrease", fleamarketcommentseq);
+	public int updateReCommentCount_decrease(String gymquestionseq) {
+		int n = sqlsession.update("HS.updateReCommentCount_decrease", gymquestionseq);
 		return n;
 	}
 	

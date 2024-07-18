@@ -21,11 +21,13 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.app.common.FileManager;
-import com.spring.app.domain.FleamarketCommentReVO;
-import com.spring.app.domain.FleamarketCommentVO;
+import com.spring.app.domain.AnswerVO;
+//import com.spring.app.domain.FleamarketCommentReVO;
+//import com.spring.app.domain.FleamarketCommentVO;
 import com.spring.app.domain.GymVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.domain.PhotoVO;
+import com.spring.app.domain.QuestionVO;
 import com.spring.app.service.AmadoService_HS;
 
 
@@ -216,9 +218,12 @@ public class ControllerHS {
 	   
 	   
 	   
+	   
+	   
+	   
 	   @ResponseBody
 		@PostMapping(value="/addComment2.do", produces="text/plain;charset=UTF-8")
-		public String addComment(FleamarketCommentVO fmcommentvo, HttpServletRequest request) {
+		public String addComment(QuestionVO questionvo, HttpServletRequest request) {
 			// 댓글쓰기에 첨부파일이 없는 경우
 			String name = request.getParameter("name");
 			String comment_text = request.getParameter("comment_text");
@@ -228,7 +233,7 @@ public class ControllerHS {
 			int n = 0;
 			
 			try {
-				n = service.addComment(fmcommentvo);
+				n = service.addComment(questionvo);
 				// 댓글쓰기(insert) 및 원게시물(tbl_board 테이블)에 댓글의 개수 증가(update 1씩 증가)하기 
 		        // 이어서 회원의 포인트를 50점을 증가하도록 한다. (tbl_member 테이블에 point 컬럼의 값을 50 증가하도록 update 한다.)
 				 
@@ -254,19 +259,19 @@ public class ControllerHS {
 			
 			String parentSeq = request.getParameter("parentSeq"); 
 			
-			List<FleamarketCommentVO> commentList = service.getCommentList(parentSeq); 
+			List<QuestionVO> commentList = service.getCommentList(parentSeq); 
 			
 			JSONArray jsonArr = new JSONArray(); // [] 
 			
 			if(commentList != null) {
-				for(FleamarketCommentVO fmcommentvo : commentList) {
+				for(QuestionVO questionvo : commentList) {
 					JSONObject jsonObj = new JSONObject();          // {} 
-					jsonObj.put("fleamarketcommentseq", fmcommentvo.getFleamarketcommentseq());             // {"seq":1}
-					jsonObj.put("fk_userid", fmcommentvo.getFk_userid()); // {"seq":1, "fk_userid":"seoyh"}
-					jsonObj.put("comment_text", fmcommentvo.getComment_text());           // {"seq":1, "fk_userid":"seoyh","name":"서영학"}
-					jsonObj.put("registerdate", fmcommentvo.getRegisterdate());     // {"seq":1, "fk_userid":"seoyh","name":서영학,"content":"첫번째 댓글입니다. ㅎㅎㅎ","regdate":"2024-06-18 15:36:31"}
-					jsonObj.put("memberimg", fmcommentvo.getMemberimg());
-					jsonObj.put("changestatus", fmcommentvo.getChangestatus());
+					jsonObj.put("gymquestionseq", questionvo.getGymquestionseq());             // {"seq":1}
+					jsonObj.put("fk_userid", questionvo.getFk_userid()); // {"seq":1, "fk_userid":"seoyh"}
+					jsonObj.put("content", questionvo.getContent());           // {"seq":1, "fk_userid":"seoyh","name":"서영학"}
+					jsonObj.put("registerdate", questionvo.getRegisterdate());     // {"seq":1, "fk_userid":"seoyh","name":서영학,"content":"첫번째 댓글입니다. ㅎㅎㅎ","regdate":"2024-06-18 15:36:31"}
+					jsonObj.put("memberimg", questionvo.getMemberimg());
+					jsonObj.put("changestatus", questionvo.getChangestatus());
 					
 					jsonArr.put(jsonObj);
 				}// end of for-----------------------
@@ -357,12 +362,12 @@ public class ControllerHS {
 		@PostMapping(value="/updateComment2.action", produces="text/plain;charset=UTF-8")
 		public String updateComment(HttpServletRequest request) {
 			
-			String fleamarketcommentseq = request.getParameter("fleamarketcommentseq");
-			String comment_text = request.getParameter("content");
+			String gymquestionseq = request.getParameter("gymquestionseq");
+			String content = request.getParameter("content");
 			
 			Map<String, String> paraMap = new HashMap<>();
-			paraMap.put("fleamarketcommentseq", fleamarketcommentseq);
-			paraMap.put("comment_text", comment_text);
+			paraMap.put("gymquestionseq", gymquestionseq);
+			paraMap.put("content", content);
 			
 			int n = service.updateComment(paraMap);
 			
@@ -379,12 +384,12 @@ public class ControllerHS {
 		@PostMapping(value="/deleteComment2.action", produces="text/plain;charset=UTF-8") 
 		public String deleteComment(HttpServletRequest request) {
 			
-			String fleamarketcommentseq = request.getParameter("fleamarketcommentseq");
-			String fleamarketseq = request.getParameter("parentSeq");
+			String gymquestionseq = request.getParameter("gymquestionseq");
+			String gymseq = request.getParameter("parentSeq");
 			
 			Map<String, String> paraMap = new HashMap<>();
-			paraMap.put("fleamarketcommentseq", fleamarketcommentseq);
-			paraMap.put("fleamarketseq", fleamarketseq);
+			paraMap.put("gymquestionseq", gymquestionseq);
+			paraMap.put("gymseq", gymseq);
 			
 			int n=0;
 			try {
@@ -404,22 +409,22 @@ public class ControllerHS {
 		@PostMapping(value="/addReplyComment2.action", produces="text/plain;charset=UTF-8")
 		public String addReplyComment(HttpServletRequest request) {
 			
-			String fleamarketcommentseq = request.getParameter("fleamarketcommentseq");
+			String gymquestionseq = request.getParameter("gymquestionseq");
 			
 			// System.out.println(fleamarketcommentseq);
-			List<FleamarketCommentReVO> commentreList = service.getCommentreList(fleamarketcommentseq); 
+			List<AnswerVO> commentreList = service.getCommentreList(gymquestionseq); 
 			
 			JSONArray jsonArr = new JSONArray(); // [] 
 			
 			if(commentreList != null) {
-				for(FleamarketCommentReVO fmcommentrevo : commentreList) {
+				for(AnswerVO answervo : commentreList) {
 					JSONObject jsonObj = new JSONObject();          // {} 
-					jsonObj.put("fleamarketcommentreplyseq", fmcommentrevo.getFleamarketcommentreplyseq());             // {"seq":1}
-					jsonObj.put("fk_userid", fmcommentrevo.getFk_userid()); // {"seq":1, "fk_userid":"seoyh"}
-					jsonObj.put("commentreply_text", fmcommentrevo.getCommentreply_text());           // {"seq":1, "fk_userid":"seoyh","name":"서영학"}
-					jsonObj.put("registerdate", fmcommentrevo.getRegisterdate());     // {"seq":1, "fk_userid":"seoyh","name":서영학,"content":"첫번째 댓글입니다. ㅎㅎㅎ","regdate":"2024-06-18 15:36:31"}
-					jsonObj.put("memberimg", fmcommentrevo.getMemberimg());
-					jsonObj.put("changestatus", fmcommentrevo.getChangestatus());
+					jsonObj.put("fleamarketcommentreplyseq", answervo.getGymanswerseq());             // {"seq":1}
+					jsonObj.put("fk_userid", answervo.getFk_userid()); // {"seq":1, "fk_userid":"seoyh"}
+					jsonObj.put("getContent_reply", answervo.getContent_reply());           // {"seq":1, "fk_userid":"seoyh","name":"서영학"}
+					jsonObj.put("registerdate", answervo.getRegisterdate());     // {"seq":1, "fk_userid":"seoyh","name":서영학,"content":"첫번째 댓글입니다. ㅎㅎㅎ","regdate":"2024-06-18 15:36:31"}
+					jsonObj.put("memberimg", answervo.getMemberimg());
+					jsonObj.put("changestatus", answervo.getChangestatus());
 					
 					jsonArr.put(jsonObj);
 				}// end of for-----------------------
@@ -432,23 +437,23 @@ public class ControllerHS {
 		
 		@ResponseBody
 		@PostMapping(value="/addReComment2.do", produces="text/plain;charset=UTF-8")
-		public String addReComment(FleamarketCommentReVO fmcommentrevo, HttpServletRequest request) {
+		public String addReComment(AnswerVO answervo, HttpServletRequest request) {
 			
 			// 댓글쓰기에 첨부파일이 없는 경우
 			String fk_userid = request.getParameter("fk_userid");
-			String commentreply_text = request.getParameter("commentreply_text");
-			String fleamarketcommentseq = request.getParameter("fleamarketcommentseq");
+			String content_reply = request.getParameter("content_reply");
+			String gymquestionseq = request.getParameter("gymquestionseq");
 			
 			//System.out.println("1"+fk_userid);
 			//System.out.println("2"+commentreply_text);
 			//System.out.println("3"+fleamarketcommentseq);
 			
-			fmcommentrevo.setFk_userid(fk_userid);
+			answervo.setFk_userid(fk_userid);
 			
 			int n = 0;
 			
 			try {
-				n = service.addReComment(fmcommentrevo);
+				n = service.addReComment(answervo);
 				// 댓글쓰기(insert) 및 원게시물(tbl_board 테이블)에 댓글의 개수 증가(update 1씩 증가)하기 
 		        // 이어서 회원의 포인트를 50점을 증가하도록 한다. (tbl_member 테이블에 point 컬럼의 값을 50 증가하도록 update 한다.)
 				 
@@ -506,12 +511,12 @@ public class ControllerHS {
 		@PostMapping(value="/updateReComment2.do", produces="text/plain;charset=UTF-8")
 		public String updateReComment(HttpServletRequest request) {
 			
-			String fleamarketcommentreplyseq = request.getParameter("fleamarketcommentreplyseq");
-			String commentreply_text = request.getParameter("content");
+			String gymanswerseq = request.getParameter("gymanswerseq");
+			String content_reply = request.getParameter("content_reply");
 			
 			Map<String, String> paraMap = new HashMap<>();
-			paraMap.put("fleamarketcommentreplyseq", fleamarketcommentreplyseq);
-			paraMap.put("commentreply_text", commentreply_text);
+			paraMap.put("gymanswerseq", gymanswerseq);
+			paraMap.put("content_reply", content_reply);
 			
 			int n = service.updateReComment(paraMap);
 			
@@ -528,12 +533,12 @@ public class ControllerHS {
 		@PostMapping(value="/deleteReComment2.do", produces="text/plain;charset=UTF-8") 
 		public String deleteReComment(HttpServletRequest request) {
 			
-			String fleamarketcommentreplyseq = request.getParameter("fleamarketcommentreplyseq");
-			String fleamarketcommentseq = request.getParameter("fleamarketcommentseq");
+			String gymanswerseq = request.getParameter("gymanswerseq");
+			String gymquestionseq = request.getParameter("gymquestionseq");
 			
 			Map<String, String> paraMap = new HashMap<>();
-			paraMap.put("fleamarketcommentreplyseq", fleamarketcommentreplyseq);
-			paraMap.put("fleamarketcommentseq", fleamarketcommentseq);
+			paraMap.put("gymanswerseq", gymanswerseq);
+			paraMap.put("gymquestionseq", gymquestionseq);
 			
 			int n=0;
 			try {

@@ -487,7 +487,7 @@ rotate(
 			     $.ajax({
 			    	 url:"${pageContext.request.contextPath}/updateComment2.action",
 			    	 type:"post",
-			    	 data:{"fleamarketcommentseq":$(e.target).parent().children("input").val(),
+			    	 data:{"gymquestionseq":$(e.target).parent().children("input").val(),
 			    		   "content":content},
 			    	 dataType:"json",
 			    	 success:function(json){
@@ -538,7 +538,7 @@ rotate(
 				     $.ajax({
 				    	 url:"${pageContext.request.contextPath}/deleteComment2.action",
 				    	 type:"post",
-				    	 data:{"fleamarketcommentseq":$(e.target).next().val(),
+				    	 data:{"gymquestionseq":$(e.target).next().val(),
 				    		   "parentSeq":"1"},
 				    	 dataType:"json",
 				    	 success:function(json){
@@ -562,7 +562,7 @@ rotate(
 			
 			   // alert("답글쓰기");
 			  
-			   const fleamarketcommentseq = $(e.target).parent().children("input").val();
+			   const gymquestionseq = $(e.target).parent().children("input").val();
 			   //alert(fleamarketcommentseq);
 			   let v_html = "";
 			   
@@ -572,7 +572,7 @@ rotate(
 				   v_html += "<form name='recommentFrm'>";
     			   v_html += "<textarea name='commentreply_text' style='font-size: 12pt; width: 100%; height: 60px;'></textarea>";
     			   v_html += "<div style='text-align: right; font-size: 12pt;'>";
-    			   v_html += "<button type='button' class='btn btn-outline-secondary' id='btnCommentOK' style='margin: auto; padding: 0.5% 1.5%;' onclick='goAddWritere("+fleamarketcommentseq+")'>";
+    			   v_html += "<button type='button' class='btn btn-outline-secondary' id='btnCommentOK' style='margin: auto; padding: 0.5% 1.5%;' onclick='goAddWritere("+gymquestionseq+")'>";
 			       v_html += "<span style='font-size: 8pt;'>등록</span>";
 			       v_html += "</button>";
 			       v_html += "</div>";
@@ -620,19 +620,19 @@ rotate(
 			  // alert("답글수정완료");
 			  // alert($(e.target).parent().parent().parent().parent().children("form").children("input").val()); // 수정해야할 댓글시퀀스 번호 
 			  // alert($(e.target).parent().parent().children("div:nth-child(2)").children("input").val()); // 수정후 댓글내용
-			     const fleamarketcommentseq = $(e.target).parent().parent().parent().parent().children("form").children("input").val()
+			     const gymquestionseq = $(e.target).parent().parent().parent().parent().children("form").children("input").val()
 			     const content = $(e.target).parent().parent().children("div:nth-child(2)").children("input").val(); 
 			  
 			     $.ajax({
 			    	 url:"${pageContext.request.contextPath}/updateReComment2.do",
 			    	 type:"post",
-			    	 data:{"fleamarketcommentreplyseq":$(e.target).parent().children("input").val(),
+			    	 data:{"gymanswerseq":$(e.target).parent().children("input").val(),
 			    		   "content":content},
 			    	 dataType:"json",
 			    	 success:function(json){
 			    	   $(e.target).parent().parent().children('#commentreply_text').html(content);
 
-			    	   readcommentreply(fleamarketcommentseq)  // 페이징 처리 안한 댓글 읽어오기
+			    	   readcommentreply(gymquestionseq);  // 페이징 처리 안한 댓글 읽어오기
 			    		
 			          ////////////////////////////////////////////////////
 			          // goViewComment(1); // 페이징 처리 한 댓글 읽어오기   
@@ -673,17 +673,17 @@ rotate(
 			  // alert($(e.target).next().val()); // 삭제해야할 답글시퀀스 번호 
 			  // alert($(e.target).parent().parent().parent().parent().children("form").children("input").val()); // 삭제해야할 댓글시퀀스 번호
 			  
-			  const fleamarketcommentseq = $(e.target).parent().parent().parent().parent().children("form").children("input").val();
+			  const gymquestionseq = $(e.target).parent().parent().parent().parent().children("form").children("input").val();
 			  
 			     if(confirm("정말로 삭제하시겠습니까?")){
 				     $.ajax({
 				    	 url:"${pageContext.request.contextPath}/deleteReComment2.do",
 				    	 type:"post",
-				    	 data:{"fleamarketcommentreplyseq":$(e.target).next().val(),
-				    		   "fleamarketcommentseq":$(e.target).parent().parent().parent().parent().children("form").children("input").val()},
+				    	 data:{"gymanswerseq":$(e.target).next().val(),
+				    		   "gymquestionseq":$(e.target).parent().parent().parent().parent().children("form").children("input").val()},
 				    	 dataType:"json",
 				    	 success:function(json){
-				    		 readcommentreply(fleamarketcommentseq);  // 페이징 처리 안한 댓글 읽어오기
+				    		 readcommentreply(gymquestionseq);  // 페이징 처리 안한 댓글 읽어오기
 				    	 //  goViewComment(1); // 페이징 처리 한 댓글 읽어오기
 				    	 },
 				    	 error: function(request, status, error){
@@ -1103,7 +1103,7 @@ function goReadComment(){
 		    	    if (${sessionScope.loginuser != null} && "${sessionScope.loginuser.userid}" == item.fk_userid) {
 		    	        v_html += "<br><button class='btnUpdateComment' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>수정</button>&nbsp;&nbsp;<button class='btnDeleteComment' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>삭제</button>";
 		    	    }
-		    	    v_html += "<input type='hidden' value='"+item.fleamarketcommentseq+"' />"
+		    	    v_html += "<input type='hidden' value='"+item.gymquestionseq+"' />"
 		    	    v_html += "<div class='input_reply' style='width: 100%;'>";
 		    	    v_html += "</div>";
 		    	    
@@ -1114,16 +1114,16 @@ function goReadComment(){
 		    	    v_html += "</div>";
 		    	    
 		    	    v_html += "<form name='commentreFrm'>";
-		    	    v_html += "<input type='hidden' id='flmkcmseq' name='fleamarketcommentseq' value='"+item.fleamarketcommentseq+"' />";
+		    	    v_html += "<input type='hidden' id='flmkcmseq' name='fleamarketcommentseq' value='"+item.gymquestionseq+"' />";
 		    	    v_html += "</form>";
 
 		    	    
 		    	    
-		    	    v_html += "<div class='comment_reply"+item.fleamarketcommentseq+"'>";
+		    	    v_html += "<div class='comment_reply"+item.gymquestionseq+"'>";
 		    	    v_html += "</div>";
 		    	    v_html += "</div>";
 		    	    
-		    	    readcommentreply(item.fleamarketcommentseq);
+		    	    readcommentreply(item.gymquestionseq);
 		    	});
 		    }
 		    
@@ -1144,7 +1144,7 @@ function goReadComment(){
 }// end of function goReadComment()----------------- 
 
 
-function readcommentreply(fleamarketcommentseq){
+function readcommentreply(gymquestionseq){
 	
 	  //alert(fleamarketcommentseq);
 	  
@@ -1154,7 +1154,7 @@ function readcommentreply(fleamarketcommentseq){
 			//data:{"fk_userid":$("input:hidden[name='fk_userid']").val()},
 	    
 	    	// 또는
-	    	data:{"fleamarketcommentseq":fleamarketcommentseq},
+	    	data:{"gymquestionseq":gymquestionseq},
 	    	type:"post",
             dataType:"json",
             success:function(json){
@@ -1185,13 +1185,13 @@ function readcommentreply(fleamarketcommentseq){
 			    	    if (${sessionScope.loginuser != null} && "${sessionScope.loginuser.userid}" == item.fk_userid) {
 			    	        v_html += "<button class='btnUpdateReComment' style='margin-left: 3%; margin-bottom: 4.5%; background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>수정</button>&nbsp;&nbsp;<button class='btnDeleteReComment' style='margin-bottom: 4.5%; background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>삭제</button>";
 			    	    }
-			    	    v_html += "<input type='hidden' value='"+item.fleamarketcommentreplyseq+"' />"
+			    	    v_html += "<input type='hidden' value='"+item.gymanswerseq+"' />"
 			    	    v_html += "</div>";
 			    	    v_html += "</div>";
 			    	    v_html += "</div>";
 			    	    
 			    	    v_html += "<form name='commentreFrm'>";
-			    	    v_html += "<input type='hidden' name='fleamarketcommentseq' value='"+fleamarketcommentseq+"' />";
+			    	    v_html += "<input type='hidden' name='fleamarketcommentseq' value='"+gymquestionseq+"' />";
 			    	    v_html += "</form>";
 			    	    
 			    	    v_html += "<div class='comment_reply'>";
@@ -1199,7 +1199,7 @@ function readcommentreply(fleamarketcommentseq){
 			    	});
 			    }
 			    
-			    $("div.comment_reply"+fleamarketcommentseq+"").html(v_html);
+			    $("div.comment_reply"+gymquestionseq+"").html(v_html);
 			},
 			error: function(request, status, error){
 			   alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
@@ -1210,7 +1210,7 @@ function readcommentreply(fleamarketcommentseq){
 
 
 // == 딥글쓰기 == //
-function goAddWritere(fleamarketcommentseq){
+function goAddWritere(gymquestionseq){
    
 	// alert($("input[name='fleamarketcommentseq']").val());
 	// const fleamarketcommentseq = $("input[name='fleamarketcommentseq']").val();
@@ -1225,13 +1225,13 @@ function goAddWritere(fleamarketcommentseq){
 	}
 	
 	
-	goAddWrite_reply(fleamarketcommentseq);
+	goAddWrite_reply(gymquestionseq);
 	
 	
 }// end of fucntion goAddWrite(){}------------------
 
 
-function goAddWrite_reply(fleamarketcommentseq){
+function goAddWrite_reply(gymquestionseq){
 	
 	const queryString = $("form[name='recommentFrm']").serialize();
     //console.log(fleamarketcommentseq);
@@ -1239,8 +1239,8 @@ function goAddWrite_reply(fleamarketcommentseq){
 		url:"<%= ctxPath%>/addReComment2.do",
 	
 		data:{"fk_userid":$("input:hidden[name='fk_userid']").val() 
-             ,"commentreply_text":$("textarea[name='commentreply_text']").val() 
-             ,"fleamarketcommentseq":fleamarketcommentseq},
+             ,"content_reply":$("textarea[name='content_reply']").val() 
+             ,"gymquestionseq":gymquestionseq},
     
     	type:"post",
         dataType:"json",
@@ -1254,7 +1254,7 @@ function goAddWrite_reply(fleamarketcommentseq){
        		alert(json.name + "오류가 발생했습니다.");
        	}
        	else{
-       		readcommentreply(fleamarketcommentseq);
+       		readcommentreply(gymquestionseq);
        		$(".input_reply").html("");
        	}
        	
