@@ -732,7 +732,29 @@ public class ControllerJY {
 		
 	
 	
-	/* ===== 쿠키로 최근 본 상품 목록 불러오기 =====
+	// ========== 마이페이지 ==========
+	// 마이페이지 뷰단
+	@RequestMapping(value="/member/viewMypage.do")
+	public ModelAndView requiredLogin_viewMypage(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+		mav.setViewName("member/viewMypage.tiles1");
+		return mav;
+		
+	}
+
+
+	// ========== 팀별 게시판 ==========
+	// 팀별 게시판 뷰단
+	@RequestMapping(value="/club/clubBoard.do")
+	public ModelAndView requiredLogin_clubBoard(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+		mav.setViewName("club/clubBoard.tiles2");
+		return mav;
+		
+	}
+
+	
+	
+	
+	// ===== 쿠키로 최근 본 상품 목록 불러오기 =====
 	@GetMapping("club/recentlist.do")
 	public ModelAndView goods_list(HttpServletRequest request, ModelAndView mav) {
 	    List<FleamarketVO> cList = new ArrayList<>();
@@ -766,21 +788,10 @@ public class ControllerJY {
 	    mav.addObject("cList", cList);
 	    return mav;
 	}
-	*/
-	
-
 	
 	
-	// ========== 마이페이지 ==========
-	// 마이페이지 보여주기
-	// public ModelAndView requiredLogin_viewMypage(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
-	@RequestMapping(value="/member/viewMypage.do")
-	public ModelAndView viewMypage(ModelAndView mav) {
-		mav.setViewName("member/viewMypage.tiles1");
-		return mav;
-		
-	}
-
+	
+	
 	
 	
 }
