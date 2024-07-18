@@ -1820,21 +1820,15 @@ public class ControllerNR {
 	
 	@ResponseBody
 	@PostMapping(value="/admin/reg/gymReg", produces="text/plain;charset=UTF-8")
-	public String gymReg(MultipartHttpServletRequest mrequest) {
+	public String gymReg(GymVO gym, MultipartHttpServletRequest mrequest) {
 		
-		String gymname = mrequest.getParameter("gymname");
-		String postcode = mrequest.getParameter("postcode");
-		String address = mrequest.getParameter("address");
-		String detailaddress = mrequest.getParameter("detailaddress");
-		String info = mrequest.getParameter("info");
-		String caution = mrequest.getParameter("caution");
-		String membercount = mrequest.getParameter("membercount");
-		String insidestatus = mrequest.getParameter("insidestatus");
-		String lat = mrequest.getParameter("lat");
-		String lng = mrequest.getParameter("lng");
+		// gymseq 채번
+		String gymseq = service.getGymseq();
+		
+		gym.setGymseq(gymseq);
 		
 		// 대표이미지
-		MultipartFile attach = mrequest.getFile("orgfilename");
+		MultipartFile attach = gym.getAttach();
 		
 		HttpSession session = mrequest.getSession(); 
         String root = session.getServletContext().getRealPath("/");
@@ -1846,60 +1840,53 @@ public class ControllerNR {
         
         try {
             bytes = attach.getBytes();
-            
             String originalFilename = attach.getOriginalFilename();
-            
             newFileName = fileManager.doFileUpload(bytes, originalFilename, path); 
+            fileSize = attach.getSize();  // 첨부파일의 크기(단위는 byte임)
+            
+            gym.setFilename(newFileName);
+            gym.setOrgfilename(originalFilename);
+            gym.setFilesize(String.valueOf(fileSize));
                      
-            fileSize = attach.getSize();  // 첨부파일의 크기(단위는 byte임) 
-                     
-         } catch (Exception e) {
-            e.printStackTrace();
-         }   
+        } catch (Exception e) {
+           e.printStackTrace();
+        }   
         
+        int n = service.adminGymreg(gym);
+        int n2 = 0;
         
+        if(n == 1) {
         
-        
-        
-        
-        
-        
-        
-        
-		/*
-		// 추가이미지
-		List<MultipartFile> fileList = mrequest.getFiles("file_arr");
+			// 추가이미지
+			List<MultipartFile> fileList = mrequest.getFiles("file_arr");
+			
+		    for(MultipartFile mtfile : fileList) {
+		    	try {
+		            bytes = mtfile.getBytes();
+		            String originalFilename = mtfile.getOriginalFilename();
+		            newFileName = fileManager.doFileUpload(bytes, originalFilename, path); 
+		            fileSize = mtfile.getSize();  // 첨부파일의 크기(단위는 byte임)
+		            
+		            Map<String, String> paramap = new HashMap<String, String>();
+		            paramap.put("gymseq", gymseq);
+		            paramap.put("filename", newFileName);
+		            paramap.put("orgfilename", originalFilename);
+		            paramap.put("filesize", String.valueOf(fileSize));
+		            
+		            // tbl_gymimg DB insert
+		            n2 = service.insertGymImg(paramap);
+		            
+		        } catch (Exception e) {
+		           e.printStackTrace();
+		        }  
+		    }
 		
-		HttpSession session = mrequest.getSession();
-	    String root = session.getServletContext().getRealPath("/");
-	    String path = root + "resources"+File.separator+"files";
+        }	
+	    	
+	    JSONObject jsonObj = new JSONObject();
+	    jsonObj.put("n", n*n2);
 		
-	    File dir = new File(path);
-	    
-	    if(!dir.exists()) {
-	    	dir.mkdirs();
-	    }
-		
-	    String[] arr_attachFilename = null;
-	    
-	    if(fileList != null && fileList.size() > 0) {
-	    	arr_attachFilename = new String[fileList.size()];
-	    */	
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	
-		
-		return "";
+		return jsonObj.toString();
 	}
 	
 	

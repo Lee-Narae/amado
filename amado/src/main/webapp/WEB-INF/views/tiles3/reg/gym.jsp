@@ -102,7 +102,7 @@ $(document).ready(function(){
 	$("#membercount").width(50);
 	
 	// file 태그에 첨부된 file 크기 누적용
-	$(document).on("change", "input[name='orgfilename']", function(e){
+	$(document).on("change", "input[name='attach']", function(e){
 	       const input_file = $(e.target).get(0);
 	       total_fileSize += input_file.files[0].size;
 	       console.log(total_fileSize);
@@ -213,18 +213,23 @@ $(document).ready(function(){
 			swal('공간정보를 입력하세요.');
 			return;
 		}
+		if($("input[name='cost']").val().trim() == '' || isNaN($("input[name='cost']").val().trim())){
+			swal('올바른 비용을 입력하세요.');
+			("input[name='cost']").val('');
+			return;
+		}
 		if($("textarea[name='caution']").val().trim() == ''){
 			swal('주의사항을 입력하세요.');
 			return;
 		}
 		if($("input[name='membercount']").val().trim() == '' || $("input[name='membercount']").val().trim()<0 ||
 		   $("input[name='membercount']").val().trim() > 500 || isNaN($("input[name='membercount']").val().trim())){
-			swal('수용인원을 입력하세요.');
+			swal('올바른 수용인원을 입력하세요.');
 			$("input[name='membercount']").val('0');
 			return;
 		}
 		
-		if($("input[name='orgfilename']").val().trim() == ''){
+		if($("input[name='attach']").val().trim() == ''){
 			swal('대표이미지 파일을 첨부하세요.');
 			return;
 		}
@@ -258,9 +263,8 @@ $(document).ready(function(){
 				return; // 종료
 	        }
 			else{
-				formData.append("attachCount", file_arr.length); // 추가 이미지 파일 개수
 				file_arr.forEach(function(item, index){
-					formData.append("attach"+index, item); // 첨부파일 추가하기. item 이 첨부파일이다.
+					 formData.append("file_arr", item);
 				});
 			}
 			
@@ -298,7 +302,10 @@ $(document).ready(function(){
             contentType: false,  // 파일 전송시 설정
             dataType: "json",
             success: function(json){
-            
+            	if(json.n == 1){
+            		alert('등록 완료!');
+            		location.href = "<%=ctxPath%>/gym/rental_gym.do";
+            	}
             },
             error: function(request, status, error){
                alert("첨부된 파일의 크기의 총합이 20MB를 초과하여 등록이 불가합니다.");
@@ -381,6 +388,10 @@ function addressMatching() {
 			<div class="td input"><textarea cols="100" rows="2" name="caution"></textarea></div>
 		</div>
 		<div class="tr" style="display: flex;">
+			<div class="td title">비용</div>
+			<div class="td input" style="width:50%; font-weight: bold;" align="left"><input type="text" name="cost" />&nbsp;원 / 1시간</div>
+		</div>
+		<div class="tr" style="display: flex;">
 			<div class="td title">인원</div>
 			<div class="td input" style="font-weight: bold;"><input type="text" name="membercount" id="membercount" style="height: 30px;"/>&nbsp;명</div>
 		</div>
@@ -395,14 +406,14 @@ function addressMatching() {
 		</div>
 		<div class="tr" style="display: flex;">
 			<div class="td title">대표이미지</div>
-			<div class="td input"><input type="file" name="orgfilename" style="border: none; margin-top: 1%;"/></div>
+			<div class="td input"><input type="file" name="attach" style="border: none; margin-top: 1%;"/></div>
 		</div>
 		<div class="tr" style="display: flex;">
 			<div class="td title">추가이미지</div>
-			<div id="plusImg" align="left" style="font-size: 10pt;">🖼️ 추가이미지 파일을 드래그하세요.</div>
+			<div id="plusImg" align="left" style="font-size: 10pt;">🖼️ 추가이미지 파일을 하나씩 드래그하세요.</div>
 		</div>
-		<input type="text" name="lat"/>
-		<input type="text" name="lng"/>
+		<input type="hidden" name="lat"/>
+		<input type="hidden" name="lng"/>
 	</form>	
 </div>
 
