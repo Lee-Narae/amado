@@ -337,13 +337,13 @@
 					    <c:if test="${clubvo.fk_sportseq == 4}">
 					        <td class="align-middle text-center">농구</td>
 					    </c:if>
-					    <c:if test="${clubvo.fk_sportseq == 5}">
+					    <c:if test="${clubvo.fk_sportseq == 6}">
 					        <td class="align-middle text-center">테니스</td>
 					    </c:if>
-					    <c:if test="${clubvo.fk_sportseq == 6}">
+					    <c:if test="${clubvo.fk_sportseq == 7}">
 					        <td class="align-middle text-center">볼링</td>
 					    </c:if>
-					    <c:if test="${clubvo.fk_sportseq == 7}">
+					    <c:if test="${clubvo.fk_sportseq == 5}">
 					        <td class="align-middle text-center">족구</td>
 					    </c:if>
 					    <c:if test="${clubvo.fk_sportseq == 8}">

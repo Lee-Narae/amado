@@ -327,4 +327,29 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		return result;
 	}
 
+	
+	
+	@Override
+	public int findseq_inquiry(Map<String, Object> paraMap) {
+		int inquiryseq = dao.findseq_inquiry(paraMap);
+		return inquiryseq;
+	}
+	
+	// 파일첨부가 있는 1대1 문의
+	@Override
+	public int InquiryFile(Map<String, Object> paraMap){
+		int result = 0;
+		// 자식테이블인 첨부파일 쪽에다가 insert 해준다.
+		result = dao.InquiryFileTable(paraMap); // tbl_inquiryFile 에 넣기 (첨부파일이 있는 경우)
+		return result;
+	}
+
+	// 파일첨부가 없는 1대1 문의
+	@Override
+	public int Inquiry(Map<String, Object> paraMap) {
+		int result = dao.Inquiry(paraMap); // tbl_inquiry 에 넣기
+		return result;
+	}
+
+
 }

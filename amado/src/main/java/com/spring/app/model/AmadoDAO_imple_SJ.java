@@ -233,6 +233,28 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 		return result;
 	}
 
+	
+	// 파일첨부가 있는 1대1 문의
+	@Override
+	public int Inquiry(Map<String, Object> paraMap) {
+		int inquiryseq  = sqlsession.insert("SJ.Inquiry", paraMap);
+		return inquiryseq;
+	}
+
+
+	// 자식테이블인 첨부파일 쪽에다가 insert 해준다.
+	@Override
+	public int InquiryFileTable(Map<String, Object> paraMap) {
+		int result = sqlsession.insert("SJ.InquiryFileTable", paraMap);
+		return result;
+	}
+
+	@Override
+	public int findseq_inquiry(Map<String, Object> paraMap) {
+		int inquiryseq = sqlsession.selectOne("SJ.findseq_inquiry", paraMap);
+		return inquiryseq;
+	}
+
 
 
 }

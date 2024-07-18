@@ -99,6 +99,14 @@ public interface AmadoDAO_SJ {
 	// 클럽 가입신청
 	int clubMRegisterSJ(ClubmemberVO clubmembervo);
 
+	// tbl_inquiry 에 넣기 (파일첨부가 있는 1대1 문의)
+	int Inquiry(Map<String, Object> paraMap);
+
+	// 자식테이블인 첨부파일 쪽에다가 insert 해준다.(파일첨부가 있는 1대1 문의)
+	int InquiryFileTable(Map<String, Object> paraMap);
+
+	int findseq_inquiry(Map<String, Object> paraMap);
+
 
 	
 

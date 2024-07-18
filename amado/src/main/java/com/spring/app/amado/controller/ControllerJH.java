@@ -445,8 +445,14 @@ public class ControllerJH {
 	
 
 	@GetMapping("/gym/gymPay.do")
-	public ModelAndView gymPay(ModelAndView mav) {
+	public ModelAndView gymPay(ModelAndView mav, HttpServletRequest request) {
 
+		String gymseq = request.getParameter("gymseq");
+		//System.out.println(request.getParameter("gymseq")); 
+		
+		GymVO gymvo = service.getGymInfo(gymseq);
+		
+		mav.addObject("gymvo", gymvo);
 		mav.setViewName("gym/gymPay.tiles2");
 		// /WEB-INF/views/tiles2/main/index.jsp
 		
@@ -462,21 +468,18 @@ public class ControllerJH {
 		List<GymVO> GymAddList = service.getGymAdd(); 
 		
 		JSONArray jsonArr = new JSONArray(); // [] 
-		/*
+		
 		if(GymAddList != null) {
 			for(GymVO gvo : GymAddList) {
-				JSONObject jsonObj = new JSONObject();          // {} 
-				jsonObj.put("fleamarketcommentreplyseq", fmcommentrevo.getFleamarketcommentreplyseq());             // {"seq":1}
-				jsonObj.put("fk_userid", fmcommentrevo.getFk_userid()); // {"seq":1, "fk_userid":"seoyh"}
-				jsonObj.put("commentreply_text", fmcommentrevo.getCommentreply_text());           // {"seq":1, "fk_userid":"seoyh","name":"서영학"}
-				jsonObj.put("registerdate", fmcommentrevo.getRegisterdate());     // {"seq":1, "fk_userid":"seoyh","name":서영학,"content":"첫번째 댓글입니다. ㅎㅎㅎ","regdate":"2024-06-18 15:36:31"}
-				jsonObj.put("memberimg", fmcommentrevo.getMemberimg());
-				jsonObj.put("changestatus", fmcommentrevo.getChangestatus());
+				JSONObject jsonObj = new JSONObject();           
+				jsonObj.put("lat", gvo.getLat());   //위도          
+				jsonObj.put("lng", gvo.getLng()); 	//경도
+				
 				
 				jsonArr.put(jsonObj);
 			}// end of for-----------------------
 		}
-		*/
+		
 		return jsonArr.toString();
 	}
 	
