@@ -5,6 +5,9 @@ import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class GoogleMail {
 	
 	public void send_certification_code(String recipient, String certification_code) throws Exception { 
@@ -56,7 +59,7 @@ public class GoogleMail {
 	       msg.setSubject(subject);
 	               
 	       // 보내는 사람의 메일주소
-	       String sender = "pigpiglilla@gmail.com";
+	       String sender = "leenaraeleenarae@gmail.com";
 	       Address fromAddr = new InternetAddress(sender);
 	       msg.setFrom(fromAddr);
 	               
