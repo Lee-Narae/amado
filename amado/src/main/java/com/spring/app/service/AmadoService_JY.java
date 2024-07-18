@@ -3,6 +3,7 @@ package com.spring.app.service;
 import java.util.List;
 import java.util.Map;
 
+import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketVO;
 
@@ -43,7 +44,8 @@ public interface AmadoService_JY {
 	// 동일한 종목의 동호회 가입하는지 확인
 	String checkseq(Map<String, String> paraMap);
 
-	
+	int getNoticeTotalPage(Map<String, String> paramap);
+
 
 
 

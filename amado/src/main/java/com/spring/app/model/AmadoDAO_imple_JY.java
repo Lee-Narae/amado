@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketVO;
 
@@ -111,6 +112,11 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 		String checkseq = sqlsession.selectOne("JY.checkseq", paraMap);
 		return checkseq;
 	}
+
+	
+	// 동호회 게시판 전체 게시글수
+
+	// 글목록 가져오기
 
 	
 
