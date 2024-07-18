@@ -45,357 +45,65 @@ $(document).ready(function() {
 
 </script>
 
+<div id="wrap" style="width: 100%; padding: 5% 0;" align="center">
+	<div id="top" class="mb-5" style="font-size: 35pt; font-weight: bolder; text-align: center;">공지사항</div>
 
-
-<div id='container'>
-	<div>00동호회 게시판</div>
-	<div style="display: flex;">
-		<table class="table table-bordered">
+	<div id="bottom" style="width: 80%;">
+		<table class="mb-5" style="width: 100%;">
 			<thead>
 				<tr>
-					<th style="width: 70px; text-align: center;">글번호</th>
-					<th style="width: 300px; text-align: center;">제목</th>
-					<th style="width: 70px; text-align: center;">작성자아이디</th>
-					<th style="width: 150px; text-align: center;">작성일자</th>
-					<th style="width: 60px; text-align: center;">조회수</th>
+					<th width="10">순번</th>
+					<th width="45">제목</th>
+					<th width="10">작성자</th>
+					<th width="15">작성일자</th>
+					<th width="10">조회수</th>
 				</tr>
 			</thead>
-
 			<tbody>
-			
-				<c:if test="${not empty requestScope.boardPagingList}">
-					<c:forEach var="boardvo" items="${requestScope.boardPagingList}">
-						<c:if test="${boardvo.fk_sportseq == 1}">
-							<c:if test="${empty boardvo.filename}">
-							<tr>
-								<td align="center">${boardvo.boardseq}</td>
-								<td>
-									<c:if test="${boardvo.commentcount > 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}<span class="badge badge-light">[${boardvo.commentcount}]</span></span>
-									</c:if>
-									<c:if test="${boardvo.commentcount == 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
-									</c:if>
-								</td>
-								<td align="center">${boardvo.fk_userid}</td>
-								<td align="center">축구</td>
-								<td align="center">${boardvo.registerdate}</td>
-								<td align="center">${boardvo.viewcount}</td>
-							</tr>
-							</c:if>
-						</c:if>		
-						<c:if test="${boardvo.fk_sportseq == 1}">
-							<c:if test="${not empty boardvo.filename}">
-							<tr>
-								<td align="center">${boardvo.boardseq}</td>
-								<td>
-									<c:if test="${boardvo.commentcount > 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}<span class="badge badge-light">[${boardvo.commentcount}]</span></span>&nbsp;<img src="<%= ctxPath%>/resources/images/disk.gif" />
-									</c:if>
-									<c:if test="${boardvo.commentcount == 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>&nbsp;<img src="<%= ctxPath%>/resources/images/disk.gif" />
-									</c:if>
-								</td>
-								<td align="center">${boardvo.fk_userid}</td>
-								<td align="center">축구</td>
-								<td align="center">${boardvo.registerdate}</td>
-								<td align="center">${boardvo.viewcount}</td>
-							</tr>
-							</c:if>
-						</c:if>		
-									
-						<c:if test="${boardvo.fk_sportseq == 2}">
-							<c:if test="${empty boardvo.filename}">
-							<tr>
-								<td align="center">${boardvo.boardseq}</td>
-								<td>
-									<c:if test="${boardvo.commentcount > 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}<span class="badge badge-light">[${boardvo.commentcount}]</span></span>
-									</c:if>
-									<c:if test="${boardvo.commentcount == 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
-									</c:if>
-								</td>
-								<td align="center">${boardvo.fk_userid}</td>
-								<td align="center">야구</td>
-								<td align="center">${boardvo.registerdate}</td>
-								<td align="center">${boardvo.viewcount}</td>
-							</tr>
-							</c:if>
-							<c:if test="${not empty boardvo.filename}">
-							<tr>
-								<td align="center">${boardvo.boardseq}</td>
-								<td>
-									<c:if test="${boardvo.commentcount > 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}<span class="badge badge-light">[${boardvo.commentcount}]</span></span>&nbsp;<img src="<%= ctxPath%>/resources/images/disk.gif" />
-									</c:if>
-									<c:if test="${boardvo.commentcount == 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>&nbsp;<img src="<%= ctxPath%>/resources/images/disk.gif" />
-									</c:if>
-								</td>
-								<td align="center">${boardvo.fk_userid}</td>
-								<td align="center">야구</td>
-								<td align="center">${boardvo.registerdate}</td>
-								<td align="center">${boardvo.viewcount}</td>
-							</tr>
-							</c:if>
-						</c:if>
-						
-						<c:if test="${boardvo.fk_sportseq == 3}">
-							<c:if test="${empty boardvo.filename}">
-							<tr>
-								<td align="center">${boardvo.boardseq}</td>
-								<td>
-									<c:if test="${boardvo.commentcount > 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}<span class="badge badge-light">[${boardvo.commentcount}]</span></span>
-									</c:if>
-									<c:if test="${boardvo.commentcount == 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
-									</c:if>
-								</td>
-								<td align="center">${boardvo.fk_userid}</td>
-								<td align="center">배구</td>
-								<td align="center">${boardvo.registerdate}</td>
-								<td align="center">${boardvo.viewcount}</td>
-							</tr>
-							</c:if>
-							<c:if test="${not empty boardvo.filename}">
-							<tr>
-								<td align="center">${boardvo.boardseq}</td>
-								<td>
-									<c:if test="${boardvo.commentcount > 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}<span class="badge badge-light">[${boardvo.commentcount}]</span></span>&nbsp;<img src="<%= ctxPath%>/resources/images/disk.gif" />
-									</c:if>
-									<c:if test="${boardvo.commentcount == 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>&nbsp;<img src="<%= ctxPath%>/resources/images/disk.gif" />
-									</c:if>
-								</td>
-								<td align="center">${boardvo.fk_userid}</td>
-								<td align="center">배구</td>
-								<td align="center">${boardvo.registerdate}</td>
-								<td align="center">${boardvo.viewcount}</td>
-							</tr>
-							</c:if>
-						</c:if>
-						
-						<c:if test="${boardvo.fk_sportseq == 4}">
-							<c:if test="${empty boardvo.filename}">
-							<tr>
-								<td align="center">${boardvo.boardseq}</td>
-								<td>
-									<c:if test="${boardvo.commentcount > 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}<span class="badge badge-light">[${boardvo.commentcount}]</span></span>
-									</c:if>
-									<c:if test="${boardvo.commentcount == 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
-									</c:if>
-								</td>
-								<td align="center">${boardvo.fk_userid}</td>
-								<td align="center">농구</td>
-								<td align="center">${boardvo.registerdate}</td>
-								<td align="center">${boardvo.viewcount}</td>
-							</tr>
-							</c:if>
-							<c:if test="${not empty boardvo.filename}">
-							<tr>
-								<td align="center">${boardvo.boardseq}</td>
-								<td>
-									<c:if test="${boardvo.commentcount > 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}<span class="badge badge-light">[${boardvo.commentcount}]</span></span>&nbsp;<img src="<%= ctxPath%>/resources/images/disk.gif" />
-									</c:if>
-									<c:if test="${boardvo.commentcount == 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>&nbsp;<img src="<%= ctxPath%>/resources/images/disk.gif" />
-									</c:if>
-								</td>
-								<td align="center">${boardvo.fk_userid}</td>
-								<td align="center">농구</td>
-								<td align="center">${boardvo.registerdate}</td>
-								<td align="center">${boardvo.viewcount}</td>
-							</tr>
-							</c:if>
-						</c:if>
-						
-						<c:if test="${boardvo.fk_sportseq == 6}">
-							<c:if test="${empty boardvo.filename}">
-							<tr>
-								<td align="center">${boardvo.boardseq}</td>
-								<td>
-									<c:if test="${boardvo.commentcount > 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}<span class="badge badge-light">[${boardvo.commentcount}]</span></span>
-									</c:if>
-									<c:if test="${boardvo.commentcount == 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
-									</c:if>
-								</td>
-								<td align="center">${boardvo.fk_userid}</td>
-								<td align="center">테니스</td>
-								<td align="center">${boardvo.registerdate}</td>
-								<td align="center">${boardvo.viewcount}</td>
-							</tr>
-							</c:if>
-							<c:if test="${not empty boardvo.filename}">
-							<tr>
-								<td align="center">${boardvo.boardseq}</td>
-								<td>
-									<c:if test="${boardvo.commentcount > 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}<span class="badge badge-light">[${boardvo.commentcount}]</span></span>&nbsp;<img src="<%= ctxPath%>/resources/images/disk.gif" />
-									</c:if>
-									<c:if test="${boardvo.commentcount == 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>&nbsp;<img src="<%= ctxPath%>/resources/images/disk.gif" />
-									</c:if>
-								</td>
-								<td align="center">${boardvo.fk_userid}</td>
-								<td align="center">테니스</td>
-								<td align="center">${boardvo.registerdate}</td>
-								<td align="center">${boardvo.viewcount}</td>
-							</tr>
-							</c:if>
-						</c:if>
-						
-						<c:if test="${boardvo.fk_sportseq == 7}">
-							<c:if test="${empty boardvo.filename}">
-							<tr>
-								<td align="center">${boardvo.boardseq}</td>
-								<td>
-									<c:if test="${boardvo.commentcount > 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}<span class="badge badge-light">[${boardvo.commentcount}]</span></span>
-									</c:if>
-									<c:if test="${boardvo.commentcount == 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
-									</c:if>
-								</td>
-								<td align="center">${boardvo.fk_userid}</td>
-								<td align="center">볼링</td>
-								<td align="center">${boardvo.registerdate}</td>
-								<td align="center">${boardvo.viewcount}</td>
-							</tr>
-							</c:if>
-							<c:if test="${not empty boardvo.filename}">
-							<tr>
-								<td align="center">${boardvo.boardseq}</td>
-								<td>
-									<c:if test="${boardvo.commentcount > 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}<span class="badge badge-light">[${boardvo.commentcount}]</span></span>&nbsp;<img src="<%= ctxPath%>/resources/images/disk.gif" />
-									</c:if>
-									<c:if test="${boardvo.commentcount == 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>&nbsp;<img src="<%= ctxPath%>/resources/images/disk.gif" />
-									</c:if>
-								</td>
-								<td align="center">${boardvo.fk_userid}</td>
-								<td align="center">볼링</td>
-								<td align="center">${boardvo.registerdate}</td>
-								<td align="center">${boardvo.viewcount}</td>
-							</tr>
-							</c:if>
-						</c:if>
-						
-						<c:if test="${boardvo.fk_sportseq == 5}">
-							<c:if test="${empty boardvo.filename}">
-							<tr>
-								<td align="center">${boardvo.boardseq}</td>
-								<td>
-									<c:if test="${boardvo.commentcount > 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}<span class="badge badge-light">[${boardvo.commentcount}]</span></span>
-									</c:if>
-									<c:if test="${boardvo.commentcount == 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
-									</c:if>
-								</td>
-								<td align="center">${boardvo.fk_userid}</td>
-								<td align="center">족구</td>
-								<td align="center">${boardvo.registerdate}</td>
-								<td align="center">${boardvo.viewcount}</td>
-							</tr>
-							</c:if>
-							<c:if test="${not empty boardvo.filename}">
-							<tr>
-								<td align="center">${boardvo.boardseq}</td>
-								<td>
-									<c:if test="${boardvo.commentcount > 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}<span class="badge badge-light">[${boardvo.commentcount}]</span></span>&nbsp;<img src="<%= ctxPath%>/resources/images/disk.gif" />
-									</c:if>
-									<c:if test="${boardvo.commentcount == 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>&nbsp;<img src="<%= ctxPath%>/resources/images/disk.gif" />
-									</c:if>
-								</td>
-								<td align="center">${boardvo.fk_userid}</td>
-								<td align="center">족구</td>
-								<td align="center">${boardvo.registerdate}</td>
-								<td align="center">${boardvo.viewcount}</td>
-							</tr>
-							</c:if>
-						</c:if>
-						
-						<c:if test="${boardvo.fk_sportseq == 8}">
-							<c:if test="${empty boardvo.filename}">
-							<tr>
-								<td align="center">${boardvo.boardseq}</td>
-								<td>
-									<c:if test="${boardvo.commentcount > 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}<span class="badge badge-light">[${boardvo.commentcount}]</span></span>
-									</c:if>
-									<c:if test="${boardvo.commentcount == 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>
-									</c:if>
-								</td>
-								<td align="center">${boardvo.fk_userid}</td>
-								<td align="center">배드민턴</td>
-								<td align="center">${boardvo.registerdate}</td>
-								<td align="center">${boardvo.viewcount}</td>
-							</tr>
-							</c:if>
-							<c:if test="${not empty boardvo.filename}">
-							<tr>
-								<td align="center">${boardvo.boardseq}</td>
-								<td>
-									<c:if test="${boardvo.commentcount > 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}<span class="badge badge-light">[${boardvo.commentcount}]</span></span>&nbsp;<img src="<%= ctxPath%>/resources/images/disk.gif" />
-									</c:if>
-									<c:if test="${boardvo.commentcount == 0}">
-										<span class="subject" onclick="goView('${boardvo.boardseq}')">${boardvo.title}</span>&nbsp;<img src="<%= ctxPath%>/resources/images/disk.gif" />
-									</c:if>
-								</td>
-								<td align="center">${boardvo.fk_userid}</td>
-								<td align="center">배드민턴</td>
-								<td align="center">${boardvo.registerdate}</td>
-								<td align="center">${boardvo.viewcount}</td>
-							</tr>
-							</c:if>
-						</c:if>
-						
+				<c:if test="${not empty requestScope.noticeList}">
+					<c:forEach var="notice" items="${requestScope.noticeList}" varStatus="status">
+						<tr>
+							<fmt:parseNumber var="currentShowPageNo" value="${requestScope.currentShowPageNo}" />
+	          				<fmt:parseNumber var="sizePerPage" value="${requestScope.sizePerPage}" />
+	          				<td align="center">${requestScope.totalMemberCount - (currentShowPageNo-1)*sizePerPage - status.index}</td>
+							<td>${notice.title}&nbsp;<c:if test="${notice.commentcount != 0}"><span id="commentCount">[${notice.commentcount}]</span></c:if></td>
+							<td align="center">${notice.registerdate}<input id="noticeseq" type="hidden" name="noticeseq" value="${notice.noticeseq}" /></td>
+							<td align="center">${notice.viewcount}</td>
+						</tr>
 					</c:forEach>
 				</c:if>
-
-				<c:if test="${empty requestScope.boardPagingList}">
-					<tr>
-						<td colspan="6">데이터가 없습니다.</td>
-					</tr>
+				<c:if test="${empty requestScope.noticeList}">
+					<td align="center" colspan="4">검색 결과가 없습니다.</td>
 				</c:if>
-
 			</tbody>
+		
 		</table>
 		
-		<div style="display: flex;"  class="float-right">
-			<button type="button" class="btn btn-secondary btn-sm" style="margin: auto 0 auto auto;" onclick="goAdd()">글쓰기</button>
-		</div>
+		<form name="searchFrm" class="mb-5">
+			<select name="searchType" >
+				<option value="title">글제목</option>
+				<option value="content">글내용</option>
+			</select>
+			<input type="text" name="searchWord"/>
+			<input type="text" style="display: none;" />
+			<button type="button" class="btn btn-light" style="font-size: 20pt; padding: 0;">🔎</button>
+		</form>
 		
-		<nav aria-label="Page navigation example">
-			<ul class="pagination justify-content-center">${requestScope.pageBar}</ul>
-	    </nav>  			
+		
+		<div id="pageBar" style="margin-left: 36%;">
+	       <nav>
+	          <ul class="pagination">${requestScope.pageBar}</ul>
+	       </nav>
+	    </div>
+		
 	</div>
 	
+	<form name="goViewFrm">
+		<input type="hidden" name="noticeseq" />
+		<input type="hidden" name="goBackURL" />
+		<input type="hidden" name="searchType" />
+		<input type="hidden" name="searchWord" />
+	</form>
+
 </div>
-<%-- #132. 페이징 처리되어진 후 특정 글제목을 클릭하여 상세내용을 본 이후
-     //    사용자가 "검색된결과목록보기" 버튼을 클릭했을때 돌아갈 페이지를 알려주기 위해
-     //    현재 페이지 주소를 뷰단으로 넘겨준다. 
---%>
-<form name="goViewFrm">
-	<input type="hidden" name="boardseq" /> 
-	<input type="hidden" name="goBackURL" /> 
-</form>
-
-
-
-
-
-
+                     

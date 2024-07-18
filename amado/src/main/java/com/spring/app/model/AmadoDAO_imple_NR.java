@@ -441,5 +441,25 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		List<Map<String, String>> matchList = sqlsession.selectList("NR.getMatchList", clubseq);
 		return matchList;
 	}
+	
+	// gymseq 채번
+	@Override
+	public String getGymseq() {
+		String gymseq = sqlsession.selectOne("NR.getGymseq");
+		return gymseq;
+	}
+
+	// 관리자 - 체육관 등록하기(대표이미지)
+	@Override
+	public int adminGymreg(GymVO gym) {
+		int n = sqlsession.insert("NR.adminGymreg", gym);
+		return n;
+	}
+	// 관리자 - 체육관 등록하기(추가이미지)
+	@Override
+	public int insertGymImg(Map<String, String> paramap) {
+		int n = sqlsession.insert("NR.insertGymImg", paramap);
+		return n;
+	}
 
 }

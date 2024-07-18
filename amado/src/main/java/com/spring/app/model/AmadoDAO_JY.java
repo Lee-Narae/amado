@@ -3,6 +3,7 @@ package com.spring.app.model;
 import java.util.List;
 import java.util.Map;
 
+import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketVO;
 
@@ -44,6 +45,10 @@ public interface AmadoDAO_JY {
 
 	// 동일한 종목의 동호회 가입하는지 확인
 	String checkseq(Map<String, String> paraMap);
+
+	// 동호회 게시판 전체 게시글수
+
+	// 글목록 가져오기
 
 	
 
