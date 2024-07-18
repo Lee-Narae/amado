@@ -462,4 +462,18 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		return n;
 	}
 
+	// opendata db insert
+	@Override
+	public int insertOpendata(Map<String, String> paramap) {
+		int n = sqlsession.insert("NR.insertOpendata", paramap);
+		return n;
+	}
+
+	// 지역별 체육시설 현황
+	@Override
+	public List<Map<String, String>> searchFacByLocal() {
+		List<Map<String, String>> localFacList = sqlsession.selectList("NR.searchFacByLocal");
+		return localFacList;
+	}
+
 }
