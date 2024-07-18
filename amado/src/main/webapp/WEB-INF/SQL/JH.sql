@@ -50,6 +50,9 @@ ALTER TABLE tbl_club ADD (viewcount number(10) default 0);
 ALTER TABLE tbl_matching ADD (result2 NUMBER default 0);
 ALTER TABLE tbl_matching ADD (score1 number(3));
 ALTER TABLE tbl_matching ADD (score2 number(3));
+ALTER TABLE tbl_gym ADD (lng number); -- 경도
+ALTER TABLE tbl_gym ADD (lat number); -- 위도
+          
 
 update tbl_fleamarket set commentCount = commentCount+1
 where fleamarketseq = 1
@@ -97,8 +100,8 @@ order by fleamarketcommentseq desc
 
 
 
-ALTER TABLE tbl_club
-MODIFY (clubscore DEFAULT 0);
+ALTER TABLE tbl_gym
+MODIFY (lng number not null);
 
 ALTER TABLE tbl_club
 MODIFY (clubstatus DEFAULT 1);
@@ -227,7 +230,7 @@ nocache;
 
 commit
 
-delete from tbl_matching
+delete from tbl_gym
 
 
 
@@ -238,3 +241,25 @@ JOIN tbl_club c2 ON m.clubseq2 = c2.clubseq
 JOIN tbl_matchingreg r ON m.matchingregseq = r.matchingregseq
 where m.clubseq2 = 3 or m.clubseq1 = 3
 order by matchingseq asc;
+
+
+select *
+from tbl_gym
+
+update tbl_gym set lng = '126.927552968846', lat='37.5805909247428'
+where gymseq = 79
+
+update tbl_gym set lng = '126.928156401761', lat='37.5128937581565'
+where gymseq = 77
+
+update tbl_gym set lng = '126.893803396338', lat='37.5333917967991'
+where gymseq = 78
+
+update tbl_gym set lng = '126.944090214952', lat='37.5637750959193'
+where gymseq = 80
+
+update tbl_gym set lng = '126.84571196058', lat='37.5592796685251'
+where gymseq = 81
+
+select lng, lat
+from tbl_gym
