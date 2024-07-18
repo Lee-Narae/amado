@@ -122,5 +122,11 @@ public class AmadoDAO_imple_JH implements AmadoDAO_JH {
 		return GymAddList;
 	}
 
+	@Override
+	public GymVO getGymInfo(String gymseq) {
+		GymVO gymvo = sqlsession.selectOne("JH.getGymInfo", gymseq);
+		return gymvo;
+	}
+
 
 }

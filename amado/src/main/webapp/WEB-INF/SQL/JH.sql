@@ -263,3 +263,7 @@ where gymseq = 81
 
 select lng, lat
 from tbl_gym
+
+select gymname, address, detailaddress, cost, orgfilename
+from tbl_gym
+where gymseq = 77
