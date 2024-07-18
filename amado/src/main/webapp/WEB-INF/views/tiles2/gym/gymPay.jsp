@@ -83,7 +83,11 @@
   		width: 50px;
   		height: 50px;
   	}
-
+.gym-image {
+      width: 330px; /* 원하는 너비 */
+      height: 180px; /* 원하는 높이 */
+      object-fit: cover; /* 이미지를 컨테이너에 맞추어 자르기 */
+  }
 /*지도 끝*/
     </style>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3e40c6a4e83259bd26e2771ad2db4e63"></script>
@@ -97,7 +101,7 @@
     	
     	// 지도를 생성할때 필요한 기본 옵션
     	var options = {
-        	 	center: new kakao.maps.LatLng(37.556513150417395, 126.91951995383943), // 지도의 중심좌표. 반드시 존재해야함.
+        	 	center: new kakao.maps.LatLng($("input.gymlat").val(), $("input.gymlng").val()), // 지도의 중심좌표. 반드시 존재해야함.
         	 	<%--
         		  	center 에 할당할 값은 kakao.maps.LatLng 클래스를 사용하여 생성한다.
         		  	kakao.maps.LatLng 클래스의 2개 인자값은 첫번째 파라미터는 위도(latitude)이고, 두번째 파라미터는 경도(longitude)이다.
@@ -140,11 +144,13 @@
     				var position = {};
     				
     				position.content = "<div class='mycontent'>"+
-    				                   "  <div class='title'><a href='https://map.kakao.com/link/to/"+item.statn_addr1+","+item.statn_lat+","+item.statn_lnt+"' style='color: #fff' target='_blank'>"+item.statn_addr1+"</a><br>"+item.statn_addr2+"</div>"+    
+    				                   "  <div class='title'>zz</div>"+    
     				                   "</div>";
     				                   
-    				position.latlng = new kakao.maps.LatLng(item.statn_lat, item.statn_lnt);
+    				position.latlng = new kakao.maps.LatLng(item.lat, item.lng);
     				positionArr.push(position);
+    				
+    				//console.log(position)
     			});// end of $.each(json, function(index, item){})---------------
     			
     		},
@@ -157,17 +163,31 @@
     	// infowindowArr 은 인포윈도우를 가지고 있는 객체 배열의 용도이다. 
     	var infowindowArr = new Array();
     	
+    	
+	    
     	// === 객체 배열 만큼 마커 및 인포윈도우를 생성하여 지도위에 표시한다. === //
     	for(var i=0; i<positionArr.length; i++){
     		
-    		// == 마커 생성하기 == //
+    		var imageSrc = '<%=ctxPath%>/resources/images/marker.png';
+    		
+        	// 마커이미지의 크기 
+    	    var imageSize = new kakao.maps.Size(34, 39);
+            
+    	    // 마커이미지의 옵션. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정한다. 
+    	    var imageOption = {offset: new kakao.maps.Point(15, 39)};
+    		
+    		// 마커의 이미지정보를 가지고 있는 마커이미지를 생성한다. 
+		    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+
+		    // == 마커 생성하기 == //
 			var marker = new kakao.maps.Marker({ 
 				map: mapobj, 
-		        position: positionArr[i].latlng   
+		        position: positionArr[i].latlng, // locPosition 좌표에 마커를 생성 
+		        image: markerImage     // 마커이미지 설정
 			}); 
+		    
+			marker.setMap(mapobj); // 지도에 마커를 표시한다
     		
-			// 지도에 마커를 표시한다.
-    		marker.setMap(mapobj);
 			
     		// == 인포윈도우를 생성하기 == 
     		var infowindow = new kakao.maps.InfoWindow({
@@ -186,7 +206,7 @@
     		// 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
     	    // 이벤트 리스너로는 클로저(closure => 함수 내에서 함수를 정의하고 사용하도록 만든것)를 만들어 등록합니다 
     	    // for문에서 클로저(closure => 함수 내에서 함수를 정의하고 사용하도록 만든것)를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
-    	    kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(mapobj, marker, infowindow, infowindowArr)); 
+    	    kakao.maps.event.addListener(marker, 'mouseclick', makeOverListener(mapobj, marker, infowindow, infowindowArr)); 
     		
     	}// end of for----------------
     	// ============ 지도에 매장위치 마커 보여주기 끝 ============ //
@@ -206,12 +226,12 @@
 
         function updatePrice(amount) {
             totalPrice += amount;
-            document.getElementById("totalPrice").innerText = '₩' + totalPrice.toLocaleString();
+            document.getElementById("totalPrice").innerText = '₩' + totalPrice.toLocaleString() + '원';
         }
 
         function toggleSelection(button) {
             const isSelected = button.classList.contains('selected');
-            const buttonValue = 10000;
+            const buttonValue = Number($("input.gymcost").val());
 
             // Toggle button selection
             if (isSelected) {
@@ -246,9 +266,11 @@
 	    <div class="container">
 	        <!-- 체육관 사진 -->
 	        <div class="section">
-	            <img src="<%=ctxPath%>/resources/images/gym.jpg" class="img-fluid" alt="체육관 사진">
+	            <img src="<%=ctxPath%>/resources/images/${requestScope.gymvo.orgfilename}" class="gym-image" alt="체육관 사진">
 	        </div>
-	
+			<div style="text-align: center; margin-top: 3%; margin-bottom: 10%; font-size: 30px; font-weight: bold">
+			 ${requestScope.gymvo.gymname}
+			</div>
 	        <!-- 날짜 선택 -->
 	        <div class="section">
 	            <label for="date">날짜 선택:</label>
@@ -271,7 +293,7 @@
 	
 	        <!-- 총 가격 -->
 	        <div class="section">
-	            <span class="price" id="totalPrice">₩0</span>
+	            <span class="price" id="totalPrice">₩0원</span>
 	        </div>
 	
 	        <!-- 예약하기 버튼 -->
@@ -288,7 +310,11 @@
 		 	
 	    </div>
     </div>
-
+	
+	<input class="gymlat" type="hidden" value="${requestScope.gymvo.lat}"></input>
+	<input class="gymlng" type="hidden" value="${requestScope.gymvo.lng}"></input>
+	<input class="gymcost" type="hidden" value="${requestScope.gymvo.cost}"></input>
+	
     <!-- Bootstrap JS and dependencies -->
     <script type="text/javascript" src="<%= ctxPath%>/resources/js/jquery-3.7.1.min.js"></script>
   	<script type="text/javascript" src="<%= ctxPath%>/resources/bootstrap-4.6.2-dist/js/bootstrap.bundle.min.js" ></script>

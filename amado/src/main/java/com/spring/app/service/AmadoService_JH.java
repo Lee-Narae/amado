@@ -35,5 +35,7 @@ public interface AmadoService_JH {
 
 	List<GymVO> getGymAdd();
 
+	GymVO getGymInfo(String gymseq);
+
 	
 }
