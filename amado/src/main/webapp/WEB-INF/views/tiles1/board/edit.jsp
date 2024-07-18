@@ -19,7 +19,7 @@
 	  $("select#searchType_a").val("${requestScope.boardvo.fk_sportseq}");
 	  
 	  
-	  
+	 
 	  <%-- === #167.-2 스마트 에디터 구현 시작 === --%>
 	 	//전역변수
 	    var obj = [];

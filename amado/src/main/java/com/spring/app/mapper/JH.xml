@@ -102,7 +102,7 @@
 	</select>
 	
 	<select id="getGymAdd" resultType="GymVO">
-		select lng, lat
+		select lng, lat, gymseq
 		from tbl_gym
 	</select>
 	

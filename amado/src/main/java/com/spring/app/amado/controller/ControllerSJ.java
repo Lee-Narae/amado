@@ -771,7 +771,6 @@ public class ControllerSJ {
 	@GetMapping("/board/edit.do")
 	public ModelAndView requiredLogin_edit(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
 		
-		
 		// 글 수정해야 할 글번호 가져오기
 		String boardseq = request.getParameter("boardseq");
 		String fk_sportseq = request.getParameter("sportseq");

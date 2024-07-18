@@ -575,6 +575,20 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		int n = dao.insertGymImg(paramap);
 		return n;
 	}
+
+	// opendata db insert
+	@Override
+	public int insertOpendata(Map<String, String> paramap) {
+		int n = dao.insertOpendata(paramap);
+		return n;
+	}
+
+	// 지역별 체육시설 현황
+	@Override
+	public List<Map<String, String>> searchFacByLocal() {
+		List<Map<String, String>> localFacList = dao.searchFacByLocal();
+		return localFacList;
+	}
 	
 	
 }

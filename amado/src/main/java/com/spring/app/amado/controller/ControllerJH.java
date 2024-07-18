@@ -474,6 +474,7 @@ public class ControllerJH {
 				JSONObject jsonObj = new JSONObject();           
 				jsonObj.put("lat", gvo.getLat());   //위도          
 				jsonObj.put("lng", gvo.getLng()); 	//경도
+				jsonObj.put("gymseq", gvo.getGymseq());
 				
 				
 				jsonArr.put(jsonObj);

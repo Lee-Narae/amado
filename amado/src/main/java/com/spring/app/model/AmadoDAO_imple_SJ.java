@@ -256,5 +256,4 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 	}
 
 
-
 }

@@ -143,9 +143,7 @@
     			$.each(json, function(index, item){
     				var position = {};
     				
-    				position.content = "<div class='mycontent'>"+
-    				                   "  <div class='title'>zz</div>"+    
-    				                   "</div>";
+    				position.content = item.gymseq;
     				                   
     				position.latlng = new kakao.maps.LatLng(item.lat, item.lng);
     				positionArr.push(position);
@@ -206,7 +204,7 @@
     		// 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
     	    // 이벤트 리스너로는 클로저(closure => 함수 내에서 함수를 정의하고 사용하도록 만든것)를 만들어 등록합니다 
     	    // for문에서 클로저(closure => 함수 내에서 함수를 정의하고 사용하도록 만든것)를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
-    	    kakao.maps.event.addListener(marker, 'mouseclick', makeOverListener(mapobj, marker, infowindow, infowindowArr)); 
+    	    kakao.maps.event.addListener(marker, 'click', makeOverListener(mapobj, marker, infowindow, infowindowArr)); 
     		
     	}// end of for----------------
     	// ============ 지도에 매장위치 마커 보여주기 끝 ============ //
@@ -248,15 +246,9 @@
         function makeOverListener(mapobj, marker, infowindow, infowindowArr) {
       	    return function() {
       	    	// alert("infowindow.getZIndex()-1:"+ (infowindow.getZIndex()-1));
+      	    	//alert(infowindow.getContent())
       	    	
-      	    	for(var i=0; i<infowindowArr.length; i++) {
-      	    		if(i == infowindow.getZIndex()-1) {
-      	    			infowindowArr[i].open(mapobj, marker);
-      	    		}
-      	    		else{
-      	    			infowindowArr[i].close();
-      	    		}
-      	    	}
+      	   		location.href = "<%=ctxPath%>/gym/gymPay.do?gymseq="+infowindow.getContent();
       	    };
       	}// end of function makeOverListener(mapobj, marker, infowindow, infowindowArr)--------
     </script>

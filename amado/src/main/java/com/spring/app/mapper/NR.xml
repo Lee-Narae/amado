@@ -547,4 +547,25 @@
 		values(SEQ_GYMIMG.nextval, #{gymseq}, #{filename}, #{orgfilename}, #{filesize})
 	</insert>
 	
+	<insert id="insertOpendata">
+		insert into tbl_opendata_gym(opendata_gymseq, name, type, status, postcode, oldAdd, newAdd, city)
+		values (opendata_gymseq.nextval, #{name}, #{type}, #{status}, #{postcode}, #{oldAdd}, #{newAdd}, #{city})
+	</insert>
+	
+	<resultMap type="HashMap" id="searchFacByLocalMap">
+		<result column="city" property="city" javaType="String"/>
+		<result column="local" property="local" javaType="String"/>
+		<result column="cnt" property="cnt" javaType="String"/>
+	</resultMap>
+	<select id="searchFacByLocal" resultMap="searchFacByLocalMap">
+		select A.city, local, count(*) cnt
+		from
+		(select substr(oldadd,instr(oldadd, ' ', 1, 1)+1,instr(oldadd, ' ', 1, 2)-1-instr(oldadd, ' ', 1, 1)) local, name, city
+		from tbl_opendata_gym) A join (select city
+		                               from tbl_opendata_gym
+		                               group by city) B
+		on A.city = B.city
+		group by A.city, local
+		order by 1, 2
+	</select>
 </mapper>

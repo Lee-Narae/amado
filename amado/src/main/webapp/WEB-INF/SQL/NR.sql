@@ -366,3 +366,53 @@ select A.matchingseq, A.matchingregseq, A.clubseq1, A.clubseq2, B.sportseq, to_c
 from tbl_matching A join tbl_matchingreg B
 on A.matchingregseq = B.matchingregseq;
 
+select * from seoul_bicycle_rental;
+
+create table tbl_watch  -- 테이블 명
+--  (watchname varchar2(10)             -- 컬럼 명 // 최대 10 bytes 문자열 허용 -> 쌍용교육센터 X(12 bytes)
+    (watchname Nvarchar2(10),           -- Nvarchar2: 최대 10글자까지 허용 -> 쌍용교육센터 O (6 글자)
+     bigo Nvarchar2(100));
+
+create sequence opendata_gymseq
+    start with 1    -- 첫번째 출발은 1 부터 한다. 
+    increment by 1  -- 증가치는 1 이다. 즉, 1씩 증가한다. 
+    nomaxvalue      -- 최대값은 없는 무제한. 계속 증가시키겠다는 말이다. 
+    nominvalue      -- 최소값이 없다.
+    nocycle         -- 반복을 안한다.
+    nocache;
+
+
+
+create table tbl_opendata_gym
+(opendata_gymseq number,
+ name nvarchar2(50),
+ type nvarchar2(50),
+ status nvarchar2(50),
+ postcode nvarchar2(50),
+ oldAdd nvarchar2(50),
+ newAdd nvarchar2(50),
+ city nvarchar2(50));
+
+ -- SUBSTR("문자열", "시작위치", "길이")
+
+
+select * from tbl_opendata_gym;
+
+select A.city, 구, name
+from
+(select substr(oldadd,instr(oldadd, ' ', 1, 1)+1,instr(oldadd, ' ', 1, 2)-1-instr(oldadd, ' ', 1, 1)) 구, name, city
+from tbl_opendata_gym) A join (select city
+                               from tbl_opendata_gym
+                               group by city) B
+on A.city = B.city
+order by 1, 2;
+
+select A.city, 구, count(*)
+from
+(select substr(oldadd,instr(oldadd, ' ', 1, 1)+1,instr(oldadd, ' ', 1, 2)-1-instr(oldadd, ' ', 1, 1)) 구, name, city
+from tbl_opendata_gym) A join (select city
+                               from tbl_opendata_gym
+                               group by city) B
+on A.city = B.city
+group by A.city, 구
+order by 1, 2;

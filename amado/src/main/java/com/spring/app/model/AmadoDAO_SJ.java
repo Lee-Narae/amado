@@ -90,6 +90,7 @@ public interface AmadoDAO_SJ {
 	// 파일첨부가 있는 글 수정하기
 	int edit_withFile(BoardVO boardvo);
 
+
 	// 내가 가입한 클럽 가져오기
 	List<ClubmemberVO> getClubmemberList(String fk_userid) throws Exception;
 
@@ -106,7 +107,6 @@ public interface AmadoDAO_SJ {
 	int InquiryFileTable(Map<String, Object> paraMap);
 
 	int findseq_inquiry(Map<String, Object> paraMap);
-
 
 	
 
