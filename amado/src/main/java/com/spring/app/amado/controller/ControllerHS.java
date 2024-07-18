@@ -2,11 +2,14 @@ package com.spring.app.amado.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,13 +40,7 @@ public class ControllerHS {
 	
 	
 	
-	//체육관 전체보기
-	@GetMapping(value="/gym/rental_gym.do")
-	   public ModelAndView rental_gym(ModelAndView mav) {
-		mav.setViewName("/gym/rental_gym.tiles2");
-	      return mav;
-	       //  /WEB-INF/views/tiles1/opendata/korea_tour_api.jsp 페이지를 만들어야 한다.
-	   }  
+
 	// 체육관 상세보기
 	@GetMapping(value="/gym/detail_gym.do")
 	   public ModelAndView detail_gym(ModelAndView mav) {
@@ -119,7 +116,7 @@ public class ControllerHS {
 				
 				gymvo.setFilename(newFileName);
 				//was(톰캣)에 저장된 파일명(2024062712075997631067179400.jpg)
-				gymvo.setImgfilename(originalFilename);
+				gymvo.setOrgfilename(originalFilename);
 				// 게시판 페이지에서 첨부된 파일(LG_싸이킹청소기_사용설명서.pdf)을 보여줄 때 사용.
 	            // 또한 사용자가 파일을 다운로드 할때 사용되어지는 파일명으로 사용.
 				fileSize = attach.getSize(); // 첨부파일의 크기 
@@ -149,11 +146,12 @@ public class ControllerHS {
 	  
 	  System.out.println("7 "+gymvo.getInsidestatus());
 	  System.out.println("8 "+gymvo.getInfo());
-	  System.out.println("9 "+gymvo.getImgfilename());
+	  System.out.println("9 "+gymvo.getOrgfilename());
 	  
 	  System.out.println("10"+gymvo.getCost());
 	  System.out.println("11 "+gymvo.getCaution());
 	  System.out.println("12 "+gymvo.getMembercount());
+	 
 	  System.out.println("13 "+photovo.getSeveral_photos());
 	  System.out.println("14 "+request.getParameter("several_photos"));
 
@@ -170,9 +168,9 @@ public class ControllerHS {
 		if(!(attach.isEmpty())) {
 			//파일 첨부가  있는 경우라면 
 			n=service.add_withFile(gymvo);
-			if(n==1) {
-				n=service.add_photofile(photovo);
-			}
+			/*
+			 * if(n==1) { n=service.add_photofile(photovo); }
+			 */
 			
 		}
 		
@@ -194,7 +192,29 @@ public class ControllerHS {
 		
 		return mav;
 	}
-	
 
+
+	   //체육관 전체보기
+	   @GetMapping(value="/gym/rental_gym.do")
+	      public ModelAndView rental_gym(ModelAndView mav) {
+	      
+	      // 모든 상품 select 해오기
+	      List<GymVO> allGymList = service.getAllGymList(); //디비에서 데이터를 불러만오는 거라 map에 넣어서 보낼게 없음!!!!
+	            
+	      mav.addObject("allGymList", allGymList);
+	            
+	      mav.setViewName("/gym/rental_gym.tiles2");
+	         return mav;
+	          //  /WEB-INF/views/tiles1/opendata/korea_tour_api.jsp 페이지를 만들어야 한다.
+	    
+	   
+	   
+	   }  
+	      
+		
+	   
+	   
+	   
+	
 
 }

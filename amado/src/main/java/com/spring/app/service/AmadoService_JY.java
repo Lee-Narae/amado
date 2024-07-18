@@ -3,6 +3,7 @@ package com.spring.app.service;
 import java.util.List;
 import java.util.Map;
 
+import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketVO;
 
@@ -20,7 +21,10 @@ public interface AmadoService_JY {
 	int add_withFile(ClubVO clubvo);
 
 	// 동호회 등록후 회원등급 동호회장으로  업데이트 해주기
-	void updateRank(String fk_userid);
+	int updateRank(String string);
+	
+	// 동호회 등록완료 하면 tbl_clubmember 에 insert 하기
+	void insertCmemberTbl(ClubVO clubvo);
 
 	// 카테고리 상품 select 해오기
 	List<Map<String, String>> getSportNameList(String sportname);
@@ -32,10 +36,16 @@ public interface AmadoService_JY {
 	List<FleamarketVO> getAllItemList();
 
 	// 상품 전체 개수 불러오기
-	String getItemCnt();
+	int getItemCnt(Map<String, String> paraMap);
 
 	// 쿠키
 	FleamarketVO goodsDetailData(int goodsSeq);
+
+	// 동일한 종목의 동호회 가입하는지 확인
+	String checkseq(Map<String, String> paraMap);
+
+	int getNoticeTotalPage(Map<String, String> paramap);
+
 
 
 

@@ -17,6 +17,7 @@ import com.spring.app.common.Sha256;
 import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
+import com.spring.app.domain.ClubmemberVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.model.AmadoDAO_SJ;
 
@@ -297,5 +298,58 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		int n = dao.edit_withFile(boardvo); // 첨부파일이 있는 경우 
 		return n;
 	}
+
+	
+	
+	
+	// 내가 가입한 클럽 가져오기
+	@Override
+	public List<ClubmemberVO> getClubmemberList(String fk_userid) throws Exception {
+		List<ClubmemberVO> clubmemberList = dao.getClubmemberList(fk_userid);
+		return clubmemberList;
+	}
+
+	// 클럽 가입신청
+	@Override
+	public int clubMRegisterSJ(ClubmemberVO clubmembervo) {
+
+		int result = 0;
+		// 이미 클럽가입 신청했거나 가입됐는지 확인용
+		int n1 = dao.getclubAry(clubmembervo);
+		
+		if(n1 == 0) {
+			// 이미 가입신청하지 않았을 경우
+			
+			// 클럽 가입신청
+			result = dao.clubMRegisterSJ(clubmembervo);
+		}
+		
+		return result;
+	}
+
+	
+	
+	@Override
+	public int findseq_inquiry(Map<String, Object> paraMap) {
+		int inquiryseq = dao.findseq_inquiry(paraMap);
+		return inquiryseq;
+	}
+	
+	// 파일첨부가 있는 1대1 문의
+	@Override
+	public int InquiryFile(Map<String, Object> paraMap){
+		int result = 0;
+		// 자식테이블인 첨부파일 쪽에다가 insert 해준다.
+		result = dao.InquiryFileTable(paraMap); // tbl_inquiryFile 에 넣기 (첨부파일이 있는 경우)
+		return result;
+	}
+
+	// 파일첨부가 없는 1대1 문의
+	@Override
+	public int Inquiry(Map<String, Object> paraMap) {
+		int result = dao.Inquiry(paraMap); // tbl_inquiry 에 넣기
+		return result;
+	}
+
 
 }

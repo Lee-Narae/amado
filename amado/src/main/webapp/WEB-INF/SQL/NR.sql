@@ -226,7 +226,193 @@ select * from tbl_matchingreg;
 select * from user_constraints
 where table_name = 'TBL_MEMBER';
 
-desc tbl_member;
+desc tbl_gym;
 
 
 select * from tbl_gym;
+delete from tbl_gym;
+commit;
+
+alter table tbl_gym drop column imgfilename;
+alter table tbl_gym add filesize number;
+
+insert into tbl_gym(gymseq, gymname, fk_userid, postcode, address, detailaddress, status, info, cost, caution, membercount, likecount, insidestatus, orgfilename, filename, filesize)
+values (SEQ_GYM.nextval, '서면체육관', 'leess', '10111', '부산시 가나다구', '가나다동', 0, '좋은 체육관입니다.', '120000', '대관 시간을 잘 지켜주세요', 50, 0, 1, 'casual-life-3d-pink-basketball.png', '234234234893.png', '1233');
+commit;
+
+update tbl_gym set status = 0;
+commit;
+
+select * from tbl_member;
+
+insert into tbl_clubmember(fk_userid, sportseq, clubseq)
+values('leejy', 3, 4);
+
+select * from tbl_club order by fk_sportseq;
+select * from tbl_clubmember;
+delete from tbl_club where clubseq = 24;
+
+alter table tbl_clubmember
+add constraint FK_TBL_CLUBMEMBER_FK_USERID
+foreign key (fk_userid)
+references tbl_member(userid)
+on delete cascade;
+
+select * from user_constraints where constraint_type = 'R' order by table_name;
+
+alter table tbl_clubmember foreign key FK_TBL_CLUBMEMBER_CLUBSEQ;
+alter table TBL_CLUBMEMBER drop constraint FK_TBL_CLUBMEMBER_FK_USERID;
+
+select * from TBL_CATEGORY;
+
+purge recyclebin;
+
+ select A.table_name, A.constraint_name, A.delete_rule, A.constraint_type, A.search_condition, 
+           B.column_name, B.position
+    from user_constraints A join user_cons_columns B 
+    on A.constraint_name = B.constraint_name
+    where constraint_type = 'R'
+    order by 1;
+    
+desc TBL_MATCHINGAPPLY;
+
+alter table 테이블명 add constraint 제약조건명 foreign key(컬럼명) references 부모테이블명(식별자컬럼명) on delete cascade;
+
+alter table TBL_NOTICECOMMENT drop constraint FK_TBL_NTCMT_FK_USERID;
+alter table TBL_NOTICECOMMENT add constraint FK_TBL_NTCMT_FK_USERID foreign key(FK_USERID) references tbl_member(userid) on delete cascade;
+
+select * from tbl_club order by fk_sportseq, fk_userid;
+
+delete from tbl_club where clubseq = 23;
+commit;
+rollback;
+
+
+
+select count(*) from tbl_clubmember where fk_userid ='leejy' and sportseq = 1;
+
+
+
+select * from tbl_clubmember;
+select * from tbl_club;
+
+insert into tbl_clubmember(fk_userid, sportseq, clubseq, status) values ('test3', 8, 31, 1);
+update tbl_member set memberrank = 1 where userid = 'test3';
+commit;
+
+select matchingapplyseq, B.matchingregseq, E.sportname, B.clubseq A, D.clubname "A-name", D.fk_userid, A.clubseq B, C.clubname "B-name", A.message, A.membercount, to_char(B.matchdate, 'yyyy-mm-dd hh24:mi'), B.city, B.local, B.area, B.status
+from tbl_matchingapply A join tbl_matchingreg B
+on A.matchingregseq = B.matchingregseq
+join tbl_club C
+on A.clubseq = C.clubseq
+join tbl_club D
+on B.clubseq = D.clubseq
+join tbl_sport E
+on B.sportseq = E.sportseq
+where D.fk_userid = 'test3';
+
+select *
+from tbl_clubmember A join tbl_sport B
+on A.sportseq = B.sportseq
+join tbl_club C
+on A.clubseq = C.clubseq
+where A.fk_userid = 'ksj1024sj' and sportname = '배드민턴';
+
+update tbl_clubmember set fk_userid = 'ksj1024sj' where sportseq = 8 and clubseq = 30;
+commit;
+
+select * from tbl_sport where sportname = '배드민턴';
+
+desc tbl_matching;        
+
+
+select matchingapplyseq, B.matchingregseq, E.sportname, B.clubseq Aseq, D.clubname "A-name", D.fk_userid, A.clubseq Bseq,
+       C.clubname "B-name", A.message, A.membercount, to_char(B.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, B.city, B.local, B.area, B.status
+from tbl_matchingapply A join tbl_matchingreg B
+on A.matchingregseq = B.matchingregseq
+join tbl_club C
+on A.clubseq = C.clubseq
+join tbl_club D
+on B.clubseq = D.clubseq
+join tbl_sport E
+on B.sportseq = E.sportseq
+where A.status = 0;
+
+select * from tbl_matchingapply;
+
+select * from tbl_matchingreg;
+
+update tbl_matchingreg set status = 0;
+commit;
+
+select * from tbl_clubmember order by 1,2;
+update tbl_clubmember set clubseq=15 where fk_userid = 'ksj1024sj' and clubseq=29;
+delete from tbl_clubmember where fk_userid = 'ksj1024sj' and clubseq in(15,2);
+commit;
+select * from tbl_club;
+
+select * from tbl_matching;
+desc tbl_matching;
+delete from tbl_matching where matchingseq = 19;
+commit;
+
+insert into tbl_matching(matchingseq, matchingregseq, clubseq1, clubseq2, result1, result2, score1, score2)
+values(SEQ_MATCHING.nextval, #{matchingregseq}, #{clubseq1}, #{clubseq2}, 0, 0, 0, 0);
+
+select * from tbl_matchingreg;
+select * from tbl_matching;
+
+select A.matchingseq, A.matchingregseq, A.clubseq1, A.clubseq2, B.sportseq, to_char(B.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, B.city, B.local, B.status
+from tbl_matching A join tbl_matchingreg B
+on A.matchingregseq = B.matchingregseq;
+
+select * from seoul_bicycle_rental;
+
+create table tbl_watch  -- 테이블 명
+--  (watchname varchar2(10)             -- 컬럼 명 // 최대 10 bytes 문자열 허용 -> 쌍용교육센터 X(12 bytes)
+    (watchname Nvarchar2(10),           -- Nvarchar2: 최대 10글자까지 허용 -> 쌍용교육센터 O (6 글자)
+     bigo Nvarchar2(100));
+
+create sequence opendata_gymseq
+    start with 1    -- 첫번째 출발은 1 부터 한다. 
+    increment by 1  -- 증가치는 1 이다. 즉, 1씩 증가한다. 
+    nomaxvalue      -- 최대값은 없는 무제한. 계속 증가시키겠다는 말이다. 
+    nominvalue      -- 최소값이 없다.
+    nocycle         -- 반복을 안한다.
+    nocache;
+
+
+
+create table tbl_opendata_gym
+(opendata_gymseq number,
+ name nvarchar2(50),
+ type nvarchar2(50),
+ status nvarchar2(50),
+ postcode nvarchar2(50),
+ oldAdd nvarchar2(50),
+ newAdd nvarchar2(50),
+ city nvarchar2(50));
+
+ -- SUBSTR("문자열", "시작위치", "길이")
+
+
+select * from tbl_opendata_gym;
+
+select A.city, 구, name
+from
+(select substr(oldadd,instr(oldadd, ' ', 1, 1)+1,instr(oldadd, ' ', 1, 2)-1-instr(oldadd, ' ', 1, 1)) 구, name, city
+from tbl_opendata_gym) A join (select city
+                               from tbl_opendata_gym
+                               group by city) B
+on A.city = B.city
+order by 1, 2;
+
+select A.city, 구, count(*)
+from
+(select substr(oldadd,instr(oldadd, ' ', 1, 1)+1,instr(oldadd, ' ', 1, 2)-1-instr(oldadd, ' ', 1, 1)) 구, name, city
+from tbl_opendata_gym) A join (select city
+                               from tbl_opendata_gym
+                               group by city) B
+on A.city = B.city
+group by A.city, 구
+order by 1, 2;

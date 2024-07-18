@@ -504,6 +504,91 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		List<GymVO> gymList = dao.getGymStatus();
 		return gymList;
 	}
+
+	// gymVO 한 개 가져오기
+	@Override
+	public GymVO getGymInfo(String gymseq) {
+		GymVO gym = dao.getGymInfo(gymseq);
+		return gym;
+	}
+
+	// 체육관 승인하기
+	@Override
+	public int gymPermit(String gymseq) {
+		int n = dao.gymPermit(gymseq);
+		return n;
+	}
+
+	// 동호회장 한정 알림 불러오기
+	@Override
+	public List<Map<String, String>> getClubAlarm(String userid) {
+		List<Map<String, String>> alarmList = dao.getClubAlarm(userid);
+		return alarmList;
+	}
+
+	// 선택된 동호회의 tbl_matchingapplyseq 행 status는 1로, 선택받지 못한 동호회는 2로, tbl_matchingreg의  matchingregseq 행 status는 1로
+	// 1. tbl_matchingapply
+	@Override
+	public int updateMatchingApply(Map<String, String> paramap) {
+		int n = dao.updateMatchingApply(paramap);
+		return n;
+	}
+
+	// 2. tbl_matchingreg
+	@Override
+	public int updateMatchingReg(String matchingregseq) {
+		int n = dao.updateMatchingReg(matchingregseq);
+		return n;
+	}
+
+	// 3. tbl_matching
+	@Override
+	public int insertMatching(Map<String, String> paramap) {
+		int n = dao.insertMatching(paramap);
+		return n;
+	}
+
+	// 우리팀 매치일정 불러오기
+	@Override
+	public List<Map<String, String>> getMatchList(String clubseq) {
+		List<Map<String, String>> matchList = dao.getMatchList(clubseq);
+		return matchList;
+	}
+	
+	// gymseq 채번
+	@Override
+	public String getGymseq() {
+		String gymseq = dao.getGymseq();
+		return gymseq;
+	}
+
+	// 관리자 - 체육관 등록하기(대표이미지)
+	@Override
+	public int adminGymreg(GymVO gym) {
+		int n = dao.adminGymreg(gym);
+		return n;
+	}
+
+	// 관리자 - 체육관 등록하기(추가이미지)
+	@Override
+	public int insertGymImg(Map<String, String> paramap) {
+		int n = dao.insertGymImg(paramap);
+		return n;
+	}
+
+	// opendata db insert
+	@Override
+	public int insertOpendata(Map<String, String> paramap) {
+		int n = dao.insertOpendata(paramap);
+		return n;
+	}
+
+	// 지역별 체육시설 현황
+	@Override
+	public List<Map<String, String>> searchFacByLocal() {
+		List<Map<String, String>> localFacList = dao.searchFacByLocal();
+		return localFacList;
+	}
 	
 	
 }

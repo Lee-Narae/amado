@@ -46,6 +46,13 @@ ALTER TABLE tbl_member ADD (memberImg VARCHAR2(50));
 ALTER TABLE tbl_gym ADD (insidestatus number(1));
 ALTER TABLE tbl_fleamarketcomment ADD (changestatus number(1) default 0);
 ALTER TABLE tbl_fleamarketcomment ADD (recommentcount number(5) default 0);
+ALTER TABLE tbl_club ADD (viewcount number(10) default 0);
+ALTER TABLE tbl_matching ADD (result2 NUMBER default 0);
+ALTER TABLE tbl_matching ADD (score1 number(3));
+ALTER TABLE tbl_matching ADD (score2 number(3));
+ALTER TABLE tbl_gym ADD (lng number); -- 경도
+ALTER TABLE tbl_gym ADD (lat number); -- 위도
+          
 
 update tbl_fleamarket set commentCount = commentCount+1
 where fleamarketseq = 1
@@ -62,6 +69,9 @@ commit
 
 update tbl_fleamarket set commentcount = commentcount+1
 where fleamarketseq = 1
+
+update tbl_club set fk_sportseq = 1
+where clubname = '최준혁과 친구들'
 
 update tbl_member set memberImg = '차은우.jpg'
 where userid = 'chaew';
@@ -90,14 +100,24 @@ order by fleamarketcommentseq desc
 
 
 
-ALTER TABLE tbl_club
-MODIFY (clubscore DEFAULT 0);
+ALTER TABLE tbl_gym
+MODIFY (lng number not null);
 
 ALTER TABLE tbl_club
 MODIFY (clubstatus DEFAULT 1);
 
+ALTER TABLE tbl_matching
+MODIFY (result NUMBER DEFAULT 0);
+
 commit
 
+ALTER TABLE tbl_matching
+MODIFY (result NUMBER DEFAULT 0);
+
+ALTER TABLE tbl_matching RENAME COLUMN result TO result1;
+ALTER TABLE tbl_matching RENAME COLUMN clubseq2 TO clubseq1;
+ALTER TABLE tbl_matching RENAME COLUMN clubseq TO clubseq2;
+commit
 
 
 
@@ -147,3 +167,103 @@ from tbl_fleamarketcommentreply A join tbl_member V
 ON A.fk_userid = V.userid
 where A.fleamarketcommentseq = #{fleamarketcommentseq}
 order by fleamarketcommentreplyseq desc
+
+
+
+
+select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, local, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, viewcount
+from tbl_club
+where clubseq = 3
+
+update tbl_club set clubimg = 'real_madrid.png'
+where clubseq = 17;
+
+commit
+
+select *
+from tbl_matching
+
+select *
+from tbl_club
+
+insert into tbl_matching(matchingseq, matchingregseq, clubseq1, clubseq2, result1, result2, score1, score2)
+values(seq_matching.nextval, 1, 2, 3, 1, 2, 2, 1)
+
+insert into tbl_matching(matchingseq, matchingregseq, clubseq1, clubseq2, result1, result2, score1, score2)
+values(seq_matching.nextval, 2, 2, 3, 1, 2, 3, 1)
+
+insert into tbl_matching(matchingseq, matchingregseq, clubseq1, clubseq2, result1, result2, score1, score2)
+values(seq_matching.nextval, 9, 2, 3, 1, 2, 1, 0)
+
+insert into tbl_matching(matchingseq, matchingregseq, clubseq1, clubseq2, result1, result2, score1, score2)
+values(seq_matching.nextval, 10, 2, 3, 2, 1, 0, 2)
+
+insert into tbl_matching(matchingseq, matchingregseq, clubseq1, clubseq2, result1, result2, score1, score2)
+values(seq_matching.nextval, 13, 15, 3, 3, 3, 1, 1)
+
+insert into tbl_matching(matchingseq, matchingregseq, clubseq1, clubseq2, result1, result2, score1, score2)
+values(seq_matching.nextval, 14, 29, 3, 1, 2, 2, 1)
+
+insert into tbl_matching(matchingseq, matchingregseq, clubseq1, clubseq2, result1, result2, score1, score2)
+values(seq_matching.nextval, 15, 3, 9, 2, 1, 1, 3)
+
+
+
+select *
+from tbl_matchingreg
+where sportseq = 1
+
+select *
+from tbl_matching
+
+select *
+from tbl_club
+DROP SEQUENCE seq_matching;
+
+create sequence seq_matching 
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+commit
+
+delete from tbl_gym
+
+
+
+SELECT m.matchingseq, m.result1, m.result2, m.score1, m.score2, c1.clubname AS clubname1, c2.clubname AS clubname2, r.area, to_char(r.matchdate, 'YYYY-MM-DD') AS matchdate
+FROM tbl_matching m
+JOIN tbl_club c1 ON m.clubseq1 = c1.clubseq
+JOIN tbl_club c2 ON m.clubseq2 = c2.clubseq
+JOIN tbl_matchingreg r ON m.matchingregseq = r.matchingregseq
+where m.clubseq2 = 3 or m.clubseq1 = 3
+order by matchingseq asc;
+
+
+select *
+from tbl_gym
+
+update tbl_gym set lng = '126.927552968846', lat='37.5805909247428'
+where gymseq = 79
+
+update tbl_gym set lng = '126.928156401761', lat='37.5128937581565'
+where gymseq = 77
+
+update tbl_gym set lng = '126.893803396338', lat='37.5333917967991'
+where gymseq = 78
+
+update tbl_gym set lng = '126.944090214952', lat='37.5637750959193'
+where gymseq = 80
+
+update tbl_gym set lng = '126.84571196058', lat='37.5592796685251'
+where gymseq = 81
+
+select lng, lat
+from tbl_gym
+
+select gymname, address, detailaddress, cost, orgfilename
+from tbl_gym
+where gymseq = 77

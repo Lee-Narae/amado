@@ -153,5 +153,39 @@ public interface AmadoDAO_NR {
 
 	// 관리자 - 아직 등록 승인 안 된 체육관 불러오기
 	List<GymVO> getGymStatus();
+
+	// gymVO 한 개 가져오기
+	GymVO getGymInfo(String gymseq);
+
+	// 체육관 승인하기
+	int gymPermit(String gymseq);
+
+	// 동호회장 한정 알림 불러오기
+	List<Map<String, String>> getClubAlarm(String userid);
+
+	// 선택된 동호회의 tbl_matchingapplyseq 행 status는 1로, 선택받지 못한 동호회는 2로, tbl_matchingreg의  matchingregseq 행 status는 1로
+	// 1. tbl_matchingapply
+	int updateMatchingApply(Map<String, String> paramap);
+	// 2. tbl_matchingreg
+	int updateMatchingReg(String matchingregseq);
+	// 3. tbl_matching
+	int insertMatching(Map<String, String> paramap);
+
+	// 우리팀 매치일정 불러오기
+	List<Map<String, String>> getMatchList(String clubseq);
+
+	// gymseq 채번
+	String getGymseq();
+
+	// 관리자 - 체육관 등록하기(대표이미지)
+	int adminGymreg(GymVO gym);
+	// 관리자 - 체육관 등록하기(추가이미지)
+	int insertGymImg(Map<String, String> paramap);
+
+	// opendata db insert
+	int insertOpendata(Map<String, String> paramap);
+
+	// 지역별 체육시설 현황
+	List<Map<String, String>> searchFacByLocal();
 	
 }

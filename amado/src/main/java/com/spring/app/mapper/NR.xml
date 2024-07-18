@@ -53,10 +53,11 @@
 		<result property="clubscore" 		column="clubscore" 		javaType="String" />
 		<result property="name" 		column="name" 		javaType="String" />
 		<result property="sportname" 		column="sportname" 		javaType="String" />
+		<result property="wasfilename" 		column="wasfilename" 		javaType="String" />
 	</resultMap>
 	
 	<select id="getClubInfo" parameterType="String" resultMap="club">
-		select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, local, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, name, sportname
+		select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, local, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, name, sportname, wasfilename
 		from tbl_club A join tbl_member B
 		on A.fk_userid = B.userid
 		join tbl_sport C
@@ -440,8 +441,131 @@
 	</update>
 	
 	<select id="getGymStatus" resultType="GymVO">
-		select gymseq, gymname, fk_userid, postcode, address, detailaddress, status, info, imgfilename, cost, caution, membercount, likecount, insidestatus
+		select gymseq, gymname, fk_userid, postcode, address, detailaddress, status, info, cost, caution, membercount, likecount, insidestatus, orgfilename, filename, filesize
 		from tbl_gym
 		where status = 0
+	</select>
+	
+	<select id="getGymInfo" parameterType="String" resultType="GymVO">
+		select gymseq, gymname, fk_userid, postcode, address, detailaddress, status, info, cost, caution, membercount, likecount, insidestatus, orgfilename, filename, filesize
+		from tbl_gym
+		where gymseq = #{gymseq}
+	</select>
+	
+	<update id="gymPermit" parameterType="String">
+		update tbl_gym set status = 1 where gymseq = #{gymseq}
+	</update>
+	
+	
+	
+	<resultMap type="HashMap" id="alarmMap">
+		<result property="matchingapplyseq" column="matchingapplyseq" javaType="String"/>
+		<result property="matchingregseq" column="matchingregseq" javaType="String"/>
+		<result property="sportname" column="sportname" javaType="String"/>
+		<result property="Aseq" column="Aseq" javaType="String"/>
+		<result property="A_name" column="A-name" javaType="String"/>
+		<result property="fk_userid" column="fk_userid" javaType="String"/>
+		<result property="Bseq" column="Bseq" javaType="String"/>
+		<result property="B_name" column="B-name" javaType="String"/>
+		<result property="message" column="message" javaType="String"/>
+		<result property="membercount" column="membercount" javaType="String"/>
+		<result property="matchdate" column="matchdate" javaType="String"/>
+		<result property="city" column="city" javaType="String"/>
+		<result property="local" column="local" javaType="String"/>
+		<result property="area" column="area" javaType="String"/>
+		<result property="status" column="status" javaType="String"/>
+	</resultMap>
+	<select id="getClubAlarm" parameterType="String" resultMap="alarmMap">
+		select matchingapplyseq, B.matchingregseq, E.sportname, B.clubseq Aseq, D.clubname "A-name", D.fk_userid, A.clubseq Bseq,
+			   C.clubname "B-name", A.message, A.membercount, to_char(B.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, B.city, B.local, B.area, B.status
+		from tbl_matchingapply A join tbl_matchingreg B
+		on A.matchingregseq = B.matchingregseq
+		join tbl_club C
+		on A.clubseq = C.clubseq
+		join tbl_club D
+		on B.clubseq = D.clubseq
+		join tbl_sport E
+		on B.sportseq = E.sportseq
+		where D.fk_userid = #{userid} and A.status = 0
+	</select>
+	
+	
+	<update id="updateMatchingApply1" parameterType="HashMap">
+		update tbl_matchingapply set status = 1 where matchingapplyseq = #{matchingapplyseq}
+	</update>
+	
+	<update id="updateMatchingApply2">
+		update tbl_matchingapply set status = 2 where matchingregseq = #{matchingregseq} and matchingapplyseq != #{matchingapplyseq}
+	</update>
+	
+	<update id="updateMatchingReg">
+		update tbl_matchingreg set status = 1 where matchingregseq = #{matchingregseq}
+	</update>
+	
+	<insert id="insertMatching">
+		insert into tbl_matching(matchingseq, matchingregseq, clubseq1, clubseq2, result1, result2, score1, score2)
+		values(SEQ_MATCHING.nextval, #{matchingregseq}, #{Aseq}, #{Bseq}, 0, 0, 0, 0)
+	</insert>
+	
+	<resultMap type="HashMap" id="matchMap2">
+		<result property="matchingseq" column="matchingseq" javaType="String"/>
+		<result property="matchingregseq" column="matchingregseq" javaType="String"/>
+		<result property="sportname" column="sportname" javaType="String"/>
+		<result property="teamA" column="teamA" javaType="String"/>
+		<result property="teamB" column="teamB" javaType="String"/>
+		<result property="matchdate" column="matchdate" javaType="String"/>
+		<result property="area" column="area" javaType="String"/>
+		<result property="status" column="status" javaType="String"/>
+	</resultMap>
+	<select id="getMatchList" parameterType="String" resultMap="matchMap2">
+		select A.matchingseq, A.matchingregseq, E.sportname, C.clubname teamA, D.clubname teamB,
+			   to_char(B.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, B.area, B.status
+		from tbl_matching A join tbl_matchingreg B
+		on A.matchingregseq = B.matchingregseq
+		join tbl_club C
+		on A.clubseq1 = C.clubseq
+		join tbl_club D
+		on A.clubseq2 = D.clubseq
+		join tbl_sport E
+		on B.sportseq = E.sportseq
+		where B.status = 1 and B.matchdate >= sysdate and A.clubseq1 = #{clubseq} or A.clubseq2 = #{clubseq}
+	</select>
+	
+	<select id="getGymseq" resultType="String">
+		select SEQ_GYM.nextval from dual
+	</select>
+	
+	<insert id="adminGymreg" parameterType="GymVO">
+	insert into tbl_gym(gymseq, gymname, fk_userid, postcode, address, detailaddress, status, info, cost, caution,
+						membercount, likecount, insidestatus, orgfilename, filename, filesize, lat, lng)
+	values(#{gymseq}, #{gymname}, 'admin', #{postcode}, #{address}, #{detailaddress}, 1, #{info}, #{cost}, #{caution},
+  		   #{membercount}, 0, #{insidestatus}, #{orgfilename}, #{filename}, #{filesize}, #{lat}, #{lng})
+	</insert>
+	
+	<insert id="insertGymImg" parameterType="HashMap">
+		insert into tbl_gymimg(gymimgseq, gymseq, filename, orgfilename, filesize)
+		values(SEQ_GYMIMG.nextval, #{gymseq}, #{filename}, #{orgfilename}, #{filesize})
+	</insert>
+	
+	<insert id="insertOpendata">
+		insert into tbl_opendata_gym(opendata_gymseq, name, type, status, postcode, oldAdd, newAdd, city)
+		values (opendata_gymseq.nextval, #{name}, #{type}, #{status}, #{postcode}, #{oldAdd}, #{newAdd}, #{city})
+	</insert>
+	
+	<resultMap type="HashMap" id="searchFacByLocalMap">
+		<result column="city" property="city" javaType="String"/>
+		<result column="local" property="local" javaType="String"/>
+		<result column="cnt" property="cnt" javaType="String"/>
+	</resultMap>
+	<select id="searchFacByLocal" resultMap="searchFacByLocalMap">
+		select A.city, local, count(*) cnt
+		from
+		(select substr(oldadd,instr(oldadd, ' ', 1, 1)+1,instr(oldadd, ' ', 1, 2)-1-instr(oldadd, ' ', 1, 1)) local, name, city
+		from tbl_opendata_gym) A join (select city
+		                               from tbl_opendata_gym
+		                               group by city) B
+		on A.city = B.city
+		group by A.city, local
+		order by 1, 2
 	</select>
 </mapper>

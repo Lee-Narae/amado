@@ -10,8 +10,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.app.common.AES256;
+import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
+import com.spring.app.domain.GymVO;
+import com.spring.app.domain.MatchingVO;
 import com.spring.app.model.AmadoDAO_JH;
 
 @Service
@@ -127,6 +130,45 @@ public class AmadoService_imple_JH implements AmadoService_JH {
 		}
 		
 		return n*m;
+	}
+
+
+
+	@Override
+	public ClubVO getMyClub(Map<String, String> paraMap) {
+		ClubVO clubvo = dao.getMyClub(paraMap);
+		return clubvo;
+	}
+
+
+
+	@Override
+	public void updateviewcount(String clubseq) {
+		dao.updateviewcount(clubseq);
+	}
+
+
+
+	@Override
+	public List<MatchingVO> getmatchingList(String clubseq) {
+		List<MatchingVO> getmatchingList = dao.getmatchingList(clubseq);
+		return getmatchingList;
+	}
+
+
+
+	@Override
+	public List<GymVO> getGymAdd() {
+		List<GymVO> GymAddList = dao.getGymAdd();
+		return GymAddList;
+	}
+
+
+
+	@Override
+	public GymVO getGymInfo(String gymseq) {
+		GymVO gymvo = dao.getGymInfo(gymseq);
+		return gymvo;
 	}
 
 }

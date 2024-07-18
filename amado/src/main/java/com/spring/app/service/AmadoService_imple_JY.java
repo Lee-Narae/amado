@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.app.common.FileManager;
+import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketVO;
 import com.spring.app.model.AmadoDAO_JY;
@@ -49,19 +50,26 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 	// 동호회등록  완료 요청(파일첨부ㅇ)
 	@Override
 	public int add_withFile(ClubVO clubvo) {
-		
 		int n = dao.add_withFile(clubvo); //첨부파일이 있는경우
 		return n;
-
 	}
-
+	
+	
 
 	// 동호회 등록후 회원등급 동호회장으로  업데이트 해주기
 	@Override
-	public void updateRank(String fk_userid) {
-		dao.updateRank(fk_userid);
+	public int updateRank(String fk_userid) {
+		int n = dao.updateRank(fk_userid);
+		return n;
 	}
-
+	
+	
+	// 동호회 등록완료 하면 tbl_clubmember 에 insert 하기
+	@Override
+	public void insertCmemberTbl(ClubVO clubvo) {
+		dao.insertCmemberTbl(clubvo);
+			
+	}
 
 	// 상품 select 헤오기
 	@Override
@@ -89,20 +97,48 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 
 	// 상품 전체 개수 불러오기
 	@Override
-	public String getItemCnt() {
-		
-		String itemCnt = dao.getItemCnt();
+	public int getItemCnt(Map<String, String> paraMap) {
+		int itemCnt = dao.getItemCnt(paraMap);
 		return itemCnt;
 	}
 
-
-
+	
 	// 쿠키
 	@Override
 	public FleamarketVO goodsDetailData(int goodsSeq) {
 		FleamarketVO gDetailData = dao.goodsDetailData(goodsSeq);
 		return gDetailData;
 	}
+
+
+	// 동일한 종목의 동호회 가입하는지 확인
+	@Override
+	public String checkseq(Map<String, String> paraMap) {
+		String checkseq = dao.checkseq(paraMap);
+		return checkseq;
+	}
+
+
+
+	@Override
+	public int getNoticeTotalPage(Map<String, String> paramap) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	
+	
+
+
+
+
+
+
+
+
+
+
 
 
 	

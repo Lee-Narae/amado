@@ -96,6 +96,47 @@ select fleamarketseq,  city, local, title, content, cost, deal, fk_userid, to_ch
 from tbl_fleamarket;
 
 
+-- 동호회등록 할 때 동호회장 소속 indert하기
+select *
+from tbl_clubmember;
 
+
+-- insert 하기 전에 이미 동호회장으로 가입한 sportseq 가 존재한다면 가입 안되게 하기
+select *
+from tbl_clubmember
+where fk_userid = 'leenr';
+
+select count(*)
+from tbl_clubmember
+where fk_userid = #{userid} and sportseq = #{category}
+
+select *
+from tbl_board
+where fk_userid = 'ksj1024sj'  ;
+
+select *
+from tbl_club;
+
+
+
+select * 
+from tbl_clubboard;
+
+-- 종목별 동호회 게시판
+select count(*) 
+(
+select clubseq
+from tbl_clubboard
+where userid = 'leejy'
+)
+group by clubseq;
+
+insert into tbl_clubboard(clubboardseq, clubseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status)
+values(seq_clubboard.nextval, 2, '토마토맛토마토맛토', '먹어볼사람', 'leejy', sysdate , '1234', 0 , 0, 1);
+insert into tbl_clubboard(clubboardseq, clubseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status)
+values(seq_clubboard.nextval, 3, '토마토김치전', '만들어줄게요', 'leejy', sysdate , '1234', 0 , 0, 1);
+
+ALTER TABLE tbl_clubboard
+MODIFY (registerdate DEFAULT sysdate);
 
 

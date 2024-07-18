@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
+import com.spring.app.domain.ClubmemberVO;
 import com.spring.app.domain.MemberVO;
 
 @Repository
@@ -208,6 +209,51 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 		return n;
 	}
 
+	
+	// 내가 가입한 클럽 가져오기
+	@Override
+	public List<ClubmemberVO> getClubmemberList(String fk_userid) throws Exception {
+		List<ClubmemberVO> clubmemberList = sqlsession.selectList("SJ.getClubmemberList", fk_userid);
+		return clubmemberList;
+	}
+
+	
+	// 이미 클럽가입 신청했거나 가입됐는지 확인용
+	@Override
+	public int getclubAry(ClubmemberVO clubmembervo) {
+		int n1 = sqlsession.selectOne("SJ.getclubAry", clubmembervo);
+		return n1;
+	}
+
+	
+	// 클럽 가입신청
+	@Override
+	public int clubMRegisterSJ(ClubmemberVO clubmembervo) {
+		int result = sqlsession.insert("SJ.clubMRegisterSJ", clubmembervo);
+		return result;
+	}
+
+	
+	// 파일첨부가 있는 1대1 문의
+	@Override
+	public int Inquiry(Map<String, Object> paraMap) {
+		int inquiryseq  = sqlsession.insert("SJ.Inquiry", paraMap);
+		return inquiryseq;
+	}
+
+
+	// 자식테이블인 첨부파일 쪽에다가 insert 해준다.
+	@Override
+	public int InquiryFileTable(Map<String, Object> paraMap) {
+		int result = sqlsession.insert("SJ.InquiryFileTable", paraMap);
+		return result;
+	}
+
+	@Override
+	public int findseq_inquiry(Map<String, Object> paraMap) {
+		int inquiryseq = sqlsession.selectOne("SJ.findseq_inquiry", paraMap);
+		return inquiryseq;
+	}
 
 
 }

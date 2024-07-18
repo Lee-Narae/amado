@@ -6,6 +6,7 @@ import java.util.Map;
 import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
+import com.spring.app.domain.ClubmemberVO;
 import com.spring.app.domain.MemberVO;
 
 public interface AmadoDAO_SJ {
@@ -89,6 +90,23 @@ public interface AmadoDAO_SJ {
 	// 파일첨부가 있는 글 수정하기
 	int edit_withFile(BoardVO boardvo);
 
+
+	// 내가 가입한 클럽 가져오기
+	List<ClubmemberVO> getClubmemberList(String fk_userid) throws Exception;
+
+	// 이미 클럽가입 신청했거나 가입됐는지 확인용
+	int getclubAry(ClubmemberVO clubmembervo);
+
+	// 클럽 가입신청
+	int clubMRegisterSJ(ClubmemberVO clubmembervo);
+
+	// tbl_inquiry 에 넣기 (파일첨부가 있는 1대1 문의)
+	int Inquiry(Map<String, Object> paraMap);
+
+	// 자식테이블인 첨부파일 쪽에다가 insert 해준다.(파일첨부가 있는 1대1 문의)
+	int InquiryFileTable(Map<String, Object> paraMap);
+
+	int findseq_inquiry(Map<String, Object> paraMap);
 
 	
 

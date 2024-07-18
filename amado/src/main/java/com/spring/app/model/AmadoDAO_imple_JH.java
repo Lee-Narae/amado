@@ -9,8 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
+import com.spring.app.domain.GymVO;
+import com.spring.app.domain.MatchingVO;
 
 
 @Repository
@@ -94,6 +97,35 @@ public class AmadoDAO_imple_JH implements AmadoDAO_JH {
 	public int updateReCommentCount_decrease(String fleamarketcommentseq) {
 		int n = sqlsession.update("JH.updateReCommentCount_decrease", fleamarketcommentseq);
 		return n;
+	}
+
+	@Override
+	public ClubVO getMyClub(Map<String, String> paraMap) {
+		ClubVO clubvo = sqlsession.selectOne("JH.getMyClub", paraMap);
+		return clubvo;
+	}
+
+	@Override
+	public void updateviewcount(String clubseq) {
+		sqlsession.update("JH.updateviewcount", clubseq);
+	}
+
+	@Override
+	public List<MatchingVO> getmatchingList(String clubseq) {
+		List<MatchingVO> getmatchingList = sqlsession.selectList("JH.getmatchingList", clubseq);
+		return getmatchingList;
+	}
+
+	@Override
+	public List<GymVO> getGymAdd() {
+		List<GymVO> GymAddList = sqlsession.selectList("JH.getGymAdd");
+		return GymAddList;
+	}
+
+	@Override
+	public GymVO getGymInfo(String gymseq) {
+		GymVO gymvo = sqlsession.selectOne("JH.getGymInfo", gymseq);
+		return gymvo;
 	}
 
 

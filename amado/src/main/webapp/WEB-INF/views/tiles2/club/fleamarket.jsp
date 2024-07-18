@@ -60,7 +60,7 @@
 	#rItem img{
 		border-radius: 20px;
 	}
-	div#notready{
+	div#notready{ 
 		font-size: 15pt;
 		padding-left: 38%;
 	}    
@@ -79,7 +79,7 @@
 
 $(document).ready(function(){
 	
-	$.ajax({
+	$.ajax({ // 첫화면 전체 상품 보여주기 ajax
         url:"<%= ctxPath%>/allview.do",
         dataType:"json",
         success:function(json){
@@ -121,6 +121,109 @@ $(document).ready(function(){
 			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 		} 
     });
+	
+	
+	
+	// 검색
+	$("input:text[name='searchWord']").bind("keyup", function(e){ // 키뗄때 자동검색
+		if(e.keyCode == 13){
+			goSearch();
+		}
+	});
+	
+	// 검색시 검색조건 및 검색어 값 유지시키기
+	if(${not empty requestScope.paraMap}) {
+		$("select[name='searchType']").val("${requestScope.paraMap.searchType}");
+		$("input[name='searchWord']").val("${requestScope.paraMap.searchWord}");
+	}
+	
+	
+	<%-- === #115. 검색어 입력시 자동글 완성하기 2 === --%>
+	$("div#displayList").hide();
+	
+	$("input[name='searchWord']").keyup(function() {
+		
+		const wordLength = $(this).val().trim().length;
+		// 검색어에서 공백을 제거한 길이를 알아온다.
+		
+		if(wordLength == 0) {
+			$("div#displayList").hide();
+			// 검색어가 공백이거나 검색어 입력후 백스페이스키를 눌러서 검색어를 모두 지우면 검색된 내용이 안 나오도록 해야 한다.
+		}
+		else {
+			if( $("select[name='searchType']").val() == "subject" || 
+				$("select[name='searchType']").val() == "name" ) {
+				
+				$.ajax({
+					url:"<%= ctxPath%>/wordSearchShow.action",
+					type:"get",
+					data:{"searchType":$("select[name='searchType']").val(),
+						  "searchWord":$("input[name='searchWord']").val()},
+					dataType:"json",
+					success:function(json) {
+						console.log(JSON.stringify(json));
+
+						<%-- === #120. 검색어 입력시 자동글 완성하기 7 === --%>
+						if(json.length > 0) {
+							// 검색된 데이터가 있는 경우임.
+							
+							let v_html = ``;
+							
+							$.each(json, function(index, item) {
+								const word = item.word;
+								
+								const idx = word.toLowerCase().indexOf($("input[name='searchWord']").val().toLowerCase());
+								//word.toLowerCase() 은 word 를 모두 소문자로 변경하는 것이다.
+								// 만약에 검색어가 JavA 이라면
+								/*
+									Java 에 관한 질문입니다. 은 idx 가 0 이다.
+									웹 만들 때 jaVaScript 효과주는 다른 언어는 없나요? 은 idx 가  7 이다.
+								*/
+								
+								const len = $("input[name='searchWord']").val().length;
+								// 검색어(JavA) 의 길이 len 은 4가 된다.
+/*									
+								console.log("~~~~ 시작 ~~~~");
+								console.log(word.substring(0, idx)); 	    // 검색어(JavA) 앞까지의 글자 ==> 웹 만들 때 
+								console.log(word.substring(idx, idx+len));  // 검색어(JavA) 글자 ==> jaVa
+								console.log(word.substring(idx+len));       // 검색어(JavA) 이후의 글자 ==> Script 효과주는 다른 언어는 없나요?
+								console.log("~~~~ 끝 ~~~~");
+*/
+								const result = word.substring(0, idx) + "<span style='color:purple;'>" + word.substring(idx, idx+len) + "</span>" + word.substring(idx+len);
+								
+								v_html += `<span style='cursor:pointer;' class='result'>\${result}</span><br>`;
+							}); // end of $.each
+							
+							const input_width = $("input[name='searchWord']").css("width"); 
+							// 검색어 input 태그 width 값 알아오기(현재 연관검색어 창이 너무 커서)
+							
+							$("div#displayList").css({"width":input_width});
+							// 검색결과 div 의 width 크기를 검색어 입력 input 태그의 width 와 일치시키기 
+							
+							$("div#displayList").html(v_html);
+							$("div#displayList").show();
+							
+						}
+					}, // end of success:function(json)
+				    error: function(request, status, error){
+				    	alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					}						
+				}); // end of $.ajax
+			}
+		}
+	}); // end of $("input[name='searchWord']").keyup
+	
+	<%-- === #121. 검색어 입력시 자동글 완성하기 8 === --%>
+	$(document).on("click", "span.result", function(e){
+		const word = $(e.target).text();
+		$("input[name='searchWord']").val(word); // 텍스트박스에 검색된 결과의 문자열을 입력해준다.
+		$("div#displayList").hide();
+		goSearch();
+	});
+	
+
+	
+	
 	
 	$(document).on("click","button#all", function(e){
 		 
@@ -171,6 +274,10 @@ $(document).ready(function(){
 	$(document).on("click","button.cbtn", function(e){
 		//alert($(e.target).text());
 		
+		$("button.cbtn").css("background-color", "");   // 원래 색상 css 전체 적용
+		$(e.target).css("background-color", "#05203c"); // 클릭된 버튼 색상 변경
+		
+		
 		const sportname = $(e.target).text();
 		
 		$.ajax({
@@ -181,6 +288,9 @@ $(document).ready(function(){
 	        	//alert("성공!");
 	        	
 	        	let v_html=``;
+	        	
+	        	
+	        	
 	        	
 	        	if(json.length == 0) {
 	        		if(sportname == "배드민턴"){
@@ -265,9 +375,59 @@ $(document).ready(function(){
 });// end of $(document).ready(function(){})-------------------
 
 
+//Function Declaration
+function goView(seq) {
+	
+	const goBackURL = "${requestScope.goBackURL}";
+  //	  goBackURL = "/list.action?searchType=subject&searchWord=엄정화&currentShowPageNo=4"
+  // /list.action?searchType=subject 여기까지만 나온다
+  // & 가 종결자이기 때문에 GET 방식으로는 보낼 수 없다!! (매우중요!!!)
+  // 그렇기 때문에 POST 방식으로 보내야한다!!
+  // 아래처럼 get 방식으로 보내면 안된다. 왜냐하면 get방식에서 &는 전송될 데이터의 구분자로 사용되기 때문이다. 
+//	location.href = "<%= ctxPath%>/view.action?seq="+seq; // 쌍따움표일 경우 	
+//	location.href = `<%= ctxPath%>/view.action?seq=\${seq}&goBackURL=\${goBackURL}`; //백틱 `` 이기 때문에 \${}
+
+//그러므로 & 를 글자 그대로 인식하는 post 방식으로 보내야 한다.
+//아래에 #132. 에 표기된 from 태그를 먼저 만든다.
+
+	const frm = document.goViewFrm;
+		frm.seq.value = seq;
+	frm.goBackURL.value = goBackURL; 
+	
+	if(${not empty requestScope.paraMap}) { // 검색조건이 있을 경우
+		frm.searchType.value = "${requestScope.paraMap.searchType}";
+		frm.searchWord.value = "${requestScope.paraMap.searchWord}";
+	}
+	frm.action = "<%= ctxPath %>/view.action";
+	frm.method = "post";
+	frm.submit();
+
+} // end of function goView(seq) -------------------- 	 	
+
+
+function goSearch() {
+	//alert("눌렀다");
+
+	if($("input:text[name='searchWord']").val() == ""){
+		alert("검색어를 입력하세요.");
+		return;
+	}
+	
+	if($("select[name='searchType']").val() == ""){ // select태그의 option 중 value 값을 넣어야 한다.
+		alert("검색 대상을 선택하세요.");
+		return;
+	}
+	const frm = document.item_searchFrm;
+<%--	frm.method = "get";	
+	frm.action = "<%= ctxPath%>/fleamarket.action";
+--%>		
+	frm.submit();
+	
+} // end of goSearch
+
 
 </script>
-
+  
 
 <div id="container" style="border:solid 0px black; display:flex; margin: 12% auto; width: 80%;">
 
@@ -278,7 +438,7 @@ $(document).ready(function(){
 			<h3 style="font-weight: bold;">아마두 플리마켓🧺</h3>
 			<br>
 			
-			<form name="searchFrm" style="margin-top: 20px;">
+			<form name="item_searchFrm" style="margin-top: 20px;">
 		      <select name="searchType" style="height: 26px;">
 		         <option value="subject">글제목</option>
 		         <option value="location">지역</option>
@@ -287,6 +447,12 @@ $(document).ready(function(){
 		      <input type="text" style="display: none;"/> <%-- form 태그내에 input 태그가 오로지 1개 뿐일경우에는 엔터를 했을 경우 검색이 되어지므로 이것을 방지하고자 만든것이다. --%> 
 		      <button type="button" class="btn btn-secondary btn-sm" onclick="goSearch()">검색</button>
 		    </form>
+		    
+			<%-- === #114. 검색어 입력시 자동글 완성하기 1 === --%>
+			<div id="disp  layList" style="border:solid 1px gray; border-top:0px; height:100px; margin-left:13.2%; margin-top:-1px; margin-bottom:30px; overflow:auto;">
+				
+			</div>
+		
 		</div>
 		
 		<%-- 종목 카테고리 --%>
@@ -310,9 +476,12 @@ $(document).ready(function(){
 		<!-- 상품  -->
 		<div id="product" style="margin-top: 5%; margin-right: 8%; border:solid 0px red; "></div>
 	    
-		<%-- 페이지 바
+		<%-- 페이지 바 --%>
 		<div aria-label="Page navigation" class="pn" style="border:solid 0px red; padding: 10% 35%;">
-		   <div class="pagination" >
+			   <nav>
+		          <ul class="pagination">${requestScope.pageBar}</ul>
+		       </nav>
+		       <!--  
 			  <a href="#">&laquo;</a>
 			  <a href="#">1</a>
 			  <a class="active" href="#">2</a>
@@ -320,14 +489,13 @@ $(document).ready(function(){
 			  <a href="#">4</a>
 			  <a href="#">5</a>
 			  <a href="#">6</a>
-			  <a href="#">&raquo;</a>
+			  <a href="#">&raquo;</a>-->
 			</div>
-	    </div> 
-	     --%>
+	     
 	</div>
 	
 	
-	<!-- 최근 본 상품 -->
+	<%-- 최근 본 상품 --%>
 	<div id="item2" style="border-left:solid 1px lightgray ; width: 20%; height: 400px; ">
 		<div style="background-color: #f1f5f9; width: 60%; height: 40px; border-radius: 20px; margin-left: 3%;" ><!-- 스크롤할때 같이 움직이기 -->
 			<div id="recentItem" style="text-align: center; padding-top: 3%;">
@@ -347,7 +515,10 @@ $(document).ready(function(){
 	    </div>
 	</div>
 	
-
+<form name="goViewFrm">
+	<input type="text" name="seq" /> 
+	<input type="text" name="goBackURL" /> 
+</form>
 	
 	
 </div>

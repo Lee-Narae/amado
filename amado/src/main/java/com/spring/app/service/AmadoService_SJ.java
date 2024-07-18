@@ -6,6 +6,7 @@ import java.util.Map;
 import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
+import com.spring.app.domain.ClubmemberVO;
 import com.spring.app.domain.MemberVO;
 
 // 승진 서비스
@@ -79,6 +80,21 @@ public interface AmadoService_SJ {
 
 	// 파일첨부가 있는 글 수정하기
 	int edit_withFile(BoardVO boardvo);
+
+
+	// 내가 가입한 클럽 가져오기
+	List<ClubmemberVO> getClubmemberList(String fk_userid) throws Exception;
+
+	// 클럽 가입 신청
+	int clubMRegisterSJ(ClubmemberVO clubmembervo);
+
+	// 파일첨부가 있는 1대1 문의
+	int InquiryFile(Map<String, Object> paraMap);
+
+	// 파일첨부가 없는 1대1 문의
+	int Inquiry(Map<String, Object> paraMap);
+
+	int findseq_inquiry(Map<String, Object> paraMap);
 
 
 }

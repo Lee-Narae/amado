@@ -327,8 +327,8 @@ create table tbl_matching
 (matchingseq         NUMBER   not null        -- 시합번호
 ,matchingregseq      NUMBER                   -- 시합등록번호(FK)
 ,clubseq2            NUMBER                   -- 동호회A(FK)
-,clubseq            NUMBER                   -- 동호회B(FK)
-,result                nvarchar2(10)            -- 시합결과
+,clubseq             NUMBER                   -- 동호회B(FK)
+,result              NUMBER   default 0       -- 시합결과(시합전:0, 승:1, 패:2)
 
 ,constraint PK_tbl_matching_matchingseq primary key(matchingseq)
 ,constraint FK_tbl_matching_matchingregseq foreign key(matchingregseq) references tbl_matchingreg(matchingregseq)
@@ -860,15 +860,157 @@ delete from tbl_boardcomment
 
 commit
 
-select *
-from tbl_boardcomment
+ALTER TABLE tbl_gym_photos CHANGE several_photos fileDrop NVARCHAR2(200);
 
+desc tbl_gym_photos
+
+delete from tbl_gym_photos
+
+drop table tbl_gym_photos
+
+select *
+from tbl_gym;
+
+select *
+from tbl_gym_photos
 
 delete from tbl_boardcomment
 where fk_userid = 'TestID'
 
 commit;
 
+orgfilename 
+
+filename
+
+filesize
+
+select *from tab
+
+select *
+from TBL_SPORT
 
 
+/*
+1	축구
+2	야구
+3	배구
+4	농구
+5	족구
+6	테니스
+7	볼링
+8	배드민턴
+*/
+
+
+select *
+from tbl_club
+order by clubseq desc
+
+/*
+---------------
+1	축구
+THE CHEERS
+이나래와 친구들
+최준혁과 친구들
+테스트클럽3
+---------------
+
+---------------
+2	야구
+야구빠따
+---------------
+
+---------------
+3	배구
+서한솔과 친구들
+---------------
+
+---------------
+4	농구
+김승진과 친구들
+---------------
+
+---------------
+5	족구
+서영학의 제자들
+축구가 조아
+---------------
+
+---------------
+6	테니스
+영학씨의 마니또들
+---------------
+
+---------------
+7	볼링
+서울대학교 동호회
+---------------
+
+---------------
+8	배드민턴
+날아라닭털공
+강원대 배드민턴 동호회
+가평잣막걸리
+---------------
+*/
+
+
+
+
+
+
+
+
+
+/* 1대1 문의 테이블 */
+
+
+create table tbl_inquiry   
+(inquiryseq                  NUMBER   not null                -- 문의번호
+,content                     nvarchar2(1000)   not null       -- 글내용
+,fk_userid                   nvarchar2(20)  not null          -- 아이디(tbl_member 의 회원아이디)
+,email                       nvarchar2(50)   not null         -- 이메일
+,phone                       nvarchar2(50)   not null         -- 휴대폰
+,registerdate                date default sysdate  not null   -- 작성일자
+,searchType_a                NUMBER                           -- 문의유형 A
+,searchType_b                NUMBER                           -- 문의유형 B
+,status                      number(1) default 1 not null     -- 게시글삭제유무   1: 사용가능(게시글등록) / 0:사용불능(게시글삭제) 
+
+,constraint PK_tbl_inquiry_boardseq primary key(inquiryseq)
+,constraint FK_tbl_inquiry_fk_userid foreign key(fk_userid) references tbl_member(userid)
+,constraint CK_tbl_inquiry_status check( status in(0,1) )
+);
+// Table TBL_INQUIRY이(가) 생성되었습니다.
+
+
+
+create sequence seq_inquiry 
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+-- Sequence SEQ_INQUIRY이(가) 생성되었습니다.
+
+commit
+
+
+create table tbl_inquiryFile 
+(inquiryseq                NUMBER   not null
+,orgfilename               nvarchar2(50)                    -- 첨부파일원본이름
+,filename                  nvarchar2(50)                    -- 첨부파일이름
+,filesize                  NUMBER                           -- 파일크기
+,constraint FK_tbl_inquiryFile_inquiryseq foreign key(inquiryseq) references tbl_inquiry(inquiryseq)
+);
+-- Table TBL_INQUIRYFILE이(가) 생성되었습니다.
+
+
+select inquiryseq
+from tbl_inquiry
+order by inquiryseq desc
+
+select *
+from tbl_inquiryFile
 

@@ -3,7 +3,8 @@
 <%
    String ctxPath = request.getContextPath();
 %>
-<!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <html lang="ko">
 
 <style type="text/css">
@@ -108,178 +109,55 @@ document.addEventListener("DOMContentLoaded", function() {
 	   
 	    <br><br>
 	    
+	    
 	    <section id="indoor" class="product-section container mt-4">
 	        <div class="row">
 	            <!-- 실내 상품 카드들 -->
+	            <c:forEach var="gym" items="${requestScope.allGymList }">
+	            <c:if test="${gym.insidestatus == '0' && gym.status =='1'}">
 	            <div class="col-md-3 mb-4">
-	                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/gym/detail_gym.do'">
-	                    <img src="<%=ctxPath%>/resources/images/1/체육관.jpg" class="card-img-top" alt="실내 상품 1">
-	                    <div class="card-body">
-	                        <h5 class="card-title">광주</h5>
-	                        <p class="card-text">2만원/2시간</p>
-	                
-	                    </div>
-	                </div>
-	            </div>
-	             <div class="col-md-3 mb-4">
-	                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/gym/detail_gym.do'">
-	                    <img src="<%=ctxPath%>/resources/images/1/체육관2.jpg" class="card-img-top" alt="실내 상품 2">
-	                    <div class="card-body">
-	                        <h5 class="card-title">부산</h5>
-	                        <p class="card-text">1.5만원/2시간</p>
-	                     
-	                    </div>
-	                </div>
-	            </div>
-	             <div class="col-md-3 mb-4">
-	                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/gym/detail_gym.do'">
-	                    <img src="<%=ctxPath%>/resources/images/1/체육관3.jpg" class="card-img-top" alt="실내 상품 3">
-	                    <div class="card-body">
-	                        <h5 class="card-title">서울 강남</h5>
-	                        <p class="card-text">2.3만원/2시간</p>
-	                
-	                    </div>
-	                </div>
-	            </div>
-	             <div class="col-md-3 mb-4">
-	                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/gym/detail_gym.do'">
-	                    <img src="<%=ctxPath%>/resources/images/1/체육관4.jpg" class="card-img-top" alt="실내 상품 4">
-	                    <div class="card-body">
-	                        <h5 class="card-title">서울 목동</h5>
-	                        <p class="card-text">2.4만원/2시간</p>
-	                 
-	                    </div>
-	                </div>
-	            </div>
-	             <div class="col-md-3 mb-4">
-	                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/gym/detail_gym.do'">
-	                    <img src="<%=ctxPath%>/resources/images/1/체육관5.jpg" class="card-img-top" alt="실내 상품 5">
-	                    <div class="card-body">
-	                        <h5 class="card-title">서울 강서</h5>
-	                        <p class="card-text">2.1만원/2시간</p>
-	                     
-	                    </div>
-	                </div>
-	            </div>
-	             <div class="col-md-3 mb-4">
-	                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/gym/detail_gym.do'">
-	                    <img src="<%=ctxPath%>/resources/images/1/체육관6.jpg" class="card-img-top" alt="실내 상품 6">
-	                    <div class="card-body">
-	                        <h5 class="card-title">인천</h5>
-	                        <p class="card-text">1.9만원/2시간</p>
-	                    
-	                    </div>
-	                </div>
-	            </div>
-	             <div class="col-md-3 mb-4">
-	                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/gym/detail_gym.do'">
-	                    <img src="<%=ctxPath%>/resources/images/1/체육관7.jpg" class="card-img-top" alt="실내 상품 7">
-	                    <div class="card-body">
-	                        <h5 class="card-title">대구</h5>
-	                        <p class="card-text">1.6만원/2시간</p>
-	                   
-	                    </div>
-	                </div>
-	            </div>
-	               <div class="col-md-3 mb-4">
-	                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/gym/detail_gym.do'">
-	                    <img src="<%=ctxPath%>/resources/images/1/체육관8.jpg" class="card-img-top" alt="실내 상품8">
-	                    <div class="card-body">
-	                        <h5 class="card-title">대전</h5>
-	                        <p class="card-text">1.5만원/2시간</p>
-	                      
-	                    </div>
-	                </div>
-	            </div>
-	            
-	            <!-- 15개 더 추가 -->
-	        </div>
+			                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/gym/detail_gym.do'">
+			                    <img src="<%=ctxPath%>/resources/images/1/${gym.filename	    }" class="card-img-top" alt="실내 상품 1">
+			                    <div class="card-body">
+			                        <h5 class="card-title">${gym.gymname}</h5>
+			                        <p class="card-text">${gym.cost}/1시간</p>
+			                    </div>
+			                </div>
+			            </div>
+	            </c:if>
+	            </c:forEach>
+	           <%--  <c:forEach var="gym" items="${requestScope.allGymList} ">
+		            <c:if test="${gym.insidestatus == '0'}">
+			            <div class="col-md-3 mb-4">
+			                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/gym/detail_gym.do'">
+			                    <img src="<%=ctxPath%>/resources/images/1/${gym.orgfilename}" class="card-img-top" alt="실내 상품 1">
+			                    <div class="card-body">
+			                        <h5 class="card-title">${gym.gymname}</h5>
+			                        <p class="card-text">${gym.cost}/1시간</p>
+			                    </div>
+			                </div>
+			            </div>
+		            </c:if>
+	            </c:forEach> --%>
+	             </div>
 	    </section>
+	    
 	    
 	    <section id="outdoor" class="product-section container mt-4 hidden">
 	        <div class="row">
-	            <!-- 실외 상품 카드들 -->
-	            <div class="col-md-3 mb-4">
-	                <div class="card">
-	                    <img src="outdoor_product1.jpg" class="card-img-top" alt="실외 상품 1">
-	                    <div class="card-body">
-	                        <h5 class="card-title">체육관  1</h5>
-	                        <p class="card-text">체육관 설명...</p>
-	                   
-	                    </div>
-	                </div>
-	            </div>
-	              <div class="col-md-3 mb-4">
-	                <div class="card">
-	                    <img src="outdoor_product1.jpg" class="card-img-top" alt="실외 상품 1">
-	                    <div class="card-body">
-	                        <h5 class="card-title">체육관  2</h5>
-	                        <p class="card-text">체육관 설명...</p>
-	                   
-	                    </div>
-	                </div>
-	            </div>
-	              <div class="col-md-3 mb-4">
-	                <div class="card">
-	                    <img src="outdoor_product1.jpg" class="card-img-top" alt="실외 상품 1">
-	                    <div class="card-body">
-	                        <h5 class="card-title">체육관  3</h5>
-	                        <p class="card-text">체육관 설명...</p>
-	                   
-	                    </div>
-	                </div>
-	            </div>
-	              <div class="col-md-3 mb-4">
-	                <div class="card">
-	                    <img src="outdoor_product1.jpg" class="card-img-top" alt="실외 상품 1">
-	                    <div class="card-body">
-	                        <h5 class="card-title">체육관 4</h5>
-	                        <p class="card-text">체육관 설명...</p>
-	                   
-	                    </div>
-	                </div>
-	            </div>
-	              <div class="col-md-3 mb-4">
-	                <div class="card">
-	                    <img src="outdoor_product1.jpg" class="card-img-top" alt="실외 상품 1">
-	                    <div class="card-body">
-	                        <h5 class="card-title">체육관 5</h5>
-	                        <p class="card-text">체육관 설명...</p>
-	                   
-	                    </div>
-	                </div>
-	            </div>
-	              <div class="col-md-3 mb-4">
-	                <div class="card">
-	                    <img src="outdoor_product1.jpg" class="card-img-top" alt="실외 상품 1">
-	                    <div class="card-body">
-	                        <h5 class="card-title">체육관  6</h5>
-	                        <p class="card-text">체육관 설명...</p>
-	                   
-	                    </div>
-	                </div>
-	            </div>
-	              <div class="col-md-3 mb-4">
-	                <div class="card">
-	                    <img src="outdoor_product1.jpg" class="card-img-top" alt="실외 상품 1">
-	                    <div class="card-body">
-	                        <h5 class="card-title">체육관  7</h5>
-	                        <p class="card-text">체육관 설명...</p>
-	                   
-	                    </div>
-	                </div>
-	            </div>
-	              <div class="col-md-3 mb-4">
-	                <div class="card">
-	                    <img src="outdoor_product1.jpg" class="card-img-top" alt="실외 상품 1">
-	                    <div class="card-body">
-	                        <h5 class="card-title">체육관  8</h5>
-	                        <p class="card-text">체육관 설명...</p>
-	                   
-	                    </div>
-	                </div>
-	            </div>
-	            <!-- 15개 더 추가 -->
+	          <c:forEach var="gym" items="${requestScope.allGymList}">
+		            <c:if test="${gym.insidestatus == '1' && gym.status =='1'}">
+			            <div class="col-md-3 mb-4">
+			                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/gym/detail_gym.do'">
+			                    <img src="<%=ctxPath%>/resources/images/1/${gym.filename}" class="card-img-top" alt="실내 상품 1">
+			                    <div class="card-body">
+			                        <h5 class="card-title">${gym.gymname}</h5>
+			                        <p class="card-text">${gym.cost}/1시간</p>
+			                    </div>
+			                </div>
+			            </div>
+		            </c:if>
+	            </c:forEach> 
 	        </div>
 	        
 	        
