@@ -125,7 +125,7 @@ public class ControllerNR {
 	}
 	
 	@ResponseBody
-	@PostMapping("/member/findId.do")
+	@PostMapping(value="/member/findId.do", produces="text/plain;charset=UTF-8")
 	public String findId(HttpServletRequest request) {
 		
 		String name = request.getParameter("name");
@@ -156,7 +156,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/member/idFind_sendEmail.do")
+	@PostMapping(value="/member/idFind_sendEmail.do", produces="text/plain;charset=UTF-8")
 	public String idFind_sendEmail(HttpServletRequest request) {
 		
 		String email = request.getParameter("email");
@@ -208,7 +208,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/member/findpw.do")
+	@PostMapping(value="/member/findpw.do", produces="text/plain;charset=UTF-8")
 	public String findpw(HttpServletRequest request) {
 		
 		String name = request.getParameter("name");
@@ -242,7 +242,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/member/pwFind_sendEmail.do")
+	@PostMapping(value="/member/pwFind_sendEmail.do", produces="text/plain;charset=UTF-8")
 	public String pwFind_sendEmail(HttpServletRequest request) {
 		
 		String email = request.getParameter("email");
@@ -294,7 +294,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/member/findPwUpdatePw.do")
+	@PostMapping(value="/member/findPwUpdatePw.do", produces="text/plain;charset=UTF-8")
 	public String findPwUpdatePw(HttpServletRequest request) {
 		
 		String newpw = request.getParameter("password");
@@ -426,7 +426,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@GetMapping("/admin/getMemberStatic")
+	@GetMapping(value="/admin/getMemberStatic", produces="text/plain;charset=UTF-8")
 	public String getMemberStatic() {
 		
 		JSONArray jsonArr = new JSONArray();
@@ -894,7 +894,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/admin/memberInsert")
+	@PostMapping(value="/admin/memberInsert", produces="text/plain;charset=UTF-8")
 	public String memberInsert(MultipartHttpServletRequest mrequest) {
 		
 		MultipartFile mtpExcelFile = mrequest.getFile("excelsheet"); // input:file 태그의 태그 name을 넣는다.
@@ -1549,7 +1549,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/community/regComment.do")
+	@PostMapping(value="/community/regComment.do", produces="text/plain;charset=UTF-8")
 	public String requiredLogin_regComment(HttpServletRequest request, HttpServletResponse response) {
 		
 		HttpSession session = request.getSession();
@@ -1597,7 +1597,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/community/delNoticeComment.do")
+	@PostMapping(value="/community/delNoticeComment.do", produces="text/plain;charset=UTF-8")
 	public String delNoticeComment(HttpServletRequest request) {
 		
 		String noticecommentseq = request.getParameter("noticecommentseq");
@@ -1615,7 +1615,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@GetMapping("/community/viewCommentOnly.do")
+	@GetMapping(value="/community/viewCommentOnly.do", produces="text/plain;charset=UTF-8")
 	public String viewCommentOnly(HttpServletRequest request) {
 		String parentseq = request.getParameter("parentseq");
 		
@@ -1641,7 +1641,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/community/editNoticeComment.do")
+	@PostMapping(value="/community/editNoticeComment.do", produces="text/plain;charset=UTF-8")
 	public String editNoticeComment(HttpServletRequest request) {
 		
 		String comment_text = request.getParameter("edit_comment_text");
@@ -1662,7 +1662,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@GetMapping("/club/getSportseq.do")
+	@GetMapping(value="/club/getSportseq.do", produces="text/plain;charset=UTF-8")
 	public String getSportseq(HttpServletRequest request) {
 		
 		String matchingregseq = request.getParameter("matchingregseq");
@@ -1722,7 +1722,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@GetMapping("/admin/getGymInfo")
+	@GetMapping(value="/admin/getGymInfo", produces="text/plain;charset=UTF-8")
 	public String getGymInfo(HttpServletRequest request) {
 		
 		String gymseq = request.getParameter("gymseq");
@@ -1753,7 +1753,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/admin/gymPermit")
+	@PostMapping(value="/admin/gymPermit", produces="text/plain;charset=UTF-8")
 	public String gymPermit(HttpServletRequest request) {
 		
 		String gymseq = request.getParameter("gymseq");
@@ -1770,7 +1770,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/club/matching.do")
+	@PostMapping(value="/club/matching.do", produces="text/plain;charset=UTF-8")
 	public String matching (HttpServletRequest request) {
 		
 		String matchingapplyseq = request.getParameter("matchingapplyseq");
@@ -1818,8 +1818,89 @@ public class ControllerNR {
 	}
 	
 	
-	
-	
+	@ResponseBody
+	@PostMapping(value="/admin/reg/gymReg", produces="text/plain;charset=UTF-8")
+	public String gymReg(MultipartHttpServletRequest mrequest) {
+		
+		String gymname = mrequest.getParameter("gymname");
+		String postcode = mrequest.getParameter("postcode");
+		String address = mrequest.getParameter("address");
+		String detailaddress = mrequest.getParameter("detailaddress");
+		String info = mrequest.getParameter("info");
+		String caution = mrequest.getParameter("caution");
+		String membercount = mrequest.getParameter("membercount");
+		String insidestatus = mrequest.getParameter("insidestatus");
+		String lat = mrequest.getParameter("lat");
+		String lng = mrequest.getParameter("lng");
+		
+		// 대표이미지
+		MultipartFile attach = mrequest.getFile("orgfilename");
+		
+		HttpSession session = mrequest.getSession(); 
+        String root = session.getServletContext().getRealPath("/");
+        String path = root+"resources"+File.separator+"files";
+        
+        String newFileName = "";
+        byte[] bytes = null;
+        long fileSize = 0;
+        
+        try {
+            bytes = attach.getBytes();
+            
+            String originalFilename = attach.getOriginalFilename();
+            
+            newFileName = fileManager.doFileUpload(bytes, originalFilename, path); 
+                     
+            fileSize = attach.getSize();  // 첨부파일의 크기(단위는 byte임) 
+                     
+         } catch (Exception e) {
+            e.printStackTrace();
+         }   
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+		/*
+		// 추가이미지
+		List<MultipartFile> fileList = mrequest.getFiles("file_arr");
+		
+		HttpSession session = mrequest.getSession();
+	    String root = session.getServletContext().getRealPath("/");
+	    String path = root + "resources"+File.separator+"files";
+		
+	    File dir = new File(path);
+	    
+	    if(!dir.exists()) {
+	    	dir.mkdirs();
+	    }
+		
+	    String[] arr_attachFilename = null;
+	    
+	    if(fileList != null && fileList.size() > 0) {
+	    	arr_attachFilename = new String[fileList.size()];
+	    */	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+		
+		return "";
+	}
 	
 	
 	

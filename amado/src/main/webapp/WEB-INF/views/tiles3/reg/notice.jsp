@@ -33,6 +33,8 @@ padding-left: 1%;
 <script type="text/javascript">
 $(document).ready(function(){
 	
+	$("div#noticeR").addClass("hover");
+	
 	  <%-- === #166. 스마트 에디터 구현 시작 === --%>
       //전역변수
       var obj = [];

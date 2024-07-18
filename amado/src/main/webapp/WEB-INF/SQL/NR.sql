@@ -365,3 +365,4 @@ select * from tbl_matching;
 select A.matchingseq, A.matchingregseq, A.clubseq1, A.clubseq2, B.sportseq, to_char(B.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, B.city, B.local, B.status
 from tbl_matching A join tbl_matchingreg B
 on A.matchingregseq = B.matchingregseq;
+
