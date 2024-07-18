@@ -101,5 +101,10 @@
 		order by matchingseq desc
 	</select>
 	
+	<select id="getGymAdd" resultType="GymVO">
+		select lng, lat
+		from tbl_gym
+	</select>
+	
 	
 </mapper>
