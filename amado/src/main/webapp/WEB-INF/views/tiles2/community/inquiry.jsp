@@ -108,13 +108,20 @@ input[type="file"] {
 				return;
 			}
 	    	 
+			
+		    const checkbox_checked_length = $("input:checkbox[id='agree']:checked").length;
+
+		    if(checkbox_checked_length == 0) {
+		         alert("이용약관에 동의하셔야 합니다.");
+		         return; // goRegister() 함수를 종료한다.
+		    }
 	    	 
-	    	 const frm = document.inquiryFrm;
-			 frm.searchType_a.value = $("select#searchType_a").val();
-			 frm.searchType_b.value = $("select#searchType_b").val();
-	    	 frm.method = "post";
-	    	 frm.action = "<%= ctxPath%>/community/inquiryEnd.do";
-	    	 frm.submit();
+	    	const frm = document.inquiryFrm;
+			frm.searchType_a.value = $("select#searchType_a").val();
+			frm.searchType_b.value = $("select#searchType_b").val();
+	    	frm.method = "post";
+	    	frm.action = "<%= ctxPath%>/community/inquiryEnd.do";
+	    	frm.submit();
     	 
         }); // 문의접수 버튼 눌렀을 경우
         
@@ -145,13 +152,16 @@ input[type="file"] {
 				<strong class="col-md-2 mt-3" style="text-align: center;">문의유형</strong>
 				<select class="col-md-3" id="searchType_a" name="searchType_a">
 					<option value="0">선택해주세요</option>
-					<option value="1">대관문의</option>
-					<option value="2">환불문의</option>
+					<option value="1">동호회</option>
+					<option value="2">체육관</option>
+					<option value="3">플리마켓</option>
+					<option value="3">기타</option>
 				</select>
 				<select class="col-md-3 ml-4" id="searchType_b" name="searchType_b">
 					<option value="0">선택해주세요</option>
 					<option value="1">대관문의</option>
 					<option value="2">환불문의</option>
+					<option value="3">기타문의</option>
 				</select>
 				<div class="col-md-4"></div>
 			</div>
@@ -193,7 +203,7 @@ input[type="file"] {
 
 			<div class="row mt-5 mb-5" style="height: 20px; border: solid 0px red;">
 				<div class="col-md-3"></div>
-				<input type="checkbox" class="col-md-1"><span class="mt-1">(필수) 개인정보 수집,이용동의<span id="view-policy" style="cursor: pointer;">  전문보기</span></span>
+				<input type="checkbox" id="agree" class="col-md-1"><span class="mt-1">(필수) 개인정보 수집,이용동의&nbsp;&nbsp;<span id="view-policy" style="cursor: pointer; text-decoration: underline;">전문보기</span></span>
 			</div>
 
 

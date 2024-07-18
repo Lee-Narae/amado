@@ -1297,6 +1297,11 @@ public class ControllerSJ {
 		System.out.println("확인용~~ content : " + content);
 		System.out.println("확인용~~ email : " + email);
 		System.out.println("확인용~~ phone : " + phone);
+		
+		List<MultipartFile> fileList = mrequest.getFiles("file_arr");
+		
+		
+		
 
 		mav.setViewName("community/inquiryList.tiles2");
 
