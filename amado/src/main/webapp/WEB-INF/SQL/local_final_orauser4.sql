@@ -905,7 +905,7 @@ from TBL_SPORT
 
 select *
 from tbl_club
-order by fk_sportseq
+order by clubseq desc
 
 /*
 ---------------
@@ -953,10 +953,64 @@ THE CHEERS
 강원대 배드민턴 동호회
 가평잣막걸리
 ---------------
-
-
-
-
-
-
 */
+
+
+
+
+
+
+
+
+
+/* 1대1 문의 테이블 */
+
+
+create table tbl_inquiry   
+(inquiryseq                  NUMBER   not null                -- 문의번호
+,content                     nvarchar2(1000)   not null       -- 글내용
+,fk_userid                   nvarchar2(20)  not null          -- 아이디(tbl_member 의 회원아이디)
+,email                       nvarchar2(50)   not null         -- 이메일
+,phone                       nvarchar2(50)   not null         -- 휴대폰
+,registerdate                date default sysdate  not null   -- 작성일자
+,searchType_a                NUMBER                           -- 문의유형 A
+,searchType_b                NUMBER                           -- 문의유형 B
+,status                      number(1) default 1 not null     -- 게시글삭제유무   1: 사용가능(게시글등록) / 0:사용불능(게시글삭제) 
+
+,constraint PK_tbl_inquiry_boardseq primary key(inquiryseq)
+,constraint FK_tbl_inquiry_fk_userid foreign key(fk_userid) references tbl_member(userid)
+,constraint CK_tbl_inquiry_status check( status in(0,1) )
+);
+// Table TBL_INQUIRY이(가) 생성되었습니다.
+
+
+
+create sequence seq_inquiry 
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+-- Sequence SEQ_INQUIRY이(가) 생성되었습니다.
+
+commit
+
+
+create table tbl_inquiryFile 
+(inquiryseq                NUMBER   not null
+,orgfilename               nvarchar2(50)                    -- 첨부파일원본이름
+,filename                  nvarchar2(50)                    -- 첨부파일이름
+,filesize                  NUMBER                           -- 파일크기
+,constraint FK_tbl_inquiryFile_inquiryseq foreign key(inquiryseq) references tbl_inquiry(inquiryseq)
+);
+-- Table TBL_INQUIRYFILE이(가) 생성되었습니다.
+
+
+select inquiryseq
+from tbl_inquiry
+order by inquiryseq desc
+
+select *
+from tbl_inquiryFile
+

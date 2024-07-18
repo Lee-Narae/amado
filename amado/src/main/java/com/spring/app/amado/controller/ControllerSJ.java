@@ -1278,35 +1278,172 @@ public class ControllerSJ {
 	
 	// 1:1 문의하기
 	
-	@GetMapping(value = "/community/inquiry.do")
-	public String inquiry(HttpServletRequest request) {
+	@GetMapping("/community/inquiry.do")
+	public String requiredLogin_inquiry(HttpServletRequest request, HttpServletResponse response) {
+		
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser"); 
+		
+		String fk_userid = loginuser.getUserid();
+		
+		request.setAttribute("fk_userid", fk_userid);
 		
 		return "community/inquiry.tiles2";
 	}
 
-	@PostMapping(value = "/community/inquiryEnd.do")
-	public ModelAndView inquiryEnd(ModelAndView mav, HttpServletRequest request, MultipartHttpServletRequest mrequest) {
+	
+	
+	@ResponseBody
+	@PostMapping(value = "/community/inquiryEnd.do", produces = "text/plain;charset=UTF-8")
+	public String inquiryEnd(ModelAndView mav, HttpServletRequest request, MultipartHttpServletRequest mrequest) {
 		
 		String searchType_a = request.getParameter("searchType_a");
 		String searchType_b = request.getParameter("searchType_b");
 		String content = request.getParameter("content");
 		String email = request.getParameter("email");
 		String phone = request.getParameter("phone");
+		String fk_userid = request.getParameter("fk_userid");
 		System.out.println("확인용~~ searchType_a : " + searchType_a);
 		System.out.println("확인용~~ searchType_b : " + searchType_b);
 		System.out.println("확인용~~ content : " + content);
 		System.out.println("확인용~~ email : " + email);
 		System.out.println("확인용~~ phone : " + phone);
+		System.out.println("확인용~~ fk_userid : " + fk_userid);
 		
 		List<MultipartFile> fileList = mrequest.getFiles("file_arr");
 		
+		HttpSession session = mrequest.getSession();
+		String root = session.getServletContext().getRealPath("/");
+		String path = root + "resources" + File.separator + "email_attach_file";
+
+		File dir = new File(path);
+		if (!dir.exists()) {
+			// C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\board\resources\email_attach_file
+			// \email_attach_file 폴더가 생성되었는지 확인하고 없으면 만든다.
+			dir.mkdirs();
+		}
+
+		// >>>> 첨부파일을 위의 path 경로에 올리기 <<<< //
+		String[] arr_attachFilename = null; // 첨부파일명들을 기록하기 위한 용도
+
+		JSONObject jsonObj = new JSONObject();
+		Map<String, Object> paraMap = new HashMap<>();
+		paraMap.put("searchType_a", searchType_a);
+		paraMap.put("searchType_b", searchType_b);
+		paraMap.put("content", content);
+		paraMap.put("email", email);
+		paraMap.put("phone", phone);
+		paraMap.put("fk_userid", fk_userid);
 		
+		int result = 0;
+		
+		// 파일첨부가 없는 1대1 문의
+		result = service.Inquiry(paraMap);
+		
+		if (fileList != null && fileList.size() > 0) {
+			
+			int inquiryseq = service.findseq_inquiry(paraMap);
+			
+			paraMap.put("inquiryseq", inquiryseq);
+
+			// 배열의 크기를 정해주고
+			arr_attachFilename = new String[fileList.size()];
+
+			for (int i = 0; i < fileList.size(); i++) {
+
+				MultipartFile mtfile = fileList.get(i);
+        		System.out.println("파일명 : " + mtfile.getOriginalFilename() + " / 파일크기 : " + mtfile.getSize());
+				/*
+				 * 파일명 : berkelekle심플라운드01.jpg / 파일크기 : 71317 파일명 : Electrolux냉장고_사용설명서.pdf /
+				 * 파일크기 : 791567 파일명 : 쉐보레전면.jpg / 파일크기 : 131110
+				 */
+
+				// 다중파일 할 때 파일명 (여기서는 메일만 보내기 때문에 하지 않는다)
+				// FileManager 에 doFileUpload (게시판에 파일첨부에 있다) 숫자로 되어진 새로운 파일이름을 받아오는데
+				// for 문 안에 있기 때문에 return 타입이 숫자. (DB 에 넣어줘야하는데)
+				// DB 설계를 -> 컬럼명 filename1 , 컬럼명 filename2, 컬럼명 filename3 이런식으로 하면 안된다.
+				// 만약 첨부파일이 DB 보다 많을 경우 문제가 있고, 하나만 넣었을 경우 나머지는 모두 null 값이기 때문에
+				// 첨부파일은 자식테이블로 만들어야한다!!
+				// seq 채번해서 가져온다.
+				// fk_부모seq 로 해서 가져온다. ( fk_부모seq = 101, filename = ex.pdf , fk_부모seq = 101,
+				// filename = ex23.pdf) 이런식으로
+				// 즉, for 문을 사용해서 insert를 해주면 된다.
+
+				try {
+					/*
+					 * File 클래스는 java.io 패키지에 포함되며, 입출력에 필요한 파일이나 디렉터리를 제어하는 데 사용된다. 파일과 디렉터리의 접근
+					 * 권한, 생성된 시간, 경로 등의 정보를 얻을 수 있는 메소드가 있으며, 새로운 파일 및 디렉터리 생성, 삭제 등 다양한 조작 메서드를
+					 * 가지고 있다.
+					 */
+
+					// 첨부파일이 있을 경우
+					// 첨부파일의 경로
+					paraMap.put("path", path); // path 는 첨부파일들이 저장된 WAS(톰캣)의 폴더의 경로명이다.
+					paraMap.put("orgfilename", mtfile.getOriginalFilename()); 
+					paraMap.put("filesize", mtfile.getSize()); 
+
+					
+					// 시분초로 되어있는 파일명
+					
+					String newFileName = "";
+					// WAS(톰캣)의 디스크에 저장될 파일명(나노타임)
+
+					byte[] bytes = null;
+					// 첨부파일의 내용물을 담는 것
+					
+					bytes = mtfile.getBytes();
+					// 첨부파일의 내용물을 읽어오는 것
+
+					String originalFilename = mtfile.getOriginalFilename();
+					// mtfile.getOriginalFilename() 이 첨부파일명의 파일명(예: 강아지.png) 이다.
+
+					try {
+						newFileName = fileManager.doFileUpload(bytes, originalFilename, path);
+						System.out.println("newFileName : " + newFileName);
+						paraMap.put("filename", newFileName);
+						// newFileName : 20240627131107274413505051000.jpg	
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				
+					// 파일첨부가 있는 1대1 문의
+					result = service.InquiryFile(paraMap);
+					
+					// === MultipartFile 을 File 로 변환하여 탐색기 저장폴더에 저장하기 시작 === //
+
+					File attachFile = new File(path + File.separator + mtfile.getOriginalFilename());
+					// spring 에서 파일을 전송해주는 메소드 void
+					// org.springframework.web.multipart.MultipartFile.transferTo(File dest)
+					mtfile.transferTo(attachFile); // 이것이 파일을 업로드해주는 것이다!!
+
+					/*
+					 * form 태그로 부터 전송받은 MultipartFile mtfile 파일을 지정된 대상 파일(attachFile)로 전송한다. 만약에 대상
+					 * 파일(attachFile)이 이미 존재하는 경우 먼저 삭제된다.
+					 */
+					// 탐색기에서
+					// C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\board\resources\email_attach_file
+					// 폴더에 가보면
+					// 첨부한 파일이 생성되어져 있음을 확인할 수 있다.
+
+					// === MultipartFile 을 File 로 변환하여 탐색기 저장폴더에 저장하기 끝 === //
+
+					arr_attachFilename[i] = mtfile.getOriginalFilename(); // 배열 속에 첨부파일명들을 기록한다.
+
+				} catch (IllegalStateException | IOException e) {
+					e.printStackTrace();
+				}
+			} // end of for
+
+		} // end of if (fileList != null && fileList.size() > 0)
+
+		 
 		
 
-		mav.setViewName("community/inquiryList.tiles2");
 
-		
-		return mav;
+
+//		System.out.println(jsonObj.toString());
+
+		return jsonObj.toString();
 	}
 	
 	
