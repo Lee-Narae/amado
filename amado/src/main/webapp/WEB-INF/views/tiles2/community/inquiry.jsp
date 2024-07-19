@@ -361,11 +361,12 @@ div.fileDrop>div.fileList>span.fileSize {
 	              success:function(json){
 	            	  // console.log("~~~ 확인용 : " + JSON.stringify(json));
 	                  // ~~~ 확인용 : {"result":1}
-	                  if(json.result == 1) {
-	            	     location.href="<%=ctxPath%>/community/inquiryList.tiles2"; 
+	                  if(json.result == 1 || json.inquiryseq != 0) {
+	                	 alert("1대1 문의가 등록되었습니다.");
+	            	     location.href="<%=ctxPath%>/community/inquiryList.do"; 
 	                  }
 	                  else {
-	                	  alert("메일보내기가 실패했습니다.");
+	                	  alert("1대1 문의 등록에 실패했습니다.");
 	                  }
 	              },
 	              error: function(request, status, error){
@@ -396,7 +397,11 @@ div.fileDrop>div.fileList>span.fileSize {
 
 
 <div style="display: flex;" class="mt-4">
+
 	<div style="width: 80%; margin: auto; padding-left: 3%;">
+
+		<div class="mb-3" style="cursor: pointer; text-decoration: underline;" id="GoInquiryList" onclick="location.href='<%=ctxPath%>/community/inquiryList.do'">문의목록보기</div>		
+
 
 		<h2 style="margin-bottom: 30px;">1:1 문의하기</h2>
 		<hr style="border-width: 1px 0 0 0; border-color: #000;" class="mb-3">
@@ -452,16 +457,16 @@ div.fileDrop>div.fileList>span.fileSize {
 			<div class="row mt-4" style="height: 40px; border: solid 0px blue;">
 				<strong class="col-md-2 mt-2 mb-4" style="text-align: center;">이메일
 					주소</strong>
-				<textarea name="email" class="col-md6" rows="1" cols="78"
-					placeholder="exam@naver.com"></textarea>
+				<textarea name="email" class="col-md6" rows="1" cols="65"
+					placeholder="exam@naver.com" style="font-size: 14pt;">${requestScope.loginuser.email}</textarea>
 			</div>
 
 			<div class="row mt-5 mb-5"
 				style="height: 40px; border: solid 0px red;">
 				<strong class="col-md-2 mt-2 mb-4" style="text-align: center;">휴대폰
 					번호</strong>
-				<textarea name="phone" class="col-md6" rows="1" cols="78"
-					placeholder="01012345678"></textarea>
+				<textarea name="phone" class="col-md6" rows="1" cols="65"
+					placeholder="01012345678" style="font-size: 14pt;">${requestScope.loginuser.mobile}</textarea>
 				<input type="hidden" name="fk_userid" value="${requestScope.fk_userid}">
 			</div>
 

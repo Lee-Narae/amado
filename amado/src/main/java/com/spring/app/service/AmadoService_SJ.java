@@ -96,5 +96,8 @@ public interface AmadoService_SJ {
 
 	int findseq_inquiry(Map<String, Object> paraMap);
 
+	// 멤버정보 가져오기
+	MemberVO getMemberInfo(String fk_userid);
+
 
 }

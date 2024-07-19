@@ -3,6 +3,8 @@ package com.spring.app.amado.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.spring.app.common.AES256;
 import com.spring.app.common.FileManager;
 import com.spring.app.common.MyUtil;
 import com.spring.app.domain.BoardCommentVO;
@@ -1282,10 +1285,14 @@ public class ControllerSJ {
 		
 		HttpSession session = request.getSession();
 		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser"); 
-		
+				
+
 		String fk_userid = loginuser.getUserid();
 		
-		request.setAttribute("fk_userid", fk_userid);
+		loginuser = service.getMemberInfo(fk_userid);
+		
+		request.setAttribute("fk_userid", fk_userid);		request.setAttribute("fk_userid", fk_userid);
+
 		
 		return "community/inquiry.tiles2";
 	}
@@ -1313,7 +1320,7 @@ public class ControllerSJ {
 		
 		HttpSession session = mrequest.getSession();
 		String root = session.getServletContext().getRealPath("/");
-		String path = root + "resources" + File.separator + "email_attach_file";
+		String path = root + "resources" + File.separator + "inquiry_file";
 
 		File dir = new File(path);
 		if (!dir.exists()) {
@@ -1342,6 +1349,8 @@ public class ControllerSJ {
 		if (fileList != null && fileList.size() > 0) {
 			
 			int inquiryseq = service.findseq_inquiry(paraMap);
+			
+			jsonObj.put("inquiryseq", inquiryseq);
 			
 			paraMap.put("inquiryseq", inquiryseq);
 
@@ -1434,18 +1443,29 @@ public class ControllerSJ {
 			} // end of for
 
 		} // end of if (fileList != null && fileList.size() > 0)
-
-		 
 		
-
-
-
+		
+		jsonObj.put("result", result);
+		
 //		System.out.println(jsonObj.toString());
 
 		return jsonObj.toString();
 	}
 	
 	
+	// 문의목록보기
+	@GetMapping("/community/inquiryList.do")
+	public ModelAndView inquiryList(HttpServletRequest request, ModelAndView mav) {
+		
+		
+		mav.setViewName("/community/inquiryList.tiles2");
+		
+		return mav;
+	}
+	
+	
+	
+	// 클럽에 가입했을 경우(회원이 클럽에 가입)
 	@ResponseBody
 	@PostMapping(value = "/club/clubMRegisterSJ.do", produces = "text/plain;charset=UTF-8") 
 	public String clubMRegisterSJ(HttpServletRequest request) {
