@@ -313,15 +313,21 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	@Override
 	public int clubMRegisterSJ(ClubmemberVO clubmembervo) {
 
-		int result = 0;
-		// 이미 클럽가입 신청했거나 가입됐는지 확인용
-		int n1 = dao.getclubAry(clubmembervo);
+		int n, n1, result = 0;
 		
-		if(n1 == 0) {
-			// 이미 가입신청하지 않았을 경우
+		// 한 카테고리에 이미 가입한 클럽이 있는지 확인용
+		n = dao.checkClubSportseq(clubmembervo);
+		result = 99;
+		if(n == 0) {
+			// 이미 클럽가입 신청했거나 가입됐는지 확인용
+			n1 = dao.getclubAry(clubmembervo);
 			
-			// 클럽 가입신청
-			result = dao.clubMRegisterSJ(clubmembervo);
+			if(n1 == 0) {
+				// 가입하려는 카테고리에 이미 가입한 클럽이 없고, 가입신청하지 않았을 경우
+				
+				// 클럽 가입신청
+				result = dao.clubMRegisterSJ(clubmembervo);
+			}
 		}
 		
 		return result;
@@ -349,6 +355,30 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	public int Inquiry(Map<String, Object> paraMap) {
 		int result = dao.Inquiry(paraMap); // tbl_inquiry 에 넣기
 		return result;
+	}
+
+	// 멤버정보 가져오기
+	@Override
+	public MemberVO getMemberInfo(String fk_userid) {
+			
+		MemberVO loginuser = dao.getMemberInfo(fk_userid);	
+			
+		String email = "";
+		String mobile = "";
+		try {
+			email = aES256.decrypt(loginuser.getEmail());
+			mobile = aES256.decrypt(loginuser.getMobile());
+			
+			loginuser.setEmail(email);
+			loginuser.setMobile(mobile);
+			
+		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return loginuser;
 	}
 
 

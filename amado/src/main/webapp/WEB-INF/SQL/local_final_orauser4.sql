@@ -903,7 +903,7 @@ from TBL_SPORT
 */
 
 
-select *
+select clubseq
 from tbl_club
 order by clubseq desc
 
@@ -1007,10 +1007,27 @@ create table tbl_inquiryFile
 -- Table TBL_INQUIRYFILE이(가) 생성되었습니다.
 
 
-select inquiryseq
+
+select *
 from tbl_inquiry
 order by inquiryseq desc
 
 select *
 from tbl_inquiryFile
+order by inquiryseq desc
 
+
+select *
+from tbl_member
+
+
+
+select *
+from tbl_clubmember
+where fk_userid = 'ksj1024sj' and sportseq = 1
+
+delete from tbl_clubmember
+where fk_userid = 'ksj1024sj' and STATUS = 0;
+
+
+commit;

@@ -255,5 +255,20 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 		return inquiryseq;
 	}
 
+	// 멤버정보 가져오기
+	@Override
+	public MemberVO getMemberInfo(String fk_userid) {
+		MemberVO loginuser = sqlsession.selectOne("SJ.getMemberInfo", fk_userid);
+		return loginuser;
+	}
+
+	
+	// 한 카테고리에 이미 가입한 클럽이 있는지 확인용
+	@Override
+	public int checkClubSportseq(ClubmemberVO clubmembervo) {
+		int n = sqlsession.selectOne("SJ.checkClubSportseq", clubmembervo);
+		return n;
+	}
+
 
 }

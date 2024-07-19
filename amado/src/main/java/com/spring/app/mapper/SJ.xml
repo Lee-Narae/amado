@@ -450,6 +450,14 @@
     
     
     <!-- 이미 클럽가입 신청했거나 가입됐는지 확인용 -->
+    <select id="checkClubSportseq" parameterType="ClubmemberVO" resultType="int">
+		select count(*) AS n
+		from tbl_clubmember
+		where fk_userid = #{fk_userid} and sportseq = #{sportseq}   
+    </select>
+    
+    
+    <!-- 이미 클럽가입 신청했거나 가입됐는지 확인용 -->
     <select id="getclubAry" parameterType="ClubmemberVO" resultType="int">
 		select count(*) AS n1
 		from tbl_clubmember
@@ -483,6 +491,17 @@
 		insert into tbl_inquiryFile(inquiryseq, orgfilename, filename, filesize)
 		values(#{inquiryseq}, #{orgfilename}, #{filename} , to_number(#{filesize}))
     </insert>
+    
+    
+    <!-- 멤버정보 가져오기 -->
+    <select id="getMemberInfo" parameterType="String" resultType="MemberVO">
+    	select userid, password, name, email, postcode, address
+    	     , detailaddress, extraaddress, mobile, gender, birthday
+    	     , registerday, lastpwdchangedate, status, memberrank
+    	     , gymregisterstatus, speed, quick, power, earth, stretch, idle, memberimg
+    	from tbl_member
+    	where userid = #{fk_userid}
+    </select>
     
 	
 </mapper>

@@ -108,6 +108,12 @@ public interface AmadoDAO_SJ {
 
 	int findseq_inquiry(Map<String, Object> paraMap);
 
+	// 멤버정보 가져오기
+	MemberVO getMemberInfo(String fk_userid);
+
+	// 한 카테고리에 이미 가입한 클럽이 있는지 확인용
+	int checkClubSportseq(ClubmemberVO clubmembervo);
+
 	
 
 }
