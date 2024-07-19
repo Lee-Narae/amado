@@ -407,12 +407,51 @@ from tbl_opendata_gym) A join (select city
 on A.city = B.city
 order by 1, 2;
 
-select A.city, 구, count(*)
+select 구, count(*) cnt
 from
-(select substr(oldadd,instr(oldadd, ' ', 1, 1)+1,instr(oldadd, ' ', 1, 2)-1-instr(oldadd, ' ', 1, 1)) 구, name, city
+(select city, substr(oldadd,instr(oldadd, ' ', 1, 1)+1,instr(oldadd, ' ', 1, 2)-1-instr(oldadd, ' ', 1, 1)) 구
 from tbl_opendata_gym) A join (select city
                                from tbl_opendata_gym
                                group by city) B
 on A.city = B.city
+where A.city = '경기도'
 group by A.city, 구
 order by 1, 2;
+
+
+select substr(oldadd,instr(oldadd, ' ', 1, 1)+1,instr(oldadd, ' ', 1, 2)-1-instr(oldadd, ' ', 1, 1)) 구, count(*) cnt
+from tbl_opendata_gym
+where city = '경기도'
+group by city, substr(oldadd,instr(oldadd, ' ', 1, 1)+1,instr(oldadd, ' ', 1, 2)-1-instr(oldadd, ' ', 1, 1))
+order by 1, 2;
+
+desc tbl_opendata_gym;
+
+select opendata_gymseq, name, type, status, newadd, city
+from tbl_opendata_gym;
+
+select rn, userid, name, email, gender, memberrank
+		from
+		(select rownum rn, userid, name, email, gender, memberrank
+		from
+		(select userid, name, email, gender, case memberrank when 0 then '일반회원' when 1 then '동호회장' else '관리자' end memberrank
+		from tbl_member
+		where 1=1
+		<if test="searchType == 'name' and searchWord != ''">and name like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'userid' and searchWord != ''">and userid like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'email' and searchWord != ''">and email like '%'||#{searchWord}||'%'</if>
+		order by registerday desc)
+		)
+		where rn between to_number(#{currentShowPageNo})*to_number(#{sizePerPage})-(to_number(#{sizePerPage})-1) and to_number(#{currentShowPageNo})*to_number(#{sizePerPage});
+        
+select rn, name, type, status, newadd, city
+from
+(select rownum rn, name, type, status, newadd, city
+from     
+(select distinct  name, newadd,type, status, city
+from tbl_opendata_gym
+order by city, newadd));
+        
+        
+
+        

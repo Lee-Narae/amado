@@ -552,20 +552,71 @@
 		values (opendata_gymseq.nextval, #{name}, #{type}, #{status}, #{postcode}, #{oldAdd}, #{newAdd}, #{city})
 	</insert>
 	
-	<resultMap type="HashMap" id="searchFacByLocalMap">
+	<resultMap type="HashMap" id="searchFacByCityMap">
 		<result column="city" property="city" javaType="String"/>
+		<result column="cnt" property="cnt" javaType="String"/>
+	</resultMap>
+	<select id="searchFacByCity" resultMap="searchFacByCityMap">
+		select city, count(*) cnt
+		from tbl_opendata_gym
+		group by city
+		order by 1
+	</select>
+	
+	
+	<resultMap type="HashMap" id="searchFacByLocalMap">
 		<result column="local" property="local" javaType="String"/>
 		<result column="cnt" property="cnt" javaType="String"/>
 	</resultMap>
-	<select id="searchFacByLocal" resultMap="searchFacByLocalMap">
-		select A.city, local, count(*) cnt
-		from
-		(select substr(oldadd,instr(oldadd, ' ', 1, 1)+1,instr(oldadd, ' ', 1, 2)-1-instr(oldadd, ' ', 1, 1)) local, name, city
-		from tbl_opendata_gym) A join (select city
-		                               from tbl_opendata_gym
-		                               group by city) B
-		on A.city = B.city
-		group by A.city, local
+	<select id="searchFacByLocal" parameterType="String" resultMap="searchFacByLocalMap">
+		select substr(oldadd,instr(oldadd, ' ', 1, 1)+1,instr(oldadd, ' ', 1, 2)-1-instr(oldadd, ' ', 1, 1)) local, count(*) cnt
+		from tbl_opendata_gym
+		where city = #{city}
+		group by city, substr(oldadd,instr(oldadd, ' ', 1, 1)+1,instr(oldadd, ' ', 1, 2)-1-instr(oldadd, ' ', 1, 1))
 		order by 1, 2
 	</select>
+	
+	<resultMap type="HashMap" id="facMap">
+		<result column="opendata_gymseq" property="opendata_gymseq" javaType="String"/>
+		<result column="name" property="name" javaType="String"/>
+		<result column="type" property="type" javaType="String"/>
+		<result column="status" property="status" javaType="String"/>
+		<result column="newadd" property="newadd" javaType="String"/>
+		<result column="city" property="city" javaType="String"/>
+	</resultMap>
+	<select id="getFacList" resultMap="facMap" parameterType="HashMap">
+		select rn, name, type, status, newadd, city
+		from
+		(select rownum rn, name, type, status, newadd, city
+		from     
+		(select distinct name, type, status, newadd, city
+		from tbl_opendata_gym
+		where 1=1
+		<if test="searchType == 'name' and searchWord != ''">and name like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'type' and searchWord != ''">and type like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'newadd' and searchWord != ''">and newadd like '%'||#{searchWord}||'%'</if>
+		order by city, newadd))
+		where rn between to_number(#{currentShowPageNo})*10-9 and to_number(#{currentShowPageNo})*10
+	</select>
+	
+	
+	<select id="getfacTotalPage" resultType="int">
+		select ceil(count(*)/10)
+		from (select distinct newadd, name, type, status, city from tbl_opendata_gym)
+		where 1=1
+		<if test="searchType == 'name' and searchWord != ''">and name like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'type' and searchWord != ''">and type like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'newadd' and searchWord != ''">and newadd like '%'||#{searchWord}||'%'</if>
+	</select>
+	
+	
+	<select id="getTotalFacCount" resultType="int">
+		select count(*)
+		from (select distinct newadd, name, type, status, city from tbl_opendata_gym)
+		where 1=1
+		<if test="searchType == 'name' and searchWord != ''">and name like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'type' and searchWord != ''">and type like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'newadd' and searchWord != ''">and newadd like '%'||#{searchWord}||'%'</if>
+	</select>
+	
 </mapper>

@@ -189,7 +189,13 @@ public interface AmadoService_NR {
 	int insertOpendata(Map<String, String> paramap);
 
 	// 지역별 체육시설 현황
-	List<Map<String, String>> searchFacByLocal();
+	List<Map<String, String>> searchFacByCity();
+	List<Map<String, String>> searchFacByLocal(String city);
+
+	// 전국 체육시설
+	List<Map<String, String>> getFacList(Map<String, String> paramap);
+	int getfacTotalPage(Map<String, String> paramap);
+	int getTotalFacCount(Map<String, String> paramap);
 
 	
 
