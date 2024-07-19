@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <% String ctxPath = request.getContextPath(); %>
 
@@ -51,6 +53,38 @@
     background: #f1f7ff;
 }
 
+#searchType {
+height: 35px;
+width: 10%;
+border-radius: 10px;
+text-align: center;
+}
+
+#sizePerPage {
+height: 35px;
+width: 5%;
+border-radius: 10px;
+text-align: center;
+}
+
+#searchWord {
+height: 35px;
+border-radius: 10px;
+border: solid 1px gray;
+padding-left: 1%;
+}
+
+table#memberTbl th {
+text-align: center;
+font-size: 14pt;
+}
+
+table#memberTbl tr.memberInfo:hover {
+background-color: #e6ffe6;
+cursor: pointer;
+}
+
+
 </style>
 
 
@@ -64,22 +98,127 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	
+	$("input:text[name='searchWord']").bind("keyup", function(e){
+        if(e.keyCode == 13){
+        	goSearch();
+        }
+    });
+	
+	if("${requestScope.searchWord}" != "" && "${requestScope.searchType}" != ""){
+		$("input:text[name='searchWord']").val("${requestScope.searchWord}");
+		$("select[name='searchType']").val("${requestScope.searchType}");
+	}
+	
 	let cityFacList = [];
 	
+	// ------------------------ 지역별 구별 통계차트 ------------------------- //
+	
+	// 1. 지역별 통계 가져오기
 	$.ajax({
-		url: "<%=ctxPath%>/community/searchFacByLocal.do",
+		url: "<%=ctxPath%>/community/searchFacByCity.do",
 		dataType: "json",
 		success: function(json){
-			console.log(JSON.stringify(json));
-			// [{"city":"경기도","cnt":"1","local":"가평군"}, {"city":"경기도","cnt":"1","local":"가평군"}, ...]
+			// [{"city":"경기도","cnt":"322"},{"city":"경상남도","cnt":"58"}, ...]
+			
+			let city_arr = [];
 			
 			$.each(json, function(index, item){
-				let cityObj = {};
-				cityObj.name = item.city;
-				
-				
-				
+				city_arr.push({name: item.city,
+			                   y: Number(item.cnt),
+			                   drilldown: item.city});
 			});
+			
+			let local_arr = [];
+			
+			$.each(json, function(index, item){
+				
+				// 2. 구별 통계 가져오기
+				$.ajax({
+					url: "<%=ctxPath%>/community/searchFacByLocal.do",
+					data: {"city": item.city},
+					dataType: "json",
+					success: function(json2){
+						// {"cnt":"3","local":"경산시"}
+						
+						let subArr = [];
+	    				
+	    				$.each(json2, function(index2, item2){
+	    					subArr.push([item2.local, Number(item2.cnt)]);
+	    				});
+	    				
+	    				local_arr.push({name: item.city, id: item.city, data: subArr});
+						
+					},
+					error: function(request, status, error){
+						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					}
+				});
+			});
+			
+			
+			Highcharts.chart('container', {
+				 chart: {
+				     type: 'column'
+				 },
+				 title: {
+				     align: 'left',
+				     text: '지역별 전국 체육시설 분포 현황'
+				 },
+				 subtitle: {
+				     align: 'left',
+				     text: '출처: <a href="https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15113986" target="_blank">공공데이터포털 data.go.kr</a>'
+				 },
+				 accessibility: {
+				     announceNewData: {
+				         enabled: true
+				     }
+				 },
+				 xAxis: {
+				     type: 'category'
+				 },
+				 yAxis: {
+				     title: {
+				         text: '시설 수(개)'
+				     }
+				
+				 },
+				 legend: {
+				     enabled: false
+				 },
+				 plotOptions: {
+				     series: {
+				         borderWidth: 0,
+				         dataLabels: {
+				             enabled: true,
+				             format: '{point.y:f}개'
+				         }
+				     }
+				 },
+				
+				 tooltip: {
+				     headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+				     pointFormat: '<span style="color:{point.color}">{point.name}</span>: ' +
+				         '<b>{point.y:f}개</b> of total<br/>'
+				 },
+				
+				 series: [
+				     {
+				         name: '시/도',
+				         colorByPoint: true,
+				         data: city_arr
+				     }
+				 ],
+				 drilldown: {
+				     breadcrumbs: {
+				         position: {
+				             align: 'right'
+				         }
+				     },
+				     series: local_arr
+				 }
+				});
+			
+			
 			
 		},
 		error: function(request, status, error){
@@ -88,342 +227,99 @@ $(document).ready(function(){
 	});
 	
 	
-	Highcharts.chart('container', {
-	 chart: {
-	     type: 'column'
-	 },
-	 title: {
-	     align: 'left',
-	     text: '지역별 전국 체육시설 분포 현황'
-	 },
-	 subtitle: {
-	     align: 'left',
-	     text: '출처: <a href="https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15113986" target="_blank">공공데이터포털 data.go.kr</a>'
-	 },
-	 accessibility: {
-	     announceNewData: {
-	         enabled: true
-	     }
-	 },
-	 xAxis: {
-	     type: 'category'
-	 },
-	 yAxis: {
-	     title: {
-	         text: 'Total percent market share'
-	     }
 	
-	 },
-	 legend: {
-	     enabled: false
-	 },
-	 plotOptions: {
-	     series: {
-	         borderWidth: 0,
-	         dataLabels: {
-	             enabled: true,
-	             format: '{point.y:.1f}%'
-	         }
-	     }
-	 },
-	
-	 tooltip: {
-	     headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-	     pointFormat: '<span style="color:{point.color}">{point.name}</span>: ' +
-	         '<b>{point.y:.2f}%</b> of total<br/>'
-	 },
-	
-	 series: [
-	     {
-	         name: '시/도',
-	         colorByPoint: true,
-	         data: [
-	             {
-	                 name: 'chrome',
-	                 y: 63.06,
-	                 drilldown: '크롬'
-	             },
-	             {
-	                 name: 'Safari',
-	                 y: 19.84,
-	                 drilldown: 'Safari'
-	             },
-	             {
-	                 name: 'Firefox',
-	                 y: 4.18,
-	                 drilldown: 'Firefox'
-	             },
-	             {
-	                 name: 'Edge',
-	                 y: 4.12,
-	                 drilldown: 'Edge'
-	             },
-	             {
-	                 name: 'Opera',
-	                 y: 2.33,
-	                 drilldown: 'Opera'
-	             },
-	             {
-	                 name: 'Internet Explorer',
-	                 y: 0.45,
-	                 drilldown: 'Internet Explorer'
-	             },
-	             {
-	                 name: 'Other',
-	                 y: 1.582,
-	                 drilldown: null
-	             }
-	         ]
-	     }
-	 ],
-	 drilldown: {
-	     breadcrumbs: {
-	         position: {
-	             align: 'right'
-	         }
-	     },
-	     series: [
-	         {
-	             name: 'Chrome',
-	             id: '크롬',
-	             data: [
-	                 [
-	                     'v65.0',
-	                     0.1
-	                 ],
-	                 [
-	                     'v64.0',
-	                     1.3
-	                 ],
-	                 [
-	                     'v63.0',
-	                     53.02
-	                 ],
-	                 [
-	                     'v62.0',
-	                     1.4
-	                 ],
-	                 [
-	                     'v61.0',
-	                     0.88
-	                 ],
-	                 [
-	                     'v60.0',
-	                     0.56
-	                 ],
-	                 [
-	                     'v59.0',
-	                     0.45
-	                 ],
-	                 [
-	                     'v58.0',
-	                     0.49
-	                 ],
-	                 [
-	                     'v57.0',
-	                     0.32
-	                 ],
-	                 [
-	                     'v56.0',
-	                     0.29
-	                 ],
-	                 [
-	                     'v55.0',
-	                     0.79
-	                 ],
-	                 [
-	                     'v54.0',
-	                     0.18
-	                 ],
-	                 [
-	                     'v51.0',
-	                     0.13
-	                 ],
-	                 [
-	                     'v49.0',
-	                     2.16
-	                 ],
-	                 [
-	                     'v48.0',
-	                     0.13
-	                 ],
-	                 [
-	                     'v47.0',
-	                     0.11
-	                 ],
-	                 [
-	                     'v43.0',
-	                     0.17
-	                 ],
-	                 [
-	                     'v29.0',
-	                     0.26
-	                 ]
-	             ]
-	         },
-	         {
-	             name: 'Firefox',
-	             id: 'Firefox',
-	             data: [
-	                 [
-	                     'v58.0',
-	                     1.02
-	                 ],
-	                 [
-	                     'v57.0',
-	                     7.36
-	                 ],
-	                 [
-	                     'v56.0',
-	                     0.35
-	                 ],
-	                 [
-	                     'v55.0',
-	                     0.11
-	                 ],
-	                 [
-	                     'v54.0',
-	                     0.1
-	                 ],
-	                 [
-	                     'v52.0',
-	                     0.95
-	                 ],
-	                 [
-	                     'v51.0',
-	                     0.15
-	                 ],
-	                 [
-	                     'v50.0',
-	                     0.1
-	                 ],
-	                 [
-	                     'v48.0',
-	                     0.31
-	                 ],
-	                 [
-	                     'v47.0',
-	                     0.12
-	                 ]
-	             ]
-	         },
-	         {
-	             name: 'Internet Explorer',
-	             id: 'Internet Explorer',
-	             data: [
-	                 [
-	                     'v11.0',
-	                     6.2
-	                 ],
-	                 [
-	                     'v10.0',
-	                     0.29
-	                 ],
-	                 [
-	                     'v9.0',
-	                     0.27
-	                 ],
-	                 [
-	                     'v8.0',
-	                     0.47
-	                 ]
-	             ]
-	         },
-	         {
-	             name: 'Safari',
-	             id: 'Safari',
-	             data: [
-	                 [
-	                     'v11.0',
-	                     3.39
-	                 ],
-	                 [
-	                     'v10.1',
-	                     0.96
-	                 ],
-	                 [
-	                     'v10.0',
-	                     0.36
-	                 ],
-	                 [
-	                     'v9.1',
-	                     0.54
-	                 ],
-	                 [
-	                     'v9.0',
-	                     0.13
-	                 ],
-	                 [
-	                     'v5.1',
-	                     0.2
-	                 ]
-	             ]
-	         },
-	         {
-	             name: 'Edge',
-	             id: 'Edge',
-	             data: [
-	                 [
-	                     'v16',
-	                     2.6
-	                 ],
-	                 [
-	                     'v15',
-	                     0.92
-	                 ],
-	                 [
-	                     'v14',
-	                     0.4
-	                 ],
-	                 [
-	                     'v13',
-	                     0.1
-	                 ]
-	             ]
-	         },
-	         {
-	             name: 'Opera',
-	             id: 'Opera',
-	             data: [
-	                 [
-	                     'v50.0',
-	                     0.96
-	                 ],
-	                 [
-	                     'v49.0',
-	                     0.82
-	                 ],
-	                 [
-	                     'v12.1',
-	                     0.14
-	                 ]
-	             ]
-	         }
-	     ]
-	 }
-	});
 });
+
+function goSearch() {
+	if($("input:text[name='searchWord']").val() == ""){
+		alert("검색어를 입력하세요.");
+		return;
+	}
+	
+	if($("select[name='searchType']").val() == ""){ // select태그의 option 중 value 값을 넣어야 한다.
+		alert("검색 대상을 선택하세요.");
+		return;
+	}
+	
+	const frm = document.fac_search_frm;
+	frm.submit();
+	
+}
 </script>
 
 
-<div style="width: 100%; padding-top: 5%;" align="center">
+<div style="width: 100%; padding: 5% 0;" align="center">
 
 <div style="font-size: 30pt; font-weight: bold;">전국체육시설 정보</div>
 <hr style="border: solid 2px black; width:80%; border-style: groove;">
 
-<div id="selectDiv">
-	<select id="select">
-		<option value="type">지역별</option>
-		<option value="city">업종별</option>
-	</select>
+<div id="chartDiv" style="width: 80%; margin-top: 1.5%;">
+	<figure class="highcharts-figure">
+	    <div id="container"></div>
+	</figure>
 </div>
 
-<div id="chartDiv" style="border: solid 1px red; width: 80%; margin-top: 1.5%;">
+<div id="tableDiv">
+<div id="memberTable" class="mt-5" style="width: 80%;">
 
-<figure class="highcharts-figure">
-    <div id="container"></div>
-</figure>
+	
+	<table class="table table-bordered" id="memberTbl" style="text-align: center;">
+      <thead>
+          <tr style="background-color: #ccf3ff;">
+             <th width="10%">번호</th>
+             <th width="10%">지역</th>
+             <th width="15%">업종</th>
+             <th width="20%">시설명</th>
+             <th width="35%">주소</th>
+             <th width="10%">운영여부</th>
+          </tr>
+      </thead>
+      
+      <tbody>
+          <c:if test="${not empty requestScope.facList}">
+          	<c:forEach var="fac" items="${requestScope.facList}" varStatus="status">
+          		<tr style="font-size: 11pt;">
+          			<fmt:parseNumber var="currentShowPageNo" value="${requestScope.currentShowPageNo}" />
+       				<td>${requestScope.totalMemberCount - (currentShowPageNo-1)*10 - status.index}</td>
+          			<td>${fac.city}</td>
+          			<td>${fac.type}</td>
+          			<td>${fac.name}</td>
+          			<td>${fac.newadd}</td>
+          			<td>${fac.status}</td>
+          		</tr>
+          	</c:forEach>
+          
+          </c:if>
+          
+          <c:if test="${empty requestScope.facList}">
+          	<td colspan="6">데이터가 존재하지 않습니다.</td>
+          </c:if>
+      </tbody>
+    </table>
+    
+   	<div class="mt-5 mb-5">
+		<form name="fac_search_frm">
+		     <select name="searchType" id="searchType">
+		        <option value="">검색대상</option>
+		        <option value="name">시설명</option>
+		        <option value="type">업종</option>
+		        <option value="newadd">주소</option>
+		     </select>
+		     &nbsp;
+		     <input type="text" name="searchWord" id="searchWord" />
+		     <input type="text" style="display: none;" /> 
+		    
+		    <span onclick="goSearch()" style="cursor: pointer;">🔎</span>
+		 </form>
+	</div>
+    
 
-
+	<div id="pageBar" align="center" style="margin-left: 30%;">
+       <nav>
+          <ul class="pagination">${requestScope.pageBar}</ul>
+       </nav>
+    </div>
 </div>
+</div>
+
 </div>

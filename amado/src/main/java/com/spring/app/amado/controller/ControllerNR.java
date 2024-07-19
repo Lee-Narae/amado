@@ -1,10 +1,8 @@
 package com.spring.app.amado.controller;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
@@ -28,7 +26,6 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -99,10 +96,13 @@ public class ControllerNR {
 			mav.addObject("club", club);
 		}
 		
-		// 동호회장 한정 알림 불러오기
+		// 동호회장 한정 알림 불러오기(매치요청, 매치결과)
 		if("1".equals(loginuser.getMemberrank())) {
 			List<Map<String,String>> alarmList = service.getClubAlarm(loginuser.getUserid());
 			mav.addObject("alarmList", alarmList);
+		
+			List<Map<String, String>> matchResultList = service.getMatchResult(loginuser.getUserid());
+			mav.addObject("matchResultList", matchResultList);
 		}
 		
 		// 우리팀 매치일정 불러오기
@@ -1791,11 +1791,10 @@ public class ControllerNR {
 		// 선택된 동호회의 tbl_matchingapplyseq 행 status는 1로, 선택받지 못한 동호회는 2로, tbl_matchingreg의  matchingregseq 행 status는 1로
 		// 1. tbl_matchingapply
 		int n = service.updateMatchingApply(paramap);
-		
+
 		if(n == 1) {
 			// 2. tbl_matchingreg
 			n = service.updateMatchingReg(matchingregseq);
-			
 			if(n == 1) {
 				// 3. tbl_matching
 				n = service.insertMatching(paramap);
@@ -1953,8 +1952,108 @@ public class ControllerNR {
 
 	
 	@GetMapping("/community/SportsFacilitiesInfo.do")
-	public ModelAndView SportsFacilitiesInfo(ModelAndView mav) {
+	public ModelAndView SportsFacilitiesInfo(ModelAndView mav, HttpServletRequest request) {
 		
+		String searchType = request.getParameter("searchType");
+		String searchWord = request.getParameter("searchWord");
+		String currentShowPageNo = request.getParameter("currentShowPageNo");
+		String sizePerPage = "10";
+		
+		if(searchType == null || !"name".equals(searchType) && !"type".equals(searchType) && !"newadd".equals(searchType)) {
+			searchType = "";
+		}
+		
+		if(searchWord == null || searchWord != null && searchWord.trim().isEmpty()) {
+			searchWord = "";
+		}
+		
+		if(currentShowPageNo == null) {
+			currentShowPageNo = "1";
+		}
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("searchType", searchType);
+		paramap.put("searchWord", searchWord);
+		paramap.put("currentShowPageNo", currentShowPageNo);
+		paramap.put("sizePerPage", sizePerPage);
+		
+		int totalPage = service.getfacTotalPage(paramap);
+		
+		try {
+			if(Integer.parseInt(currentShowPageNo) > totalPage || Integer.parseInt(currentShowPageNo) < 0) {
+				currentShowPageNo = "1";
+				paramap.put("currentShowPageNo", currentShowPageNo);
+			}
+		}catch (NumberFormatException e) {
+			currentShowPageNo = "1";
+			paramap.put("currentShowPageNo", currentShowPageNo);
+		}
+		
+		// 페이지바 만들기		
+		String pageBar = "";
+		int blockSize = 10; // blockSize 는 블럭(토막)당 보여지는 페이지 번호의 개수이다.
+		int loop = 1;  // loop 는 1부터 증가하여 1개 블럭을 이루는 페이지번호의 개수(지금은 10개)까지만 증가하는 용도이다.
+
+		// pageNo  ==> ( (currentShowPageNo - 1)/blockSize ) * blockSize + 1
+		int pageNo = ((Integer.parseInt(currentShowPageNo)-1)/blockSize)*blockSize+1;
+		// pageNo는 페이지바에서 보여지는 첫 번째 번호이다.
+		
+		
+		// *** [맨처음][이전] 만들기 *** //
+		   
+           pageBar += "<li class='page-item'><a class='page-link' href='SportsFacilitiesInfo.do?searchType="+searchType+"&searchWord="+searchWord+"&currentShowPageNo=1'>[맨처음]</a></li>";
+
+           if(pageNo != 1) {
+              pageBar += "<li class='page-item'><a class='page-link' href='SportsFacilitiesInfo.do?searchType="+searchType+"&searchWord="+searchWord+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a></li>";
+           }
+   
+           while(!(loop > blockSize || pageNo > totalPage)) {
+              
+              
+              if(pageNo ==  Integer.parseInt(currentShowPageNo)) {
+                 pageBar += "<li class='page-item active'><a class='page-link' href='#'>"+pageNo+"</a></li>";
+              }
+              else {
+                 pageBar += "<li class='page-item'><a class='page-link' href='SportsFacilitiesInfo.do?searchType="+searchType+"&searchWord="+searchWord+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a></li>";
+              }
+              
+              loop++;
+              
+              pageNo++;
+              
+           }// end of while(!( )) {}------------------- 
+           
+           // *** [다음][마지막] 만들기 *** //
+           // pageNo ==> 11
+           if(pageNo <= totalPage) {
+              pageBar += "<li class='page-item'><a class='page-link' href='SportsFacilitiesInfo.do?searchType="+searchType+"&searchWord="+searchWord+"&currentShowPageNo="+pageNo+"'>[다음]</a></li>";
+           }
+           pageBar += "<li class='page-item'><a class='page-link' href='SportsFacilitiesInfo.do?searchType="+searchType+"&searchWord="+searchWord+"&currentShowPageNo="+totalPage+"'>[맨마지막]</a></li>";
+           
+           
+         // *** ==== 페이지바 만들기 끝 ==== *** //
+
+        List<Map<String, String>> facList = service.getFacList(paramap);
+		
+		mav.addObject("facList", facList);
+		
+		if(searchType != null && ("name".equals(searchType) ||"type".equals(searchType) || "newadd".equals(searchType))) {
+			mav.addObject("searchType", searchType);
+		}
+		
+		if(searchWord != null && !searchWord.trim().isEmpty()) {
+			mav.addObject("searchWord", searchWord);
+		}
+		
+		mav.addObject("paramap", paramap);
+		mav.addObject("pageBar", pageBar);
+		
+		/* >>> 뷰단(memberList.jsp)에서 "페이징 처리시 보여주는 순번 공식" 에서 사용하기 위해 
+        	        검색이 있는 또는 검색이 없는 회원의 총개수 알아오기 <<< */
+		int totalMemberCount = service.getTotalFacCount(paramap);
+		
+		mav.addObject("totalMemberCount", totalMemberCount);
+		mav.addObject("currentShowPageNo", currentShowPageNo);
 		
 		
 		mav.setViewName("opendata/SportsFacilitiesInfo.tiles1");
@@ -1964,30 +2063,46 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@GetMapping(value="/community/searchFacByLocal.do", produces="text/plain;charset=UTF-8")
-	public String searchFacByLocal() {
+	@GetMapping(value="/community/searchFacByCity.do", produces="text/plain;charset=UTF-8")
+	public String searchFacByCity() {
 		
 		// 지역별 체육시설 현황
-		List<Map<String, String>> localFacList = service.searchFacByLocal();
+		List<Map<String, String>> cityFacList = service.searchFacByCity();
+		
+		JSONArray jsonArr = new JSONArray();
+		
+		for(Map<String, String> cityMap : cityFacList) {
+			
+			JSONObject jsonObj = new JSONObject();
+			jsonObj.put("city", cityMap.get("city"));
+			jsonObj.put("cnt", cityMap.get("cnt"));
+			jsonArr.put(jsonObj);
+		}
+		
+		return jsonArr.toString();
+	}
+	
+	
+	@ResponseBody
+	@GetMapping("/community/searchFacByLocal.do")
+	public String searchFacByLocal(HttpServletRequest request) {
+		
+		String city = request.getParameter("city");
+		
+		List<Map<String, String>> localFacList = service.searchFacByLocal(city);
 		
 		JSONArray jsonArr = new JSONArray();
 		
 		for(Map<String, String> localMap : localFacList) {
 			
 			JSONObject jsonObj = new JSONObject();
-			jsonObj.put("city", localMap.get("city"));
 			jsonObj.put("local", localMap.get("local"));
 			jsonObj.put("cnt", localMap.get("cnt"));
 			jsonArr.put(jsonObj);
 		}
 		
-		
-		
 		return jsonArr.toString();
 	}
-	
-	
-	
 	
 	
 	
