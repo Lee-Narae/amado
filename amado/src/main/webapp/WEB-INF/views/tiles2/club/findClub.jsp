@@ -133,6 +133,42 @@
 					alert("가입신청중입니다.");	
 					goSearch();
 				}
+				if(json.n == 99) {
+					
+					let sportname;
+					
+					switch (fk_sportseq) {
+					  case 1:
+						  sportname = "축구";
+					    break;
+					  case 2:
+						  sportname = "야구";
+					    break;
+					  case 3:
+						  sportname = "배구";
+					    break;
+					  case 4:
+						  sportname = "농구";
+					    break;
+					  case 5:
+						  sportname = "족구";
+					    break;
+					  case 6:
+						  sportname = "테니스";
+					    break;
+					  case 7:
+						  sportname = "볼링";
+					    break;
+					  case 8:
+						  sportname = "배드민턴";
+					    break;
+					  default:
+					    // 모든 case에 해당하지 않는 경우 실행할 코드 블록
+					}
+					
+					alert("이미 "+sportname+" 종목에서 가입한 동호회가 있습니다.");	
+					goSearch();
+				}
 				
 			},
 			error: function(request, status, error){
@@ -356,17 +392,17 @@
 					    <c:if test="${not empty requestScope.fk_userid}">
 					    	<c:if test="${clubvo.clubmembervo.status == 1}">
 								<td class="align-middle text-center">
-									<input type="button" value="가입함" />
+									<input type="button" style="pointer-events: none" class="btn-info" value="가입완료" />
 								</td>
 					    	</c:if>
 					    	<c:if test="${clubvo.clubmembervo.status == 0}">
 								<td class="align-middle text-center">
-									<input type="button" value="가입대기" />
+									<input type="button" style="pointer-events: none" class="btn-warning" value="가입대기" />
 								</td>
 					    	</c:if>
 					    	<c:if test="${clubvo.clubmembervo == null}">
 								<td class="align-middle text-center">
-									<input type="button" onclick="clubMRegister(${clubvo.clubseq}, ${clubvo.fk_sportseq}, '${sessionScope.loginuser.userid}')" value="가입하기" />
+									<input type="button" class="btn-success" onclick="clubMRegister(${clubvo.clubseq}, ${clubvo.fk_sportseq}, '${sessionScope.loginuser.userid}')" value="가입하기" />
 								</td>
 					    	</c:if>
 					    </c:if>

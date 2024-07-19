@@ -128,5 +128,11 @@ public class AmadoDAO_imple_JH implements AmadoDAO_JH {
 		return gymvo;
 	}
 
+	@Override
+	public GymVO getgymPay(String gymseq) {
+		GymVO gymvo = sqlsession.selectOne("JH.getgymPay", gymseq);
+		return gymvo;
+	}
+
 
 }

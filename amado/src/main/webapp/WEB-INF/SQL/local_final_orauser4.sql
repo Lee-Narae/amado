@@ -903,7 +903,7 @@ from TBL_SPORT
 */
 
 
-select *
+select clubseq
 from tbl_club
 order by clubseq desc
 
@@ -1007,10 +1007,47 @@ create table tbl_inquiryFile
 -- Table TBL_INQUIRYFILE이(가) 생성되었습니다.
 
 
-select inquiryseq
+
+select *
 from tbl_inquiry
 order by inquiryseq desc
 
 select *
 from tbl_inquiryFile
+order by inquiryseq desc
 
+
+SELECT I.inquiryseq, I.content, I.fk_userid, I.email, I.phone, I.registerdate, I.searchtype_a, I.searchtype_b, I.status
+     , F.orgfilename, F.filename, F.filesize  
+FROM tbl_inquiryFile F JOIN(select *
+                        from tbl_inquiry
+                        where fk_userid = 'ksj1024sj' and status = 1) I
+ON F.inquiryseq = I.inquiryseq
+order by inquiryseq desc
+
+-- 1대1 문의 디테일(파일보여주기)
+SELECT I.inquiryseq, I.content, I.fk_userid, I.email, I.phone, I.registerdate, I.searchtype_a, I.searchtype_b, I.status
+     , F.orgfilename, F.filename, F.filesize  
+FROM tbl_inquiryFile F JOIN(select *
+                        from tbl_inquiry
+                        where fk_userid = 'ksj1024sj' and inquiryseq = 6) I
+ON F.inquiryseq = I.inquiryseq
+order by inquiryseq desc
+
+select *
+from tbl_member
+
+
+
+select *
+from tbl_clubmember
+where fk_userid = 'ksj1024sj' and sportseq = 1
+
+delete from tbl_clubmember
+where fk_userid = 'ksj1024sj' and STATUS = 0;
+
+
+commit;
+
+select *
+from tbl_sport

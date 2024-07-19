@@ -115,7 +115,7 @@ background-color: rgba(230, 245, 255, 0.5);
 padding: 1.5%;
 }
 
-.alarmDiv:hover {
+.alarmDiv:hover, .matchDiv:hover {
 cursor: pointer;
 font-weight: bold;
 color: #0099ff !important;
@@ -190,19 +190,21 @@ $(document).ready(function(){
 
 function openModal(){
 	
-	const sportname = $(event.target).parent().parent().find("input#sportname").val();
-	const matchdate = $(event.target).parent().parent().find("input#matchdate").val();
-	const city = $(event.target).parent().parent().find("input#city").val();
-	const local = $(event.target).parent().parent().find("input#local").val();
-	const area = $(event.target).parent().parent().find("input#area").val();
-	const B_name = $(event.target).parent().parent().find("input#B_name").val();
-	const message = $(event.target).parent().parent().find("input#message").val();
-	const membercount = $(event.target).parent().parent().find("input#membercount").val();
-	const matchingapplyseq = $(event.target).parent().parent().find("input#matchingapplyseq").val();
-	const matchingregseq = $(event.target).parent().parent().find("input#matchingregseq").val();
+	$("div.modal-content").empty();
 	
-	const Aseq = $(event.target).parent().parent().find("input#Aseq").val();
-	const Bseq = $(event.target).parent().parent().find("input#Bseq").val();
+	const sportname = $(event.target).parent().find("input#sportname").val();
+	const matchdate = $(event.target).parent().find("input#matchdate").val();
+	const city = $(event.target).parent().find("input#city").val();
+	const local = $(event.target).parent().find("input#local").val();
+	const area = $(event.target).parent().find("input#area").val();
+	const B_name = $(event.target).parent().find("input#B_name").val();
+	const message = $(event.target).parent().find("input#message").val();
+	const membercount = $(event.target).parent().find("input#membercount").val();
+	const matchingapplyseq = $(event.target).parent().find("input#matchingapplyseq").val();
+	const matchingregseq = $(event.target).parent().find("input#matchingregseq").val();
+	
+	const Aseq = $(event.target).parent().find("input#Aseq").val();
+	const Bseq = $(event.target).parent().find("input#Bseq").val();
 	
 	let modal_html = `
 		<div class="modal-header" align="center">
@@ -238,9 +240,17 @@ function openModal(){
         			<td width="70"><a>\${B_name}</a></td>
         		</tr>
         		<tr>
-        			<td>전달 메세지</td>
-        			<td>\${message}</td>
-        		</tr>
+        			<td>전달 메세지</td>`;
+        			
+	if(message == ''){
+		modal_html += `<td>없음</td>`;
+	}        			
+	
+	else {
+		modal_html += `<td>\${message}</td>`;
+	}
+        			
+	modal_html += `</tr>
         		<tr>
         			<td>인원</td>
         			<td>\${membercount}명</td>
@@ -313,31 +323,22 @@ function goPermit(matchingapplyseq, matchingregseq, Aseq, Bseq){
 				<img width="70" height="70" src="https://img.icons8.com/3d-fluency/94/bell.png" alt="bell"/>
 			</div>
 			
-			<c:if test="${not empty requestScope.alarmList}">
-			<div id="alarmPopup">
-				<c:forEach var="alarm" items="${requestScope.alarmList}" varStatus="status">
-					<c:if test="${status.index != requestScope.alarmList.size()-1}">
+		<div id="alarmPopup">
+			<c:if test="${not empty requestScope.matchResultList}">
+				<c:forEach var="match" items="${requestScope.matchResultList}" varStatus="status">
 						<div>
-							<div class="alarmDiv" data-toggle="modal" data-target="#matchPermitModal" onclick="openModal()">[${alarm.sportname}]&nbsp;<span style="font-weight: bold; color: red;">${alarm.B_name}</span>&nbsp;팀의 매치 요청</div>
-							<input type="hidden" id="matchingapplyseq" value="${alarm.matchingapplyseq}" />
-							<input type="hidden" id="matchingregseq" value="${alarm.matchingregseq}" />
-							<input type="hidden" id="sportname" value="${alarm.sportname}" />
-							<input type="hidden" id="Aseq" value="${alarm.Aseq}" />
-							<input type="hidden" id="Bseq" value="${alarm.Bseq}" />
-							<input type="hidden" id="B_name" value="${alarm.B_name}" />
-							<input type="hidden" id="message" value="${alarm.message}" />
-							<input type="hidden" id="membercount" value="${alarm.membercount}" />
-							<input type="hidden" id="matchdate" value="${alarm.matchdate}" />
-							<input type="hidden" id="city" value="${alarm.city}" />
-							<input type="hidden" id="local" value="${alarm.local}" />
-							<input type="hidden" id="area" value="${alarm.area}" />
-							<input type="hidden" id="status" value="${alarm.status}" />
+							<div class="matchDiv" data-toggle="modal" data-target="#matchResultModal" onclick="openModal2()"><span style="color: red; font-weight: bold;">[긴급] </span><span style="color: blue;">${match.clubname}</span> 팀과의 매치 결과 등록</div>
 						</div>
+					<c:if test="${not empty requestScope.alarmList}">
 						<hr>
 					</c:if>
-					<c:if test="${status.index == requestScope.alarmList.size()-1}">
+				</c:forEach>
+			</c:if>
+		
+			<c:if test="${not empty requestScope.alarmList}">
+				<c:forEach var="alarm" items="${requestScope.alarmList}" varStatus="status">
 						<div>
-							<div class="alarmDiv" data-toggle="modal" data-target="#matchPermitModal" onclick="openModal()">[${alarm.sportname}]&nbsp;<span style="font-weight: bold; color: red;">${alarm.B_name}</span>&nbsp;팀의 매치 요청</div>
+							<div class="alarmDiv" data-toggle="modal" data-target="#matchPermitModal" onclick="openModal()">[${alarm.sportname}]&nbsp;<span style="color: blue;">${alarm.B_name}</span>&nbsp;팀의 매치 요청</div>
 							<input type="hidden" id="matchingapplyseq" value="${alarm.matchingapplyseq}" />
 							<input type="hidden" id="matchingregseq" value="${alarm.matchingregseq}" />
 							<input type="hidden" id="sportname" value="${alarm.sportname}" />
@@ -352,11 +353,17 @@ function goPermit(matchingapplyseq, matchingregseq, Aseq, Bseq){
 							<input type="hidden" id="area" value="${alarm.area}" />
 							<input type="hidden" id="status" value="${alarm.status}" />
 						</div>
+					<c:if test="${status.index != requestScope.alarmList.size()-1}">
+						<hr>
 					</c:if>
 				</c:forEach>
-			</div>
 			</c:if>
 			
+			<c:if test="${empty requestScope.matchResultList && empty requestscope.alarmList}">
+				알림이 없습니다.
+			</c:if>
+		</div>
+		
 		</div>
 	</c:if>
 	<div id="clubTitle" style="text-align: center; margin: 2% 0 2% 0; font-size: 30pt; font-weight: bolder;">💌 My 동호회 💌</div>
@@ -466,8 +473,8 @@ function goPermit(matchingapplyseq, matchingregseq, Aseq, Bseq){
 										<td style="width: 10%;">${status.count}</td>
 										<td style="width: 20%;">${match.matchdate}</td>
 										<td style="width: 35%;">
-											<c:if test="${match.teamA == requestScope.club.clubname}">${match.teamB}</c:if>
-											<c:if test="${match.teamA != requestScope.club.clubname}">${match.teamA}</c:if>
+											<c:if test="${match.regteam == requestScope.club.clubname}">${match.appteam}</c:if>
+											<c:if test="${match.regteam != requestScope.club.clubname}">${match.regteam}</c:if>
 										</td>
 										<td style="width: 35%;">${match.area}</td>
 									</tr>			    			

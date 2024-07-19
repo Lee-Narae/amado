@@ -407,12 +407,112 @@ from tbl_opendata_gym) A join (select city
 on A.city = B.city
 order by 1, 2;
 
-select A.city, 구, count(*)
+select 구, count(*) cnt
 from
-(select substr(oldadd,instr(oldadd, ' ', 1, 1)+1,instr(oldadd, ' ', 1, 2)-1-instr(oldadd, ' ', 1, 1)) 구, name, city
+(select city, substr(oldadd,instr(oldadd, ' ', 1, 1)+1,instr(oldadd, ' ', 1, 2)-1-instr(oldadd, ' ', 1, 1)) 구
 from tbl_opendata_gym) A join (select city
                                from tbl_opendata_gym
                                group by city) B
 on A.city = B.city
+where A.city = '경기도'
 group by A.city, 구
 order by 1, 2;
+
+
+select substr(oldadd,instr(oldadd, ' ', 1, 1)+1,instr(oldadd, ' ', 1, 2)-1-instr(oldadd, ' ', 1, 1)) 구, count(*) cnt
+from tbl_opendata_gym
+where city = '경기도'
+group by city, substr(oldadd,instr(oldadd, ' ', 1, 1)+1,instr(oldadd, ' ', 1, 2)-1-instr(oldadd, ' ', 1, 1))
+order by 1, 2;
+
+desc tbl_opendata_gym;
+
+select opendata_gymseq, name, type, status, newadd, city
+from tbl_opendata_gym;
+
+select rn, userid, name, email, gender, memberrank
+		from
+		(select rownum rn, userid, name, email, gender, memberrank
+		from
+		(select userid, name, email, gender, case memberrank when 0 then '일반회원' when 1 then '동호회장' else '관리자' end memberrank
+		from tbl_member
+		where 1=1
+		<if test="searchType == 'name' and searchWord != ''">and name like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'userid' and searchWord != ''">and userid like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'email' and searchWord != ''">and email like '%'||#{searchWord}||'%'</if>
+		order by registerday desc)
+		)
+		where rn between to_number(#{currentShowPageNo})*to_number(#{sizePerPage})-(to_number(#{sizePerPage})-1) and to_number(#{currentShowPageNo})*to_number(#{sizePerPage});
+        
+select rn, name, type, status, newadd, city
+from
+(select rownum rn, name, type, status, newadd, city
+from     
+(select distinct  name, newadd,type, status, city
+from tbl_opendata_gym
+order by city, newadd));
+        
+select * from tbl_matching;
+
+select matchingseq, C.clubname myteam, D.clubname, to_char(B.matchdate, 'yyyy-mm-dd hh24:mi') matchdate
+from tbl_matching A join tbl_matchingreg B
+on A.matchingregseq = B.matchingregseq
+join tbl_club C
+on B.clubseq = C.clubseq
+join tbl_club D
+on A.clubseq2 = D.clubseq
+join tbl_member E
+on C.fk_userid = E.userid
+where E.userid = 'leejy' and A.result1 = 0;
+
+select * from tbl_club;
+select * from tbl_member;
+select * from tbl_matchingreg;
+select * from tbl_matchingapply;
+select * from tbl_matching;
+
+update tbl_club set fk_userid = 'test4' where clubseq = 3;
+commit;
+
+select * from tbl_clubmember;
+
+insert into tbl_clubmember (fk_userid, sportseq, clubseq, status) values('test4', 1, 3, 1);
+update tbl_member set memberrank = 1 where userid = 'test4';
+
+
+select A.matchingseq, A.matchingregseq, E.sportname, C.clubname teamA, D.clubname teamB,
+			   to_char(B.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, B.area, B.status
+		from tbl_matching A join tbl_matchingreg B
+		on A.matchingregseq = B.matchingregseq
+		join tbl_club C
+		on A.clubseq1 = C.clubseq
+		join tbl_club D
+		on A.clubseq2 = D.clubseq
+		join tbl_sport E
+		on B.sportseq = E.sportseq
+		where B.status = 1 and B.matchdate >= sysdate and (A.clubseq1 = 2 or A.clubseq2 = 2);
+
+
+select matchdate, clubseq, area
+from
+(select *
+from tbl_matchingreg A join tbl_matchingapply B
+on A.matchingregseq = B.matchingregseq
+where B.status = 1);
+
+
+select C.clubname regteam, D.clubname appteam, to_char(A.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, A.area
+from tbl_matchingreg A join tbl_matchingapply B
+on A.matchingregseq = B.matchingregseq
+join tbl_club C
+on A.clubseq = C.clubseq
+join tbl_club D
+on B.clubseq =  D.clubseq
+join tbl_member E
+on C.fk_userid = E.userid
+join tbl_member F
+on D.fk_userid = F.userid
+where B.status = 1 and (C.clubseq=2 or D.clubseq=2);
+
+select * from tbl_matchingapply;
+select * from tbl_club;

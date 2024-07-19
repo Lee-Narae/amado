@@ -46,5 +46,7 @@ public interface AmadoDAO_JH {
 
 	GymVO getGymInfo(String gymseq);
 
+	GymVO getgymPay(String gymseq);
+
 
 }

@@ -98,7 +98,8 @@ ON A.fk_userid = V.userid
 where A.fleamarketseq = 1
 order by fleamarketcommentseq desc
 
-
+select *
+from tbl_gymanswer
 
 ALTER TABLE tbl_gym
 MODIFY (lng number not null);
@@ -267,3 +268,102 @@ from tbl_gym
 select gymname, address, detailaddress, cost, orgfilename
 from tbl_gym
 where gymseq = 77
+
+
+
+create table tbl_gymres
+(gymresseq      NUMBER                       -- 댓글번호(PK)
+,fk_gymseq      NUMBER          not nul      -- 중고마켓게시판번호(FK)
+,gymresdate     date            not nul      -- 예약날짜
+,gymrestime0     number default 0            -- 예약시간
+,gymrestime1     number default 0            -- 예약시간
+,gymrestime2     number default 0            -- 예약시간
+,gymrestime3     number default 0            -- 예약시간
+,gymrestime4     number default 0            -- 예약시간
+,gymrestime5     number default 0            -- 예약시간
+,gymrestime6     number default 0            -- 예약시간
+,gymrestime7     number default 0            -- 예약시간
+,gymrestime8     number default 0            -- 예약시간
+,gymrestime9     number default 0            -- 예약시간
+,gymrestime10     number default 0            -- 예약시간
+,gymrestime11     number default 0            -- 예약시간
+,gymrestime12     number default 0            -- 예약시간
+,gymrestime13     number default 0            -- 예약시간
+,gymrestime14     number default 0            -- 예약시간
+,gymrestime15     number default 0            -- 예약시간
+,gymrestime16     number default 0            -- 예약시간
+,gymrestime17     number default 0            -- 예약시간
+,gymrestime18     number default 0            -- 예약시간
+,gymrestime19     number default 0            -- 예약시간
+,gymrestime20     number default 0            -- 예약시간
+,gymrestime21     number default 0            -- 예약시간
+,gymrestime22     number default 0            -- 예약시간
+,gymrestime23     number default 0            -- 예약시간
+
+,constraint PK_tbl_gymres_gymresseq primary key(gymresseq)
+,constraint FK_tbl_gymres_fk_gymseq foreign key(fk_gymseq) references tbl_gym(gymseq)
+);
+
+CREATE TABLE tbl_gymtime (
+    fk_gymseq      NUMBER NOT NULL,          -- 체육관 번호(FK)
+    gymrestime0    NUMBER DEFAULT 0,         -- 예약시간
+    gymrestime1    NUMBER DEFAULT 0,         -- 예약시간
+    gymrestime2    NUMBER DEFAULT 0,         -- 예약시간
+    gymrestime3    NUMBER DEFAULT 0,         -- 예약시간
+    gymrestime4    NUMBER DEFAULT 0,         -- 예약시간
+    gymrestime5    NUMBER DEFAULT 0,         -- 예약시간
+    gymrestime6    NUMBER DEFAULT 0,         -- 예약시간
+    gymrestime7    NUMBER DEFAULT 0,         -- 예약시간
+    gymrestime8    NUMBER DEFAULT 0,         -- 예약시간
+    gymrestime9    NUMBER DEFAULT 0,         -- 예약시간
+    gymrestime10   NUMBER DEFAULT 0,         -- 예약시간
+    gymrestime11   NUMBER DEFAULT 0,         -- 예약시간
+    gymrestime12   NUMBER DEFAULT 0,         -- 예약시간
+    gymrestime13   NUMBER DEFAULT 0,         -- 예약시간
+    gymrestime14   NUMBER DEFAULT 0,         -- 예약시간
+    gymrestime15   NUMBER DEFAULT 0,         -- 예약시간
+    gymrestime16   NUMBER DEFAULT 0,         -- 예약시간
+    gymrestime17   NUMBER DEFAULT 0,         -- 예약시간
+    gymrestime18   NUMBER DEFAULT 0,         -- 예약시간
+    gymrestime19   NUMBER DEFAULT 0,         -- 예약시간
+    gymrestime20   NUMBER DEFAULT 0,         -- 예약시간
+    gymrestime21   NUMBER DEFAULT 0,         -- 예약시간
+    gymrestime22   NUMBER DEFAULT 0,         -- 예약시간
+    gymrestime23   NUMBER DEFAULT 0,         -- 예약시간
+    CONSTRAINT FK_tbl_gymres_fk_gymseq FOREIGN KEY (fk_gymseq) REFERENCES tbl_gym (gymseq)
+);
+
+CREATE TABLE tbl_gymdate (
+    fk_gymseq      NUMBER NOT NULL,          -- 체육관 번호(FK)
+    gymresdate     DATE NOT NULL,            -- 예약날짜
+    
+    CONSTRAINT FK_tbl_gymres_fk_gymseq FOREIGN KEY (fk_gymseq) REFERENCES tbl_gym (gymseq)
+);
+
+CREATE TABLE tbl_gymres (
+    gymresseq NUMBER PRIMARY KEY,
+    fk_gymseq NUMBER NOT NULL,                    -- 체육관 ID (외래 키)
+    fk_userid nvarchar2(20),                           -- 사용자 ID (외래 키, 선택 사항)
+    reservation_date DATE NOT NULL,           -- 예약 날짜
+    time VARCHAR2(5) NOT NULL,           -- 예약 시간대 ('HH24:MI' 형식)
+    CONSTRAINT fk_gymseq FOREIGN KEY (fk_gymseq) REFERENCES tbl_gym(gymseq),
+    constraint FK_tbl_gymres_fk_userid foreign key(fk_userid) references tbl_member(userid)
+    
+);
+
+create sequence seq_gymresseq
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+commit
+
+insert into tbl_gymres(gymresseq, fk_gymseq, fk_userid, reservation_date, time)
+values(seq_gymresseq.nextval, 77, choijh, TO_DATE('2024-07-20', 'YYYY-MM-DD'), '00:00');
+
+
+select *
+from tbl_gymres

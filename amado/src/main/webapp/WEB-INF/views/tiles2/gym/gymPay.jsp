@@ -18,7 +18,7 @@
         .container {
             max-width: 800px;
             width: 20%;
-            margin: 1.5% 2% 8% 5%
+            margin: 1.5% 2% 3% 5%
         }
         .section {
             margin-bottom: 20px;
@@ -143,9 +143,7 @@
     			$.each(json, function(index, item){
     				var position = {};
     				
-    				position.content = "<div class='mycontent'>"+
-    				                   "  <div class='title'>zz</div>"+    
-    				                   "</div>";
+    				position.content = item.gymseq;
     				                   
     				position.latlng = new kakao.maps.LatLng(item.lat, item.lng);
     				positionArr.push(position);
@@ -206,7 +204,7 @@
     		// 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
     	    // 이벤트 리스너로는 클로저(closure => 함수 내에서 함수를 정의하고 사용하도록 만든것)를 만들어 등록합니다 
     	    // for문에서 클로저(closure => 함수 내에서 함수를 정의하고 사용하도록 만든것)를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
-    	    kakao.maps.event.addListener(marker, 'mouseclick', makeOverListener(mapobj, marker, infowindow, infowindowArr)); 
+    	    kakao.maps.event.addListener(marker, 'click', makeOverListener(mapobj, marker, infowindow, infowindowArr)); 
     		
     	}// end of for----------------
     	// ============ 지도에 매장위치 마커 보여주기 끝 ============ //
@@ -230,8 +228,11 @@
         }
 
         function toggleSelection(button) {
+        	
+        	let cost = button.getAttribute('data-cost');
+        	
             const isSelected = button.classList.contains('selected');
-            const buttonValue = Number($("input.gymcost").val());
+            const buttonValue = Number(cost);
 
             // Toggle button selection
             if (isSelected) {
@@ -248,15 +249,70 @@
         function makeOverListener(mapobj, marker, infowindow, infowindowArr) {
       	    return function() {
       	    	// alert("infowindow.getZIndex()-1:"+ (infowindow.getZIndex()-1));
+      	    	//alert(infowindow.getContent())
+      	    	let gymseq = infowindow.getContent();
       	    	
-      	    	for(var i=0; i<infowindowArr.length; i++) {
-      	    		if(i == infowindow.getZIndex()-1) {
-      	    			infowindowArr[i].open(mapobj, marker);
-      	    		}
-      	    		else{
-      	    			infowindowArr[i].close();
-      	    		}
-      	    	}
+      	    	$.ajax({
+		    		url:"<%= ctxPath%>/gym/gymPay_dtail.do",
+		    		async:false, // !!!!! 지도는 비동기 통신이 아닌 동기 통신으로 해야 한다.!!!!!!
+		    		data:{"gymseq":infowindow.getContent()},
+		    		dataType:"json",
+		    		success:function(json){
+		    			totalPrice = 0;
+		    		    console.log(JSON.stringify(json));
+		    			// JSON.stringify(json) 은 자바스크립트의 객체(배열)인 json 을 string 타입으로 변경시켜주는 것이다.
+		    			
+		    			v_html ="";
+		    			
+		    			v_html += "<div class='section'>";
+		    			v_html += "<img src='<%=ctxPath%>/resources/images/"+json.orgfilename+"' class='gym-image' alt='체육관 사진'>";
+		    			v_html += "</div>";
+		    			v_html += "<div style='text-align: center; margin-top: 3%; margin-bottom: 10%; font-size: 30px; font-weight: bold'>"
+		    			v_html += json.gymname;
+		    			v_html += "</div>";
+				        
+		    			v_html += "<div class='section'>";
+		    			v_html += "    <label for='date'>날짜 선택:</label>";
+		    			v_html += "    <input type='date' id='date' class='form-control'>";
+		    			v_html += "</div>";
+				
+				        
+		    			v_html += "<div class='section'>";
+		    			v_html += "    <label for='time'>시간 선택:</label>";
+		    			v_html += "    <div class='btn-container'>";
+		    			for (let i = 0; i < 24; i++) {
+		    	            let time = ("0" + i).slice(-2) + ":00";
+		    	            v_html += "<button class='btn btn-outline-primary btn-custom' data-cost='" + json.cost + "' onclick='toggleSelection(this)'>" + time + "</button>";
+		    	        }
+				        v_html += "   </div>";
+				            
+				        v_html += "</div>";
+				
+				        <!-- 총 가격 -->
+				        v_html += "<div class='section'>";
+				        v_html += "    <span class='price' id='totalPrice'>₩0원</span>";
+				        v_html += "</div>";
+				
+				        <!-- 예약하기 버튼 -->
+				        v_html += "<div class='section'>";
+				        v_html += "    <button class='btn btn-primary btn-reserve'>예약하기</button>";
+				        v_html += "</div>";
+		    			
+		    			
+		    			
+		    			$("div.container").html(v_html);
+		    			
+		    			let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?gymseq=" + gymseq;
+		                window.history.pushState({ path: newUrl }, '', newUrl);
+		    			
+		    		},
+		    		error: function(request, status, error){
+		    			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		    	    }
+		    	});// end of $.ajax({})----------------------
+      	    	
+      	    	
+      	   		//location.href = "<%=ctxPath%>/gym/gymPay.do?gymseq="+infowindow.getContent();
       	    };
       	}// end of function makeOverListener(mapobj, marker, infowindow, infowindowArr)--------
     </script>
@@ -305,7 +361,7 @@
 	    	
 				
 			<div align="center">
-				 <div id="map" style="margin-top:2%; width:1250px; height:930px;"></div>
+				 <div id="map" style="margin-top:2%; width:1250px; height:1000px;"></div>
 			</div>
 		 	
 	    </div>
