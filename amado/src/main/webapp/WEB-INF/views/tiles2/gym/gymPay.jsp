@@ -18,7 +18,7 @@
         .container {
             max-width: 800px;
             width: 20%;
-            margin: 1.5% 2% 8% 5%
+            margin: 1.5% 2% 3% 5%
         }
         .section {
             margin-bottom: 20px;
@@ -228,8 +228,11 @@
         }
 
         function toggleSelection(button) {
+        	
+        	let cost = button.getAttribute('data-cost');
+        	
             const isSelected = button.classList.contains('selected');
-            const buttonValue = Number($("input.gymcost").val());
+            const buttonValue = Number(cost);
 
             // Toggle button selection
             if (isSelected) {
@@ -247,8 +250,69 @@
       	    return function() {
       	    	// alert("infowindow.getZIndex()-1:"+ (infowindow.getZIndex()-1));
       	    	//alert(infowindow.getContent())
+      	    	let gymseq = infowindow.getContent();
       	    	
-      	   		location.href = "<%=ctxPath%>/gym/gymPay.do?gymseq="+infowindow.getContent();
+      	    	$.ajax({
+		    		url:"<%= ctxPath%>/gym/gymPay_dtail.do",
+		    		async:false, // !!!!! 지도는 비동기 통신이 아닌 동기 통신으로 해야 한다.!!!!!!
+		    		data:{"gymseq":infowindow.getContent()},
+		    		dataType:"json",
+		    		success:function(json){
+		    			totalPrice = 0;
+		    		    console.log(JSON.stringify(json));
+		    			// JSON.stringify(json) 은 자바스크립트의 객체(배열)인 json 을 string 타입으로 변경시켜주는 것이다.
+		    			
+		    			v_html ="";
+		    			
+		    			v_html += "<div class='section'>";
+		    			v_html += "<img src='<%=ctxPath%>/resources/images/"+json.orgfilename+"' class='gym-image' alt='체육관 사진'>";
+		    			v_html += "</div>";
+		    			v_html += "<div style='text-align: center; margin-top: 3%; margin-bottom: 10%; font-size: 30px; font-weight: bold'>"
+		    			v_html += json.gymname;
+		    			v_html += "</div>";
+				        
+		    			v_html += "<div class='section'>";
+		    			v_html += "    <label for='date'>날짜 선택:</label>";
+		    			v_html += "    <input type='date' id='date' class='form-control'>";
+		    			v_html += "</div>";
+				
+				        
+		    			v_html += "<div class='section'>";
+		    			v_html += "    <label for='time'>시간 선택:</label>";
+		    			v_html += "    <div class='btn-container'>";
+		    			for (let i = 0; i < 24; i++) {
+		    	            let time = ("0" + i).slice(-2) + ":00";
+		    	            v_html += "<button class='btn btn-outline-primary btn-custom' data-cost='" + json.cost + "' onclick='toggleSelection(this)'>" + time + "</button>";
+		    	        }
+				        v_html += "   </div>";
+				            
+				        v_html += "</div>";
+				
+				        <!-- 총 가격 -->
+				        v_html += "<div class='section'>";
+				        v_html += "    <span class='price' id='totalPrice'>₩0원</span>";
+				        v_html += "</div>";
+				
+				        <!-- 예약하기 버튼 -->
+				        v_html += "<div class='section'>";
+				        v_html += "    <button class='btn btn-primary btn-reserve'>예약하기</button>";
+				        v_html += "</div>";
+		    			
+		    			
+		    			
+		    			$("div.container").html(v_html);
+		    			
+		    			let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?gymseq=" + gymseq;
+		                window.history.pushState({ path: newUrl }, '', newUrl);
+		    			
+		    		},
+		    		error: function(request, status, error){
+		    			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		    	    }
+		    	});// end of $.ajax({})----------------------
+      	    	
+      	    	
+      	   		//location.href = "<%=ctxPath%>/gym/gymPay.do?gymseq="+infowindow.getContent();
       	    };
       	}// end of function makeOverListener(mapobj, marker, infowindow, infowindowArr)--------
     </script>
@@ -297,7 +361,7 @@
 	    	
 				
 			<div align="center">
-				 <div id="map" style="margin-top:2%; width:1250px; height:930px;"></div>
+				 <div id="map" style="margin-top:2%; width:1250px; height:1000px;"></div>
 			</div>
 		 	
 	    </div>
