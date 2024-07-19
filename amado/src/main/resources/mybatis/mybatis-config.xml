@@ -14,6 +14,7 @@
 		<typeAlias type="com.spring.app.domain.NoticeVO" alias="NoticeVO"/>
 		<typeAlias type="com.spring.app.domain.PhotoVO" alias="PhotoVO"/>
 		<typeAlias type="com.spring.app.domain.FleamarketVO" alias="FleamarketVO"/>
+		<typeAlias type="com.spring.app.domain.ClubBoardVO" alias="ClubBoardVO"/>
 
 	</typeAliases>
 </configuration>
