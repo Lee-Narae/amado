@@ -485,5 +485,29 @@ public class ControllerJH {
 	}
 	
 	
+	@ResponseBody
+	@GetMapping(value="/gym/gymPay_dtail.do", produces="text/plain;charset=UTF-8") 
+	public String gymPay_dtail(HttpServletRequest request) throws IOException, ParseException {
+
+		//System.out.println(request.getParameter("gymseq"));
+		
+		String gymseq = request.getParameter("gymseq");
+		
+		GymVO gymvo = service.getgymPay(gymseq); 
+		
+		JSONObject jsonObj = new JSONObject(); 
+		jsonObj.put("gymname", gymvo.getGymname());
+		jsonObj.put("address", gymvo.getAddress());
+		jsonObj.put("detailaddress", gymvo.getDetailaddress());
+		jsonObj.put("cost", gymvo.getCost());
+		jsonObj.put("orgfilename", gymvo.getOrgfilename());
+		jsonObj.put("lat", gymvo.getLat());
+		jsonObj.put("lng", gymvo.getLng());
+		
+		return jsonObj.toString();
+	}
+	
+	
+	
 	
 }
