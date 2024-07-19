@@ -452,6 +452,67 @@ from
 from tbl_opendata_gym
 order by city, newadd));
         
-        
+select * from tbl_matching;
 
-        
+select matchingseq, C.clubname myteam, D.clubname, to_char(B.matchdate, 'yyyy-mm-dd hh24:mi') matchdate
+from tbl_matching A join tbl_matchingreg B
+on A.matchingregseq = B.matchingregseq
+join tbl_club C
+on B.clubseq = C.clubseq
+join tbl_club D
+on A.clubseq2 = D.clubseq
+join tbl_member E
+on C.fk_userid = E.userid
+where E.userid = 'leejy' and A.result1 = 0;
+
+select * from tbl_club;
+select * from tbl_member;
+select * from tbl_matchingreg;
+select * from tbl_matchingapply;
+select * from tbl_matching;
+
+update tbl_club set fk_userid = 'test4' where clubseq = 3;
+commit;
+
+select * from tbl_clubmember;
+
+insert into tbl_clubmember (fk_userid, sportseq, clubseq, status) values('test4', 1, 3, 1);
+update tbl_member set memberrank = 1 where userid = 'test4';
+
+
+select A.matchingseq, A.matchingregseq, E.sportname, C.clubname teamA, D.clubname teamB,
+			   to_char(B.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, B.area, B.status
+		from tbl_matching A join tbl_matchingreg B
+		on A.matchingregseq = B.matchingregseq
+		join tbl_club C
+		on A.clubseq1 = C.clubseq
+		join tbl_club D
+		on A.clubseq2 = D.clubseq
+		join tbl_sport E
+		on B.sportseq = E.sportseq
+		where B.status = 1 and B.matchdate >= sysdate and (A.clubseq1 = 2 or A.clubseq2 = 2);
+
+
+select matchdate, clubseq, area
+from
+(select *
+from tbl_matchingreg A join tbl_matchingapply B
+on A.matchingregseq = B.matchingregseq
+where B.status = 1);
+
+
+select C.clubname regteam, D.clubname appteam, to_char(A.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, A.area
+from tbl_matchingreg A join tbl_matchingapply B
+on A.matchingregseq = B.matchingregseq
+join tbl_club C
+on A.clubseq = C.clubseq
+join tbl_club D
+on B.clubseq =  D.clubseq
+join tbl_member E
+on C.fk_userid = E.userid
+join tbl_member F
+on D.fk_userid = F.userid
+where B.status = 1 and (C.clubseq=2 or D.clubseq=2);
+
+select * from tbl_matchingapply;
+select * from tbl_club;

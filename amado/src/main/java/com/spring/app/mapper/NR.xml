@@ -508,27 +508,24 @@
 	</insert>
 	
 	<resultMap type="HashMap" id="matchMap2">
-		<result property="matchingseq" column="matchingseq" javaType="String"/>
-		<result property="matchingregseq" column="matchingregseq" javaType="String"/>
-		<result property="sportname" column="sportname" javaType="String"/>
-		<result property="teamA" column="teamA" javaType="String"/>
-		<result property="teamB" column="teamB" javaType="String"/>
+		<result property="regteam" column="regteam" javaType="String"/>
+		<result property="appteam" column="appteam" javaType="String"/>
 		<result property="matchdate" column="matchdate" javaType="String"/>
 		<result property="area" column="area" javaType="String"/>
-		<result property="status" column="status" javaType="String"/>
 	</resultMap>
 	<select id="getMatchList" parameterType="String" resultMap="matchMap2">
-		select A.matchingseq, A.matchingregseq, E.sportname, C.clubname teamA, D.clubname teamB,
-			   to_char(B.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, B.area, B.status
-		from tbl_matching A join tbl_matchingreg B
+		select C.clubname regteam, D.clubname appteam, to_char(A.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, A.area
+		from tbl_matchingreg A join tbl_matchingapply B
 		on A.matchingregseq = B.matchingregseq
 		join tbl_club C
-		on A.clubseq1 = C.clubseq
+		on A.clubseq = C.clubseq
 		join tbl_club D
-		on A.clubseq2 = D.clubseq
-		join tbl_sport E
-		on B.sportseq = E.sportseq
-		where B.status = 1 and B.matchdate >= sysdate and A.clubseq1 = #{clubseq} or A.clubseq2 = #{clubseq}
+		on B.clubseq =  D.clubseq
+		join tbl_member E
+		on C.fk_userid = E.userid
+		join tbl_member F
+		on D.fk_userid = F.userid
+		where B.status = 1 and (C.clubseq=#{clubseq} or D.clubseq=#{clubseq})
 	</select>
 	
 	<select id="getGymseq" resultType="String">
@@ -619,4 +616,22 @@
 		<if test="searchType == 'newadd' and searchWord != ''">and newadd like '%'||#{searchWord}||'%'</if>
 	</select>
 	
+	<resultMap type="HashMap" id="MatchResultMap">
+		<result column="matchingseq" property="matchingseq" javaType="String"/>
+		<result column="myteam" property="myteam" javaType="String"/>
+		<result column="clubname" property="clubname" javaType="String"/>
+		<result column="matchdate" property="matchdate" javaType="String"/>
+	</resultMap>
+	<select id="getMatchResult" parameterType="String" resultMap="MatchResultMap">
+		select matchingseq, C.clubname myteam, D.clubname, to_char(B.matchdate, 'yyyy-mm-dd hh24:mi') matchdate
+		from tbl_matching A join tbl_matchingreg B
+		on A.matchingregseq = B.matchingregseq
+		join tbl_club C
+		on B.clubseq = C.clubseq
+		join tbl_club D
+		on A.clubseq2 = D.clubseq
+		join tbl_member E
+		on C.fk_userid = E.userid
+		where E.userid = #{userid} and A.result1 = 0
+	</select>
 </mapper>

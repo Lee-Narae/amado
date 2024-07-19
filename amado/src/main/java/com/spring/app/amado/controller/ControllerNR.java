@@ -1,10 +1,8 @@
 package com.spring.app.amado.controller;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
@@ -28,7 +26,6 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -104,7 +101,8 @@ public class ControllerNR {
 			List<Map<String,String>> alarmList = service.getClubAlarm(loginuser.getUserid());
 			mav.addObject("alarmList", alarmList);
 		
-			
+			List<Map<String, String>> matchResultList = service.getMatchResult(loginuser.getUserid());
+			mav.addObject("matchResultList", matchResultList);
 		}
 		
 		// 우리팀 매치일정 불러오기
@@ -1793,11 +1791,10 @@ public class ControllerNR {
 		// 선택된 동호회의 tbl_matchingapplyseq 행 status는 1로, 선택받지 못한 동호회는 2로, tbl_matchingreg의  matchingregseq 행 status는 1로
 		// 1. tbl_matchingapply
 		int n = service.updateMatchingApply(paramap);
-		
+
 		if(n == 1) {
 			// 2. tbl_matchingreg
 			n = service.updateMatchingReg(matchingregseq);
-			
 			if(n == 1) {
 				// 3. tbl_matching
 				n = service.insertMatching(paramap);

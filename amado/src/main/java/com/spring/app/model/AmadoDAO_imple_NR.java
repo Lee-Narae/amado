@@ -418,7 +418,7 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		int n = sqlsession.update("NR.updateMatchingApply1", paramap);
 		
 		if(n == 1) {
-			n = sqlsession.update("NR.updateMatchingApply2", paramap);
+			sqlsession.update("NR.updateMatchingApply2", paramap);
 		}
 		return n;
 	}
@@ -487,17 +487,22 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		List<Map<String, String>> facList = sqlsession.selectList("NR.getFacList", paramap);
 		return facList;
 	}
-
 	@Override
 	public int getfacTotalPage(Map<String, String> paramap) {
 		int n = sqlsession.selectOne("NR.getfacTotalPage", paramap);
 		return n;
 	}
-
 	@Override
 	public int getTotalFacCount(Map<String, String> paramap) {
 		int n = sqlsession.selectOne("NR.getTotalFacCount", paramap);
 		return n;
+	}
+
+	// 동호회장 - 매치결과 등록알림
+	@Override
+	public List<Map<String, String>> getMatchResult(String userid) {
+		List<Map<String, String>> matchResultList = sqlsession.selectList("NR.getMatchResult", userid);
+		return matchResultList;
 	}
 
 }

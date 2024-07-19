@@ -601,19 +601,22 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		List<Map<String, String>> facList = dao.getFacList(paramap);
 		return facList;
 	}
-
-
 	@Override
 	public int getfacTotalPage(Map<String, String> paramap) {
 		int n = dao.getfacTotalPage(paramap);
 		return n;
 	}
-
-
 	@Override
 	public int getTotalFacCount(Map<String, String> paramap) {
 		int n = dao.getTotalFacCount(paramap);
 		return n;
+	}
+
+	// 동호회장 - 매치결과 등록알림
+	@Override
+	public List<Map<String, String>> getMatchResult(String userid) {
+		List<Map<String, String>> matchResultList = dao.getMatchResult(userid);
+		return matchResultList;
 	}
 	
 	

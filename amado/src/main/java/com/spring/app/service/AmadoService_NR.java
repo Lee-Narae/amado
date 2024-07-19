@@ -197,6 +197,9 @@ public interface AmadoService_NR {
 	int getfacTotalPage(Map<String, String> paramap);
 	int getTotalFacCount(Map<String, String> paramap);
 
+	// 동호회장 - 매치결과 등록알림
+	List<Map<String, String>> getMatchResult(String userid);
+
 	
 
 
