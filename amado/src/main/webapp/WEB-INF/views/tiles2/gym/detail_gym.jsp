@@ -462,8 +462,8 @@ rotate(
 			if($(e.target).text() == "수정"){
 			 // alert("댓글수정");
 			 //	alert($(e.target).parent().parent().children().children('#comment_text').text()); // 수정전 댓글내용
-			    const $content = $(e.target).parent().parent().children().children('#comment_text');
-			    origin_comment_content = $(e.target).parent().parent().children().children('#comment_text').text();
+			    const $content = $(e.target).parent().parent().children().children('#content');
+			    origin_comment_content = $(e.target).parent().parent().children().children('#content').text();
 			    $content.html(`<input id='comment_update' type='text' value='\${origin_comment_content}' size='40' />`); // 댓글내용을 수정할 수 있도록 input 태그를 만들어 준다.
 			    
 			    $(e.target).text("완료");
@@ -522,7 +522,7 @@ rotate(
 		$(document).on("click", "button.btnDeleteComment", function(e){
 			if($(e.target).text() == "취소"){
 			 // alert("댓글수정취소");
-			 	alert($(e.target).parent().parent().children("div:nth-child(2)").children().html());
+			 //	alert($(e.target).parent().parent().children("div:nth-child(2)").children().html());
 			    const $content = $(e.target).parent().parent().children("div:nth-child(2)").children(); 
 			    $content.html(`\${origin_comment_content}`);
 			 
@@ -563,14 +563,14 @@ rotate(
 			   // alert("답글쓰기");
 			  
 			   const gymquestionseq = $(e.target).parent().children("input").val();
-			   //alert(fleamarketcommentseq);
+			   //alert(gymquestionseq);
 			   let v_html = "";
 			   
 			   if($(e.target).parent().children(".input_reply").html() == ""){
 				   $(".input_reply").html("");
 				   v_html += "<div>";
 				   v_html += "<form name='recommentFrm'>";
-    			   v_html += "<textarea name='commentreply_text' style='font-size: 12pt; width: 100%; height: 60px;'></textarea>";
+    			   v_html += "<textarea name='content_reply' style='font-size: 12pt; width: 100%; height: 60px;'></textarea>";
     			   v_html += "<div style='text-align: right; font-size: 12pt;'>";
     			   v_html += "<button type='button' class='btn btn-outline-secondary' id='btnCommentOK' style='margin: auto; padding: 0.5% 1.5%;' onclick='goAddWritere("+gymquestionseq+")'>";
 			       v_html += "<span style='font-size: 8pt;'>등록</span>";
@@ -600,8 +600,8 @@ rotate(
 			if($(e.target).text() == "수정"){
 			 // alert("답글수정");
 			 //	alert($(e.target).parent().parent().children('div#commentreply_text').text()); // 수정전 답글내용
-			    const $content = $(e.target).parent().parent().children('div#commentreply_text');
-			    origin_recomment_content = $(e.target).parent().parent().children('div#commentreply_text').text();
+			    const $content = $(e.target).parent().parent().children('div#content_reply');
+			    origin_recomment_content = $(e.target).parent().parent().children('div#content_reply').text();
 			    $content.html(`<input id='recomment_update' type='text' value='\${origin_recomment_content}' size='30' />`); // 댓글내용을 수정할 수 있도록 input 태그를 만들어 준다.
 			    
 			    $(e.target).text("완료");
@@ -630,7 +630,7 @@ rotate(
 			    		   "content":content},
 			    	 dataType:"json",
 			    	 success:function(json){
-			    	   $(e.target).parent().parent().children('#commentreply_text').html(content);
+			    	   $(e.target).parent().parent().children('#content_reply').html(content);
 
 			    	   readcommentreply(gymquestionseq);  // 페이징 처리 안한 댓글 읽어오기
 			    		
@@ -1002,12 +1002,16 @@ $(function(){
 //== 댓글쓰기 == //
 function goAddWrite(){
    
-	const comment_content = $("textarea[name='comment_text']").val().trim();
+	const comment_content = $("textarea[name='content']").val().trim();
 	if(comment_content == ""){
 		alert("댓글 내용을 입력하세요!!");
 		return; // 종료
 	}
 	
+	if($("input:hidden[name='fk_userid']").val()==""){
+		alert("로그인을 먼저 하셔야합니다!");
+		return;
+	}
 	
 	goAddWrite_noAttach();
 	
@@ -1041,7 +1045,7 @@ function goAddWrite_noAttach(){
     	type:"post",
         dataType:"json",
         success:function(json){
-       		//console.log(JSON.stringify(json));
+       		console.log(JSON.stringify(json));
            	//{"name":"최준혁","n":1}
            	//또는
            	//{"name":"최준혁","n":0}
@@ -1067,11 +1071,10 @@ function goAddWrite_noAttach(){
 
 
 
-function goReadComment(){
-	
+function goReadComment(){	
 	$.ajax({
 		url:"<%= ctxPath%>/readComment2.action",
-		data:{"parentSeq":"1"},
+		data:{"parentSeq":"77"},
 		dataType:"json",
 		success:function(json){
 			// console.log(JSON.stringify(json));
@@ -1093,7 +1096,7 @@ function goReadComment(){
 		    	    v_html += "<div style='width: 85%;'>";
 		    	    v_html += "<div style='font-size:12pt; font-weight: bold; margin-bottom: 2.3%;'>" + item.fk_userid + "</div>";
 		    	    v_html += "<div style='width: 100%;'>";
-		    	    v_html += "<div id='comment_text'>" + item.comment_text + "</div>";
+		    	    v_html += "<div id='content'>" + item.content + "</div>";
 		    	    v_html += "</div>";
 		    	    v_html += "<div class='comment' style='color:#999999; font-size:10pt; margin-top: 2%;'>" + item.registerdate; 
 		    	    if(item.changestatus > 0){
@@ -1158,7 +1161,7 @@ function readcommentreply(gymquestionseq){
 	    	type:"post",
             dataType:"json",
             success:function(json){
-           	//console.log(JSON.stringify(json));
+           	console.log(JSON.stringify(json));
            	//{"name":"최준혁","n":1}
            	//또는
            	//{"name":"최준혁","n":0}
@@ -1176,7 +1179,7 @@ function readcommentreply(gymquestionseq){
 			    	    }
 			    	    v_html += "<div style='display: flex; margin-top:0.7%; margin-left: 2%; width: 120%'>";
 			    	    v_html += "<div style='font-size:12pt; font-weight: bold; margin-bottom: 1.5%;'>" + item.fk_userid + "</div>";
-			    	    v_html += "<div id='commentreply_text' style='margin-left: 2%;'>" + item.commentreply_text + "</div>";
+			    	    v_html += "<div id='content_reply' style='margin-left: 2%;'>" + item.content_reply + "</div>";
 			    	    v_html += "<div class='comment' style='color:#999999; font-size:10pt; margin-top: 0.4%; margin-left: 1.5%; display: flex; width: 50%;'>" + item.registerdate; 
 			    	    if(item.changestatus > 0){
 			    	    	v_html += " (수정됨)";
@@ -1191,7 +1194,7 @@ function readcommentreply(gymquestionseq){
 			    	    v_html += "</div>";
 			    	    
 			    	    v_html += "<form name='commentreFrm'>";
-			    	    v_html += "<input type='hidden' name='fleamarketcommentseq' value='"+gymquestionseq+"' />";
+			    	    v_html += "<input type='hidden' name='gymquestionseq' value='"+gymquestionseq+"' />";
 			    	    v_html += "</form>";
 			    	    
 			    	    v_html += "<div class='comment_reply'>";
@@ -1214,8 +1217,8 @@ function goAddWritere(gymquestionseq){
    
 	// alert($("input[name='fleamarketcommentseq']").val());
 	// const fleamarketcommentseq = $("input[name='fleamarketcommentseq']").val();
-	const commentreply_text = $("textarea[name='commentreply_text']").val().trim();
-	if(commentreply_text == ""){
+	const content_reply = $("textarea[name='content_reply']").val().trim();
+	if(content_reply == ""){
 		alert("댓글 내용을 입력하세요!!");
 		return; // 종료
 	}
@@ -1258,7 +1261,7 @@ function goAddWrite_reply(gymquestionseq){
        		$(".input_reply").html("");
        	}
        	
-       	$("textarea[name='commentreply_text']").val("");
+       	$("textarea[name='content_reply']").val("");
        },
        error: function(request, status, error){
            alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
@@ -1270,26 +1273,7 @@ function goAddWrite_reply(gymquestionseq){
 
 
 
-<video id="video" preload="auto" autoplay="true" loop="loop" muted="muted" volume="0">
-    	<source src="https://youtu.be/Ui-U66uB-So">
-    </video>
 
-
-
-<div style="display: flex;">
-<div >홈  ></div>
-<select name="" id="">
-	 		    <option value="default">종목 선택하세요</option>
-   			 	<option value="">축구</option>
-    			<option value="">야구</option>
-    			<option value="">배구</option>
-   				<option value="">농구</option>
-   				<option value="">테니스</option>
-   				<option value="">볼링</option>
-   				<option value="">족구</option>
-   				<option value="">배드민턴</option>
-</select>
-</div>
 
 <hr>
 
@@ -1299,7 +1283,7 @@ function goAddWrite_reply(gymquestionseq){
     <div class="col-lg-8">
       <!-- 큰 사진 부분 -->
       <a href="#" data-toggle="modal" data-target="#myModal">
-        <img src="<%=ctxPath%>/resources/images/체육관2.jpg"  class="img-fluid" alt="큰 사진">
+        <img src="<%=ctxPath%>/resources/images/체육관1.jpg" class="img-fluid" alt="큰 사진">
       </a>
     </div>
     <div class="col-lg-4">
@@ -1329,6 +1313,7 @@ function goAddWrite_reply(gymquestionseq){
     </div>
   </div>
 </div>
+
 
 <!-- 모달 -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -1383,9 +1368,9 @@ function goAddWrite_reply(gymquestionseq){
   <div class="row">
     <div class="col-md-6 pl-3 pr-3">
       <ul class="list-unstyled">
-        <div> 📍서울 송파구 토성로 58 옥상층</div>
+        <div> 📍${gym.address}</div>
         <br>
-        <li style="font-size: 20px; font-family: 'Volt110', sans-serif; font-weight: 700;">[송파/풋살]실외풋살장</li>
+        <li style="font-size: 20px; font-family: 'Volt110', sans-serif; font-weight: 700;">${gym.gymname}</li>
         <hr>
         <li style="color: #bfbfbf; ">👀 조회수  |  🕓 올린시간</li>
         <br>
@@ -1508,7 +1493,7 @@ function goAddWrite_reply(gymquestionseq){
 	 	<div> 📍서울 송파구 토성로 58 옥상층</div>
  	</div>
 	<br>
-	
+
 
 		<%-- === 문의 내용 보여주기 === --%>
 	<div id="inquiry-section" class="text-left">
@@ -1529,8 +1514,8 @@ function goAddWrite_reply(gymquestionseq){
      <div>
 		<form name="commentFrm">
 			<div>
-				<textarea name="comment_text" style="font-size: 12pt; width: 100%; height: 100px;"></textarea>
-				<input type="hidden" name="fk_userid" value="${sessionScope.loginuser.userid}" />
+				<textarea name="content" style="font-size: 12pt; width: 100%; height: 100px;"></textarea>
+				<input class="userid" type="hidden" name="fk_userid" value="${sessionScope.loginuser.userid}" />
 				<input type="hidden" name="name" value="${sessionScope.loginuser.name}" />
 				<input type="hidden" name="gymseq" value="${requestScope.pvo.pnum}" />
 			</div>
@@ -1630,7 +1615,7 @@ function goAddWrite_reply(gymquestionseq){
 
 	<div>
 		<p id="order_error_msg"
-			class="text-center text-danger font-weight-bold h4"></p>
+		class="text-center text-danger font-weight-bold h4"></p>
 	</div>
 
 

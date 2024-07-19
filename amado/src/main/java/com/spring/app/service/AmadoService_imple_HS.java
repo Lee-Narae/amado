@@ -78,11 +78,11 @@ public class AmadoService_imple_HS implements AmadoService_HS {
 		int n1=0, result=0;
 		
 		n1 = dao.addComment(questionvo); // 댓글쓰기(tbl_comment 테이블에 insert)
-		//System.out.println("~~~ 확인용n1: " + n1);
+		System.out.println("~~~ 확인용n1: " + n1);
 		
 		if(n1 == 1) {
 			result = dao.updateCommentCount(questionvo.getGymseq());  // tbl_board 테이블에 commentCount 컬럼이 1증가(update)
-			//System.out.println("~~~ 확인용result: " + result);
+			System.out.println("~~~ 확인용result: " + result);
 		}
 		
 		return result;
@@ -136,11 +136,11 @@ public class AmadoService_imple_HS implements AmadoService_HS {
 		int n1=0, result=0;
 		
 		n1 = dao.addReComment(answervo); // 댓글쓰기(tbl_comment 테이블에 insert)
-		//System.out.println("~~~ 확인용n1: " + n1);
+		System.out.println("~~~ 확인용n1: " + n1);
 		
 		if(n1 == 1) {
 			result = dao.updateReCommentCount(answervo.getGymquestionseq());  // tbl_board 테이블에 commentCount 컬럼이 1증가(update)
-			//System.out.println("~~~ 확인용result: " + result);
+			// System.out.println("~~~ 확인용result: " + result);
 		}
 		
 		return result;

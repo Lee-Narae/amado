@@ -264,26 +264,35 @@ create table tbl_gymanswerreply
 
 
 select *
+from tbl_gym
+
+select *
 from tbl_fleamarketcomment 
 
 select *
 from tbl_fleamarketcommentreply 
 ---------------------------------------------------------------------------------------------
 ALTER TABLE tbl_gymquestion ADD (changestatus NUMBER(1));
-ALTER TABLE tbl_gymquestion ADD (RECOMMENTCOUNT NUMBER(5));
+ALTER TABLE tbl_gym ADD (commentcount NUMBER);
+commit;
+ALTER TABLE tbl_gymquestion ADD (commentcount NUMBER(5));
 
 select * from tbl_gymquestion
 
 ALTER TABLE tbl_gymquestion ADD COLUMN RECOMMENDCOUNT NUMBER(5);
 
-
+desc 
 
 drop table tbl_gymquestion;
 
 select *
 from tbl_gymquestion;
 
-desc tbl_fleamarketcomment
+select *
+from tbl_fleamarket
+
+desc tbl_gym
+desc tbl_fleamarket
 
 create table tbl_gymquestion      
 (gymquestionseq               NUMBER                                 -- 체육관문의번호(PK)
@@ -300,6 +309,9 @@ create table tbl_gymquestion
 ,constraint FK_tbl_gyq_fk_userid foreign key(fk_userid) references tbl_member(userid)
 );
 
+select *
+from tbl_gym
+
 -- Table TBL_GYMQUESTION이(가) 생성되었습니다.
 commit
 create sequence seq_gymquestion
@@ -310,11 +322,21 @@ nominvalue
 nocycle
 nocache;
 -- Sequence SEQ_GYMQUESTION이(가) 생성되었습니다.
-
+drop sequence seq_gymquestion
 
 select *
 from tbl_answer
 -- 체육관문의답변
+
+select *
+from tbl_fleamarketcomment
+
+select *
+from tbl_gymquestion
+
+select *
+from tbl_gymanswer
+
 
 create table tbl_gymanswer      
 (gymanswerseq               NUMBER                              -- 체육관문의답변번호(PK)
@@ -325,8 +347,42 @@ create table tbl_gymanswer
 ,changestatus              number(1)        default 0
 
 
-
 ,constraint PK_tbl_gymawr_gymawrseq primary key(gymanswerseq)
 ,constraint FK_tbl_gymawr_gymquestionseq foreign key(gymquestionseq) references tbl_gymquestion(gymquestionseq)
 ,constraint FK_tbl_gymawr_fk_userid foreign key(fk_userid) references tbl_member(userid)
 );
+
+
+content_reply
+
+create sequence seq_gymanswerseq
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+ALTER TABLE tbl_gymanswer
+MODIFY (content number not null);
+
+ALTER TABLE tbl_gymanswer RENAME COLUMN CONTENT_RELPY TO content_reply;
+
+select gymquestionseq, fk_userid,category, content, changestatus
+		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
+             , V.memberimg
+		from tbl_gymquestion A join tbl_member V
+		ON A.fk_userid = V.userid
+		where A.gymseq = 77
+		order by gymquestionseq desc
+        
+        
+select gymanswerseq, fk_userid, content, changestatus
+     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
+     , V.memberimg
+from tbl_gymanswer A join tbl_member V
+ON A.fk_userid = V.userid
+where A.gymquestionseq = 20
+order by gymanswerseq desc
+        
+        

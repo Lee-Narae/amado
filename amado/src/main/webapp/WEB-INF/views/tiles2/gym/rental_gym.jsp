@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	            <c:if test="${gym.insidestatus == '0' && gym.status =='1'}">
 	            <div class="col-md-3 mb-4">
 			                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/gym/detail_gym.do'">
-			                    <img src="<%=ctxPath%>/resources/images/1/${gym.filename	    }" class="card-img-top" alt="실내 상품 1">
+			                    <img src="<%=ctxPath%>/resources/images/1/${gym.filename}" class="card-img-top" alt="실내 상품 1">
 			                    <div class="card-body">
 			                        <h5 class="card-title">${gym.gymname}</h5>
 			                        <p class="card-text">${gym.cost}/1시간</p>

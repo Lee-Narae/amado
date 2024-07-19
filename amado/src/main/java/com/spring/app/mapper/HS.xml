@@ -21,20 +21,16 @@ values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
 	</select>
 	
 <!-- #88. 댓글쓰기 (tbl_comment 테이블에 insert) -->
-	<insert id="addComment" parameterType="FleamarketCommentVO">
-		insert into tbl_fleamarketcomment(fleamarketcommentseq, fleamarketseq, comment_text, registerdate, fk_userid)
-		values(seq_fleamarketcomment.nextval, 1, #{comment_text}, default, #{fk_userid})
+	<insert id="addComment" parameterType="QuestionVO">
+		insert into tbl_gymquestion(gymquestionseq, gymseq, content, registerdate, fk_userid)
+		values(seq_gymquestion.nextval, 77, #{content}, default, #{fk_userid})
 	</insert>
 	
 	<!-- #89-1. tbl_board 테이블에 commentCount 컬럼이 1증가(update) -->
 	<update id="updateCommentCount" parameterType="String">
-		update tbl_fleamarket set commentcount = commentcount+1
-		where fleamarketseq = 1
+		update tbl_gym set commentcount = commentcount+1
+		where gymseq = 77
 	</update>
-	
-	
-	
-	
 	
 
 	<!-- === #93. 원게시물에 딸린 댓글들을 조회해오기 === -->
@@ -76,35 +72,37 @@ values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
     </select> 
 
 	<insert id="addReComment" parameterType="AnswerVO">
-		insert into  tbl_gymanswer(fleamarketcommentreplyseq, fleamarketcommentseq, commentreply_text, fk_userid)
-		values(seq_fleamarketcommentreplyseq.nextval, #{fleamarketcommentseq}, #{commentreply_text}, #{fk_userid})
+		insert into tbl_gymanswer(gymanswerseq, gymquestionseq, content_reply, fk_userid)
+		values(seq_gymanswerseq.nextval, #{gymquestionseq}, #{content_reply}, #{fk_userid})
 	</insert>
 	
 	<update id="updateReCommentCount" parameterType="String">
-		update tbl_fleamarketcomment set recommentcount = recommentcount+1
-		where fleamarketcommentseq = #{fleamarketcommentseq}
+		update tbl_gymquestion set recommentcount = recommentcount+1
+		where gymquestionseq = #{gymquestionseq}
 	</update>
-	
+	 
 	<update id="updateReComment" parameterType="HashMap">
-        update tbl_fleamarketcommentreply set commentreply_text = #{commentreply_text}, registerdate = sysdate, changestatus = 1
-        where fleamarketcommentreplyseq = #{fleamarketcommentreplyseq}
+        update tbl_gymanswer set content = #{content}, registerdate = sysdate, changestatus = 1
+        where gymanswerseq = #{gymanswerseq}
     </update>
     
     <delete id="deleteReComment" parameterType="String">
-        delete from tbl_fleamarketcommentreply
-        where fleamarketcommentreplyseq = #{fleamarketcommentreplyseq}
+        delete from tbl_gymanswer
+        where gymanswerseq = #{gymanswerseq}
     </delete>
     
     <update id="updateReCommentCount_decrease" parameterType="String">
-        update tbl_fleamarketcomment set recommentcount = recommentcount - 1 
-        where fleamarketcommentseq = #{fleamarketcommentseq}
-    </update>
+        update tbl_gymquestion set recommentcount = recommentcount - 1 
+        where gymquestionseq = #{gymquestionseq}
+    </update> 
     
     
     
     
     
     
+    
+        <!-- 체육관 등록하기  -->
 	<select id="getGymseq" resultType="String">
 		select SEQ_GYM.nextval from dual
 	</select>
