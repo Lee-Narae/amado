@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.spring.app.domain.BoardVO;
+import com.spring.app.domain.ClubBoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketVO;
+import com.spring.app.domain.NoticeVO;
 
 @Repository
 public class AmadoDAO_imple_JY implements AmadoDAO_JY {
@@ -98,13 +100,7 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 		return itemCnt;
 	}
 	
-	
-	// 쿠키
-	@Override
-	public FleamarketVO goodsDetailData(int goodsSeq) {
-		FleamarketVO gDetailData = sqlsession.selectOne("JY.goodsDetailData", goodsSeq);
-		return gDetailData;
-	}
+
 
 	// 동일한 종목의 동호회 가입하는지 확인
 	@Override
@@ -114,9 +110,44 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 	}
 
 	
-	// 동호회 게시판 전체 게시글수
+	// 동호회 게시판 - 총페이지수
+	@Override
+	public int getTotalPage(Map<String, String> paramap) {
+		int n = sqlsession.selectOne("JY.getTotalPage", paramap);
+		return n;
+	}
 
-	// 글목록 가져오기
+	
+	// 동호회 게시판 - 페이징처리
+	@Override
+	public List<ClubBoardVO> select_clubboard_paging(Map<String, String> paramap) {
+		List<ClubBoardVO> clubboard = sqlsession.selectList("JY.select_clubboard_paging", paramap);
+		return clubboard;
+	}
+
+	
+	// 동호회 게시판 - 게시글 개수
+	@Override
+	public int getTotalCount(Map<String, String> paramap) {
+		int n = sqlsession.selectOne("JY.getTotalCount", paramap);
+		return n;
+	}
+
+	// 동호회 게시판 - 디테일
+	@Override
+	public ClubBoardVO getClubboardDetail(Map<String, String> paramap) {
+		ClubBoardVO cboard = sqlsession.selectOne("JY.getClubboardDetail", paramap);
+		return cboard;
+	}
+
+	
+
+	// 동호회게시판 조회수 올리기
+	@Override
+	public void updateCboardViewcount(String clubboardseq) {
+		sqlsession.update("JY.updateCboardViewcount", clubboardseq);
+	}
+
 
 	
 

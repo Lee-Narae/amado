@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.spring.app.domain.BoardVO;
+import com.spring.app.domain.ClubBoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketVO;
+import com.spring.app.domain.NoticeVO;
 
 public interface AmadoDAO_JY {
 	
@@ -40,15 +42,26 @@ public interface AmadoDAO_JY {
 	// 상품 전체 개수 불러오기
 	int getItemCnt(Map<String, String> paraMap);
 	
-	// 쿠키
-	FleamarketVO goodsDetailData(int goodsSeq);
 
 	// 동일한 종목의 동호회 가입하는지 확인
 	String checkseq(Map<String, String> paraMap);
 
-	// 동호회 게시판 전체 게시글수
+	// 동호회 게시판 - 총페이지수
+	int getTotalPage(Map<String, String> paramap);
 
-	// 글목록 가져오기
+	// 돌아갈페이지
+	List<ClubBoardVO> select_clubboard_paging(Map<String, String> paramap);
+
+	// 동호회 게시판 - 게시글 개수
+	int getTotalCount(Map<String, String> paramap);
+
+	// 동호회 게시판 - 디테일
+	ClubBoardVO getClubboardDetail(Map<String, String> paramap);
+
+	// 동호회게시판 조회수 올리기
+	void updateCboardViewcount(String clubboardseq);
+
+
 
 	
 
