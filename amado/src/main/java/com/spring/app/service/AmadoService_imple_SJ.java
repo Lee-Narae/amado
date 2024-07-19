@@ -2,6 +2,7 @@ package com.spring.app.service;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,8 @@ import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.ClubmemberVO;
+import com.spring.app.domain.InquiryFileVO;
+import com.spring.app.domain.InquiryVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.model.AmadoDAO_SJ;
 
@@ -380,6 +383,43 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		
 		return loginuser;
 	}
+
+	
+	// 문의목록 가져오기
+	@Override
+	public List<InquiryVO> getinquiryList(String fk_userid) {
+	    List<Map<String, String>> inquiryLista = dao.getinquiryList(fk_userid);
+	    List<InquiryVO> inquiryList = new ArrayList<>(); // 초기화
+
+	    if (inquiryLista != null && !inquiryLista.isEmpty()) {
+	        for (Map<String, String> inquiryMap : inquiryLista) {
+	            InquiryVO inquiryVO = new InquiryVO(); // 새 객체 생성
+	            
+	            inquiryVO.setInquiryseq(inquiryMap.get("inquiryseq"));
+	            inquiryVO.setContent(inquiryMap.get("content"));
+	            inquiryVO.setFk_userid(inquiryMap.get("fk_userid"));
+	            inquiryVO.setEmail(inquiryMap.get("email"));
+	            inquiryVO.setPhone(inquiryMap.get("phone"));
+	            inquiryVO.setRegisterdate(inquiryMap.get("registerdate"));
+	            inquiryVO.setSearchtype_a(inquiryMap.get("searchtype_a"));
+	            inquiryVO.setSearchtype_b(inquiryMap.get("searchtype_b"));
+	            inquiryVO.setStatus(inquiryMap.get("status"));
+
+	            if (inquiryMap.get("filename") != null || inquiryMap.get("filesize") != null || inquiryMap.get("orgfilename") != null) {
+	                InquiryFileVO inquiryfilevo = new InquiryFileVO();
+	                inquiryfilevo.setFilename(inquiryMap.get("filename"));
+	                inquiryfilevo.setFilesize(inquiryMap.get("filesize"));
+	                inquiryfilevo.setOrgfilename(inquiryMap.get("orgfilename"));
+	                inquiryVO.setInquiryfilevo(inquiryfilevo);
+	            }
+
+	            inquiryList.add(inquiryVO); // 리스트에 추가
+	        }
+	    }
+
+	    return inquiryList;
+	}
+
 
 
 }

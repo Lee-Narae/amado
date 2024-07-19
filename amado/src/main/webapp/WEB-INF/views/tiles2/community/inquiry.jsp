@@ -363,7 +363,7 @@ div.fileDrop>div.fileList>span.fileSize {
 	                  // ~~~ 확인용 : {"result":1}
 	                  if(json.result == 1 || json.inquiryseq != 0) {
 	                	 alert("1대1 문의가 등록되었습니다.");
-	            	     location.href="<%=ctxPath%>/community/inquiryList.do"; 
+	                	 GoInquiryList();
 	                  }
 	                  else {
 	                	  alert("1대1 문의 등록에 실패했습니다.");
@@ -388,6 +388,12 @@ div.fileDrop>div.fileList>span.fileSize {
 	}); // end of $(document).ready
 	
 	
+	function GoInquiryList() {
+		const frm = document.idFrm;
+//    	frm.method = "GET";
+    	frm.action = "<%=ctxPath%>/community/inquiryList.do";
+    	frm.submit();		
+	}
 	
 	
 	
@@ -400,16 +406,16 @@ div.fileDrop>div.fileList>span.fileSize {
 
 	<div style="width: 80%; margin: auto; padding-left: 3%;">
 
-		<div class="mb-3" style="cursor: pointer; text-decoration: underline;" id="GoInquiryList" onclick="location.href='<%=ctxPath%>/community/inquiryList.do'">문의목록보기</div>		
+		<div class="mb-3" style="cursor: pointer; text-decoration: underline;" id="GoInquiryList" onclick="GoInquiryList()">문의목록보기</div>		
 
 
 		<h2 style="margin-bottom: 30px;">1:1 문의하기</h2>
 		<hr style="border-width: 1px 0 0 0; border-color: #000;" class="mb-3">
 
 
+
+
 		<form name="inquiryFrm" enctype="multipart/form-data">
-
-
 			<div class="row mt-5" style="height: 50px;">
 				<strong class="col-md-2 mt-3" style="text-align: center;">문의유형</strong>
 				<select class="col-md-3" id="searchType_a" name="searchType_a">
@@ -526,6 +532,10 @@ div.fileDrop>div.fileList>span.fileSize {
 
 		</form>
 
+
+<form name="idFrm">
+	<input type="hidden" name="userid" value="${requestScope.fk_userid}">
+</form>
 
 
 	</div>

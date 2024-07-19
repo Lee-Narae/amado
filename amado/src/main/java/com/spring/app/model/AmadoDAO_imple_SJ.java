@@ -12,6 +12,7 @@ import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.ClubmemberVO;
+import com.spring.app.domain.InquiryVO;
 import com.spring.app.domain.MemberVO;
 
 @Repository
@@ -268,6 +269,14 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 	public int checkClubSportseq(ClubmemberVO clubmembervo) {
 		int n = sqlsession.selectOne("SJ.checkClubSportseq", clubmembervo);
 		return n;
+	}
+
+	
+	// 문의목록 가져오기
+	@Override
+	public List<Map<String, String>> getinquiryList(String fk_userid) {
+		List<Map<String, String>> inquiryList = sqlsession.selectList("SJ.getinquiryList", fk_userid);
+		return inquiryList;
 	}
 
 

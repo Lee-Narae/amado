@@ -3,8 +3,6 @@ package com.spring.app.amado.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,13 +23,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.spring.app.common.AES256;
 import com.spring.app.common.FileManager;
 import com.spring.app.common.MyUtil;
 import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.ClubmemberVO;
+import com.spring.app.domain.InquiryVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.service.AmadoService_SJ;
 
@@ -1285,15 +1283,11 @@ public class ControllerSJ {
 		
 		HttpSession session = request.getSession();
 		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser"); 
-				
-
-		String fk_userid = loginuser.getUserid();
+				String fk_userid = loginuser.getUserid();
 		
 		loginuser = service.getMemberInfo(fk_userid);
 		
-		request.setAttribute("fk_userid", fk_userid);		request.setAttribute("fk_userid", fk_userid);
-
-		
+		request.setAttribute("fk_userid", fk_userid);		request.setAttribute("loginuser", loginuser);		
 		return "community/inquiry.tiles2";
 	}
 
@@ -1452,15 +1446,18 @@ public class ControllerSJ {
 		return jsonObj.toString();
 	}
 	
-	
 	// 문의목록보기
 	@GetMapping("/community/inquiryList.do")
-	public ModelAndView inquiryList(HttpServletRequest request, ModelAndView mav) {
+	public String requiredLogin_inquiryList(HttpServletRequest request, HttpServletResponse response) {
 		
-		
-		mav.setViewName("/community/inquiryList.tiles2");
-		
-		return mav;
+		String fk_userid = request.getParameter("userid");
+		System.out.println("fk_userid : " + fk_userid);
+		if(fk_userid != null) {
+			// 문의목록 가져오기
+			List<InquiryVO> inquiryList = service.getinquiryList(fk_userid);
+			request.setAttribute("inquiryList", inquiryList);
+		}
+		return "/community/inquiryList.tiles2";
 	}
 	
 	
