@@ -265,7 +265,7 @@ function openModal(){
   </div>
     `;
     
-    $("div.modal-content").html(modal_html);
+    $("div.modal1").html(modal_html);
 }
 
 function goPermit(matchingapplyseq, matchingregseq, Aseq, Bseq){
@@ -307,6 +307,80 @@ function goPermit(matchingapplyseq, matchingregseq, Aseq, Bseq){
 function goBoard(fk_userid, clubseq){
 	location.href = "<%= ctxPath%>/club/clubBoard.do?fk_userid="+fk_userid+"&clubseq="+clubseq;
 }
+
+
+function openModal2(){
+	
+	$("div.modal-content").empty();
+	
+	const matchingseq = $(event.target).parent().find("input#matchingseq").val();
+	const myteam = $(event.target).parent().find("input#myteam").val();
+	const clubname = $(event.target).parent().find("input#clubname").val();
+	const matchdate = $(event.target).parent().find("input#matchdate").val();
+	const area = $(event.target).parent().find("input#area").val();
+	
+	let modal_html2 = `
+		<div class="modal-header" align="center">
+        <h5 class="modal-title" style="font-weight: bold; width: 100%; display: inline-block;">매치 결과 등록하기</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+	<div class="modal-body" style="height: auto;">
+	<div style="margin-left: 15%; font-weight: bold; color: #001633;">매치 정보</div>
+      	<div style="border: solid 2px #99d6ff; border-radius: 20px; width: 70%; margin-left: 15%;">
+        <table id="matchInfo">
+        	<tbody>
+        		<tr>
+        			<td width="30">종목</td>
+        			<td width="70">\${sportname}</td>
+        		</tr>
+        		<tr>
+        			<td>날짜</td>
+        			<td>\${matchdate.substring(0, 16)}</td>
+        		</tr>
+        		<tr>
+        			<td>장소</td>
+        			<td>\${city}&nbsp;\${local}&nbsp;\${area}</td>
+        		</tr>
+        	</tbody>
+        </table>
+  	</div>
+  	<div style="margin: 5% 0 0 15%; font-weight: bold; color: #001633;">상대팀 정보</div>
+  	<div style="border: solid 2px #99d6ff; border-radius: 20px; width: 70%; margin-left: 15%;">
+        <table id="VsInfo">
+        	<tbody>
+        		<tr>
+        			<td width="30">팀명</td>
+        			<td width="70"><a>\${B_name}</a></td>
+        		</tr>
+        		<tr>
+        			<td>전달 메세지</td>`;
+        			
+	if(message == ''){
+		modal_html += `<td>없음</td>`;
+	}        			
+	
+	else {
+		modal_html += `<td>\${message}</td>`;
+	}
+        			
+	modal_html += `</tr>
+        		<tr>
+        			<td>인원</td>
+        			<td>\${membercount}명</td>
+        		</tr>
+        	</tbody>
+        </table>
+    </div>
+    </div>
+    <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+    <button type="button" class="btn btn-primary" onclick="goPermit(\${matchingapplyseq}, \${matchingregseq}, \${Aseq}, \${Bseq})">승인하기</button>
+  </div>
+    `;
+    
+    $("div.modal2").html(modal_html2);
+}
+
 </script>
 
 <div id="container">
@@ -314,10 +388,66 @@ function goBoard(fk_userid, clubseq){
 <!-- 모달 -->
 <div class="modal modalclass" id="matchPermitModal" style="margin-top: 5%; height: auto;">
   <div class="modal-dialog modal-lg" style="height: auto;">
-    <div class="modal-content">
+    <div class="modal-content modal1">
+
     </div>
   </div>
 </div>
+
+
+
+<!-- 모달2 -->
+<div class="modal modalclass" id="matchResultModal" style="margin-top: 5%; height: auto;">
+  <div class="modal-dialog modal-lg" style="height: auto;">
+    <div class="modal-content modal2">
+    <div class="modal-header" align="center">
+        <h5 class="modal-title" style="font-weight: bold; width: 100%; display: inline-block;">매치 결과 등록하기</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+	<div class="modal-body" style="height: auto;">
+		<div style="margin-left: 15%; font-weight: bold; color: #001633;">매치 정보</div>
+	      	<div style="border: solid 2px #99d6ff; border-radius: 20px; width: 70%; margin-left: 15%;">
+	        <table id="matchInfo">
+	        	<tbody>
+	        		<tr>
+	        			<td width="30">상대팀</td>
+	        			<td width="70">ㅇㅇ</td>
+	        		</tr>
+	        		<tr>
+	        			<td>날짜</td>
+	        			<td>ㅇㅇ</td>
+	        		</tr>
+	        		<tr>
+	        			<td>장소</td>
+	        			<td>ㅇㅇ</td>
+	        		</tr>
+	        	</tbody>
+	        </table>
+	  	</div>
+	  	<div style="margin: 5% 0 0 15%; font-weight: bold; color: #001633;">매치 결과</div>
+		<div style="border: solid 1px red; width: 80%; margin-left: 15%; align-content: center;" align="center">
+			<div style="display: flex; width: 50%;">
+				<div style="margin-left: 15%;">우리팀</div>
+				<div style="margin-left: 40%;">상대팀</div>
+			</div>
+			<div style="width: 50%;">
+				<input type="number" id="score1" style="width: 30%; height: 50px; text-align: center; margin-right: 10%;"/>
+				<span style="font-size: 20pt;">:</span>
+				<input type="number" id="score2" style="width: 30%; height: 50px; text-align: center; margin-left: 10%;"/>
+			</div>
+		</div>
+    </div>
+    <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+    <button type="button" class="btn btn-primary" onclick="goPermit(\${matchingapplyseq}, \${matchingregseq}, \${Aseq}, \${Bseq})">승인하기</button>
+  </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 
 	<c:if test="${sessionScope.loginuser.memberrank == '1'}">
 		<div style="height: 60px;">
@@ -330,7 +460,12 @@ function goBoard(fk_userid, clubseq){
 			<c:if test="${not empty requestScope.matchResultList}">
 				<c:forEach var="match" items="${requestScope.matchResultList}" varStatus="status">
 						<div>
-							<div class="matchDiv" data-toggle="modal" data-target="#matchResultModal" onclick="openModal2()"><span style="color: red; font-weight: bold;">[긴급] </span><span style="color: blue;">${match.clubname}</span> 팀과의 매치 결과 등록</div>
+							<div class="matchDiv" data-toggle="modal" data-target="#matchResultModal"><span style="color: red; font-weight: bold;">[긴급] </span><span style="color: blue;">${match.clubname}</span> 팀과의 매치 결과 등록</div>
+							<input type="hidden" id="matchingseq" value="${match.matchingseq}" />
+							<input type="hidden" id="myteam" value="${match.myteam}" />
+							<input type="hidden" id="clubname" value="${match.clubname}" />
+							<input type="hidden" id="matchdate" value="${match.matchdate}" />
+							<input type="hidden" id="area" value="${match.area}" />
 						</div>
 					<c:if test="${not empty requestScope.alarmList}">
 						<hr>

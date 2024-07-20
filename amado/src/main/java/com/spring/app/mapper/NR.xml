@@ -621,9 +621,10 @@
 		<result column="myteam" property="myteam" javaType="String"/>
 		<result column="clubname" property="clubname" javaType="String"/>
 		<result column="matchdate" property="matchdate" javaType="String"/>
+		<result column="area" property="area" javaType="String"/>
 	</resultMap>
 	<select id="getMatchResult" parameterType="String" resultMap="MatchResultMap">
-		select matchingseq, C.clubname myteam, D.clubname, to_char(B.matchdate, 'yyyy-mm-dd hh24:mi') matchdate
+		select matchingseq, C.clubname myteam, D.clubname, to_char(B.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, area
 		from tbl_matching A join tbl_matchingreg B
 		on A.matchingregseq = B.matchingregseq
 		join tbl_club C

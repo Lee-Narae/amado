@@ -516,3 +516,14 @@ where B.status = 1 and (C.clubseq=2 or D.clubseq=2);
 
 select * from tbl_matchingapply;
 select * from tbl_club;
+
+select matchingseq, C.clubname myteam, D.clubname, to_char(B.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, area
+		from tbl_matching A join tbl_matchingreg B
+		on A.matchingregseq = B.matchingregseq
+		join tbl_club C
+		on B.clubseq = C.clubseq
+		join tbl_club D
+		on A.clubseq2 = D.clubseq
+		join tbl_member E
+		on C.fk_userid = E.userid
+		where E.userid = 'leejy' and A.result1 = 0;
