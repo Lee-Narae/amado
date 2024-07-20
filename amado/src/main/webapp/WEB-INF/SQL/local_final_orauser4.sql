@@ -1013,4 +1013,9 @@ order by inquiryseq desc
 
 select *
 from tbl_inquiryFile
+order by inquiryseq desc
+
+select *
+from tbl_inquiry
+order by inquiryseq desc
 
