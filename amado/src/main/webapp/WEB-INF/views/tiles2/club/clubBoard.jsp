@@ -11,42 +11,107 @@
 <style type="text/css">
 
 
-	span.subject {
-	    display: inline-block;
-	    max-width: 450px; /* 최대 너비를 적절히 설정 */
-	    overflow: hidden;
-	    text-overflow: ellipsis;
-	    white-space: nowrap;
-	}	
+th {
+height: 50px;
+font-size: 15pt;
+text-align: center;
+align-content: center;
+background-color: #3366ff;
+color: white;
+}
 
+th:nth-child(1) {
+border-top-left-radius: 20px;
+}
 
-/* 	.subject:hover {
-		background: red;
-	} */
-    
-    th {
-    	background-color: none;
-    	
-    }
-    
-    .subjectStyle {font-weight: bold;
-                   color: navy;
-                   cursor: pointer; }
-                   
-    a {text-decoration: none !important;} /* 페이지바의 a 태그에 밑줄 없애기 */
-    
+th:last-child {
+border-top-right-radius: 20px;
+}
+
+td {
+height: 55px;
+align-content: center;
+border-top: solid 1px #e0e0e0;
+}
+
+tbody > tr:hover {
+background-color: #e4edfb;
+opacity: 0.8;
+cursor: pointer;
+}
+
+select {
+width: 8%;
+height: 40px;
+text-align: center;
+border-radius: 10px;
+}
+
+input[name='searchWord'] {
+height: 40px;
+padding-left: 1%;
+border-radius: 10px;
+align-content: center;
+border: solid 1px gray;
+}
+
 </style>
 
 <script type="text/javascript">
 
-$(document).ready(function() {
+$(document).ready(function(){
 	
+	// 검색 버튼 눌렀을 때
+	$("button.btn-light").click(function(){
+		goSearch();
+	});
+	
+	// 검색에서 엔터
+	$("input:text[name='searchWord']").keyup(function(e){
+		if(e.keyCode == 13){
+			goSearch();
+		}
+	});
+	
+	// 글을 눌렀을 때
+	$("tbody > tr *").click(function(e){
+
+		let clubboardseq = $(e.target).parent().find("input[name='clubboardseq']").val();
+		
+		const frm = document.goViewFrm;
+		frm.clubboardseq.value = clubboardseq;
+		frm.goBackURL.value = "${requestScope.currentURL}";
+		
+		if(${not empty requestScope.paramap.searchType}){ // 검색을 했을 경우
+			frm.searchType.value = '${requestScope.paramap.searchType}';
+			frm.searchWord.value = '${requestScope.paramap.searchWord}';
+		}
+		
+		frm.method = "post";
+		frm.action = "<%=ctxPath%>/club/clubboardDetail.do";
+		frm.submit();
+	
+	});
 });
+
+function goSearch(){
+	
+	if($("input:text[name='searchWord']").val().trim() == ""){
+		swal('검색어를 입력하세요.');
+		return;
+	}
+	
+	
+	
+	const frm = document.searchFrm;
+	frm.submit();
+}
+	
 
 </script>
 
 <div id="wrap" style="width: 100%; padding: 5% 0;" align="center">
-	<div id="top" class="mb-5" style="font-size: 35pt; font-weight: bolder; text-align: center;">공지사항</div>
+	<div id="top" class="mb-5" style="font-size: 35pt; font-weight: bolder; text-align: center;">동호회 게시판</div>
 
 	<div id="bottom" style="width: 80%;">
 		<table class="mb-5" style="width: 100%;">
@@ -60,19 +125,20 @@ $(document).ready(function() {
 				</tr>
 			</thead>
 			<tbody>
-				<c:if test="${not empty requestScope.noticeList}">
-					<c:forEach var="notice" items="${requestScope.noticeList}" varStatus="status">
+				<c:if test="${not empty requestScope.clubboardList}">
+					<c:forEach var="cboard" items="${requestScope.clubboardList}" varStatus="status">
 						<tr>
 							<fmt:parseNumber var="currentShowPageNo" value="${requestScope.currentShowPageNo}" />
 	          				<fmt:parseNumber var="sizePerPage" value="${requestScope.sizePerPage}" />
-	          				<td align="center">${requestScope.totalMemberCount - (currentShowPageNo-1)*sizePerPage - status.index}</td>
-							<td>${notice.title}&nbsp;<c:if test="${notice.commentcount != 0}"><span id="commentCount">[${notice.commentcount}]</span></c:if></td>
-							<td align="center">${notice.registerdate}<input id="noticeseq" type="hidden" name="noticeseq" value="${notice.noticeseq}" /></td>
-							<td align="center">${notice.viewcount}</td>
+	          				<td align="center">${requestScope.totalCount - (currentShowPageNo-1)*sizePerPage - status.index}</td>
+							<td>${cboard.title}&nbsp;<c:if test="${cboard.commentcount != 0}"><span id="commentCount">[${cboard.commentcount}]</span></c:if></td>
+							<td align="center">${cboard.fk_userid}</td>
+							<td align="center">${cboard.registerdate}<input id="clubboardseq" type="hidden" name="clubboardseq" value="${cboard.clubboardseq}" /></td>
+							<td align="center">${cboard.viewcount}</td>
 						</tr>
 					</c:forEach>
 				</c:if>
-				<c:if test="${empty requestScope.noticeList}">
+				<c:if test="${empty requestScope.clubboardList}">
 					<td align="center" colspan="4">검색 결과가 없습니다.</td>
 				</c:if>
 			</tbody>
@@ -99,7 +165,7 @@ $(document).ready(function() {
 	</div>
 	
 	<form name="goViewFrm">
-		<input type="hidden" name="noticeseq" />
+		<input type="hidden" name="clubboardseq" />
 		<input type="hidden" name="goBackURL" />
 		<input type="hidden" name="searchType" />
 		<input type="hidden" name="searchWord" />

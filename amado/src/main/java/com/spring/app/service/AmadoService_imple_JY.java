@@ -8,8 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.spring.app.common.FileManager;
 import com.spring.app.domain.BoardVO;
+import com.spring.app.domain.ClubBoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketVO;
+import com.spring.app.domain.MemberVO;
+import com.spring.app.domain.NoticeVO;
 import com.spring.app.model.AmadoDAO_JY;
 
 @Service
@@ -102,13 +105,7 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 		return itemCnt;
 	}
 
-	
-	// 쿠키
-	@Override
-	public FleamarketVO goodsDetailData(int goodsSeq) {
-		FleamarketVO gDetailData = dao.goodsDetailData(goodsSeq);
-		return gDetailData;
-	}
+
 
 
 	// 동일한 종목의 동호회 가입하는지 확인
@@ -120,11 +117,51 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 
 
 
+	// 동호회 게시판 - 총페이지수
 	@Override
-	public int getNoticeTotalPage(Map<String, String> paramap) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int getTotalPage(Map<String, String> paramap) {
+		int n = dao.getTotalPage(paramap);
+		return n;
 	}
+
+
+	// 동호회 게시판 - 페이징처리
+	@Override
+	public List<ClubBoardVO> select_clubboard_paging(Map<String, String> paramap) {
+		List<ClubBoardVO> clubboardList = dao.select_clubboard_paging(paramap);
+		return clubboardList;
+	}
+
+
+	// 동호회 게시판 - 게시글 개수
+	@Override
+	public int getTotalCount(Map<String, String> paramap) {
+		int n = dao.getTotalCount(paramap);
+		return n;
+	}
+
+
+	// 동호회 게시판 - 디테일
+	@Override
+	public ClubBoardVO getClubboardDetail(Map<String, String> paramap) {
+		ClubBoardVO cboard = dao.getClubboardDetail(paramap);
+		return cboard;
+	}
+
+
+	// 동호회게시판 조회수 올리기
+	@Override
+	public void updateCboardViewcount(String clubboardseq) {
+		dao.updateCboardViewcount(clubboardseq);
+		
+	}
+
+
+
+	
+
+
+	
 
 
 	

@@ -171,4 +171,12 @@ public class AmadoService_imple_JH implements AmadoService_JH {
 		return gymvo;
 	}
 
+
+
+	@Override
+	public GymVO getgymPay(String gymseq) {
+		GymVO gymvo = dao.getgymPay(gymseq);
+		return gymvo;
+	}
+
 }

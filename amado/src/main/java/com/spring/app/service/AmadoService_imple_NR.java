@@ -585,9 +585,38 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 
 	// 지역별 체육시설 현황
 	@Override
-	public List<Map<String, String>> searchFacByLocal() {
-		List<Map<String, String>> localFacList = dao.searchFacByLocal();
+	public List<Map<String, String>> searchFacByCity() {
+		List<Map<String, String>> cityFacList = dao.searchFacByCity();
+		return cityFacList;
+	}
+	@Override
+	public List<Map<String, String>> searchFacByLocal(String city) {
+		List<Map<String, String>> localFacList = dao.searchFacByLocal(city);
 		return localFacList;
+	}
+
+	// 전국 체육시설
+	@Override
+	public List<Map<String, String>> getFacList(Map<String, String> paramap) {
+		List<Map<String, String>> facList = dao.getFacList(paramap);
+		return facList;
+	}
+	@Override
+	public int getfacTotalPage(Map<String, String> paramap) {
+		int n = dao.getfacTotalPage(paramap);
+		return n;
+	}
+	@Override
+	public int getTotalFacCount(Map<String, String> paramap) {
+		int n = dao.getTotalFacCount(paramap);
+		return n;
+	}
+
+	// 동호회장 - 매치결과 등록알림
+	@Override
+	public List<Map<String, String>> getMatchResult(String userid) {
+		List<Map<String, String>> matchResultList = dao.getMatchResult(userid);
+		return matchResultList;
 	}
 	
 	

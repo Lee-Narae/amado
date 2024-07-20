@@ -7,6 +7,7 @@ import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.ClubmemberVO;
+import com.spring.app.domain.InquiryVO;
 import com.spring.app.domain.MemberVO;
 
 public interface AmadoDAO_SJ {
@@ -107,6 +108,15 @@ public interface AmadoDAO_SJ {
 	int InquiryFileTable(Map<String, Object> paraMap);
 
 	int findseq_inquiry(Map<String, Object> paraMap);
+
+	// 멤버정보 가져오기
+	MemberVO getMemberInfo(String fk_userid);
+
+	// 한 카테고리에 이미 가입한 클럽이 있는지 확인용
+	int checkClubSportseq(ClubmemberVO clubmembervo);
+
+	// 문의목록 가져오기
+	List<Map<String, String>> getinquiryList(String fk_userid);
 
 	
 

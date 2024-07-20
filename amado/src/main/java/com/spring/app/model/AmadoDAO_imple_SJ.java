@@ -12,6 +12,7 @@ import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.ClubmemberVO;
+import com.spring.app.domain.InquiryVO;
 import com.spring.app.domain.MemberVO;
 
 @Repository
@@ -253,6 +254,29 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 	public int findseq_inquiry(Map<String, Object> paraMap) {
 		int inquiryseq = sqlsession.selectOne("SJ.findseq_inquiry", paraMap);
 		return inquiryseq;
+	}
+
+	// 멤버정보 가져오기
+	@Override
+	public MemberVO getMemberInfo(String fk_userid) {
+		MemberVO loginuser = sqlsession.selectOne("SJ.getMemberInfo", fk_userid);
+		return loginuser;
+	}
+
+	
+	// 한 카테고리에 이미 가입한 클럽이 있는지 확인용
+	@Override
+	public int checkClubSportseq(ClubmemberVO clubmembervo) {
+		int n = sqlsession.selectOne("SJ.checkClubSportseq", clubmembervo);
+		return n;
+	}
+
+	
+	// 문의목록 가져오기
+	@Override
+	public List<Map<String, String>> getinquiryList(String fk_userid) {
+		List<Map<String, String>> inquiryList = sqlsession.selectList("SJ.getinquiryList", fk_userid);
+		return inquiryList;
 	}
 
 

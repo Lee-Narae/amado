@@ -7,6 +7,7 @@ import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.ClubmemberVO;
+import com.spring.app.domain.InquiryVO;
 import com.spring.app.domain.MemberVO;
 
 // 승진 서비스
@@ -95,6 +96,12 @@ public interface AmadoService_SJ {
 	int Inquiry(Map<String, Object> paraMap);
 
 	int findseq_inquiry(Map<String, Object> paraMap);
+
+	// 멤버정보 가져오기
+	MemberVO getMemberInfo(String fk_userid);
+
+	// 문의목록 가져오기
+	List<InquiryVO> getinquiryList(String fk_userid);
 
 
 }

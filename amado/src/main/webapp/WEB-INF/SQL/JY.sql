@@ -123,20 +123,64 @@ select *
 from tbl_clubboard;
 
 -- 종목별 동호회 게시판
-select count(*) 
-(
-select clubseq
+select clubseq, count(*) 
 from tbl_clubboard
-where userid = 'leejy'
-)
+where fk_userid = 'leejy'
 group by clubseq;
 
 insert into tbl_clubboard(clubboardseq, clubseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status)
 values(seq_clubboard.nextval, 2, '토마토맛토마토맛토', '먹어볼사람', 'leejy', sysdate , '1234', 0 , 0, 1);
 insert into tbl_clubboard(clubboardseq, clubseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status)
 values(seq_clubboard.nextval, 3, '토마토김치전', '만들어줄게요', 'leejy', sysdate , '1234', 0 , 0, 1);
+insert into tbl_clubboard(clubboardseq, clubseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status)
+values(seq_clubboard.nextval, 4, '여의도 가양얼큰버섯칼국수', '먹고싶어요', 'leenr', sysdate , '1234', 0 , 0, 1);
+
+insert into tbl_clubboard(clubboardseq, clubseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status)
+values(seq_clubboard.nextval, 2, '11칼국슈', '무짜', 'leejy', sysdate , '1234', 0 , 0, 1);
+insert into tbl_clubboard(clubboardseq, clubseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status)
+values(seq_clubboard.nextval, 2, '시러 칼국수!', '시러시러', 'leenr', sysdate , '1234', 0 , 0, 1);
+insert into tbl_clubboard(clubboardseq, clubseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status)
+values(seq_clubboard.nextval, 2, '조아 칼국수!', '조아조아', 'leenr', sysdate , '1234', 0 , 0, 1);
+
+insert into tbl_clubboard(clubboardseq, clubseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status)
+values(seq_clubboard.nextval, 2, '12칼국슈', '무짜', 'leenr', sysdate , '1234', 0 , 0, 1);
+insert into tbl_clubboard(clubboardseq, clubseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status)
+values(seq_clubboard.nextval, 2, '13칼국슈', '무짜', 'leenr', sysdate , '1234', 0 , 0, 1);
+insert into tbl_clubboard(clubboardseq, clubseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status)
+values(seq_clubboard.nextval, 2, '14칼국슈', '무짜', 'leenr', sysdate , '1234', 0 , 0, 1);
+commit;
 
 ALTER TABLE tbl_clubboard
 MODIFY (registerdate DEFAULT sysdate);
 
 
+select rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status, orgfilename, filename, filesize
+from
+(select rownum rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status, orgfilename, filename, filesize
+from
+
+(
+select clubboardseq, clubseq, title, content, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, password, commentcount, viewcount, status, orgfilename, filename, filesize
+from tbl_clubboard)
+where clubseq = '2'
+order by registerdate desc
+) 
+
+select ceil(count(*)/1)
+from tbl_clubboard
+where fk_userid = 'leenr'
+
+
+select rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status, orgfilename, filename, filesize
+		from
+		(select rownum rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status, orgfilename, filename, filesize
+		from
+		(
+		select clubboardseq, clubseq, title, content, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, password, commentcount, viewcount, status, orgfilename, filename, filesize
+		from tbl_clubboard)
+		where fk_userid = 'leejy'
+		
+		
+		order by registerdate desc
+		)
+		where rn between to_number(1)*to_number(10)-(to_number(10)-1) and to_number(1)*to_number(10)	

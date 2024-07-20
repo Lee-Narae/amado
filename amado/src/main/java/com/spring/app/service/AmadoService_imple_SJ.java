@@ -2,6 +2,7 @@ package com.spring.app.service;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,8 @@ import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.ClubmemberVO;
+import com.spring.app.domain.InquiryFileVO;
+import com.spring.app.domain.InquiryVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.model.AmadoDAO_SJ;
 
@@ -313,15 +316,21 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	@Override
 	public int clubMRegisterSJ(ClubmemberVO clubmembervo) {
 
-		int result = 0;
-		// 이미 클럽가입 신청했거나 가입됐는지 확인용
-		int n1 = dao.getclubAry(clubmembervo);
+		int n, n1, result = 0;
 		
-		if(n1 == 0) {
-			// 이미 가입신청하지 않았을 경우
+		// 한 카테고리에 이미 가입한 클럽이 있는지 확인용
+		n = dao.checkClubSportseq(clubmembervo);
+		result = 99;
+		if(n == 0) {
+			// 이미 클럽가입 신청했거나 가입됐는지 확인용
+			n1 = dao.getclubAry(clubmembervo);
 			
-			// 클럽 가입신청
-			result = dao.clubMRegisterSJ(clubmembervo);
+			if(n1 == 0) {
+				// 가입하려는 카테고리에 이미 가입한 클럽이 없고, 가입신청하지 않았을 경우
+				
+				// 클럽 가입신청
+				result = dao.clubMRegisterSJ(clubmembervo);
+			}
 		}
 		
 		return result;
@@ -350,6 +359,67 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		int result = dao.Inquiry(paraMap); // tbl_inquiry 에 넣기
 		return result;
 	}
+
+	// 멤버정보 가져오기
+	@Override
+	public MemberVO getMemberInfo(String fk_userid) {
+			
+		MemberVO loginuser = dao.getMemberInfo(fk_userid);	
+			
+		String email = "";
+		String mobile = "";
+		try {
+			email = aES256.decrypt(loginuser.getEmail());
+			mobile = aES256.decrypt(loginuser.getMobile());
+			
+			loginuser.setEmail(email);
+			loginuser.setMobile(mobile);
+			
+		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return loginuser;
+	}
+
+	
+	// 문의목록 가져오기
+	@Override
+	public List<InquiryVO> getinquiryList(String fk_userid) {
+	    List<Map<String, String>> inquiryLista = dao.getinquiryList(fk_userid);
+	    List<InquiryVO> inquiryList = new ArrayList<>(); // 초기화
+
+	    if (inquiryLista != null && !inquiryLista.isEmpty()) {
+	        for (Map<String, String> inquiryMap : inquiryLista) {
+	            InquiryVO inquiryVO = new InquiryVO(); // 새 객체 생성
+	            
+	            inquiryVO.setInquiryseq(inquiryMap.get("inquiryseq"));
+	            inquiryVO.setContent(inquiryMap.get("content"));
+	            inquiryVO.setFk_userid(inquiryMap.get("fk_userid"));
+	            inquiryVO.setEmail(inquiryMap.get("email"));
+	            inquiryVO.setPhone(inquiryMap.get("phone"));
+	            inquiryVO.setRegisterdate(inquiryMap.get("registerdate"));
+	            inquiryVO.setSearchtype_a(inquiryMap.get("searchtype_a"));
+	            inquiryVO.setSearchtype_b(inquiryMap.get("searchtype_b"));
+	            inquiryVO.setStatus(inquiryMap.get("status"));
+
+	            if (inquiryMap.get("filename") != null || inquiryMap.get("filesize") != null || inquiryMap.get("orgfilename") != null) {
+	                InquiryFileVO inquiryfilevo = new InquiryFileVO();
+	                inquiryfilevo.setFilename(inquiryMap.get("filename"));
+	                inquiryfilevo.setFilesize(inquiryMap.get("filesize"));
+	                inquiryfilevo.setOrgfilename(inquiryMap.get("orgfilename"));
+	                inquiryVO.setInquiryfilevo(inquiryfilevo);
+	            }
+
+	            inquiryList.add(inquiryVO); // 리스트에 추가
+	        }
+	    }
+
+	    return inquiryList;
+	}
+
 
 
 }

@@ -29,6 +29,7 @@ import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.ClubmemberVO;
+import com.spring.app.domain.InquiryVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.service.AmadoService_SJ;
 
@@ -1282,11 +1283,11 @@ public class ControllerSJ {
 		
 		HttpSession session = request.getSession();
 		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser"); 
+				String fk_userid = loginuser.getUserid();
 		
-		String fk_userid = loginuser.getUserid();
+		loginuser = service.getMemberInfo(fk_userid);
 		
-		request.setAttribute("fk_userid", fk_userid);
-		
+		request.setAttribute("fk_userid", fk_userid);		request.setAttribute("loginuser", loginuser);		
 		return "community/inquiry.tiles2";
 	}
 
@@ -1313,7 +1314,7 @@ public class ControllerSJ {
 		
 		HttpSession session = mrequest.getSession();
 		String root = session.getServletContext().getRealPath("/");
-		String path = root + "resources" + File.separator + "email_attach_file";
+		String path = root + "resources" + File.separator + "inquiry_file";
 
 		File dir = new File(path);
 		if (!dir.exists()) {
@@ -1342,6 +1343,8 @@ public class ControllerSJ {
 		if (fileList != null && fileList.size() > 0) {
 			
 			int inquiryseq = service.findseq_inquiry(paraMap);
+			
+			jsonObj.put("inquiryseq", inquiryseq);
 			
 			paraMap.put("inquiryseq", inquiryseq);
 
@@ -1434,18 +1437,32 @@ public class ControllerSJ {
 			} // end of for
 
 		} // end of if (fileList != null && fileList.size() > 0)
-
-		 
 		
-
-
-
+		
+		jsonObj.put("result", result);
+		
 //		System.out.println(jsonObj.toString());
 
 		return jsonObj.toString();
 	}
 	
+	// 문의목록보기
+	@GetMapping("/community/inquiryList.do")
+	public String requiredLogin_inquiryList(HttpServletRequest request, HttpServletResponse response) {
+		
+		String fk_userid = request.getParameter("userid");
+		System.out.println("fk_userid : " + fk_userid);
+		if(fk_userid != null) {
+			// 문의목록 가져오기
+			List<InquiryVO> inquiryList = service.getinquiryList(fk_userid);
+			request.setAttribute("inquiryList", inquiryList);
+		}
+		return "/community/inquiryList.tiles2";
+	}
 	
+	
+	
+	// 클럽에 가입했을 경우(회원이 클럽에 가입)
 	@ResponseBody
 	@PostMapping(value = "/club/clubMRegisterSJ.do", produces = "text/plain;charset=UTF-8") 
 	public String clubMRegisterSJ(HttpServletRequest request) {
