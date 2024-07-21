@@ -96,6 +96,9 @@
     
     
     $(document).ready(function(){
+    	
+    	let totalPrice = 0;
+    	
     	// 지도를 담을 영역의 DOM 레퍼런스
     	var mapContainer = document.getElementById("map");
     	
@@ -215,12 +218,36 @@
 		    var imageUrl = $(this).find('img').attr('src');
 		    $('#modalImage').attr('src', imageUrl);
 		  });
+    	
+    	
+		  $("button.btn-reserve").click(function(){
+		    	
+			    
+			   	var priceText = $("#totalPrice").text();
+                
+			   	/////////////////////////////////////////////////////////
+                // ₩, 원, , 문자를 제거합니다.
+                var numericPrice = priceText.replace(/[₩,원]/g, '');
+                const selected = $("button.btn-custom.selected").text()+" ";
+                const date = $("#date").val();
+                const gymseq = $("input.gymseq").val();
+			   	/////////////////////////////////////////////////////////
+
+              //alert( $("input.gymseq").val() );
+              //alert("gdgd");
+			  //alert($("button.btn-custom.selected").text()+" ");
+			  //alert(numericPrice);
+              //alert( $("#date").val());
+              
+              
+			    
+		  });
     })
     
     
     
     
-        let totalPrice = 0;
+        
 
         function updatePrice(amount) {
             totalPrice += amount;
@@ -292,15 +319,11 @@
 				        v_html += "<div class='section'>";
 				        v_html += "    <span class='price' id='totalPrice'>₩0원</span>";
 				        v_html += "</div>";
-				
-				        <!-- 예약하기 버튼 -->
-				        v_html += "<div class='section'>";
-				        v_html += "    <button class='btn btn-primary btn-reserve'>예약하기</button>";
-				        v_html += "</div>";
+						
+				        v_html += "<input type='hidden' class='gymseq' value='"+json.gymseq+"'></input>";
+				       
 		    			
-		    			
-		    			
-		    			$("div.container").html(v_html);
+		    			$("div.container1").html(v_html);
 		    			
 		    			let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?gymseq=" + gymseq;
 		                window.history.pushState({ path: newUrl }, '', newUrl);
@@ -315,43 +338,46 @@
       	   		//location.href = "<%=ctxPath%>/gym/gymPay.do?gymseq="+infowindow.getContent();
       	    };
       	}// end of function makeOverListener(mapobj, marker, infowindow, infowindowArr)--------
+      	
+      	
     </script>
 </head>
 <body>
 	<div style="display: flex">
 	    <div class="container">
-	        <!-- 체육관 사진 -->
-	        <div class="section">
-	            <img src="<%=ctxPath%>/resources/images/${requestScope.gymvo.orgfilename}" class="gym-image" alt="체육관 사진">
-	        </div>
-			<div style="text-align: center; margin-top: 3%; margin-bottom: 10%; font-size: 30px; font-weight: bold">
-			 ${requestScope.gymvo.gymname}
+	    	<div class="container1">
+		        <!-- 체육관 사진 -->
+		        <div class="section">
+		            <img src="<%=ctxPath%>/resources/images/${requestScope.gymvo.orgfilename}" class="gym-image" alt="체육관 사진">
+		        </div>
+				<div style="text-align: center; margin-top: 3%; margin-bottom: 10%; font-size: 30px; font-weight: bold">
+				 ${requestScope.gymvo.gymname}
+				</div>
+		        <!-- 날짜 선택 -->
+		        <div class="section">
+		            <label for="date">날짜 선택:</label>
+		            <input type="date" id="date" class="form-control">
+		        </div>
+		
+		        <!-- 시간 선택 버튼들 -->
+		        <div class="section">
+		            <label for="time">시간 선택:</label>
+		            <div class="btn-container">
+		                <% 
+		                    for (int i = 0; i < 24; i++) {
+		                        String time = String.format("%02d:00", i);
+		                        out.print("<button class='btn btn-outline-primary btn-custom' onclick=\"toggleSelection(this)\">" + time + "</button>");
+		                    }
+		                %>
+		            </div>
+		            
+		        </div>
+		
+		        <!-- 총 가격 -->
+		        <div class="section">
+		            <span class="price" id="totalPrice">₩0원</span>
+		        </div>
 			</div>
-	        <!-- 날짜 선택 -->
-	        <div class="section">
-	            <label for="date">날짜 선택:</label>
-	            <input type="date" id="date" class="form-control">
-	        </div>
-	
-	        <!-- 시간 선택 버튼들 -->
-	        <div class="section">
-	            <label for="time">시간 선택:</label>
-	            <div class="btn-container">
-	                <% 
-	                    for (int i = 0; i < 24; i++) {
-	                        String time = String.format("%02d:00", i);
-	                        out.print("<button class='btn btn-outline-primary btn-custom' onclick=\"toggleSelection(this)\">" + time + "</button>");
-	                    }
-	                %>
-	            </div>
-	            
-	        </div>
-	
-	        <!-- 총 가격 -->
-	        <div class="section">
-	            <span class="price" id="totalPrice">₩0원</span>
-	        </div>
-	
 	        <!-- 예약하기 버튼 -->
 	        <div class="section">
 	            <button class="btn btn-primary btn-reserve">예약하기</button>
