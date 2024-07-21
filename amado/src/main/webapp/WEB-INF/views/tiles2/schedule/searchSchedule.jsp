@@ -110,7 +110,7 @@
 		frm.scheduleno.value = scheduleno;
 		
 		frm.method="get";
-		frm.action="<%= ctxPath%>/schedule/detailSchedule.action";
+		frm.action="<%= ctxPath%>/schedule/detailSchedule.do";
 		frm.submit();
 	} // end of function goDetail(scheduleno){}-------------------------- 
 			
@@ -135,7 +135,7 @@
 		
 		var frm = document.searchScheduleFrm;
         frm.method="get";
-        frm.action="<%= ctxPath%>/schedule/searchSchedule.action";
+        frm.action="<%= ctxPath%>/schedule/searchSchedule.do";
         frm.submit();
 	}
 
@@ -143,7 +143,7 @@
 
 <div style="margin-left: 80px; width: 88%;">
 	<div>
-		<h3 style="display: inline-block;">일정 검색결과</h3>&nbsp;&nbsp;<a href="<%= ctxPath%>/schedule/scheduleManagement.action"><span>◀캘린더로 돌아가기</span></a>
+		<h3 style="display: inline-block;">일정 검색결과</h3>&nbsp;&nbsp;<a href="<%= ctxPath%>/schedule/scheduleManagement.do"><span>◀캘린더로 돌아가기</span></a>
 
 		<div id="searchPart" style="float: right; margin-top: 50px;">
 			<form name="searchScheduleFrm">

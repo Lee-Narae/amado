@@ -4,9 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.spring.app.domain.BoardVO;
+import com.spring.app.domain.Calendar_schedule_VO;
+import com.spring.app.domain.Calendar_small_category_VO;
 import com.spring.app.domain.ClubBoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketVO;
+import com.spring.app.domain.MemberVO;
 import com.spring.app.domain.NoticeVO;
 
 public interface AmadoService_JY {
@@ -59,8 +62,40 @@ public interface AmadoService_JY {
 	// 동호회게시판 조회수 올리기
 	void updateCboardViewcount(String clubboardseq);
 
+	
+	List<Calendar_schedule_VO> selectSchedule(String fk_userid);
+	
+	
+	int addComCalendar(Map<String, String> paraMap) throws Throwable;
 
-	int addComCalendar(Map<String, String> paraMap);
+	List<Calendar_small_category_VO> showCompanyCalendar();
+
+	int editCalendar(Map<String, String> paraMap);
+
+	int addMyCalendar(Map<String, String> paraMap);
+
+	List<Calendar_small_category_VO> showMyCalendar(String fk_userid);
+
+	int deleteSubCalendar(String smcatgono);
+
+	int getS_totalCount(Map<String, String> paraMap);
+
+	List<Map<String, String>> scheduleListSearchWithPaging(Map<String, String> paraMap);
+
+	Map<String, String> detailSchedule(String scheduleno);
+
+	List<Calendar_small_category_VO> selectSmallCategory(Map<String, String> paraMap);
+
+	List<MemberVO> searchJoinUserList(String joinUserName);
+
+	int registerSchedule_end(Map<String, String> paraMap);
+
+	int deleteSchedule(String scheduleno);
+
+	int editSchedule_end(Calendar_schedule_VO svo);
+
+	
+
 
 
 

@@ -185,7 +185,7 @@
 		$("select.calType").val("${requestScope.map.FK_LGCATGONO}");
 		
 		$.ajax({
-				url: "<%= ctxPath%>/schedule/selectSmallCategory.action",
+				url: "<%= ctxPath%>/schedule/selectSmallCategory.do",
 				data: {"fk_lgcatgono":"${requestScope.map.FK_LGCATGONO}", 
 					   "fk_userid":"${requestScope.map.FK_USERID}"},
 				dataType: "json",
@@ -214,7 +214,7 @@
 			
 			if(fk_lgcatgono != "") { // 선택하세요 가 아니라면
 				$.ajax({
-						url: "<%= ctxPath%>/schedule/selectSmallCategory.action",
+						url: "<%= ctxPath%>/schedule/selectSmallCategory.do",
 						data: {"fk_lgcatgono":fk_lgcatgono, 
 							   "fk_userid":fk_userid},
 						dataType: "json",
@@ -259,7 +259,7 @@
 				var joinUserName = $(this).val();
 			//	console.log("확인용 joinUserName : " + joinUserName);
 				$.ajax({
-					url:"<%= ctxPath%>/schedule/insertSchedule/searchJoinUserList.action",
+					url:"<%= ctxPath%>/schedule/insertSchedule/searchJoinUserList.do",
 					data:{"joinUserName":joinUserName},
 					dataType:"json",
 					success : function(json){
@@ -406,7 +406,7 @@
 			$("input[name=joinuser]").val(joinuser);
 			
 		    var frm = document.scheduleFrm;
-		  	frm.action="<%= ctxPath%>/schedule/editSchedule_end.action";
+		  	frm.action="<%= ctxPath%>/schedule/editSchedule_end.do";
 			frm.method="post";
 			frm.submit(); 
 
@@ -446,7 +446,7 @@
 
 
 <div style="margin-left: 80px; width: 88%;">
-<h3 style="display: inline-block;">일정 수정하기</h3>&nbsp;&nbsp;<a href="<%= ctxPath%>/schedule/scheduleManagement.action"><span>◀캘린더로 돌아가기</span></a>
+<h3 style="display: inline-block;">일정 수정하기</h3>&nbsp;&nbsp;<a href="<%= ctxPath%>/schedule/scheduleManagement.do"><span>◀캘린더로 돌아가기</span></a>
 	<form name="scheduleFrm">
 		<table id="schedule" class="table table-bordered">
 			<tr>
@@ -482,16 +482,16 @@
 						</c:when>
 					--%> 
 					<%-- 일정등록시 사내캘린더 등록은 loginuser.gradelevel =='10' 인 사용자만 등록이 가능하도록 한다. --%> 
-						<c:when test="${loginuser.gradelevel =='10'}"> 
+						<c:when test="${loginuser.userid != null}"> 
 							<option value="">선택하세요</option>
 							<option value="1">내 캘린더</option>
-							<option value="2">사내 캘린더</option>
+							<option value="2">동호회 캘린더</option>
 						</c:when>
-					<%-- 일정등록시 내캘린더 등록은 로그인 된 사용자이라면 누구나 등록이 가능하다. --%> 	
+				<%--	 일정등록시 내캘린더 등록은 로그인 된 사용자이라면 누구나 등록이 가능하다.  	
 						<c:otherwise>
 							<option value="">선택하세요</option>
 							<option value="1">내 캘린더</option>
-						</c:otherwise >
+						</c:otherwise >--%>
 					</c:choose>
 					</select> &nbsp;
 					<select class="small_category schedule" name="fk_smcatgono"></select>

@@ -251,7 +251,7 @@ $(document).ready(function(){
     	events:function(info, successCallback, failureCallback) {
 	
 	    	 $.ajax({
-                 url: '<%= ctxPath%>/schedule/selectSchedule.action',
+                 url: '<%= ctxPath%>/schedule/selectSchedule.do',
                  data:{"fk_userid":$('input#fk_userid').val()},
                  dataType: "json",
                  success:function(json) {
@@ -280,7 +280,7 @@ $(document).ready(function(){
 	   			                                                title: item.subject,
 	   			                                                start: startdate,
 	   			                                                end: enddate,
-	   			                                        	    url: "<%= ctxPath%>/schedule/detailSchedule.action?scheduleno="+item.scheduleno,
+	   			                                        	    url: "<%= ctxPath%>/schedule/detailSchedule.do?scheduleno="+item.scheduleno,
 	   			                                                color: item.color,
 	   			                                                cid: item.fk_smcatgono  // 사내캘린더 내의 서브캘린더 체크박스의 value값과 일치하도록 만들어야 한다. 그래야만 서브캘린더의 체크박스와 cid 값이 연결되어 체크시 풀캘린더에서 일정이 보여지고 체크해제시 풀캘린더에서 일정이 숨겨져 안보이게 된다. 
 	   			                                   }); // end of events.push({})---------
@@ -304,7 +304,7 @@ $(document).ready(function(){
 	   			                                                title: item.subject,
 	   			                                                start: startdate,
 	   			                                                end: enddate,
-	   			                                        	    url: "<%= ctxPath%>/schedule/detailSchedule.action?scheduleno="+item.scheduleno,
+	   			                                        	    url: "<%= ctxPath%>/schedule/detailSchedule.do?scheduleno="+item.scheduleno,
 	   			                                                color: item.color,
 	   			                                                cid: item.fk_smcatgono  // 내캘린더 내의 서브캘린더 체크박스의 value값과 일치하도록 만들어야 한다. 그래야만 서브캘린더의 체크박스와 cid 값이 연결되어 체크시 풀캘린더에서 일정이 보여지고 체크해제시 풀캘린더에서 일정이 숨겨져 안보이게 된다. 
 	   			                                   }); // end of events.push({})---------
@@ -322,7 +322,7 @@ $(document).ready(function(){
   	                                                title: item.subject,
   	                                                start: startdate,
   	                                                end: enddate,
-  	                                        	    url: "<%= ctxPath%>/schedule/detailSchedule.action?scheduleno="+item.scheduleno,
+  	                                        	    url: "<%= ctxPath%>/schedule/detailSchedule.do?scheduleno="+item.scheduleno,
   	                                                color: item.color,
   	                                                cid: "0"  // "0" 인 이유는  공유받은캘린더 에서의 체크박스의 value 를 "0" 으로 주었기 때문이다.
   	                                   }); // end of events.push({})--------- 
@@ -353,7 +353,7 @@ $(document).ready(function(){
       	    
       	    var frm = document.dateFrm;
       	    frm.method="POST";
-      	    frm.action="<%= ctxPath%>/schedule/insertSchedule.action";
+      	    frm.action="<%= ctxPath%>/schedule/insertSchedule.do";
       	    frm.submit();
       	  },
       	  
@@ -435,28 +435,28 @@ function addComCalendar(){
 function goAddComCal(){
 	
 	if($("input.add_com_smcatgoname").val().trim() == ""){
- 		  alert("추가할 사내캘린더 소분류명을 입력하세요!!");
+ 		  alert("추가할 동호회캘린더 소분류명을 입력하세요!!");
  		  return;
  	}
 	
  	else {
  		 $.ajax({
- 			 url: "<%= ctxPath%>/schedule/addComCalendar.action",
+ 			 url: "<%= ctxPath%>/schedule/addComCalendar.do",
  			 type: "post",
  			 data: {"com_smcatgoname": $("input.add_com_smcatgoname").val(), 
  				    "fk_userid": "${sessionScope.loginuser.userid}"},
  			 dataType: "json",
  			 success:function(json){
  				 if(json.n != 1){
-  					alert("이미 존재하는 '사내캘린더 소분류명' 입니다.");
+  					alert("이미 존재하는 '동호회캘린더 소분류명' 입니다.");
   					return;
   				 }
  				 else if(json.n == 1){
  					 $('#modal_addComCal').modal('hide'); // 모달창 감추기				
- 					 alert("사내 캘린더에 "+$("input.add_com_smcatgoname").val()+" 소분류명이 추가되었습니다.");
+ 					 alert("동호회캘린더에 "+$("input.add_com_smcatgoname").val()+" 소분류명이 추가되었습니다.");
  					 
  					 $("input.add_com_smcatgoname").val("");
- 					 showCompanyCal();  // 사내 캘린더 소분류 보여주기
+ 					 showCompanyCal();  // 동호회캘린더 소분류 보여주기
  				 }
  			 },
  			 error: function(request, status, error){
@@ -468,10 +468,10 @@ function goAddComCal(){
 }// end of function goAddComCal(){}------------------------------------
 
 
-// === 사내 캘린더에서 사내캘린더 소분류  보여주기  === //
+// === 동호회캘린더에서  소분류  보여주기  === //
 function showCompanyCal(){
 	$.ajax({
-		 url:"<%= ctxPath%>/schedule/showCompanyCalendar.action",
+		 url:"<%= ctxPath%>/schedule/showCompanyCalendar.do",
 		 type:"get",
 		 dataType:"json",
 		 success:function(json){
@@ -524,12 +524,12 @@ function goEditComCal(){
   	}
   	else{
 		$.ajax({
-			url:"<%= ctxPath%>/schedule/editCalendar.action",
+			url:"<%= ctxPath%>/schedule/editCalendar.do",
 			type: "post",
 			data:{"smcatgono":$("input.edit_com_smcatgono").val(), 
 				  "smcatgoname": $("input.edit_com_smcatgoname").val(), 
 				  "userid":"${sessionScope.loginuser.userid}",
-				  "caltype":"2"  // 사내캘린더
+				  "caltype":"2"  // 동호회캘린더
 			     },
 			dataType:"json",
 			success:function(json){
@@ -539,7 +539,7 @@ function goEditComCal(){
    				 }
 				if(json.n == 1){
 					$('#modal_editComCal').modal('hide'); // 모달 숨기기
-					alert("사내 캘린더명을 수정하였습니다.");
+					alert("동호회 캘린더명을 수정하였습니다.");
 					showCompanyCal();
 				}
 			},
@@ -570,7 +570,7 @@ function goAddMyCal(){
  	
 	else {
  		  $.ajax({
- 			 url: "<%= ctxPath%>/schedule/addMyCalendar.action",
+ 			 url: "<%= ctxPath%>/schedule/addMyCalendar.do",
  			 type: "post",
  			 data: {"my_smcatgoname": $("input.add_my_smcatgoname").val(), 
  				    "fk_userid": "${sessionScope.loginuser.userid}"},
@@ -601,7 +601,7 @@ function goAddMyCal(){
 // === 내 캘린더에서 내캘린더 소분류 보여주기  === //
 function showmyCal(){
 	$.ajax({
-		 url:"<%= ctxPath%>/schedule/showMyCalendar.action",
+		 url:"<%= ctxPath%>/schedule/showMyCalendar.do",
 		 type:"get",
 		 data:{"fk_userid":"${sessionScope.loginuser.userid}"},
 		 dataType:"json",
@@ -648,7 +648,7 @@ function goEditMyCal(){
 	}
   	else{
 		 $.ajax({
-			url:"<%= ctxPath%>/schedule/editCalendar.action",
+			url:"<%= ctxPath%>/schedule/editCalendar.do",
 			type: "post",
 			data:{"smcatgono":$("input.edit_my_smcatgono").val(), 
 				  "smcatgoname": $("input.edit_my_smcatgoname").val(), 
@@ -685,7 +685,7 @@ function delCalendar(smcatgono, smcatgoname){ // smcatgono => 캘린더 소분�
 	
 	if(bool){
 		$.ajax({
-			url:"<%= ctxPath%>/schedule/deleteSubCalendar.action",
+			url:"<%= ctxPath%>/schedule/deleteSubCalendar.do",
 			type: "post",
 			data:{"smcatgono":smcatgono},
 			dataType:"json",
@@ -724,7 +724,7 @@ function goSearch(){
 	
    	var frm = document.searchScheduleFrm;
     frm.method="get";
-    frm.action="<%= ctxPath%>/schedule/searchSchedule.action";
+    frm.action="<%= ctxPath%>/schedule/searchSchedule.do";
     frm.submit();
 	
 }// end of function goSearch(){}--------------------------
@@ -738,7 +738,7 @@ function goSearch(){
 	<div id="wrapper1">
 		<input type="hidden" value="${sessionScope.loginuser.userid}" id="fk_userid"/>
 		
-		<input type="checkbox" id="allComCal" class="calendar_checkbox" checked/>&nbsp;&nbsp;<label for="allComCal">사내 캘린더</label>
+		<input type="checkbox" id="allComCal" class="calendar_checkbox" checked/>&nbsp;&nbsp;<label for="allComCal">동호회 캘린더</label>
 	
 	<%-- 사내 캘린더 추가를 할 수 있는 직원은 직위코드가 3 이면서 부서코드가 4 에 근무하는 사원이 로그인 한 경우에만 가능하도록 조건을 걸어둔다.  	
 	     <c:if test="${sessionScope.loginuser.fk_pcode =='3' && sessionScope.loginuser.fk_dcode == '4' }">  --%>
@@ -799,7 +799,7 @@ function goSearch(){
     
       <!-- Modal header -->
       <div class="modal-header">
-        <h4 class="modal-title">사내 캘린더 추가</h4>
+        <h4 class="modal-title">동호회 캘린더 추가</h4>
         <button type="button" class="close modal_close" data-dismiss="modal">&times;</button>
       </div>
       
