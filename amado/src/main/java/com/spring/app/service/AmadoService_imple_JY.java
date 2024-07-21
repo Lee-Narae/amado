@@ -127,6 +127,14 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 	}
 
 
+
+	@Override
+	public int addComCalendar(Map<String, String> paraMap) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
 	
 	
 

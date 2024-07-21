@@ -46,6 +46,8 @@ public interface AmadoService_JY {
 
 	int getNoticeTotalPage(Map<String, String> paramap);
 
+	int addComCalendar(Map<String, String> paraMap);
+
 
 
 
