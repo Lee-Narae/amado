@@ -527,3 +527,8 @@ select matchingseq, C.clubname myteam, D.clubname, to_char(B.matchdate, 'yyyy-mm
 		join tbl_member E
 		on C.fk_userid = E.userid
 		where E.userid = 'leejy' and A.result1 = 0;
+        
+        
+select * from tbl_matching;
+select * from tbl_club;
+
