@@ -352,7 +352,35 @@ rotate(
         overflow: hidden;}
 
 
+.action-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
 
+  .action-buttons .right_area {
+    margin-right: 10px;
+  }
+
+  .action-buttons .btn {
+    flex-grow: 1;
+    padding: 10px 20px; /* Padding을 조정하여 버튼 크기 조정 */
+    font-size: 16px; /* 폰트 크기 조정 */
+  }
+
+
+ @media (max-width: 768px) {
+    .action-buttons .btn {
+      padding: 10px 50px; /* 모바일 장치에서 버튼 패딩 조정 */
+    }
+  }
+
+  @media (min-width: 769px) {
+    .action-buttons .btn {
+      padding: 10px 100px; /* 데스크탑 장치에서 버튼 패딩 조정 */
+    }
+  }
 
 </style>
 
