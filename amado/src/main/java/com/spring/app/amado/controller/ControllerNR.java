@@ -2106,10 +2106,55 @@ public class ControllerNR {
 	
 	
 	
+	@ResponseBody
+	@PostMapping("/club/matchResultInsert.do")
+	public String matchResultInsert(HttpServletRequest request) {
+		
+		String score1 = request.getParameter("score1");
+		String score2 = request.getParameter("score2");
+		String matchingseq = request.getParameter("matchingseq");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("score1", score1);
+		paramap.put("score2", score2);
+		paramap.put("matchingseq", matchingseq);
+		
+		String result1 = "";
+		String result2 = "";
+		
+		if(Integer.parseInt(score1) > Integer.parseInt(score2)) {
+			result1 = "1";
+			result2 = "2";
+		}
+		
+		else if (Integer.parseInt(score1) < Integer.parseInt(score2)) {
+			result1 = "2";
+			result2 = "1";
+		}
+		
+		else if (Integer.parseInt(score1) == Integer.parseInt(score2)) {
+			result1 = "3";
+			result2 = "3";
+		}
+		
+		paramap.put("result1", result1);
+		paramap.put("result2", result2);
+		
+		
+		int n = service.updateMatchResult(paramap);
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+		
+		return jsonObj.toString();
+	}
 	
 	
-	
-	
+	@GetMapping("/member/myPage.do")
+	public ModelAndView myPage(ModelAndView mav) {
+		mav.setViewName("member/viewMypage.tiles1");
+		return mav;
+	}
 	
 	
 }

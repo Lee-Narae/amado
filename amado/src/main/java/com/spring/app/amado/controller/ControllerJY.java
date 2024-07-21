@@ -884,6 +884,7 @@ public class ControllerJY {
 	}
 
 	
+
 	// 게시글 자세히보기
 	@PostMapping("/club/clubboardDetail.do")
 	public ModelAndView noticeDetail(ModelAndView mav, HttpServletRequest request) {
@@ -939,6 +940,40 @@ public class ControllerJY {
 		return mav;
 	}
 
+	
+	
+	// ========== 캘린더 ==========
+	@GetMapping(value="/schedule/scheduleManagement.do")
+	public ModelAndView requiredLogin_scheduleManagement(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+		
+		mav.setViewName("schedule/scheduleManagement.tiles2");
+		return mav;
+	}
+	
+	
+	// 사내 캘린더에 사내캘린더 소분류 추가하기
+	@ResponseBody
+	@PostMapping("/schedule/addComCalendar.action")
+	public String addComCalendar(HttpServletRequest request) throws Throwable {
+		
+		String com_smcatgoname = request.getParameter("com_smcatgoname");
+		String fk_userid = request.getParameter("fk_userid");
+		
+		Map<String, String> paraMap = new HashMap<String, String>();
+		paraMap.put("com_smcatgoname",com_smcatgoname);
+		paraMap.put("fk_userid",fk_userid);
+		
+		int n = service.addComCalendar(paraMap);
+				
+		JSONObject jsObj = new JSONObject();
+		jsObj.put("n", n);
+		
+		return jsObj.toString();
+	}
+
+	
+	
+	
 	
 	
 	

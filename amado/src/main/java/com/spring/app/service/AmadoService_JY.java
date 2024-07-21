@@ -60,6 +60,8 @@ public interface AmadoService_JY {
 	void updateCboardViewcount(String clubboardseq);
 
 
+	int addComCalendar(Map<String, String> paraMap);
+
 
 
 

@@ -18,6 +18,5 @@
 		<typeAlias type="com.spring.app.domain.MatchingVO" alias="MatchingVO"/>
 		<typeAlias type="com.spring.app.domain.InquiryVO" alias="InquiryVO"/>
 		<typeAlias type="com.spring.app.domain.ClubBoardVO" alias="ClubBoardVO"/>
-
 	</typeAliases>
 </configuration>

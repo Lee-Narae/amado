@@ -503,6 +503,8 @@ public class ControllerJH {
 		jsonObj.put("orgfilename", gymvo.getOrgfilename());
 		jsonObj.put("lat", gymvo.getLat());
 		jsonObj.put("lng", gymvo.getLng());
+		jsonObj.put("gymseq", gymseq);
+		
 		
 		return jsonObj.toString();
 	}
