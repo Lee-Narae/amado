@@ -199,6 +199,8 @@ public interface AmadoService_NR {
 
 	// 동호회장 - 매치결과 등록알림
 	List<Map<String, String>> getMatchResult(String userid);
+	// 동호회장 - 매치 결과 등록
+	int updateMatchResult(Map<String, String> paramap);
 
 	
 

@@ -635,4 +635,12 @@
 		on C.fk_userid = E.userid
 		where E.userid = #{userid} and A.result1 = 0
 	</select>
+	
+	<update id="updateMatchResult">
+		update tbl_matching set result1 = #{result1}, result2 = #{result2}, score1 = #{score1}, score2 = #{score2}
+		where matchingseq = #{matchingseq}
+	</update>
+	
+	
+	
 </mapper>

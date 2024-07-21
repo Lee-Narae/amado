@@ -190,7 +190,7 @@ $(document).ready(function(){
 
 function openModal(){
 	
-	$("div.modal-content").empty();
+	$("div.modal1").empty();
 	
 	const sportname = $(event.target).parent().find("input#sportname").val();
 	const matchdate = $(event.target).parent().find("input#matchdate").val();
@@ -311,7 +311,7 @@ function goBoard(fk_userid, clubseq){
 
 function openModal2(){
 	
-	$("div.modal-content").empty();
+	$("div.modal2").empty();
 	
 	const matchingseq = $(event.target).parent().find("input#matchingseq").val();
 	const myteam = $(event.target).parent().find("input#myteam").val();
@@ -325,60 +325,83 @@ function openModal2(){
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
 	<div class="modal-body" style="height: auto;">
-	<div style="margin-left: 15%; font-weight: bold; color: #001633;">매치 정보</div>
-      	<div style="border: solid 2px #99d6ff; border-radius: 20px; width: 70%; margin-left: 15%;">
-        <table id="matchInfo">
-        	<tbody>
-        		<tr>
-        			<td width="30">종목</td>
-        			<td width="70">\${sportname}</td>
-        		</tr>
-        		<tr>
-        			<td>날짜</td>
-        			<td>\${matchdate.substring(0, 16)}</td>
-        		</tr>
-        		<tr>
-        			<td>장소</td>
-        			<td>\${city}&nbsp;\${local}&nbsp;\${area}</td>
-        		</tr>
-        	</tbody>
-        </table>
-  	</div>
-  	<div style="margin: 5% 0 0 15%; font-weight: bold; color: #001633;">상대팀 정보</div>
-  	<div style="border: solid 2px #99d6ff; border-radius: 20px; width: 70%; margin-left: 15%;">
-        <table id="VsInfo">
-        	<tbody>
-        		<tr>
-        			<td width="30">팀명</td>
-        			<td width="70"><a>\${B_name}</a></td>
-        		</tr>
-        		<tr>
-        			<td>전달 메세지</td>`;
-        			
-	if(message == ''){
-		modal_html += `<td>없음</td>`;
-	}        			
-	
-	else {
-		modal_html += `<td>\${message}</td>`;
-	}
-        			
-	modal_html += `</tr>
-        		<tr>
-        			<td>인원</td>
-        			<td>\${membercount}명</td>
-        		</tr>
-        	</tbody>
-        </table>
-    </div>
+		<div style="margin-left: 15%; font-weight: bold; color: #001633;">매치 정보</div>
+	      	<div style="border: solid 2px #99d6ff; border-radius: 20px; width: 70%; margin-left: 15%;">
+	        <table id="matchInfo">
+	        	<tbody>
+	        		<tr>
+	        			<td width="30">상대팀</td>
+	        			<td width="70">\${clubname}</td>
+	        		</tr>
+	        		<tr>
+	        			<td>날짜</td>
+	        			<td>\${matchdate}</td>
+	        		</tr>
+	        		<tr>
+	        			<td>장소</td>
+	        			<td>\${area}</td>
+	        		</tr>
+	        	</tbody>
+	        </table>
+	  	</div>
+	  	<div style="margin: 5% 0 0 15%; font-weight: bold; color: #001633;">매치 결과</div>
+		<div style="width: 80%; margin-left: 15%; align-content: center;" align="center">
+			<div style="display: flex; width: 50%;">
+				<div style="margin-left: 15%;">우리팀</div>
+				<div style="margin-left: 40%;">상대팀</div>
+			</div>
+			<div style="width: 50%;">
+				<input type="number" id="score1" style="width: 30%; height: 50px; text-align: center; margin-right: 10%;"/>
+				<span style="font-size: 20pt;">:</span>
+				<input type="number" id="score2" style="width: 30%; height: 50px; text-align: center; margin-left: 10%;"/>
+			</div>
+		</div>
     </div>
     <div class="modal-footer">
     <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
-    <button type="button" class="btn btn-primary" onclick="goPermit(\${matchingapplyseq}, \${matchingregseq}, \${Aseq}, \${Bseq})">승인하기</button>
+    <button type="button" class="btn btn-primary" onclick="goMatchResult(\${matchingseq})">등록하기</button>
   </div>
     `;
     
     $("div.modal2").html(modal_html2);
+}
+
+
+function goMatchResult(matchingseq){
+	
+
+	const score1 = $(event.target).parent().parent().find("#score1").val();
+	const score2 = $(event.target).parent().parent().find("#score2").val();
+	
+	$.ajax({
+		
+		url: "<%=ctxPath%>/club/matchResultInsert.do",
+		data: {"score1": score1, "score2": score2, "matchingseq": matchingseq},
+		dataType: "json",
+		type: "post",
+		success: function(json){
+			if(json.n == 1){
+				  
+				alert('등록 완료!');
+				
+				$('#matchResultModal').modal('hide');
+				location.reload(true);
+			}
+			
+			else {
+				alert('내부 오류로 인해 승인이 실패하였습니다. 다시 시도해주세요.');
+
+				$('#matchResultModal').modal('hide');
+				location.reload(true);
+			}
+		},
+		error: function(request, status, error){
+			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		}
+		
+	});
+	
+	
 }
 
 </script>
@@ -400,47 +423,7 @@ function openModal2(){
 <div class="modal modalclass" id="matchResultModal" style="margin-top: 5%; height: auto;">
   <div class="modal-dialog modal-lg" style="height: auto;">
     <div class="modal-content modal2">
-    <div class="modal-header" align="center">
-        <h5 class="modal-title" style="font-weight: bold; width: 100%; display: inline-block;">매치 결과 등록하기</h5>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-	<div class="modal-body" style="height: auto;">
-		<div style="margin-left: 15%; font-weight: bold; color: #001633;">매치 정보</div>
-	      	<div style="border: solid 2px #99d6ff; border-radius: 20px; width: 70%; margin-left: 15%;">
-	        <table id="matchInfo">
-	        	<tbody>
-	        		<tr>
-	        			<td width="30">상대팀</td>
-	        			<td width="70">ㅇㅇ</td>
-	        		</tr>
-	        		<tr>
-	        			<td>날짜</td>
-	        			<td>ㅇㅇ</td>
-	        		</tr>
-	        		<tr>
-	        			<td>장소</td>
-	        			<td>ㅇㅇ</td>
-	        		</tr>
-	        	</tbody>
-	        </table>
-	  	</div>
-	  	<div style="margin: 5% 0 0 15%; font-weight: bold; color: #001633;">매치 결과</div>
-		<div style="border: solid 1px red; width: 80%; margin-left: 15%; align-content: center;" align="center">
-			<div style="display: flex; width: 50%;">
-				<div style="margin-left: 15%;">우리팀</div>
-				<div style="margin-left: 40%;">상대팀</div>
-			</div>
-			<div style="width: 50%;">
-				<input type="number" id="score1" style="width: 30%; height: 50px; text-align: center; margin-right: 10%;"/>
-				<span style="font-size: 20pt;">:</span>
-				<input type="number" id="score2" style="width: 30%; height: 50px; text-align: center; margin-left: 10%;"/>
-			</div>
-		</div>
-    </div>
-    <div class="modal-footer">
-    <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
-    <button type="button" class="btn btn-primary" onclick="goPermit(\${matchingapplyseq}, \${matchingregseq}, \${Aseq}, \${Bseq})">승인하기</button>
-  </div>
+    
     </div>
   </div>
 </div>
@@ -452,7 +435,7 @@ function openModal2(){
 	<c:if test="${sessionScope.loginuser.memberrank == '1'}">
 		<div style="height: 60px;">
 			<div id="notice" align="right" style="margin-right: 10%;">
-				<span style="background-color: #0099ff; color: white; font-weight: bold; font-size: 20pt; display: inline-block; width: 40px; height: 40px; text-align: center; align-content: center; border-radius: 20px;">${requestScope.alarmList.size()}</span>
+				<span style="background-color: #0099ff; color: white; font-weight: bold; font-size: 20pt; display: inline-block; width: 40px; height: 40px; text-align: center; align-content: center; border-radius: 20px;">${requestScope.alarmList.size()+requestScope.matchResultList.size()}</span>
 				<img width="70" height="70" src="https://img.icons8.com/3d-fluency/94/bell.png" alt="bell"/>
 			</div>
 			
@@ -460,7 +443,7 @@ function openModal2(){
 			<c:if test="${not empty requestScope.matchResultList}">
 				<c:forEach var="match" items="${requestScope.matchResultList}" varStatus="status">
 						<div>
-							<div class="matchDiv" data-toggle="modal" data-target="#matchResultModal"><span style="color: red; font-weight: bold;">[긴급] </span><span style="color: blue;">${match.clubname}</span> 팀과의 매치 결과 등록</div>
+							<div class="matchDiv" data-toggle="modal" data-target="#matchResultModal" onclick="openModal2()"><span style="color: red; font-weight: bold;">[긴급] </span><span style="color: blue;">${match.clubname}</span> 팀과의 매치 결과 등록</div>
 							<input type="hidden" id="matchingseq" value="${match.matchingseq}" />
 							<input type="hidden" id="myteam" value="${match.myteam}" />
 							<input type="hidden" id="clubname" value="${match.clubname}" />
@@ -497,7 +480,7 @@ function openModal2(){
 				</c:forEach>
 			</c:if>
 			
-			<c:if test="${empty requestScope.matchResultList && empty requestscope.alarmList}">
+			<c:if test="${empty requestScope.matchResultList && empty requestScope.alarmList}">
 				알림이 없습니다.
 			</c:if>
 		</div>

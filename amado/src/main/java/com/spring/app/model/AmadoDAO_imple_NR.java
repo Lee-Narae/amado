@@ -504,5 +504,11 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		List<Map<String, String>> matchResultList = sqlsession.selectList("NR.getMatchResult", userid);
 		return matchResultList;
 	}
+	// 동호회장 - 매치 결과 등록
+	@Override
+	public int updateMatchResult(Map<String, String> paramap) {
+		int n = sqlsession.update("NR.updateMatchResult", paramap);
+		return n;
+	}
 
 }

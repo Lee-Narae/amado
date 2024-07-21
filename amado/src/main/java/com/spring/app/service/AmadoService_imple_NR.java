@@ -618,6 +618,13 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		List<Map<String, String>> matchResultList = dao.getMatchResult(userid);
 		return matchResultList;
 	}
+
+	// 동호회장 - 매치 결과 등록
+	@Override
+	public int updateMatchResult(Map<String, String> paramap) {
+		int n = dao.updateMatchResult(paramap);
+		return n;
+	}
 	
 	
 }
