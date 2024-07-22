@@ -11,6 +11,7 @@ import com.spring.app.domain.Calendar_schedule_VO;
 import com.spring.app.domain.Calendar_small_category_VO;
 import com.spring.app.domain.ClubBoardVO;
 import com.spring.app.domain.ClubVO;
+import com.spring.app.domain.ClubmemberVO;
 import com.spring.app.domain.FleamarketVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.model.AmadoDAO_JY;
@@ -303,6 +304,22 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 	public int editSchedule_end(Calendar_schedule_VO svo) {
 		int n = dao.editSchedule_end(svo);
 		return n;
+	}
+
+
+	// 내가 속한 동호회 종목 리스트 가져오기
+	@Override
+	public List<ClubmemberVO> selectclubCategoryList(String fk_userid) {
+		List<ClubmemberVO> clubCategoryList = dao.selectclubCategoryList(fk_userid);
+		return clubCategoryList;
+	}
+
+
+	// 동호회게시판 댓글 불러오기
+	@Override
+	public List<Map<String, String>> getCBoardComment(String clubboardseq) {
+		List<Map<String, String>> commentList = dao.getCBoardComment(clubboardseq);
+		return commentList;
 	}
 
 

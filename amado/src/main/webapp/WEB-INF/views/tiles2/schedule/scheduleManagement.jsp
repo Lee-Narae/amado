@@ -40,7 +40,7 @@ ul{
 }
 
 button.btn_normal{
-	background-color: #990000;
+	background-color: #d0c9c9;
 	border: none;
 	color: white;
 	width: 50px;
@@ -67,8 +67,12 @@ button.btn_edit{
 
 $(document).ready(function(){
 	
-	// === 사내 캘린더에 사내캘린더 소분류 보여주기 ===
+	//console.log('${sessionScope.loginuser.memberrank}');
+	
+	
+	// === 동호회캘린더에 소분류 보여주기 ===
 	showCompanyCal();
+	
 
 	// === 내 캘린더에 내캘린더 소분류 보여주기 ===
 	showmyCal();
