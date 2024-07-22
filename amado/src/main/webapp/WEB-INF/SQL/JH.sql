@@ -351,6 +351,11 @@ CREATE TABLE tbl_gymres (
     
 );
 
+ALTER TABLE tbl_gymres
+MODIFY (time nvarchar2(20));
+
+commit
+
 create sequence seq_gymresseq
 start with 1
 increment by 1
@@ -364,6 +369,9 @@ commit
 insert into tbl_gymres(gymresseq, fk_gymseq, fk_userid, reservation_date, time)
 values(seq_gymresseq.nextval, 77, choijh, TO_DATE('2024-07-20', 'YYYY-MM-DD'), '00:00');
 
+select *
+from tbl_gymres
+where reservation_date = '24-07-24';
 
 select *
 from tbl_gymres

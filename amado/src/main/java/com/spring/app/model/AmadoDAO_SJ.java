@@ -118,6 +118,10 @@ public interface AmadoDAO_SJ {
 	// 문의목록 가져오기
 	List<Map<String, String>> getinquiryList(String fk_userid);
 
+	int getTotalInquiryCount(Map<String, String> paraMap);
+
+	List<InquiryVO> getPaginginquiryList(Map<String, String> paraMap);
+
 	
 
 }
