@@ -150,6 +150,14 @@ public class AmadoDAO_imple_HS implements AmadoDAO_HS {
 			return n;
 		}
 
+
+		@Override
+		public List<GymVO> getGymAdd() {
+			
+			List<GymVO> GymAddList = sqlsession.selectList("HS.getGymAdd");
+			return GymAddList;
+		}
+
 	
 	
 

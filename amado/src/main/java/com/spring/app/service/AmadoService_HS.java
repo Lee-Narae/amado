@@ -49,6 +49,10 @@ public interface AmadoService_HS {
 	int insertGymImg(Map<String, String> paramap);
 
 
+	
+	List<GymVO> getGymAdd();
+
+
 
 
 

@@ -151,6 +151,7 @@ public class AmadoService_imple_HS implements AmadoService_HS {
 	@Override
 	public int updateReComment(Map<String, String> paraMap) {
 		int n = dao.updateReComment(paraMap);
+		//System.out.println("paraMap" + paraMap.get("gymanswerseq"));
 		return n;
 	}
 
@@ -165,7 +166,7 @@ public class AmadoService_imple_HS implements AmadoService_HS {
 		if(n==1) {
 			// 댓글삭제시 tbl_board 테이블에 commentCount 컬럼이 1감소(update)
 			m = dao.updateReCommentCount_decrease(paraMap.get("gymquestionseq"));
-			// System.out.println("~~~ 확인용 m : " + m);
+			 System.out.println("~~~ 확인용 m : " + m);
 			// ~~~ 확인용 m : 1
 		}
 		
@@ -192,6 +193,17 @@ public class AmadoService_imple_HS implements AmadoService_HS {
 		public int insertGymImg(Map<String, String> paramap) {
 			int n = dao.insertGymImg(paramap);
 			return n;
+		}
+
+
+
+
+
+		@Override
+		public List<GymVO> getGymAdd() {
+			
+			List<GymVO> GymAddList = dao.getGymAdd();
+			return GymAddList;
 		}
 		
 

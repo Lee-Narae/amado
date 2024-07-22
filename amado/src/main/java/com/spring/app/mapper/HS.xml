@@ -76,14 +76,17 @@ values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
 		values(seq_gymanswerseq.nextval, #{gymquestionseq}, #{content_reply}, #{fk_userid})
 	</insert>
 	
+	
+	
+	
 	<update id="updateReCommentCount" parameterType="String">
 		update tbl_gymquestion set recommentcount = recommentcount+1
 		where gymquestionseq = #{gymquestionseq}
 	</update>
 	 
 	<update id="updateReComment" parameterType="HashMap">
-        update tbl_gymanswer set content = #{content}, registerdate = sysdate, changestatus = 1
-        where gymanswerseq = #{gymanswerseq}
+        update tbl_gymanswer set content_reply = #{content_reply}, registerdate = sysdate, changestatus = 1
+        where gymanswerseq = #{gymanswerseq} 
     </update>
     
     <delete id="deleteReComment" parameterType="String">
@@ -118,6 +121,17 @@ values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
 		insert into tbl_gymimg(gymimgseq, gymseq, filename, orgfilename, filesize)
 		values(SEQ_GYMIMG.nextval, #{gymseq}, #{filename}, #{orgfilename}, #{filesize})
 	</insert>
+	
+	
+	
+	<select id="getGymAdd" resultType="GymVO">
+		select lng, lat, gymseq
+		from tbl_gym
+	</select>
+	
+	
+	
+	
 	
 
 </mapper>

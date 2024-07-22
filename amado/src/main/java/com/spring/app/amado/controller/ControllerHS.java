@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -237,77 +238,6 @@ public class ControllerHS {
 		}
 		
 		
-		// === #146. 원게시물에 딸린 댓글내용들을 페이징 처리하기 (Ajax 로 처리) === // 
-		/*
-			@ResponseBody
-			@GetMapping(value="/commentList.action", produces="text/plain;charset=UTF-8") 
-			public String commentList(HttpServletRequest request) {
-
-				String parentSeq = request.getParameter("parentSeq");
-				String currentShowPageNo = request.getParameter("currentShowPageNo"); 
-				
-				if(currentShowPageNo == null) {
-					currentShowPageNo = "1";
-				}
-				
-				int sizePerPage = 5; // 한 페이지당 5개의 댓글을 보여줄 것임.
-				
-				// **** 가져올 게시글의 범위를 구한다.(공식임!!!) **** 
-				
-				     currentShowPageNo      startRno     endRno
-				    --------------------------------------------
-				         1 page        ===>    1           10
-				         2 page        ===>    11          20
-				         3 page        ===>    21          30
-				         4 page        ===>    31          40
-				         ......                ...         ...
-				 
-				int startRno = ((Integer.parseInt(currentShowPageNo) - 1) * sizePerPage) + 1; // 시작 행번호 
-				int endRno = startRno + sizePerPage - 1; // 끝 행번호
-				
-				Map<String, String> paraMap = new HashMap<>();
-				paraMap.put("parentSeq", parentSeq);
-				paraMap.put("startRno", String.valueOf(startRno));
-				paraMap.put("endRno", String.valueOf(endRno));
-				
-				List<CommentVO> commentList = service.getCommentList_Paging(paraMap); 
-				int totalCount = service.getCommentTotalCount(parentSeq); // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.
-				
-				JSONArray jsonArr = new JSONArray(); // [] 
-				
-				if(commentList != null) {
-					for(CommentVO cmtvo : commentList) {
-						JSONObject jsonObj = new JSONObject();          // {} 
-						jsonObj.put("seq", cmtvo.getSeq());             // {"seq":1}
-						jsonObj.put("fk_userid", cmtvo.getFk_userid()); // {"seq":1, "fk_userid":"seoyh"}
-						jsonObj.put("name", cmtvo.getName());           // {"seq":1, "fk_userid":"seoyh","name":"서영학"}
-						jsonObj.put("content", cmtvo.getContent());     // {"seq":1, "fk_userid":"seoyh","name":서영학,"content":"첫번째 댓글입니다. ㅎㅎㅎ"}
-						jsonObj.put("regdate", cmtvo.getRegDate());     // {"seq":1, "fk_userid":"seoyh","name":서영학,"content":"첫번째 댓글입니다. ㅎㅎㅎ","regdate":"2024-06-18 15:36:31"}
-						
-						jsonObj.put("totalCount", totalCount);   // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.
-						jsonObj.put("sizePerPage", sizePerPage); // 페이징 처리시 보여주는 순번을 나타내기 위한 것임. 
-						
-						//=== #197. 댓글읽어오기에 있어서 첨부파일 기능을 넣은 경우 시작 === //
-						jsonObj.put("fileName", cmtvo.getFileName());  
-						jsonObj.put("orgFilename", cmtvo.getOrgFilename());  
-						jsonObj.put("fileSize", cmtvo.getFileSize());  
-						
-						//=== 댓글읽어오기에 있어서 첨부파일 기능을 넣은 경우 끝 === //
-						
-						
-						jsonArr.put(jsonObj);
-					}// end of for-----------------------
-				}
-				
-			//	System.out.println(jsonArr.toString());
-				
-				return jsonArr.toString(); // "[{"seq":1, "fk_userid":"seoyh","name":서영학,"content":"첫번째 댓글입니다. ㅎㅎㅎ","regdate":"2024-06-18 15:36:31"}]"
-				                           // 또는
-				                           // "[]"		
-				
-			}
-		
-		*/
 		
 		
 		
@@ -373,7 +303,7 @@ public class ControllerHS {
 			if(commentreList != null) {
 				for(AnswerVO answervo : commentreList) {
 					JSONObject jsonObj = new JSONObject();          // {} 
-					jsonObj.put("fleamarketcommentreplyseq", answervo.getGymanswerseq());             // {"seq":1}
+					jsonObj.put("gymanswerseq", answervo.getGymanswerseq());             // {"seq":1}
 					jsonObj.put("fk_userid", answervo.getFk_userid()); // {"seq":1, "fk_userid":"seoyh"}
 					jsonObj.put("content_reply", answervo.getContent_reply());           // {"seq":1, "fk_userid":"seoyh","name":"서영학"}
 					jsonObj.put("registerdate", answervo.getRegisterdate());     // {"seq":1, "fk_userid":"seoyh","name":서영학,"content":"첫번째 댓글입니다. ㅎㅎㅎ","regdate":"2024-06-18 15:36:31"}
@@ -427,38 +357,7 @@ public class ControllerHS {
 		
 		
 		
-		/*
-		// === #90. 원게시물에 딸린 댓글들을 조회해오기(Ajax 로 처리) === //
-		@ResponseBody
-		@GetMapping(value="/readComment.action", produces="text/plain;charset=UTF-8") 
-		public String readComment(HttpServletRequest request) {
-			
-			String parentSeq = request.getParameter("parentSeq"); 
-			
-			List<FleamarketCommentVO> commentList = service.getCommentList(parentSeq); 
-			
-			JSONArray jsonArr = new JSONArray(); // [] 
-			
-			if(commentList != null) {
-				for(FleamarketCommentVO fmcommentvo : commentList) {
-					JSONObject jsonObj = new JSONObject();          // {} 
-					jsonObj.put("fleamarketcommentseq", fmcommentvo.getFleamarketcommentseq());             // {"seq":1}
-					jsonObj.put("fk_userid", fmcommentvo.getFk_userid()); // {"seq":1, "fk_userid":"seoyh"}
-					jsonObj.put("comment_text", fmcommentvo.getComment_text());           // {"seq":1, "fk_userid":"seoyh","name":"서영학"}
-					jsonObj.put("registerdate", fmcommentvo.getRegisterdate());     // {"seq":1, "fk_userid":"seoyh","name":서영학,"content":"첫번째 댓글입니다. ㅎㅎㅎ","regdate":"2024-06-18 15:36:31"}
-					jsonObj.put("memberimg", fmcommentvo.getMemberimg());
-					jsonObj.put("changestatus", fmcommentvo.getChangestatus());
-					
-					jsonArr.put(jsonObj);
-				}// end of for-----------------------
-			}
-			
-			return jsonArr.toString(); // "[{"seq":1, "fk_userid":"seoyh","name":서영학,"content":"첫번째 댓글입니다. ㅎㅎㅎ","regdate":"2024-06-18 15:36:31"}]"
-			                           // 또는
-			                           // "[]"
-		}
-		*/
-		
+	
 		
 		
 		
@@ -468,6 +367,8 @@ public class ControllerHS {
 		public String updateReComment(HttpServletRequest request) {
 			
 			String gymanswerseq = request.getParameter("gymanswerseq");
+			
+			System.out.println("gymanswerseq" + gymanswerseq);
 			String content_reply = request.getParameter("content_reply");
 			
 			Map<String, String> paraMap = new HashMap<>();
@@ -475,17 +376,17 @@ public class ControllerHS {
 			paraMap.put("content_reply", content_reply);
 			
 			int n = service.updateReComment(paraMap);
-			
 			JSONObject jsonObj = new JSONObject();
 			jsonObj.put("n", n);
 			
 			return jsonObj.toString(); // "{"n":1}"
 		}
 		
+
 			
 		
 		
-	/*	@ResponseBody
+		@ResponseBody
 		@PostMapping(value="/deleteReComment2.do", produces="text/plain;charset=UTF-8") 
 		public String deleteReComment(HttpServletRequest request) {
 			
@@ -495,7 +396,7 @@ public class ControllerHS {
 			Map<String, String> paraMap = new HashMap<>();
 			paraMap.put("gymanswerseq", gymanswerseq);
 			paraMap.put("gymquestionseq", gymquestionseq);
-			
+			System.out.println(gymanswerseq);
 			int n=0;
 			try {
 				n = service.deleteReComment(paraMap);
@@ -509,7 +410,7 @@ public class ControllerHS {
 			return jsonObj.toString(); // "{"n":1}"
 		}
 	      
-
+		/*
 		@GetMapping("admin/manage/club")
 		public ModelAndView clubmanager(HttpServletRequest request, HttpServletResponse response ,ModelAndView mav) {
 			
@@ -656,6 +557,31 @@ public class ControllerHS {
 		}
 	   */
 	   
+		
+		@ResponseBody
+		@GetMapping(value="/gym/gymPay_JSON2.do", produces="text/plain;charset=UTF-8") 
+		public String gymPay_JSON(HttpServletRequest request) throws IOException, ParseException {
+
+			// System.out.println(fleamarketcommentseq);
+			List<GymVO> GymAddList = service.getGymAdd(); 
+			
+			JSONArray jsonArr = new JSONArray(); // [] 
+			
+			if(GymAddList != null) {
+				for(GymVO gvo : GymAddList) {
+					JSONObject jsonObj = new JSONObject();           
+					jsonObj.put("lat", gvo.getLat());   //위도          
+					jsonObj.put("lng", gvo.getLng()); 	//경도
+					jsonObj.put("gymseq", gvo.getGymseq());
+					
+					
+					jsonArr.put(jsonObj);
+				}// end of for-----------------------
+			}
+			
+			return jsonArr.toString();
+		}
+		
 	   
 	
 

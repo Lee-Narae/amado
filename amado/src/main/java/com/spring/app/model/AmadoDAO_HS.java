@@ -55,6 +55,8 @@ public interface AmadoDAO_HS {
 	int Gymreg(GymVO gym);
 	// 체육관 등록하기(추가이미지)
 	int insertGymImg(Map<String, String> paramap);
+
+	List<GymVO> getGymAdd();
 	
 
 }

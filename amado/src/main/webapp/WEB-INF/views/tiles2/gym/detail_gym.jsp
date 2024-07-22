@@ -624,7 +624,7 @@ rotate(
 		$(document).on("click", "button.btnUpdateReComment", function(e){
 		    
 			const $btn = $(e.target);
-			
+		
 			if($(e.target).text() == "수정"){
 			 // alert("답글수정");
 			 //	alert($(e.target).parent().parent().children('div#commentreply_text').text()); // 수정전 답글내용
@@ -646,19 +646,22 @@ rotate(
 			
 			else if($(e.target).text() == "완료"){
 			  // alert("답글수정완료");
-			  // alert($(e.target).parent().parent().parent().parent().children("form").children("input").val()); // 수정해야할 댓글시퀀스 번호 
-			  // alert($(e.target).parent().parent().children("div:nth-child(2)").children("input").val()); // 수정후 댓글내용
-			     const gymquestionseq = $(e.target).parent().parent().parent().parent().children("form").children("input").val()
-			     const content = $(e.target).parent().parent().children("div:nth-child(2)").children("input").val(); 
+			   alert($(e.target).parent().children("input").val()); // 수정해야할 댓글시퀀스 번호 
+			   alert($(e.target).parent().parent().children("div:nth-child(2)").children("input").val()); // 수정후 댓글내용
+			   	 const gymquestionseq = $(e.target).parent().parent().parent().parent().children("form").children("input").val()
+			     const gymanswerseq = $(e.target).parent().children("input").val()
+			     const content_reply = $(e.target).parent().parent().children("div:nth-child(2)").children("input").val(); 
+			  
+			  //alert($(e.target).parent().children("input").val());
 			  
 			     $.ajax({
 			    	 url:"${pageContext.request.contextPath}/updateReComment2.do",
 			    	 type:"post",
-			    	 data:{"gymanswerseq":$(e.target).parent().children("input").val(),
-			    		   "content":content},
+			    	 data:{"gymanswerseq":gymanswerseq,
+			    		   "content_reply":content_reply},
 			    	 dataType:"json",
 			    	 success:function(json){
-			    	   $(e.target).parent().parent().children('#content_reply').html(content);
+			    	   $(e.target).parent().parent().children('#content_reply').html(content_reply);
 
 			    	   readcommentreply(gymquestionseq);  // 페이징 처리 안한 댓글 읽어오기
 			    		
@@ -926,8 +929,8 @@ rotate(
 	 // 너비 800, 높이 480 인 팝업창을 화면 가운데 위치시키기
 		const width = 800;
 		const height = 480;
-	    const left = Math.ceil((window.screen.width - width)/2);  // 정수로 만듬 
-	    const top = Math.ceil((window.screen.height - height)/2); // 정수로 만듬
+	    const left = Math.ceil((window.screen.width - width) /2);  // 정수로 만듬 
+	    const top = Math.ceil((window.screen.height - height )/2); // 정수로 만듬
 		
 	    popup = window.open("", "imgInfo", 
 		                    `left=\${left}, top=\${top}, width=\${width}, height=\${height}`);
@@ -1145,12 +1148,12 @@ function goReadComment(){
 		    	    v_html += "</div>";
 		    	    
 		    	    v_html += "<form name='commentreFrm'>";
-		    	    v_html += "<input type='hidden' id='flmkcmseq' name='fleamarketcommentseq' value='"+item.gymquestionseq+"' />";
+		    	    v_html += "<input type='hidden' id='flmkcmseq' name='gymquestionseq' value='"+item.gymquestionseq+"' />";
 		    	    v_html += "</form>";
 
 		    	    
 		    	    
-		    	    v_html += "<div class='comment_reply"+item.gymquestionseq+"'>";
+		    	    v_html += "<div class='content_reply"+item.gymquestionseq+"'>";
 		    	    v_html += "</div>";
 		    	    v_html += "</div>";
 		    	    
@@ -1177,7 +1180,6 @@ function goReadComment(){
 
 function readcommentreply(gymquestionseq){
 	
-	  //alert(fleamarketcommentseq);
 	  
 	  $.ajax({
 			url:"<%= ctxPath%>/addReplyComment2.action",
@@ -1190,14 +1192,12 @@ function readcommentreply(gymquestionseq){
             dataType:"json",
             success:function(json){
            	console.log(JSON.stringify(json));
-           	//{"name":"최준혁","n":1}
-           	//또는
-           	//{"name":"최준혁","n":0}
+      
            	
             	let v_html = "";
 			    if(json.length > 0){
 			    	$.each(json, function(index, item) {
-			    	    v_html += "<div style='display: flex; margin: 4% 0 4% 5%;'>";
+			    	    v_html += "<div style='display: flex; margin: 4% 0 4% 5%; background-color: #d3d3d3;'>";
 			    	    v_html += "<div style='width: 6%;'><img class='profile-img' style='width: 50%; height: 50%;' src='<%=ctxPath%>/resources/images/reply.png'></div>";
 			    	    if (item.memberimg == null) {
 			    	        v_html += "<div style='width: 6%;'><img class='profile-img' src='<%=ctxPath%>/resources/images/기본이미지.png'></div>";
@@ -1205,9 +1205,9 @@ function readcommentreply(gymquestionseq){
 			    	    if (item.memberimg != null) {
 			    	        v_html += "<div style='width: 6%;'><img class='profile-img' src='<%=ctxPath%>/resources/images/" + item.memberimg + "'></div>";
 			    	    }
-			    	    v_html += "<div style='display: flex; margin-top:0.7%; margin-left: 2%; width: 120%'>";
+			    	    v_html += "<div style='display: flex; margin-top:0.7%; margin-left: 2%; width: 120% '>";
 			    	    v_html += "<div style='font-size:12pt; font-weight: bold; margin-bottom: 1.5%;'>" + item.fk_userid + "</div>";
-			    	    v_html += "<div id='content_reply' style='margin-left: 2%;'>" + item.content_reply + "</div>";
+			    	    v_html += "<div id='content_reply' style='margin-left: 2%; text-align: left;'>" + item.content_reply + "</div>";
 			    	    v_html += "<div class='comment' style='color:#999999; font-size:10pt; margin-top: 0.4%; margin-left: 1.5%; display: flex; width: 50%;'>" + item.registerdate; 
 			    	    if(item.changestatus > 0){
 			    	    	v_html += " (수정됨)";
@@ -1225,12 +1225,12 @@ function readcommentreply(gymquestionseq){
 			    	    v_html += "<input type='hidden' name='gymquestionseq' value='"+gymquestionseq+"' />";
 			    	    v_html += "</form>";
 			    	    
-			    	    v_html += "<div class='comment_reply'>";
+			    	    v_html += "<div class='content_reply'>";
 			    	    v_html += "</div>";
 			    	});
 			    }
 			    
-			    $("div.comment_reply"+gymquestionseq+"").html(v_html);
+			    $("div.content_reply"+gymquestionseq+"").html(v_html);
 			},
 			error: function(request, status, error){
 			   alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
@@ -1520,6 +1520,9 @@ function goAddWrite_reply(gymquestionseq){
 	 	<br>
 	 	<div> 📍서울 송파구 토성로 58 옥상층</div>
  	</div>
+ 	
+ 	
+ 	
 	<br>
 
 
