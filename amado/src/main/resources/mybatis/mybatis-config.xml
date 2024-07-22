@@ -2,22 +2,22 @@
 
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-	<!--  domain(VO) package -->
-	<typeAliases>
-		<typeAlias type="com.spring.app.domain.MemberVO" alias="MemberVO"/>
-		<typeAlias type="com.spring.app.domain.BoardVO" alias="BoardVO"/>
-		<typeAlias type="com.spring.app.domain.ClubVO" alias="ClubVO"/>
-		<typeAlias type="com.spring.app.domain.FleamarketCommentVO" alias="FleamarketCommentVO"/>
-		<typeAlias type="com.spring.app.domain.GymVO" alias="GymVO"/>
-		<typeAlias type="com.spring.app.domain.FleamarketCommentReVO" alias="FleamarketCommentReVO"/>
-		<typeAlias type="com.spring.app.domain.BoardCommentVO" alias="BoardCommentVO"/>
-		<typeAlias type="com.spring.app.domain.NoticeVO" alias="NoticeVO"/>
-		<typeAlias type="com.spring.app.domain.PhotoVO" alias="PhotoVO"/>
-		<typeAlias type="com.spring.app.domain.FleamarketVO" alias="FleamarketVO"/>
-		<typeAlias type="com.spring.app.domain.ClubmemberVO" alias="ClubmemberVO"/>
-		<typeAlias type="com.spring.app.domain.MatchingVO" alias="MatchingVO"/>
-		<typeAlias type="com.spring.app.domain.InquiryVO" alias="InquiryVO"/>
-		<typeAlias type="com.spring.app.domain.ClubBoardVO" alias="ClubBoardVO"/>
-		<typeAlias type="com.spring.app.domain.Calendar_small_category_VO" alias="Calendar_small_category_VO"/>
-	</typeAliases>
+   <!--  domain(VO) package -->
+   <typeAliases>
+      <typeAlias type="com.spring.app.domain.MemberVO" alias="MemberVO"/>
+      <typeAlias type="com.spring.app.domain.BoardVO" alias="BoardVO"/>
+      <typeAlias type="com.spring.app.domain.ClubVO" alias="ClubVO"/>
+      <typeAlias type="com.spring.app.domain.FleamarketCommentVO" alias="FleamarketCommentVO"/>
+      <typeAlias type="com.spring.app.domain.GymVO" alias="GymVO"/>
+      <typeAlias type="com.spring.app.domain.FleamarketCommentReVO" alias="FleamarketCommentReVO"/>
+      <typeAlias type="com.spring.app.domain.BoardCommentVO" alias="BoardCommentVO"/>
+      <typeAlias type="com.spring.app.domain.NoticeVO" alias="NoticeVO"/>
+      <typeAlias type="com.spring.app.domain.PhotoVO" alias="PhotoVO"/>
+      <typeAlias type="com.spring.app.domain.FleamarketVO" alias="FleamarketVO"/>
+      <typeAlias type="com.spring.app.domain.ClubmemberVO" alias="ClubmemberVO"/>
+      <typeAlias type="com.spring.app.domain.MatchingVO" alias="MatchingVO"/>
+      <typeAlias type="com.spring.app.domain.InquiryVO" alias="InquiryVO"/>
+      <typeAlias type="com.spring.app.domain.ClubBoardVO" alias="ClubBoardVO"/>
+      <typeAlias type="com.spring.app.domain.Calendar_small_category_VO" alias="Calendar_small_category_VO"/>
+   </typeAliases>
 </configuration>

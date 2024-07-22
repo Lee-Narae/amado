@@ -1015,6 +1015,13 @@ order by inquiryseq desc
 select *
 from tbl_inquiryFile
 order by inquiryseq desc
+<<<<<<< HEAD
+
+select *
+from tbl_inquiry
+order by inquiryseq desc
+=======
+>>>>>>> branch 'main' of https://github.com/Lee-Narae/amado.git
 
 
 SELECT I.inquiryseq, I.content, I.fk_userid, I.email, I.phone, I.registerdate, I.searchtype_a, I.searchtype_b, I.status
