@@ -534,4 +534,6 @@ select * from tbl_club;
 
 desc tbl_member;
 
-select * from tbl_member;
+select * from tbl_member where userid = 'leenr';
+
+select count(*) from tbl_member where userid = 'leenr' and password = '9695b88a59a1610320897fa84cb7e144cc51f2984520efb77111d94b402a8382';

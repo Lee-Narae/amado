@@ -2287,6 +2287,9 @@ public class ControllerNR {
 	
 		System.out.println("n: "+n);
 		
+		
+		// ★★★★★★★★★★★★★★★★★★★★★ 여기서부터 비번 암호화 AES 아님!!
+		
 		JSONObject jsonObj = new JSONObject();
 		
 		if(n == 1) {
