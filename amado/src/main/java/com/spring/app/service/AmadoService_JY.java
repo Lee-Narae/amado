@@ -8,6 +8,7 @@ import com.spring.app.domain.Calendar_schedule_VO;
 import com.spring.app.domain.Calendar_small_category_VO;
 import com.spring.app.domain.ClubBoardVO;
 import com.spring.app.domain.ClubVO;
+import com.spring.app.domain.ClubmemberVO;
 import com.spring.app.domain.FleamarketVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.domain.NoticeVO;
@@ -93,6 +94,10 @@ public interface AmadoService_JY {
 	int deleteSchedule(String scheduleno);
 
 	int editSchedule_end(Calendar_schedule_VO svo);
+
+	List<ClubmemberVO> selectclubCategoryList(String fk_userid);
+
+	List<Map<String, String>> getCBoardComment(String clubboardseq);
 
 	
 
