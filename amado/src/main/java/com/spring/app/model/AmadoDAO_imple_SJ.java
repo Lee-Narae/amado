@@ -279,5 +279,17 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 		return inquiryList;
 	}
 
+	@Override
+	public int getTotalInquiryCount(Map<String, String> paraMap) {
+		int totalCount = sqlsession.selectOne("SJ.getTotalInquiryCount", paraMap);
+		return totalCount;
+	}
+
+	@Override
+	public List<InquiryVO> getPaginginquiryList(Map<String, String> paraMap) {
+		List<InquiryVO> inquiryPagingList = sqlsession.selectList("SJ.getPaginginquiryList", paraMap);
+		return inquiryPagingList;
+	}
+
 
 }

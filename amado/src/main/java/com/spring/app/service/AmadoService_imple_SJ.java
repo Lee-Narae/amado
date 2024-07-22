@@ -420,6 +420,20 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	    return inquiryList;
 	}
 
+	
+	@Override
+	public int getTotalInquiryCount(Map<String, String> paraMap) {
+		int totalCount = dao.getTotalInquiryCount(paraMap);
+		return totalCount;
+	}
+
+	
+	@Override
+	public List<InquiryVO> getPaginginquiryList(Map<String, String> paraMap) {
+		List<InquiryVO> inquiryPagingList = dao.getPaginginquiryList(paraMap); 
+		return inquiryPagingList;
+	}
+
 
 
 }

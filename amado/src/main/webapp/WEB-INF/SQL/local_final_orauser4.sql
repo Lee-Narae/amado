@@ -1058,3 +1058,54 @@ commit;
 
 select *
 from tbl_sport
+
+
+
+
+
+
+		WITH InquiryWithFiles AS (
+		  SELECT I.inquiryseq, I.content, I.fk_userid, I.email, I.phone, I.registerdate, I.searchtype_a, I.searchtype_b, I.status,
+		         F.orgfilename, F.filename, F.filesize,
+		         ROW_NUMBER() OVER (PARTITION BY I.inquiryseq ORDER BY F.filename) AS row_num
+		  FROM tbl_inquiryFile F
+		  JOIN tbl_inquiry I ON F.inquiryseq = I.inquiryseq
+		  WHERE I.fk_userid ='ksj1024sj' AND I.status = 1
+		)
+		SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status,
+		       orgfilename, filename, filesize
+		FROM InquiryWithFiles
+		WHERE row_num = 1
+		ORDER BY inquiryseq DESC
+        
+        
+	    SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status
+		FROM
+(        select row_number() over(order by inquiryseq asc) AS rno 
+             , inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status
+             
+        from tbl_inquiry
+        where fk_userid = 'ksj1024sj' and status = 1
+        order by rno desc
+)
+where rno between 1 and 10
+        
+        
+        
+	    SELECT clubseq, clubname, clubimg, fk_sportseq, clubtel
+		 , city, local, clubgym, clubtime
+		 , membercount, clubpay, clubstatus, clubscore
+		 , rank() over(order by clubscore desc) AS rank	
+		FROM
+(
+		select row_number() over(order by clubscore asc) AS rno 
+		 , clubseq, clubname, clubimg, fk_sportseq, clubtel
+		 , city, local, clubgym, clubtime
+		 , membercount, clubpay, clubstatus, clubscore
+		 , rank() over(order by clubscore desc) AS rank	
+ 		from tbl_club
+		where clubstatus = 1
+				and fk_sportseq = 1
+		order by rno desc
+)
+where rno between 1 and 10            
