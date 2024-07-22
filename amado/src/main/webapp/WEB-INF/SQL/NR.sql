@@ -532,3 +532,6 @@ select matchingseq, C.clubname myteam, D.clubname, to_char(B.matchdate, 'yyyy-mm
 select * from tbl_matching;
 select * from tbl_club;
 
+desc tbl_member;
+
+select * from tbl_member;

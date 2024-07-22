@@ -511,4 +511,28 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		return n;
 	}
 
+	// 회원정보 수정
+	@Override
+	public int updateMemberInfo_noAttach(MemberVO editMember) {
+		int n = sqlsession.update("NR.updateMemberInfo_noAttach", editMember);
+		return n;
+	}
+	@Override
+	public int updateMemberInfo_attach(MemberVO editMember) {
+		int n = sqlsession.update("NR.updateMemberInfo_attach", editMember);
+		return n;
+	}
+
+	// 비밀번호 변경
+	@Override
+	public int checkPw(Map<String, String> paramap) {
+		int n = sqlsession.selectOne("NR.checkPw", paramap);
+		return n;
+	}
+	@Override
+	public int changePw(Map<String, String> paramap) {
+		int n = sqlsession.update("NR.changePw", paramap);
+		return n;
+	}
+
 }
