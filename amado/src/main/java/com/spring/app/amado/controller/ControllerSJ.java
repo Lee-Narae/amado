@@ -1489,6 +1489,17 @@ public class ControllerSJ {
 		return jsonObject.toString();
 	}
 	
+
+	
+	// 웹채팅
+	@GetMapping("/chatting/multichat.do")
+	public String requiredLogin_multichat(HttpServletRequest request, HttpServletResponse response) {
+		
+		return "chatting/multichat.tiles1";
+	}
+	
+	
+	
 	
 	
 	

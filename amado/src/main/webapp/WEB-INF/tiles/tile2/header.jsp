@@ -6,6 +6,28 @@
 <%-- ===== #28. tile2 중 header 페이지 만들기 ===== --%> 
 <%
 	String ctxPath = request.getContextPath();
+
+    // === #221. (웹채팅관련3) === 
+    // === 서버 IP 주소 알아오기(사용중인 IP주소가 유동IP 이라면 IP주소를 알아와야 한다.) === 
+    
+//  InetAddress inet = InetAddress.getLocalHost();
+//  String serverIP = inet.getHostAddress();
+     
+//  System.out.println("serverIP : " + serverIP);
+//  serverIP : 192.168.219.101
+
+
+    String serverIP = "192.168.219.101";
+ // String serverIP = "211.238.142.72"; 만약에 사용중인 IP주소가 고정IP 이라면 IP주소를 직접입력해주면 된다. 
+ 
+    // === 서버 포트번호 알아오기 === //
+    int portnumber = request.getServerPort();
+ // System.out.println("portnumber : " + portnumber);
+ // portnumber : 9099
+ 
+    String serverName = "http://"+serverIP+":"+portnumber;
+ // System.out.println("serverName : " + serverName);
+ // serverName : http://192.168.0.219:9099 
 %>
 
 <style type="text/css">
@@ -166,6 +188,7 @@ $(document).ready(function(){
 			<div onclick="location.href='<%=ctxPath%>/community/list.do'">게시판</div>
 			<div onclick="location.href='<%=ctxPath%>/community/inquiry.do'">1:1 문의하기</div>
 			<div onclick="location.href='<%=ctxPath%>/community/SportsFacilitiesInfo.do'">전국체육시설 정보</div>
+			<div onclick="location.href='<%= serverName%><%=ctxPath%>/chatting/multichat.do'">웹채팅</div>
 		</div>
 	</div>
 </div>
