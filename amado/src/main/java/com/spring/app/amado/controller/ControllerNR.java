@@ -2084,7 +2084,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@GetMapping("/community/searchFacByLocal.do")
+	@GetMapping(value="/community/searchFacByLocal.do", produces="text/plain;charset=UTF-8")
 	public String searchFacByLocal(HttpServletRequest request) {
 		
 		String city = request.getParameter("city");
@@ -2107,7 +2107,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/club/matchResultInsert.do")
+	@PostMapping(value="/club/matchResultInsert.do", produces="text/plain;charset=UTF-8")
 	public String matchResultInsert(HttpServletRequest request) {
 		
 		String score1 = request.getParameter("score1");
