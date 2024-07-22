@@ -14,6 +14,7 @@ import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
 import com.spring.app.domain.GymVO;
+import com.spring.app.domain.GymresVO;
 import com.spring.app.domain.MatchingVO;
 import com.spring.app.model.AmadoDAO_JH;
 
@@ -174,9 +175,24 @@ public class AmadoService_imple_JH implements AmadoService_JH {
 
 
 	@Override
-	public GymVO getgymPay(String gymseq) {
-		GymVO gymvo = dao.getgymPay(gymseq);
+	public GymVO getgymPay(String reservation_date) {
+		GymVO gymvo = dao.getgymPay(reservation_date);
 		return gymvo;
+	}
+
+
+	@Override
+	public int gymPayEnd(Map<String, String> paraMap) {
+		int n = dao.gymPayEnd(paraMap);
+		return n;
+	}
+
+
+
+	@Override
+	public List<GymresVO> gymPayDate(String date) {
+		List<GymresVO> gymresList = dao.gymPayDate(date);
+		return gymresList;
 	}
 
 }
