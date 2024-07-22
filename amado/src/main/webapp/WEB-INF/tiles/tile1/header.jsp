@@ -144,7 +144,7 @@ $(document).ready(function(){
 		</c:if>
 		<c:if test="${not empty sessionScope.loginuser }">
 			<div style="margin-top: 3%; margin-right: 3%;"><span id="username" onclick="location.href='<%=ctxPath%>/member/myPage.do'">${sessionScope.loginuser.name }</span> 님</div>
-			<img id="cld" style="margin-right: 5%;" width="40" height="40" src="https://img.icons8.com/cotton/64/calendar--v1.png" alt="calendar--v1"/>
+			<img id="cld" style="margin-right: 5%;" width="40" height="40" src="https://img.icons8.com/cotton/64/calendar--v1.png" onclick="location.href='<%=ctxPath %>/schedule/scheduleManagement.do'" alt="calendar--v1"/>
 			<div id="logout" onclick="location.href='<%=ctxPath%>/member/logout.do'">로그아웃</div>
 		</c:if>		
 	</div>
