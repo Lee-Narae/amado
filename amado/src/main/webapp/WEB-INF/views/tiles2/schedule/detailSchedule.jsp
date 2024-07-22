@@ -94,7 +94,7 @@
 		
 		if(bool){
 			$.ajax({
-				url: "<%= ctxPath%>/schedule/deleteSchedule.action",
+				url: "<%= ctxPath%>/schedule/deleteSchedule.do",
 				type: "post",
 				data: {"scheduleno":scheduleno},
 				dataType: "json",
@@ -106,7 +106,7 @@
 						alert("일정을 삭제하지 못했습니다.");
 					}
 					
-					location.href="<%= ctxPath%>/schedule/scheduleManagement.action";
+					location.href="<%= ctxPath%>/schedule/scheduleManagement.do";
 				},
 				error: function(request, status, error){
 		            alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
@@ -122,7 +122,7 @@
 		var frm = document.goEditFrm;
 		frm.scheduleno.value = scheduleno;
 		
-		frm.action = "<%= ctxPath%>/schedule/editSchedule.action";
+		frm.action = "<%= ctxPath%>/schedule/editSchedule.do";
 		frm.method = "post";
 		frm.submit();
 	}
@@ -130,7 +130,7 @@
 </script>
 
 <div style="margin-left: 80px; width: 88%;">
-<h3 style="display: inline-block;">일정 상세보기</h3>&nbsp;&nbsp;<a href="<%= ctxPath%>/schedule/scheduleManagement.action"><span>◀캘린더로 돌아가기</span></a> 
+<h3 style="display: inline-block;">일정 상세보기</h3>&nbsp;&nbsp;<a href="<%= ctxPath%>/schedule/scheduleManagement.do"><span>◀캘린더로 돌아가기</span></a> 
 
 		<table id="schedule" class="table table-bordered">
 			<tr>
@@ -187,11 +187,11 @@
 	               일정이 사내캘린더 인데, 로그인한 사용자가 4번 부서에 근무하는 3직급을 가진 사용자 이라면 
 	        <c:if test="${v_fk_lgcatgono eq '2' && sessionScope.loginuser.fk_pcode =='3' && sessionScope.loginuser.fk_dcode == '4' }">  
 	    --%>
-			<c:if test="${v_fk_lgcatgono eq '2' && sessionScope.loginuser.gradelevel == 10 }">
+			<c:if test="${v_fk_lgcatgono eq '2'}">
 				<button type="button" id="edit" class="btn_normal" onclick="editSchedule('${requestScope.map.SCHEDULENO}')">수정</button>
 				<button type="button" class="btn_normal" onclick="delSchedule('${requestScope.map.SCHEDULENO}')">삭제</button>
 			</c:if>
-			<c:if test="${v_fk_lgcatgono eq '1' && v_fk_userid eq v_loginuser_userid}">
+			<c:if test="${v_fk_lgcatgono eq '1'}">
 				<button type="button" id="edit" class="btn_normal" onclick="editSchedule('${requestScope.map.SCHEDULENO}')">수정</button>
 				<button type="button" class="btn_normal" onclick="delSchedule('${requestScope.map.SCHEDULENO}')">삭제</button>
 			</c:if>
@@ -203,15 +203,15 @@
 	               일정이 사내캘린더 인데, 로그인한 사용자가 4번 부서에 근무하는 3직급을 가진 사용자 이라면 
 	        <c:if test="${v_fk_lgcatgono eq '2' && sessionScope.loginuser.fk_pcode =='3' && sessionScope.loginuser.fk_dcode == '4' }">  
 	    --%>
-	        <c:if test="${v_fk_lgcatgono eq '2' && sessionScope.loginuser.gradelevel == 10 }">
+	        <c:if test="${v_fk_lgcatgono eq '2'}">
 				<button type="button" id="edit" class="btn_normal" onclick="editSchedule('${requestScope.map.SCHEDULENO}')">수정</button>
 				<button type="button" class="btn_normal" onclick="delSchedule('${requestScope.map.SCHEDULENO}')">삭제</button>
 			</c:if>
-			<c:if test="${v_fk_lgcatgono eq '1' && v_fk_userid eq v_loginuser_userid}">
+			<c:if test="${v_fk_lgcatgono eq '1'}">
 				<button type="button" id="edit" class="btn_normal" onclick="editSchedule('${requestScope.map.SCHEDULENO}')">수정</button>
 				<button type="button" class="btn_normal" onclick="delSchedule('${requestScope.map.SCHEDULENO}')">삭제</button>
 			</c:if>
-				<button type="button" id="cancel" class="btn_normal" style="margin-right: 0px; background-color: #990000;" onclick="javascript:location.href='<%= ctxPath%>/schedule/detailSchedule.action'">취소</button> 
+				<button type="button" id="cancel" class="btn_normal" style="margin-right: 0px; background-color: #990000;" onclick="javascript:location.href='<%= ctxPath%>/schedule/detailSchedule.do'">취소</button> 
 		</c:if>
 	
 	</div>
