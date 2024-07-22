@@ -649,6 +649,13 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		int n = dao.changePw(paramap);
 		return n;
 	}
+
+	// 회원탈퇴
+	@Override
+	public int memberQuit(String userid) {
+		int n = dao.memberQuit(userid);
+		return n;
+	}
 	
 	
 }

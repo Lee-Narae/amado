@@ -535,4 +535,11 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		return n;
 	}
 
+	// 회원탈퇴
+	@Override
+	public int memberQuit(String userid) {
+		int n = sqlsession.update("NR.memberQuit", userid);
+		return n;
+	}
+
 }

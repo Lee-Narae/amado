@@ -2235,6 +2235,12 @@ public class ControllerNR {
 			editMember.setPwdchangegap(loginuser.getPwdchangegap());
 			editMember.setLastlogingap(loginuser.getLastlogingap());
 			editMember.setMobile(phone1+phone2+phone3);
+			try {
+				editMember.setEmail(aES256.decrypt(editMember.getEmail()));
+				editMember.setMobile(aES256.decrypt(editMember.getMobile()));
+			} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+				e.printStackTrace();
+			}
 			
 			session.setAttribute("loginuser", editMember);
 			
@@ -2260,7 +2266,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping(value="/member/changPw.do", produces="text/plain;charset=UTF-8")
+	@PostMapping(value="/member/changePw.do", produces="text/plain;charset=UTF-8")
 	public String changePw(HttpServletRequest request) {
 		
 		HttpSession session = request.getSession();
@@ -2271,29 +2277,18 @@ public class ControllerNR {
 		
 		Map<String, String> paramap = new HashMap<String, String>();
 
-		try {
-			paramap.put("userid", loginuser.getUserid());
-			paramap.put("password", aES256.encrypt(password));
-			paramap.put("newPw", aES256.encrypt(newPw));
-		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
-			e.printStackTrace();
-		}
+		paramap.put("userid", loginuser.getUserid());
+		paramap.put("password", Sha256.encrypt(password));
+		paramap.put("newPw", Sha256.encrypt(newPw));
 	
-		System.out.println("userid: "+paramap.get("userid"));
-		System.out.println("password: "+paramap.get("password"));
-		
 		// 입력한 비밀번호가 일치하는지
 		int n = service.checkPw(paramap);
 	
-		System.out.println("n: "+n);
-		
-		
-		// ★★★★★★★★★★★★★★★★★★★★★ 여기서부터 비번 암호화 AES 아님!!
-		
 		JSONObject jsonObj = new JSONObject();
 		
 		if(n == 1) {
 			n = service.changePw(paramap);
+			session.removeAttribute("loginuser");
 			jsonObj.put("n", n);
 		}
 		
@@ -2305,8 +2300,47 @@ public class ControllerNR {
 	}
 	
 	
+	@ResponseBody
+	@PostMapping("/member/checkPw.do")
+	public String checkPw(HttpServletRequest request) {
+		
+		String pwd = request.getParameter("pwd");
+		
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("userid", loginuser.getUserid());
+		paramap.put("password", Sha256.encrypt(pwd));
+		
+		int n = service.checkPw(paramap);
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+		
+		return jsonObj.toString();
+	}
 	
 	
+	
+	@ResponseBody
+	@PostMapping("/member/memberQuit.do")
+	public String memberQuit(HttpServletRequest request) {
+		
+		String userid = request.getParameter("userid");
+		HttpSession session = request.getSession();
+		
+		int n = service.memberQuit(userid);
+		
+		if(n == 1) {
+			session.removeAttribute("loginuser");
+		}
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+		
+		return jsonObj.toString();
+	}
 	
 	
 }
