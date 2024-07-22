@@ -4,11 +4,7 @@
 
 <mapper namespace="HS">
 
-<insert id="add_withFile" parameterType="GymVO">
-	
-	insert into tbl_gym(gymseq ,gymname,fk_userid,postcode,address,detailaddress,status,info,orgfilename,filename,filesize,cost,caution,membercount,likecount,insidestatus)
-	values(seq_gym.nextval, #{gymname}, #{fk_userid}, #{postcode}, #{address}, #{detailaddress}, 0,#{info},#{orgfilename},#{filename},#{filesize},to_number(#{cost}),#{caution},to_number(#{membercount}),0 ,to_number(#{insidestatus}))
-</insert>
+
 
 
 <!-- <insert id="add_photofile" parameterType="PhotoVO">
@@ -23,5 +19,105 @@ values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
 		select gymseq ,gymname,fk_userid,postcode,address,detailaddress,status,info,orgfilename,filename,filesize,cost,caution,membercount,likecount,insidestatus
 		from tbl_gym
 	</select>
+	
+<!-- #88. 댓글쓰기 (tbl_comment 테이블에 insert) -->
+	<insert id="addComment" parameterType="QuestionVO">
+		insert into tbl_gymquestion(gymquestionseq, gymseq, content, registerdate, fk_userid)
+		values(seq_gymquestion.nextval, 77, #{content}, default, #{fk_userid})
+	</insert>
+	
+	<!-- #89-1. tbl_board 테이블에 commentCount 컬럼이 1증가(update) -->
+	<update id="updateCommentCount" parameterType="String">
+		update tbl_gym set commentcount = commentcount+1
+		where gymseq = 77
+	</update>
+	
+
+	<!-- === #93. 원게시물에 딸린 댓글들을 조회해오기 === -->
+    <!-- 첨부파일이 없는 경우  -->
+    <select id="getCommentList" parameterType="String" resultType="QuestionVO">
+		select gymquestionseq, fk_userid,category, content, changestatus
+		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
+             , V.memberimg
+		from tbl_gymquestion A join tbl_member V
+		ON A.fk_userid = V.userid
+		where A.gymseq = #{parentSeq}
+		order by gymquestionseq desc
+    </select>
+
+
+	<update id="updateComment" parameterType="HashMap">
+        update tbl_gymquestion set content = #{content}, registerdate = sysdate, changestatus = 1
+        where gymquestionseq = #{gymquestionseq}
+    </update>
+
+    <delete id="deleteComment" parameterType="String">
+        delete from tbl_gymquestion
+        where gymquestionseq = #{gymquestionseq}
+    </delete>
+    
+    <update id="updateCommentCount_decrease" parameterType="String">
+        update tbl_gym set commentcount = commentcount - 1 
+        where gymseq = #{gymseq}
+    </update>
+
+ 	<select id="getCommentreList" parameterType="String" resultType="AnswerVO">
+		select gymanswerseq, fk_userid, content_reply, changestatus
+		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
+             , V.memberimg
+		from tbl_gymanswer A join tbl_member V
+		ON A.fk_userid = V.userid
+		where A.gymquestionseq = #{gymquestionseq}
+		order by gymanswerseq desc
+    </select> 
+
+	<insert id="addReComment" parameterType="AnswerVO">
+		insert into tbl_gymanswer(gymanswerseq, gymquestionseq, content_reply, fk_userid)
+		values(seq_gymanswerseq.nextval, #{gymquestionseq}, #{content_reply}, #{fk_userid})
+	</insert>
+	
+	<update id="updateReCommentCount" parameterType="String">
+		update tbl_gymquestion set recommentcount = recommentcount+1
+		where gymquestionseq = #{gymquestionseq}
+	</update>
+	 
+	<update id="updateReComment" parameterType="HashMap">
+        update tbl_gymanswer set content = #{content}, registerdate = sysdate, changestatus = 1
+        where gymanswerseq = #{gymanswerseq}
+    </update>
+    
+    <delete id="deleteReComment" parameterType="String">
+        delete from tbl_gymanswer
+        where gymanswerseq = #{gymanswerseq}
+    </delete>
+    
+    <update id="updateReCommentCount_decrease" parameterType="String">
+        update tbl_gymquestion set recommentcount = recommentcount - 1 
+        where gymquestionseq = #{gymquestionseq}
+    </update> 
+    
+    
+    
+    
+    
+    
+    
+        <!-- 체육관 등록하기  -->
+	<select id="getGymseq" resultType="String">
+		select SEQ_GYM.nextval from dual
+	</select>
+	
+	<insert id="Gymreg" parameterType="GymVO">
+	insert into tbl_gym(gymseq, gymname, fk_userid, postcode, address, detailaddress, status, info, cost, caution,
+						membercount, likecount, insidestatus, orgfilename, filename, filesize, lat, lng)
+	values(#{gymseq}, #{gymname}, #{fk_userid}, #{postcode}, #{address}, #{detailaddress}, 0, #{info}, #{cost}, #{caution},
+  		   #{membercount}, 0, #{insidestatus}, #{orgfilename}, #{filename}, #{filesize}, #{lat}, #{lng})
+	</insert>
+	
+	<insert id="insertGymImg" parameterType="HashMap">
+		insert into tbl_gymimg(gymimgseq, gymseq, filename, orgfilename, filesize)
+		values(SEQ_GYMIMG.nextval, #{gymseq}, #{filename}, #{orgfilename}, #{filesize})
+	</insert>
+	
 
 </mapper>

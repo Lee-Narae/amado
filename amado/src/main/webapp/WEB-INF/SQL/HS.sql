@@ -1,7 +1,10 @@
 select *
 from tbl_member
 
-       
+select *
+from tbl_gym
+
+desc tbl_fleamarketcomment      
 
 create table tbl_member    
 (userid                          nvarchar2(20)   not null         -- 회원아이디
@@ -213,3 +216,173 @@ insert into tbl_gym(gymseq ,gymname,fk_userid,postcode,address,detailaddress,sta
 	values(seq_gym.nextval, #{gymname}, #{fk_userid}, #{postcode}, #{address}, #{detailaddress}, 0,#{info},#{imgfilename},to_number(#{cost}),#{caution},to_number(#{membercount}),0 ,to_number(#{insidestatus}))
 
 
+select *
+from tbl_gymanswer
+
+drop table tbl_gymanswer
+commit;
+-- 체육관문의답변
+commit;
+create table tbl_gymanswer      
+(gymanswerseq               NUMBER                              -- 체육관문의답변번호(PK)
+,gymquestionseq             NUMBER                              -- 체육관문의번호(FK)
+,content                    nvarchar2(500)                      -- 답변내용
+,registerdate               date default sysdate  not null      -- 작성일자
+,fk_userid                 nvarchar2(20)           -- 아이디(FK)
+
+,constraint PK_tbl_gymawr_gymawrseq primary key(gymanswerseq)
+,constraint FK_tbl_gymawr_gymquestionseq foreign key(gymquestionseq) references tbl_gymquestion(gymquestionseq)
+,constraint FK_tbl_gymanswer_fk_userid foreign key(fk_userid) references tbl_member(userid)
+);
+
+-- Table TBL_GYMANSWER이(가) 생성되었습니다.
+
+
+create sequence seq_gymanswer 
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+-- Sequence SEQ_GYMANSWER이(가) 생성되었습니다.
+
+
+create table tbl_gymanswerreply
+(gymquestionseq           NUMBER                  -- 댓글번호(PK)
+,gymanswerseq             NUMBER                  -- 중고마켓게시판번호(FK)
+,commentreply_text              nvarchar2(200)          -- 댓글내용
+,registerdate              date default sysdate  not null                     -- 댓글작성일자
+,fk_userid                 nvarchar2(20)           -- 아이디(FK)
+,changestatus              number(1)        default 0
+
+,constraint PK_tbl_fktcommentre_fmkcmreseq primary key(gymquestionseq)
+,constraint FK_tbl_fktcommentre_fmketcmseq foreign key(gymanswerseq) references tbl_fleamarketcomment(gymanswerseq)
+,constraint FK_tbl_fktcommentre_fk_userid foreign key(fk_userid) references tbl_member(userid)
+);
+
+
+select *
+from tbl_gym
+
+select *
+from tbl_fleamarketcomment 
+
+select *
+from tbl_fleamarketcommentreply 
+---------------------------------------------------------------------------------------------
+ALTER TABLE tbl_gymquestion ADD (changestatus NUMBER(1));
+ALTER TABLE tbl_gym ADD (commentcount NUMBER);
+commit;
+ALTER TABLE tbl_gymquestion ADD (commentcount NUMBER(5));
+
+select * from tbl_gymquestion
+
+ALTER TABLE tbl_gymquestion ADD COLUMN RECOMMENDCOUNT NUMBER(5);
+
+desc 
+
+drop table tbl_gymquestion;
+
+select *
+from tbl_gymquestion;
+
+select *
+from tbl_fleamarket
+
+desc tbl_gym
+desc tbl_fleamarket
+
+create table tbl_gymquestion      
+(gymquestionseq               NUMBER                                 -- 체육관문의번호(PK)
+,gymseq                       NUMBER                                 -- 체육관번호(FK)
+,category                     NUMBER                                 -- 카테고리(FK)
+,content                      nvarchar2(500)                         -- 문의내용
+,fk_userid                       nvarchar2(20)                          -- 작성자아이디
+,registerdate                 date default sysdate  not null         -- 작성일자
+,changestatus                 NUMBER(1)  
+,RECOMMENTCOUNT                NUMBER(5)   
+
+,constraint PK_tbl_gyq_gymquestionseq primary key(gymquestionseq)
+,constraint FK_tbl_gyq_gymseq foreign key(gymseq) references tbl_gym(gymseq)
+,constraint FK_tbl_gyq_fk_userid foreign key(fk_userid) references tbl_member(userid)
+);
+
+select *
+from tbl_gym
+
+-- Table TBL_GYMQUESTION이(가) 생성되었습니다.
+commit
+create sequence seq_gymquestion
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+-- Sequence SEQ_GYMQUESTION이(가) 생성되었습니다.
+drop sequence seq_gymquestion
+
+select *
+from tbl_answer
+-- 체육관문의답변
+
+select *
+from tbl_fleamarketcomment
+
+select *
+from tbl_gymquestion
+
+select *
+from tbl_gymanswer
+
+
+create table tbl_gymanswer      
+(gymanswerseq               NUMBER                              -- 체육관문의답변번호(PK)
+,gymquestionseq             NUMBER                              -- 체육관문의번호(FK)
+,content                    nvarchar2(500)                      -- 답변내용
+,registerdate               date default sysdate  not null      -- 작성일자
+,fk_userid                 nvarchar2(20)           -- 아이디(FK)
+,changestatus              number(1)        default 0
+
+
+,constraint PK_tbl_gymawr_gymawrseq primary key(gymanswerseq)
+,constraint FK_tbl_gymawr_gymquestionseq foreign key(gymquestionseq) references tbl_gymquestion(gymquestionseq)
+,constraint FK_tbl_gymawr_fk_userid foreign key(fk_userid) references tbl_member(userid)
+);
+
+
+content_reply
+
+create sequence seq_gymanswerseq
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+ALTER TABLE tbl_gymanswer
+MODIFY (content number not null);
+
+ALTER TABLE tbl_gymanswer RENAME COLUMN CONTENT_RELPY TO content_reply;
+
+select gymquestionseq, fk_userid,category, content, changestatus
+		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
+             , V.memberimg
+		from tbl_gymquestion A join tbl_member V
+		ON A.fk_userid = V.userid
+		where A.gymseq = 77
+		order by gymquestionseq desc
+        
+        
+select gymanswerseq, fk_userid, content, changestatus
+     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
+     , V.memberimg
+from tbl_gymanswer A join tbl_member V
+ON A.fk_userid = V.userid
+where A.gymquestionseq = 20
+order by gymanswerseq desc
+        
+        
