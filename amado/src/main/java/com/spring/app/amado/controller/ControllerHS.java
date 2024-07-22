@@ -22,13 +22,12 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.app.common.FileManager;
-<<<<<<< HEAD
+
 import com.spring.app.common.MyUtil;
-=======
+
 import com.spring.app.domain.AnswerVO;
 //import com.spring.app.domain.FleamarketCommentReVO;
 //import com.spring.app.domain.FleamarketCommentVO;
->>>>>>> branch 'HS' of https://github.com/Lee-Narae/amado.git
 import com.spring.app.domain.GymVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.domain.PhotoVO;
@@ -486,7 +485,7 @@ public class ControllerHS {
 			
 		
 		
-		@ResponseBody
+	/*	@ResponseBody
 		@PostMapping(value="/deleteReComment2.do", produces="text/plain;charset=UTF-8") 
 		public String deleteReComment(HttpServletRequest request) {
 			
@@ -543,7 +542,7 @@ public class ControllerHS {
 			paramap.put("currentShowPageNo", currentShowPageNo);
 
 			// 페이징처리를 한 모든 회원 or 검색한 회원 목록 보여주기
-			int totalPage = service.getMemberTotalPage(paramap);
+			//int totalPage = service.getMemberTotalPage(paramap);
 			
 			// === GET 방식이므로 사용자가 웹브라우저 주소창에서 currentShowPageNo 에 totalPage 값보다 더 큰 값을 입력하여 장난친 경우
 			// === GET 방식이므로 사용자가 웹브라우저 주소창에서 currentShowPageNo 에 0 또는 음수를 입력하여 장난친 경우
@@ -636,8 +635,8 @@ public class ControllerHS {
 			
 			
 			
-			/* >>> 뷰단(memberList.jsp)에서 "페이징 처리시 보여주는 순번 공식" 에서 사용하기 위해 
-	        	        검색이 있는 또는 검색이 없는 회원의 총개수 알아오기 <<< */
+			 >>> 뷰단(memberList.jsp)에서 "페이징 처리시 보여주는 순번 공식" 에서 사용하기 위해 
+	        	        검색이 있는 또는 검색이 없는 회원의 총개수 알아오기 <<< 
 			int totalMemberCount = service.getTotalMemberCount(paramap);
 			
 			mav.addObject("totalMemberCount", totalMemberCount);
@@ -655,7 +654,7 @@ public class ControllerHS {
 			return mav;
 			
 		}
-	   
+	   */
 	   
 	   
 	
