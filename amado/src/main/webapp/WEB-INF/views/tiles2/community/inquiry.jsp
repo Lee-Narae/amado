@@ -423,8 +423,9 @@ div.fileDrop>div.fileList>span.fileSize {
 					<option value="1">동호회</option>
 					<option value="2">체육관</option>
 					<option value="3">플리마켓</option>
-					<option value="3">기타</option>
-				</select> <select class="col-md-3 ml-4" id="searchType_b" name="searchType_b">
+					<option value="4">기타</option>
+				</select> 
+				<select class="col-md-3 ml-4" id="searchType_b" name="searchType_b">
 					<option value="0">선택해주세요</option>
 					<option value="1">대관문의</option>
 					<option value="2">환불문의</option>
