@@ -7,6 +7,7 @@ import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
 import com.spring.app.domain.GymVO;
+import com.spring.app.domain.GymresVO;
 import com.spring.app.domain.MatchingVO;
 
 public interface AmadoService_JH {
@@ -38,6 +39,10 @@ public interface AmadoService_JH {
 	GymVO getGymInfo(String gymseq);
 
 	GymVO getgymPay(String gymseq);
+
+	int gymPayEnd(Map<String, String> paraMap);
+
+	List<GymresVO> gymPayDate(String reservation_date);
 
 	
 }

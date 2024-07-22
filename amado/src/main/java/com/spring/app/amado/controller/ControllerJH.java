@@ -29,6 +29,7 @@ import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
 import com.spring.app.domain.GymVO;
+import com.spring.app.domain.GymresVO;
 import com.spring.app.domain.MatchingVO;
 import com.spring.app.service.AmadoService_JH;
 
@@ -452,6 +453,9 @@ public class ControllerJH {
 		
 		GymVO gymvo = service.getGymInfo(gymseq);
 		
+		request.setAttribute("gymvo", gymvo);
+		request.setAttribute("gymseq", gymseq);
+		
 		mav.addObject("gymvo", gymvo);
 		mav.setViewName("gym/gymPay.tiles2");
 		// /WEB-INF/views/tiles2/main/index.jsp
@@ -508,6 +512,65 @@ public class ControllerJH {
 		
 		return jsonObj.toString();
 	}
+	
+	
+	@ResponseBody
+	@PostMapping(value="/gym/gymPay_end.do", produces="text/plain;charset=UTF-8") 
+	public String gymPay_end(HttpServletRequest request) throws IOException, ParseException {
+
+		
+		String numericPrice = request.getParameter("numericPrice");
+		String reservation_date = request.getParameter("reservation_date");
+		String fk_gymseq = request.getParameter("fk_gymseq");
+		String fk_userid = request.getParameter("fk_userid");
+		
+		System.out.println(numericPrice);
+		System.out.println(reservation_date);
+		System.out.println(fk_gymseq);
+		System.out.println(fk_userid);
+		
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("numericPrice", numericPrice);
+		paraMap.put("reservation_date", reservation_date);
+		paraMap.put("fk_gymseq", fk_gymseq);
+		paraMap.put("fk_userid", fk_userid);
+		
+		// 입력된 시간 문자열을 가져옵니다.
+		String time = request.getParameter("selected").trim();
+
+		// 모든 줄 바꿈, 탭, 여러 공백, 콤마를 단일 공백으로 변환
+		String cleanedString = time.replaceAll("[\\s\\r\\n,]+", " ").trim();
+
+		// 문자열을 공백 기준으로 나누기
+		String[] times = cleanedString.split("\\s+");
+		
+		
+		
+		int n = 0;
+		// 결과 확인
+		for(int i=0; i<times.length; i++) {
+			time = times[i];
+			paraMap.put("time", time);
+			n = service.gymPayEnd(paraMap);
+			if(n!=1) {
+				n=0;
+				break;
+			}
+		}
+		
+		//System.out.println(selectedTimes[0]);
+		//System.out.println(selectedTimes[1]);	
+		System.out.println(n);
+		
+		 
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+		
+		
+		return jsonObj.toString();
+	}
+	
+	
 	
 	
 	

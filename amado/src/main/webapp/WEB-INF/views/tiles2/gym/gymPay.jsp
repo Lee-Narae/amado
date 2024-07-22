@@ -89,15 +89,26 @@
       object-fit: cover; /* 이미지를 컨테이너에 맞추어 자르기 */
   }
 /*지도 끝*/
+
+.btn-disabled {
+            background-color: #d3d3d3; /* 회색 배경색 */
+            color: #a9a9a9; /* 연한 회색 텍스트 */
+            border-color: #a9a9a9; /* 연한 회색 테두리 */
+            cursor: not-allowed; /* 마우스 커서를 금지 아이콘으로 변경 */
+        }
+
+        .btn-disabled:disabled {
+            opacity: 1; /* 비활성화된 버튼의 불투명도 조정 */
+        }
+        
     </style>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3e40c6a4e83259bd26e2771ad2db4e63"></script>
     <script>
     
-    
+    let totalPrice = 0;
     
     $(document).ready(function(){
     	
-    	let totalPrice = 0;
     	
     	// 지도를 담을 영역의 DOM 레퍼런스
     	var mapContainer = document.getElementById("map");
@@ -228,9 +239,10 @@
 			   	/////////////////////////////////////////////////////////
                 // ₩, 원, , 문자를 제거합니다.
                 var numericPrice = priceText.replace(/[₩,원]/g, '');
-                const selected = $("button.btn-custom.selected").text()+" ";
-                const date = $("#date").val();
-                const gymseq = $("input.gymseq").val();
+                const time = $("button.btn-custom.selected").text()+",";
+                const reservation_date = $("#date").val();
+                const fk_gymseq = $("input.gymseq").val();
+                const fk_userid = $("input.fk_userid").val();
 			   	/////////////////////////////////////////////////////////
 
               //alert( $("input.gymseq").val() );
@@ -239,10 +251,43 @@
 			  //alert(numericPrice);
               //alert( $("#date").val());
               
+              	
+              	$.ajax({
+		    		url:"<%= ctxPath%>/gym/gymPay_end.do",
+		    		type:"post",
+		    		data:{"numericPrice":numericPrice,
+		    			  "selected":time,
+		    			  "reservation_date":reservation_date,
+		    			  "fk_gymseq":fk_gymseq,
+		    			  "fk_userid":fk_userid},
+		    		dataType:"json",
+		    		success:function(json){
+		    			
+		    			if(json.n == 1){
+		    				alert("ㅎㅇㅎㅇ");
+		    			}
+		    			else{
+		    				
+		    			}
+		    			
+		    		},
+		    		error: function(request, status, error){
+		    			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		    	    }
+		    	});// end of $.ajax({})----------------------
               
 			    
 		  });
-    })
+		  
+		  
+		  
+		$(document).on("change", "input[id='date']", function(e){
+		    alert("날짜가 바뀜");
+		});
+		  
+		  
+		  
+    })// end of ready--------------------------------------
     
     
     
@@ -251,7 +296,7 @@
 
         function updatePrice(amount) {
             totalPrice += amount;
-            document.getElementById("totalPrice").innerText = '₩' + totalPrice.toLocaleString() + '원';
+            $("#totalPrice").html('₩' + Number(totalPrice).toLocaleString() + '원');
         }
 
         function toggleSelection(button) {
@@ -259,7 +304,8 @@
         	let cost = button.getAttribute('data-cost');
         	
             const isSelected = button.classList.contains('selected');
-            const buttonValue = Number(cost);
+            var buttonValue = Number(cost);
+            
 
             // Toggle button selection
             if (isSelected) {
@@ -320,9 +366,8 @@
 				        v_html += "    <span class='price' id='totalPrice'>₩0원</span>";
 				        v_html += "</div>";
 						
-				        v_html += "<input type='hidden' class='gymseq' value='"+json.gymseq+"'></input>";
 				       
-		    			
+		    			$("input.gymseq").val(json.gymseq);
 		    			$("div.container1").html(v_html);
 		    			
 		    			let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?gymseq=" + gymseq;
@@ -361,17 +406,23 @@
 		
 		        <!-- 시간 선택 버튼들 -->
 		        <div class="section">
-		            <label for="time">시간 선택:</label>
-		            <div class="btn-container">
-		                <% 
-		                    for (int i = 0; i < 24; i++) {
-		                        String time = String.format("%02d:00", i);
-		                        out.print("<button class='btn btn-outline-primary btn-custom' onclick=\"toggleSelection(this)\">" + time + "</button>");
-		                    }
-		                %>
-		            </div>
-		            
-		        </div>
+				    <label for="time">시간 선택:</label>
+				    <div class="btn-container">
+				        <c:forEach var="i" begin="0" end="23">
+				            <c:choose>
+				                <c:when test="${i lt 10}">
+				                    <c:set var="time" value="0${i}:00" />
+				                </c:when>
+				                <c:otherwise>
+				                    <c:set var="time" value="${i}:00" />
+				                </c:otherwise>
+				            </c:choose>
+				            <button class='btn btn-outline-primary btn-custom' data-cost='${requestScope.gymvo.cost}' onclick='toggleSelection(this)'>
+				                ${time}
+				            </button>
+				        </c:forEach>
+				    </div>
+				</div>
 		
 		        <!-- 총 가격 -->
 		        <div class="section">
@@ -396,6 +447,8 @@
 	<input class="gymlat" type="hidden" value="${requestScope.gymvo.lat}"></input>
 	<input class="gymlng" type="hidden" value="${requestScope.gymvo.lng}"></input>
 	<input class="gymcost" type="hidden" value="${requestScope.gymvo.cost}"></input>
+	<input class='gymseq' type="hidden" value="${requestScope.gymseq}"></input>
+	<input class='fk_userid' type="hidden" value="${sessionScope.loginuser.userid}"></input>
 	
     <!-- Bootstrap JS and dependencies -->
     <script type="text/javascript" src="<%= ctxPath%>/resources/js/jquery-3.7.1.min.js"></script>
