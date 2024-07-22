@@ -149,11 +149,11 @@
 		select previousseq, previoustitle, clubboardseq, clubseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status, orgfilename, filename, filesize, nextseq, nexttitle
 		from 
 		(
-		select lag(boardseq, 1) over(order by boardseq desc) previousseq,
-		       lag(title, 1) over(order by boardseq desc) previoustitle,
-		       boardseq, title, content, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, viewcount, orgfilename, filename, filesize,
-		       lead(boardseq, 1) over(order by boardseq desc) nextseq,
-		       lead(title, 1) over(order by boardseq desc) nexttitle
+		select status, lag(clubboardseq, 1) over(order by clubboardseq desc) previousseq,
+		       lag(title, 1) over(order by clubboardseq desc) previoustitle,
+		       clubboardseq, title, content, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, viewcount, orgfilename, filename, filesize,
+		       lead(clubboardseq, 1) over(order by clubboardseq desc) nextseq,
+		       lead(title, 1) over(order by clubboardseq desc) nexttitle
 		from tbl_clubboard
 		where status = 0
 		<if test="searchType == 'title' and searchWord != ''">and title like '%'||#{searchWord}||'%'</if>
@@ -447,8 +447,24 @@
 	</update>
 	
 	
+	<!-- 내가 속한 동호회 종목 리스트 가져오기  -->
+	<select id="selectclubCategoryList"  parameterType="String" resultType="ClubmemberVO">
+		select *
+		from tbl_clubmember
+	</select>
 	
 	
+	<!-- 동호회게시판 댓글 불러오기 -->
+	<resultMap type="HashMap" id="commentMap">
+		<result property="fk_userid" column="fk_userid" javaType="String"/>
+	</resultMap>
+	<select id="getCBoardComment" parameterType="String" resultMap="commentMap">
+		select noticecommentseq, parentseq, comment_text, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, fk_userid, memberimg
+		from tbl_noticecomment A join tbl_member B
+		on A.fk_userid = B.userid
+		where A.status = 1 and parentseq = #{noticeseq}
+		order by registerdate
+	</select>
 	
 
 </mapper>

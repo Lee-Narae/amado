@@ -13,6 +13,7 @@ import com.spring.app.domain.Calendar_schedule_VO;
 import com.spring.app.domain.Calendar_small_category_VO;
 import com.spring.app.domain.ClubBoardVO;
 import com.spring.app.domain.ClubVO;
+import com.spring.app.domain.ClubmemberVO;
 import com.spring.app.domain.FleamarketVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.domain.NoticeVO;
@@ -310,6 +311,22 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 	public int editSchedule_end(Calendar_schedule_VO svo) {
 		int n = sqlsession.update("JY.editSchedule_end", svo);
 		return n;
+	}
+
+	
+	// 내가 속한 동호회 종목 리스트 가져오기
+	@Override
+	public List<ClubmemberVO> selectclubCategoryList(String fk_userid) {
+		List<ClubmemberVO> clubCategoryList = sqlsession.selectList("JY.selectclubCategoryList", fk_userid);
+		return clubCategoryList;
+	}
+
+	
+	// 동호회게시판 댓글 불러오기
+	@Override
+	public List<Map<String, String>> getCBoardComment(String clubboardseq) {
+		List<Map<String, String>> commentList = sqlsession.selectList("JY.getCBoardComment", clubboardseq);
+		return commentList;
 	}
 	
 

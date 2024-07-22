@@ -1,5 +1,7 @@
 package com.spring.app.domain;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class MemberVO {
 
 	private String userid;				// 회원아이디
@@ -24,8 +26,14 @@ public class MemberVO {
 	private String earth;
 	private String stretch;
 	private String memberimg;
+	private MultipartFile attach;
 	
-	
+	public MultipartFile getAttach() {
+		return attach;
+	}
+	public void setAttach(MultipartFile attach) {
+		this.attach = attach;
+	}
 	private int idle;
 	
 	private int pwdchangegap;          // select 용. 지금으로 부터 마지막으로 암호를 변경한지가 몇개월인지 알려주는 개월수(3개월 동안 암호를 변경 안 했을시 암호를 변경하라는 메시지를 보여주기 위함)

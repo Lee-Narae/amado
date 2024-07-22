@@ -202,6 +202,14 @@ public interface AmadoService_NR {
 	// 동호회장 - 매치 결과 등록
 	int updateMatchResult(Map<String, String> paramap);
 
+	// 회원정보 수정
+	int updateMemberInfo_noAttach(MemberVO editMember);
+	int updateMemberInfo_attach(MemberVO editMember);
+
+	// 비밀번호 변경
+	int checkPw(Map<String, String> paramap);
+	int changePw(Map<String, String> paramap);
+
 	
 
 

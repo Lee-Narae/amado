@@ -33,6 +33,7 @@ import com.spring.app.domain.Calendar_schedule_VO;
 import com.spring.app.domain.Calendar_small_category_VO;
 import com.spring.app.domain.ClubBoardVO;
 import com.spring.app.domain.ClubVO;
+import com.spring.app.domain.ClubmemberVO;
 import com.spring.app.domain.FleamarketVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.domain.NoticeVO;
@@ -811,10 +812,10 @@ public class ControllerJY {
 		
 		// *** [맨처음][이전] 만들기 *** //
 		   
-           pageBar += "<li class='page-item'><a class='page-link' href='clubBoard.do?clubseq"+clubseq+"searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo=1'>[맨처음]</a></li>";
+           pageBar += "<li class='page-item'><a class='page-link' href='clubBoard.do?clubseq="+clubseq+"&searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo=1'>[맨처음]</a></li>";
 
            if(pageNo != 1) {
-              pageBar += "<li class='page-item'><a class='page-link' href='clubBoard.do?clubseq"+clubseq+"searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a></li>";
+              pageBar += "<li class='page-item'><a class='page-link' href='clubBoard.do?clubseq="+clubseq+"&searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a></li>";
            }
    
            while(!(loop > blockSize || pageNo > totalPage)) {
@@ -824,7 +825,7 @@ public class ControllerJY {
                  pageBar += "<li class='page-item active'><a class='page-link' href='#'>"+pageNo+"</a></li>";
               }
               else {
-                 pageBar += "<li class='page-item'><a class='page-link' href='clubBoard.do?clubseq"+clubseq+"searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a></li>";
+                 pageBar += "<li class='page-item'><a class='page-link' href='clubBoard.do?clubseq="+clubseq+"&searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a></li>";
               }
               
               loop++;
@@ -836,9 +837,9 @@ public class ControllerJY {
            // *** [다음][마지막] 만들기 *** //
            // pageNo ==> 11
            if(pageNo <= totalPage) {
-              pageBar += "<li class='page-item'><a class='page-link' href='clubBoard.do?clubseq"+clubseq+"searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"'>[다음]</a></li>";
+              pageBar += "<li class='page-item'><a class='page-link' href='clubBoard.do?clubseq="+clubseq+"&searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"'>[다음]</a></li>";
            }
-           pageBar += "<li class='page-item'><a class='page-link' href='clubBoard.do?clubseq"+clubseq+"searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+totalPage+"'>[맨마지막]</a></li>";
+           pageBar += "<li class='page-item'><a class='page-link' href='clubBoard.do?clubseq="+clubseq+"&searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+totalPage+"'>[맨마지막]</a></li>";
            
            
          // *** ==== 페이지바 만들기 끝 ==== *** //
@@ -904,22 +905,22 @@ public class ControllerJY {
 		paramap.put("searchWord", searchWord);
 		
 		// 댓글
-		//List<Map<String,String>> commentList = service.getNoticeComment(clubboardseq);
+		List<Map<String,String>> commentList = service.getCBoardComment(clubboardseq);
 		
 		// 댓글 수
 		//String commentCount = service.getNoticeCommentCount(clubboardseq);
-		/*
+		
 		if(commentList.size() > 0) {
 			mav.addObject("commentList", commentList);
-			mav.addObject("commentCount", commentCount);
+			//mav.addObject("commentCount", commentCount);
 		}
-		*/
+		
 		
 		
 		// 게시글
-		ClubBoardVO notice = service.getClubboardDetail(paramap);
+		ClubBoardVO cboard = service.getClubboardDetail(paramap);
 		
-		if(notice == null) {
+		if(cboard == null) {
 			String message = "존재하지 않는 게시글입니다.";
 			String loc = "javascript:history.back()";
 			
@@ -933,13 +934,13 @@ public class ControllerJY {
 		service.updateCboardViewcount(clubboardseq);
 		
 		
-		mav.addObject("notice", notice);
+		mav.addObject("cboard", cboard);
 		mav.addObject("clubboardseq", clubboardseq);
 		mav.addObject("goBackURL", goBackURL);
 		mav.addObject("searchType", searchType);
 		mav.addObject("searchWord", searchWord);
 		
-		mav.setViewName("community/noticeDetail.tiles2");
+		mav.setViewName("club/clubboardDetail.tiles2");
 		return mav;
 	}
 
@@ -952,6 +953,7 @@ public class ControllerJY {
 		mav.setViewName("schedule/scheduleManagement.tiles2");
 		return mav;
 	}
+	
 	
 	
 	// === 모든 캘린더(사내캘린더, 내캘린더, 공유받은캘린더)를 불러오는것 ===

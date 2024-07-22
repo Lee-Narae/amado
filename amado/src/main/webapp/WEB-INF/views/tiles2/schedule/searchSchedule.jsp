@@ -32,7 +32,7 @@
 	}
 	
 	button.btn_normal{
-		background-color: #0071bd;
+		background-color: #c3b7b7;
 		border: none;
 		color: white;
 		width: 50px;
