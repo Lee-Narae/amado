@@ -234,6 +234,22 @@ create table tbl_calendar_small_category
 -- Table TBL_CALENDAR_SMALL_CATEGORY이(가) 생성되었습니다.
 
 
+-- 가입동호회 종목 소분류로 자동 들어오게하기
+alter table tbl_calendar_small_category add fk_sportseq NUMBER
+,constraint FK_sportseq_fk_sprotseq foreign key(fk_sportseq) references tbl_sport(sportseq);
+
+ALTER TABLE tbl_calendar_small_category
+ADD fk_clubseq NUMBER;
+
+ALTER TABLE tbl_calendar_small_category
+ADD CONSTRAINT FK_clubseq_fk_clubseq FOREIGN KEY (fk_clubseq)
+REFERENCES tbl_club(clubseq);
+---
+desc tbl_clubmember;
+
+select *
+from tbl_member
+
 create sequence seq_smcatgono
 start with 1
 increment by 1
@@ -318,4 +334,8 @@ from tbl_member
 where name = '이순신';
 
 ------------- >>>>>>>> 일정관리(풀캘린더) 끝 <<<<<<<< -------------
+
+
+select *
+from tbl_clubmember;
 
