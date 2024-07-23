@@ -7,6 +7,7 @@ import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.ClubmemberVO;
+import com.spring.app.domain.InquiryFileVO;
 import com.spring.app.domain.InquiryVO;
 import com.spring.app.domain.MemberVO;
 
@@ -102,6 +103,14 @@ public interface AmadoService_SJ {
 
 	// 문의목록 가져오기
 	List<InquiryVO> getinquiryList(String fk_userid);
+
+	int getTotalInquiryCount(Map<String, String> paraMap);
+
+	List<InquiryVO> getPaginginquiryList(Map<String, String> paraMap);
+
+	InquiryVO inquiryGoDetail(String inquiryseq);
+
+	List<InquiryFileVO> inquiryFileGoDetail(String inquiryseq);
 
 
 }

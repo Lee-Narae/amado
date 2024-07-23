@@ -625,6 +625,37 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		int n = dao.updateMatchResult(paramap);
 		return n;
 	}
+
+	// 회원정보 수정
+	@Override
+	public int updateMemberInfo_noAttach(MemberVO editMember) {
+		int n = dao.updateMemberInfo_noAttach(editMember);
+		return n;
+	}
+	@Override
+	public int updateMemberInfo_attach(MemberVO editMember) {
+		int n = dao.updateMemberInfo_attach(editMember);
+		return n;
+	}
+
+	// 비밀번호 변경
+	@Override
+	public int checkPw(Map<String, String> paramap) {
+		int n = dao.checkPw(paramap);
+		return n;
+	}
+	@Override
+	public int changePw(Map<String, String> paramap) {
+		int n = dao.changePw(paramap);
+		return n;
+	}
+
+	// 회원탈퇴
+	@Override
+	public int memberQuit(String userid) {
+		int n = dao.memberQuit(userid);
+		return n;
+	}
 	
 	
 }

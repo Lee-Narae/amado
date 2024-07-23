@@ -2151,9 +2151,195 @@ public class ControllerNR {
 	
 	
 	@GetMapping("/member/myPage.do")
-	public ModelAndView myPage(ModelAndView mav) {
-		mav.setViewName("member/viewMypage.tiles1");
+	public ModelAndView myPage(ModelAndView mav, HttpServletRequest request) {
+		mav.setViewName("member/myPage_info.tiles1");
 		return mav;
+	}
+	
+	
+	@PostMapping("/member/infoEdit.do")
+	public ModelAndView infoEdit(HttpServletRequest request, MemberVO editMember, MultipartHttpServletRequest mrequest, ModelAndView mav) {
+		
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		
+		editMember.setUserid(loginuser.getUserid());
+		
+		String phone1 = request.getParameter("phone1");
+		String phone2 = request.getParameter("phone2");
+		String phone3 = request.getParameter("phone3");
+		
+		try {
+			editMember.setMobile(aES256.encrypt(phone1+phone2+phone3));
+			editMember.setEmail(aES256.encrypt(editMember.getEmail()));
+		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+			e.printStackTrace();
+		}
+		
+		MultipartFile attach = editMember.getAttach();
+
+		if(attach != null) {
+			
+	        String root = session.getServletContext().getRealPath("/");
+	        String path = root+"resources"+File.separator+"files";
+			
+	        String newFileName = "";
+	        
+	        byte[] bytes = null;
+	        
+	        try {
+				bytes = attach.getBytes();
+				// 첨부파일의 내용물을 읽어서 배열에 저장한다.
+				
+				String originalFilename = attach.getOriginalFilename();
+				// attach.getOriginalFilename() 이 첨부파일명의 파일명(예: 강아지.png) 이다.
+				// System.out.println("originalFilename => " + originalFilename); 
+	            // originalFilename => LG_싸이킹청소기_사용설명서.pdf
+				
+				newFileName = fileManager.doFileUpload(bytes, originalFilename, path);
+				// 첨부된 파일을 업로드하는 것
+				
+				// System.out.println("newFileName => " + newFileName);
+				
+				/*
+	             3. BoardVO boardvo 에 fileName 값과 orgFilename 값과 fileSize 값을 넣어주기  
+	            */
+				
+				editMember.setMemberimg(newFileName);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	        
+		}
+		
+		int n = 0;
+		
+		if(attach.isEmpty()) { // null 과 비슷한데 ""이어도 해당됨. return 타입은 boolean
+			// 파일 첨부가 없다면
+			editMember.setMemberimg(null);
+			n = service.updateMemberInfo_noAttach(editMember);
+		}
+		
+		else {
+			// 파일 첨부가 있다면
+			n = service.updateMemberInfo_attach(editMember);
+		}
+
+		if(n == 1) {
+			
+			editMember.setName(loginuser.getName());
+			editMember.setGender(loginuser.getGender());
+			editMember.setBirthday(loginuser.getBirthday());
+			editMember.setMemberrank(loginuser.getMemberrank());
+			editMember.setPwdchangegap(loginuser.getPwdchangegap());
+			editMember.setLastlogingap(loginuser.getLastlogingap());
+			editMember.setMobile(phone1+phone2+phone3);
+			try {
+				editMember.setEmail(aES256.decrypt(editMember.getEmail()));
+				editMember.setMobile(aES256.decrypt(editMember.getMobile()));
+			} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+				e.printStackTrace();
+			}
+			
+			session.setAttribute("loginuser", editMember);
+			
+			String msg = "회원정보 수정이 완료되었습니다.";
+			String loc = request.getContextPath()+"/member/myPage.do";
+			mav.addObject("message", msg);
+			mav.addObject("loc", loc);
+		}
+		
+		else {
+			String msg = "회원정보 수정이 실패하였습니다.";
+			String loc = request.getContextPath()+"/member/myPage.do";
+			mav.addObject("message", msg);
+			mav.addObject("loc", loc);
+		}
+		
+		
+		
+		mav.setViewName("msg");
+		
+		return mav;
+	}
+	
+	
+	@ResponseBody
+	@PostMapping(value="/member/changePw.do", produces="text/plain;charset=UTF-8")
+	public String changePw(HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		
+		String password = request.getParameter("password");
+		String newPw = request.getParameter("newPw");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+
+		paramap.put("userid", loginuser.getUserid());
+		paramap.put("password", Sha256.encrypt(password));
+		paramap.put("newPw", Sha256.encrypt(newPw));
+	
+		// 입력한 비밀번호가 일치하는지
+		int n = service.checkPw(paramap);
+	
+		JSONObject jsonObj = new JSONObject();
+		
+		if(n == 1) {
+			n = service.changePw(paramap);
+			session.removeAttribute("loginuser");
+			jsonObj.put("n", n);
+		}
+		
+		else {
+			jsonObj.put("n", 3);
+		}
+
+		return jsonObj.toString();
+	}
+	
+	
+	@ResponseBody
+	@PostMapping("/member/checkPw.do")
+	public String checkPw(HttpServletRequest request) {
+		
+		String pwd = request.getParameter("pwd");
+		
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("userid", loginuser.getUserid());
+		paramap.put("password", Sha256.encrypt(pwd));
+		
+		int n = service.checkPw(paramap);
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+		
+		return jsonObj.toString();
+	}
+	
+	
+	
+	@ResponseBody
+	@PostMapping("/member/memberQuit.do")
+	public String memberQuit(HttpServletRequest request) {
+		
+		String userid = request.getParameter("userid");
+		HttpSession session = request.getSession();
+		
+		int n = service.memberQuit(userid);
+		
+		if(n == 1) {
+			session.removeAttribute("loginuser");
+		}
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+		
+		return jsonObj.toString();
 	}
 	
 	

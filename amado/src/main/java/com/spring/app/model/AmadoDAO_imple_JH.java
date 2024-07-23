@@ -13,6 +13,7 @@ import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
 import com.spring.app.domain.GymVO;
+import com.spring.app.domain.GymresVO;
 import com.spring.app.domain.MatchingVO;
 
 
@@ -132,6 +133,18 @@ public class AmadoDAO_imple_JH implements AmadoDAO_JH {
 	public GymVO getgymPay(String gymseq) {
 		GymVO gymvo = sqlsession.selectOne("JH.getgymPay", gymseq);
 		return gymvo;
+	}
+
+	@Override
+	public int gymPayEnd(Map<String, String> paraMap) {
+		int n = sqlsession.insert("JH.gymPayEnd", paraMap);
+		return n;
+	}
+
+	@Override
+	public List<GymresVO> gymPayDate(String reservation_date) {
+		List<GymresVO> gymresList = sqlsession.selectList("JH.gymPayDate", reservation_date);
+		return gymresList;
 	}
 
 

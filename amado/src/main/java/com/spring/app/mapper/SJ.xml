@@ -472,8 +472,8 @@
     
     
 	<insert id="Inquiry" parameterType="HashMap">
-		insert into tbl_inquiry(inquiryseq, content, fk_userid, email, phone, registerdate, searchType_a, searchType_b, status)
-		values(seq_inquiry.nextval, #{content}, #{fk_userid}, #{email}, #{phone}, default, to_number(#{searchType_a}), to_number(#{searchType_b}), default)
+		insert into tbl_inquiry(inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status)
+		values(seq_inquiry.nextval, #{content}, #{fk_userid}, #{email}, #{phone}, default, to_number(#{searchtype_a}), to_number(#{searchtype_b}), default)
     </insert>
     
     <select id="findseq_inquiry" parameterType="HashMap" resultType="int">
@@ -533,6 +533,104 @@
 		FROM InquiryWithFiles
 		WHERE row_num = 1
 		ORDER BY inquiryseq DESC
+    </select>
+    
+    <select id="getTotalInquiryCount" parameterType="HashMap" resultType="int">
+	    select count(*)
+	    from tbl_inquiry
+	    where status = 1 and fk_userid = #{fk_userid}
+	    <choose>
+		   <when test='searchtype_a == "0" and searchtype_b == "0" and searchWord == ""'>
+		   </when>
+		   <when test='searchtype_a == "0" and searchtype_b == "0" and searchWord != ""'>
+		      and lower(content) like '%'||lower(#{searchWord})||'%' 
+		   </when>
+		   
+		   <when test='searchtype_a != "0" and searchtype_b == "0" and searchWord != ""'>
+		      and searchtype_a = #{searchtype_a} and lower(content) like '%'||lower(#{searchWord})||'%' 
+		   </when>
+		   <when test='searchtype_a != "0" and searchtype_b == "0" and searchWord == ""'>
+		      and searchtype_a = #{searchtype_a}
+		   </when>
+		   
+		   <when test='searchtype_a == "0" and searchtype_b != "0" and searchWord != ""'>
+		      and searchtype_b = #{searchtype_b} and lower(content) like '%'||lower(#{searchWord})||'%' 
+		   </when>
+		   <when test='searchtype_a == "0" and searchtype_b != "0" and searchWord == ""'>
+		      and searchtype_b = #{searchtype_b}
+		   </when>
+		   
+		   <when test='searchtype_a != "0" and searchtype_b != "0" and searchWord != ""'>
+		      and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b} and lower(content) like '%'||lower(#{searchWord})||'%' 
+		   </when>
+		   <when test='searchtype_a != "0" and searchtype_b != "0" and searchWord == ""'>
+		      and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b}  
+		   </when>
+		   
+		   <otherwise></otherwise>
+		</choose>
+	</select>
+    
+    
+    
+    <select id="getPaginginquiryList" parameterType="HashMap" resultType="InquiryVO">
+	    SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status
+		FROM
+(        select row_number() over(order by inquiryseq asc) AS rno 
+             , inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status
+             
+        from tbl_inquiry
+        where fk_userid = 'ksj1024sj' and status = 1
+	    <choose>
+		   <when test='searchtype_a == "0" and searchtype_b == "0" and searchWord == ""'>
+		   </when>
+		   <when test='searchtype_a == "0" and searchtype_b == "0" and searchWord != ""'>
+		      and lower(content) like '%'||lower(#{searchWord})||'%' 
+		   </when>
+		   
+		   <when test='searchtype_a != "0" and searchtype_b == "0" and searchWord != ""'>
+		      and searchtype_a = #{searchtype_a} and lower(content) like '%'||lower(#{searchWord})||'%' 
+		   </when>
+		   <when test='searchtype_a != "0" and searchtype_b == "0" and searchWord == ""'>
+		      and searchtype_a = #{searchtype_a}
+		   </when>
+		   
+		   <when test='searchtype_a == "0" and searchtype_b != "0" and searchWord != ""'>
+		      and searchtype_b = #{searchtype_b} and lower(content) like '%'||lower(#{searchWord})||'%' 
+		   </when>
+		   <when test='searchtype_a == "0" and searchtype_b != "0" and searchWord == ""'>
+		      and searchtype_b = #{searchtype_b}
+		   </when>
+		   
+		   <when test='searchtype_a != "0" and searchtype_b != "0" and searchWord != ""'>
+		      and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b} and lower(content) like '%'||lower(#{searchWord})||'%' 
+		   </when>
+		   <when test='searchtype_a != "0" and searchtype_b != "0" and searchWord == ""'>
+		      and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b}  
+		   </when>
+		   
+		   <otherwise></otherwise>
+		</choose>      
+        order by rno desc
+)
+where rno between #{startRno} and #{endRno}   
+    
+    </select>
+    
+    
+    <select id="inquiryGoDetail" parameterType="String" resultType="InquiryVO">
+	        SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status
+	        FROM tbl_inquiry
+            where inquiryseq = #{inquiryseq}
+	        ORDER BY inquiryseq DESC    
+    </select>
+
+
+    <select id="inquiryFileGoDetail" parameterType="String" resultType="InquiryFileVO">
+	        SELECT inquiryseq, orgfilename, filename, filesize
+	        FROM tbl_inquiryFile
+            where inquiryseq = #{inquiryseq}
+	        ORDER BY inquiryseq DESC    
     </select>
     
 	

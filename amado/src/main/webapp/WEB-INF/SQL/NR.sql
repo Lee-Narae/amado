@@ -532,3 +532,9 @@ select matchingseq, C.clubname myteam, D.clubname, to_char(B.matchdate, 'yyyy-mm
 select * from tbl_matching;
 select * from tbl_club;
 
+desc tbl_member;
+
+select * from tbl_member;
+update tbl_member set status = 1;
+commit;
+select count(*) from tbl_member where userid = 'leenr' and password = '9695b88a59a1610320897fa84cb7e144cc51f2984520efb77111d94b402a8382';

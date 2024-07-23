@@ -641,6 +641,27 @@
 		where matchingseq = #{matchingseq}
 	</update>
 	
+	<update id="updateMemberInfo_noAttach">
+		update tbl_member set email = #{email}, postcode = #{postcode}, address = #{address}, detailaddress = #{detailaddress},
+		extraaddress = #{extraaddress}, mobile = #{mobile}, speed = #{speed}, quick = #{quick}, power = #{power}, earth = #{earth}, stretch = #{stretch}, memberimg = null
+		where userid = #{userid}
+	</update>
 	
+	<update id="updateMemberInfo_attach">
+		update tbl_member set email = #{email}, postcode = #{postcode}, address = #{address}, detailaddress = #{detailaddress},
+		extraaddress = #{extraaddress}, mobile = #{mobile}, speed = #{speed}, quick = #{quick}, power = #{power}, earth = #{earth}, stretch = #{stretch}, memberimg = #{memberimg}
+		where userid = #{userid}
+	</update>
 	
+	<select id="checkPw" parameterType="HashMap" resultType="int">
+		select count(*) from tbl_member where userid = #{userid} and password = #{password}
+	</select>
+	
+	<update id="changePw">
+		update tbl_member set password = #{newPw} where userid = #{userid}
+	</update>
+	
+	<update id="memberQuit">
+		update tbl_member set status = 0 where userid = #{userid}
+	</update>
 </mapper>
