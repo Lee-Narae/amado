@@ -116,70 +116,63 @@
   });// end of $(document).ready(function(){})-----------
 
   
-	function navigate() {
-	    var selectBox = document.getElementById("searchType_a");
-	    var selectedValue = selectBox.value;
+  function navigate() {
+      var selectBox = document.getElementById("searchType_a");
+      var selectedValue = selectBox.value;
 
-	    // URL을 설정할 때 여기서 사용할 변수나 경로를 정의합니다.
-	    var ctxPath = "<%=ctxPath %>"; // ctxPath 변수가 정의되어 있다고 가정
+      // URL을 설정할 때 여기서 사용할 변수나 경로를 정의합니다.
+      var ctxPath = "<%=ctxPath %>"; // ctxPath 변수가 정의되어 있다고 가정
 
-	    switch (selectedValue) {
-	        case "0":
-	            // 전체 선택 시 처리할 URL
-	            location.href = "?sportseq=/community/list.do";
-	            break;
-	        case "1":
-	            // 축구 선택 시 처리할 URL
-	            location.href = "?sportseq=1";
-	            break;
-	        case "2":
-	            // 야구 선택 시 처리할 URL
-	            location.href = "?sportseq=2";
-	            break;
-	        case "3":
-	            // 배구 선택 시 처리할 URL
-	            location.href = "?sportseq=3";
-	            break;
-	        case "4":
-	            // 농구 선택 시 처리할 URL
-	            location.href = "?sportseq=4";
-	            break;
-	        case "5":
-	            // 테니스 선택 시 처리할 URL
-	            location.href = "?sportseq=5";
-	            break;
-	        case "6":
-	            // 볼링 선택 시 처리할 URL
-	            location.href = "?sportseq=6";
-	            break;
-	        case "7":
-	            // 족구 선택 시 처리할 URL
-	            location.href = "?sportseq=7";
-	            break;
-	        case "8":
-	            // 배드민턴 선택 시 처리할 URL
-	            location.href = "?sportseq=8";
-	            break;
-	        default:
-	            // 기본적으로는 전체로 처리
-	            location.href = ctxPath + "/community/list.do";
-	            break;
-	    }
+      switch (selectedValue) {
+          case "1":
+              location.href = "?sportseq=1";
+              break;
+          case "2":
+              location.href = "?sportseq=2";
+              break;
+          case "3":
+              location.href = "?sportseq=3";
+              break;
+          case "4":
+              location.href = "?sportseq=4";
+              break;
+          case "5":
+              location.href = "?sportseq=5";
+              break;
+          case "6":
+              location.href = "?sportseq=6";
+              break;
+          case "7":
+              location.href = "?sportseq=7";
+              break;
+          case "8":
+              location.href = "?sportseq=8";
+              break;
+          default:
+              location.href = ctxPath + "/community/list.do";
+              break;
+      }
 
-	    // 선택한 값을 localStorage에 저장하여 페이지 새로고침 후에도 유지
-	    localStorage.setItem("selectedSport", selectedValue);
-	}
+      // 선택한 값을 localStorage에 저장하여 페이지 새로고침 후에도 유지
+      localStorage.setItem("selectedSport", selectedValue);
+  }
+
+  // 페이지가 로드될 때 localStorage에 저장된 값을 설정하고 제거
+  window.onload = function() {
+      var selectedValue = localStorage.getItem("selectedSport");
+      if (selectedValue) {
+          document.getElementById("searchType_a").value = selectedValue;
+          localStorage.removeItem("selectedSport"); // 값을 설정한 후 제거
+      }
+  }
   
 </script>
 
 
 <div style="display: flex;">
   <div style="margin: auto; padding-top: 3%; padding-left: 3%;">
-     
-     	<c:if test="${requestScope.params == '/community/list.do'}"> <!-- 나중에 post 방식으로 보낼 때는 clubseq 값도 같이 보내서 requestScope.clubseq 값에 따라 보여주게 변경. -->
-		<h2 style="margin-bottom: 30px;">전체 글쓰기</h2>
-		</c:if>		
-		<c:if test="${requestScope.params == '1'}">
+     	
+		<c:if test="${requestScope.params == '1' || requestScope.params == '/community/list.do'}">
 			<h2 style="margin-bottom: 30px;">축구 글쓰기</h2>
 		</c:if>		
 		<c:if test="${requestScope.params == '2'}">
@@ -223,7 +216,6 @@
          	<th style="width: 15%; background-color: #DDDDDD;">게시판</th>
          <td>
 		     <select id="searchType_a" name="searchType_a" style="width: 30%;" onchange="navigate()">
-		         <option value="0">전체</option>
 		         <option value="1">축구</option>
 		         <option value="2">야구</option>
 		         <option value="3">배구</option>

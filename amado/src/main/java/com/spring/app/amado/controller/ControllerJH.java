@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -426,7 +427,7 @@ public class ControllerJH {
 		List<MatchingVO> matchingList = service.getmatchingList(clubseq);
 		
 		
-		System.out.println(matchingList.get(0).getClubname1());
+		//System.out.println(matchingList.get(0).getClubname1());
 		
 		for(MatchingVO matchingvo : matchingList) {
 			if(matchingvo.getClubseq1() == clubseq) {
@@ -524,10 +525,10 @@ public class ControllerJH {
 		String fk_gymseq = request.getParameter("fk_gymseq");
 		String fk_userid = request.getParameter("fk_userid");
 		
-		System.out.println(numericPrice);
-		System.out.println(reservation_date);
-		System.out.println(fk_gymseq);
-		System.out.println(fk_userid);
+		//System.out.println(numericPrice);
+		//System.out.println(reservation_date);
+		//System.out.println(fk_gymseq);
+		//System.out.println(fk_userid);
 		
 		Map<String, String> paraMap = new HashMap<>();
 		paraMap.put("numericPrice", numericPrice);
@@ -537,18 +538,29 @@ public class ControllerJH {
 		
 		// 입력된 시간 문자열을 가져옵니다.
 		String time = request.getParameter("selected").trim();
+		System.out.println("여기야"+time);
 
-		// 모든 줄 바꿈, 탭, 여러 공백, 콤마를 단일 공백으로 변환
-		String cleanedString = time.replaceAll("[\\s\\r\\n,]+", " ").trim();
+		int chunkSize = 5;
+        ArrayList<String> list = new ArrayList<>();
 
-		// 문자열을 공백 기준으로 나누기
-		String[] times = cleanedString.split("\\s+");
-		
+        for (int i = 0; i < time.length(); i += chunkSize) {
+            int end = Math.min(time.length(), i + chunkSize);
+            list.add(time.substring(i, end));
+        }
+
+        // ArrayList를 배열로 변환
+        String[] times = list.toArray(new String[0]);
+
+        // 결과 출력
+        for (String t : times) {
+            System.out.println(t);
+        }
 		
 		
 		int n = 0;
 		// 결과 확인
 		for(int i=0; i<times.length; i++) {
+			//System.out.println(times[i]);
 			time = times[i];
 			paraMap.put("time", time);
 			n = service.gymPayEnd(paraMap);
@@ -571,6 +583,43 @@ public class ControllerJH {
 	}
 	
 	
+	@ResponseBody
+	@GetMapping(value="/gym/gymPayDate.do", produces="text/plain;charset=UTF-8") 
+	public String gymPayDate(HttpServletRequest request) throws IOException, ParseException {
+
+		//System.out.println(request.getParameter("reservation_date"));
+		//System.out.println(request.getParameter("gymseq"));
+		
+		String reservation_date = request.getParameter("reservation_date");
+		String gymseq = request.getParameter("gymseq");
+		
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("reservation_date", reservation_date);
+		paraMap.put("gymseq", gymseq);
+		
+		List<Map<String, String>> gymDateList = service.getgymPayDate(paraMap); 
+		
+		for(Map<String, String> gymdate : gymDateList) {
+			//System.out.println(gymdate.get("time"));
+		}// end of for----------------------
+		
+		String cost = service.getCost(gymseq);
+		
+		JSONArray jsonArr = new JSONArray(); // [] 
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("cost", cost);
+		jsonArr.put(jsonObj);
+		for(Map<String, String> gymdate : gymDateList) {
+			jsonObj = new JSONObject();
+			jsonObj.put("time", gymdate.get("time"));
+			
+			jsonArr.put(jsonObj);
+		}// end of for----------------------
+		
+		
+		return jsonArr.toString();
+	}
 	
 	
 	

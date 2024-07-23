@@ -434,6 +434,27 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		return inquiryPagingList;
 	}
 
+	
+	@Override
+	public InquiryVO inquiryGoDetail(String inquiryseq) {
+		InquiryVO inquiryvo = dao.inquiryGoDetail(inquiryseq);
+		
+		return inquiryvo;
+	}
+
+	@Override
+	public List<InquiryFileVO> inquiryFileGoDetail(String inquiryseq) {
+		List<InquiryFileVO> inquiryfileList = dao.inquiryFileGoDetail(inquiryseq);
+		return inquiryfileList;
+	}
+
+	
+	@Override
+	public InquiryFileVO getView_inquiry(Map<String, String> paraMap) {
+		InquiryFileVO inquiryfilevo = dao.getView_inquiry(paraMap);
+		return inquiryfilevo;
+	}
+
 
 
 }
