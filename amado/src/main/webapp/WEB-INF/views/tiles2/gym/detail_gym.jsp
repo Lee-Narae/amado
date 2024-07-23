@@ -1352,17 +1352,14 @@ function goAddWrite_reply(gymquestionseq){
           </ol>
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <img class="d-block w-100" src="<%=ctxPath%>/resources/images/${gym.orgfilename}" alt="첫 번째 사진">
+              <img class="d-block w-100" src="<%=ctxPath%>/resources/images/1/${gym.orgfilename}" alt="첫 번째 사진">
             </div>
+            <c:forEach items="${requestScope.gymImgList}" var="img">
             <div class="carousel-item">
-              <img class="d-block w-100" src="<%=ctxPath%>/resources/images/체육관2.jpg" alt="두 번째 사진">
+              <img class="d-block w-100" src="<%=ctxPath%>/resources/images/1/${img.orgfilename}" alt="두 번째 사진">
             </div>
-            <div class="carousel-item">
-              <img class="d-block w-100" src="<%=ctxPath%>/resources/images/체육관3.jpg" alt="세 번째 사진">
-            </div>
-            <div class="carousel-item">
-              <img class="d-block w-100" src="<%=ctxPath%>/resources/images/체육관2.jpg" alt="네 번째 사진">
-            </div>
+            </c:forEach>
+
           </div>
           <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -1424,7 +1421,7 @@ function goAddWrite_reply(gymquestionseq){
 	        <img src="https://cdn-icons-png.flaticon.com/512/812/812327.png" alt="찜하기"> 
 	        </a>
 	      </div>
-	         <button class="btn btn-success" style="padding: 10px 200px;">예약하기</button>
+	         <button class="btn btn-success" style="padding: 10px 200px;" onclick="javascript:location.href='<%= ctxPath%>/gym/gymPay.do?gymseq=${gym.gymseq}'">예약하기</button>
       </div>
     
   </div>
@@ -1453,11 +1450,11 @@ function goAddWrite_reply(gymquestionseq){
 			</div>
 	
 			<div style="width: 50%; margin: 5% auto;">
-			<img src="<%=ctxPath%>/resources/images/체육관2.jpg" class="img-fluid"
-				style="width: 100%;" /> 공차러 와~
+			
+			 <c:forEach items="${requestScope.gymImgList}" var="img">	
+			<img src="<%=ctxPath%>/resources/images/1/${img.orgfilename}" class="img-fluid"style="width: 100%;" /> 하이
+			</c:forEach>
 				
-			<img src="<%=ctxPath%>/resources/images/체육관3.jpg" class="img-fluid"
-			style="width: 100%;" /> 하이
 			</div>
 	</div>
 	<br>
