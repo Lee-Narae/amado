@@ -371,7 +371,10 @@ values(seq_gymresseq.nextval, 77, choijh, TO_DATE('2024-07-20', 'YYYY-MM-DD'), '
 
 select *
 from tbl_gymres
-where reservation_date = '24-07-24';
+where reservation_date = '24-07-25';
 
-select *
-from tbl_gymres
+select cost
+from tbl_gymres r
+join tbl_gym g
+on r.fk_gymseq = g.gymseq
+where reservation_date = '24-07-25' and gymseq = 80;

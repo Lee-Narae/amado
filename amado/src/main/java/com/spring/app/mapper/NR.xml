@@ -660,4 +660,8 @@
 	<update id="changePw">
 		update tbl_member set password = #{newPw} where userid = #{userid}
 	</update>
+	
+	<update id="memberQuit">
+		update tbl_member set status = 0 where userid = #{userid}
+	</update>
 </mapper>

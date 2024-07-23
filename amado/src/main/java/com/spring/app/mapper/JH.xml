@@ -125,11 +125,27 @@
 		values(seq_gymresseq.nextval, #{fk_gymseq}, #{fk_userid}, TO_DATE(#{reservation_date}, 'YYYY-MM-DD'), #{time})
 	</insert>
 	
-	<select id="gymPayDate" resultType="GymresVO" parameterType="String">
+	
+	<resultMap type="HashMap" id="gymDateMap"> 
+		<result property="gymresseq" column="gymresseq" javaType="String"/>
+		<result property="fk_gymseq" column="fk_gymseq" javaType="String"/>
+		<result property="fk_userid" column="fk_userid" javaType="String"/>
+		<result property="reservation_date" column="reservation_date" javaType="String"/>
+		<result property="time" column="time" javaType="String"/>
+	</resultMap>
+	<select id="getgymPayDate" resultMap="gymDateMap" parameterType="HashMap">
 		select gymresseq, fk_gymseq, fk_userid, reservation_date, time
 		from tbl_gymres
-		where reservation_date = #{reservation_date}
+		where reservation_date = #{reservation_date} and fk_gymseq = #{gymseq}
 	</select>
+	
+	
+	<select id="getCost" resultType="String" parameterType="String">
+		select cost
+		from tbl_gym
+		where gymseq = #{gymseq}
+	</select>
+	
 	
 	
 </mapper>

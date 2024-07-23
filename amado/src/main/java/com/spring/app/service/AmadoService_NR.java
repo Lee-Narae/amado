@@ -210,6 +210,9 @@ public interface AmadoService_NR {
 	int checkPw(Map<String, String> paramap);
 	int changePw(Map<String, String> paramap);
 
+	// 회원탈퇴
+	int memberQuit(String userid);
+
 	
 
 

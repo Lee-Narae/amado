@@ -112,7 +112,7 @@ margin-top: 1%;
 }
 </style>
 
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
 
@@ -341,7 +341,7 @@ function pwdChange(){
 	}
 	
 	$.ajax({
-		url: "<%=ctxPath%>/member/changPw.do",
+		url: "<%=ctxPath%>/member/changePw.do",
 		data: {"password": password, "newPw": newPw},
 		type: "post",
 		dataType: "json",
@@ -359,10 +359,89 @@ function pwdChange(){
 		},
 		error: function(request, status, error) {
             alert("code: " + request.status + "\n" + "message: " + request.responseText + "\n" + "error: " + error);
-       }
+        }
 	});
 	
 }
+
+
+function memberQuit(){
+	
+	const pwd = $("input[name='password2']").val().trim();
+	
+	if(pwd == ''){
+		alert('비밀번호를 입력하세요.');
+		return;
+	}
+	
+	$.ajax({
+		url: "<%=ctxPath%>/member/checkPw.do",
+		data: {"pwd": pwd},
+		type: "post",
+		dataType: "json",
+		success: function(json){
+			
+			if(json.n == 1){
+				Swal.fire({
+					  title: "정말 탈퇴하시겠습니까?",
+					  text: "AmaDo 회원 혜택을 잃게 됩니다.",
+					  icon: "warning",
+					  showCancelButton: true,
+					  confirmButtonColor: "#3085d6",
+					  cancelButtonColor: "#d33",
+					  confirmButtonText: "네, 탈퇴합니다.",
+					  cancelButtonText: "취소"
+					}).then((result) => {
+					  if (result.isConfirmed) {
+						  
+						  $.ajax({
+							  
+							  url: "<%=ctxPath%>/member/memberQuit.do",
+							  data: {"userid": '${sessionScope.loginuser.userid}'},
+							  dataType: "json",
+							  type: "post",
+							  success: function(json2){
+								  
+								  if(json2.n ==1){
+									  Swal.fire({ title: "탈퇴 완료!", text: "그동안 이용해주셔서 감사합니다.", icon: "success"}).then(okay => {
+										  if (okay) {
+											    window.location.href = "<%=ctxPath%>/index.do";
+											  }
+									  });
+									  
+									  
+									  
+								  }
+								  
+								  else {
+									  alert('내부 오류로 인해 탈퇴처리가 실패하였습니다. 다시 시도해주세요.');
+								  }
+								  
+							  },
+							  error: function(request, status, error) {
+						            alert("code: " + request.status + "\n" + "message: " + request.responseText + "\n" + "error: " + error);
+						        }
+							  
+						  });
+					    
+					  }
+					});
+			}
+			
+			else{
+				alert('비밀번호가 일치하지 않습니다.');
+				$("input[name='password2']").val('');
+				return;
+			}
+			
+		},
+		error: function(request, status, error) {
+            alert("code: " + request.status + "\n" + "message: " + request.responseText + "\n" + "error: " + error);
+        }
+	});
+	
+}
+
 </script>
 
 
@@ -522,10 +601,23 @@ function pwdChange(){
 	            
 	            
 	            
-	            <div id="content3" style="border:solid 1px red; width: 50%;  margin: 3% auto;" >
+	            <div id="content3" style="width: 50%;  margin: 3% auto;" >
 	                <div class="item1">&nbsp;회원 탈퇴</div>
 	                <hr class="hr1">
 	                <div id="memberInfo">
+	                	<table style="width: 80%;">
+	                		<tbody>
+	                			<tr style="height: 100px;">
+	                				<td width="50">비밀번호</td>
+	                				<td width="50"><input type="password" name="password2" /></td>
+	                			</tr>
+	                		</tbody>
+	                	</table>
+	                	
+	                	<div style="width: 100%; text-align: center; margin: 5% 0;">
+	                		<button type="button" class="btn btn-primary" onclick="memberQuit()">탈퇴하기</button>
+	                		<button type="button" class="btn btn-secondary" onclick="javascript:history.back()">취소</button>
+	                	</div>
 	                	
 	                </div>
 	                

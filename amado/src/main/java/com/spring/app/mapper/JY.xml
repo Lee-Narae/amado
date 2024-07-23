@@ -149,15 +149,15 @@
 		select previousseq, previoustitle, clubboardseq, clubseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status, orgfilename, filename, filesize, nextseq, nexttitle
 		from 
 		(
-		select status, lag(clubboardseq, 1) over(order by clubboardseq desc) previousseq,
-		       lag(title, 1) over(order by clubboardseq desc) previoustitle,
-		       clubboardseq, title, content, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, viewcount, orgfilename, filename, filesize,
-		       lead(clubboardseq, 1) over(order by clubboardseq desc) nextseq,
-		       lead(title, 1) over(order by clubboardseq desc) nexttitle
-		from tbl_clubboard
-		where status = 0
-		<if test="searchType == 'title' and searchWord != ''">and title like '%'||#{searchWord}||'%'</if>
-		<if test="searchType == 'content' and searchWord != ''">and content like '%'||#{searchWord}||'%'</if>
+		    select 
+		        lag(clubboardseq, 1) over(order by clubboardseq desc) previousseq,
+		        lag(title, 1) over(order by clubboardseq desc) previoustitle,
+		        clubboardseq, clubseq, title, content, registerdate, viewcount, orgfilename, filename, filesize,
+		        lead(clubboardseq, 1) over(order by clubboardseq desc) nextseq,
+		        lead(title, 1) over(order by clubboardseq desc) nexttitle,
+		        fk_userid, password, commentcount, status
+		    from tbl_clubboard
+		    where status = 1
 		) A
 		where A.clubboardseq = #{clubboardseq}
 	</select>
@@ -457,14 +457,39 @@
 	<!-- 동호회게시판 댓글 불러오기 -->
 	<resultMap type="HashMap" id="commentMap">
 		<result property="fk_userid" column="fk_userid" javaType="String"/>
+		<result property="comment_text" column="comment_text" javaType="String"/>
+		<result property="clubboardcommentseq" column="clubboardcommentseq" javaType="String"/>
+		<result property="clubboardseq" column="clubboardseq" javaType="String"/>
+		<result property="registerdate" column="registerdate" javaType="String"/>
 	</resultMap>
 	<select id="getCBoardComment" parameterType="String" resultMap="commentMap">
-		select noticecommentseq, parentseq, comment_text, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, fk_userid, memberimg
-		from tbl_noticecomment A join tbl_member B
+		select clubboardcommentseq, clubboardseq, comment_text, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, fk_userid
+		from tbl_clubboardcomment A join tbl_member B
 		on A.fk_userid = B.userid
-		where A.status = 1 and parentseq = #{noticeseq}
+		where A.status = 1 and clubboardseq = #{clubboardseq}
 		order by registerdate
 	</select>
+	
+	
+	<!-- 동호회게시판  - 댓글 insert -->
+	<insert id="insertCBoardComment" parameterType="HashMap">
+		insert into tbl_clubboardcomment(clubboardcommentseq, clubboardseq, comment_text, registerdate , fk_userid)
+		values (seq_clubboardcomment.nextval, #{clubboardseq}, #{comment_text}, default, #{fk_userid})
+	</insert>
+	
+	
+	<update id="updateCBoardCommentcount" parameterType="String">
+		update tbl_clubboard set commentcount = commentcount-1
+		where clubboardseq = #{clubboardseq}
+	</update>
+	
+	
+	<select id="getCBoardCommentCount" parameterType="String" resultType="String">
+		select count(*)
+		from tbl_clubboardcomment
+		where status = 1 and clubboardseq = #{clubboardseq}
+	</select>
+	
 	
 
 </mapper>

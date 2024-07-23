@@ -472,8 +472,8 @@
     
     
 	<insert id="Inquiry" parameterType="HashMap">
-		insert into tbl_inquiry(inquiryseq, content, fk_userid, email, phone, registerdate, searchType_a, searchType_b, status)
-		values(seq_inquiry.nextval, #{content}, #{fk_userid}, #{email}, #{phone}, default, to_number(#{searchType_a}), to_number(#{searchType_b}), default)
+		insert into tbl_inquiry(inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status)
+		values(seq_inquiry.nextval, #{content}, #{fk_userid}, #{email}, #{phone}, default, to_number(#{searchtype_a}), to_number(#{searchtype_b}), default)
     </insert>
     
     <select id="findseq_inquiry" parameterType="HashMap" resultType="int">
@@ -615,6 +615,30 @@
 )
 where rno between #{startRno} and #{endRno}   
     
+    </select>
+    
+    
+    <select id="inquiryGoDetail" parameterType="String" resultType="InquiryVO">
+	        SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status
+	        FROM tbl_inquiry
+            where inquiryseq = #{inquiryseq}
+	        ORDER BY inquiryseq DESC    
+    </select>
+
+
+    <select id="inquiryFileGoDetail" parameterType="String" resultType="InquiryFileVO">
+	        SELECT inquiryseq, orgfilename, filename, filesize
+	        FROM tbl_inquiryFile
+            where inquiryseq = #{inquiryseq}
+	        ORDER BY inquiryseq DESC    
+    </select>
+    
+    
+    <!-- 1대1문의 첨부파일 다운로드 -->
+    <select id="getView_inquiry" parameterType="HashMap" resultType="InquiryFileVO">
+   	        SELECT inquiryseq, orgfilename, filename, filesize
+	        FROM tbl_inquiryFile
+            where inquiryseq = #{inquiryseq} and orgfilename = #{orgfilename}
     </select>
     
 	

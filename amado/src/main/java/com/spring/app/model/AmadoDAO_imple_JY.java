@@ -328,6 +328,30 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 		List<Map<String, String>> commentList = sqlsession.selectList("JY.getCBoardComment", clubboardseq);
 		return commentList;
 	}
+
+	
+	// 동호회게시판 댓글 개수
+	@Override
+	public String getCBoardCommentCount(String clubboardseq) {
+		String commentCount = sqlsession.selectOne("JY.getCBoardCommentCount", clubboardseq);
+		return commentCount;
+	}
+
+	
+	// 동호회게시판  - 댓글 insert
+	@Override
+	public int insertCBoardComment(Map<String, String> paramap) {
+		int n = sqlsession.insert("JY.insertCBoardComment", paramap);
+		return n;
+	}
+
+	
+	// 댓글cnt 올리기
+	@Override
+	public void updateCBoardCommentcount(String clubboardseq) {
+		sqlsession.update("JY.updateCBoardCommentcount", clubboardseq);
+		
+	}
 	
 
 
