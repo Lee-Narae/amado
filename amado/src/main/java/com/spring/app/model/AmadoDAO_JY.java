@@ -109,6 +109,12 @@ public interface AmadoDAO_JY {
 
 	List<Map<String, String>> getCBoardComment(String clubboardseq);
 
+	String getCBoardCommentCount(String clubboardseq);
+
+	int insertCBoardComment(Map<String, String> paramap);
+
+	void updateCBoardCommentcount(String clubboardseq);
+
 	
 
 

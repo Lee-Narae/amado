@@ -27,8 +27,47 @@ public class ClubBoardVO {
 	 */
 	private String wasfileName;    // WAS(톰캣)에 저장될 파일명(2024070109291535243254235235234.png) 
 
+	// 이전글, 다음글 보기
+	private String previousseq;
+	private String previoustitle;
+	private String nextseq;
+	private String nexttitle;
 	
 	
+	// 공지 수정 시 첨부파일 삭제 여부 확인용
+	private String deleteAttach; // 1: 첨부파일 지움   2: 첨부파일 안 지움
+
+	
+	public String getDeleteAttach() {
+		return deleteAttach;
+	}
+	public void setDeleteAttach(String deleteAttach) {
+		this.deleteAttach = deleteAttach;
+	}
+	public String getPreviousseq() {
+		return previousseq;
+	}
+	public void setPreviousseq(String previousseq) {
+		this.previousseq = previousseq;
+	}
+	public String getPrevioustitle() {
+		return previoustitle;
+	}
+	public void setPrevioustitle(String previoustitle) {
+		this.previoustitle = previoustitle;
+	}
+	public String getNextseq() {
+		return nextseq;
+	}
+	public void setNextseq(String nextseq) {
+		this.nextseq = nextseq;
+	}
+	public String getNexttitle() {
+		return nexttitle;
+	}
+	public void setNexttitle(String nexttitle) {
+		this.nexttitle = nexttitle;
+	}
 	public MultipartFile getAttach() {
 		return attach;
 	}

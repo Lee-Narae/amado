@@ -323,6 +323,29 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 	}
 
 
+	// 동호회게시판  - 댓글 개수
+	@Override
+	public String getCBoardCommentCount(String clubboardseq) {
+		String commentCount = dao.getCBoardCommentCount(clubboardseq);
+		return commentCount;
+	}
+
+
+	// 동호회게시판  - 댓글 insert
+	@Override
+	public int insertCBoardComment(Map<String, String> paramap) {
+		int n = dao.insertCBoardComment(paramap);
+		return n;
+	}
+
+
+	// 댓글cnt 올리기
+	@Override
+	public void updateCBoardCommentcount(String clubboardseq) {
+		dao.updateCBoardCommentcount(clubboardseq);
+	}
+
+
 	
 
 
