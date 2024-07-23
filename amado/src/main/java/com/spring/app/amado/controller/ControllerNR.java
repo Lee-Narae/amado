@@ -2343,5 +2343,55 @@ public class ControllerNR {
 	}
 	
 	
+	@GetMapping("/member/myPage_club.do")
+	public ModelAndView myPage_club(ModelAndView mav, HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		
+		Map<String, String> soccer = service.getSoccer(loginuser.getUserid());
+		Map<String, String> baseball = service.getBaseball(loginuser.getUserid());
+		Map<String, String> volley = service.getVolley(loginuser.getUserid());
+		Map<String, String> basket = service.getBasket(loginuser.getUserid());
+		Map<String, String> tennis = service.getTennis(loginuser.getUserid());
+		Map<String, String> bowling = service.getBowling(loginuser.getUserid());
+		Map<String, String> jokgu = service.getJokgu(loginuser.getUserid());
+		Map<String, String> minton = service.getMinton(loginuser.getUserid());
+		
+		mav.addObject("soccer", soccer);
+		mav.addObject("baseball", baseball);
+		mav.addObject("volley", volley);
+		mav.addObject("basket", basket);
+		mav.addObject("bowling", bowling);
+		mav.addObject("jokgu", jokgu);
+		mav.addObject("minton", minton);
+		mav.addObject("tennis", tennis);
+		
+		mav.setViewName("member/myPage_club.tiles1");
+		return mav;
+	}
+	
+	
+	
+	@ResponseBody
+	@PostMapping("/member/quitClub.do")
+	public String quitClub(HttpServletRequest request) {
+		
+		String clubseq = request.getParameter("clubseq");
+		String userid = request.getParameter("userid");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("clubseq", clubseq);
+		paramap.put("userid", userid);
+		
+		int n = service.quitClub(paramap);
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+		
+		return jsonObj.toString();
+	}
+	
+	
 }
 
