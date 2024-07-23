@@ -51,7 +51,9 @@ public interface AmadoDAO_JH {
 
 	int gymPayEnd(Map<String, String> paraMap);
 
-	List<GymresVO> gymPayDate(String reservation_date);
+	List<Map<String, String>> getgymPayDate(Map<String, String> paraMap);
+
+	String getCost(String gymseq);
 
 
 }
