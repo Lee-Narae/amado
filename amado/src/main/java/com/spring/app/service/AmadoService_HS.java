@@ -22,7 +22,7 @@ public interface AmadoService_HS {
 
 	List<GymVO> getAllGymList();
 	
-	
+
 
 	int addComment(QuestionVO questionvo) throws Throwable;
 
@@ -51,6 +51,25 @@ public interface AmadoService_HS {
 
 	
 	List<GymVO> getGymAdd();
+
+
+	
+	
+	
+	GymVO getGym(String gymseq);
+
+
+	List<Map<String, String>> getGymImg(String gymseq);
+
+
+
+
+
+
+
+
+
+
 
 
 

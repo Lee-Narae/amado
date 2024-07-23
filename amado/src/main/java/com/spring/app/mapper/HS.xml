@@ -20,6 +20,47 @@ values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
 		from tbl_gym
 	</select>
 	
+	
+	<select id="getGym" resultType="GymVO" parameterType="String">
+		select gymseq ,gymname,fk_userid,postcode,address,detailaddress,status,info,orgfilename,filename,filesize,cost,caution,membercount,likecount,insidestatus,lng,lat
+		from tbl_gym
+		where gymseq= #{gymseq}
+	</select>
+	
+	
+	<resultMap type="HashMap" id="gymImgMap">
+		<result column="gymimgseq" property="gymimgseq" javaType="String"/>
+		<result column="gymseq" property="gymseq" javaType="String"/>
+		<result column="filename" property="filename" javaType="String"/>
+		<result column="orgfilename" property="orgfilename" javaType="String"/>
+	</resultMap>
+	<select id="getGymimg" resultMap="gymImgMap" parameterType="String">
+			select gymimgseq,gymseq,filename,orgfilename    
+			from tbl_gymimg
+			where gymseq= #{gymseq}
+	</select>
+	
+	
+	
+	
+	<!--  gymseq 에 따라 상세정보 보여주기  -->
+<!-- 	<select id="getAllGymList2" resultType="GymVO" >
+	   SELECT g.gymseq,g.gymname,
+       g.fk_userid,g.postcode,g.address,
+       g.detailaddress,g.status,
+       g.info,g.cost,g.caution,
+       g.membercount,g.likecount,g.insidestatus,
+       g.orgfilename AS gym_orgfilename,g.filename AS gym_filename,
+       g.filesize AS gym_filesize,g.lat,g.lng,
+       gi.orgfilename AS gymimg_orgfilename
+  	   FROM tbl_gym g
+  	   LEFT JOIN tbl_gymimg gi
+  	   ON g.gymseq = gi.gymseq
+ 	   WHERE g.gymseq = ${g.gymseq};
+	</select> -->
+	
+	
+
 <!-- #88. 댓글쓰기 (tbl_comment 테이블에 insert) -->
 	<insert id="addComment" parameterType="QuestionVO">
 		insert into tbl_gymquestion(gymquestionseq, gymseq, content, registerdate, fk_userid)

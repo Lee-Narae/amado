@@ -53,11 +53,19 @@ public class ControllerHS {
 
 	// 체육관 상세보기
 	@GetMapping(value="/gym/detail_gym.do")
-	   public ModelAndView detail_gym(ModelAndView mav) {
-	      // 모든 상품 select 해오기
-	      List<GymVO> allGymList = service.getAllGymList(); //디비에서 데이터를 불러만오는 거라 map에 넣어서 보낼게 없음!!!!
-	            
-	      mav.addObject("allGymList", allGymList);
+	   public ModelAndView detail_gym(ModelAndView mav, HttpServletRequest request) {
+	    
+		String gymseq = request.getParameter("gymseq");
+		
+		
+		// 모든 상품 select 해오기
+		  GymVO gym = service.getGym(gymseq); //디비에서 데이터를 불러만오는 거라 map에 넣어서 보낼게 없음!!!!
+	      
+		  List<Map<String, String>> gymImgList = service.getGymImg(gymseq);
+		  
+		  
+	      mav.addObject("gym", gym);
+	      mav.addObject("gymImgList", gymImgList);
 	            
 	      mav.setViewName("/gym/detail_gym.tiles2");
 	      return mav;
@@ -72,14 +80,13 @@ public class ControllerHS {
 	      
 	      // 모든 상품 select 해오기
 	      List<GymVO> allGymList = service.getAllGymList(); //디비에서 데이터를 불러만오는 거라 map에 넣어서 보낼게 없음!!!!
-	            
+	      
 	      mav.addObject("allGymList", allGymList);
 	            
 	      mav.setViewName("/gym/rental_gym.tiles2");
 	         return mav;
 	          //  /WEB-INF/views/tiles1/opendata/korea_tour_api.jsp 페이지를 만들어야 한다.
 	    
-	   
 	   
 	   }  
 

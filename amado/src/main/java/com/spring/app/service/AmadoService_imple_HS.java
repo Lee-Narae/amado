@@ -12,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.spring.app.common.AES256;
 import com.spring.app.common.FileManager;
 import com.spring.app.domain.AnswerVO;
-import com.spring.app.domain.FleamarketCommentReVO;
-import com.spring.app.domain.FleamarketCommentVO;
 import com.spring.app.domain.GymVO;
 import com.spring.app.domain.PhotoVO;
 import com.spring.app.domain.QuestionVO;
@@ -31,7 +29,8 @@ public class AmadoService_imple_HS implements AmadoService_HS {
     @Autowired
     private AES256 aES256;
 	
-	
+  
+    
 	
 	
 	// ===#186. 첨부파일 삭제를 위한것 ==
@@ -66,9 +65,17 @@ public class AmadoService_imple_HS implements AmadoService_HS {
 
 	@Override
 	public List<GymVO> getAllGymList() {
+
 		 List<GymVO> allGymList = dao.getAllGymList();
-		return allGymList;
+			return allGymList;
 	}
+
+
+
+
+
+
+
 
 
 	
@@ -205,7 +212,38 @@ public class AmadoService_imple_HS implements AmadoService_HS {
 			List<GymVO> GymAddList = dao.getGymAdd();
 			return GymAddList;
 		}
+
+
+
+
+
+		@Override
+		public GymVO getGym(String gymseq) {
 		
+			GymVO GetGym =dao.getGym(gymseq);
+			return GetGym;
+		}
+
+
+
+
+
+		@Override
+		public List<Map<String, String>> getGymImg(String gymseq) {
+			 List<Map<String, String>> gymImgList= dao.getGymImg(gymseq);
+			 return gymImgList;
+		}
+
+
+
+
+
+
+
+
+
+	
+		 
 
 
 

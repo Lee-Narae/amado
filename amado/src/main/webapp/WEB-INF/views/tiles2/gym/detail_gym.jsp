@@ -1306,37 +1306,25 @@ function goAddWrite_reply(gymquestionseq){
 <hr>
 
 
+
 <div class="container mt-5">
   <div class="row">
     <div class="col-lg-8">
       <!-- 큰 사진 부분 -->
       <a href="#" data-toggle="modal" data-target="#myModal">
-        <img src="<%=ctxPath%>/resources/images/체육관1.jpg" class="img-fluid" alt="큰 사진">
+        <img src="<%=ctxPath%>/resources/images/1/${gym.orgfilename}" class="img-fluid" alt="큰 사진">
       </a>
     </div>
     <div class="col-lg-4">
       <!-- 작은 사진 4개 부분 -->
       <div class="row">
+        <c:forEach items="${requestScope.gymImgList}" var="img">
         <div class="col-6 mb-3">
           <a href="#" data-toggle="modal" data-target="#myModal">
-            <img src="<%=ctxPath%>/resources/images/체육관1.jpg"  class="img-fluid" alt="작은 사진 1">
+            <img src="<%=ctxPath%>/resources/images/1/${img.orgfilename}" class="img-fluid" alt="작은 사진 1">
           </a>
         </div>
-        <div class="col-6 mb-3">
-          <a href="#" data-toggle="modal" data-target="#myModal">
-            <img src="<%=ctxPath%>/resources/images/체육관2.jpg"  class="img-fluid" alt="작은 사진 2">
-          </a>
-        </div>
-        <div class="col-6 mb-3">
-          <a href="#" data-toggle="modal" data-target="#myModal">
-            <img src="<%=ctxPath%>/resources/images/체육관3.jpg"  class="img-fluid" alt="작은 사진 3">
-          </a>
-        </div>
-        <div class="col-6 mb-3">
-          <a href="#" data-toggle="modal" data-target="#myModal">
-            <img src="<%=ctxPath%>/resources/images/체육관4.jpg"  class="img-fluid" alt="작은 사진 4">
-          </a>
-        </div>
+     </c:forEach>
       </div>
     </div>
   </div>
@@ -1364,7 +1352,7 @@ function goAddWrite_reply(gymquestionseq){
           </ol>
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <img class="d-block w-100" src="<%=ctxPath%>/resources/images/체육관3.jpg" alt="첫 번째 사진">
+              <img class="d-block w-100" src="<%=ctxPath%>/resources/images/${gym.orgfilename}" alt="첫 번째 사진">
             </div>
             <div class="carousel-item">
               <img class="d-block w-100" src="<%=ctxPath%>/resources/images/체육관2.jpg" alt="두 번째 사진">
@@ -1391,9 +1379,9 @@ function goAddWrite_reply(gymquestionseq){
   </div>
 </div>
 
-		
 <div class="container">
   <div class="row">
+   	
     <div class="col-md-6 pl-3 pr-3">
       <ul class="list-unstyled">
         <div> 📍${gym.address}</div>
@@ -1403,16 +1391,16 @@ function goAddWrite_reply(gymquestionseq){
         <li style="color: #bfbfbf; ">👀 조회수  |  🕓 올린시간</li>
         <br>
         <li>
-          <span style="font-size: 14px; color: #8c8c8c;" >거래방법</span>
-          <span style="font-size: 14px; margin-left: 4%; font-family: 'Volt220', sans-serif; font-weight: 700; ">직거래</span>
+          <span style="font-size: 14px; color: #8c8c8c;" >담장자 아이디</span>
+          <span style="font-size: 14px; margin-left: 4%; font-family: 'Volt220', sans-serif; font-weight: 700; ">${gym.fk_userid}</span>
         </li>
         <li>
-          <span style="font-size: 14px; color: #8c8c8c;" >직거래 지역</span>
-          <span style="font-size: 14px; margin-left: 4%; font-family: 'Volt220', sans-serif; font-weight: 700; ">우리집 앞까지 오셔요</span>
+          <span style="font-size: 14px; color: #8c8c8c;" >인원</span>
+          <span style="font-size: 14px; margin-left: 4%; font-family: 'Volt220', sans-serif; font-weight: 700; ">${gym.membercount}</span>
         </li>
       </ul>
     </div>
-    
+
     <div class="col-md-6">
       <div class="info-box">
         <div class="payment-box">
@@ -1420,16 +1408,10 @@ function goAddWrite_reply(gymquestionseq){
             <div class="form-group">
               <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" id="checkbox-sports">
-                <label class="custom-control-label" for="checkbox-sports">생활체육 - 25,000원 / 1시간 [2시간부터]</label>
+                <label class="custom-control-label" for="checkbox-sports">생활체육 - ${gym.cost}원 / 1시간 [2시간부터]</label>
               </div>
             </div>
             <hr>
-            <div class="form-group">
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="checkbox-unlimited">
-                <label class="custom-control-label" for="checkbox-unlimited">하루무제한 - 100,000원 / 1시간 [1시간부터]</label>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -1466,20 +1448,8 @@ function goAddWrite_reply(gymquestionseq){
 	 	<h3 style="margin-top: 50px;">공간정보</h3>
 		<br>
 			<div>
-			★운동장 사이즈: 30m*15m (가로*세로) <br>
-
-			★가능 종목: 풋살 (5:5)<br>
-
-			★접근성: 강동구청역 2분 거리 (자차 기준)<br>
-
-			★주차: 건물 내 주차 시 출차할 때 2천원 정산 (2시간 30분 기준)<br>
-
-			★시설 및 기자재: 대기실, 실내 화장실, 공/조끼 대여 가능, 물/음료수 및 풋살화 개인 지참<br>
-
-			★출입 : 건물 내 1층 ′마포숯불갈비′ 옆문으로 출입.<br>
-			(엘리베이터 사용 불가)<br>
-			
-			★기타: 코로나 방역수칙 준수<br>
+			${gym.info}
+		
 			</div>
 	
 			<div style="width: 50%; margin: 5% auto;">
@@ -1498,11 +1468,7 @@ function goAddWrite_reply(gymquestionseq){
 	<%-- === 주의사항  보여주기 === --%>
 	<h3 style="margin-top: 50px;">주의사항</h3>
 	<br>
-- 대관 중 시설 훼손이 발생한 경우 손해액을 호스트에게 배상해야합니다.<br>
-- 시간 초과시, 추가 요금은 현장 결제합니다. (1시간 마다 발생)<br>
-- 사용자 인원수가 초과될 경우, 초과 결제를 요청합니다.<br>
-- 대여 시간 보다 적게 사용 하시더라도 환불되지 않습니다.
-
+	${gym.caution}
 	</div>
 	
 <br>
@@ -1518,7 +1484,7 @@ function goAddWrite_reply(gymquestionseq){
 	 	<div id="map" style="width:90%; height:600px;"></div>
 	 	<div id="latlngResult"></div> 
 	 	<br>
-	 	<div> 📍서울 송파구 토성로 58 옥상층</div>
+	 	<div> 📍${gym.address}</div>
  	</div>
  	
  	
