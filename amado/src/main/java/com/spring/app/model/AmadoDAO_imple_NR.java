@@ -1,5 +1,6 @@
 package com.spring.app.model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -539,6 +540,79 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 	@Override
 	public int memberQuit(String userid) {
 		int n = sqlsession.update("NR.memberQuit", userid);
+		return n;
+	}
+
+	// 마이페이지 - 가입 동호회 조회
+	@Override
+	public Map<String, String> getSoccer(String userid) {
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("userid", userid);
+		paramap.put("sportseq", "1");
+		Map<String, String> soccer = sqlsession.selectOne("NR.getClubMap", paramap);
+		return soccer;
+	}
+	@Override
+	public Map<String, String> getBaseball(String userid) {
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("userid", userid);
+		paramap.put("sportseq", "2");
+		Map<String, String> baseball = sqlsession.selectOne("NR.getClubMap", paramap);
+		return baseball;
+	}
+	@Override
+	public Map<String, String> getVolley(String userid) {
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("userid", userid);
+		paramap.put("sportseq", "3");
+		Map<String, String> volley = sqlsession.selectOne("NR.getClubMap", paramap);
+		return volley;
+	}
+	@Override
+	public Map<String, String> getBasket(String userid) {
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("userid", userid);
+		paramap.put("sportseq", "4");
+		Map<String, String> basket = sqlsession.selectOne("NR.getClubMap", paramap);
+		return basket;
+	}
+	@Override
+	public Map<String, String> getTennis(String userid) {
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("userid", userid);
+		paramap.put("sportseq", "6");
+		Map<String, String> tennis = sqlsession.selectOne("NR.getClubMap", paramap);
+		return tennis;
+	}
+	@Override
+	public Map<String, String> getBowling(String userid) {
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("userid", userid);
+		paramap.put("sportseq", "7");
+		Map<String, String> bowling = sqlsession.selectOne("NR.getClubMap", paramap);
+		return bowling;
+	}
+	@Override
+	public Map<String, String> getJokgu(String userid) {
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("userid", userid);
+		paramap.put("sportseq", "5");
+		Map<String, String> jokgu = sqlsession.selectOne("NR.getClubMap", paramap);
+		return jokgu;
+	}
+	@Override
+	public Map<String, String> getMinton(String userid) {
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("userid", userid);
+		paramap.put("sportseq", "8");
+		Map<String, String> minton = sqlsession.selectOne("NR.getClubMap", paramap);
+		return minton;
+	}
+
+	// 마이페이지 - 동호회 탈퇴
+	@Override
+	public int quitClub(Map<String, String> paramap) {
+		int n = sqlsession.delete("NR.quitClub", paramap);
 		return n;
 	}
 

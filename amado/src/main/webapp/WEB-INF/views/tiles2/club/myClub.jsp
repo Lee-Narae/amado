@@ -655,7 +655,7 @@ function goMatchResult(matchingseq){
 			  </table>
 			</div>
 		</div>
-		<button id="more" style="text-align: right; margin: 5% 5% 2% 0; color: #8a8a8a;" onclick="goBoard('${sessionScope.loginuser.userid}','${requestScope.club.clubseq}')">게시판 바로가기 ▶</button>
+		<div id="more" style="text-align: right; margin: 5% 5% 2% 0; color: #8a8a8a;" onclick="goBoard('${sessionScope.loginuser.userid}','${requestScope.club.clubseq}')">게시판 바로가기 ▶</div>
 	</div>
 </div>
 </c:if>
