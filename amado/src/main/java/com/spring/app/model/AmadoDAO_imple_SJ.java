@@ -12,6 +12,7 @@ import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.ClubmemberVO;
+import com.spring.app.domain.InquiryFileVO;
 import com.spring.app.domain.InquiryVO;
 import com.spring.app.domain.MemberVO;
 
@@ -289,6 +290,18 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 	public List<InquiryVO> getPaginginquiryList(Map<String, String> paraMap) {
 		List<InquiryVO> inquiryPagingList = sqlsession.selectList("SJ.getPaginginquiryList", paraMap);
 		return inquiryPagingList;
+	}
+
+	@Override
+	public InquiryVO inquiryGoDetail(String inquiryseq) {
+		InquiryVO inquiryvo = sqlsession.selectOne("SJ.inquiryGoDetail", inquiryseq);
+		return inquiryvo;
+	}
+
+	@Override
+	public List<InquiryFileVO> inquiryFileGoDetail(String inquiryseq) {
+		List<InquiryFileVO> inquiryfileList = sqlsession.selectList("SJ.inquiryFileGoDetail", inquiryseq);
+		return inquiryfileList;
 	}
 
 

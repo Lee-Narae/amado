@@ -1086,6 +1086,7 @@ from tbl_sport
              
         from tbl_inquiry
         where fk_userid = 'ksj1024sj' and status = 1
+        and searchtype_a = 2 and lower(content) like '%'||lower('')||'%' 
         order by rno desc
 )
 where rno between 1 and 10
@@ -1108,4 +1109,32 @@ where rno between 1 and 10
 				and fk_sportseq = 1
 		order by rno desc
 )
-where rno between 1 and 10            
+where rno between 1 and 10          
+
+
+
+
+	    SELECT inquiryseq
+	    FROM (
+	        SELECT INQUIRYSEQ, ORGFILENAME, FILENAME, FILESIZE
+	        FROM tbl_inquiryFile
+            where inquiryseq = 6
+	        ORDER BY inquiryseq DESC
+	    )
+	    WHERE ROWNUM = 1
+        
+        
+        
+        		WITH InquiryWithFiles AS (
+		  SELECT I.inquiryseq, I.content, I.fk_userid, I.email, I.phone, I.registerdate, I.searchtype_a, I.searchtype_b, I.status,
+		         F.orgfilename, F.filename, F.filesize,
+		         ROW_NUMBER() OVER (PARTITION BY I.inquiryseq ORDER BY F.filename) AS row_num
+		  FROM tbl_inquiryFile F
+		  JOIN tbl_inquiry I ON F.inquiryseq = I.inquiryseq
+		  WHERE I.fk_userid = 'ksj1024sj' AND I.status = 1
+		)
+		SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status,
+		       orgfilename, filename, filesize
+		FROM InquiryWithFiles
+		WHERE row_num = 1
+		ORDER BY inquiryseq DESC

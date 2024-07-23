@@ -268,7 +268,7 @@ div.fileDrop>div.fileList>span.fileSize {
         $("button#inquiryWrite").click(function(){
         	
         	
-        	if($("select#searchType_a").val() == 0 || $("select#searchType_b").val() == 0) {
+        	if($("select#searchtype_a").val() == 0 || $("select#searchtype_b").val() == 0) {
         		alert("문의유형을 선택해주세요.");
         		return;
         	}
@@ -397,6 +397,37 @@ div.fileDrop>div.fileList>span.fileSize {
 	
 	
 	
+    function updateSearchTypeB() {
+        var searchTypeA = document.getElementById("searchtype_a").value;
+        var searchTypeB = document.getElementById("searchtype_b");
+        var previousValue = searchTypeB.value;
+        searchTypeB.innerHTML = "";
+
+        var options = {
+            "0": [{"text": "선택해주세요", "value": "0"}],
+            "1": [{"text": "대관문의", "value": "1"}, {"text": "환불문의", "value": "2"}, {"text": "기타문의", "value": "3"}],
+            "2": [{"text": "시설문의", "value": "1"}, {"text": "예약문의", "value": "2"}, {"text": "기타문의", "value": "3"}],
+            "3": [{"text": "참가문의", "value": "1"}, {"text": "환불문의", "value": "2"}, {"text": "기타문의", "value": "3"}],
+            "4": [{"text": "일반문의", "value": "1"}, {"text": "환불문의", "value": "2"}, {"text": "기타문의", "value": "3"}]
+        };
+
+        options[searchTypeA].forEach(function(optionObject) {
+            var option = document.createElement("option");
+            option.text = optionObject.text;
+            option.value = optionObject.value;
+            if (option.value === previousValue) {
+                option.selected = true;
+            }
+            searchTypeB.add(option);
+        });
+
+        // Enable or disable searchTypeB based on searchTypeA value
+        if (searchTypeA === "0") {
+            searchTypeB.disabled = true;
+        } else {
+            searchTypeB.disabled = false;
+        }
+    }
 
 </script>
 
@@ -418,18 +449,15 @@ div.fileDrop>div.fileList>span.fileSize {
 		<form name="inquiryFrm" enctype="multipart/form-data">
 			<div class="row mt-5" style="height: 50px;">
 				<strong class="col-md-2 mt-3" style="text-align: center;">문의유형</strong>
-				<select class="col-md-3" id="searchType_a" name="searchType_a">
+				<select class="col-md-3" id="searchtype_a" name="searchtype_a" onchange="updateSearchTypeB()">
 					<option value="0">선택해주세요</option>
 					<option value="1">동호회</option>
 					<option value="2">체육관</option>
 					<option value="3">플리마켓</option>
 					<option value="4">기타</option>
 				</select> 
-				<select class="col-md-3 ml-4" id="searchType_b" name="searchType_b">
+				<select class="col-md-3 ml-4" id="searchtype_b" name="searchtype_b" disabled>
 					<option value="0">선택해주세요</option>
-					<option value="1">대관문의</option>
-					<option value="2">환불문의</option>
-					<option value="3">기타문의</option>
 				</select>
 				<div class="col-md-4"></div>
 			</div>

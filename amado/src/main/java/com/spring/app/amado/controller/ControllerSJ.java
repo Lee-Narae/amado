@@ -29,6 +29,7 @@ import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.ClubmemberVO;
+import com.spring.app.domain.InquiryFileVO;
 import com.spring.app.domain.InquiryVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.service.AmadoService_SJ;
@@ -1297,14 +1298,14 @@ public class ControllerSJ {
 	@PostMapping(value = "/community/inquiryEnd.do", produces = "text/plain;charset=UTF-8")
 	public String inquiryEnd(ModelAndView mav, HttpServletRequest request, MultipartHttpServletRequest mrequest) {
 		
-		String searchType_a = request.getParameter("searchType_a");
-		String searchType_b = request.getParameter("searchType_b");
+		String searchtype_a = request.getParameter("searchtype_a");
+		String searchtype_b = request.getParameter("searchtype_b");
 		String content = request.getParameter("content");
 		String email = request.getParameter("email");
 		String phone = request.getParameter("phone");
 		String fk_userid = request.getParameter("fk_userid");
-		System.out.println("확인용~~ searchType_a : " + searchType_a);
-		System.out.println("확인용~~ searchType_b : " + searchType_b);
+		System.out.println("확인용~~ searchType_a : " + searchtype_a);
+		System.out.println("확인용~~ searchType_b : " + searchtype_b);
 		System.out.println("확인용~~ content : " + content);
 		System.out.println("확인용~~ email : " + email);
 		System.out.println("확인용~~ phone : " + phone);
@@ -1328,8 +1329,8 @@ public class ControllerSJ {
 
 		JSONObject jsonObj = new JSONObject();
 		Map<String, Object> paraMap = new HashMap<>();
-		paraMap.put("searchType_a", searchType_a);
-		paraMap.put("searchType_b", searchType_b);
+		paraMap.put("searchtype_a", searchtype_a);
+		paraMap.put("searchtype_b", searchtype_b);
 		paraMap.put("content", content);
 		paraMap.put("email", email);
 		paraMap.put("phone", phone);
@@ -1453,19 +1454,13 @@ public class ControllerSJ {
 		
 		String fk_userid = "";
 		
-		if(request.getParameter("userid") == null) {
-			HttpSession session = request.getSession();
-			MemberVO loginuser = (MemberVO) session.getAttribute("loginuser"); 
-			
-			fk_userid = loginuser.getUserid();
-		}
-		else {
-			fk_userid = request.getParameter("userid");
-		}
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser"); 
+		
+		fk_userid = loginuser.getUserid();
+		request.setAttribute("fk_userid", fk_userid);
 		
 		
-
-			
 		List<InquiryVO> inquiryPagingList = null;
 		
 		if(fk_userid != null) {
@@ -1480,11 +1475,7 @@ public class ControllerSJ {
 			String searchWord = request.getParameter("searchWord");
 			String str_currentShowPageNo = request.getParameter("currentShowPageNo"); 
 			
-			System.out.println("searchtype_a : " + searchtype_a);
-			System.out.println("searchtype_b : " + searchtype_b);
-			System.out.println("searchWord : " + searchWord);
-			
-		 // System.out.println("~~ 확인용 str_currentShowPageNo : " + str_currentShowPageNo);
+		  System.out.println("~~ 확인용 str_currentShowPageNo : " + str_currentShowPageNo);
 			
 			if(searchtype_a == null) {
 				searchtype_a = "0";
@@ -1518,6 +1509,8 @@ public class ControllerSJ {
 			int totalPage = 0;         // 총 페이지수(웹브라우저상에서 보여줄 총 페이지 개수, 페이지바) 			
 			
 			totalCount = service.getTotalInquiryCount(paraMap);
+			
+			System.out.println("totalCount" + totalCount);
 			
 			totalPage = (int) Math.ceil((double)totalCount/sizePerPage); 
 			
@@ -1559,7 +1552,7 @@ public class ControllerSJ {
 				request.setAttribute("paraMap", paraMap);
 			}
 			
-			int blockSize = 3;
+			int blockSize = 10;
 			// blockSize 는 1개 블럭(토막)당 보여지는 페이지번호의 개수이다.
 			
 			int loop = 1;
@@ -1567,7 +1560,7 @@ public class ControllerSJ {
 			int pageNo = ((currentShowPageNo - 1)/blockSize) * blockSize + 1;
 			
 			String pageBar = "<ul style='list-style:none;'>";
-			String url = "/community/inquiryList.do";
+			String url = "/amado/community/inquiryList.do";
 			
 			// === [맨처음][이전] 만들기 === //
 			if(pageNo != 1) {
@@ -1611,6 +1604,52 @@ public class ControllerSJ {
 			
 		}
 		return "/community/inquiryList.tiles2";
+	}
+	
+	@PostMapping(value = "/community/inquiryGoDetail.do")
+	public ModelAndView inquiryGoDetail(ModelAndView mav, HttpServletRequest request) {
+		String inquiryseq = "";
+		String goBackURL = "";
+		String searchtype_a = "";
+		String searchtype_b = "";
+		String searchWord = "";
+
+		
+		inquiryseq = request.getParameter("inquiryseq");
+		goBackURL = request.getParameter("goBackURL");
+		searchtype_a = request.getParameter("searchtype_a");
+		searchtype_b = request.getParameter("searchtype_b");
+		searchWord = request.getParameter("searchWord");
+		
+		System.out.println("inquiryseq : " + inquiryseq);
+		System.out.println("goBackURL : " + goBackURL);
+		System.out.println("searchtype_a : " + searchtype_a);
+		System.out.println("searchtype_b : " + searchtype_b);
+		System.out.println("searchWord : " + searchWord);
+		
+		mav.setViewName("community/inquiryList.tiles2");
+		
+		// 1대1 문의 상세조회 하나 가져오기
+		InquiryVO inquiryvo = service.inquiryGoDetail(inquiryseq);
+		
+		// 1대1 문의 상세조회 파일들 가져오기
+		List<InquiryFileVO> inquiryfileList = service.inquiryFileGoDetail(inquiryseq);
+		
+		mav.addObject("inquiryvo", inquiryvo); // 1대1문의 상세정보
+		mav.addObject("inquiryfileList", inquiryfileList); // 1대1문의 상세정보 파일
+		// 답변(운영자가) 
+		
+		for(InquiryFileVO inquiryFileVO : inquiryfileList) {
+			System.out.println("이름 : " + inquiryFileVO.getFilename());
+			System.out.println("사이즈 : " + inquiryFileVO.getFilesize());
+			System.out.println("진짜이름 : " + inquiryFileVO.getOrgfilename());
+			
+		}
+		
+		mav.setViewName("community/inquiryGoDetail.tiles2");
+		
+		return mav;
+		
 	}
 	
 	
