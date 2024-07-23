@@ -190,9 +190,17 @@ public class AmadoService_imple_JH implements AmadoService_JH {
 
 
 	@Override
-	public List<GymresVO> gymPayDate(String date) {
-		List<GymresVO> gymresList = dao.gymPayDate(date);
-		return gymresList;
+	public List<Map<String, String>> getgymPayDate(Map<String, String> paraMap) {
+		List<Map<String, String>> gymDateList = dao.getgymPayDate(paraMap);
+		return gymDateList;
+	}
+
+
+
+	@Override
+	public String getCost(String gymseq) {
+		String cost = dao.getCost(gymseq);
+		return cost;
 	}
 
 }

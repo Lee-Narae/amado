@@ -891,13 +891,14 @@ public class ControllerJY {
 
 	// 게시글 자세히보기
 	@PostMapping("/club/clubboardDetail.do")
-	public ModelAndView noticeDetail(ModelAndView mav, HttpServletRequest request) {
+	public ModelAndView clubboardDetail(ModelAndView mav, HttpServletRequest request) {
 		
 		String clubboardseq = request.getParameter("clubboardseq");
 		String goBackURL = request.getParameter("goBackURL");
 		String searchType = request.getParameter("searchType");
 		String searchWord = request.getParameter("searchWord");
 		
+		//System.out.println(clubboardseq +goBackURL +searchType +searchWord);
 		Map<String, String> paramap = new HashMap<String, String>();
 		paramap.put("clubboardseq", clubboardseq);
 		paramap.put("goBackURL", goBackURL);
@@ -908,17 +909,18 @@ public class ControllerJY {
 		List<Map<String,String>> commentList = service.getCBoardComment(clubboardseq);
 		
 		// 댓글 수
-		//String commentCount = service.getNoticeCommentCount(clubboardseq);
+		String commentCount = service.getCBoardCommentCount(clubboardseq);
 		
 		if(commentList.size() > 0) {
 			mav.addObject("commentList", commentList);
-			//mav.addObject("commentCount", commentCount);
+			mav.addObject("commentCount", commentCount);
 		}
 		
 		
 		
 		// 게시글
 		ClubBoardVO cboard = service.getClubboardDetail(paramap);
+		//System.out.println(cboard.getFk_userid());
 		
 		if(cboard == null) {
 			String message = "존재하지 않는 게시글입니다.";
@@ -931,7 +933,7 @@ public class ControllerJY {
 		}
 		
 		// 조회수 (로그인 여부 상관 없이, 중복 상관 없이 무조건 1 증가)
-		service.updateCboardViewcount(clubboardseq);
+		//service.updateCboardViewcount(clubboardseq);
 		
 		
 		mav.addObject("cboard", cboard);
@@ -944,6 +946,63 @@ public class ControllerJY {
 		return mav;
 	}
 
+	
+	// 동호회게시판 댓글 달기
+	@ResponseBody
+	@PostMapping(value="/club/regComment.do", produces="text/plain;charset=UTF-8")
+	public String requiredLogin_regComment(HttpServletRequest request, HttpServletResponse response) {
+		
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		
+		String comment_text = request.getParameter("comment_text");
+		String clubboardseq = request.getParameter("clubboardseq");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("comment_text", comment_text);
+		paramap.put("clubboardseq", clubboardseq);
+		paramap.put("fk_userid", loginuser.getUserid());
+		
+		int n = service.insertCBoardComment(paramap);
+		
+		JSONArray jsonArr = new JSONArray();
+
+		if(n == 1) {
+			
+			// tbl_notice commentcount 컬럼 1 올리기
+			service.updateCBoardCommentcount(clubboardseq);
+			
+			List<Map<String,String>> commentList = service.getCBoardComment(clubboardseq);
+			
+			for(Map<String,String> commentmap : commentList) {
+				JSONObject jsonObj = new JSONObject();
+				   
+				jsonObj.put("clubboardcommentseq", commentmap.get("clubboardcommentseq"));
+				jsonObj.put("clubboardseq", commentmap.get("clubboardseq"));
+				jsonObj.put("comment_text", commentmap.get("comment_text"));
+				jsonObj.put("registerdate", commentmap.get("registerdate"));
+				jsonObj.put("fk_userid", commentmap.get("fk_userid"));
+				jsonObj.put("memberimg", commentmap.get("memberimg"));
+				
+				jsonArr.put(jsonObj);
+			}
+			
+		}
+		
+		
+		return jsonArr.toString();
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	// ========== 캘린더 ==========

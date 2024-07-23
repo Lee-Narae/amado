@@ -142,9 +142,15 @@ public class AmadoDAO_imple_JH implements AmadoDAO_JH {
 	}
 
 	@Override
-	public List<GymresVO> gymPayDate(String reservation_date) {
-		List<GymresVO> gymresList = sqlsession.selectList("JH.gymPayDate", reservation_date);
-		return gymresList;
+	public List<Map<String, String>> getgymPayDate(Map<String, String> paraMap) {
+		List<Map<String, String>> gymDateList = sqlsession.selectList("JH.getgymPayDate", paraMap);
+		return gymDateList;
+	}
+
+	@Override
+	public String getCost(String gymseq) {
+		String cost = sqlsession.selectOne("JH.getCost", gymseq);
+		return cost;
 	}
 
 

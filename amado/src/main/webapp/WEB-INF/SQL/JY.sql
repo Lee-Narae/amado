@@ -334,8 +334,49 @@ from tbl_member
 where name = '이순신';
 
 ------------- >>>>>>>> 일정관리(풀캘린더) 끝 <<<<<<<< -------------
+select *
+from tbl_clubboard;
+
+select *
+from tbl_club A
+join tbl_sport B
+on A.fk_sportseq = B.sportseq;
+
+select *
+from tbl_clubboardcomment 
+
+
+-- 댓글 insert
+insert into tbl_clubboardcomment(clubboardcommentseq, clubboardseq, comment_text, registerdate , fk_userid)
+values(seq_clubboardcomment.nextval, '4', '게시판 ㅎㅎㅎ', default, 'leejy');
+insert into tbl_clubboardcomment(clubboardcommentseq, clubboardseq, comment_text, registerdate, fk_userid)
+values(seq_clubboardcomment.nextval, '5', '(축구)이나래와친구들 동호회게시판의 1칼국슈게시물에 댓글 달았다', sysdate, 'leejy');
+
+ALTER TABLE tbl_clubboardcomment
+ADD status NUMBER default 1;
 
 
 select *
-from tbl_clubmember;
+from tbl_noticecomment;
 
+desc tbl_clubboard;
+
+
+select previousseq, previoustitle, clubboardseq, clubseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status, orgfilename, filename, filesize, nextseq, nexttitle
+from 
+(
+    select 
+        lag(clubboardseq, 1) over(order by clubboardseq desc) previousseq,
+        lag(title, 1) over(order by clubboardseq desc) previoustitle,
+        clubboardseq, clubseq, title, content, registerdate, viewcount, orgfilename, filename, filesize,
+        lead(clubboardseq, 1) over(order by clubboardseq desc) nextseq,
+        lead(title, 1) over(order by clubboardseq desc) nexttitle,
+        fk_userid, password, commentcount, status
+    from tbl_clubboard
+    where status = 1 and clubseq = 2
+) A
+where A.clubboardseq = 4 ;
+
+
+select *
+from tbl_clubboardcomment;

@@ -91,17 +91,22 @@
 /*지도 끝*/
 
 .btn-disabled {
-            background-color: #d3d3d3; /* 회색 배경색 */
-            color: #a9a9a9; /* 연한 회색 텍스트 */
-            border-color: #a9a9a9; /* 연한 회색 테두리 */
-            cursor: not-allowed; /* 마우스 커서를 금지 아이콘으로 변경 */
-        }
+    background-color: #d3d3d3; /* 회색 배경색 */
+    color: #a9a9a9; /* 연한 회색 텍스트 */
+    border-color: #a9a9a9; /* 연한 회색 테두리 */
+    cursor: not-allowed; /* 마우스 커서를 금지 아이콘으로 변경 */
+}
 
-        .btn-disabled:disabled {
-            opacity: 1; /* 비활성화된 버튼의 불투명도 조정 */
-        }
+.btn-disabled:disabled {
+    opacity: 1; /* 비활성화된 버튼의 불투명도 조정 */
+}
+.btn-custom-disabled {
+    background-color: gray;
+    color: white;
+    border: 1px solid gray;
+}
         
-    </style>
+</style>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3e40c6a4e83259bd26e2771ad2db4e63"></script>
     <script>
     
@@ -220,6 +225,9 @@
     	    // for문에서 클로저(closure => 함수 내에서 함수를 정의하고 사용하도록 만든것)를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
     	    kakao.maps.event.addListener(marker, 'click', makeOverListener(mapobj, marker, infowindow, infowindowArr)); 
     		
+    		
+    		
+    		
     	}// end of for----------------
     	// ============ 지도에 매장위치 마커 보여주기 끝 ============ //
 			
@@ -239,7 +247,7 @@
 			   	/////////////////////////////////////////////////////////
                 // ₩, 원, , 문자를 제거합니다.
                 var numericPrice = priceText.replace(/[₩,원]/g, '');
-                const time = $("button.btn-custom.selected").text()+",";
+                const time = $("button.btn-custom.selected").text();
                 const reservation_date = $("#date").val();
                 const fk_gymseq = $("input.gymseq").val();
                 const fk_userid = $("input.fk_userid").val();
@@ -281,9 +289,103 @@
 		  
 		  
 		  
-		$(document).on("change", "input[id='date']", function(e){
-		    alert("날짜가 바뀜");
-		});
+		  $(document).on("change", "input[id='date']", function(e){
+			     //alert("날짜가 바뀜");
+			     const reservation_date = $("#date").val();
+			     const gymseq = $("input.gymseq").val();
+			     //alert(reservation_date);
+			     
+			      $.ajax({
+			    		url:"<%= ctxPath%>/gym/gymPayDate.do",
+			    		data:{"reservation_date":reservation_date,
+			    			  "gymseq":gymseq},
+			    		dataType:"json",
+			    		success:function(json){
+			    			
+			    			v_html ="";
+			    			
+			    			if(json.length == 1){
+		    					//alert("초기화해줘");
+		    					totalPrice = 0;
+		    					//console.log(JSON.stringify(json));
+				    		    //console.log(json.length);
+				    			// JSON.stringify(json) 은 자바스크립트의 객체(배열)인 json 을 string 타입으로 변경시켜주는 것이다.
+				    			
+			    			    v_html += "<div class='section'>";
+				    			v_html += "    <label for='time'>시간 선택:</label>";
+				    			v_html += "    <div class='btn-container'>";
+				    			for (let i = 0; i < 24; i++) {
+			    			        let time = ("0" + i).slice(-2) + ":00";
+			    			        v_html += "<button class='btn btn-outline-primary btn-custom' data-cost='" + json[0].cost + "' onclick='toggleSelection(this)'>" + time + "</button>";
+			    			    }
+						        v_html += "   </div>";
+						            
+						        v_html += "</div>";
+						
+						        <!-- 총 가격 -->
+						        v_html += "<div class='section'>";
+						        v_html += "    <span class='price' id='totalPrice'>₩0원</span>";
+						        v_html += "</div>";
+						        
+				    			$("div#time").html(v_html);
+		    				}
+			    			
+			    			
+			    			if(json.length > 1){
+				    			$.each(json, function(index, item) {
+
+				    				if(index == 0){
+				    					
+				    					totalPrice = 0;
+						    		    //console.log(JSON.stringify(json));
+						    		    //console.log(json.length);
+						    			// JSON.stringify(json) 은 자바스크립트의 객체(배열)인 json 을 string 타입으로 변경시켜주는 것이다.
+						    			
+					    			    v_html += "<div class='section'>";
+						    			v_html += "    <label for='time'>시간 선택:</label>";
+						    			v_html += "    <div class='btn-container'>";
+						    			for (let i = 0; i < 24; i++) {
+						                    let time = ("0" + i).slice(-2) + ":00";
+						                    let isDisabled = false;
+						                    let cost = json[0].cost;
+
+						                    // 해당 시간에 해당하는 json 항목을 확인하여 버튼을 회색으로 만들지 결정
+						                    $.each(json, function(index, item) {
+						                        if (time == item.time) {
+						                            isDisabled = true;
+						                            cost = item.cost;
+						                            return false; // break out of the each loop
+						                        }
+						                    });
+
+						                    if (isDisabled) {
+						                    	v_html += "<button class='btn btn-custom btn-custom-disabled' data-cost='" + cost + "' onclick='toggleSelection(this)' disabled>" + time + "</button>";
+						                    } else {
+						                        v_html += "<button class='btn btn-outline-primary btn-custom' data-cost='" + cost + "' onclick='toggleSelection(this)'>" + time + "</button>";
+						                    }
+						                }
+								        v_html += "   </div>";
+								            
+								        v_html += "</div>";
+								
+								        <!-- 총 가격 -->
+								        v_html += "<div class='section'>";
+								        v_html += "    <span class='price' id='totalPrice'>₩0원</span>";
+								        v_html += "</div>";
+								        
+						    			$("div#time").html(v_html);
+				    				}
+				    			});
+			    			}
+			    			
+			    			
+			    		},
+			    		error: function(request, status, error){
+			    			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			    	    }
+			    	});// end of $.ajax({})---------------------- 
+			    	
+		   });
 		  
 		  
 		  
@@ -325,6 +427,7 @@
       	    	//alert(infowindow.getContent())
       	    	let gymseq = infowindow.getContent();
       	    	
+      	    	
       	    	$.ajax({
 		    		url:"<%= ctxPath%>/gym/gymPay_dtail.do",
 		    		async:false, // !!!!! 지도는 비동기 통신이 아닌 동기 통신으로 해야 한다.!!!!!!
@@ -344,12 +447,15 @@
 		    			v_html += json.gymname;
 		    			v_html += "</div>";
 				        
+		    			
+		    			
 		    			v_html += "<div class='section'>";
 		    			v_html += "    <label for='date'>날짜 선택:</label>";
 		    			v_html += "    <input type='date' id='date' class='form-control'>";
 		    			v_html += "</div>";
 				
-				        
+				        v_html += "<div id='time'>"
+		    			
 		    			v_html += "<div class='section'>";
 		    			v_html += "    <label for='time'>시간 선택:</label>";
 		    			v_html += "    <div class='btn-container'>";
@@ -365,6 +471,8 @@
 				        v_html += "<div class='section'>";
 				        v_html += "    <span class='price' id='totalPrice'>₩0원</span>";
 				        v_html += "</div>";
+				        
+				        v_html += "</div>";
 						
 				       
 		    			$("input.gymseq").val(json.gymseq);
@@ -372,6 +480,8 @@
 		    			
 		    			let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?gymseq=" + gymseq;
 		                window.history.pushState({ path: newUrl }, '', newUrl);
+		                
+		                
 		    			
 		    		},
 		    		error: function(request, status, error){
@@ -404,29 +514,31 @@
 		            <input type="date" id="date" class="form-control">
 		        </div>
 		
-		        <!-- 시간 선택 버튼들 -->
-		        <div class="section">
-				    <label for="time">시간 선택:</label>
-				    <div class="btn-container">
-				        <c:forEach var="i" begin="0" end="23">
-				            <c:choose>
-				                <c:when test="${i lt 10}">
-				                    <c:set var="time" value="0${i}:00" />
-				                </c:when>
-				                <c:otherwise>
-				                    <c:set var="time" value="${i}:00" />
-				                </c:otherwise>
-				            </c:choose>
-				            <button class='btn btn-outline-primary btn-custom' data-cost='${requestScope.gymvo.cost}' onclick='toggleSelection(this)'>
-				                ${time}
-				            </button>
-				        </c:forEach>
-				    </div>
-				</div>
-		
-		        <!-- 총 가격 -->
-		        <div class="section">
-		            <span class="price" id="totalPrice">₩0원</span>
+				<div id='time'>
+			        <!-- 시간 선택 버튼들 -->
+			        <div class="section" id="time">
+					    <label for="time">시간 선택:</label>
+					    <div class="btn-container">
+					        <c:forEach var="i" begin="0" end="23">
+					            <c:choose>
+					                <c:when test="${i lt 10}">
+					                    <c:set var="time" value="0${i}:00" />
+					                </c:when>
+					                <c:otherwise>
+					                    <c:set var="time" value="${i}:00" />
+					                </c:otherwise>
+					            </c:choose>
+					            <button class='btn btn-outline-primary btn-custom' data-cost='${requestScope.gymvo.cost}' onclick='toggleSelection(this)'>
+					                ${time}
+					            </button>
+					        </c:forEach>
+					    </div>
+					</div>
+			
+			        <!-- 총 가격 -->
+			        <div class="section">
+			            <span class="price" id="totalPrice">₩0원</span>
+			        </div>
 		        </div>
 			</div>
 	        <!-- 예약하기 버튼 -->
