@@ -304,5 +304,11 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 		return inquiryfileList;
 	}
 
+	@Override
+	public InquiryFileVO getView_inquiry(Map<String, String> paraMap) {
+		InquiryFileVO inquiryfilevo = sqlsession.selectOne("SJ.getView_inquiry", paraMap);
+		return inquiryfilevo;
+	}
+
 
 }

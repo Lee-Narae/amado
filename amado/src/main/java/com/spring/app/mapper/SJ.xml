@@ -633,5 +633,13 @@ where rno between #{startRno} and #{endRno}
 	        ORDER BY inquiryseq DESC    
     </select>
     
+    
+    <!-- 1대1문의 첨부파일 다운로드 -->
+    <select id="getView_inquiry" parameterType="HashMap" resultType="InquiryFileVO">
+   	        SELECT inquiryseq, orgfilename, filename, filesize
+	        FROM tbl_inquiryFile
+            where inquiryseq = #{inquiryseq} and orgfilename = #{orgfilename}
+    </select>
+    
 	
 </mapper>

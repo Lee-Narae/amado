@@ -448,6 +448,13 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		return inquiryfileList;
 	}
 
+	
+	@Override
+	public InquiryFileVO getView_inquiry(Map<String, String> paraMap) {
+		InquiryFileVO inquiryfilevo = dao.getView_inquiry(paraMap);
+		return inquiryfilevo;
+	}
+
 
 
 }

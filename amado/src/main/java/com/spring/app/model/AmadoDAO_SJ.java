@@ -127,6 +127,8 @@ public interface AmadoDAO_SJ {
 
 	List<InquiryFileVO> inquiryFileGoDetail(String inquiryseq);
 
+	InquiryFileVO getView_inquiry(Map<String, String> paraMap);
+
 	
 
 }

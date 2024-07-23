@@ -37,7 +37,7 @@
 				<div class="col-md-10" style="text-align: left; width: 70%; margin-top: 0.5%;" align="left">
 					<c:forEach var="inquiryFileVO" items="${requestScope.inquiryfileList}">
 					<div class="row mt-1">
-						<span class="col-md-4">파일명 : <span style="font-weight: bolder; cursor: pointer;">${inquiryFileVO.orgfilename}</span>&nbsp;&nbsp;&nbsp;</span><span class="col-md-4">파일크기 : ${inquiryFileVO.filesize}byte<br></span>
+						<span class="col-md-4">파일명 : <a style="font-weight: bolder; cursor: pointer;" href="<%= ctxPath%>/inquirydownload.do?inquiryseq=${requestScope.inquiryvo.inquiryseq}&orgfilename=${inquiryFileVO.orgfilename}">${inquiryFileVO.orgfilename}</a>&nbsp;&nbsp;&nbsp;</span><span class="col-md-4">파일크기 : ${inquiryFileVO.filesize}byte<br></span>
 					</div>
 					</c:forEach>
 				</div>
