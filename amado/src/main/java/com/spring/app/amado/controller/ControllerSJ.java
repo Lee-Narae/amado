@@ -1701,8 +1701,10 @@ public class ControllerSJ {
 		return "/community/inquiryList.tiles2";
 	}
 	
+	
+	
 	@PostMapping(value = "/community/inquiryGoDetail.do")
-	public ModelAndView inquiryGoDetail(ModelAndView mav, HttpServletRequest request) {
+	public ModelAndView requiredLogin_inquiryGoDetail(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
 		String inquiryseq = "";
 		String goBackURL = "";
 		String searchtype_a = "";
@@ -1716,11 +1718,13 @@ public class ControllerSJ {
 		searchtype_b = request.getParameter("searchtype_b");
 		searchWord = request.getParameter("searchWord");
 		
-		System.out.println("inquiryseq : " + inquiryseq);
-		System.out.println("goBackURL : " + goBackURL);
-		System.out.println("searchtype_a : " + searchtype_a);
-		System.out.println("searchtype_b : " + searchtype_b);
-		System.out.println("searchWord : " + searchWord);
+		/*
+		 * System.out.println("inquiryseq : " + inquiryseq);
+		 * System.out.println("goBackURL : " + goBackURL);
+		 * System.out.println("searchtype_a : " + searchtype_a);
+		 * System.out.println("searchtype_b : " + searchtype_b);
+		 * System.out.println("searchWord : " + searchWord);
+		 */
 		
 		mav.setViewName("community/inquiryList.tiles2");
 		
