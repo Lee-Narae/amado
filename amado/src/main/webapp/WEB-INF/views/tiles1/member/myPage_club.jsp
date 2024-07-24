@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <% String ctxPath = request.getContextPath(); %> 
 
@@ -155,6 +156,42 @@
 	.back div {
 	margin-bottom: 1%;
 	}
+	
+	.clubimg {
+	width: 55%;
+	border: solid thin #6699ff;
+	border-radius: 100%;
+	height: 200px;
+	overflow: hidden;
+	text-align: center;
+	}
+	
+	#profile > div > div {
+	margin-bottom: 2%;
+	}
+	
+	#clubTable td {
+	height: 40px;
+	}
+	
+	#clubTable > tbody > tr > td:nth-child(1) {
+	font-weight: bold;
+	}
+	
+	#clubTable > tbody > tr > td:nth-child(1) > span {
+	background-color: #6699ff;
+	display: inline-block;
+	height: 30px;
+	width: 70%;
+	align-content: center;
+	border-radius: 15px;
+	color: white;
+	}
+	
+	#prev, #next {
+	cursor: pointer;
+	}
+	
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -219,6 +256,47 @@ $(document).ready(function(){
 		$(e.target).parent().parent().prev().children().fadeIn();
 	});	
 	
+	
+	let current_index = 0;      // 현재 인덱스 번호
+    let positionValue = 0;      // div#images 위치값
+    const image_width = 450;
+    
+	if(current_index == 0) {  // 첫 이미지인 경우
+        $("#prev").css({"opacity": "0.4", "cursor": "context-menu"});
+    }
+	
+    // 이전버튼 클릭
+    $("div#prev").click(function(){
+    	$("#next").css({"opacity": "", "cursor": "pointer"});
+    	
+    	if(current_index > 0){  // 첫 이미지가 아닌 경우
+            positionValue += image_width;
+            // $("div#profile").style.transform = `translateX(\${positionValue}px)`;
+            $("div#profile").css({"transform": `translateX(\${positionValue}px)`});
+            current_index--;
+        }
+
+        else if(current_index == 0) {  // 첫 이미지인 경우
+            $("#prev").css({"opacity": "0.4", "cursor": "context-menu"});
+        }
+    });
+    
+ // 다음버튼 클릭
+    $("div#next").click(function(){
+        $("#prev").css({"opacity": "", "cursor": "pointer"});
+        
+    	if(current_index < ${requestScope.clubList.size()-1}){  // 첫 이미지가 아닌 경우
+            positionValue -= image_width;
+            $("div#profile").css({"transform": `translateX(\${positionValue}px)`});
+            current_index++;
+        }
+
+    	else if(current_index == ${requestScope.clubList.size()-1}){
+    		$("#next").css({"opacity": "0.4", "cursor": "context-menu"});
+    	}
+    });
+    
+    
 });
 
 
@@ -273,6 +351,29 @@ function quitClub(clubseq, userid){
 		  
 		  }
 		});
+}
+
+function editClub(clubseq){
+
+	const cityLocal = $(event.target).parent().parent().find(".area").html();
+	const orgCity = cityLocal.substring(0, cityLocal.indexOf('&nbsp;'));
+	const orgLocal = cityLocal.substring(cityLocal.indexOf('&nbsp;')+6, cityLocal.length);
+
+	const orgClubgym = $(event.target).parent().parent().find(".clubgym").text();
+	const orgClubtel = $(event.target).parent().parent().find(".clubtel").text();
+	
+	const clubpaycomma = $(event.target).parent().parent().find(".clubpay").text().substring(0, $(event.target).parent().parent().find(".clubpay").text().length-1);
+	const commaIdx = clubpaycomma.indexOf(',');
+
+	const orgClubpay = clubpaycomma.substring(0, commaIdx)+clubpaycomma.substring(commaIdx+1, clubpaycomma.length);
+	
+	const orgMbcnt = $(event.target).parent().parent().find(".mbcnt").text().substring(0, $(event.target).parent().parent().find(".mbcnt").text().length-1);
+	
+	$(event.target).parent().parent().find(".area").html(`<input type="text" name="city" value="\${orgCity}" style="width: 35%;"/>&nbsp;<input type="text" name="local" value="\${orgLocal}" style="width: 35%;"/>`);
+	$(event.target).parent().parent().find(".clubgym").html(`<input type="text" name="clubgym" value="\${orgClubgym}" style="width: 60%;"/>`);
+	$(event.target).parent().parent().find(".clubtel").html(`<input type="text" name="clubtel" value="\${orgClubtel}" style="width: 60%;"/>`);
+	$(event.target).parent().parent().find(".clubpay").html(`<input type="text" name="clubpay" value="\${orgClubpay}" style="width: 60%;"/>원`);
+	$(event.target).parent().parent().find(".mbcnt").html(`<input type="text" name="membercount" value="\${orgMbcnt}" style="width: 30%;"/>명`);
 }
 </script>
 
@@ -453,11 +554,74 @@ function quitClub(clubseq, userid){
 	            
 	            
 	            
-	            <div id="content2" style="border:solid 1px red; width: 50%;  margin: 3% auto;" >
+	            <div id="content2" style="width: 50%;  margin: 3% auto;" >
 	                <div class="item1">&nbsp;내 동호회 관리</div>
 	                <hr class="hr1">
 	                <div id="memberInfo">
+	                	<div style="display: flex; margin-top: 3%;">
 	                	
+	                	<c:if test="${sessionScope.loginuser.memberrank == 1}">
+	                	
+							<div id="prev" style="width: 10%; margin-left: 10%; align-content: center;" align="center"><img style="width: 60%;" src="<%=ctxPath%>/resources/images/narae/icons8-left-64.png"/></div>
+							<!-- 여기 안에 div 만들고 모든 자기 동호회를 넣어야 함 -->
+							<div id="slide" style="width: 450px; height: 600px; margin: 0 auto; overflow: hidden; box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); border-radius: 20px;">
+								<div id="profile" style="display: flex; height: 600px; transition: transform 1s; width: ${requestScope.clubList.size() * 450}px; flex-wrap: wrap;">
+									
+									<c:forEach items="${requestScope.clubList}" var="club">
+										<div align="center" style="border-radius: 20px;	width: 450px; height: 600px; padding: 1%; margin: 0;">
+											<div class="clubimg mb-3"><img src="<%=ctxPath%>/resources/images/zee/${club.clubimg}"/></div>
+											<div style="font-size: 10pt; font-weight: bold;">${club.sportname}</div>
+											<div style="font-size: 20pt; font-weight: bold;">${club.clubname}</div>
+											<table id="clubTable" style="width: 100%;">
+												<tbody>
+													<tr>
+														<td width="40" align="center"><span>지역</span></td>
+														<td width="60" class="area">${club.city}&nbsp;${club.local}</td>
+													</tr>
+													<tr>
+														<td align="center"><span>활동구장</span></td>
+														<td class="clubgym">${club.clubgym}</td>
+													</tr>
+													<tr>
+														<td align="center"><span>연락처</span></td>
+														<td class="clubtel">${club.clubtel}</td>
+													</tr>
+													<tr>
+														<td align="center"><span>회비</span></td>
+														<td class="clubpay"><fmt:formatNumber value="${club.clubpay}" pattern="#,###"/>원</td>
+													</tr>
+													<tr>
+														<td align="center"><span>인원</span></td>
+														<td class="mbcnt">${club.membercount}명</td>
+													</tr>
+												</tbody>
+											</table>
+											
+											<div class="mt-3">
+												<button type="button" class="btn btn-primary">회원 관리</button>&nbsp;&nbsp;
+												<button type="button" class="btn btn-warning" onclick="editClub('${club.clubseq}')">수정</button>&nbsp;&nbsp;
+												<button type="button" class="btn btn-danger">동호회 삭제</button>
+											</div>
+										</div>
+									</c:forEach>
+									
+									
+									
+									<div>두번째</div>
+									<div>세번째</div>
+								</div>
+							</div>
+							<div id="next" style="width: 10%; margin-right: 10%; align-content: center;" align="center"><img style="width: 60%;" src="<%=ctxPath%>/resources/images/narae/icons8-right-64.png"/></div>
+						
+						</c:if>
+						<c:if test="${sessionScope.loginuser.memberrank != 1}">
+							<div align="center" style="margin: 0 auto;">
+							<img width="94" height="94" src="https://img.icons8.com/3d-fluency/94/box-important.png" alt="box-important"/><br><br>
+							${sessionScope.loginuser.name }님이 만든 동호회가 없습니다.
+							</div>
+						</c:if>
+						
+						</div>
 	                </div>
 	                
 	            </div>

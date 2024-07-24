@@ -538,3 +538,24 @@ select * from tbl_member;
 update tbl_member set status = 1;
 commit;
 select count(*) from tbl_member where userid = 'leenr' and password = '9695b88a59a1610320897fa84cb7e144cc51f2984520efb77111d94b402a8382';
+
+
+Desc tbl_club;
+
+select sportseq, A.clubseq, clubname, clubimg, clubtel, city, local, clubgym, clubtime
+from tbl_clubmember A join tbl_club B
+on A.clubseq = B.clubseq
+where A.fk_userid = 'ksj1024sj' and sportseq = 1;
+
+select * from tbl_sport;
+select * from tbl_clubmember;
+
+update tbl_clubmember set status = 1 where fk_userid = 'leenr' and clubseq = 15;
+commit;
+
+
+desc tbl_club;
+
+select fk_userid, memberrank from tbl_club A join tbl_member B on A.fk_userid = B.userid;
+
+select clubseq, clubname, clubimg, sportname, fk_userid, clubtel, city, local, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfilename, viewcount from tbl_club A join tbl_sport B on A.fk_sportseq = B.sportseq where clubstatus = 1 and fk_userid = 'leejy';

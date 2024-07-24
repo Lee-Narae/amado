@@ -41,6 +41,7 @@ import com.spring.app.common.FileManager;
 import com.spring.app.common.GoogleMail;
 import com.spring.app.common.MyUtil;
 import com.spring.app.common.Sha256;
+import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.GymVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.domain.NoticeVO;
@@ -2349,6 +2350,7 @@ public class ControllerNR {
 		HttpSession session = request.getSession();
 		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
 		
+		// 가입동호회 조회
 		Map<String, String> soccer = service.getSoccer(loginuser.getUserid());
 		Map<String, String> baseball = service.getBaseball(loginuser.getUserid());
 		Map<String, String> volley = service.getVolley(loginuser.getUserid());
@@ -2366,6 +2368,11 @@ public class ControllerNR {
 		mav.addObject("jokgu", jokgu);
 		mav.addObject("minton", minton);
 		mav.addObject("tennis", tennis);
+		
+		
+		// 내 동호회 관리
+		List<ClubVO> clubList = service.getMyClub(loginuser.getUserid());
+		mav.addObject("clubList", clubList);
 		
 		mav.setViewName("member/myPage_club.tiles1");
 		return mav;
