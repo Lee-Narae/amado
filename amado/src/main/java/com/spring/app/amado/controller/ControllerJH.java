@@ -510,6 +510,8 @@ public class ControllerJH {
 		jsonObj.put("lat", gymvo.getLat());
 		jsonObj.put("lng", gymvo.getLng());
 		jsonObj.put("gymseq", gymseq);
+		jsonObj.put("filename", gymvo.getFilename());
+		
 		
 		
 		return jsonObj.toString();

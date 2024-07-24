@@ -394,7 +394,7 @@
 		    			v_html ="";
 		    			v_html += "<div class='container1'>";
 		    			v_html += "<div class='section'>";
-		    			v_html += "<img src='<%=ctxPath%>/resources/images/"+json.orgfilename+"' class='gym-image' alt='체육관 사진'>";
+		    			v_html += "<img src='<%=ctxPath%>/resources/images/1/"+json.orgfilename+"' class='gym-image' alt='체육관 사진'>";
 		    			v_html += "</div>";
 		    			v_html += "<div id='gymname' style='text-align: center; margin-top: 3%; margin-bottom: 10%; font-size: 30px; font-weight: bold'>"
 		    			v_html += json.gymname;
@@ -541,7 +541,7 @@
 	    	<div class="container1">
 		        <!-- 체육관 사진 -->
 		        <div class="section">
-		            <img src="<%=ctxPath%>/resources/images/${requestScope.gymvo.orgfilename}" class="gym-image" alt="체육관 사진">
+		            <img src="<%=ctxPath%>/resources/images/1/${requestScope.gymvo.orgfilename}" class="gym-image" alt="체육관 사진">
 		        </div>
 				<div id="gymname" style="text-align: center; margin-top: 3%; margin-bottom: 10%; font-size: 30px; font-weight: bold">
 				 ${requestScope.gymvo.gymname}

@@ -107,14 +107,14 @@
 	</select>
 	
 	<select id="getGymInfo" resultType="GymVO" parameterType="String">
-		select gymname, address, detailaddress, cost, orgfilename, lat, lng
+		select gymname, address, detailaddress, cost, orgfilename, lat, lng, filename
 		from tbl_gym
 		where gymseq = #{gymseq}
 	</select>
 	
 	
 	<select id="getgymPay" resultType="GymVO" parameterType="String">
-		select gymname, address, detailaddress, cost, orgfilename, lat, lng
+		select gymname, address, detailaddress, cost, orgfilename, lat, lng, filename
 		from tbl_gym
 		where gymseq = #{gymseq}
 	</select>
