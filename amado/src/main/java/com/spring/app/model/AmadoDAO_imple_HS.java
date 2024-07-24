@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.spring.app.domain.AnswerVO;
-import com.spring.app.domain.FleamarketCommentReVO;
-import com.spring.app.domain.FleamarketCommentVO;
 import com.spring.app.domain.GymVO;
 import com.spring.app.domain.PhotoVO;
 import com.spring.app.domain.QuestionVO;
@@ -54,6 +52,9 @@ public class AmadoDAO_imple_HS implements AmadoDAO_HS {
 	      return allGymList;
 	}
 	
+
+
+
 	
 	
 	@Override
@@ -150,7 +151,39 @@ public class AmadoDAO_imple_HS implements AmadoDAO_HS {
 			return n;
 		}
 
-	
+
+		@Override
+		public List<GymVO> getGymAdd() {
+			
+			List<GymVO> GymAddList = sqlsession.selectList("HS.getGymAdd");
+			return GymAddList;
+		}
+
+
+
+
+
+		@Override
+		public GymVO getGym(String gymseq) {
+			GymVO GetGym =sqlsession.selectOne("HS.getGym", gymseq);
+			return GetGym;
+		}
+
+
+
+
+
+		@Override
+		public List<Map<String, String>> getGymImg(String gymseq) {
+			List<Map<String, String>> getGymImg=sqlsession.selectList("HS.getGymimg", gymseq);
+			return getGymImg;
+		}
+
+
+
+
+
+
 	
 
 

@@ -3,6 +3,7 @@ package com.spring.app.model;
 import java.util.List;
 import java.util.Map;
 
+import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.GymVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.domain.NoticeVO;
@@ -222,5 +223,8 @@ public interface AmadoDAO_NR {
 
 	// 마이페이지 - 동호회 탈퇴
 	int quitClub(Map<String, String> paramap);
+
+	// 마이페이지 - 내동호회 관리
+	List<ClubVO> getMyClub(String userid);
 	
 }

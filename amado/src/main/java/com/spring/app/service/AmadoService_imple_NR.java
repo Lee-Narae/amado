@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.app.common.AES256;
+import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.GymVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.domain.NoticeVO;
@@ -681,6 +682,13 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 	public int quitClub(Map<String, String> paramap) {
 		int n = dao.quitClub(paramap);
 		return n;
+	}
+
+	// 마이페이지 - 내동호회 관리
+	@Override
+	public List<ClubVO> getMyClub(String userid) {
+		List<ClubVO> clubList = dao.getMyClub(userid);
+		return clubList;
 	}
 
 

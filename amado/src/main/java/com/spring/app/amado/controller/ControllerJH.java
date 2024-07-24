@@ -32,6 +32,7 @@ import com.spring.app.domain.FleamarketCommentVO;
 import com.spring.app.domain.GymVO;
 import com.spring.app.domain.GymresVO;
 import com.spring.app.domain.MatchingVO;
+import com.spring.app.domain.MemberVO;
 import com.spring.app.service.AmadoService_JH;
 
 
@@ -509,6 +510,8 @@ public class ControllerJH {
 		jsonObj.put("lat", gymvo.getLat());
 		jsonObj.put("lng", gymvo.getLng());
 		jsonObj.put("gymseq", gymseq);
+		jsonObj.put("filename", gymvo.getFilename());
+		
 		
 		
 		return jsonObj.toString();
@@ -621,6 +624,77 @@ public class ControllerJH {
 		return jsonArr.toString();
 	}
 	
+	
+	
+	
+	
+	
+	@GetMapping(value="/gym/coinPurchaseEnd.do", produces="text/plain;charset=UTF-8") 
+	public ModelAndView coinPurchaseEnd(ModelAndView mav, HttpServletRequest request) {
+		// 원포트(구 아임포트) 결제창을 하기 위한 전제조건은 먼저 로그인을 해야 하는 것이다. 
+		if(request.getParameter("userid") != null) {
+			// 로그인을 했으면
+			
+			String userid = request.getParameter("userid");
+			
+			HttpSession session = request.getSession();
+			MemberVO loginuser = (MemberVO) session.getAttribute("loginuser"); 
+			
+			if(loginuser.getUserid().equals(userid)) {
+				// 로그인한 사용자가 자신의 코인을 수정하는 경우 
+				
+				String coinmoney = request.getParameter("coinmoney"); 
+				String gymname = request.getParameter("gymname"); 
+				
+				String productName = "새우깡";
+				int productPrice = Integer.parseInt(coinmoney);
+								
+				request.setAttribute("productName", productName);
+			//	request.setAttribute("productPrice", productPrice);
+				request.setAttribute("productPrice", productPrice);
+				request.setAttribute("email", loginuser.getEmail());
+				request.setAttribute("name", loginuser.getName());
+				request.setAttribute("mobile", loginuser.getMobile());
+				request.setAttribute("gymname", gymname);
+				
+			//	System.out.println("~~~~ 확인용 email : " + loginuser.getEmail());
+			//	System.out.println("~~~~ 확인용 mobile : " + loginuser.getMobile());
+				
+				request.setAttribute("userid", userid);
+				request.setAttribute("coinmoney", coinmoney);
+				
+				mav.setViewName("/paymentGateway");
+				
+				return mav;
+			}
+			else {
+				// 로그인한 사용자가 다른 사용자의 코인을 충전하려고 결제를 시도하는 경우 
+				String message = "다른 사용자의 코인충전 결제 시도는 불가합니다.!!";
+				String loc = "javascript:history.back()";
+				
+				request.setAttribute("message", message);
+				request.setAttribute("loc", loc);
+				
+				mav.setViewName("/msg");
+				
+				return mav;
+			}
+			
+		}
+		else {
+			// 로그인을 안했으면 
+			String message = "코인충전 결제를 하기 위해서는 먼저 로그인을 하세요!!";
+			String loc = "javascript:history.back()";
+			
+			request.setAttribute("message", message);
+			request.setAttribute("loc", loc);
+			
+			mav.setViewName("/msg");
+			
+			return mav;
+		}
+	}
+			
 	
 	
 	

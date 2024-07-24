@@ -39,7 +39,9 @@ public class ClubVO {
 	private String clubscore;		// 점수
 	private String viewcount;		// 조회수
 	
-	
+	// 나래 - 마이페이지 용으로 만든 거
+	private String sportname;
+
 	private String rank; // select 용 랭킹  
 	
 	
@@ -55,7 +57,13 @@ public class ClubVO {
 	
 	   private ClubmemberVO clubmembervo;
 	
-
+		
+	public String getSportname() {
+		return sportname;
+	}
+	public void setSportname(String sportname) {
+		this.sportname = sportname;
+	}
 	public String getWasfileName() {
 		return wasfileName;
 	}

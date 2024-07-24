@@ -22,7 +22,7 @@ public interface AmadoService_HS {
 
 	List<GymVO> getAllGymList();
 	
-	
+
 
 	int addComment(QuestionVO questionvo) throws Throwable;
 
@@ -47,6 +47,29 @@ public interface AmadoService_HS {
 	int Gymreg(GymVO gym);
 	//  체육관 등록하기(추가이미지)
 	int insertGymImg(Map<String, String> paramap);
+
+
+	
+	List<GymVO> getGymAdd();
+
+
+	
+	
+	
+	GymVO getGym(String gymseq);
+
+
+	List<Map<String, String>> getGymImg(String gymseq);
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.GymVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.domain.NoticeVO;
@@ -614,6 +615,13 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 	public int quitClub(Map<String, String> paramap) {
 		int n = sqlsession.delete("NR.quitClub", paramap);
 		return n;
+	}
+
+	// 마이페이지 - 내동호회 관리
+	@Override
+	public List<ClubVO> getMyClub(String userid) {
+		List<ClubVO> clubList = sqlsession.selectList("NR.getMyClub", userid);
+		return clubList;
 	}
 
 }
