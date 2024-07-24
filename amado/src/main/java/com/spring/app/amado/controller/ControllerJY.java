@@ -995,7 +995,7 @@ public class ControllerJY {
 
 	
 	
-	
+	// /club/delCBoardComment.do
 	
 	
 	

@@ -656,6 +656,34 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		int n = dao.memberQuit(userid);
 		return n;
 	}
+
+
+	// 마이페이지 - 가입 동호회 조회
+	@Override
+	public Map<String, String> getSoccer(String userid) { Map<String, String> soccer = dao.getSoccer(userid); return soccer; } 
+	@Override
+	public Map<String, String> getBaseball(String userid) { Map<String, String> baseball = dao.getBaseball(userid); return baseball; }
+	@Override
+	public Map<String, String> getVolley(String userid) { Map<String, String> volley = dao.getVolley(userid); return volley; }
+	@Override
+	public Map<String, String> getBasket(String userid) { Map<String, String> basket = dao.getBasket(userid); return basket; }
+	@Override
+	public Map<String, String> getTennis(String userid) { Map<String, String> tennis = dao.getTennis(userid); return tennis; }
+	@Override
+	public Map<String, String> getBowling(String userid) { Map<String, String> bowling = dao.getBowling(userid); return bowling; }
+	@Override
+	public Map<String, String> getJokgu(String userid) { Map<String, String> jokgu = dao.getJokgu(userid); return jokgu; }
+	@Override
+	public Map<String, String> getMinton(String userid) { Map<String, String> minton = dao.getMinton(userid); return minton; }
+
+	// 마이페이지 - 동호회 탈퇴
+	@Override
+	public int quitClub(Map<String, String> paramap) {
+		int n = dao.quitClub(paramap);
+		return n;
+	}
+
+
 	
 	
 }

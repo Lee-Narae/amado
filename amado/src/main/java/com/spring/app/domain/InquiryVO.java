@@ -2,7 +2,7 @@ package com.spring.app.domain;
 
 public class InquiryVO {
 	
-	private String inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status;
+	private String inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer;
 	
 	private InquiryFileVO inquiryfilevo;
 
@@ -85,6 +85,16 @@ public class InquiryVO {
 	public void setInquiryfilevo(InquiryFileVO inquiryfilevo) {
 		this.inquiryfilevo = inquiryfilevo;
 	}
+
+	public String getAnswer() {
+		return answer;
+	}
+
+	public void setAnswer(String answer) {
+		this.answer = answer;
+	}
+	
+	
 
 	
 	

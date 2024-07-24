@@ -664,4 +664,30 @@
 	<update id="memberQuit">
 		update tbl_member set status = 0 where userid = #{userid}
 	</update>
+	
+	<resultMap type="HashMap" id="clubMap">
+		<result column="sportseq" property="sportseq" javaType="String"/>
+		<result column="clubseq" property="clubseq" javaType="String"/>
+		<result column="clubname" property="clubname" javaType="String"/>
+		<result column="clubimg" property="clubimg" javaType="String"/>
+		<result column="clubtel" property="clubtel" javaType="String"/>
+		<result column="city" property="city" javaType="String"/>
+		<result column="local" property="local" javaType="String"/>
+		<result column="clubgym" property="clubgym" javaType="String"/>
+		<result column="clubgym" property="clubgym" javaType="String"/>
+		<result column="clubtime" property="clubtime" javaType="String"/>
+	</resultMap>
+	<select id="getClubMap" parameterType="String" resultMap="clubMap">
+		select sportseq, A.clubseq, clubname, clubimg, clubtel, city, local, clubgym, clubgym, clubtime
+		from tbl_clubmember A join tbl_club B
+		on A.clubseq = B.clubseq
+		where A.fk_userid = #{userid} and sportseq = #{sportseq}
+	</select>
+	
+	
+	<delete id="quitClub" parameterType="HashMap">
+		delete from tbl_clubmember where fk_userid = #{userid} and clubseq = #{clubseq}
+	</delete>
+	
+	
 </mapper>

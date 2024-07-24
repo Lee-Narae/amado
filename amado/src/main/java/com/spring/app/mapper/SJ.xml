@@ -472,8 +472,8 @@
     
     
 	<insert id="Inquiry" parameterType="HashMap">
-		insert into tbl_inquiry(inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status)
-		values(seq_inquiry.nextval, #{content}, #{fk_userid}, #{email}, #{phone}, default, to_number(#{searchtype_a}), to_number(#{searchtype_b}), default)
+		insert into tbl_inquiry(inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer)
+		values(seq_inquiry.nextval, #{content}, #{fk_userid}, #{email}, #{phone}, default, to_number(#{searchtype_a}), to_number(#{searchtype_b}), default, default)
     </insert>
     
     <select id="findseq_inquiry" parameterType="HashMap" resultType="int">
@@ -521,14 +521,14 @@
 	</resultMap>    
     <select id="getinquiryList" parameterType="String" resultMap="getinquiryList_Map">
 		WITH InquiryWithFiles AS (
-		  SELECT I.inquiryseq, I.content, I.fk_userid, I.email, I.phone, I.registerdate, I.searchtype_a, I.searchtype_b, I.status,
+		  SELECT I.inquiryseq, I.content, I.fk_userid, I.email, I.phone, I.registerdate, I.searchtype_a, I.searchtype_b, I.status, I.answer,
 		         F.orgfilename, F.filename, F.filesize,
 		         ROW_NUMBER() OVER (PARTITION BY I.inquiryseq ORDER BY F.filename) AS row_num
 		  FROM tbl_inquiryFile F
 		  JOIN tbl_inquiry I ON F.inquiryseq = I.inquiryseq
 		  WHERE I.fk_userid = #{fk_userid} AND I.status = 1
 		)
-		SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status,
+		SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer,
 		       orgfilename, filename, filesize
 		FROM InquiryWithFiles
 		WHERE row_num = 1
@@ -574,10 +574,10 @@
     
     
     <select id="getPaginginquiryList" parameterType="HashMap" resultType="InquiryVO">
-	    SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status
+	    SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
 		FROM
 (        select row_number() over(order by inquiryseq asc) AS rno 
-             , inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status
+             , inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
              
         from tbl_inquiry
         where fk_userid = 'ksj1024sj' and status = 1
@@ -619,7 +619,7 @@ where rno between #{startRno} and #{endRno}
     
     
     <select id="inquiryGoDetail" parameterType="String" resultType="InquiryVO">
-	        SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status
+	        SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
 	        FROM tbl_inquiry
             where inquiryseq = #{inquiryseq}
 	        ORDER BY inquiryseq DESC    
@@ -631,6 +631,14 @@ where rno between #{startRno} and #{endRno}
 	        FROM tbl_inquiryFile
             where inquiryseq = #{inquiryseq}
 	        ORDER BY inquiryseq DESC    
+    </select>
+    
+    
+    <!-- 1대1문의 첨부파일 다운로드 -->
+    <select id="getView_inquiry" parameterType="HashMap" resultType="InquiryFileVO">
+   	        SELECT inquiryseq, orgfilename, filename, filesize
+	        FROM tbl_inquiryFile
+            where inquiryseq = #{inquiryseq} and orgfilename = #{orgfilename}
     </select>
     
 	

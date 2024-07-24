@@ -476,6 +476,101 @@ public class ControllerSJ {
 		}
 		
 	}	
+
+	
+	// === 1대1문의 첨부파일 다운로드 받기 === //
+	@GetMapping("/inquirydownload.do")
+	public void requiredLogin_inquirydownload(HttpServletRequest request, HttpServletResponse response) {
+		
+		String inquiryseq = request.getParameter("inquiryseq");
+		String orgfilename = request.getParameter("orgfilename");
+		// 첨부파일이 있는 글번호 
+		
+		/*
+		    첨부파일이 있는 글번호에서
+		  20240628092043154731282615400.jpg 처럼
+		    이러한 fileName 값을 DB에서 가져와야 한다.
+		    또한 orgFilename 값도 DB에서 가져와야 한다.
+		 */
+		
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("inquiryseq", inquiryseq);
+		paraMap.put("orgfilename", orgfilename);
+		
+		// **** 웹브라우저에 출력하기 시작 **** //
+		// HttpServletResponse response 객체는 전송되어져온 데이터를 조작해서 결과물을 나타내고자 할때 쓰인다.
+		response.setContentType("text/html; charset=UTF-8");
+		
+		PrintWriter out = null;
+		// out 은 웹브라우저에 기술하는 대상체라고 생각하자.
+		
+		try {
+			Integer.parseInt(inquiryseq);
+			InquiryFileVO inquiryfilevo = service.getView_inquiry(paraMap); 
+			
+			if(inquiryfilevo == null || (inquiryfilevo != null && inquiryfilevo.getFilename() == null) ) {
+				out = response.getWriter();
+				// out 은 웹브라우저에 기술하는 대상체라고 생각하자.
+				
+				out.println("<script type='text/javascript'>alert('존재하지 않는 글번호 이거나 첨부파일이 없으므로 파일다운로드가 불가합니다.'); history.back();</script>");
+				return;
+			}
+			
+			else {
+				// 정상적으로 다운로드를 할 경우 
+				
+				String filename = inquiryfilevo.getFilename();
+				// 20240628092043154731282615400.jpg  이것이 바로 WAS(톰캣) 디스크에 저장된 파일명이다.
+				
+				// 첨부파일이 저장되어 있는 WAS(톰캣) 디스크 경로명을 알아와야만 다운로드를 해줄 수 있다.
+				// 이 경로는 우리가 파일첨부를 위해서 /addEnd.action 에서 설정해두었던 경로와 똑같아야 한다.  
+				// WAS 의 webapp 의 절대경로를 알아와야 한다. 
+				HttpSession session = request.getSession(); 
+				String root = session.getServletContext().getRealPath("/");  
+				
+				// System.out.println("~~~ 확인용 webapp 의 절대경로 => " + root);
+				// ~~~ 확인용 webapp 의 절대경로 => C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\amado\ 
+				
+				String path = root+"resources"+File.separator+"inquiry_file";
+				/* File.separator 는 운영체제에서 사용하는 폴더와 파일의 구분자이다.
+				      운영체제가 Windows 이라면 File.separator 는  "\" 이고,
+				      운영체제가 UNIX, Linux, 매킨토시(맥) 이라면  File.separator 는 "/" 이다. 
+				 */
+				
+				// path 가 첨부파일이 저장될 WAS(톰캣)의 폴더가 된다.
+				// System.out.println("~~~ 확인용 path => " + path);
+				// ~~~ 확인용 path => C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\board\resources\files
+				
+				// ***** file 다운로드 하기 ***** //
+				boolean flag = false; // file 다운로드 성공, 실패인지 여부를 알려주는 용도 
+				flag = fileManager.doFileDownload(filename, orgfilename, path, response); 
+				// file 다운로드 성공시 flag 는 true,
+				// file 다운로드 실패시 flag 는 false 를 가진다.
+				
+				if(!flag) {
+					// 다운로드가 실패한 경우 메시지를 띄워준다. 
+					out = response.getWriter();
+					// out 은 웹브라우저에 기술하는 대상체라고 생각하자.
+					
+					out.println("<script type='text/javascript'>alert('파일다운로드가 실패되었습니다.'); history.back();</script>");
+				}
+				
+			}
+			
+		} catch (NumberFormatException | IOException e) {
+			
+			try {
+				out = response.getWriter();
+				// out 은 웹브라우저에 기술하는 대상체라고 생각하자.
+				
+				out.println("<script type='text/javascript'>alert('파일다운로드가 불가합니다.'); history.back();</script>"); 
+			} catch (IOException e2) {
+				e2.printStackTrace();
+			}
+			
+		}
+		
+	}	
 	
 	
 	
@@ -1606,8 +1701,10 @@ public class ControllerSJ {
 		return "/community/inquiryList.tiles2";
 	}
 	
+	
+	
 	@PostMapping(value = "/community/inquiryGoDetail.do")
-	public ModelAndView inquiryGoDetail(ModelAndView mav, HttpServletRequest request) {
+	public ModelAndView requiredLogin_inquiryGoDetail(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
 		String inquiryseq = "";
 		String goBackURL = "";
 		String searchtype_a = "";
@@ -1621,11 +1718,13 @@ public class ControllerSJ {
 		searchtype_b = request.getParameter("searchtype_b");
 		searchWord = request.getParameter("searchWord");
 		
-		System.out.println("inquiryseq : " + inquiryseq);
-		System.out.println("goBackURL : " + goBackURL);
-		System.out.println("searchtype_a : " + searchtype_a);
-		System.out.println("searchtype_b : " + searchtype_b);
-		System.out.println("searchWord : " + searchWord);
+		/*
+		 * System.out.println("inquiryseq : " + inquiryseq);
+		 * System.out.println("goBackURL : " + goBackURL);
+		 * System.out.println("searchtype_a : " + searchtype_a);
+		 * System.out.println("searchtype_b : " + searchtype_b);
+		 * System.out.println("searchWord : " + searchWord);
+		 */
 		
 		mav.setViewName("community/inquiryList.tiles2");
 		
@@ -1637,15 +1736,8 @@ public class ControllerSJ {
 		
 		mav.addObject("inquiryvo", inquiryvo); // 1대1문의 상세정보
 		mav.addObject("inquiryfileList", inquiryfileList); // 1대1문의 상세정보 파일
-		// 답변(운영자가) 
-		
-		for(InquiryFileVO inquiryFileVO : inquiryfileList) {
-			System.out.println("이름 : " + inquiryFileVO.getFilename());
-			System.out.println("사이즈 : " + inquiryFileVO.getFilesize());
-			System.out.println("진짜이름 : " + inquiryFileVO.getOrgfilename());
-			
-		}
-		
+		// 답변(운영자가) (여기해야함!!)
+
 		mav.setViewName("community/inquiryGoDetail.tiles2");
 		
 		return mav;

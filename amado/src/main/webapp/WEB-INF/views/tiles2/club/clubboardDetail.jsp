@@ -64,6 +64,33 @@ $(document).ready(function(){
 	});
 
 	
+	// 댓글 삭제
+	$(document).on("click", "span#delComment", function(e){
+
+		if(confirm('댓글을 삭제하시겠습니까?')){
+			let clubboardcommentseq = $(e.target).parent().parent().parent().find("input#commentseq").val();
+			const clubboardseq = '${requestScope.cboard.clubboardseq}';
+			
+			$.ajax({
+				url: "<%=ctxPath%>/club/delCBoardComment.do",
+				type: "post",
+				data: {"clubboardcommentseq": clubboardcommentseq, "clubboardseq":clubboardseq},
+				dataType: "json",
+				success: function(json){
+					viewCommentOnly();
+				},
+				error: function(request, status, error){
+		               alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		        }
+			});
+		
+		}
+
+	});
+
+	
+	
+	
 	
 });
 
@@ -148,6 +175,66 @@ function viewComment(){
 		
 	}		
 	
+}
+
+
+function viewCommentOnly(){
+	
+	const parentseq = '${requestScope.notice.noticeseq}';
+	
+	$.ajax({
+		url: "<%=ctxPath%>/community/viewCommentOnly.do",
+		data: {"parentseq": parentseq},
+		type: "get",
+		dataType: "json",
+		success: function(json){
+			
+			let v_html = ``;
+			
+			if(json.length > 0){
+				
+				$.each(json, function(index, item){
+					
+					v_html += `<div style="display: flex;">
+									<div class="mr-3">`;
+									
+					if(item.memberimg != null){
+						v_html += `<img width="50" height="50" style="border-radius: 50px;" src="<%=ctxPath%>/resources/images/\${item.memberimg}"/>`;
+					}
+					else {
+						v_html += `<img width="50" height="50" style="border-radius: 50px;" src="<%=ctxPath%>/resources/images/기본이미지.png"/>`;
+					}
+					
+					v_html += `</div>
+								<div align="left" style="width: 80%;">
+								<input id="commentseq" type="hidden" value="\${item.noticecommentseq}"/>
+								<span style="font-size: 10pt; font-weight: bold;">\${item.fk_userid }</span>&nbsp;&nbsp;<span style="font-size: 10pt;">\${item.registerdate}</span>
+									<span id="editOrDel">`;
+									
+					if(item.fk_userid == '${sessionScope.loginuser.userid}'){
+						v_html += `<span id="editComment" class="commentBtn" style="margin-left: 3%;">수정</span>&nbsp;|&nbsp;<span id="delComment" class="commentBtn">삭제</span>`;
+					}			
+									
+					v_html += `</span>
+						<div style="text-align: left;">\${item.comment_text }</div>
+						</div>
+					</div>`;					
+											
+												
+					if(index < json.length-1){
+						v_html += `<hr>`;
+					}
+				
+				});
+			}
+			
+			$("div#comment").html(v_html);
+			
+		},
+		error: function(request, status, error){
+               alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+        }
+	});
 }
 
 

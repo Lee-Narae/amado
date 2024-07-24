@@ -51,7 +51,7 @@ margin-top: 2%;
 	<div class="name">볼링</div>
 </div>
 <div class="sport" onclick="location.href='<%=ctxPath%>/club/findClub.do?sportseq=5'">
-	<img style="margin-top: 5%;" width="45%" height="45%" src="https://img.icons8.com/office/96/beach-ball.png" alt="beach-ball"/>
+	<img width="50" height="50" src="https://img.icons8.com/3d-fluency/94/beach-ball.png" alt="beach-ball"/>
 	<div class="name">족구</div>
 </div>
 <div class="sport" onclick="location.href='<%=ctxPath%>/club/findClub.do?sportseq=8'">

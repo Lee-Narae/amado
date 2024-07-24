@@ -213,6 +213,19 @@ public interface AmadoService_NR {
 	// 회원탈퇴
 	int memberQuit(String userid);
 
+	// 마이페이지 - 가입 동호회 조회
+	Map<String, String> getSoccer(String userid);
+	Map<String, String> getBaseball(String userid);
+	Map<String, String> getVolley(String userid);
+	Map<String, String> getBasket(String userid);
+	Map<String, String> getTennis(String userid);
+	Map<String, String> getBowling(String userid);
+	Map<String, String> getJokgu(String userid);
+	Map<String, String> getMinton(String userid);
+
+	// 마이페이지 - 동호회 탈퇴
+	int quitClub(Map<String, String> paramap);
+
 	
 
 

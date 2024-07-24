@@ -404,6 +404,7 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	            inquiryVO.setSearchtype_a(inquiryMap.get("searchtype_a"));
 	            inquiryVO.setSearchtype_b(inquiryMap.get("searchtype_b"));
 	            inquiryVO.setStatus(inquiryMap.get("status"));
+	            inquiryVO.setAnswer(inquiryMap.get("answer"));
 
 	            if (inquiryMap.get("filename") != null || inquiryMap.get("filesize") != null || inquiryMap.get("orgfilename") != null) {
 	                InquiryFileVO inquiryfilevo = new InquiryFileVO();
@@ -446,6 +447,13 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	public List<InquiryFileVO> inquiryFileGoDetail(String inquiryseq) {
 		List<InquiryFileVO> inquiryfileList = dao.inquiryFileGoDetail(inquiryseq);
 		return inquiryfileList;
+	}
+
+	
+	@Override
+	public InquiryFileVO getView_inquiry(Map<String, String> paraMap) {
+		InquiryFileVO inquiryfilevo = dao.getView_inquiry(paraMap);
+		return inquiryfilevo;
 	}
 
 
