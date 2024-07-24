@@ -132,8 +132,9 @@
 	<table style="width: 1280px" class="table table-bordered">
 		<thead>
 		    <tr>
-		    	<th style="width: 70px;  text-align: center;">글번호</th>
+		    	<th style="width: 80px;  text-align: center;">글번호</th>
 				<th style="width: 220px; text-align: center;">내용</th>
+				<th style="width: 120px; text-align: center;">답변여부</th>
 				<th style="width: 120px;  text-align: center;">아이디</th>
 				<th style="width: 200px;  text-align: center;">타입</th>
 				<th style="width: 200px; text-align: center;">날짜</th>
@@ -146,6 +147,16 @@
 			     <tr onclick="goDetail('${inquiryvo.inquiryseq}')">
 			        <td align="center">${inquiryvo.inquiryseq}</td>
 			        <td align="center" class="content">${inquiryvo.content}</td>
+				    
+				    <c:choose>
+				        <c:when test="${inquiryvo.answer == 0}">
+				            <td align="center">답변대기</td>
+				        </c:when>
+				        <c:otherwise>
+				            <td align="center">답변완료</td>
+				        </c:otherwise>
+				    </c:choose>			        
+
 			        <td align="center">${inquiryvo.fk_userid}</td>
 			        
 			        <c:if test="${inquiryvo.searchtype_a == 1 && inquiryvo.searchtype_b == 1}">
