@@ -727,188 +727,36 @@ rotate(
 		
 		
 
-	    
-	    
+		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+	    mapOption = { 
+	        center: new kakao.maps.LatLng(${gym.lat}, ${gym.lng}), // 지도의 중심좌표
+	        level: 4 // 지도의 확대 레벨
+	    };
 
-    	// 지도를 담을 영역의 DOM 레퍼런스
-    	var mapContainer = document.getElementById("map");
-    	
-    	// 지도를 생성할때 필요한 기본 옵션
-    	var options = {
-        	 	center: new kakao.maps.LatLng(37.556513150417395, 126.91951995383943), // 지도의 중심좌표. 반드시 존재해야함.
-        	 	<%--
-        		  	center 에 할당할 값은 kakao.maps.LatLng 클래스를 사용하여 생성한다.
-        		  	kakao.maps.LatLng 클래스의 2개 인자값은 첫번째 파라미터는 위도(latitude)이고, 두번째 파라미터는 경도(longitude)이다.
-        		 --%>
-        	 	level: 7  // 지도의 레벨(확대, 축소 정도). 숫자가 클수록 축소된다. 4가 적당함.
-         };
-    	
-    	// 지도 생성 및 생성된 지도객체 리턴
-    	var mapobj = new kakao.maps.Map(mapContainer, options);
-    	
-    	// 일반 지도와 스카이뷰로 지도 타입을 전환할 수 있는 지도타입 컨트롤을 생성함. 	
-    	var mapTypeControl = new kakao.maps.MapTypeControl();
-    	
-    	// 지도 타입 컨트롤을 지도에 표시함.
-    	// kakao.maps.ControlPosition은 컨트롤이 표시될 위치를 정의하는데 TOPRIGHT는 오른쪽 위를 의미함.	
-    	mapobj.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT); 
-    	
-    	// 지도 확대 축소를 제어할 수 있는 줌 컨트롤을 생성함.	
-    	var zoomControl = new kakao.maps.ZoomControl();
-    	
-    	// 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 지도에 표시함.
-    	// kakao.maps.ControlPosition은 컨트롤이 표시될 위치를 정의하는데 RIGHT는 오른쪽을 의미함.	 
-    	mapobj.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-    	
-    	if(navigator.geolocation) {
-    		// HTML5의 geolocation으로 사용할 수 있는지 확인한다 
-    		
-    		// GeoLocation을 이용해서 웹페이지에 접속한 사용자의 현재 위치를 확인하여 그 위치(위도,경도)를 지도의 중앙에 오도록 한다.
-    		navigator.geolocation.getCurrentPosition(function(position) {
-    			var latitude = position.coords.latitude;   // 현위치의 위도
-    			var longitude = position.coords.longitude; // 현위치의 경도
-    		//	console.log("현위치의 위도: "+latitude+", 현위치의 경도: "+longitude);
-    			// 현위치의 위도: 37.5499076, 현위치의 경도: 126.9218479
-    			
-    			// 마커가 표시될 위치를 geolocation으로 얻어온 현위치의 위.경도 좌표로 한다   
-    			var locPosition = new kakao.maps.LatLng(latitude, longitude);
-    			    			
-    			// 마커이미지를 기본이미지를 사용하지 않고 다른 이미지로 사용할 경우의 이미지 주소 
-    	        var imageSrc = 'http://localhost:9090/MyMVC/images/pointerPink.png';
-    			
-    	        // 마커이미지의 크기 
-    		    var imageSize = new kakao.maps.Size(34, 39);
-    	        
-    		    // 마커이미지의 옵션. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정한다. 
-    		    var imageOption = {offset: new kakao.maps.Point(15, 39)};
+	var map = new kakao.maps.Map(mapContainer, mapOption);
 
-    		    // 마커의 이미지정보를 가지고 있는 마커이미지를 생성한다. 
-    		    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+	// 마커가 표시될 위치입니다 
+	var markerPosition  = new kakao.maps.LatLng(${gym.lat}, ${gym.lng}); 
 
-    		    // == 마커 생성하기 == //
-    			var marker = new kakao.maps.Marker({ 
-    				map: mapobj, 
-    		        position: locPosition, // locPosition 좌표에 마커를 생성 
-    		        image: markerImage     // 마커이미지 설정
-    			}); 
-    		    
-    			marker.setMap(mapobj); // 지도에 마커를 표시한다
-    	     
-    			
-    			// === 인포윈도우(텍스트를 올릴 수 있는 말풍선 모양의 이미지) 생성하기 === //
-    			
-    			// 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능함.
-    			var iwContent = "<div style='padding:5px; font-size:9pt;'>여기에 계신가요?<br/><a href='https://map.kakao.com/link/map/현위치(약간틀림),"+latitude+","+longitude+"' style='color:blue;' target='_blank'>큰지도</a> <a href='https://map.kakao.com/link/to/현위치(약간틀림),"+latitude+","+longitude+"' style='color:blue' target='_blank'>길찾기</a></div>";
-    			
-    			// 인포윈도우 표시 위치
-    		    var iwPosition = locPosition;
-    			
-    		 // removeable 속성을 true 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됨
-    		    var iwRemoveable = true; 
+	// 마커를 생성합니다
+	var marker = new kakao.maps.Marker({
+	    position: markerPosition
+	});
 
-    		    // == 인포윈도우를 생성하기 == 
-    			var infowindow = new kakao.maps.InfoWindow({
-    			    position : iwPosition, 
-    			    content : iwContent,
-    			    removable : iwRemoveable
-    			});
+	// 마커가 지도 위에 표시되도록 설정합니다
+	marker.setMap(map);
 
-    			// == 마커 위에 인포윈도우를 표시하기 == //
-    			infowindow.open(mapobj, marker);
+	var iwContent = '<div style="padding:5px;">${gym.gymname} <br><a href="https://map.kakao.com/link/map/Hello World!,33.450701,126.570667" style="color:blue" target="_blank">큰지도보기</a> <a href="https://map.kakao.com/link/to/Hello World!,33.450701,126.570667" style="color:blue" target="_blank">길찾기</a></div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+	    iwPosition = new kakao.maps.LatLng(${gym.lat}, ${gym.lng}); //인포윈도우 표시 위치입니다
 
-    			// == 지도의 센터위치를 locPosition로 변경한다.(사이트에 접속한 클라이언트 컴퓨터의 현재의 위.경도로 변경한다.)
-    		    mapobj.setCenter(locPosition);
-    			
-    	    });
-    	}
-    	else {
-    		// HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정한다.
-    		var locPosition = new kakao.maps.LatLng(37.556513150417395, 126.91951995383943);     
-            
-    		// 위의 
-    		// 마커이미지를 기본이미지를 사용하지 않고 다른 이미지로 사용할 경우의 이미지 주소 
-    		// 부터
-    		// 마커 위에 인포윈도우를 표시하기 
-    		// 까지 동일함.
-    		
-         // 지도의 센터위치를 위에서 정적으로 입력한 위.경도로 변경한다.
-    	    mapobj.setCenter(locPosition);
-    		
-    	}// end of if~else------------------------------------------
-    	
-    	
-    	// ============ 지도에 매장위치 마커 보여주기 시작 ============ //
-   			 // == 마커 생성하기 == //
-				var marker = new kakao.maps.Marker({ 
-					map: mapobj, 
-			        position: positionArr[i].latlng   
-				}); 
-	    		
-				// 지도에 마커를 표시한다.
-	    		marker.setMap(mapobj);
-    	// ============ 지도에 매장위치 마커 보여주기 끝 ============ //
-    	
-    	
-    	// ================== 지도에 클릭 이벤트를 등록하기 시작 ======================= //
-       // 지도를 클릭하면 클릭한 위치에 마커를 표시하면서 위,경도를 보여주도록 한다.
-       
-       // == 마커 생성하기 == //
-       // 1. 마커이미지 변경
-       var imageSrc = 'http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png';       
-           
-      // 2. 마커이미지의 크기 
-       var imageSize = new kakao.maps.Size(34, 39);   
-               
-       // 3. 마커이미지의 옵션. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정한다. 
-       var imageOption = {offset: new kakao.maps.Point(15, 39)};   
-         
-       // 4. 이미지정보를 가지고 있는 마커이미지를 생성한다. 
-       var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
-             
-       var movingMarker = new kakao.maps.Marker({ 
-         map: mapobj, 
-           image: markerImage  // 마커이미지 설정
-      });
-       
-       // === 인포윈도우(텍스트를 올릴 수 있는 말풍선 모양의 이미지) 생성하기 === //
-      var movingInfowindow = new kakao.maps.InfoWindow({
-          removable : false
-        //removable : true   // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됨
-      });
-      
-       
-      kakao.maps.event.addListener(mapobj, 'click', function(mouseEvent) {         
-             
-          // 클릭한 위도, 경도 정보를 가져옵니다 
-          var latlng = mouseEvent.latLng;
-          
-          // 마커 위치를 클릭한 위치로 옮긴다.
-          movingMarker.setPosition(latlng);
-          
-          // 인포윈도우의 내용물 변경하기 
-          movingInfowindow.setContent("<div style='padding:5px; font-size:9pt;'>여기가 어디에요?<br/><a href='https://map.kakao.com/link/map/여기,"+latlng.getLat()+","+latlng.getLng()+"' style='color:blue;' target='_blank'>큰지도</a> <a href='https://map.kakao.com/link/to/여기,"+latlng.getLat()+","+latlng.getLng()+"' style='color:blue' target='_blank'>길찾기</a></div>");  
-          
-          // == 마커 위에 인포윈도우를 표시하기 == //
-          movingInfowindow.open(mapobj, movingMarker);
-          
-          var htmlMessage = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, '; 
-              htmlMessage += '경도는 ' + latlng.getLng() + ' 입니다';
-             
-          var resultDiv = document.getElementById("latlngResult"); 
-          resultDiv.innerHTML = htmlMessage;
-      });
-       // ================== 지도에 클릭 이벤트를 등록하기 끝 ======================= //
-    	
-	    
-      // 이미지 클릭 시 모달에 이미지 경로 설정
-      $('.modal-link').on('click', function() {
-        var imageUrl = $(this).find('img').attr('src');
-        $('#modalImage').attr('src', imageUrl);
-      });
-   
-       
-       
-       
+	// 인포윈도우를 생성합니다
+	var infowindow = new kakao.maps.InfoWindow({
+	    position : iwPosition, 
+	    content : iwContent 
+	});
+	  
+	// 마커 위에 인포윈도우를 표시합니다. 두번째 파라미터인 marker를 넣어주지 않으면 지도 위에 표시됩니다
+	infowindow.open(map, marker); 
        
 	});// end of $(document).ready(function(){})-----------------
 
@@ -1077,9 +925,7 @@ function goAddWrite_noAttach(){
         dataType:"json",
         success:function(json){
        		console.log(JSON.stringify(json));
-           	//{"name":"최준혁","n":1}
-           	//또는
-           	//{"name":"최준혁","n":0}
+          
            	
            	if(json.n == 0){
            		alert(json.name + "님의 포인트는 300점을 초과할 수 없으므로 댓글쓰기가 불가합니다.");
@@ -1105,7 +951,7 @@ function goAddWrite_noAttach(){
 function goReadComment(){	
 	$.ajax({
 		url:"<%= ctxPath%>/readComment2.action",
-		data:{"parentSeq":"77"},
+		data:{"parentSeq":"${gym.gymseq}"},
 		dataType:"json",
 		success:function(json){
 			// console.log(JSON.stringify(json));
@@ -1277,9 +1123,9 @@ function goAddWrite_reply(gymquestionseq){
         dataType:"json",
         success:function(json){
        	//console.log(JSON.stringify(json));
-       	//{"name":"최준혁","n":1}
+       	//
        	//또는
-       	//{"name":"최준혁","n":0}
+       	//
        	
        	if(json.n == 0){
        		alert(json.name + "오류가 발생했습니다.");
@@ -1511,7 +1357,8 @@ function goAddWrite_reply(gymquestionseq){
 				<textarea name="content" style="font-size: 12pt; width: 100%; height: 100px;"></textarea>
 				<input class="userid" type="hidden" name="fk_userid" value="${sessionScope.loginuser.userid}" />
 				<input type="hidden" name="name" value="${sessionScope.loginuser.name}" />
-				<input type="hidden" name="gymseq" value="${requestScope.pvo.pnum}" />
+				<input type="hidden" name="gymseq" value="${requestScope.gym.gymseq}" />
+				
 			</div>
 			<div style="text-align: right; font-size: 12pt;">
 				<button type="button" class="btn btn-outline-secondary"
@@ -1554,58 +1401,16 @@ function goAddWrite_reply(gymquestionseq){
        </div>
 	</div>
 	
-	
+	<div>
+	 <br>
+	${gym.lng}
+	</div>
 	<%-- CSS 로딩화면 구현한것--%>
 	<div
 		style="display: flex; position: absolute; top: 30%; left: 37%; border: solid 0px blue;">
 		<div class="loader" style="margin: auto"></div>
 	</div>
 
-	<%-- === 추가이미지 보여주기 시작 === --%>
-	<c:if test="${not empty requestScope.imgList}">
-		<%-- /////// 추가이미지 캐러젤로 보여주는 것 시작 //////// --%>
-		<div class="row mx-auto my-auto" style="width: 100%;">
-			<div id="recipeCarousel" class="carousel slide w-100"
-				data-ride="carousel">
-				<div class="carousel-inner w-100" role="listbox">
-					<c:forEach var="imgfilename" items="${requestScope.imgList}"
-						varStatus="status">
-						<c:if test="${status.index == 0}">
-							<div class="carousel-item active">
-								<%--   <img class="d-block col-3 img-fluid" src="<%= ctxPath%>/images/${imgfilename}" style="cursor: pointer;" onclick="openPopup('<%= ctxPath%>/images/${imgfilename}')" />  --%>
-								<img class="d-block col-3 img-fluid"
-									src="<%= ctxPath%>/images/${imgfilename}"
-									style="cursor: pointer;" data-toggle="modal"
-									data-target="#add_image_modal_view" data-dismiss="modal"
-									onclick="modal_content(this)" />
-							</div>
-						</c:if>
-						<c:if test="${status.index > 0}">
-							<div class="carousel-item">
-								<%--   <img class="d-block col-3 img-fluid" src="<%= ctxPath%>/images/${imgfilename}" style="cursor: pointer;" onclick="openPopup('<%= ctxPath%>/images/${imgfilename}')" />  --%>
-								<img class="d-block col-3 img-fluid"
-									src="<%= ctxPath%>/images/${imgfilename}"
-									style="cursor: pointer;" data-toggle="modal"
-									data-target="#add_image_modal_view" data-dismiss="modal"
-									onclick="modal_content(this)" />
-							</div>
-						</c:if>
-					</c:forEach>
-				</div>
-				<a class="carousel-control-prev" href="#recipeCarousel"
-					role="button" data-slide="prev"> <span
-					class="carousel-control-prev-icon" aria-hidden="true"></span> <span
-					class="sr-only">Previous</span>
-				</a> <a class="carousel-control-next" href="#recipeCarousel"
-					role="button" data-slide="next"> <span
-					class="carousel-control-next-icon" aria-hidden="true"></span> <span
-					class="sr-only">Next</span>
-				</a>
-			</div>
-		</div>
-		<%-- /////// 추가이미지 캐러젤로 보여주는 것 끝 //////// --%>
-	</c:if>
-	<%-- === 추가이미지 보여주기 끝 === --%>
 
 	<div>
 		<p id="order_error_msg"
