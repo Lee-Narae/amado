@@ -404,6 +404,7 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	            inquiryVO.setSearchtype_a(inquiryMap.get("searchtype_a"));
 	            inquiryVO.setSearchtype_b(inquiryMap.get("searchtype_b"));
 	            inquiryVO.setStatus(inquiryMap.get("status"));
+	            inquiryVO.setAnswer(inquiryMap.get("answer"));
 
 	            if (inquiryMap.get("filename") != null || inquiryMap.get("filesize") != null || inquiryMap.get("orgfilename") != null) {
 	                InquiryFileVO inquiryfilevo = new InquiryFileVO();

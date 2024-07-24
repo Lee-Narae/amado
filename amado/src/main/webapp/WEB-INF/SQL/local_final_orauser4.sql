@@ -984,6 +984,15 @@ create table tbl_inquiry
 // Table TBL_INQUIRY이(가) 생성되었습니다.
 
 
+alter table tbl_inquiry
+add answer number(1) default 0;
+-- Table TBL_INQUIRY이(가) 변경되었습니다.
+
+desc tbl_inquiry;
+
+select *
+from tbl_inquiry
+
 
 create sequence seq_inquiry 
 start with 1
@@ -995,6 +1004,24 @@ nocache;
 -- Sequence SEQ_INQUIRY이(가) 생성되었습니다.
 
 commit
+
+-- 문의답변(운영자용)
+create table tbl_inquiryanswers
+(inquiryseq                  NUMBER   not null
+,content                     nvarchar2(1000)   not null       -- 글내용
+,registerdate                date default sysdate  not null   -- 작성일자
+,fk_userid                   nvarchar2(20)  not null          -- 아이디(tbl_member 의 회원아이디)
+,constraint FK_tbl_iqryaws_inquiryseq foreign key(inquiryseq) references tbl_inquiry(inquiryseq)
+,constraint FK_tbl_iqryaws_fk_userid foreign key(fk_userid) references tbl_member(userid)
+,CONSTRAINT CK_tbl_iqryaws_admin CHECK (fk_userid = 'admin')
+);
+-- Table TBL_INQUIRYANSWERS이(가) 생성되었습니다.
+
+commit;
+-- 커밋 완료.
+
+
+
 
 
 create table tbl_inquiryFile 
@@ -1020,8 +1047,6 @@ order by inquiryseq desc
 select *
 from tbl_inquiry
 order by inquiryseq desc
-=======
->>>>>>> branch 'main' of https://github.com/Lee-Narae/amado.git
 
 
 SELECT I.inquiryseq, I.content, I.fk_userid, I.email, I.phone, I.registerdate, I.searchtype_a, I.searchtype_b, I.status
@@ -1138,3 +1163,9 @@ where rno between 1 and 10
 		FROM InquiryWithFiles
 		WHERE row_num = 1
 		ORDER BY inquiryseq DESC
+        
+        
+        
+        
+        
+        

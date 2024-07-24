@@ -239,53 +239,6 @@
 		  });
     	
     	
-		  $("button.btn-reserve").click(function(){
-		    	
-			    
-			   	var priceText = $("#totalPrice").text();
-                
-			   	/////////////////////////////////////////////////////////
-                // ₩, 원, , 문자를 제거합니다.
-                var numericPrice = priceText.replace(/[₩,원]/g, '');
-                const time = $("button.btn-custom.selected").text();
-                const reservation_date = $("#date").val();
-                const fk_gymseq = $("input.gymseq").val();
-                const fk_userid = $("input.fk_userid").val();
-			   	/////////////////////////////////////////////////////////
-
-              //alert( $("input.gymseq").val() );
-              //alert("gdgd");
-			  //alert($("button.btn-custom.selected").text()+" ");
-			  //alert(numericPrice);
-              //alert( $("#date").val());
-              
-              	
-              	$.ajax({
-		    		url:"<%= ctxPath%>/gym/gymPay_end.do",
-		    		type:"post",
-		    		data:{"numericPrice":numericPrice,
-		    			  "selected":time,
-		    			  "reservation_date":reservation_date,
-		    			  "fk_gymseq":fk_gymseq,
-		    			  "fk_userid":fk_userid},
-		    		dataType:"json",
-		    		success:function(json){
-		    			
-		    			if(json.n == 1){
-		    				alert("ㅎㅇㅎㅇ");
-		    			}
-		    			else{
-		    				
-		    			}
-		    			
-		    		},
-		    		error: function(request, status, error){
-		    			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-		    	    }
-		    	});// end of $.ajax({})----------------------
-              
-			    
-		  });
 		  
 		  
 		  
@@ -426,7 +379,7 @@
       	    	// alert("infowindow.getZIndex()-1:"+ (infowindow.getZIndex()-1));
       	    	//alert(infowindow.getContent())
       	    	let gymseq = infowindow.getContent();
-      	    	
+      	    	const ctxPath = '<%= ctxPath%>';
       	    	
       	    	$.ajax({
 		    		url:"<%= ctxPath%>/gym/gymPay_dtail.do",
@@ -439,11 +392,11 @@
 		    			// JSON.stringify(json) 은 자바스크립트의 객체(배열)인 json 을 string 타입으로 변경시켜주는 것이다.
 		    			
 		    			v_html ="";
-		    			
+		    			v_html += "<div class='container1'>";
 		    			v_html += "<div class='section'>";
 		    			v_html += "<img src='<%=ctxPath%>/resources/images/"+json.orgfilename+"' class='gym-image' alt='체육관 사진'>";
 		    			v_html += "</div>";
-		    			v_html += "<div style='text-align: center; margin-top: 3%; margin-bottom: 10%; font-size: 30px; font-weight: bold'>"
+		    			v_html += "<div id='gymname' style='text-align: center; margin-top: 3%; margin-bottom: 10%; font-size: 30px; font-weight: bold'>"
 		    			v_html += json.gymname;
 		    			v_html += "</div>";
 				        
@@ -473,10 +426,18 @@
 				        v_html += "</div>";
 				        
 				        v_html += "</div>";
-						
+				        v_html += "<div class='section'>";
+				        v_html += 
+				            '<button class="btn btn-primary btn-reserve" ' +
+				            'onclick="goCoinPurchaseEnd(\'' + ctxPath + '\', \'' + $('input.fk_userid').val() + '\', \'' + json.gymname + '\')">' +
+				            '예약하기' +
+				            '</button>';
+				        
+				        v_html += "</div>";
+				        v_html += "</div>";
 				       
 		    			$("input.gymseq").val(json.gymseq);
-		    			$("div.container1").html(v_html);
+		    			$("div.container").html(v_html);
 		    			
 		    			let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?gymseq=" + gymseq;
 		                window.history.pushState({ path: newUrl }, '', newUrl);
@@ -495,6 +456,83 @@
       	}// end of function makeOverListener(mapobj, marker, infowindow, infowindowArr)--------
       	
       	
+
+      	// === 포트원(구 아임포트) 결제를 해주는 함수 === //
+		function goCoinPurchaseEnd(ctxPath, userid, gymname) {
+
+		    // 결제 금액을 가져옵니다.
+		    var priceText = $("#totalPrice").text();
+		            
+		    // ₩, 원, , 문자를 제거하여 결제 금액을 숫자로 변환합니다.
+		    var coinmoney = priceText.replace(/[₩,원,]/g, '').trim();
+		
+		    // 팝업창의 크기 설정
+		    var width = 1000;
+		    var height = 600;
+		
+		    // 화면 가운데에 팝업창 위치 설정
+		    var left = Math.ceil((window.screen.width - width) / 2); // 정수로 만듬
+		    var top = Math.ceil((window.screen.height - height) / 2); // 정수로 만듬
+		
+		    // 팝업창의 URL 설정
+		    var url = ctxPath + "/gym/coinPurchaseEnd.do?coinmoney=" + coinmoney + "&userid=" + userid + "&gymname=" + gymname; 
+		
+		    // 팝업창 열기
+		    window.open(url, "coinPurchaseEnd",
+		                "left=" + left + ", top=" + top + ", width=" + width + ", height=" + height);
+		}
+      	
+      	
+     
+      	
+		function gymPayEndInsert(){
+		    
+		   	var priceText = $("#totalPrice").text();
+            
+		   	/////////////////////////////////////////////////////////
+            // ₩, 원, , 문자를 제거합니다.
+            var numericPrice = priceText.replace(/[₩,원]/g, '');
+            const time = $("button.btn-custom.selected").text();
+            const reservation_date = $("#date").val();
+            const fk_gymseq = $("input.gymseq").val();
+            const fk_userid = $("input.fk_userid").val();
+		   	/////////////////////////////////////////////////////////
+
+          //alert( $("input.gymseq").val() );
+          //alert("gdgd");
+		  //alert($("button.btn-custom.selected").text()+" ");
+		  //alert(numericPrice);
+          //alert( $("#date").val());
+          
+          	
+          	$.ajax({
+	    		url:"<%= ctxPath%>/gym/gymPay_end.do",
+	    		type:"post",
+	    		data:{"numericPrice":numericPrice,
+	    			  "selected":time,
+	    			  "reservation_date":reservation_date,
+	    			  "fk_gymseq":fk_gymseq,
+	    			  "fk_userid":fk_userid},
+	    		dataType:"json",
+	    		success:function(json){
+	    			
+	    			if(json.n == 1){
+	    				alert("insert 완료");
+	    				window.location.href = 'http://localhost:9099/amado/index.do';
+	    			}
+	    			else{
+	    				
+	    			}
+	    			
+	    		},
+	    		error: function(request, status, error){
+	    			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+	    	    }
+	    	});// end of $.ajax({})----------------------
+		
+		    
+	  }
+      	
     </script>
 </head>
 <body>
@@ -505,7 +543,7 @@
 		        <div class="section">
 		            <img src="<%=ctxPath%>/resources/images/${requestScope.gymvo.orgfilename}" class="gym-image" alt="체육관 사진">
 		        </div>
-				<div style="text-align: center; margin-top: 3%; margin-bottom: 10%; font-size: 30px; font-weight: bold">
+				<div id="gymname" style="text-align: center; margin-top: 3%; margin-bottom: 10%; font-size: 30px; font-weight: bold">
 				 ${requestScope.gymvo.gymname}
 				</div>
 		        <!-- 날짜 선택 -->
@@ -543,7 +581,7 @@
 			</div>
 	        <!-- 예약하기 버튼 -->
 	        <div class="section">
-	            <button class="btn btn-primary btn-reserve">예약하기</button>
+	            <button class="btn btn-primary btn-reserve" onclick="goCoinPurchaseEnd('<%= ctxPath%>','${sessionScope.loginuser.userid}','${requestScope.gymvo.gymname}')">예약하기</button>
 	        </div>
 	    </div>
 	    <div>
