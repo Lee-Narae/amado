@@ -753,7 +753,9 @@ public class ControllerJY {
 	@GetMapping(value="/club/clubBoard.do")
 	public ModelAndView requiredLogin_clubBoard(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
 		
+		String sportname = request.getParameter("sportname");
 		String clubseq = request.getParameter("clubseq");
+		String clubname = request.getParameter("clubname");
 		
 		String searchType = request.getParameter("searchType");
 		String searchWord = request.getParameter("searchWord");
@@ -781,6 +783,8 @@ public class ControllerJY {
 		paramap.put("currentShowPageNo", currentShowPageNo);
 		paramap.put("sizePerPage", sizePerPage);
 		paramap.put("clubseq", clubseq);
+		paramap.put("clubname", clubname);
+		paramap.put("sportname", sportname);
 		
 		int totalPage = service.getTotalPage(paramap);
 		
@@ -868,6 +872,9 @@ public class ControllerJY {
 			mav.addObject("searchWord", searchWord);
 		}
 		
+		mav.addObject("sportname", sportname);
+		mav.addObject("clubname", clubname);
+		mav.addObject("clubseq", clubseq);
 		mav.addObject("paramap", paramap);
 		mav.addObject("pageBar", pageBar);
 		
@@ -893,6 +900,7 @@ public class ControllerJY {
 	@PostMapping("/club/clubboardDetail.do")
 	public ModelAndView clubboardDetail(ModelAndView mav, HttpServletRequest request) {
 		
+		String clubseq = request.getParameter("clubseq");
 		String clubboardseq = request.getParameter("clubboardseq");
 		String goBackURL = request.getParameter("goBackURL");
 		String searchType = request.getParameter("searchType");
@@ -904,6 +912,7 @@ public class ControllerJY {
 		paramap.put("goBackURL", goBackURL);
 		paramap.put("searchType", searchType);
 		paramap.put("searchWord", searchWord);
+		paramap.put("clubseq", clubseq);
 		
 		// 댓글
 		List<Map<String,String>> commentList = service.getCBoardComment(clubboardseq);
@@ -933,9 +942,10 @@ public class ControllerJY {
 		}
 		
 		// 조회수 (로그인 여부 상관 없이, 중복 상관 없이 무조건 1 증가)
-		//service.updateCboardViewcount(clubboardseq);
+		service.updateCboardViewcount(clubboardseq);
 		
 		
+		mav.addObject("clubseq", clubseq);
 		mav.addObject("cboard", cboard);
 		mav.addObject("clubboardseq", clubboardseq);
 		mav.addObject("goBackURL", goBackURL);
@@ -957,6 +967,8 @@ public class ControllerJY {
 		
 		String comment_text = request.getParameter("comment_text");
 		String clubboardseq = request.getParameter("clubboardseq");
+		
+		System.out.println("clubboardseq = "+ clubboardseq);
 		
 		Map<String, String> paramap = new HashMap<String, String>();
 		paramap.put("comment_text", comment_text);
@@ -995,10 +1007,79 @@ public class ControllerJY {
 
 	
 	
-	// /club/delCBoardComment.do
+	// 동호회게시판 - 댓삭
+	@ResponseBody
+	@PostMapping(value="/club/delCBoardComment.do", produces="text/plain;charset=UTF-8")
+	public String delNoticeComment(HttpServletRequest request) {
+		
+		String clubboardcommentseq = request.getParameter("clubboardcommentseq");
+		String clubboardseq = request.getParameter("clubboardseq");
+		
+		System.out.println("clubboardcommentseq = " + clubboardcommentseq);
+		System.out.println("clubboardseq = " + clubboardseq);
+		
+		int n = service.delCBoardComment(clubboardcommentseq);
+		
+		service.updateCBoardCommentcount_del(clubboardseq);
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+		
+		return jsonObj.toString();
+	}
+	
+	
+	// 댓 수정
+	@ResponseBody
+	@PostMapping(value="/club/editCBoardComment.do", produces="text/plain;charset=UTF-8")
+	public String editCBoardComment(HttpServletRequest request) {
+		
+		String comment_text = request.getParameter("edit_comment_text");
+		String clubboardcommentseq = request.getParameter("commentseq");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		
+		paramap.put("comment_text", comment_text);
+		paramap.put("clubboardcommentseq", clubboardcommentseq);
+		
+		int n = service.editCBoardComment(paramap);
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+		
+		return jsonObj.toString();
+	}
+
 	
 	
 	
+	
+	//댓글 불러오기
+	@ResponseBody
+	@GetMapping(value="/club/viewCommentOnly.do", produces="text/plain;charset=UTF-8")
+	public String viewCommentOnly(HttpServletRequest request) {
+		String clubboardseq = request.getParameter("clubboardseq");
+		
+		List<Map<String,String>> commentList = service.getCBoardComment(clubboardseq);
+		
+		JSONArray jsonArr = new JSONArray();
+		
+		for(Map<String,String> commentmap : commentList) {
+			JSONObject jsonObj = new JSONObject();
+			
+			jsonObj.put("clubboardcommentseq", commentmap.get("clubboardcommentseq"));
+			jsonObj.put("clubboardseq", commentmap.get("clubboardseq"));
+			jsonObj.put("comment_text", commentmap.get("comment_text"));
+			jsonObj.put("registerdate", commentmap.get("registerdate"));
+			jsonObj.put("fk_userid", commentmap.get("fk_userid"));
+			jsonObj.put("memberimg", commentmap.get("memberimg"));
+			
+			jsonArr.put(jsonObj);
+		}
+		
+		return jsonArr.toString();
+	}
+
 	
 	
 	

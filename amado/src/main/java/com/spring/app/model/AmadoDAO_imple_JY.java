@@ -352,6 +352,29 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 		sqlsession.update("JY.updateCBoardCommentcount", clubboardseq);
 		
 	}
+
+	
+	// 댓글 삭제
+	@Override
+	public int delCBoardComment(String clubboardcommentseq) {
+		int n = sqlsession.delete("JY.delCBoardComment", clubboardcommentseq);
+		return n;
+	}
+
+	@Override
+	public void updateCBoardCommentcount_del(String clubboardseq) {
+		sqlsession.update("JY.updateCBoardCommentcount_del", clubboardseq);
+		
+	}
+
+	
+	// 댓글 수정
+	@Override
+	public int editCBoardComment(Map<String, String> paramap) {
+		int n = sqlsession.update("JY.editCBoardComment", paramap);
+		
+		return n;
+	}
 	
 
 

@@ -16,8 +16,8 @@ height: 50px;
 font-size: 15pt;
 text-align: center;
 align-content: center;
-background-color: #3366ff;
-color: white;
+color: black;
+border-bottom: solid 3px #1f7bb5;
 }
 
 th:nth-child(1) {
@@ -26,12 +26,13 @@ border-top-left-radius: 20px;
 
 th:last-child {
 border-top-right-radius: 20px;
+
 }
 
 td {
 height: 55px;
 align-content: center;
-border-top: solid 1px #e0e0e0;
+border-top: solid 1px #7dc1f3;
 }
 
 tbody > tr:hover {
@@ -76,10 +77,12 @@ $(document).ready(function(){
 	// 글을 눌렀을 때
 	$("tbody > tr *").click(function(e){
 
+		let clubseq = '${requestScope.clubseq}';
 		let clubboardseq = $(e.target).parent().find("input[name='clubboardseq']").val();
 		
 		const frm = document.goViewFrm;
 		frm.clubboardseq.value = clubboardseq;
+		frm.clubseq.value = clubseq;
 		frm.goBackURL.value = "${requestScope.currentURL}";
 		
 		if(${not empty requestScope.paramap.searchType}){ // 검색을 했을 경우
@@ -111,7 +114,7 @@ function goSearch(){
 </script>
 
 <div id="wrap" style="width: 100%; padding: 5% 0;" align="center">
-	<div id="top" class="mb-5" style="font-size: 35pt; font-weight: bolder; text-align: center;">동호회 게시판</div>
+	<div id="top" class="mb-5" style="font-size: 35pt; font-weight: bolder; text-align: center;">[${requestScope.clubname}]<br><span style='color: #00588f;'>${requestScope.sportname}</span>&nbsp;동호회 게시판</div>
 
 	<div id="bottom" style="width: 80%;">
 		<table class="mb-5" style="width: 100%;">
@@ -165,6 +168,7 @@ function goSearch(){
 	</div>
 	
 	<form name="goViewFrm">
+		<input type="hidden" name="clubseq" />
 		<input type="hidden" name="clubboardseq" />
 		<input type="hidden" name="goBackURL" />
 		<input type="hidden" name="searchType" />

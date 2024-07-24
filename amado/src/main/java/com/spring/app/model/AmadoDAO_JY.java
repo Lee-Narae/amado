@@ -115,6 +115,12 @@ public interface AmadoDAO_JY {
 
 	void updateCBoardCommentcount(String clubboardseq);
 
+	int delCBoardComment(String clubboardcommentseq);
+
+	void updateCBoardCommentcount_del(String clubboardseq);
+
+	int editCBoardComment(Map<String, String> paramap);
+
 	
 
 

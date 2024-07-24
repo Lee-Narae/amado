@@ -380,3 +380,13 @@ where A.clubboardseq = 4 ;
 
 select *
 from tbl_clubboardcomment;
+
+-- 댓삭
+delete from tbl_clubboardcomment where clubboardcommentseq = 15;
+
+
+select clubboardcommentseq, clubboardseq, comment_text, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, fk_userid
+		from tbl_clubboardcomment A join tbl_member B
+		on A.fk_userid = B.userid
+		where A.status = 1 and clubboardseq = 7
+		order by registerdate

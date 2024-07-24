@@ -304,8 +304,8 @@ function goPermit(matchingapplyseq, matchingregseq, Aseq, Bseq){
 	
 }
 
-function goBoard(fk_userid, clubseq){
-	location.href = "<%= ctxPath%>/club/clubBoard.do?fk_userid="+fk_userid+"&clubseq="+clubseq;
+function goBoard(clubseq, clubname, sportname){
+	location.href = "<%= ctxPath%>/club/clubBoard.do?clubname="+clubname+"&clubseq="+clubseq+"&sportname="+sportname;
 }
 
 
@@ -655,7 +655,7 @@ function goMatchResult(matchingseq){
 			  </table>
 			</div>
 		</div>
-		<div id="more" style="text-align: right; margin: 5% 5% 2% 0; color: #8a8a8a;" onclick="goBoard('${sessionScope.loginuser.userid}','${requestScope.club.clubseq}')">게시판 바로가기 ▶</div>
+		<div id="more" style="text-align: right; margin: 5% 5% 2% 0; color: #8a8a8a;" onclick="goBoard('${requestScope.club.clubseq}', '${requestScope.club.clubname}', '${requestScope.club.sportname}')">게시판 바로가기 ▶</div>
 	</div>
 </div>
 </c:if>

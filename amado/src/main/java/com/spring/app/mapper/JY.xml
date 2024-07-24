@@ -157,7 +157,7 @@
 		        lead(title, 1) over(order by clubboardseq desc) nexttitle,
 		        fk_userid, password, commentcount, status
 		    from tbl_clubboard
-		    where status = 1
+		    where status = 1 and clubseq=#{clubseq}
 		) A
 		where A.clubboardseq = #{clubboardseq}
 	</select>
@@ -479,7 +479,7 @@
 	
 	
 	<update id="updateCBoardCommentcount" parameterType="String">
-		update tbl_clubboard set commentcount = commentcount-1
+		update tbl_clubboard set commentcount = commentcount+1
 		where clubboardseq = #{clubboardseq}
 	</update>
 	
@@ -490,6 +490,28 @@
 		where status = 1 and clubboardseq = #{clubboardseq}
 	</select>
 	
+	
+	<delete id="delCBoardComment" parameterType="String">
+		delete from tbl_clubboardcomment where clubboardcommentseq = #{clubboardcommentseq}
+	</delete>
+	
+	<update id="updateCBoardCommentcount_del" parameterType="String">
+		update tbl_clubboard set commentcount = commentcount-1
+		where clubboardseq = #{clubboardseq}
+	</update>
+
+
+
+	<update id="editCBoardComment" parameterType="HashMap">
+		update tbl_clubboardcomment set comment_text = #{comment_text}, registerdate = sysdate
+		where clubboardcommentseq = #{clubboardcommentseq}
+	</update>
+
+	
+	<update id="updateCboardViewcount" parameterType="String">
+		update tbl_clubboard set viewcount = viewcount + 1
+		where clubboardseq = #{clubboardseq}
+	</update>
 	
 
 </mapper>
