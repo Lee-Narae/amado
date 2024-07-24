@@ -689,5 +689,13 @@
 		delete from tbl_clubmember where fk_userid = #{userid} and clubseq = #{clubseq}
 	</delete>
 	
+	<select id="getMyClub" parameterType="String" resultType="ClubVO">
+		select clubseq, clubname, clubimg, sportname, fk_userid, clubtel, city, local, clubgym, clubtime,
+			   membercount, clubpay, clubstatus, clubscore, wasfilename, viewcount
+		from tbl_club A join tbl_sport B
+		on A.fk_sportseq = B.sportseq
+		where clubstatus = 1 and fk_userid = #{userid}
+	</select>
+	
 	
 </mapper>
