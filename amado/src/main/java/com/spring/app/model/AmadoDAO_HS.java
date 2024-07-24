@@ -19,7 +19,7 @@ public interface AmadoDAO_HS {
 
 	List<GymVO> getAllGymList();
 	
-	
+
 	
 	// 댓글 시작 
 	int addComment(QuestionVO questionvo);
@@ -49,12 +49,22 @@ public interface AmadoDAO_HS {
 	// 댓글  끝
 
 	// gymseq 채번
-		String getGymseq();
+    String getGymseq();
 
 	// 체육관 등록하기(대표이미지)
 	int Gymreg(GymVO gym);
 	// 체육관 등록하기(추가이미지)
 	int insertGymImg(Map<String, String> paramap);
+	List<GymVO> getGymAdd();
+
+	
+	GymVO getGym(String gymseq);
+
+	List<Map<String, String>> getGymImg(String gymseq);
+
+
+
+
 	
 
 }

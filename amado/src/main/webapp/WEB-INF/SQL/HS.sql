@@ -262,9 +262,40 @@ create table tbl_gymanswerreply
 ,constraint FK_tbl_fktcommentre_fk_userid foreign key(fk_userid) references tbl_member(userid)
 );
 
-
 select *
 from tbl_gym
+
+        select *
+		from tbl_gym
+		where gymseq=77
+desc  tbl_gym
+select *
+from tbl_gym
+
+
+SELECT g.gymseq,
+       g.gymname,
+       g.fk_userid,
+       g.postcode,
+       g.address,
+       g.detailaddress,
+       g.status,
+       g.info,
+       g.cost,
+       g.caution,
+       g.membercount,
+       g.likecount,
+       g.insidestatus,
+       g.orgfilename AS gym_orgfilename,
+       g.filename AS gym_filename,
+       g.filesize AS gym_filesize,
+       g.lat,
+       g.lng,
+       gi.orgfilename AS gymimg_orgfilename
+  FROM tbl_gym g
+  LEFT JOIN tbl_gymimg gi
+    ON g.gymseq = gi.gymseq
+ WHERE g.gymseq = 77;
 
 select *
 from tbl_fleamarketcomment 
@@ -386,3 +417,55 @@ where A.gymquestionseq = 20
 order by gymanswerseq desc
         
         
+select *
+from tbl_gymimg
+        
+        
+SELECT g.gymseq,
+       g.gymname,
+       g.fk_userid,
+       g.postcode,
+       g.address,
+       g.detailaddress,
+       g.status,
+       g.info,
+       g.cost,
+       g.caution,
+       g.membercount,
+       g.likecount,
+       g.insidestatus,
+       g.orgfilename AS gym_orgfilename,
+       g.filename AS gym_filename,
+       g.filesize AS gym_filesize,
+       g.lat,
+       g.lng,
+       gi.orgfilename AS gymimg_orgfilename
+  FROM tbl_gym g
+  LEFT JOIN tbl_gymimg gi
+    ON g.gymseq = gi.gymseq
+ WHERE g.gymseq = 93;      
+ 
+ select * from tbl_gym where gymseq = 93;
+ 
+ select * from tbl_gymimg where gymseq = 93;
+ 
+ desc tbl_gymimg
+ 
+select GYMIMGSEQ,GYMSEQ,FILENAME,ORGFILENAME    
+		from tbl_gymimg
+		where gymseq= 77
+ gymimgseq,gymseq,filename,orgfilename 
+GYMIMGSEQ   
+GYMSEQ                    
+FILENAME              
+ORGFILENAME       
+FILESIZE   
+
+select *
+from  tbl_gym
+
+update tbl_gym set status = 1;
+commit;
+select gymimgseq,gymseq,filename,orgfilename    
+			from tbl_gym
+			where gymseq= 
