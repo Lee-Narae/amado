@@ -646,9 +646,8 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 	}
 
 	@Override
-	public int deleteClubMember(String clubseq) {
-		int n = sqlsession.delete("NR.deleteClubMember", clubseq);
-		return n;
+	public void deleteClubMember(String clubseq) {
+		sqlsession.delete("NR.deleteClubMember", clubseq);
 	}
 
 }

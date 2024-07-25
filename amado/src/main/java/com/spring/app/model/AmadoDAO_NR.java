@@ -233,7 +233,7 @@ public interface AmadoDAO_NR {
 
 	// 마이페이지 - 내 동호회 삭제
 	int deleteClub(String clubseq);
-	int deleteClubMember(String clubseq);
+	void deleteClubMember(String clubseq);
 
 	
 }

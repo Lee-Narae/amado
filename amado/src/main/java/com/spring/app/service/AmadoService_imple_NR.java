@@ -709,9 +709,8 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 	@Override
 	public int deleteClub(String clubseq) {
 		int n = dao.deleteClub(clubseq);
-		int n2 = 0;
 		if(n == 1) {
-			n2 = dao.deleteClubMember(clubseq);
+			dao.deleteClubMember(clubseq);
 		}
 		
 		return n;
