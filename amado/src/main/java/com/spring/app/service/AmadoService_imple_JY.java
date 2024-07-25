@@ -370,6 +370,14 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 	}
 
 
+	// 글삭하기
+	@Override
+	public int deleteCBoard(String clubboardseq) {
+		int n = dao.deleteCBoard(clubboardseq);
+		return n;
+	}
+
+
 	
 
 

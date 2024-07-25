@@ -17,7 +17,7 @@ color: black;
 height: 35px;
 align-content: center;
 font-weight: bold;
-border-left: solid 3px #05203c;
+border-left: solid 3px #2651ac;
 }
 
 .tr{
@@ -149,6 +149,30 @@ function goback(){
 	const gobackurl = $("input[name='goBackURL']").val();
 	location.href="<%=ctxPath%>"+gobackurl;
 }
+
+
+function delCBoard(seq){
+
+	if(confirm('게시글을 삭제하시겠습니까?')){	
+		const frm3 = document.goViewFrm;
+		frm3.clubboardseq.value = seq;
+		frm3.action = "<%=ctxPath%>/club/deleteCBoard.do";
+		frm3.method = "post";
+		frm3.submit();
+	}
+}
+
+function editCBoard(seq){
+	
+	const frm4 = document.goViewFrm;
+	frm4.clubboardseq.value = seq;
+	frm4.action = "<%=ctxPath%>/admin/reg/notice";
+	frm4.method = "post";
+	frm4.submit();
+	
+}
+
+
 
 function viewComment(){
 	
@@ -288,8 +312,8 @@ function viewCommentOnly(){
 
 <c:if test="${sessionScope.loginuser.userid == requestScope.cboard.fk_userid}">
 <div align="right" class="mb-2" style="padding-right: 10%;">
-<button type="button" class="btn btn-warning" onclick="editNotice(${requestScope.cboard.clubboardseq})">수정하기</button>&nbsp;&nbsp;
-<button type="button" class="btn btn-light" onclick="delNotice(${requestScope.cboard.clubboardseq})">삭제하기</button>
+<button type="button" class="btn" style='background-color: #aab1c0;' onclick="editCBoard(${requestScope.cboard.clubboardseq})">수정하기</button>&nbsp;&nbsp;
+<button type="button" class="btn btn-light" onclick="delCBoard(${requestScope.cboard.clubboardseq})">삭제하기</button>
 </div>
 </c:if>
 <div id="line" class="py-5" style="width: 80%; border: solid 0.5px #e3e3e3; min-height: auto;">
@@ -351,7 +375,7 @@ function viewCommentOnly(){
 	</div>
 	<div id="commentWrite" class="mt-3 p-3" style="border: solid 0.5px #e3e3e3; width: 75%" align="left">
 		<input type="text" name="comment_text" maxlength="200" style="width: 87%; height: 70px;"/>
-		<button type="button" class="btn btn-info btn-lg ml-3 regComment" style="font-size: 13pt;">등록하기</button>	
+		<button type="button" class="btn  btn-lg ml-3 regComment" style="font-size: 13pt; background-color: #142b5b; color: white;">등록하기</button>	
 	</div>
 	
 	<div id="pre_next_notice" class="mt-3 p-3" style="width: 75%" align="left">

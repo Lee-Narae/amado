@@ -375,6 +375,14 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 		
 		return n;
 	}
+
+	
+	// 글삭하기
+	@Override
+	public int deleteCBoard(String clubboardseq) {
+		int n = sqlsession.delete("JY.deleteCBoard", clubboardseq);
+		return n;
+	}
 	
 
 

@@ -121,6 +121,8 @@ public interface AmadoDAO_JY {
 
 	int editCBoardComment(Map<String, String> paramap);
 
+	int deleteCBoard(String clubboardseq);
+
 	
 
 
