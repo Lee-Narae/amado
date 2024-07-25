@@ -677,6 +677,13 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 	@Override
 	public Map<String, String> getMinton(String userid) { Map<String, String> minton = dao.getMinton(userid); return minton; }
 
+	// 탈퇴 전 동호회장인지 알아보기
+	@Override
+	public int checkClubMaster(Map<String, String> paramap) {
+		int n = dao.checkClubMaster(paramap);
+		return n;
+	}
+	
 	// 마이페이지 - 동호회 탈퇴
 	@Override
 	public int quitClub(Map<String, String> paramap) {
@@ -689,6 +696,24 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 	public List<ClubVO> getMyClub(String userid) {
 		List<ClubVO> clubList = dao.getMyClub(userid);
 		return clubList;
+	}
+
+	// 마이페이지 - 내 동호회 수정
+	@Override
+	public int updateClubInfo(ClubVO club) {
+		int n = dao.updateClubInfo(club);
+		return n;
+	}
+
+	// 마이페이지 - 내 동호회 삭제
+	@Override
+	public int deleteClub(String clubseq) {
+		int n = dao.deleteClub(clubseq);
+		if(n == 1) {
+			dao.deleteClubMember(clubseq);
+		}
+		
+		return n;
 	}
 
 

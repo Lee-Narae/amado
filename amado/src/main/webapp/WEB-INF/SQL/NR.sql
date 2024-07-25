@@ -559,3 +559,26 @@ desc tbl_club;
 select fk_userid, memberrank from tbl_club A join tbl_member B on A.fk_userid = B.userid;
 
 select clubseq, clubname, clubimg, sportname, fk_userid, clubtel, city, local, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfilename, viewcount from tbl_club A join tbl_sport B on A.fk_sportseq = B.sportseq where clubstatus = 1 and fk_userid = 'leejy';
+
+
+select count(*) from tbl_club where clubseq = 5 and fk_userid = 'leejy';
+
+select * from tbl_clubmember order by 1, 2;
+
+insert into tbl_clubmember(fk_userid, sportseq, clubseq, status) values ('leejy', 7, 8, 1);
+commit;
+
+select * from tbl_city order by to_number(cityseq);
+select * from tbl_club;
+select * from tbl_clubmember;
+
+update tbl_city set cityname = '' where cityseq = '16';
+commit;
+
+alter table tbl_city modify cityname nvarchar2(10);
+
+select * from tbl_noticecomment;
+select * from tbl_notice;
+update tbl_notice set commentcount = 0;
+commit;
+
