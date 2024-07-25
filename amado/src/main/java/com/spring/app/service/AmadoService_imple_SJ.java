@@ -431,7 +431,20 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	
 	@Override
 	public List<InquiryVO> getPaginginquiryList(Map<String, String> paraMap) {
-		List<InquiryVO> inquiryPagingList = dao.getPaginginquiryList(paraMap); 
+		
+		String fk_userid = paraMap.get("fk_userid");
+		
+		List<InquiryVO> inquiryPagingList = null;
+		
+		if(fk_userid == "admin") {
+			// 전체 문의목록 가져오기 (운영자일 경우)
+			inquiryPagingList = dao.getAllInquiry();
+		}
+		else {
+			inquiryPagingList = dao.getPaginginquiryList(paraMap);	
+		}
+		
+		 
 		return inquiryPagingList;
 	}
 
@@ -455,7 +468,6 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		InquiryFileVO inquiryfilevo = dao.getView_inquiry(paraMap);
 		return inquiryfilevo;
 	}
-
 
 
 }

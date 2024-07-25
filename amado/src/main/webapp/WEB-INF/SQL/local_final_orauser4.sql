@@ -994,6 +994,21 @@ select *
 from tbl_inquiry
 
 
+		WITH InquiryWithFiles AS (
+		  SELECT I.inquiryseq, I.content, I.fk_userid, I.email, I.phone, I.registerdate, I.searchtype_a, I.searchtype_b, I.status, I.answer,
+		         F.orgfilename, F.filename, F.filesize,
+		         ROW_NUMBER() OVER (PARTITION BY I.inquiryseq ORDER BY F.filename) AS row_num
+		  FROM tbl_inquiryFile F
+		  JOIN tbl_inquiry I ON F.inquiryseq = I.inquiryseq
+		  WHERE I.fk_userid = 'ksj1024sj' AND I.status = 1
+		)
+		SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer,
+		       orgfilename, filename, filesize
+		FROM InquiryWithFiles
+		WHERE row_num = 1
+		ORDER BY inquiryseq DESC
+
+
 create sequence seq_inquiry 
 start with 1
 increment by 1
@@ -1167,5 +1182,80 @@ where rno between 1 and 10
         
         
         
+SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
+FROM tbl_inquiry
+ORDER BY fk_userid ASC, inquiryseq DESC;        
         
         
+        
+        
+    		SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
+		FROM
+(        select row_number() over(order by inquiryseq asc) AS rno 
+             , inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
+             
+        from tbl_inquiry
+        where fk_userid = #{fk_userid} and status = 1
+	    <choose>
+		   <when test='searchtype_a == "0" and searchtype_b == "0" and searchWord == ""'>
+		   </when>
+		   <when test='searchtype_a == "0" and searchtype_b == "0" and searchWord != ""'>
+		      and lower(content) like '%'||lower(#{searchWord})||'%' 
+		   </when>
+		   
+		   <when test='searchtype_a != "0" and searchtype_b == "0" and searchWord != ""'>
+		      and searchtype_a = #{searchtype_a} and lower(content) like '%'||lower(#{searchWord})||'%' 
+		   </when>
+		   <when test='searchtype_a != "0" and searchtype_b == "0" and searchWord == ""'>
+		      and searchtype_a = #{searchtype_a}
+		   </when>
+		   
+		   <when test='searchtype_a == "0" and searchtype_b != "0" and searchWord != ""'>
+		      and searchtype_b = #{searchtype_b} and lower(content) like '%'||lower(#{searchWord})||'%' 
+		   </when>
+		   <when test='searchtype_a == "0" and searchtype_b != "0" and searchWord == ""'>
+		      and searchtype_b = #{searchtype_b}
+		   </when>
+		   
+		   <when test='searchtype_a != "0" and searchtype_b != "0" and searchWord != ""'>
+		      and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b} and lower(content) like '%'||lower(#{searchWord})||'%' 
+		   </when>
+		   <when test='searchtype_a != "0" and searchtype_b != "0" and searchWord == ""'>
+		      and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b}  
+		   </when>
+		   
+		   
+		   <when test='searchtype_fk_userid == "0" and searchtype_answer == "0" and searchWord == ""'>
+		   </when>
+		   <when test='searchtype_fk_userid == "0" and searchtype_answer == "0" and searchWord != ""'>
+		      and lower(content) like '%'||lower(#{searchWord})||'%' 
+		   </when>
+		   
+		   <when test='searchtype_fk_userid != "0" and searchtype_answer == "0" and searchWord != ""'>
+		      and fk_userid = #{searchtype_fk_userid} and lower(content) like '%'||lower(#{searchWord})||'%' 
+		   </when>
+		   <when test='searchtype_fk_userid != "0" and searchtype_answer == "0" and searchWord == ""'>
+		      and fk_userid = #{searchtype_fk_userid}
+		   </when>
+		   
+		   <when test='searchtype_fk_userid == "0" and searchtype_answer != "0" and searchWord != ""'>
+		      and answer = TO_NUMBER(#{searchtype_answer}) and lower(content) like '%'||lower(#{searchWord})||'%' 
+		   </when>
+		   <when test='searchtype_fk_userid == "0" and searchtype_answer != "0" and searchWord == ""'>
+		      and answer = TO_NUMBER(#{searchtype_answer})
+		   </when>
+		   
+		   <when test='searchtype_fk_userid != "0" and searchtype_answer != "0" and searchWord != ""'>
+		      and fk_userid = #{searchtype_fk_userid} and answer = TO_NUMBER(#{searchtype_answer}) and lower(content) like '%'||lower(#{searchWord})||'%' 
+		   </when>
+		   <when test='searchtype_fk_userid != "0" and searchtype_answer != "0" and searchWord == ""'>
+		      and fk_userid = #{searchtype_fk_userid} and answer = TO_NUMBER(#{searchtype_answer})  
+		   </when>
+		   
+
+		   
+		   <otherwise></otherwise>
+		</choose>      
+        order by fk_userid ASC, rno desc
+)
+where rno between 1 and 10

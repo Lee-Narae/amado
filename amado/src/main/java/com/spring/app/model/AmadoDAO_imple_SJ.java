@@ -310,5 +310,12 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 		return inquiryfilevo;
 	}
 
+	// 전체 문의목록 가져오기
+	@Override
+	public List<InquiryVO> getAllInquiry() {
+		List<InquiryVO> inquiryList = sqlsession.selectList("SJ.getAllInquiry");
+		return inquiryList;
+	}
+
 
 }
