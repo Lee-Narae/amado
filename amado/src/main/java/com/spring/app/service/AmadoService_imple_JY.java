@@ -346,6 +346,30 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 	}
 
 
+	// 댓글 삭제
+	@Override
+	public int delCBoardComment(String clubboardcommentseq) {
+		int n = dao.delCBoardComment(clubboardcommentseq);
+		return n;
+	}
+
+
+
+	@Override
+	public void updateCBoardCommentcount_del(String clubboardseq) {
+		dao.updateCBoardCommentcount_del(clubboardseq);			
+	}
+
+
+	// 댓글 수정
+	@Override
+	public int editCBoardComment(Map<String, String> paramap) {
+		int n = dao.editCBoardComment(paramap);
+		
+		return n;
+	}
+
+
 	
 
 

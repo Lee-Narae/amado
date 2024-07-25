@@ -609,6 +609,13 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		Map<String, String> minton = sqlsession.selectOne("NR.getClubMap", paramap);
 		return minton;
 	}
+	
+	// 탈퇴 전 동호회장인지 알아보기
+	@Override
+	public int checkClubMaster(Map<String, String> paramap) {
+		int n = sqlsession.selectOne("NR.checkClubMaster", paramap);
+		return n;
+	}
 
 	// 마이페이지 - 동호회 탈퇴
 	@Override
@@ -622,6 +629,25 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 	public List<ClubVO> getMyClub(String userid) {
 		List<ClubVO> clubList = sqlsession.selectList("NR.getMyClub", userid);
 		return clubList;
+	}
+
+	// 마이페이지 - 내 동호회 수정
+	@Override
+	public int updateClubInfo(ClubVO club) {
+		int n = sqlsession.update("NR.updateClubInfo", club);
+		return n;
+	}
+
+	// 마이페이지 - 내 동호회 삭제
+	@Override
+	public int deleteClub(String clubseq) {
+		int n = sqlsession.delete("NR.deleteClub", clubseq);
+		return n;
+	}
+
+	@Override
+	public void deleteClubMember(String clubseq) {
+		sqlsession.delete("NR.deleteClubMember", clubseq);
 	}
 
 }

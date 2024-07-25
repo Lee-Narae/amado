@@ -99,7 +99,7 @@
     }
     
     #memberInfo input {
-    height: 40px;
+    height: 30px;
     border-radius: 10px;
     align-content: center;
     padding-left: 1%;
@@ -170,32 +170,38 @@
 	margin-bottom: 2%;
 	}
 	
-	#clubTable td {
-	height: 40px;
+	#prev, #next {
+	cursor: pointer;
 	}
 	
-	#clubTable > tbody > tr > td:nth-child(1) {
-	font-weight: bold;
+	#swal2-title {
+	font-size: 15pt;
 	}
 	
-	#clubTable > tbody > tr > td:nth-child(1) > span {
+	.spTitle {
 	background-color: #6699ff;
 	display: inline-block;
 	height: 30px;
-	width: 70%;
+	width: 25%;
 	align-content: center;
 	border-radius: 15px;
 	color: white;
+	text-align: center;
+	font-weight: bold;
+	margin-left: 10%;
+	margin-right: 5%;
 	}
 	
-	#prev, #next {
-	cursor: pointer;
+	#tableDiv > div {
+	margin-bottom: 2.5%;
 	}
 	
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript">
+
+let cancelHTML = '';
 
 $(document).ready(function(){
 	
@@ -268,7 +274,7 @@ $(document).ready(function(){
     // 이전버튼 클릭
     $("div#prev").click(function(){
     	$("#next").css({"opacity": "", "cursor": "pointer"});
-    	
+		
     	if(current_index > 0){  // 첫 이미지가 아닌 경우
             positionValue += image_width;
             // $("div#profile").style.transform = `translateX(\${positionValue}px)`;
@@ -301,80 +307,211 @@ $(document).ready(function(){
 
 
 function quitClub(clubseq, userid){
+
+	$.ajax({
+		
+		url: "<%=ctxPath%>/member/checkClubMaster.do",
+		data: {"clubseq": clubseq, "userid": userid},
+		type: "post",
+		dataType: "json",
+		success: function(json){
+			
+			if(json.result == 1){
+				Swal.fire(`동호회장이므로 탈퇴가 불가합니다.
+					  [내 동호회 관리]에서 동호회를 삭제하세요.`);
+				return;
+			}
+			
+			else {
+				
+				Swal.fire({
+					  title: "정말 탈퇴하시겠습니까?",
+					  icon: "warning",
+					  showCancelButton: true,
+					  confirmButtonColor: "#3085d6",
+					  cancelButtonColor: "#d33",
+					  confirmButtonText: "네, 탈퇴합니다.",
+					  cancelButtonText: "취소"		  
+					}).then((result) => {
+					  if (result.isConfirmed) {
+						  
+						  $.ajax({
+							  url: "<%=ctxPath%>/member/quitClub.do",
+							  data: {"clubseq": clubseq, "userid": userid},
+							  type: "post",
+							  dataType: "json",
+							  success: function(json2){
+								  
+								  if(json2.n == 1){
+									  Swal.fire({
+									      title: "탈퇴 완료!",
+									      icon: "success"
+									    }).then(okay => {
+											  if (okay) {
+												  location.reload(true);
+												  }
+										  });
+								  }
+								  
+							  },
+							  error: function(request, status, error){
+									alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+							  }
+						  });
+					  
+					  }
+					  
+					});
+				
+			}
+			
+		},
+		error: function(request, status, error){
+			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		}
+		
+	});
+	
+}
+
+
+function editClub(clubseq){
+
+	let num = $("button.editBtn").index(event.target);
+	
+	cancelHTML = $(event.target).parent().parent().parent().find("#tableDiv").html();
+	
+	if($(event.target).html() == '수정'){ // 수정
+		$(event.target).html('완료');
+		$(event.target).parent().append('<button type="button" class="btn btn-light cancel" onclick="editCancel()">취소</button>');
+		
+		const cityLocal = $(event.target).parent().parent().parent().find(".area").html();
+		const orgCity = cityLocal.substring(0, cityLocal.indexOf('&nbsp;'));
+		const orgLocal = cityLocal.substring(cityLocal.indexOf('&nbsp;')+6, cityLocal.length);
+
+		const orgClubgym = $(event.target).parent().parent().parent().find(".clubgym").text();
+		const orgClubtel = $(event.target).parent().parent().parent().find(".clubtel").text();
+		
+		const clubpaycomma = $(event.target).parent().parent().parent().find(".clubpay").text().substring(0, $(event.target).parent().parent().parent().find(".clubpay").text().length-1);
+		const commaIdx = clubpaycomma.indexOf(',');
+
+		const orgClubpay = clubpaycomma.substring(0, commaIdx)+clubpaycomma.substring(commaIdx+1, clubpaycomma.length);
+		
+		const orgMbcnt = $(event.target).parent().parent().parent().find(".mbcnt").text().substring(0, $(event.target).parent().parent().parent().find(".mbcnt").text().length-1);
+		
+		$(event.target).parent().parent().parent().find(".area").html(`<input type="text" name="city" value="\${orgCity}" style="width: 25%;"/>&nbsp;<input type="text" name="local" value="\${orgLocal}" style="width: 25%;"/>`);
+		$(event.target).parent().parent().parent().find(".clubgym").html(`<input type="text" name="clubgym" value="\${orgClubgym}" style="width: 50%;"/>`);
+		$(event.target).parent().parent().parent().find(".clubtel").html(`<input type="text" name="clubtel" value="\${orgClubtel}" style="width: 50%;"/>`);
+		$(event.target).parent().parent().parent().find(".clubpay").html(`<input type="text" name="clubpay" value="\${orgClubpay}" style="width: 20%;"/>원`);
+		$(event.target).parent().parent().parent().find(".mbcnt").html(`<input type="text" name="membercount" value="\${orgMbcnt}" style="width: 10%;"/>명`);
+	}
+	
+	else { // 수정완료
+		
+		const newcity = $("input[name='city']").val().trim();
+		const newlocal = $("input[name='local']").val().trim();
+		const newclubgym = $("input[name='clubgym']").val().trim();
+		const newclubtel = $("input[name='clubtel']").val().trim();
+		const newclubpay = $("input[name='clubpay']").val().trim();
+		const newmembercount = $("input[name='membercount']").val().trim();
+		
+		if(newcity == "" || newlocal == "" || newclubgym == "" || newclubtel == "" || newclubpay == "" || newmembercount == ""){
+			alert('값을 입력하세요.');
+			return;
+		}
+		
+		if(isNaN(newclubpay) || isNaN(newmembercount)){
+			alert('잘못된 값입니다.');
+			return;
+		}
+		
+		else {
+			
+			$.ajax({
+				url: "<%=ctxPath%>/member/clubEdit.do",
+				data: {"clubseq": clubseq, "city": newcity, "local": newlocal, "clubgym": newclubgym, "clubtel": newclubtel, "clubpay": newclubpay, "membercount": newmembercount},
+				type: "post",
+				dataType: "json",
+				success: function(json){
+					if(json.n == 1){
+						
+						$(".area").eq(num).html(`\${newcity}&nbsp;\${newlocal}`);
+						$(".clubgym").eq(num).html(newclubgym);
+						$(".clubtel").eq(num).html(newclubtel);
+						$(".clubpay").eq(num).html(Number(newclubpay).toLocaleString('en')+'원');
+						$(".mbcnt").eq(num).html(newmembercount+'명');
+
+						$(".ifEdit").eq(num).html(`<button type="button" class="btn btn-warning editBtn" onclick="editClub('\${clubseq}')">수정</button>&nbsp;&nbsp;`);
+						
+					}
+					
+					else {
+						alert('내부 오류로 인해 수정이 실패하였습니다. 다시 시도해주세요.');
+						location.reload(true);
+					}
+				},
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				}
+			});
+			
+		}
+	}
+	
+	
+}
+
+function editCancel(){
+	$(event.target).parent().parent().parent().find("#tableDiv").html(cancelHTML);
+	$("div.ifEdit").html(`<button type="button" class="btn btn-warning editBtn" onclick="editClub('\${club.clubseq}')">수정</button>&nbsp;&nbsp;`);
+}
+
+
+function deleteClub(clubseq){
 	Swal.fire({
-		  title: "정말 탈퇴하시겠습니까?",
+		  title: "정말 삭제하시겠습니까?",
+		  html: "삭제 후 복구할 수 없습니다.<br>가입된 회원은 모두 <span style='color: red; font-weight: bold;'>탈퇴 처리</span>됩니다.",
 		  icon: "warning",
 		  showCancelButton: true,
 		  confirmButtonColor: "#3085d6",
 		  cancelButtonColor: "#d33",
-		  confirmButtonText: "네, 탈퇴합니다.",
-		  cancelButtonText: "취소"		  
+		  confirmButtonText: "삭제하기",
+		  cancelButtonText: "취소"
 		}).then((result) => {
 		  if (result.isConfirmed) {
-		    
-			  
+
 			  $.ajax({
-				  url: "<%=ctxPath%>/member/quitClub.do",
-				  data: {"clubseq": clubseq, "userid": userid},
-				  type: "post",
+				  url: "<%=ctxPath%>/member/deleteClub.do",
+				  data: {"clubseq": clubseq},
 				  dataType: "json",
+				  type: "post",
 				  success: function(json){
-					  
+					  console.log(JSON.stringify(json));
 					  if(json.n == 1){
 						  Swal.fire({
-						      title: "탈퇴 완료!",
+						      title: "삭제 완료!",
+						      text: "동호회가 삭제되었습니다.",
 						      icon: "success"
 						    }).then(okay => {
 								  if (okay) {
 									  location.reload(true);
 									  }
-							  });;
+							  });
 					  }
 					  
+					  else {
+						  alert('내부 오류로 삭제가 실패하였습니다. 다시 진행해 주세요.');
+					  }
 				  },
 				  error: function(request, status, error){
 						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 				  }
 			  });
 			  
-			  
-		  Swal.fire({
-		      title: "Deleted!",
-		      text: "Your file has been deleted.",
-		      icon: "success"
-		    });
-		  
-		  
-		  
-		  
-		  
-		  
 		  }
 		});
 }
 
-function editClub(clubseq){
-
-	const cityLocal = $(event.target).parent().parent().find(".area").html();
-	const orgCity = cityLocal.substring(0, cityLocal.indexOf('&nbsp;'));
-	const orgLocal = cityLocal.substring(cityLocal.indexOf('&nbsp;')+6, cityLocal.length);
-
-	const orgClubgym = $(event.target).parent().parent().find(".clubgym").text();
-	const orgClubtel = $(event.target).parent().parent().find(".clubtel").text();
-	
-	const clubpaycomma = $(event.target).parent().parent().find(".clubpay").text().substring(0, $(event.target).parent().parent().find(".clubpay").text().length-1);
-	const commaIdx = clubpaycomma.indexOf(',');
-
-	const orgClubpay = clubpaycomma.substring(0, commaIdx)+clubpaycomma.substring(commaIdx+1, clubpaycomma.length);
-	
-	const orgMbcnt = $(event.target).parent().parent().find(".mbcnt").text().substring(0, $(event.target).parent().parent().find(".mbcnt").text().length-1);
-	
-	$(event.target).parent().parent().find(".area").html(`<input type="text" name="city" value="\${orgCity}" style="width: 35%;"/>&nbsp;<input type="text" name="local" value="\${orgLocal}" style="width: 35%;"/>`);
-	$(event.target).parent().parent().find(".clubgym").html(`<input type="text" name="clubgym" value="\${orgClubgym}" style="width: 60%;"/>`);
-	$(event.target).parent().parent().find(".clubtel").html(`<input type="text" name="clubtel" value="\${orgClubtel}" style="width: 60%;"/>`);
-	$(event.target).parent().parent().find(".clubpay").html(`<input type="text" name="clubpay" value="\${orgClubpay}" style="width: 60%;"/>원`);
-	$(event.target).parent().parent().find(".mbcnt").html(`<input type="text" name="membercount" value="\${orgMbcnt}" style="width: 30%;"/>명`);
-}
 </script>
 
 
@@ -568,47 +705,41 @@ function editClub(clubseq){
 								<div id="profile" style="display: flex; height: 600px; transition: transform 1s; width: ${requestScope.clubList.size() * 450}px; flex-wrap: wrap;">
 									
 									<c:forEach items="${requestScope.clubList}" var="club">
-										<div align="center" style="border-radius: 20px;	width: 450px; height: 600px; padding: 1%; margin: 0;">
+										<div align="center" style="border-radius: 20px;	width: 450px; height: 600px; padding: 30px; margin: 0;">
 											<div class="clubimg mb-3"><img src="<%=ctxPath%>/resources/images/zee/${club.clubimg}"/></div>
 											<div style="font-size: 10pt; font-weight: bold;">${club.sportname}</div>
 											<div style="font-size: 20pt; font-weight: bold;">${club.clubname}</div>
-											<table id="clubTable" style="width: 100%;">
-												<tbody>
-													<tr>
-														<td width="40" align="center"><span>지역</span></td>
-														<td width="60" class="area">${club.city}&nbsp;${club.local}</td>
-													</tr>
-													<tr>
-														<td align="center"><span>활동구장</span></td>
-														<td class="clubgym">${club.clubgym}</td>
-													</tr>
-													<tr>
-														<td align="center"><span>연락처</span></td>
-														<td class="clubtel">${club.clubtel}</td>
-													</tr>
-													<tr>
-														<td align="center"><span>회비</span></td>
-														<td class="clubpay"><fmt:formatNumber value="${club.clubpay}" pattern="#,###"/>원</td>
-													</tr>
-													<tr>
-														<td align="center"><span>인원</span></td>
-														<td class="mbcnt">${club.membercount}명</td>
-													</tr>
-												</tbody>
-											</table>
-											
-											<div class="mt-3">
+											<div id="tableDiv" align="left">
+												<div>
+													<span class="spTitle">지역</span>
+													<span class="area">${club.city}&nbsp;${club.local}</span>
+												</div>
+												<div>
+													<span class="spTitle">활동구장</span>
+													<span class="clubgym">${club.clubgym}</span>
+												</div>
+												<div>
+													<span class="spTitle">연락처</span>
+													<span class="clubtel">${club.clubtel}</span>
+												</div>
+												<div>
+													<span class="spTitle">회비</span>
+													<span class="clubpay"><fmt:formatNumber value="${club.clubpay}" pattern="#,###"/>원</span>
+												</div>
+												<div>
+													<span class="spTitle">인원</span>
+													<span class="mbcnt">${club.membercount}명</span>
+												</div>
+											</div>
+											<div class="mt-3" style="display: flex; justify-content: space-between;">
 												<button type="button" class="btn btn-primary">회원 관리</button>&nbsp;&nbsp;
-												<button type="button" class="btn btn-warning" onclick="editClub('${club.clubseq}')">수정</button>&nbsp;&nbsp;
-												<button type="button" class="btn btn-danger">동호회 삭제</button>
+												<div class="ifEdit">
+													<button type="button" class="btn btn-warning editBtn" onclick="editClub('${club.clubseq}')">수정</button>&nbsp;&nbsp;
+												</div>
+												<button type="button" class="btn btn-danger" onclick="deleteClub('${club.clubseq}')">동호회 삭제</button>
 											</div>
 										</div>
 									</c:forEach>
-									
-									
-									
-									<div>두번째</div>
-									<div>세번째</div>
 								</div>
 							</div>
 							<div id="next" style="width: 10%; margin-right: 10%; align-content: center;" align="center"><img style="width: 60%;" src="<%=ctxPath%>/resources/images/narae/icons8-right-64.png"/></div>

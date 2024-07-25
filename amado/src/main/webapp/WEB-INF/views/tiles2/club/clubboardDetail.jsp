@@ -68,8 +68,10 @@ $(document).ready(function(){
 	$(document).on("click", "span#delComment", function(e){
 
 		if(confirm('댓글을 삭제하시겠습니까?')){
-			let clubboardcommentseq = $(e.target).parent().parent().parent().find("input#commentseq").val();
+			let clubboardcommentseq = $(e.target).parent().parent().find("input#commentseq").val();
 			const clubboardseq = '${requestScope.cboard.clubboardseq}';
+			
+			//alert(clubboardcommentseq);
 			
 			$.ajax({
 				url: "<%=ctxPath%>/club/delCBoardComment.do",
@@ -89,15 +91,56 @@ $(document).ready(function(){
 	});
 
 	
-	
-	
-	
+	// 댓글 수정
+	$(document).on("click", "span#editComment", function(e){
+		
+		const noticecommentseq = $(e.target).parent().parent().parent().find("input#commentseq").val();
+		const org_comment_text = $(e.target).parent().parent().parent().find("div#comment_text").text();
+		
+		$("span#editOrDel").hide();
+		$(e.target).parent().parent().parent().find("div#comment_text").html(`<input type="text" id="comment_text_edit" name="comment_text_edit" maxlength="200" style="width: 70%; height: 70px;" value="\${org_comment_text}"/>&nbsp;&nbsp;
+																			  <button type="button" class="btn btn-primary btn-sm" onclick="commentEdit(\${noticecommentseq})">수정하기</button>&nbsp;&nbsp;
+																			  <button type="button" class="btn btn-secondary btn-sm" onclick="cancelEditComment('\${org_comment_text}')">취소</button>`);
+		
+	});
+
+	$(document).on("keyup", "input#comment_text_edit", function(e){
+		if(e.keyCode == 13){
+			commentEdit($(e.target).parent().parent().find("input#commentseq").val());
+		}
+	});
+
 });
+
+
+function commentEdit(clubboardcommentseq){
+
+	const edit_comment_text = $(event.target).parent().find("input#comment_text_edit").val().trim();
+	const commentseq = $(event.target).parent().parent().find("input#commentseq").val();
+
+	$.ajax({
+		url: "<%=ctxPath%>/club/editCBoardComment.do",
+		data: {"edit_comment_text": edit_comment_text, "commentseq": commentseq},
+		dataType: "json",
+		type: "post",
+		success: function(json){
+			viewCommentOnly();
+		},
+		error: function(request, status, error){
+            alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+        }
+	});
+
+}
+
 
 function goPrevOrNext(seq){
 	
+	let clubseq = '${requestScope.clubseq}';
+	
 	const frm2 = document.goViewFrm;
 	frm2.clubboardseq.value = seq;
+	frm2.clubseq.value = clubseq; //추가
 	frm2.method = "post";
 	frm2.submit();
 }
@@ -130,7 +173,6 @@ function viewComment(){
 				if(json.length > 0){
 					
 					$.each(json, function(index, item){
-						
 						v_html += `<div style="display: flex;">
 										<div class="mr-3">`;
 										
@@ -180,11 +222,11 @@ function viewComment(){
 
 function viewCommentOnly(){
 	
-	const parentseq = '${requestScope.notice.noticeseq}';
+	const clubboardseq = '${requestScope.cboard.clubboardseq}';
 	
 	$.ajax({
-		url: "<%=ctxPath%>/community/viewCommentOnly.do",
-		data: {"parentseq": parentseq},
+		url: "<%=ctxPath%>/club/viewCommentOnly.do",
+		data: {"clubboardseq": clubboardseq},
 		type: "get",
 		dataType: "json",
 		success: function(json){
@@ -292,7 +334,7 @@ function viewCommentOnly(){
 						<c:if test="${comment.memberimg == null}"><img width="50" height="50" style="border-radius: 50px;" src="<%=ctxPath%>/resources/images/기본이미지.png"/></c:if>
 					</div>
 					<div align="left" style="width: 100%;">
-						<input id="commentseq" type="hidden" value="${comment.noticecommentseq}"/>
+						<input id="commentseq" type="hidden" value="${comment.clubboardcommentseq}"/>
 						<span style="font-size: 10pt; font-weight: bold;">${comment.fk_userid }</span>&nbsp;&nbsp;<span style="font-size: 10pt;">${comment.registerdate}</span>
 							<span id="editOrDel">
 								<c:if test="${comment.fk_userid == sessionScope.loginuser.userid}">
@@ -329,6 +371,7 @@ function viewCommentOnly(){
 </div>
 
 <form name="goViewFrm">
+	<input type="hidden" name="clubseq" />
 	<input type="hidden" name="clubboardseq" />
 	<input type="hidden" name="goBackURL" />
 	<input type="hidden" name="searchType" />
