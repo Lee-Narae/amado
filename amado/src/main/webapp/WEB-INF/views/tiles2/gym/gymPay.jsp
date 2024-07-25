@@ -459,7 +459,12 @@
 
       	// === 포트원(구 아임포트) 결제를 해주는 함수 === //
 		function goCoinPurchaseEnd(ctxPath, userid, gymname) {
-
+			
+      		if(userid == ''){
+      			alert("로그인 후 결제해주세요!");
+      			return;
+      		}
+      		else{
 		    // 결제 금액을 가져옵니다.
 		    var priceText = $("#totalPrice").text();
 		            
@@ -480,6 +485,7 @@
 		    // 팝업창 열기
 		    window.open(url, "coinPurchaseEnd",
 		                "left=" + left + ", top=" + top + ", width=" + width + ", height=" + height);
+      		}
 		}
       	
       	
