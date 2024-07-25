@@ -697,5 +697,21 @@
 		where clubstatus = 1 and fk_userid = #{userid}
 	</select>
 	
+	<select id="checkClubMaster" parameterType="HashMap" resultType="int">
+		select count(*) from tbl_club where clubseq = #{clubseq} and fk_userid = #{userid}
+	</select>
+	
+	<update id="updateClubInfo" parameterType="ClubVO">
+		update tbl_club set city = #{city}, local = #{local}, clubgym = #{clubgym}, clubtel = #{clubtel}, clubpay = #{clubpay}, membercount = #{membercount}
+		where clubseq = #{clubseq}
+	</update>
+	
+	<delete id="deleteClub" parameterType="String">
+		delete from tbl_club where clubseq = #{clubseq}
+	</delete>
+	
+	<delete id="deleteClubMember" parameterType="String">
+		delete from tbl_clubmember where clubseq = #{clubseq}
+	</delete>
 	
 </mapper>

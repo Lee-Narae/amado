@@ -861,6 +861,9 @@ public class ControllerJY {
         // /member/memberList.up?searchType=name&searchWord=%EC%9C%A0&sizePerPage=5&currentShowPageNo=15
 
 		List<ClubBoardVO> clubboardList = service.select_clubboard_paging(paramap);
+		for(ClubBoardVO board : clubboardList) {
+			System.out.println("viewcount: "+board.getViewcount());
+		}
 		
 		mav.addObject("clubboardList", clubboardList);
 		
@@ -955,6 +958,49 @@ public class ControllerJY {
 		mav.setViewName("club/clubboardDetail.tiles2");
 		return mav;
 	}
+	
+	
+	
+	// 글삭하기
+	@PostMapping("/club/deleteCBoard.do")
+	public ModelAndView deleteNotice(HttpServletRequest request, ModelAndView mav) {
+	
+		String clubboardseq = request.getParameter("clubboardseq");
+		
+		int n = service.deleteCBoard(clubboardseq);
+		
+		if(n == 1) {
+			
+			String message = "공지사항이 삭제되었습니다.";
+			String loc = "clubBoard.do";
+			
+			mav.addObject("message", message);
+			mav.addObject("loc", loc);
+			
+			mav.setViewName("msg");
+			
+		}
+		
+		else {
+			
+			String message = "게시글 삭제가 실패하였습니다.";
+			String loc = "javascript:history.back()";
+			
+			mav.addObject("message", message);
+			mav.addObject("loc", loc);
+			
+			mav.setViewName("msg");
+			
+		}
+		
+		return mav;
+	}
+	
+	
+	
+	
+	
+	
 
 	
 	// 동호회게시판 댓글 달기

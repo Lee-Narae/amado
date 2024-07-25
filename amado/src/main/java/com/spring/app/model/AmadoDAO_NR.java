@@ -222,9 +222,18 @@ public interface AmadoDAO_NR {
 	Map<String, String> getMinton(String userid);
 
 	// 마이페이지 - 동호회 탈퇴
+	int checkClubMaster(Map<String, String> paramap); // 탈퇴 전 동호회장인지 알아보기
 	int quitClub(Map<String, String> paramap);
 
 	// 마이페이지 - 내동호회 관리
 	List<ClubVO> getMyClub(String userid);
+
+	// 마이페이지 - 내 동호회 수정
+	int updateClubInfo(ClubVO club);
+
+	// 마이페이지 - 내 동호회 삭제
+	int deleteClub(String clubseq);
+	void deleteClubMember(String clubseq);
+
 	
 }

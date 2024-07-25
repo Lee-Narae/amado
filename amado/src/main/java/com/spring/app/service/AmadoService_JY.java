@@ -111,6 +111,8 @@ public interface AmadoService_JY {
 
 	int editCBoardComment(Map<String, String> paramap);
 
+	int deleteCBoard(String clubboardseq);
+
 
 	
 

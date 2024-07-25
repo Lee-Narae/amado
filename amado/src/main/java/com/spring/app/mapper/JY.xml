@@ -513,5 +513,13 @@
 		where clubboardseq = #{clubboardseq}
 	</update>
 	
+	
+	<delete id="deleteCBoard">
+		delete from tbl_clubboard where clubboardseq = #{clubboardseq}
+	</delete>
+	
+	
+	
+	
 
 </mapper>

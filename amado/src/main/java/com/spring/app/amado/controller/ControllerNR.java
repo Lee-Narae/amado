@@ -2302,7 +2302,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/member/checkPw.do")
+	@PostMapping(value="/member/checkPw.do", produces="text/plain;charset=UTF-8")
 	public String checkPw(HttpServletRequest request) {
 		
 		String pwd = request.getParameter("pwd");
@@ -2325,7 +2325,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/member/memberQuit.do")
+	@PostMapping(value="/member/memberQuit.do", produces="text/plain;charset=UTF-8")
 	public String memberQuit(HttpServletRequest request) {
 		
 		String userid = request.getParameter("userid");
@@ -2381,7 +2381,7 @@ public class ControllerNR {
 	
 	
 	@ResponseBody
-	@PostMapping("/member/quitClub.do")
+	@PostMapping(value="/member/quitClub.do", produces="text/plain;charset=UTF-8")
 	public String quitClub(HttpServletRequest request) {
 		
 		String clubseq = request.getParameter("clubseq");
@@ -2399,6 +2399,52 @@ public class ControllerNR {
 		return jsonObj.toString();
 	}
 	
+	
+	@ResponseBody
+	@PostMapping(value="/member/checkClubMaster.do", produces="text/plain;charset=UTF-8")
+	public String checkClubMaster(HttpServletRequest request) {
+		
+		String clubseq = request.getParameter("clubseq");
+		String userid = request.getParameter("userid");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("clubseq", clubseq);
+		paramap.put("userid", userid);
+		
+		int n = service.checkClubMaster(paramap);
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("result", n);
+		
+		return jsonObj.toString();
+	}
+	
+	
+	@ResponseBody
+	@PostMapping(value="/member/clubEdit.do", produces="text/plain;charset=UTF-8")
+	public String clubEdit(ClubVO club) {
+		
+		int n = service.updateClubInfo(club);
+
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+		
+		return jsonObj.toString();
+	}
+	
+	
+	@ResponseBody
+	@PostMapping(value="/member/deleteClub.do", produces="text/plain;charset=UTF-8")
+	public String deleteClub(HttpServletRequest request) {
+		
+		String clubseq = request.getParameter("clubseq");
+		
+		int n = service.deleteClub(clubseq);
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+		
+		return jsonObj.toString();
+	}
 	
 }
 
