@@ -716,6 +716,28 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		return n;
 	}
 
+	// 마이페이지 - 내 동호회 회원 관리
+	@Override
+	public List<Map<String, String>> getClubMember(Map<String, String> paramap) {
+		List<Map<String, String>> memberList = dao.getClubMember(paramap);
+		return memberList;
+	}
+	@Override
+	public int getClubMemberTotalPage(Map<String, String> paramap) {
+		int n = dao.getClubMemberTotalPage(paramap);
+		return n;
+	}
+	@Override
+	public int getTotalClubMemberCount(Map<String, String> paramap) {
+		int n = dao.getTotalClubMemberCount(paramap);
+		return n;
+	}
+	@Override
+	public int quitClubMember(Map<String, String> paramap) {
+		int n = dao.quitClubMember(paramap);
+		return n;
+	}
+
 
 	
 	

@@ -141,21 +141,20 @@ $(document).ready(function(){
         <div>
 	       <div id="hr2-container">
 	            <div id="hrbtns">
-	                <button id="payList" class='btn2'>대관내역 조회</button>
 	                <button id="gymManage" class='btn2'>내 체육관 관리</button>
 	            </div>
 	        </div>
 
 	       
 	        <div>
-	            <div id="content1" style="border:solid 1px red; width: 50%;  margin: 3% auto;" >
+<!-- 	            <div id="content1" style="border:solid 1px red; width: 50%;  margin: 3% auto;" >
 	                <div class="item1">&nbsp;대관내역 조회</div>
 	                <hr class="hr1">
 	                <div id="memberInfo">
 	                	
 	                </div>
 	                
-	            </div>
+	            </div> -->
 	            
 	            
 	            

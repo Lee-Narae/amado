@@ -714,4 +714,43 @@
 		delete from tbl_clubmember where clubseq = #{clubseq}
 	</delete>
 	
+	
+	<resultMap type="HashMap" id="clubmemberMap">
+		<result column="rn" property="rn" javaType="String"/>
+		<result column="userid" property="userid" javaType="String"/>
+		<result column="name" property="name" javaType="String"/>
+		<result column="email" property="email" javaType="String"/>
+		<result column="mobile" property="mobile" javaType="String"/>
+		<result column="gender" property="gender" javaType="String"/>
+		<result column="clubseq" property="clubseq" javaType="String"/>
+	</resultMap>
+	<select id="getClubMember" parameterType="HashMap" resultMap="clubmemberMap">
+		select rn, userid, name, email, mobile, gender, clubseq
+		from
+		(select rownum rn, userid, name, email, mobile, gender, clubseq
+		from
+		(select userid, name, email, mobile, gender, clubseq
+		from tbl_clubmember A join tbl_member B
+		on A.fk_userid = B.userid
+		where A.clubseq = #{clubseq}))
+		where rn between to_number(#{currentShowPageNo})*7-6 and to_number(#{currentShowPageNo})*7
+	</select>
+	
+	<select id="getClubMemberTotalPage" parameterType="HashMap" resultType="int">
+		select ceil(count(*)/#{sizePerPage})
+		from tbl_clubmember A join tbl_member B
+		on A.fk_userid = B.userid
+		where A.clubseq = #{clubseq}
+	</select>
+	
+	<select id="getTotalClubMemberCount" parameterType="HashMap" resultType="int">
+		select count(*)
+		from tbl_clubmember A join tbl_member B
+		on A.fk_userid = B.userid
+		where A.clubseq = #{clubseq}
+	</select>
+	
+	<delete id="quitClubMember" parameterType="HashMap">
+		delete from tbl_clubmember where fk_userid = #{userid} and clubseq = #{clubseq}
+	</delete>
 </mapper>
