@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.spring.app.domain.AnswerVO;
+import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
 import com.spring.app.domain.GymVO;
@@ -61,6 +62,23 @@ public interface AmadoDAO_HS {
 	GymVO getGym(String gymseq);
 
 	List<Map<String, String>> getGymImg(String gymseq);
+
+	
+	// 관리자 - 전체 페이지 수 알아오기
+	int getclubTotalPage(Map<String, String> paramap);
+
+	// 관리자  -클럽 조회 
+	List<ClubVO> select_club_paging(Map<String, String> paramap);
+	
+	// 관리자 - 전체 클럽 수 조회
+	int getTotalClubCount(Map<String, String> paramap);
+	
+
+
+	// 관리자 - 클럽 상세정보
+	ClubVO getClubDetail(String clubname);
+
+	
 
 
 

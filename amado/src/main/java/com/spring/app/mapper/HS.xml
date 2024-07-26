@@ -174,5 +174,47 @@ values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
 	
 	
 	
+	<select id="getclubTotalPage" parameterType="HashMap" resultType="int">
+		select ceil(count(*)/#{sizePerPage})
+		from tbl_club
+		where 1=1
+		<if test="searchType == 'clubname' and searchWord != ''">and clubname like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'fk_userid' and searchWord != ''">and fk_userid like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'clubgym' and searchWord != ''">and clubgym like '%'||#{searchWord}||'%'</if>
+	</select>
+	
+	<select id="select_club_paging" parameterType="HashMap" resultType="ClubVO">
+		SELECT rn, clubname, fk_userid, clubgym, clubpay, clubtime, clubseq
+	FROM (
+    SELECT rownum rn, clubname, fk_userid, clubgym, clubpay, clubtime, clubseq
+    FROM tbl_club
+    WHERE 1=1
+    <if test="searchType == 'clubname' and searchWord != ''">AND clubname LIKE '%' || #{searchWord} || '%'</if>
+    <if test="searchType == 'fk_userid' and searchWord != ''">AND fk_userid LIKE '%' || #{searchWord} || '%'</if>
+    <if test="searchType == 'clubgym' and searchWord != ''">AND clubgym LIKE '%' || #{searchWord} || '%'</if>
+	)
+	WHERE rn BETWEEN (TO_NUMBER(#{currentShowPageNo}) - 1) * TO_NUMBER(#{sizePerPage}) + 1 AND TO_NUMBER(#{currentShowPageNo}) * TO_NUMBER(#{sizePerPage})
+
+	</select>
+	
+	<select id="getTotalClubCount" parameterType="HashMap" resultType="int">
+		select count(*)
+		from tbl_club
+		where 1=1
+		<if test="searchType == 'clubname' and searchWord != ''">and clubname like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'fk_userid' and searchWord != ''">and fk_userid like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'clubgym' and searchWord != ''">and clubgym like '%'||#{searchWord}||'%'</if>
+	</select>
+	
+	
+		
+	<select id="getClubDetail" parameterType="String" resultType="ClubVO">
+		select clubname, fk_userid,clubtel ,clubgym ,clubtime ,membercount ,clubpay
+		from tbl_club
+		where clubseq = #{clubseq}
+	</select>
+	
+	
+	
 
 </mapper>

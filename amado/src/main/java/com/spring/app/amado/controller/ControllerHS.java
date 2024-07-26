@@ -2,6 +2,8 @@ package com.spring.app.amado.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +29,7 @@ import com.spring.app.common.FileManager;
 import com.spring.app.common.MyUtil;
 
 import com.spring.app.domain.AnswerVO;
+import com.spring.app.domain.ClubVO;
 //import com.spring.app.domain.FleamarketCommentReVO;
 //import com.spring.app.domain.FleamarketCommentVO;
 import com.spring.app.domain.GymVO;
@@ -414,7 +417,7 @@ public class ControllerHS {
 	public ModelAndView clubmanager(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
 	
 		
-		/*String searchType = request.getParameter("searchType");
+		String searchType = request.getParameter("searchType");
 		String searchWord = request.getParameter("searchWord");
 		String sizePerPage = request.getParameter("sizePerPage");
 		String currentShowPageNo = request.getParameter("currentShowPageNo");
@@ -423,7 +426,7 @@ public class ControllerHS {
 			sizePerPage = "10";
 		}
 		
-		if(searchType == null || !"name".equals(searchType) && !"userid".equals(searchType) && !"email".equals(searchType)) {
+		if(searchType == null || !"clubname".equals(searchType) && !"fk_userid".equals(searchType) && !"clubgym".equals(searchType)) {
 			searchType = "";
 		}
 		
@@ -442,7 +445,7 @@ public class ControllerHS {
 		paramap.put("currentShowPageNo", currentShowPageNo);
 
 		// 페이징처리를 한 모든 회원 or 검색한 회원 목록 보여주기
-		int totalPage = service.getMemberTotalPage(paramap);
+		int totalPage = service.getclubTotalPage(paramap);
 		
 		// === GET 방식이므로 사용자가 웹브라우저 주소창에서 currentShowPageNo 에 totalPage 값보다 더 큰 값을 입력하여 장난친 경우
 		// === GET 방식이므로 사용자가 웹브라우저 주소창에서 currentShowPageNo 에 0 또는 음수를 입력하여 장난친 경우
@@ -472,10 +475,10 @@ public class ControllerHS {
 		
 		// *** [맨처음][이전] 만들기 *** //
 		   
-           pageBar += "<li class='page-item'><a class='page-link' href='member?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo=1'>[맨처음]</a></li>";
+           pageBar += "<li class='page-item'><a class='page-link' href='club?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo=1'>[맨처음]</a></li>";
 
            if(pageNo != 1) {
-              pageBar += "<li class='page-item'><a class='page-link' href='member?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a></li>";
+              pageBar += "<li class='page-item'><a class='page-link' href='club?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a></li>";
            }
    
            while(!(loop > blockSize || pageNo > totalPage)) {
@@ -485,7 +488,7 @@ public class ControllerHS {
                  pageBar += "<li class='page-item active'><a class='page-link' href='#'>"+pageNo+"</a></li>";
               }
               else {
-                 pageBar += "<li class='page-item'><a class='page-link' href='member?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a></li>";
+                 pageBar += "<li class='page-item'><a class='page-link' href='club?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a></li>";
               }
               
               loop++;
@@ -497,9 +500,9 @@ public class ControllerHS {
            // *** [다음][마지막] 만들기 *** //
            // pageNo ==> 11
            if(pageNo <= totalPage) {
-              pageBar += "<li class='page-item'><a class='page-link' href='member?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"'>[다음]</a></li>";
+              pageBar += "<li class='page-item'><a class='page-link' href='club?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"'>[다음]</a></li>";
            }
-           pageBar += "<li class='page-item'><a class='page-link' href='member?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+totalPage+"'>[맨마지막]</a></li>";
+           pageBar += "<li class='page-item'><a class='page-link' href='club?searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+totalPage+"'>[맨마지막]</a></li>";
            
            
          // *** ==== 페이지바 만들기 끝 ==== *** //
@@ -516,11 +519,11 @@ public class ControllerHS {
         // System.out.println(currentURL);
         // /member/memberList.up?searchType=name&searchWord=%EC%9C%A0&sizePerPage=5&currentShowPageNo=15
 
-		List<MemberVO> memberList = service.select_member_paging(paramap);
+		List<ClubVO> clubList = service.select_club_paging(paramap);
 		
-		mav.addObject("memberList", memberList);
+		mav.addObject("clubList", clubList);
 		
-		if(searchType != null && ("name".equals(searchType) ||"userid".equals(searchType)||"email".equals(searchType))) {
+		if(searchType != null && ("clubname".equals(searchType) ||"fk_userid".equals(searchType)||"clubgym".equals(searchType))) {
 			mav.addObject("searchType", searchType);
 		}
 		
@@ -535,18 +538,47 @@ public class ControllerHS {
 		
 		
 		
-		 >>> 뷰단(memberList.jsp)에서 "페이징 처리시 보여주는 순번 공식" 에서 사용하기 위해 
-        	        검색이 있는 또는 검색이 없는 회원의 총개수 알아오기 <<< 
-		int totalMemberCount = service.getTotalMemberCount(paramap);
+		// >>> 뷰단(memberList.jsp)에서 "페이징 처리시 보여주는 순번 공식" 에서 사용하기 위해 
+        	        //검색이 있는 또는 검색이 없는 회원의 총개수 알아오기 <<< 
+		int totalMemberCount = service.getTotalClubCount(paramap);
 		
 		mav.addObject("totalMemberCount", totalMemberCount);
 		mav.addObject("currentShowPageNo", currentShowPageNo);
-		*/
+	
 		
 		mav.setViewName("manage/club.tiles3");
 
 		return mav;
 
 	}
+	
+	
+	
+	
+	
+	// 관리자 - 동호회 상세정보
+		@PostMapping("/admin/manage/clubdetail")
+		public ModelAndView adminLogin_memberDetail(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+			
+			String clubseq = request.getParameter("clubseq");
+			String goBackURL = request.getParameter("goBackURL");
+			
+			System.out.println("clubname: "+clubseq);
+			
+			// System.out.println("userid: "+userid+"/"+"goBackURL: "+goBackURL); 확인 완료
+			
+			ClubVO club = service.getClubDetail(clubseq);
+			
+		
+			mav.addObject("club", club);
+			mav.addObject("goBackURL", goBackURL);
+			
+			mav.setViewName("manage/clubdetail.tiles3");
+			
+			return mav;
+		}
+		
+	
+	
 
 }

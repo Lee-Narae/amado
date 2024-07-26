@@ -469,3 +469,20 @@ commit;
 select gymimgseq,gymseq,filename,orgfilename    
 			from tbl_gym
 			where gymseq= 
+            
+delete from tbl_gym where gymseq= 94 
+    commit;
+            
+desc tbl_gymquestion;
+
+select *
+from tbl_gym
+
+select * from tbl_gymquestion;
+
+
+select *
+from tbl_member
+
+select *
+from tbl_club
