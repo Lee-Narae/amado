@@ -519,6 +519,11 @@
 	</delete>
 	
 	
+	<insert id="add_withFile2"  parameterType="ClubBoardVO">
+		insert into tbl_clubboardcomment(clubboardcommentseq, clubboardseq, comment_text, registerdate , fk_userid)
+		values(seq_clubboardcomment.nextval, #{clubboardseq}, #{comment_text}, default, #{fk_userid});
+	</insert>
+	
 	
 	
 

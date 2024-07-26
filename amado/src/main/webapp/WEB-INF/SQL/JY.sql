@@ -390,3 +390,9 @@ select clubboardcommentseq, clubboardseq, comment_text, to_char(registerdate, 'y
 		on A.fk_userid = B.userid
 		where A.status = 1 and clubboardseq = 7
 		order by registerdate
+        
+
+select *
+from tbl_clubboard
+
+

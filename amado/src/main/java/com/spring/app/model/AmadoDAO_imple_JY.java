@@ -383,6 +383,12 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 		int n = sqlsession.delete("JY.deleteCBoard", clubboardseq);
 		return n;
 	}
+
+	@Override
+	public int add_withFile2(ClubBoardVO cvo) {
+		int n = sqlsession.insert("JY.add_withFile2",cvo);
+		return n;
+	}
 	
 
 

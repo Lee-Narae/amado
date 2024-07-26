@@ -320,7 +320,7 @@ function viewCommentOnly(){
 		<div class="tr" style="align-content: center; margin-left: 8%; display: flex; margin-bottom: 0.5%;">
 			<div class="title">조회수</div>
 			<div style="width: 70%; margin-top: 0.5%;" align="left">${requestScope.notice.viewcount}</div>
-		</div>
+		</div> 
 		<div class="tr" style="align-content: center; margin-left: 8%; display: flex; margin-bottom: 0.5%;">
 			<div class="title">작성일자</div>
 			<div style="width: 70%; margin-top: 0.5%;" align="left">${requestScope.notice.registerdate}</div>

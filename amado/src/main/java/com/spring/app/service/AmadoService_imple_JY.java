@@ -378,6 +378,14 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 	}
 
 
+
+	@Override
+	public int add_withFile2(ClubBoardVO cvo) {
+		int n = dao.add_withFile2(cvo); //첨부파일이 있는경우
+		return n;
+	}
+
+
 	
 
 
