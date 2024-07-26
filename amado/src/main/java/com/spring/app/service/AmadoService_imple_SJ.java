@@ -424,6 +424,15 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	
 	@Override
 	public int getTotalInquiryCount(Map<String, String> paraMap) {
+		
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		System.out.println("searchtype_a : " + paraMap.get("searchtype_a"));
+		System.out.println("searchtype_b : " + paraMap.get("searchtype_b"));
+		System.out.println("searchtype_fk_userid : " + paraMap.get("searchtype_fk_userid"));
+		System.out.println("searchtype_answer : " + paraMap.get("searchtype_answer"));
+		System.out.println("searchWord : " + paraMap.get("searchWord"));
+		System.out.println("fk_userid : " + paraMap.get("fk_userid"));
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		int totalCount = dao.getTotalInquiryCount(paraMap);
 		return totalCount;
 	}

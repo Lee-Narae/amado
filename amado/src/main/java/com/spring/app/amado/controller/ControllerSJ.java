@@ -1381,6 +1381,16 @@ public class ControllerSJ {
 		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser"); 
 				String fk_userid = loginuser.getUserid();
 		
+		System.out.println("fk_userid : " + fk_userid);
+		
+		if("admin".equals(fk_userid)) {
+			loginuser = service.getMemberInfo(fk_userid);
+			
+			request.setAttribute("fk_userid", fk_userid);
+			request.setAttribute("loginuser", loginuser);
+			return "redirect:/community/inquiryList.do";
+		}
+		
 		loginuser = service.getMemberInfo(fk_userid);
 		
 		request.setAttribute("fk_userid", fk_userid);		request.setAttribute("loginuser", loginuser);		
@@ -1544,21 +1554,24 @@ public class ControllerSJ {
 	
 	// 문의목록보기
 	@GetMapping("/community/inquiryList.do")
-	public String requiredLogin_inquiryList(HttpServletRequest request, HttpServletResponse response) {
-		
+	public String inquiryList(HttpServletRequest request, HttpServletResponse response) {
 		
 		String fk_userid = "";
 		
 		HttpSession session = request.getSession();
-		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser"); 
+		if(session.getAttribute("loginuser") != null) {
+			MemberVO loginuser = (MemberVO) session.getAttribute("loginuser"); 
+			
+			if(loginuser.getUserid() != null) {
+				fk_userid = loginuser.getUserid();
+			}
+		}
 		
-		fk_userid = loginuser.getUserid();
 		request.setAttribute("fk_userid", fk_userid);
-		
 		
 		List<InquiryVO> inquiryPagingList = null;
 		
-		if(fk_userid != null) {
+		if(fk_userid != "" && fk_userid != null) {
 			// 문의목록 가져오기
 			List<InquiryVO> inquiryList = service.getinquiryList(fk_userid);
 			request.setAttribute("inquiryList", inquiryList);
@@ -1572,7 +1585,7 @@ public class ControllerSJ {
 			String searchWord = request.getParameter("searchWord");
 			String str_currentShowPageNo = request.getParameter("currentShowPageNo"); 
 			
-		  System.out.println("~~ 확인용 str_currentShowPageNo : " + str_currentShowPageNo);
+		  // System.out.println("~~ 확인용 str_currentShowPageNo : " + str_currentShowPageNo);
 			
 			if(searchtype_a == null) {
 				searchtype_a = "0";
@@ -1587,7 +1600,7 @@ public class ControllerSJ {
 			}
 			
 			if(searchtype_answer == null) {
-				searchtype_answer = "0";
+				searchtype_answer = "-1";
 			}
 			
 			if(searchWord == null) {
@@ -1607,7 +1620,14 @@ public class ControllerSJ {
 			paraMap.put("searchtype_answer", searchtype_answer);
 			paraMap.put("searchWord", searchWord);
 			paraMap.put("fk_userid", fk_userid);
-					
+			
+			System.out.println("searchtype_a : " + searchtype_a);
+			System.out.println("searchtype_b : " + searchtype_b);
+			System.out.println("searchtype_fk_userid : " + searchtype_fk_userid);
+			System.out.println("searchtype_answer : " + searchtype_answer);
+			System.out.println("searchWord : " + searchWord);
+			System.out.println("fk_userid : " + fk_userid);
+			
 			// 먼저, 총 게시물 건수(totalCount)를 구해와야 한다.
 			// 총 게시물 건수(totalCount)는  검색조건이 있을 때와 없을때로 나뉘어진다.
 			int totalCount = 0;        // 총 게시물 건수
@@ -1616,6 +1636,7 @@ public class ControllerSJ {
 			int totalPage = 0;         // 총 페이지수(웹브라우저상에서 보여줄 총 페이지 개수, 페이지바) 			
 			
 			totalCount = service.getTotalInquiryCount(paraMap);
+			System.out.println("바로밑에서 totalCount : " + totalCount);
 			
 			System.out.println("totalCount" + totalCount);
 			
@@ -1655,7 +1676,7 @@ public class ControllerSJ {
 			
 			
 			// 검색시 검색조건 및 검색어 값 유지시키기
-			if(searchtype_a != "0" || searchtype_b != "0" || searchWord != "") {
+			if(searchtype_a != "0" || searchtype_b != "0" || searchWord != "" || searchtype_answer != "-1" || searchtype_fk_userid != "0") {
 				request.setAttribute("paraMap", paraMap);
 			}
 			
@@ -1709,7 +1730,17 @@ public class ControllerSJ {
 			request.setAttribute("currentShowPageNo", currentShowPageNo); // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.
 			request.setAttribute("sizePerPage", sizePerPage); // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.			
 			
+			System.out.println("currentShowPageNo : " + currentShowPageNo);
+			System.out.println("totalCount : " + totalCount);
+			System.out.println("sizePerPage : " + sizePerPage);
+			System.out.println("pageBar : " + pageBar);
+			
 		}
+		
+		else {
+			return "redirect:/index.do";
+		}
+		
 		return "/community/inquiryList.tiles2";
 	}
 	

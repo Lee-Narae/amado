@@ -1196,66 +1196,11 @@ ORDER BY fk_userid ASC, inquiryseq DESC;
              
         from tbl_inquiry
         where fk_userid = #{fk_userid} and status = 1
-	    <choose>
-		   <when test='searchtype_a == "0" and searchtype_b == "0" and searchWord == ""'>
-		   </when>
-		   <when test='searchtype_a == "0" and searchtype_b == "0" and searchWord != ""'>
-		      and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   
-		   <when test='searchtype_a != "0" and searchtype_b == "0" and searchWord != ""'>
-		      and searchtype_a = #{searchtype_a} and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a != "0" and searchtype_b == "0" and searchWord == ""'>
-		      and searchtype_a = #{searchtype_a}
-		   </when>
-		   
-		   <when test='searchtype_a == "0" and searchtype_b != "0" and searchWord != ""'>
-		      and searchtype_b = #{searchtype_b} and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a == "0" and searchtype_b != "0" and searchWord == ""'>
-		      and searchtype_b = #{searchtype_b}
-		   </when>
-		   
-		   <when test='searchtype_a != "0" and searchtype_b != "0" and searchWord != ""'>
 		      and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b} and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a != "0" and searchtype_b != "0" and searchWord == ""'>
-		      and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b}  
-		   </when>
-		   
-		   
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer == "0" and searchWord == ""'>
-		   </when>
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer == "0" and searchWord != ""'>
-		      and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer == "0" and searchWord != ""'>
-		      and fk_userid = #{searchtype_fk_userid} and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer == "0" and searchWord == ""'>
-		      and fk_userid = #{searchtype_fk_userid}
-		   </when>
-		   
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer != "0" and searchWord != ""'>
-		      and answer = TO_NUMBER(#{searchtype_answer}) and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer != "0" and searchWord == ""'>
-		      and answer = TO_NUMBER(#{searchtype_answer})
-		   </when>
-		   
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer != "0" and searchWord != ""'>
-		      and fk_userid = #{searchtype_fk_userid} and answer = TO_NUMBER(#{searchtype_answer}) and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer != "0" and searchWord == ""'>
-		      and fk_userid = #{searchtype_fk_userid} and answer = TO_NUMBER(#{searchtype_answer})  
-		   </when>
-		   
 
-		   
-		   <otherwise></otherwise>
-		</choose>      
+
+		      and fk_userid = #{searchtype_fk_userid} and answer = TO_NUMBER(#{searchtype_answer})  
+  
         order by fk_userid ASC, rno desc
 )
 where rno between 1 and 10

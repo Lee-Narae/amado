@@ -526,7 +526,10 @@
 		         ROW_NUMBER() OVER (PARTITION BY I.inquiryseq ORDER BY F.filename) AS row_num
 		  FROM tbl_inquiryFile F
 		  JOIN tbl_inquiry I ON F.inquiryseq = I.inquiryseq
-		  WHERE I.fk_userid = #{fk_userid} AND I.status = 1
+		  WHERE I.status = 1
+	  	    <if test="!fk_userid.equals('admin')">
+		    	and I.fk_userid = #{fk_userid}
+		    </if>
 		)
 		SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer,
 		       orgfilename, filename, filesize
@@ -535,117 +538,58 @@
 		ORDER BY inquiryseq DESC
     </select>
     
-    <select id="getTotalInquiryCount" parameterType="HashMap" resultType="int">
-	    select count(*)
+	<select id="getTotalInquiryCount" parameterType="HashMap" resultType="int">
+	    select count(*) AS totalCount
 	    from tbl_inquiry
-	    where status = 1 and fk_userid = #{fk_userid}
-	    <choose>
-		   <when test='searchtype_a == "0" and searchtype_b == "0" and searchWord == ""'>
-		   </when>
-		   <when test='searchtype_a == "0" and searchtype_b == "0" and searchWord != ""'>
-		      and lower(fk_userid) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   
-		   <when test='searchtype_a != "0" and searchtype_b == "0" and searchWord != ""'>
-		      and searchtype_a = #{searchtype_a} and lower(fk_userid) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a != "0" and searchtype_b == "0" and searchWord == ""'>
-		      and searchtype_a = #{searchtype_a}
-		   </when>
-		   
-		   <when test='searchtype_a == "0" and searchtype_b != "0" and searchWord != ""'>
-		      and searchtype_b = #{searchtype_b} and lower(fk_userid) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a == "0" and searchtype_b != "0" and searchWord == ""'>
-		      and searchtype_b = #{searchtype_b}
-		   </when>
-		   
-		   <when test='searchtype_a != "0" and searchtype_b != "0" and searchWord != ""'>
-		      and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b} and lower(fk_userid) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a != "0" and searchtype_b != "0" and searchWord == ""'>
-		      and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b}  
-		   </when>
-		   
-		   <otherwise></otherwise>
-		</choose>
+	    where status = 1  
+	    <if test="fk_userid != 'admin'">
+	        and fk_userid = #{fk_userid}
+	    </if>
+	    <if test="searchtype_a != '0'">
+	        AND searchtype_a = #{searchtype_a}
+	    </if>
+	    <if test="searchtype_b != '0'">
+	        AND searchtype_b = #{searchtype_b}
+	    </if>
+	    <if test="searchtype_answer != '-1'">
+	        AND answer = #{searchtype_answer}
+	    </if>
+	    <if test="searchtype_fk_userid == '0' and searchWord != ''">
+	        AND lower(content) LIKE '%' || lower(#{searchWord}) || '%'
+	    </if>
+	    <if test="searchtype_fk_userid != '0' and searchWord != ''">
+	        AND lower(fk_userid) LIKE '%' || lower(#{searchWord}) || '%'
+	    </if>
+
 	</select>
     
     
     
     <select id="getPaginginquiryList" parameterType="HashMap" resultType="InquiryVO">
-	    SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
-		FROM
-(        select row_number() over(order by inquiryseq asc) AS rno 
-             , inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
-             
-        from tbl_inquiry
-        where status = 1
-        <if test='fk_userid != "admin"'>
-        	and fk_userid = #{fk_userid} 
-        </if>
-       		
-	    <choose>
-		   <when test='searchtype_a == "0" and searchtype_b == "0" and searchWord == ""'>
-		   </when>
-		   <when test='searchtype_a == "0" and searchtype_b == "0" and searchWord != ""'>
-		      and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   
-		   <when test='searchtype_a != "0" and searchtype_b == "0" and searchWord != ""'>
-		      and searchtype_a = #{searchtype_a} and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a != "0" and searchtype_b == "0" and searchWord == ""'>
-		      and searchtype_a = #{searchtype_a}
-		   </when>
-		   
-		   <when test='searchtype_a == "0" and searchtype_b != "0" and searchWord != ""'>
-		      and searchtype_b = #{searchtype_b} and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a == "0" and searchtype_b != "0" and searchWord == ""'>
-		      and searchtype_b = #{searchtype_b}
-		   </when>
-		   
-		   <when test='searchtype_a != "0" and searchtype_b != "0" and searchWord != ""'>
-		      and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b} and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a != "0" and searchtype_b != "0" and searchWord == ""'>
-		      and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b}  
-		   </when>
-		   
-
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer == "0" and searchWord == ""'>
-		   </when>
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer == "0" and searchWord != ""'>
-		      and lower(fk_userid) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer == "0" and searchWord != ""'>
-		      and fk_userid = #{searchtype_fk_userid} and lower(fk_userid) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer == "0" and searchWord == ""'>
-		      and fk_userid = #{searchtype_fk_userid}
-		   </when>
-		   
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer != "0" and searchWord != ""'>
-		      and answer = TO_NUMBER(#{searchtype_answer}) and lower(fk_userid) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer != "0" and searchWord == ""'>
-		      and answer = TO_NUMBER(#{searchtype_answer})
-		   </when>
-		   
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer != "0" and searchWord != ""'>
-		      and fk_userid = #{searchtype_fk_userid} and answer = TO_NUMBER(#{searchtype_answer}) and lower(fk_userid) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer != "0" and searchWord == ""'>
-		      and fk_userid = #{searchtype_fk_userid} and answer = TO_NUMBER(#{searchtype_answer})  
-		   </when>		   
-		   
-		   <otherwise></otherwise>
-		</choose>      
-        order by rno desc
-)
-where rno between #{startRno} and #{endRno}   
+    SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
+    FROM (
+        SELECT row_number() OVER (ORDER BY inquiryseq ASC) AS rno,
+               inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
+        FROM tbl_inquiry
+        WHERE status = 1 and fk_userid = #{fk_userid}
+          <if test="searchtype_a != '0'">
+              AND searchtype_a = #{searchtype_a}
+          </if>
+          <if test="searchtype_b != '0'">
+              AND searchtype_b = #{searchtype_b}
+          </if>
+          <if test="searchtype_answer != '-1'">
+              AND answer = #{searchtype_answer}
+          </if>
+          <if test="searchtype_fk_userid == '0' and searchWord != ''">
+              AND lower(content) LIKE '%' || lower(#{searchWord}) || '%'
+          </if>
+          <if test="searchtype_fk_userid != '0' and searchWord != ''">
+              AND lower(fk_userid) LIKE '%' || lower(#{searchWord}) || '%'
+          </if>
+        ORDER BY rno DESC
+    )
+    WHERE rno BETWEEN #{startRno} AND #{endRno}  
     
     </select>
     
@@ -676,80 +620,30 @@ where rno between #{startRno} and #{endRno}
     
     <!-- 전체 문의목록 가져오기 -->
     <select id="getAllInquiry" resultType="InquiryVO">
-		SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
-		FROM
-(        select row_number() over(order by inquiryseq asc) AS rno 
-             , inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
-             
-        from tbl_inquiry
-        where status = 1 
-        <if test='fk_userid != "admin"'>
-        	and fk_userid = #{fk_userid} 
-        </if>
-       		
-	    <choose>
-		   <when test='searchtype_a == "0" and searchtype_b == "0" and searchWord == ""'>
-		   </when>
-		   <when test='searchtype_a == "0" and searchtype_b == "0" and searchWord != ""'>
-		      and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   
-		   <when test='searchtype_a != "0" and searchtype_b == "0" and searchWord != ""'>
-		      and searchtype_a = #{searchtype_a} and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a != "0" and searchtype_b == "0" and searchWord == ""'>
-		      and searchtype_a = #{searchtype_a}
-		   </when>
-		   
-		   <when test='searchtype_a == "0" and searchtype_b != "0" and searchWord != ""'>
-		      and searchtype_b = #{searchtype_b} and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a == "0" and searchtype_b != "0" and searchWord == ""'>
-		      and searchtype_b = #{searchtype_b}
-		   </when>
-		   
-		   <when test='searchtype_a != "0" and searchtype_b != "0" and searchWord != ""'>
-		      and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b} and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a != "0" and searchtype_b != "0" and searchWord == ""'>
-		      and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b}  
-		   </when>
-		   
-		   
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer == "0" and searchWord == ""'>
-		   </when>
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer == "0" and searchWord != ""'>
-		      and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer == "0" and searchWord != ""'>
-		      and fk_userid = #{searchtype_fk_userid} and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer == "0" and searchWord == ""'>
-		      and fk_userid = #{searchtype_fk_userid}
-		   </when>
-		   
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer != "0" and searchWord != ""'>
-		      and answer = TO_NUMBER(#{searchtype_answer}) and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer != "0" and searchWord == ""'>
-		      and answer = TO_NUMBER(#{searchtype_answer})
-		   </when>
-		   
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer != "0" and searchWord != ""'>
-		      and fk_userid = #{searchtype_fk_userid} and answer = TO_NUMBER(#{searchtype_answer}) and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer != "0" and searchWord == ""'>
-		      and fk_userid = #{searchtype_fk_userid} and answer = TO_NUMBER(#{searchtype_answer})  
-		   </when>
-		   
-
-		   
-		   <otherwise></otherwise>
-		</choose>      
-        order by fk_userid ASC, rno desc
-)
-where rno between #{startRno} and #{endRno} 
+    SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
+    FROM (
+        SELECT row_number() OVER (ORDER BY inquiryseq ASC) AS rno,
+               inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
+        FROM tbl_inquiry
+        WHERE status = 1
+          <if test="searchtype_a != '0'">
+              AND searchtype_a = #{searchtype_a}
+          </if>
+          <if test="searchtype_b != '0'">
+              AND searchtype_b = #{searchtype_b}
+          </if>
+          <if test="searchtype_answer != '-1'">
+              AND answer = TO_NUMBER(#{searchtype_answer})
+          </if>
+          <if test="searchtype_fk_userid == '0' and searchWord != ''">
+              AND lower(content) LIKE '%' || lower(#{searchWord}) || '%'
+          </if>
+          <if test="searchtype_fk_userid != '0' and searchWord != ''">
+              AND lower(fk_userid) LIKE '%' || lower(#{searchWord}) || '%'
+          </if>
+        ORDER BY fk_userid ASC, rno DESC
+    )
+    WHERE rno BETWEEN #{startRno} AND #{endRno}
 		
     </select>
 	

@@ -283,6 +283,7 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 	@Override
 	public int getTotalInquiryCount(Map<String, String> paraMap) {
 		int totalCount = sqlsession.selectOne("SJ.getTotalInquiryCount", paraMap);
+		System.out.println("daoimp totalCount : " + totalCount);
 		return totalCount;
 	}
 

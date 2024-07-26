@@ -138,8 +138,9 @@
 		</select>
 		
 		<select class="ml-2" id="searchtype_answer" name="searchtype_answer">
-			<option value="0">답변여부검색시</option>
-			<option value="1">답변여부검색</option>
+			<option value="-1">답변여부검색시</option>
+			<option value="0">답변대기</option>
+			<option value="1">답변완료</option>
 		</select>
 		
 		<c:if test="${requestScope.fk_userid == 'admin'}">
