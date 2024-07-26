@@ -582,3 +582,24 @@ select * from tbl_notice;
 update tbl_notice set commentcount = 0;
 commit;
 
+select * from tbl_club;
+
+insert into tbl_clubmember(fk_userid, sportseq, clubseq, status) values('test20', 1, 3, 1);
+commit;
+
+select userid, name, email, mobile, gender
+from tbl_clubmember A join tbl_member B
+on A.fk_userid = B.userid
+where A.clubseq = 3;
+
+select * from tbl_clubmember;
+
+select rn, userid, name, email, mobile, gender
+from
+(select rownum rn, userid, name, email, mobile, gender
+from
+(select userid, name, email, mobile, gender
+from tbl_clubmember A join tbl_member B
+on A.fk_userid = B.userid
+where A.clubseq = 3))
+where rn between 1 and 7;

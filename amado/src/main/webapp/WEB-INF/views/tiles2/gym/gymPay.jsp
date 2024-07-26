@@ -243,102 +243,114 @@
 		  
 		  
 		  $(document).on("change", "input[id='date']", function(e){
-			     //alert("날짜가 바뀜");
-			     const reservation_date = $("#date").val();
-			     const gymseq = $("input.gymseq").val();
-			     //alert(reservation_date);
-			     
-			      $.ajax({
-			    		url:"<%= ctxPath%>/gym/gymPayDate.do",
-			    		data:{"reservation_date":reservation_date,
-			    			  "gymseq":gymseq},
-			    		dataType:"json",
-			    		success:function(json){
-			    			
-			    			v_html ="";
-			    			
-			    			if(json.length == 1){
-		    					//alert("초기화해줘");
-		    					totalPrice = 0;
-		    					//console.log(JSON.stringify(json));
-				    		    //console.log(json.length);
-				    			// JSON.stringify(json) 은 자바스크립트의 객체(배열)인 json 을 string 타입으로 변경시켜주는 것이다.
-				    			
-			    			    v_html += "<div class='section'>";
-				    			v_html += "    <label for='time'>시간 선택:</label>";
-				    			v_html += "    <div class='btn-container'>";
-				    			for (let i = 0; i < 24; i++) {
-			    			        let time = ("0" + i).slice(-2) + ":00";
-			    			        v_html += "<button class='btn btn-outline-primary btn-custom' data-cost='" + json[0].cost + "' onclick='toggleSelection(this)'>" + time + "</button>";
-			    			    }
-						        v_html += "   </div>";
-						            
-						        v_html += "</div>";
-						
-						        <!-- 총 가격 -->
-						        v_html += "<div class='section'>";
-						        v_html += "    <span class='price' id='totalPrice'>₩0원</span>";
-						        v_html += "</div>";
-						        
-				    			$("div#time").html(v_html);
-		    				}
-			    			
-			    			
-			    			if(json.length > 1){
-				    			$.each(json, function(index, item) {
+			    const selectedDate = new Date($(this).val());
+			    const today = new Date();
+			    
+			    // 오늘 날짜의 시간 부분을 0으로 설정
+			    today.setHours(0, 0, 0, 0);
 
-				    				if(index == 0){
-				    					
-				    					totalPrice = 0;
-						    		    //console.log(JSON.stringify(json));
-						    		    //console.log(json.length);
-						    			// JSON.stringify(json) 은 자바스크립트의 객체(배열)인 json 을 string 타입으로 변경시켜주는 것이다.
-						    			
-					    			    v_html += "<div class='section'>";
-						    			v_html += "    <label for='time'>시간 선택:</label>";
-						    			v_html += "    <div class='btn-container'>";
-						    			for (let i = 0; i < 24; i++) {
-						                    let time = ("0" + i).slice(-2) + ":00";
-						                    let isDisabled = false;
-						                    let cost = json[0].cost;
+			    // 선택된 날짜의 시간 부분을 0으로 설정
+			    selectedDate.setHours(0, 0, 0, 0);
 
-						                    // 해당 시간에 해당하는 json 항목을 확인하여 버튼을 회색으로 만들지 결정
-						                    $.each(json, function(index, item) {
-						                        if (time == item.time) {
-						                            isDisabled = true;
-						                            cost = item.cost;
-						                            return false; // break out of the each loop
-						                        }
-						                    });
+			    // 선택된 날짜가 현재 날짜보다 이전인지 확인
+			    if (selectedDate < today) {
+			        alert("이전 날짜는 선택할 수 없습니다.");
+			        
+			        // 날짜를 현재 날짜로 되돌림
+			        const year = today.getFullYear();
+			        const month = ("0" + (today.getMonth() + 1)).slice(-2); // 월은 0부터 시작하므로 1을 더함
+			        const day = ("0" + today.getDate()).slice(-2);
+			        $(this).val(`${year}-${month}-${day}`);
 
-						                    if (isDisabled) {
-						                    	v_html += "<button class='btn btn-custom btn-custom-disabled' data-cost='" + cost + "' onclick='toggleSelection(this)' disabled>" + time + "</button>";
-						                    } else {
-						                        v_html += "<button class='btn btn-outline-primary btn-custom' data-cost='" + cost + "' onclick='toggleSelection(this)'>" + time + "</button>";
-						                    }
-						                }
-								        v_html += "   </div>";
-								            
-								        v_html += "</div>";
-								
-								        <!-- 총 가격 -->
-								        v_html += "<div class='section'>";
-								        v_html += "    <span class='price' id='totalPrice'>₩0원</span>";
-								        v_html += "</div>";
-								        
-						    			$("div#time").html(v_html);
-				    				}
-				    			});
-			    			}
-			    			
-			    			
-			    		},
-			    		error: function(request, status, error){
-			    			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-			    	    }
-			    	});// end of $.ajax({})---------------------- 
-			    	
-		   });
+			        // 모든 버튼을 원래 색으로 바꾸고 활성화
+			        $(".btn-container button").removeAttr("disabled").removeClass("btn-custom-disabled").addClass("btn-outline-primary").css("background-color", "");
+
+			        return;
+			    }
+			    
+			    const reservation_date = $("#date").val();
+			    const gymseq = $("input.gymseq").val();
+			    
+			    $.ajax({
+			        url:"<%= ctxPath %>/gym/gymPayDate.do",
+			        data:{"reservation_date":reservation_date,
+			              "gymseq":gymseq},
+			        dataType:"json",
+			        success:function(json){
+			            v_html ="";
+			            const currentTime = new Date();
+
+			            if(json.length == 1){
+			                totalPrice = 0;
+			                v_html += "<div class='section'>";
+			                v_html += "    <label for='time'>시간 선택:</label>";
+			                v_html += "    <div class='btn-container'>";
+			                for (let i = 0; i < 24; i++) {
+			                    let time = ("0" + i).slice(-2) + ":00";
+			                    let isDisabled = false;
+
+			                    // 오늘 날짜의 지난 시간인지 확인하여 비활성화
+			                    if (selectedDate.toDateString() === today.toDateString() && i < currentTime.getHours()) {
+			                        isDisabled = true;
+			                    }
+
+			                    v_html += "<button class='btn btn-outline-primary btn-custom' data-cost='" + json[0].cost + "' onclick='toggleSelection(this)'" + (isDisabled ? " disabled class='btn-custom-disabled'" : "") + ">" + time + "</button>";
+			                }
+			                v_html += "   </div>";
+			                v_html += "</div>";
+			                v_html += "<div class='section'>";
+			                v_html += "    <span class='price' id='totalPrice'>₩0원</span>";
+			                v_html += "</div>";
+			                $("div#time").html(v_html);
+			            }
+
+			            if(json.length > 1){
+			                $.each(json, function(index, item) {
+			                    if(index == 0){
+			                        totalPrice = 0;
+			                        v_html += "<div class='section'>";
+			                        v_html += "    <label for='time'>시간 선택:</label>";
+			                        v_html += "    <div class='btn-container'>";
+			                        for (let i = 0; i < 24; i++) {
+			                            let time = ("0" + i).slice(-2) + ":00";
+			                            let isDisabled = false;
+			                            let cost = json[0].cost;
+
+			                            // 오늘 날짜의 지난 시간인지 확인하여 비활성화
+			                            if (selectedDate.toDateString() === today.toDateString() && i < currentTime.getHours()) {
+			                                isDisabled = true;
+			                            }
+
+			                            // 해당 시간에 해당하는 json 항목을 확인하여 버튼을 회색으로 만들지 결정
+			                            $.each(json, function(index, item) {
+			                                if (time == item.time) {
+			                                    isDisabled = true;
+			                                    cost = item.cost;
+			                                    return false; // break out of the each loop
+			                                }
+			                            });
+
+			                            if (isDisabled) {
+			                                v_html += "<button class='btn btn-custom btn-custom-disabled' data-cost='" + cost + "' onclick='toggleSelection(this)' disabled>" + time + "</button>";
+			                            } else {
+			                                v_html += "<button class='btn btn-outline-primary btn-custom' data-cost='" + cost + "' onclick='toggleSelection(this)'>" + time + "</button>";
+			                            }
+			                        }
+			                        v_html += "   </div>";
+			                        v_html += "</div>";
+			                        v_html += "<div class='section'>";
+			                        v_html += "    <span class='price' id='totalPrice'>₩0원</span>";
+			                        v_html += "</div>";
+			                        $("div#time").html(v_html);
+			                    }
+			                });
+			            }
+			        },
+			        error: function(request, status, error){
+			            alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			        }
+			    });
+			});
 		  
 		  
 		  

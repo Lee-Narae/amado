@@ -7,132 +7,135 @@
 <% String ctxPath = request.getContextPath(); %> 
 
 <style type="text/css">
+.mbtn {
+	font-weight: bold;
+	height: 100px;
+	margin-inline-end: .25rem;
+	background-color: white;
+	border: none;
+	color: gray;
+	width: 40%;
+	cursor: pointer;
+	transition: box-shadow 0.3s ease; /* 호버 시 부드러운 전환 효과 */
+}
 
-    .mbtn{
-        font-weight: bold;
-        height: 100px;
-        margin-inline-end: .25rem;
-        background-color: white; 
-        border: none; 
-        color: gray;
-        width: 40%;
-        cursor: pointer;
-        transition: box-shadow 0.3s ease; /* 호버 시 부드러운 전환 효과 */
-    }
+.mbtn:hover {
+	color: #05203c;
+}
 
-    .mbtn:hover {
-        color: #05203c; 
-    }
+.hr1 {
+	border-style: none;
+	height: 2px;
+	background-color: lightgray;
+}
 
-    .hr1{
-        border-style:none; 
-        height: 2px; 
-        background-color : lightgray;
-    }
-    .item1{
-        border-left: solid 3px #05203c;
-    }
+.item1 {
+	border-left: solid 3px #05203c;
+}
 
-    #hr2-container {
-        position: relative;
-        height: 40px;
-        background-color : #98b6d5;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    #hrbtns{
-    border: solid 0px red;
-    margin-right:1.5%;
-        display: flex;
-        gap: 70px; /* Adjust the gap between buttons */
-        position: absolute;
-        z-index: 1;
-    }
-    .btn2{
-    font-size: 14px;
-        cursor: pointer;
-        border: none;
-        background-color: inherit;
-    }
-    
-    .hover {
-    color: #05203c; 
-    font-weight: bold;
-    }
-    
-    .title {
-     width: 15%;
-     background-color: #4db8ff; 
-     color: white; 
-     font-weight: bold; 
-     align-content: center; 
-     text-align: center; 
-     height: 40px; 
-     border-radius: 15px;
-     margin-right: 3%;
-    }
-    
-    .tr{
-    align-content: center;
-    margin-bottom: 1%;
-    }
-    
-    .select {
-    width: 20%;
-    }
-    
-    select {
-    width: 30%;
-    height: 40px;
-    text-align: center;
-    border-radius: 10px;
-    }
-    
-    .btnInfoChange {
-    font-size: 8pt;
-    margin-left: 3%;
-    }
-    
-    .input {
-    width: 70%;
-    }
-    
-    #memberInfo input {
-    height: 30px;
-    border-radius: 10px;
-    align-content: center;
-    padding-left: 1%;
-    border: solid 1px gray;
-    }
-    
-    .sportCard {
-    width: 100%;
-    height: 350px;
-    border-radius: 20px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  	transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-  	position: relative;
-  	z-index: 1;
-    }
-    
-    .sportCard:hover {
-  	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-	}
-    
-    #top, #bottom {
-    width: 80%;
-    justify-content: space-between;
-    }
-    
-    .card {
-    width: 23%;
-    height: 350px;
-    cursor: pointer;
-    border: none;
-	}
-    
-	.back {
+#hr2-container {
+	position: relative;
+	height: 40px;
+	background-color: #98b6d5;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#hrbtns {
+	border: solid 0px red;
+	margin-right: 1.5%;
+	display: flex;
+	gap: 70px; /* Adjust the gap between buttons */
+	position: absolute;
+	z-index: 1;
+}
+
+.btn2 {
+	font-size: 14px;
+	cursor: pointer;
+	border: none;
+	background-color: inherit;
+}
+
+.hover {
+	color: #05203c;
+	font-weight: bold;
+}
+
+.title {
+	width: 15%;
+	background-color: #4db8ff;
+	color: white;
+	font-weight: bold;
+	align-content: center;
+	text-align: center;
+	height: 40px;
+	border-radius: 15px;
+	margin-right: 3%;
+}
+
+.tr {
+	align-content: center;
+	margin-bottom: 1%;
+}
+
+.select {
+	width: 20%;
+}
+
+select {
+	width: 30%;
+	height: 40px;
+	text-align: center;
+	border-radius: 10px;
+}
+
+.btnInfoChange {
+	font-size: 8pt;
+	margin-left: 3%;
+}
+
+.input {
+	width: 70%;
+}
+
+#memberInfo input {
+	height: 30px;
+	border-radius: 10px;
+	align-content: center;
+	padding-left: 1%;
+	border: solid 1px gray;
+}
+
+.sportCard {
+	width: 100%;
+	height: 350px;
+	border-radius: 20px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+	transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+	position: relative;
+	z-index: 1;
+}
+
+.sportCard:hover {
+	box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px
+		rgba(0, 0, 0, 0.22);
+}
+
+#top, #bottom {
+	width: 80%;
+	justify-content: space-between;
+}
+
+.card {
+	width: 23%;
+	height: 350px;
+	cursor: pointer;
+	border: none;
+}
+
+.back {
 	border-radius: 20px;
 	background-color: #fefeec;
 	text-align: center;
@@ -142,43 +145,44 @@
 	z-index: 0;
 	top: 0px;
 	align-content: center;
-	}
-	
-	.shadow {
-	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-	}
-	
-	.sportname {
+}
+
+.shadow {
+	box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px
+		rgba(0, 0, 0, 0.22);
+}
+
+.sportname {
 	font-size: 20pt;
 	font-weight: bold;
-	}
-	
-	.back div {
+}
+
+.back div {
 	margin-bottom: 1%;
-	}
-	
-	.clubimg {
+}
+
+.clubimg {
 	width: 55%;
 	border: solid thin #6699ff;
 	border-radius: 100%;
 	height: 200px;
 	overflow: hidden;
 	text-align: center;
-	}
-	
-	#profile > div > div {
+}
+
+#profile>div>div {
 	margin-bottom: 2%;
-	}
-	
-	#prev, #next {
+}
+
+#prev, #next {
 	cursor: pointer;
-	}
-	
-	#swal2-title {
+}
+
+#swal2-title {
 	font-size: 15pt;
-	}
-	
-	.spTitle {
+}
+
+.spTitle {
 	background-color: #6699ff;
 	display: inline-block;
 	height: 30px;
@@ -190,12 +194,42 @@
 	font-weight: bold;
 	margin-left: 10%;
 	margin-right: 5%;
-	}
-	
-	#tableDiv > div {
+}
+
+#tableDiv>div {
 	margin-bottom: 2.5%;
-	}
-	
+}
+
+.clubMemberTbl td {
+	height: 50px;
+	border-bottom: solid 1px #c9c9c9;
+}
+
+.clubMemberTbl thead, .clubMemberTbl tfoot {
+	background-color: #99ccff;
+	color: white;
+}
+
+.clubMemberTbl tfoot td {
+	height: 30px;
+}
+
+.clubMemberTbl tfoot td:nth-child(1) {
+	border-bottom-left-radius: 10px;
+}
+
+.clubMemberTbl tfoot td:last-child {
+	border-bottom-right-radius: 10px;
+	border-bottom: none;
+}
+
+.clubMemberTbl thead>tr>td:nth-child(1) {
+	border-top-left-radius: 10px;
+}
+
+.clubMemberTbl thead>tr>td:last-child {
+	border-top-right-radius: 10px;
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -512,6 +546,216 @@ function deleteClub(clubseq){
 		});
 }
 
+
+
+function openModal(clubseq){
+	
+	$.ajax({
+		url: "<%=ctxPath%>/member/getClubmember.do",
+		data: {"clubseq": clubseq},
+		dataType: "json",
+		success: function(json){
+			
+			let pageBar = json[json.length-1].pageBar;
+			
+			let modal_html = `<div class="modal-header" align="center">
+						        <h5 class="modal-title" style="font-weight: bold; width: 100%; display: inline-block;">동호회 회원 관리</h5>
+						        <button type="button" class="close" data-dismiss="modal">&times;</button>
+						      </div>
+							  <div class="modal-body" style="height: auto;">
+								<div style="width: 100%; min-height: auto;">
+									<div class="tableDiv my-5" align="center">
+										<table class="clubMemberTbl" style="width: 80%;">
+											<thead>
+												<tr>
+													<td style="width: 5%;" align="center">번호</td>
+													<td style="width: 15%;" align="center">아이디</td>
+													<td style="width: 10%;" align="center">이름</td>
+													<td style="width: 20%;" align="center">연락처</td>
+													<td style="width: 10%;" align="center">성별</td>
+													<td style="width: 30%;" align="center">관리</td>
+												</tr>
+											</thead>
+											
+											<tbody>`;
+											
+			$.each(json, function(index, item){
+				
+				if(index != json.length-1){
+				modal_html += `<tr>
+							   		<td style="width: 5%;" align="center">\${item.rn}</td>
+							   		<td style="width: 15%;" align="center">\${item.userid}</td>
+							   		<td style="width: 10%;" align="center">\${item.name}</td>
+							   		<td style="width: 20%;" align="center">\${item.mobile.substring(0, 3)}-\${item.mobile.substring(3, 7)}-\${item.mobile.substring(7, 11)}</td>
+							   		<td style="width: 10%;" align="center">\${item.gender}</td>
+							   		<td style="width: 30%;" align="center"><button type="button" class="btn btn-danger btn-sm" onclick="quitClubMember('\${item.userid}', \${item.clubseq})">강퇴</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-info btn-sm" onclick="sendMail('\${item.email}')">메일 전송</button></td>
+							   </tr>`;
+				}
+			}); 
+												
+							modal_html += `</tbody>
+										   <tfoot>
+										   		<tr>
+										   			<td colspan="6"></td>
+										   		</tr>
+										   </tfoot>
+										</table>
+									</div>
+								</div>
+								
+								<div style="margin-left: 33%;"><ul style="list-style-type: none; display: flex;">\${pageBar}</ul></div>
+								
+						      </div>
+						      <div class="modal-footer">
+							     <button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
+							  </div>`;
+			
+			$("div.modal-content").html(modal_html);
+			
+			
+		},
+		error: function(request, status, error){
+			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+	  }
+	});
+	
+	
+}
+
+
+function movePage(currentShowPageNo, clubseq){
+	
+	$.ajax({
+		url: "<%=ctxPath%>/member/getClubmember.do",
+		data: {"currentShowPageNo": currentShowPageNo, "clubseq": clubseq},
+		dataType: "json",
+		success: function(json){
+			
+			let pageBar = json[json.length-1].pageBar;
+			
+			let modal_html = `<div class="modal-header" align="center">
+						        <h5 class="modal-title" style="font-weight: bold; width: 100%; display: inline-block;">동호회 회원 관리</h5>
+						        <button type="button" class="close" data-dismiss="modal">&times;</button>
+						      </div>
+							  <div class="modal-body" style="height: auto;">
+								<div style="width: 100%; min-height: auto;">
+									<div class="tableDiv my-5" align="center">
+										<table class="clubMemberTbl" style="width: 80%;">
+											<thead>
+												<tr>
+													<td style="width: 5%;" align="center">번호</td>
+													<td style="width: 15%;" align="center">아이디</td>
+													<td style="width: 10%;" align="center">이름</td>
+													<td style="width: 20%;" align="center">연락처</td>
+													<td style="width: 10%;" align="center">성별</td>
+													<td style="width: 30%;" align="center">관리</td>
+												</tr>
+											</thead>
+											
+											<tbody>`;
+											
+			$.each(json, function(index, item){
+				
+				if(index != json.length-1){
+				modal_html += `<tr>
+							   		<td style="width: 5%;" align="center">\${item.rn}</td>
+							   		<td style="width: 15%;" align="center">\${item.userid}</td>
+							   		<td style="width: 10%;" align="center">\${item.name}</td>
+							   		<td style="width: 20%;" align="center">\${item.mobile.substring(0, 3)}-\${item.mobile.substring(3, 7)}-\${item.mobile.substring(7, 11)}</td>
+							   		<td style="width: 10%;" align="center">\${item.gender}</td>
+							   		<td style="width: 30%;" align="center"><button type="button" class="btn btn-danger btn-sm" onclick="quitClubMember('\${item.userid}', \${item.clubseq})">강퇴</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-info btn-sm" onclick="sendMail('\${item.email}')">메일 전송</button></td>
+							   </tr>`;
+				}
+			}); 
+												
+							modal_html += `</tbody>
+										   <tfoot>
+										   		<tr>
+										   			<td colspan="6"></td>
+										   		</tr>
+										   </tfoot>
+										</table>
+									</div>
+								</div>
+								
+								<div style="margin-left: 33%;"><ul style="list-style-type: none; display: flex;">\${pageBar}</ul></div>
+								
+						      </div>
+						      <div class="modal-footer">
+							     <button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
+							  </div>`;
+			
+			$("div.modal-content").html(modal_html);
+			
+			
+		},
+		error: function(request, status, error){
+			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+	  }
+	});
+	
+}
+
+
+function quitClubMember(userid, clubseq){
+	
+	if(userid == '${sessionScope.loginuser.userid}'){
+		alert('자기 자신은 탈퇴시킬 수 없습니다.');
+		return;
+	}
+	
+	Swal.fire({
+		  title: "해당 회원을 강제 탈퇴시키시겠습니까?",
+		  icon: "warning",
+		  showCancelButton: true,
+		  confirmButtonColor: "#3085d6",
+		  cancelButtonColor: "#d33",
+		  confirmButtonText: "네",
+		  cancelButtonText: "아니오"		  
+		}).then((result) => {
+		  if (result.isConfirmed) {
+			  
+			  $.ajax({
+				  url: "<%=ctxPath%>/member/quitClubMember.do",
+				  data: {"clubseq": clubseq, "userid": userid},
+				  type: "post",
+				  dataType: "json",
+				  success: function(json){
+					  
+					  if(json.n == 1){
+						  Swal.fire({
+						      title: "탈퇴 완료!",
+						      icon: "success"
+						    }).then(okay => {
+								  if (okay) {
+									  openModal(clubseq);
+									  }
+							  });
+					  }
+					  
+					  else {
+						  alert('내부 오류로 인하여 탈퇴가 실패하였습니다. 다시 시도해주세요.');
+					  }
+					  
+				  },
+				  error: function(request, status, error){
+						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				  }
+			  });
+		  
+		  }
+		  
+		});
+	
+}
+
+
+function sendMail(email){
+
+	// board 프로젝트에서 tiles1 > email 참고
+
+}
+
 </script>
 
 
@@ -689,8 +933,6 @@ function deleteClub(clubseq){
 	                
 	            </div>
 	            
-	            
-	            
 	            <div id="content2" style="width: 50%;  margin: 3% auto;" >
 	                <div class="item1">&nbsp;내 동호회 관리</div>
 	                <hr class="hr1">
@@ -706,7 +948,7 @@ function deleteClub(clubseq){
 									
 									<c:forEach items="${requestScope.clubList}" var="club">
 										<div align="center" style="border-radius: 20px;	width: 450px; height: 600px; padding: 30px; margin: 0;">
-											<div class="clubimg mb-3"><img src="<%=ctxPath%>/resources/images/zee/${club.clubimg}"/></div>
+											<div class="clubimg mb-3"><img style="width: 100%;" src="<%=ctxPath%>/resources/images/zee/${club.clubimg}"/></div>
 											<div style="font-size: 10pt; font-weight: bold;">${club.sportname}</div>
 											<div style="font-size: 20pt; font-weight: bold;">${club.clubname}</div>
 											<div id="tableDiv" align="left">
@@ -732,7 +974,7 @@ function deleteClub(clubseq){
 												</div>
 											</div>
 											<div class="mt-3" style="display: flex; justify-content: space-between;">
-												<button type="button" class="btn btn-primary">회원 관리</button>&nbsp;&nbsp;
+												<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#mngMemberModal" onclick="openModal('${club.clubseq}')">회원 관리</button>&nbsp;&nbsp;
 												<div class="ifEdit">
 													<button type="button" class="btn btn-warning editBtn" onclick="editClub('${club.clubseq}')">수정</button>&nbsp;&nbsp;
 												</div>
@@ -761,4 +1003,14 @@ function deleteClub(clubseq){
     	</div> 
     	
     </div>
+</div>
+
+
+<!-- 회원 관리 모달 -->
+<div class="modal modalclass" id="mngMemberModal" style="margin: auto 0; height: auto;">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable" style="height: auto;">
+    <div class="modal-content modal1">
+
+    </div>
+  </div>
 </div>
