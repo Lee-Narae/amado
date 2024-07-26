@@ -701,6 +701,8 @@ public class ControllerJH {
 
 		String userid = request.getParameter("userid");
 		
+		//service.getCost(gymseq);
+		
 		mav.setViewName("gym/view_reservation.tiles2");
 		// /WEB-INF/views/tiles2/gym/view_reservation.jsp
 		
