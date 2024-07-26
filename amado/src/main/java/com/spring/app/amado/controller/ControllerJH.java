@@ -696,6 +696,17 @@ public class ControllerJH {
 	}
 			
 	
+	@GetMapping("/gym/view_reservation.do")
+	public ModelAndView view_reservation(ModelAndView mav, HttpServletRequest request) {
+
+		String userid = request.getParameter("userid");
+		
+		mav.setViewName("gym/view_reservation.tiles2");
+		// /WEB-INF/views/tiles2/gym/view_reservation.jsp
+		
+		return mav;
+	}	
+	
 	
 	
 }
