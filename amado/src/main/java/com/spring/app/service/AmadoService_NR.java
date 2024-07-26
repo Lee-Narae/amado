@@ -230,12 +230,15 @@ public interface AmadoService_NR {
 
 	// 마이페이지 - 내동호회 관리
 	List<ClubVO> getMyClub(String userid);
-
 	// 마이페이지 - 내 동호회 수정
 	int updateClubInfo(ClubVO club);
-
 	// 마이페이지 - 내 동호회 삭제
 	int deleteClub(String clubseq);
+	// 마이페이지 - 내 동호회 회원 관리
+	List<Map<String, String>> getClubMember(Map<String, String> paramap);
+	int getClubMemberTotalPage(Map<String, String> paramap);
+	int getTotalClubMemberCount(Map<String, String> paramap);
+	int quitClubMember(Map<String, String> paramap);
 
 
 	
