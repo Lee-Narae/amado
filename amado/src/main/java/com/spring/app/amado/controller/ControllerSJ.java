@@ -1567,6 +1567,8 @@ public class ControllerSJ {
 			
 			String searchtype_a = request.getParameter("searchtype_a");
 			String searchtype_b = request.getParameter("searchtype_b");
+			String searchtype_fk_userid = request.getParameter("searchtype_fk_userid");
+			String searchtype_answer = request.getParameter("searchtype_answer");
 			String searchWord = request.getParameter("searchWord");
 			String str_currentShowPageNo = request.getParameter("currentShowPageNo"); 
 			
@@ -1578,6 +1580,14 @@ public class ControllerSJ {
 			
 			if(searchtype_b == null) {
 				searchtype_b = "0";
+			}
+			
+			if(searchtype_fk_userid == null) {
+				searchtype_fk_userid = "0";
+			}
+			
+			if(searchtype_answer == null) {
+				searchtype_answer = "0";
 			}
 			
 			if(searchWord == null) {
@@ -1593,6 +1603,8 @@ public class ControllerSJ {
 			Map<String, String> paraMap = new HashMap<>();
 			paraMap.put("searchtype_a", searchtype_a);
 			paraMap.put("searchtype_b", searchtype_b);
+			paraMap.put("searchtype_fk_userid", searchtype_fk_userid);
+			paraMap.put("searchtype_answer", searchtype_answer);
 			paraMap.put("searchWord", searchWord);
 			paraMap.put("fk_userid", fk_userid);
 					
@@ -1659,8 +1671,8 @@ public class ControllerSJ {
 			
 			// === [맨처음][이전] 만들기 === //
 			if(pageNo != 1) {
-				pageBar += "<li style='display:inline-block; width:70px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchWord="+searchWord+"&currentShowPageNo=1'>[맨처음]</a></li>";
-				pageBar += "<li style='display:inline-block; width:50px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchWord="+searchWord+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a></li>"; 
+				pageBar += "<li style='display:inline-block; width:70px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchtype_answer="+searchtype_answer+"&searchWord="+searchWord+"&currentShowPageNo=1'>[맨처음]</a></li>";
+				pageBar += "<li style='display:inline-block; width:50px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchtype_answer="+searchtype_answer+"&searchWord="+searchWord+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a></li>"; 
 			}
 			
 			while( !(loop > blockSize || pageNo > totalPage) ) {
@@ -1669,7 +1681,7 @@ public class ControllerSJ {
 					pageBar += "<li style='display:inline-block; width:30px; font-size:12pt; border:solid 1px gray; color:red; padding:2px 4px;'>"+pageNo+"</li>";
 				}
 				else {
-					pageBar += "<li style='display:inline-block; width:30px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchWord="+searchWord+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a></li>"; 
+					pageBar += "<li style='display:inline-block; width:30px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchtype_answer="+searchtype_answer+"&searchWord="+searchWord+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a></li>"; 
 				}
 				
 				loop++;
@@ -1678,8 +1690,8 @@ public class ControllerSJ {
 			
 			// === [다음][마지막] 만들기 === //
 			if(pageNo <= totalPage) {
-				pageBar += "<li style='display:inline-block; width:50px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchWord="+searchWord+"&currentShowPageNo="+pageNo+"'>[다음]</a></li>";
-				pageBar += "<li style='display:inline-block; width:70px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchWord="+searchWord+"&currentShowPageNo="+totalPage+"'>[마지막]</a></li>"; 
+				pageBar += "<li style='display:inline-block; width:50px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchtype_answer="+searchtype_answer+"&searchWord="+searchWord+"&currentShowPageNo="+pageNo+"'>[다음]</a></li>";
+				pageBar += "<li style='display:inline-block; width:70px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchtype_answer="+searchtype_answer+"&searchWord="+searchWord+"&currentShowPageNo="+totalPage+"'>[마지막]</a></li>"; 
 			}
 			
 			pageBar += "</ul>";
@@ -1781,8 +1793,6 @@ public class ControllerSJ {
 		
 		return "chatting/multichat.tiles1";
 	}
-	
-	
 	
 	
 	
