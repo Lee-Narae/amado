@@ -1,5 +1,7 @@
 package com.spring.app.service;
 
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.spring.app.common.AES256;
 import com.spring.app.common.FileManager;
 import com.spring.app.domain.AnswerVO;
+import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.GymVO;
+import com.spring.app.domain.MemberVO;
 import com.spring.app.domain.PhotoVO;
 import com.spring.app.domain.QuestionVO;
 import com.spring.app.model.AmadoDAO_HS;
@@ -232,6 +236,50 @@ public class AmadoService_imple_HS implements AmadoService_HS {
 		public List<Map<String, String>> getGymImg(String gymseq) {
 			 List<Map<String, String>> gymImgList= dao.getGymImg(gymseq);
 			 return gymImgList;
+		}
+
+
+
+
+		// 관리자 -전체 클럽수 알아오기 
+		@Override
+		public int getclubTotalPage(Map<String, String> paramap) {
+		
+			
+			int n = dao.getclubTotalPage(paramap);
+			return n;
+		}
+
+
+
+
+		// 관리자  -클럽 조회 
+		@Override
+		public List<ClubVO> select_club_paging(Map<String, String> paramap) {
+			
+			List<ClubVO> clubList = dao.select_club_paging(paramap);
+		
+			return clubList;
+		}
+
+
+
+
+		// 관리자 - 전체 클럽 수 조회
+		@Override
+		public int getTotalClubCount(Map<String, String> paramap) {
+			int n = dao.getTotalClubCount(paramap);
+			return n;
+		}
+
+
+
+
+
+		@Override
+		public ClubVO getClubDetail(String clubseq) {
+			 ClubVO club = dao.getClubDetail(clubseq);
+			return club;
 		}
 
 

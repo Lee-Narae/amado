@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.spring.app.domain.AnswerVO;
+import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.GymVO;
+import com.spring.app.domain.MemberVO;
 import com.spring.app.domain.PhotoVO;
 import com.spring.app.domain.QuestionVO;
 
@@ -177,6 +179,45 @@ public class AmadoDAO_imple_HS implements AmadoDAO_HS {
 		public List<Map<String, String>> getGymImg(String gymseq) {
 			List<Map<String, String>> getGymImg=sqlsession.selectList("HS.getGymimg", gymseq);
 			return getGymImg;
+		}
+
+
+
+
+		// 관리자 - 전체 페이지 수 알아오기
+		@Override
+		public int getclubTotalPage(Map<String, String> paramap) {
+		
+			int n = sqlsession.selectOne("HS.getclubTotalPage", paramap);
+			return n;
+		}
+
+
+
+
+		// 관리자  -클럽 조회 
+		@Override
+		public List<ClubVO> select_club_paging(Map<String, String> paramap) {
+			List<ClubVO> clubList = sqlsession.selectList("HS.select_club_paging", paramap);
+			return clubList;
+		}
+
+
+
+
+		// 관리자 - 전체 클럽 수 조회
+		@Override
+		public int getTotalClubCount(Map<String, String> paramap) {
+			int n = sqlsession.selectOne("HS.getTotalClubCount", paramap);
+			return n;
+		}
+
+
+		// 관리자 - 클럽 상세정보
+		@Override
+		public ClubVO getClubDetail(String clubseq) {
+			ClubVO club = sqlsession.selectOne("HS.getClubDetail", clubseq);
+			return club;
 		}
 
 

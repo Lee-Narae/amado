@@ -752,8 +752,13 @@ function quitClubMember(userid, clubseq){
 
 function sendMail(email){
 
-	// board 프로젝트에서 tiles1 > email 참고
-
+	const f = document.emailFrm;
+	f.receive.value = email;
+	f.send.value = '${sessionScope.loginuser.userid}';
+	f.method = "post";
+	f.action = "<%=ctxPath%>/member/clubEmail.do";
+	f.submit();
+	
 }
 
 </script>
@@ -1004,6 +1009,11 @@ function sendMail(email){
     	
     </div>
 </div>
+
+<form name="emailFrm">
+	<input type="hidden" name="receive" />
+	<input type="hidden" name="send" />
+</form>
 
 
 <!-- 회원 관리 모달 -->

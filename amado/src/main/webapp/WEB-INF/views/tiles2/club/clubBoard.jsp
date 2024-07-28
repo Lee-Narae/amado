@@ -90,6 +90,7 @@ $(document).ready(function(){
 		if(${not empty requestScope.paramap.searchType}){ // 검색을 했을 경우
 			frm.searchType.value = '${requestScope.paramap.searchType}';
 			frm.searchWord.value = '${requestScope.paramap.searchWord}';
+			frm.clubseq.value = '${requestScope.paramap.clubseq}';
 		}
 		
 		frm.method = "post";
@@ -102,7 +103,7 @@ $(document).ready(function(){
 function goSearch(){
 	
 	if($("input:text[name='searchWord']").val().trim() == ""){
-		swal('검색어를 입력하세요.');
+		alert('검색어를 입력하세요.');
 		return;
 	}
 	

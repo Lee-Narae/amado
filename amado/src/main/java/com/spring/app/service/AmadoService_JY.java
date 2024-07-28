@@ -113,6 +113,8 @@ public interface AmadoService_JY {
 
 	int deleteCBoard(String clubboardseq);
 
+	int add_withFile2(ClubBoardVO cvo);
+
 
 	
 

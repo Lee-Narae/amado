@@ -749,6 +749,128 @@ public class ControllerJY {
 
 
 	// ========== 동호회 게시판 ==========
+	// 동호회게시판 글 작성하기 뷰단
+	@GetMapping(value="/club/addClubBoard.do")
+	public ModelAndView requiredLogin_addClubBoard(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+		mav.setViewName("club/addClubBoard.tiles2");
+		return mav;
+		
+	}
+	
+	
+	// 글쓰기
+	@PostMapping(value="/club/addEndClubBoard.do" , produces="text/plain;charset=UTF-8")
+	public ModelAndView requiredLogin_addEndClubBoard(HttpServletRequest request, HttpServletResponse response, ModelAndView mav, Map<String, String> paraMap, ClubBoardVO cvo, MultipartHttpServletRequest mrequest) throws Exception {
+		
+		MultipartFile attach = cvo.getAttach();
+		
+		if(attach != null) {
+			// attach(첨부파일)가 비어 있지 않으면(즉, 첨부파일이 있는 경우라면) 
+			
+			/*
+			   1. 사용자가 보낸 첨부파일을 WAS(톰캣)의 특정 폴더에 저장해주어야 한다. 
+			   >>> 파일이 업로드 되어질 특정 경로(폴더)지정해주기
+			             우리는 WAS의 webapp/resources/files 라는 폴더로 지정해준다.
+			             조심할 것은  Package Explorer 에서  files 라는 폴더를 만드는 것이 아니다.       
+			*/
+			// WAS 의 webapp 의 절대경로를 알아와야 한다. 
+			HttpSession session = mrequest.getSession(); 
+			String root = session.getServletContext().getRealPath("/");  
+			
+			//System.out.println("root: "+root);
+			//root: C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\amado\
+			//System.out.println("~~~ 확인용 webapp 의 절대경로 => " + root);  
+			//~~~ 확인용 webapp 의 절대경로 => C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\board\
+			
+			String path =root+"resources" +File.separator+"files";
+			/* File.separator 는 운영체제에서 사용하는 폴더와 파일의 구분자이다.
+            	운영체제가 Windows 이라면 File.separator 는  "\" 이고,
+            	운영체제가 UNIX, Linux, 매킨토시(맥) 이라면  File.separator 는 "/" 이다. 
+            	
+			 */
+			
+			/*
+			 
+			 #2 . 파일첨부를 위한 변수의 설정 및 값을 초기화 한 후 파일 올리기
+			  
+			 */
+			String newFileName ="";
+			//was(톰캣)의 디스크에 저장될 파일명
+			
+			byte[] bytes = null;
+			//첨부파일의 내용물을 담는것
+			
+			
+			try {
+				bytes= attach.getBytes();
+				//첨부파일의 내용물을 읽어오는 것
+				
+				String originalFilename=attach.getOriginalFilename();
+				// attach.getOriginalFilename() 이 첨부파일명의 파일명(예: 강아지.png) 이다.
+				
+			//   System.out.println("~~~ 확인용 originalFilename => " + originalFilename); 
+	            // ~~~ 확인용 originalFilename => LG_싸이킹청소기_사용설명서.pdf 
+				newFileName =fileManager.doFileUpload(bytes, originalFilename, path);
+				//첨부되어진 파일을 업로드 하는 것 
+				
+				//System.out.println("~~~ 확인용 newFileName => " + newFileName); 
+				
+				/*
+	             3. BoardVO boardvo 에 fileName 값과 orgFilename 값과 fileSize 값을 넣어주기  
+	             
+	         */
+				
+				cvo.setWasfileName(newFileName);
+				//was(톰캣)에 저장된 파일명(2024062712075997631067179400.jpg)
+				cvo.setFilename(originalFilename);
+				// 게시판 페이지에서 첨부된 파일(LG_싸이킹청소기_사용설명서.pdf)을 보여줄 때 사용.
+	            // 또한 사용자가 파일을 다운로드 할때 사용되어지는 파일명으로 사용.
+				
+				
+			} catch (IOException e) {
+			
+				e.printStackTrace();
+			}
+			
+		}
+		
+			/*
+			System.out.println("1"+fvo.getAttach());
+			System.out.println("2"+fvo.getImgfilename());
+			System.out.println("3"+fvo.getSportseq());
+			System.out.println("4"+fvo.getCity());
+			System.out.println("5"+fvo.getLocal());
+			
+			System.out.println("6"+fvo.getCost());
+			System.out.println("7"+fvo.getFk_userid());
+			
+			System.out.println("8"+fvo.getTitle());
+			System.out.println("9"+fvo.getContent());
+			System.out.println("10"+fvo.getPassword());
+			System.out.println("10"+fvo.getDeal());
+			*/
+		// === !!! 첨부파일이 있는 경우 작업 끝 !!! ===	
+
+		int n =0;
+		
+		if(!(attach.isEmpty())) {
+			//파일첨부가 있는 경우라면
+			n=service.add_withFile2(cvo);
+			
+		}
+		
+		mav.setViewName("redirect:/club/clubBoard.do"); //상품 등록이 완료되면 결과가 적용된 페이지로 가야하기때문에 redirect를 써줘여 함.
+		//  /WEB-INF/views/tiles1/board/error/add_error.jsp 파일을 생성한다.
+
+			
+		return mav;
+		
+	}
+
+	
+	
+	
+	
 	// 동호회 게시판 뷰단
 	@GetMapping(value="/club/clubBoard.do")
 	public ModelAndView requiredLogin_clubBoard(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
