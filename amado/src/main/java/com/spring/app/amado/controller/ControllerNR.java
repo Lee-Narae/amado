@@ -2603,6 +2603,17 @@ public class ControllerNR {
 	}
 	
 	
+	
+	@PostMapping("/member/clubEmail.do")
+	public ModelAndView clubEmail (ModelAndView mav) {
+		
+		mav.setViewName("member/clubEmail.tiles1");
+		return mav;
+	}
+	
+	
+	
+	
 	@GetMapping("/member/myPage_etc.do")
 	public ModelAndView myPage_etc(ModelAndView mav) {
 		
@@ -2610,6 +2621,12 @@ public class ControllerNR {
 		
 		return mav;
 	}
+	
+	
+	
+	
+	
+	
 	
 	
 }
