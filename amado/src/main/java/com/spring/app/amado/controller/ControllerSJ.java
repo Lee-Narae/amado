@@ -1379,21 +1379,11 @@ public class ControllerSJ {
 		
 		HttpSession session = request.getSession();
 		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser"); 
-				String fk_userid = loginuser.getUserid();
-		
-		System.out.println("fk_userid : " + fk_userid);
-		
-		if("admin".equals(fk_userid)) {
-			loginuser = service.getMemberInfo(fk_userid);
-			
-			request.setAttribute("fk_userid", fk_userid);
-			request.setAttribute("loginuser", loginuser);
-			return "redirect:/community/inquiryList.do";
-		}
+				String fk_userid = loginuser.getUserid();
 		
 		loginuser = service.getMemberInfo(fk_userid);
 		
-		request.setAttribute("fk_userid", fk_userid);		request.setAttribute("loginuser", loginuser);		
+		request.setAttribute("fk_userid", fk_userid);		request.setAttribute("loginuser", loginuser);		
 		return "community/inquiry.tiles2";
 	}
 
@@ -1554,24 +1544,21 @@ public class ControllerSJ {
 	
 	// 문의목록보기
 	@GetMapping("/community/inquiryList.do")
-	public String inquiryList(HttpServletRequest request, HttpServletResponse response) {
+	public String requiredLogin_inquiryList(HttpServletRequest request, HttpServletResponse response) {
+		
 		
 		String fk_userid = "";
 		
 		HttpSession session = request.getSession();
-		if(session.getAttribute("loginuser") != null) {
-			MemberVO loginuser = (MemberVO) session.getAttribute("loginuser"); 
-			
-			if(loginuser.getUserid() != null) {
-				fk_userid = loginuser.getUserid();
-			}
-		}
+		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser"); 
 		
+		fk_userid = loginuser.getUserid();
 		request.setAttribute("fk_userid", fk_userid);
+		
 		
 		List<InquiryVO> inquiryPagingList = null;
 		
-		if(fk_userid != "" && fk_userid != null) {
+		if(fk_userid != null) {
 			// 문의목록 가져오기
 			List<InquiryVO> inquiryList = service.getinquiryList(fk_userid);
 			request.setAttribute("inquiryList", inquiryList);
@@ -1580,12 +1567,14 @@ public class ControllerSJ {
 			
 			String searchtype_a = request.getParameter("searchtype_a");
 			String searchtype_b = request.getParameter("searchtype_b");
-			String searchtype_fk_userid = request.getParameter("searchtype_fk_userid");
-			String searchtype_answer = request.getParameter("searchtype_answer");
 			String searchWord = request.getParameter("searchWord");
 			String str_currentShowPageNo = request.getParameter("currentShowPageNo"); 
 			
-		  // System.out.println("~~ 확인용 str_currentShowPageNo : " + str_currentShowPageNo);
+			// 관리자 검색용귀찮아서 넣어둠
+			String searchtype_answer = "99";
+			String searchtype_fk_userid = "0";
+			
+		  System.out.println("~~ 확인용 str_currentShowPageNo : " + str_currentShowPageNo);
 			
 			if(searchtype_a == null) {
 				searchtype_a = "0";
@@ -1593,14 +1582,6 @@ public class ControllerSJ {
 			
 			if(searchtype_b == null) {
 				searchtype_b = "0";
-			}
-			
-			if(searchtype_fk_userid == null) {
-				searchtype_fk_userid = "0";
-			}
-			
-			if(searchtype_answer == null) {
-				searchtype_answer = "-1";
 			}
 			
 			if(searchWord == null) {
@@ -1616,18 +1597,11 @@ public class ControllerSJ {
 			Map<String, String> paraMap = new HashMap<>();
 			paraMap.put("searchtype_a", searchtype_a);
 			paraMap.put("searchtype_b", searchtype_b);
-			paraMap.put("searchtype_fk_userid", searchtype_fk_userid);
 			paraMap.put("searchtype_answer", searchtype_answer);
+			paraMap.put("searchtype_fk_userid", searchtype_fk_userid);
 			paraMap.put("searchWord", searchWord);
 			paraMap.put("fk_userid", fk_userid);
-			
-			System.out.println("searchtype_a : " + searchtype_a);
-			System.out.println("searchtype_b : " + searchtype_b);
-			System.out.println("searchtype_fk_userid : " + searchtype_fk_userid);
-			System.out.println("searchtype_answer : " + searchtype_answer);
-			System.out.println("searchWord : " + searchWord);
-			System.out.println("fk_userid : " + fk_userid);
-			
+					
 			// 먼저, 총 게시물 건수(totalCount)를 구해와야 한다.
 			// 총 게시물 건수(totalCount)는  검색조건이 있을 때와 없을때로 나뉘어진다.
 			int totalCount = 0;        // 총 게시물 건수
@@ -1636,7 +1610,6 @@ public class ControllerSJ {
 			int totalPage = 0;         // 총 페이지수(웹브라우저상에서 보여줄 총 페이지 개수, 페이지바) 			
 			
 			totalCount = service.getTotalInquiryCount(paraMap);
-			System.out.println("바로밑에서 totalCount : " + totalCount);
 			
 			System.out.println("totalCount" + totalCount);
 			
@@ -1676,7 +1649,7 @@ public class ControllerSJ {
 			
 			
 			// 검색시 검색조건 및 검색어 값 유지시키기
-			if(searchtype_a != "0" || searchtype_b != "0" || searchWord != "" || searchtype_answer != "-1" || searchtype_fk_userid != "0") {
+			if(searchtype_a != "0" || searchtype_b != "0" || searchWord != "") {
 				request.setAttribute("paraMap", paraMap);
 			}
 			
@@ -1688,12 +1661,12 @@ public class ControllerSJ {
 			int pageNo = ((currentShowPageNo - 1)/blockSize) * blockSize + 1;
 			
 			String pageBar = "<ul style='list-style:none;'>";
-			String url = "/amado/community/inquiryList.do";
+			String url = "/amado/admin/reg/ADinquiryList";
 			
 			// === [맨처음][이전] 만들기 === //
 			if(pageNo != 1) {
-				pageBar += "<li style='display:inline-block; width:70px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchtype_answer="+searchtype_answer+"&searchWord="+searchWord+"&currentShowPageNo=1'>[맨처음]</a></li>";
-				pageBar += "<li style='display:inline-block; width:50px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchtype_answer="+searchtype_answer+"&searchWord="+searchWord+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a></li>"; 
+				pageBar += "<li style='display:inline-block; width:70px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_answer="+searchtype_answer+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchWord="+searchWord+"&currentShowPageNo=1'>[맨처음]</a></li>";
+				pageBar += "<li style='display:inline-block; width:50px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_answer="+searchtype_answer+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchWord="+searchWord+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a></li>"; 
 			}
 			
 			while( !(loop > blockSize || pageNo > totalPage) ) {
@@ -1702,7 +1675,7 @@ public class ControllerSJ {
 					pageBar += "<li style='display:inline-block; width:30px; font-size:12pt; border:solid 1px gray; color:red; padding:2px 4px;'>"+pageNo+"</li>";
 				}
 				else {
-					pageBar += "<li style='display:inline-block; width:30px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchtype_answer="+searchtype_answer+"&searchWord="+searchWord+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a></li>"; 
+					pageBar += "<li style='display:inline-block; width:30px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_answer="+searchtype_answer+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchWord="+searchWord+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a></li>"; 
 				}
 				
 				loop++;
@@ -1711,8 +1684,8 @@ public class ControllerSJ {
 			
 			// === [다음][마지막] 만들기 === //
 			if(pageNo <= totalPage) {
-				pageBar += "<li style='display:inline-block; width:50px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchtype_answer="+searchtype_answer+"&searchWord="+searchWord+"&currentShowPageNo="+pageNo+"'>[다음]</a></li>";
-				pageBar += "<li style='display:inline-block; width:70px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchtype_answer="+searchtype_answer+"&searchWord="+searchWord+"&currentShowPageNo="+totalPage+"'>[마지막]</a></li>"; 
+				pageBar += "<li style='display:inline-block; width:50px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_answer="+searchtype_answer+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchWord="+searchWord+"&currentShowPageNo="+pageNo+"'>[다음]</a></li>";
+				pageBar += "<li style='display:inline-block; width:70px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_answer="+searchtype_answer+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchWord="+searchWord+"&currentShowPageNo="+totalPage+"'>[마지막]</a></li>"; 
 			}
 			
 			pageBar += "</ul>";
@@ -1730,17 +1703,7 @@ public class ControllerSJ {
 			request.setAttribute("currentShowPageNo", currentShowPageNo); // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.
 			request.setAttribute("sizePerPage", sizePerPage); // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.			
 			
-			System.out.println("currentShowPageNo : " + currentShowPageNo);
-			System.out.println("totalCount : " + totalCount);
-			System.out.println("sizePerPage : " + sizePerPage);
-			System.out.println("pageBar : " + pageBar);
-			
 		}
-		
-		else {
-			return "redirect:/index.do";
-		}
-		
 		return "/community/inquiryList.tiles2";
 	}
 	
@@ -1826,6 +1789,176 @@ public class ControllerSJ {
 	}
 	
 	
+	
+
+	
+	// 문의 답변
+	@GetMapping("admin/reg/ADinquiryList")
+	public String AinquiryList(HttpServletRequest request) {
+		
+		String fk_userid = "admin";
+		
+		request.setAttribute("fk_userid", fk_userid);
+		
+		System.out.println("fk_userid : " + fk_userid); 
+		
+		List<InquiryVO> inquiryPagingList = null;
+		
+		if(fk_userid != null) {
+			// 문의목록 가져오기
+			List<InquiryVO> inquiryList = service.getinquiryList(fk_userid);
+			request.setAttribute("inquiryList", inquiryList);
+			
+			
+			
+			String searchtype_a = request.getParameter("searchtype_a");
+			String searchtype_b = request.getParameter("searchtype_b");
+			String searchtype_answer = request.getParameter("searchtype_answer");
+			String searchtype_fk_userid = request.getParameter("searchtype_fk_userid");
+			String searchWord = request.getParameter("searchWord");
+			String str_currentShowPageNo = request.getParameter("currentShowPageNo"); 
+			
+		  System.out.println("~~ 확인용 str_currentShowPageNo : " + str_currentShowPageNo);
+			
+			if(searchtype_a == null) {
+				searchtype_a = "0";
+			}
+			
+			if(searchtype_b == null) {
+				searchtype_b = "0";
+			}
+			if(searchtype_answer == null) {
+				searchtype_answer = "99";
+			}
+			if(searchtype_fk_userid == null) {
+				searchtype_fk_userid = "0";
+			}
+			
+			if(searchWord == null) {
+				searchWord = "";
+			}
+			
+			if(searchWord != null) {
+				searchWord = searchWord.trim();
+				// "    연습   " ==> "연습"
+				// "        " ==> ""  
+			}			
+			
+			Map<String, String> paraMap = new HashMap<>();
+			paraMap.put("searchtype_a", searchtype_a);
+			paraMap.put("searchtype_b", searchtype_b);
+			paraMap.put("searchtype_answer", searchtype_answer);
+			paraMap.put("searchtype_fk_userid", searchtype_fk_userid);
+			paraMap.put("searchWord", searchWord);
+			paraMap.put("fk_userid", fk_userid);
+					
+			// 먼저, 총 게시물 건수(totalCount)를 구해와야 한다.
+			// 총 게시물 건수(totalCount)는  검색조건이 있을 때와 없을때로 나뉘어진다.
+			int totalCount = 0;        // 총 게시물 건수
+			int sizePerPage = 10;      // 한 페이지당 보여줄 게시물 건수 
+			int currentShowPageNo = 0; // 현재 보여주는 페이지 번호로서, 초기치로는 1페이지로 설정함. 
+			int totalPage = 0;         // 총 페이지수(웹브라우저상에서 보여줄 총 페이지 개수, 페이지바) 			
+			
+			totalCount = service.getTotalInquiryCount(paraMap);
+			
+			System.out.println("totalCount" + totalCount);
+			
+			totalPage = (int) Math.ceil((double)totalCount/sizePerPage); 
+			
+			if(str_currentShowPageNo == null) {
+				// 문의 게시판에 보여지는 초기화면
+				currentShowPageNo = 1;
+			}
+			else {
+				
+				try {
+					currentShowPageNo = Integer.parseInt(str_currentShowPageNo);
+					
+					if(currentShowPageNo < 1 || currentShowPageNo > totalPage) {
+						// get 방식이므로 사용자가 str_currentShowPageNo 에 입력한 값이 0 또는 음수를 입력하여 장난친 경우 
+						// get 방식이므로 사용자가 str_currentShowPageNo 에 입력한 값이 실제 데이터베이스에 존재하는 페이지수 보다 더 큰값을 입력하여 장난친 경우 
+						currentShowPageNo = 1;
+					}
+					
+				} catch (NumberFormatException e) {
+					// get 방식이므로 사용자가 str_currentShowPageNo 에 입력한 값이 숫자가 아닌 문자를 입력하여 장난친 경우 
+					currentShowPageNo = 1; 
+				}
+			}
+			
+			int startRno = ((currentShowPageNo - 1) * sizePerPage) + 1; // 시작 행번호 
+			int endRno = startRno + sizePerPage - 1; // 끝 행번호
+			
+			System.out.println("여기 @! startRno : " + startRno);
+			System.out.println("여기 @! endRno : " + endRno);
+			
+			paraMap.put("startRno", String.valueOf(startRno));
+			paraMap.put("endRno", String.valueOf(endRno));
+			
+			// 문의목록 페이징 처리
+			inquiryPagingList = service.getPaginginquiryList(paraMap);
+			request.setAttribute("inquiryPagingList", inquiryPagingList);
+			
+			
+			
+			// 검색시 검색조건 및 검색어 값 유지시키기
+			if(searchtype_a != "0" || searchtype_b != "0" || searchWord != "") {
+				request.setAttribute("paraMap", paraMap);
+			}
+			
+			int blockSize = 10;
+			// blockSize 는 1개 블럭(토막)당 보여지는 페이지번호의 개수이다.
+			
+			int loop = 1;
+			
+			int pageNo = ((currentShowPageNo - 1)/blockSize) * blockSize + 1;
+			
+			String pageBar = "<ul style='list-style:none;'>";
+			String url = "/amado/admin/reg/ADinquiryList";
+			
+			// === [맨처음][이전] 만들기 === //
+			if(pageNo != 1) {
+				pageBar += "<li style='display:inline-block; width:70px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_answer="+searchtype_answer+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchWord="+searchWord+"&currentShowPageNo=1'>[맨처음]</a></li>";
+				pageBar += "<li style='display:inline-block; width:50px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_answer="+searchtype_answer+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchWord="+searchWord+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a></li>"; 
+			}
+			
+			while( !(loop > blockSize || pageNo > totalPage) ) {
+				
+				if(pageNo == currentShowPageNo) {
+					pageBar += "<li style='display:inline-block; width:30px; font-size:12pt; border:solid 1px gray; color:red; padding:2px 4px;'>"+pageNo+"</li>";
+				}
+				else {
+					pageBar += "<li style='display:inline-block; width:30px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_answer="+searchtype_answer+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchWord="+searchWord+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a></li>"; 
+				}
+				
+				loop++;
+				pageNo++;
+			}// end of while------------------------
+			
+			// === [다음][마지막] 만들기 === //
+			if(pageNo <= totalPage) {
+				pageBar += "<li style='display:inline-block; width:50px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_answer="+searchtype_answer+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchWord="+searchWord+"&currentShowPageNo="+pageNo+"'>[다음]</a></li>";
+				pageBar += "<li style='display:inline-block; width:70px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_answer="+searchtype_answer+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchWord="+searchWord+"&currentShowPageNo="+totalPage+"'>[마지막]</a></li>"; 
+			}
+			
+			pageBar += "</ul>";
+			
+			request.setAttribute("pageBar", pageBar);
+			
+			String goBackURL = MyUtil.getCurrentURL(request);
+			//	System.out.println("~~~ 확인용(list.action) goBackURL : " + goBackURL); 
+
+			request.setAttribute("goBackURL", goBackURL);
+			
+			//////////////////////////////////////////////
+			
+			request.setAttribute("totalCount", totalCount);  // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.
+			request.setAttribute("currentShowPageNo", currentShowPageNo); // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.
+			request.setAttribute("sizePerPage", sizePerPage); // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.			
+			
+		}
+		return "reg/ADinquiryList.tiles3";
+	}
 	
 	
 

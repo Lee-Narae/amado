@@ -129,9 +129,6 @@ public interface AmadoDAO_SJ {
 
 	InquiryFileVO getView_inquiry(Map<String, String> paraMap);
 
-	// 전체 문의목록 가져오기
-	List<InquiryVO> getAllInquiry();
-
 	
 
 }

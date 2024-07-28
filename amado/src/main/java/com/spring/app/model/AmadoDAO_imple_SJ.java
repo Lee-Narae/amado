@@ -283,7 +283,6 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 	@Override
 	public int getTotalInquiryCount(Map<String, String> paraMap) {
 		int totalCount = sqlsession.selectOne("SJ.getTotalInquiryCount", paraMap);
-		System.out.println("daoimp totalCount : " + totalCount);
 		return totalCount;
 	}
 
@@ -309,13 +308,6 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 	public InquiryFileVO getView_inquiry(Map<String, String> paraMap) {
 		InquiryFileVO inquiryfilevo = sqlsession.selectOne("SJ.getView_inquiry", paraMap);
 		return inquiryfilevo;
-	}
-
-	// 전체 문의목록 가져오기
-	@Override
-	public List<InquiryVO> getAllInquiry() {
-		List<InquiryVO> inquiryList = sqlsession.selectList("SJ.getAllInquiry");
-		return inquiryList;
 	}
 
 

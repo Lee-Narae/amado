@@ -390,6 +390,8 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	public List<InquiryVO> getinquiryList(String fk_userid) {
 	    List<Map<String, String>> inquiryLista = dao.getinquiryList(fk_userid);
 	    List<InquiryVO> inquiryList = new ArrayList<>(); // 초기화
+	    
+	    System.out.println("getinquiryList fk_userid : " + fk_userid);
 
 	    if (inquiryLista != null && !inquiryLista.isEmpty()) {
 	        for (Map<String, String> inquiryMap : inquiryLista) {
@@ -424,36 +426,16 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	
 	@Override
 	public int getTotalInquiryCount(Map<String, String> paraMap) {
-		
-		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-		System.out.println("searchtype_a : " + paraMap.get("searchtype_a"));
-		System.out.println("searchtype_b : " + paraMap.get("searchtype_b"));
-		System.out.println("searchtype_fk_userid : " + paraMap.get("searchtype_fk_userid"));
-		System.out.println("searchtype_answer : " + paraMap.get("searchtype_answer"));
-		System.out.println("searchWord : " + paraMap.get("searchWord"));
-		System.out.println("fk_userid : " + paraMap.get("fk_userid"));
-		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		int totalCount = dao.getTotalInquiryCount(paraMap);
+		System.out.println("getTotalInquiryCount fk_userid : " + paraMap.get("fk_userid"));
 		return totalCount;
 	}
 
 	
 	@Override
 	public List<InquiryVO> getPaginginquiryList(Map<String, String> paraMap) {
-		
-		String fk_userid = paraMap.get("fk_userid");
-		
-		List<InquiryVO> inquiryPagingList = null;
-		
-		if(fk_userid == "admin") {
-			// 전체 문의목록 가져오기 (운영자일 경우)
-			inquiryPagingList = dao.getAllInquiry();
-		}
-		else {
-			inquiryPagingList = dao.getPaginginquiryList(paraMap);	
-		}
-		
-		 
+		List<InquiryVO> inquiryPagingList = dao.getPaginginquiryList(paraMap); 
+		System.out.println("getPaginginquiryList fk_userid : " + paraMap.get("fk_userid"));
 		return inquiryPagingList;
 	}
 
@@ -477,6 +459,7 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		InquiryFileVO inquiryfilevo = dao.getView_inquiry(paraMap);
 		return inquiryfilevo;
 	}
+
 
 
 }

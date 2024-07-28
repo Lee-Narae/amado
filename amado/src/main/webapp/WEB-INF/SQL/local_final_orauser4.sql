@@ -1189,18 +1189,12 @@ ORDER BY fk_userid ASC, inquiryseq DESC;
         
         
         
-    		SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
-		FROM
-(        select row_number() over(order by inquiryseq asc) AS rno 
-             , inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
-             
-        from tbl_inquiry
-        where fk_userid = #{fk_userid} and status = 1
-		      and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b} and lower(content) like '%'||lower(#{searchWord})||'%' 
-
-
-		      and fk_userid = #{searchtype_fk_userid} and answer = TO_NUMBER(#{searchtype_answer})  
-  
-        order by fk_userid ASC, rno desc
-)
-where rno between 1 and 10
+	    SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
+	    FROM (
+	        SELECT row_number() over(order by inquiryseq asc) AS rno,
+	               inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
+	        FROM tbl_inquiry
+	        WHERE status = 1
+	        ORDER BY fk_userid asc, rno DESC
+	    )
+	    WHERE rno BETWEEN 11 AND 20
