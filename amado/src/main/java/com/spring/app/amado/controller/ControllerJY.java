@@ -968,7 +968,7 @@ public class ControllerJY {
            pageBar += "<li class='page-item'><a class='page-link' href='clubBoard.do?clubseq="+clubseq+"&searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+totalPage+"'>[맨마지막]</a></li>";
            
            
-         // *** ==== 페이지바 만들기 끝 ==== *** //
+         // *** ==== 페이지바 만들기 끝 ==== *** ////
 		
            
            
