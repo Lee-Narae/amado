@@ -460,6 +460,23 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		return inquiryfilevo;
 	}
 
+	
+	
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor= {Throwable.class})
+	public int addInquiryAD(Map<String, String> paraMap) throws Throwable {
+		int n = 0; int result = 0;
+		
+		n = dao.addInquiryAD(paraMap);
+		
+		if(n == 1) { 
+			  result = dao.updateInquiryAW(paraMap); 
+			  // 답변 등록하면 답변대기 -> 답변완료로 변경 //
+		  }
+		
+		return result;
+	}
+
 
 
 }

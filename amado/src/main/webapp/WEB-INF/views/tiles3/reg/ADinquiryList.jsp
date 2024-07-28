@@ -112,7 +112,7 @@
 			frm.searchtype_fk_userid.value = "${requestScope.paraMap.searchtype_fk_userid}";
 			frm.searchWord.value = "${requestScope.paraMap.searchWord}";
 		}
-		frm.action = "<%=ctxPath%>/admin/reg/inquiryGoDetail.do";
+		frm.action = "<%=ctxPath%>/admin/reg/inquiryGoDetail";
 		frm.method = "post";
 		frm.submit();
     	

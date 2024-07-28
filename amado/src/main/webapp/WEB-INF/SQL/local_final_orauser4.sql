@@ -1195,6 +1195,31 @@ ORDER BY fk_userid ASC, inquiryseq DESC;
 	               inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
 	        FROM tbl_inquiry
 	        WHERE status = 1
-	        ORDER BY fk_userid asc, rno DESC
+	        ORDER BY fk_userid DESC, rno DESC
 	    )
 	    WHERE rno BETWEEN 11 AND 20
+        
+        
+        select count(*)
+	    from tbl_inquiry
+	    where status = 1
+        and fk_userid = 'ksj1024sj'
+        and searchtype_a = 1
+        and answer = 0
+        and lower(fk_userid) like CONCAT(CONCAT('%', lower('ksj')), '%')
+        
+        
+        
+        
+        	    SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
+	    FROM (
+	        SELECT row_number() over(order by inquiryseq asc) AS rno,
+	               inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
+	        FROM tbl_inquiry
+	        WHERE status = 1
+	        ORDER BY fk_userid DESC, rno DESC
+	    )
+	    WHERE rno BETWEEN 11 AND 20
+        
+        
+        

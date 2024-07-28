@@ -1793,14 +1793,13 @@ public class ControllerSJ {
 
 	
 	// 문의 답변
-	@GetMapping("admin/reg/ADinquiryList")
-	public String AinquiryList(HttpServletRequest request) {
+	@GetMapping("admin/reg/ASinquiryList")
+	public String ASinquiryList(HttpServletRequest request) {
+		
 		
 		String fk_userid = "admin";
 		
 		request.setAttribute("fk_userid", fk_userid);
-		
-		System.out.println("fk_userid : " + fk_userid); 
 		
 		List<InquiryVO> inquiryPagingList = null;
 		
@@ -1808,8 +1807,6 @@ public class ControllerSJ {
 			// 문의목록 가져오기
 			List<InquiryVO> inquiryList = service.getinquiryList(fk_userid);
 			request.setAttribute("inquiryList", inquiryList);
-			
-			
 			
 			String searchtype_a = request.getParameter("searchtype_a");
 			String searchtype_b = request.getParameter("searchtype_b");
@@ -1959,6 +1956,95 @@ public class ControllerSJ {
 		}
 		return "reg/ADinquiryList.tiles3";
 	}
+	
+
+	
+	
+	
+	@PostMapping(value = "admin/reg/inquiryGoDetail")
+	public ModelAndView inquiryGoDetail(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+		
+		
+		String inquiryseq = "";
+		String goBackURL = "";
+		String searchtype_a = "";
+		String searchtype_b = "";
+		String searchtype_fk_userid = "";
+		String searchtype_answer = "";
+		String searchWord = "";
+
+		
+		inquiryseq = request.getParameter("inquiryseq");
+		goBackURL = request.getParameter("goBackURL");
+		searchtype_a = request.getParameter("searchtype_a");
+		searchtype_b = request.getParameter("searchtype_b");
+		searchtype_b = request.getParameter("searchtype_fk_userid");
+		searchtype_b = request.getParameter("searchtype_answer");
+		searchWord = request.getParameter("searchWord");
+		
+		/*
+		 * System.out.println("inquiryseq : " + inquiryseq);
+		 * System.out.println("goBackURL : " + goBackURL);
+		 * System.out.println("searchtype_a : " + searchtype_a);
+		 * System.out.println("searchtype_b : " + searchtype_b);
+		 * System.out.println("searchWord : " + searchWord);
+		 */
+		
+		mav.setViewName("community/inquiryList.tiles2");
+		
+		// 1대1 문의 상세조회 하나 가져오기
+		InquiryVO inquiryvo = service.inquiryGoDetail(inquiryseq);
+		
+		// 1대1 문의 상세조회 파일들 가져오기
+		List<InquiryFileVO> inquiryfileList = service.inquiryFileGoDetail(inquiryseq);
+		
+		mav.addObject("inquiryvo", inquiryvo); // 1대1문의 상세정보
+		mav.addObject("inquiryfileList", inquiryfileList); // 1대1문의 상세정보 파일
+		// 답변(운영자가) (여기해야함!!)
+
+		mav.setViewName("reg/inquiryGoDetail.tiles3");
+		
+		return mav;
+		
+	}
+	
+	
+	
+	// === 먼의 답변쓰기(Ajax 로 처리) === //
+	@ResponseBody
+	@PostMapping(value = "/admin/reg/addInquiryAD", produces = "text/plain;charset=UTF-8")
+	public String addInquiryAD(HttpServletRequest request) {
+
+		
+		String content = request.getParameter("content");
+		String inquiryseq = request.getParameter("inquiryseq");
+		
+		
+		System.out.println("inquiryseq : " + inquiryseq);
+		System.out.println("content : " + content);
+		System.out.println("inquiryseq : " + inquiryseq);
+		
+		
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("content", content);
+		paraMap.put("inquiryseq", inquiryseq);
+		String fk_userid = "admin";
+		paraMap.put("fk_userid", "admin");
+		
+		int n = 0;
+		try {
+			n = service.addInquiryAD(paraMap);
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+
+		JSONObject jsonObject = new JSONObject(); // {}
+		jsonObject.put("n", n); // 정상일 경우 {"n":1} 문제가 생겼을 경우{"n":0}
+
+		return jsonObject.toString();
+		// 정상일 경우 {"n":1, "name":"엄정화"} 문제가 생겼을 경우(point 300 넘을 경우){"n":0, "name":"엄정화"}
+	}
+	
 	
 	
 

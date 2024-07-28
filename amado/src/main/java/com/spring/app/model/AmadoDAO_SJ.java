@@ -129,6 +129,10 @@ public interface AmadoDAO_SJ {
 
 	InquiryFileVO getView_inquiry(Map<String, String> paraMap);
 
+	int addInquiryAD(Map<String, String> paraMap);
+
+	int updateInquiryAW(Map<String, String> paraMap);
+
 	
 
 }

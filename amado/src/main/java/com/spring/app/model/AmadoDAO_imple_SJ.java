@@ -310,5 +310,17 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 		return inquiryfilevo;
 	}
 
+	@Override
+	public int addInquiryAD(Map<String, String> paraMap) {
+		int n = sqlsession.insert("SJ.addInquiryAD", paraMap);
+		return n;
+	}
+
+	@Override
+	public int updateInquiryAW(Map<String, String> paraMap) {
+		int result = sqlsession.update("SJ.updateInquiryAW", paraMap);
+		return result;
+	}
+
 
 }

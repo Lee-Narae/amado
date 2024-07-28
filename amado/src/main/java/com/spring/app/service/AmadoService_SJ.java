@@ -114,5 +114,7 @@ public interface AmadoService_SJ {
 
 	InquiryFileVO getView_inquiry(Map<String, String> paraMap);
 
+	int addInquiryAD(Map<String, String> paraMap) throws Throwable;
+
 
 }

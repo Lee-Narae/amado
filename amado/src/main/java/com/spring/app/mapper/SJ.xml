@@ -663,5 +663,16 @@
             where inquiryseq = #{inquiryseq} and orgfilename = #{orgfilename}
     </select>
     
+    
+    <insert id="addInquiryAD" parameterType="HashMap">
+		insert into tbl_inquiryanswers(inquiryseq, content, registerdate, fk_userid) 
+		values(to_number(#{inquiryseq}), #{content}, default, #{fk_userid})
+    </insert>
+    
+	<update id="updateInquiryAW" parameterType="HashMap">
+		update tbl_inquiry set answer = 1
+		where inquiryseq = #{inquiryseq}
+	</update>
+    
 	
 </mapper>
