@@ -578,7 +578,15 @@ public class ControllerHS {
 			return mav;
 		}
 		
-	
+		
+		
+		   @GetMapping("/member/myPage_gym.do")
+		   public ModelAndView myPage_gym(ModelAndView mav) {
+		      
+		      mav.setViewName("member/myPage_gym.tiles1");
+		      
+		      return mav;
+		   }
 	
 
 }

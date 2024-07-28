@@ -104,6 +104,73 @@
     padding-left: 1%;
     border: solid 1px gray;
     }
+    
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f7;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.container h1 {
+    text-align: center;
+    color: #007BFF;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    width: 120px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="file"],
+.form-group select,
+.form-group textarea {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+    
 </style>
 
 
@@ -158,7 +225,7 @@ $(document).ready(function(){
 	            
 	            
 	            
-	            <div id="content2" style="border:solid 1px red; width: 50%;  margin: 3% auto;" >
+	            <div id="content2" style=" width: 50%;  margin: 3% auto;" >
 	                <div class="item1">&nbsp;내 체육관 관리</div>
 	                <hr class="hr1">
 	                <div id="memberInfo">
@@ -166,6 +233,67 @@ $(document).ready(function(){
 	                </div>
 	                
 	            </div>
+	            
+	<div class="container">
+        <h1>체육관 수정 페이지</h1>
+        <form>
+            <div class="form-group">
+                <label for="gymName">체육관명</label>
+                <input type="text" id="gymName" name="gymName" required>
+            </div>
+            <div class="form-group">
+                <label for="managerId">담당자아이디</label>
+                <input type="text" id="managerId" name="managerId" required>
+            </div>
+            <div class="form-group">
+                <label for="address">주소</label>
+                <div class="address-group">
+                    <input type="text" id="address" name="address" required>
+                    <button type="button" id="findAddress">주소찾기</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="zipCode">우편번호</label>
+                <input type="text" id="zipCode" name="zipCode" required>
+            </div>
+            <div class="form-group">
+                <label for="detailedAddress">상세주소</label>
+                <input type="text" id="detailedAddress" name="detailedAddress" required>
+            </div>
+            <div class="form-group">
+                <label for="indoorOutdoor">실내/실외</label>
+                <select id="indoorOutdoor" name="indoorOutdoor" required>
+                    <option value="indoor">실내</option>
+                    <option value="outdoor">실외</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="cost">비용</label>
+                <input type="text" id="cost" name="cost" required>
+            </div>
+            <div class="form-group">
+                <label for="capacity">인원수</label>
+                <input type="text" id="capacity" name="capacity" required>
+            </div>
+            <div class="form-group">
+                <label for="image">이미지</label>
+                <input type="file" id="image" name="image" required>
+            </div>
+            <div class="form-group">
+                <label for="additionalImage">추가이미지</label>
+                <input type="file" id="additionalImage" name="additionalImage">
+            </div>
+            <div class="form-group">
+                <label for="spaceInfo">공간정보</label>
+                <textarea id="spaceInfo" name="spaceInfo" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="caution">주의사항</label>
+                <textarea id="caution" name="caution" rows="4" required></textarea>
+            </div>
+            <button type="submit">수정하기</button>
+        </form>
+    </div>
 	            
 	            
 	        </div>
