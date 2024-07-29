@@ -243,7 +243,7 @@ $(document).ready(function(){
             </div>
             <div class="form-group">
                 <label for="managerId">담당자아이디</label>
-                <input type="text" id="managerId" name="managerId" required>
+               	<div class="input">${sessionScope.loginuser.userid}</div>
             </div>
             <div class="form-group">
                 <label for="address">주소</label>
