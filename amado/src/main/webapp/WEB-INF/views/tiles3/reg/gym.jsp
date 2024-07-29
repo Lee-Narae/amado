@@ -272,7 +272,6 @@ $(document).ready(function(){
          
         // 첨부한 파일의 총량이 20MB 초과시 //   
         if( total_fileSize > 20*1024*1024 ) {
-        	console.log
              alert("첨부한 파일의 총합의 크기가 20MB를 넘어 등록이 불가합니다.");
              return; // 종료
         }

@@ -208,8 +208,8 @@
 		<result property="cnt" column="cnt" javaType="String"/>
 	</resultMap>
 	<select id="getSportPerClubCount" resultMap="clubCountMap">
-		select sportname, count(*) cnt
-		from tbl_club A join tbl_sport B
+		select sportname, count(clubname) cnt
+		from tbl_club A right join tbl_sport B
 		on A.fk_sportseq = B.sportseq
 		group by B.sportname
 	</select>
