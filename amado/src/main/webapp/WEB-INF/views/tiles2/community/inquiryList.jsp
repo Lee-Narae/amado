@@ -41,7 +41,7 @@
 			}
 		});
 		
-		 $("select[name='searchtype_a'], select[name='searchtype_b']").on("change", function(){
+		 $("select[name='searchtype_a'], select[name='searchtype_b'], select[name='searchtype_answer']").on("change", function(){
 			 goSearch();
 		 });// end of searchType
 		
@@ -50,6 +50,7 @@
 			$("select[name='searchtype_a']").val("${requestScope.paraMap.searchtype_a}");
 			updateSearchTypeB();
 			$("select[name='searchtype_b']").val("${requestScope.paraMap.searchtype_b}");
+			$("select[name='searchtype_answer']").val("${requestScope.paraMap.searchtype_answer}");
 			$("input[name='searchWord']").val("${requestScope.paraMap.searchWord}");
 		}
 		
@@ -99,6 +100,7 @@
 		if(${not empty requestScope.paraMap}) { // 검색조건이 있을 경우
 			frm.searchtype_a.value = "${requestScope.paraMap.searchtype_a}";
 			frm.searchtype_b.value = "${requestScope.paraMap.searchtype_b}";
+			frm.searchtype_answer.value = "${requestScope.paraMap.searchtype_answer}";
 			frm.searchWord.value = "${requestScope.paraMap.searchWord}";
 		}
 		frm.action = "<%=ctxPath%>/community/inquiryGoDetail.do";
@@ -125,6 +127,11 @@
 		</select> 
 		<select class="ml-2" id="searchtype_b" name="searchtype_b">
 			<option value="0">선택해주세요</option>
+		</select>
+		<select class="ml-2" id="searchtype_answer" name="searchtype_answer">
+			<option value="99">답변여부검색시</option>
+			<option value="0">답변대기</option>
+			<option value="1">답변완료</option>
 		</select>
 		<button type="button" class="float-right btn btn-secondary btn-sm" onclick="goSearch()">검색</button>
 		<input class="mr-2 ml-2 float-right" type="text" name="searchWord" size="40" autocomplete="off" /> 
@@ -231,6 +238,7 @@
    <input type="hidden" name="goBackURL" />
    <input type="hidden" name="searchtype_a" />
    <input type="hidden" name="searchtype_b" />
+   <input type="hidden" name="searchtype_answer" />
    <input type="hidden" name="searchWord" />
    <input type="hidden" name="fk_userid" />
 </form>	     

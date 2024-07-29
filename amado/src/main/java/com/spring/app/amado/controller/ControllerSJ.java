@@ -1571,11 +1571,11 @@ public class ControllerSJ {
 			
 			String searchtype_a = request.getParameter("searchtype_a");
 			String searchtype_b = request.getParameter("searchtype_b");
+			String searchtype_answer = request.getParameter("searchtype_answer");
 			String searchWord = request.getParameter("searchWord");
 			String str_currentShowPageNo = request.getParameter("currentShowPageNo"); 
 			
 			// 관리자 검색용귀찮아서 넣어둠
-			String searchtype_answer = "99";
 			String searchtype_fk_userid = "0";
 			
 		  System.out.println("~~ 확인용 str_currentShowPageNo : " + str_currentShowPageNo);
@@ -1586,6 +1586,9 @@ public class ControllerSJ {
 			
 			if(searchtype_b == null) {
 				searchtype_b = "0";
+			}
+			if(searchtype_answer == null) {
+				searchtype_answer = "99";
 			}
 			
 			if(searchWord == null) {
@@ -1653,7 +1656,7 @@ public class ControllerSJ {
 			
 			
 			// 검색시 검색조건 및 검색어 값 유지시키기
-			if(searchtype_a != "0" || searchtype_b != "0" || searchWord != "") {
+			if(searchtype_a != "0" || searchtype_b != "0" || searchtype_answer != "99" || searchWord != "") {
 				request.setAttribute("paraMap", paraMap);
 			}
 			
