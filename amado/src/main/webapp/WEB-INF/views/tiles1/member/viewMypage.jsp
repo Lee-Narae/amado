@@ -145,7 +145,7 @@ $(document).ready(function(){
 		v_html=`<button id="infoEdit" class='btn2'>회원 정보 수정</button>
 	            <button id="pwdEdit" class='btn2'>비밀번호 수정</button>
 	            <button id="exit" class='btn2'>회원탈퇴</button>`;
-		
+		   
 		$("div#hrbtns").html(v_html);
 		
 		$("#infoEdit").css({"font-weight": "bold"});
