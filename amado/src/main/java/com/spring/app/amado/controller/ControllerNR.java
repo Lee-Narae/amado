@@ -2152,7 +2152,7 @@ public class ControllerNR {
 	
 	
 	@GetMapping("/member/myPage.do")
-	public ModelAndView myPage(ModelAndView mav, HttpServletRequest request) {
+	public ModelAndView requiredLogin_myPage(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
 		mav.setViewName("member/myPage_info.tiles1");
 		return mav;
 	}
@@ -2345,7 +2345,7 @@ public class ControllerNR {
 	
 	
 	@GetMapping("/member/myPage_club.do")
-	public ModelAndView myPage_club(ModelAndView mav, HttpServletRequest request) {
+	public ModelAndView requiredLogin_myPage_club(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
 		
 		HttpSession session = request.getSession();
 		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
@@ -2552,36 +2552,9 @@ public class ControllerNR {
 		
 		jsonarr.put(jsonobj);
 		
-		
-		
-		/*
-		String clubseq = request.getParameter("clubseq");
-		
-		List<Map<String, String>> memberList = service.getClubMember(clubseq);
-		
-		JSONArray jsonarr = new JSONArray();
-		
-		for(Map<String, String> member : memberList) {
-			
-			JSONObject jsonobj = new JSONObject();
-			
-			try {
-				jsonobj.put("userid", member.get("userid"));
-				jsonobj.put("name", member.get("name"));
-				jsonobj.put("email", aES256.decrypt(member.get("email")));
-				jsonobj.put("mobile", aES256.decrypt(member.get("mobile")));
-				jsonobj.put("gender", "1".equals(member.get("gender"))?"남":"여");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			jsonarr.put(jsonobj);
-		} */
-		
 		return jsonarr.toString();
 	}
 	
-
 	
 	@ResponseBody
 	@PostMapping(value="/member/quitClubMember.do", produces="text/plain;charset=UTF-8")
@@ -2603,14 +2576,102 @@ public class ControllerNR {
 	}
 	
 	
-	
 	@PostMapping("/member/clubEmail.do")
-	public ModelAndView clubEmail (ModelAndView mav) {
+	public ModelAndView clubEmail (HttpServletRequest request, ModelAndView mav) {
 		
+		String email = request.getParameter("receive");	// 받는 사람 이메일
+		String userid = request.getParameter("send");	// 보내는 사람 ID
+		
+		mav.addObject("email", email);
+		mav.addObject("userid", userid);
 		mav.setViewName("member/clubEmail.tiles1");
 		return mav;
 	}
 	
+	
+	@ResponseBody
+	@PostMapping(value="/member/sendClubEmail.do", produces="text/plain;charset=UTF-8")
+	public String sendClubEmail(MultipartHttpServletRequest mrequest) {
+		
+		String email = mrequest.getParameter("email");
+		String title = mrequest.getParameter("title"); 
+		String content = mrequest.getParameter("content");
+		String userid = mrequest.getParameter("send");
+		
+		List<MultipartFile> fileList = mrequest.getFiles("file_arr");
+		
+		HttpSession session = mrequest.getSession();
+	    String root = session.getServletContext().getRealPath("/");
+	    String path = root + "resources"+File.separator+"email_attach_file";
+		
+	    File dir = new File(path);
+	    if(!dir.exists()) {
+	    	dir.mkdirs();
+	    }
+	    
+	    String[] arr_attachFilename = null;
+	    
+	    if(fileList != null && fileList.size() > 0) {
+	    	arr_attachFilename = new String[fileList.size()];
+	    
+	    	for(int i=0; i<fileList.size(); i++) {
+	    		MultipartFile mtfile = fileList.get(i);
+	    
+	    		try {
+	    			File attachFile = new File(path+File.separator+mtfile.getOriginalFilename());
+	    			mtfile.transferTo(attachFile);
+	    			
+	    			arr_attachFilename[i] = mtfile.getOriginalFilename();
+	    		} catch (IllegalStateException | IOException e) {
+					e.printStackTrace();
+				}
+	    		
+	    	}
+	    	
+	    }
+	    
+	    JSONObject jsonObj = new JSONObject();
+	    Map<String, Object> paramap = new HashMap<String, Object>();
+	    paramap.put("recipient", email);
+    	paramap.put("subject", title);
+    	paramap.put("content", content);
+    	paramap.put("userid", userid);
+    	
+    	if(fileList != null && fileList.size()>0) {
+    		paramap.put("path", path);
+    		paramap.put("arr_attachFilename", arr_attachFilename);
+    	}
+    	
+    	try {
+    		GoogleMail mail = new GoogleMail();
+    		mail.sendmail_withFile(paramap);
+			jsonObj.put("result", 1);
+		} catch (Exception e) {
+			e.printStackTrace();
+			jsonObj.put("result", 0);
+		}
+    	
+    	if(arr_attachFilename != null) {
+	         for(String attachFilename : arr_attachFilename) {
+	            try {
+	               fileManager.doFileDelete(attachFilename, path);
+	            } catch (Exception e) {
+	               e.printStackTrace();
+	            }
+	         } // end of for----------------------
+	    }
+		
+    	return jsonObj.toString();
+	}
+	
+	
+	@GetMapping("/member/sendComplete.do")
+	public ModelAndView sendComplete(ModelAndView mav) {
+		
+		mav.setViewName("member/sendComplete.tiles1");
+		
+		return mav;
+	}
 	
 	
 	
@@ -2621,13 +2682,6 @@ public class ControllerNR {
 		
 		return mav;
 	}
-	
-	
-	
-	
-	
-	
-	
 	
 }
 

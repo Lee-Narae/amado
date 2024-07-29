@@ -424,15 +424,20 @@ function goPermit(gymseq){
 	<div id="alert" style="width: 30%; height: 400px; padding: 2%;">
 		<div style="margin-bottom: 5%; font-weight: bold; color: #6B6B6B;">알림&nbsp;<span style="display: inline-block; width: 25px; text-align: center; height: 25px; align-content: center; border-radius: 100%; color: white; background-color: #ffcc66;">${requestScope.gymCount}</span></div>
 		<div style="background-color: white; width: 100%; height: 300px; border-radius: 20px; padding-top: 3%; overflow: auto;" align="center">
-			<c:forEach var="gym" items="${requestScope.gymList}" varStatus="status">
-				<c:if test="${status.index != (requestScope.gymCount-1)}">
-					<div id="gym" data-toggle="modal" data-target="#gymPermitModal" onclick="getGymVO()">💌 ${gym.fk_userid}님의 체육관 등록 신청</div><input type="hidden" id="gymseq" value="${gym.gymseq}"/>
-					<hr style="margin: 0.5%;">
-				</c:if>
-				<c:if test="${status.index == (requestScope.gymCount-1)}">
-					<div id="gym" data-toggle="modal" data-target="#gymPermitModal" onclick="getGymVO()">💌 ${gym.fk_userid}님의 체육관 등록 신청</div><input type="hidden" id="gymseq" value="${gym.gymseq}"/>
-				</c:if>
-			</c:forEach>
+			<c:if test="${not empty requestScope.gymList}">
+				<c:forEach var="gym" items="${requestScope.gymList}" varStatus="status">
+					<c:if test="${status.index != (requestScope.gymCount-1)}">
+						<div id="gym" data-toggle="modal" data-target="#gymPermitModal" onclick="getGymVO()">💌 ${gym.fk_userid}님의 체육관 등록 신청</div><input type="hidden" id="gymseq" value="${gym.gymseq}"/>
+						<hr style="margin: 0.5%;">
+					</c:if>
+					<c:if test="${status.index == (requestScope.gymCount-1)}">
+						<div id="gym" data-toggle="modal" data-target="#gymPermitModal" onclick="getGymVO()">💌 ${gym.fk_userid}님의 체육관 등록 신청</div><input type="hidden" id="gymseq" value="${gym.gymseq}"/>
+					</c:if>
+				</c:forEach>
+			</c:if>
+			<c:if test="${empty requestScope.gymList}">
+				<div style="margin-top: 30%;">💦 알림이 없습니다.</div>			
+			</c:if>
 		</div>
 	</div>
 	
