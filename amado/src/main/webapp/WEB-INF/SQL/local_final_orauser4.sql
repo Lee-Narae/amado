@@ -1020,9 +1020,39 @@ nocache;
 
 commit
 
+select *
+from tbl_inquiryanswers
+order by registerdate desc
+
+   alter table tbl_inquiry
+   add title nvarchar2(50);
+
+alter table tbl_inquiryanswers add constraint PK_IQAS_inquiryanswerseq primary key(inquiryanswerseq);
+
+
+delete from tbl_inquiryanswers
+where inquiryanswerseq = inquiryanswerseq and inquiryseq = inquiryseq
+
+commit
+
+select *
+from tbl_inquiry
+
+    update tbl_inquiry set title = '적당한 제목 만들기'
+    
+    commit
+    
+    where INQUIRYSEQ != 11;
+
+commit
+
+select *
+from tbl_inquiry
+
 -- 문의답변(운영자용)
 create table tbl_inquiryanswers
-(inquiryseq                  NUMBER   not null
+(inquiryanswerseq           number   not null
+,inquiryseq                  NUMBER   not null
 ,content                     nvarchar2(1000)   not null       -- 글내용
 ,registerdate                date default sysdate  not null   -- 작성일자
 ,fk_userid                   nvarchar2(20)  not null          -- 아이디(tbl_member 의 회원아이디)
@@ -1031,6 +1061,14 @@ create table tbl_inquiryanswers
 ,CONSTRAINT CK_tbl_iqryaws_admin CHECK (fk_userid = 'admin')
 );
 -- Table TBL_INQUIRYANSWERS이(가) 생성되었습니다.
+
+create sequence seq_inquiryanswers 
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
 
 commit;
 -- 커밋 완료.
@@ -1189,73 +1227,37 @@ ORDER BY fk_userid ASC, inquiryseq DESC;
         
         
         
-    		SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
-		FROM
-(        select row_number() over(order by inquiryseq asc) AS rno 
-             , inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
-             
-        from tbl_inquiry
-        where fk_userid = #{fk_userid} and status = 1
-	    <choose>
-		   <when test='searchtype_a == "0" and searchtype_b == "0" and searchWord == ""'>
-		   </when>
-		   <when test='searchtype_a == "0" and searchtype_b == "0" and searchWord != ""'>
-		      and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   
-		   <when test='searchtype_a != "0" and searchtype_b == "0" and searchWord != ""'>
-		      and searchtype_a = #{searchtype_a} and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a != "0" and searchtype_b == "0" and searchWord == ""'>
-		      and searchtype_a = #{searchtype_a}
-		   </when>
-		   
-		   <when test='searchtype_a == "0" and searchtype_b != "0" and searchWord != ""'>
-		      and searchtype_b = #{searchtype_b} and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a == "0" and searchtype_b != "0" and searchWord == ""'>
-		      and searchtype_b = #{searchtype_b}
-		   </when>
-		   
-		   <when test='searchtype_a != "0" and searchtype_b != "0" and searchWord != ""'>
-		      and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b} and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a != "0" and searchtype_b != "0" and searchWord == ""'>
-		      and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b}  
-		   </when>
-		   
-		   
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer == "0" and searchWord == ""'>
-		   </when>
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer == "0" and searchWord != ""'>
-		      and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer == "0" and searchWord != ""'>
-		      and fk_userid = #{searchtype_fk_userid} and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer == "0" and searchWord == ""'>
-		      and fk_userid = #{searchtype_fk_userid}
-		   </when>
-		   
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer != "0" and searchWord != ""'>
-		      and answer = TO_NUMBER(#{searchtype_answer}) and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer != "0" and searchWord == ""'>
-		      and answer = TO_NUMBER(#{searchtype_answer})
-		   </when>
-		   
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer != "0" and searchWord != ""'>
-		      and fk_userid = #{searchtype_fk_userid} and answer = TO_NUMBER(#{searchtype_answer}) and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer != "0" and searchWord == ""'>
-		      and fk_userid = #{searchtype_fk_userid} and answer = TO_NUMBER(#{searchtype_answer})  
-		   </when>
-		   
-
-		   
-		   <otherwise></otherwise>
-		</choose>      
-        order by fk_userid ASC, rno desc
-)
-where rno between 1 and 10
+	    SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
+	    FROM (
+	        SELECT row_number() over(order by inquiryseq asc) AS rno,
+	               inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
+	        FROM tbl_inquiry
+	        WHERE status = 1
+	        ORDER BY fk_userid DESC, rno DESC
+	    )
+	    WHERE rno BETWEEN 11 AND 20
+        
+        
+        select count(*)
+	    from tbl_inquiry
+	    where status = 1
+        and fk_userid = 'ksj1024sj'
+        and searchtype_a = 1
+        and answer = 0
+        and lower(fk_userid) like CONCAT(CONCAT('%', lower('ksj')), '%')
+        
+        
+        
+        
+        	    SELECT title, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
+	    FROM (
+	        SELECT row_number() over(order by inquiryseq desc) AS rno,
+	               inquiryseq, title, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
+	        FROM tbl_inquiry
+	        WHERE status = 1
+	        ORDER BY fk_userid DESC, rno asc
+	    )
+	    WHERE rno BETWEEN 1 AND 10
+        
+        
+        

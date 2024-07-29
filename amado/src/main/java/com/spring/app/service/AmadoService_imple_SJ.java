@@ -19,6 +19,7 @@ import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.ClubmemberVO;
+import com.spring.app.domain.InquiryAnswersVO;
 import com.spring.app.domain.InquiryFileVO;
 import com.spring.app.domain.InquiryVO;
 import com.spring.app.domain.MemberVO;
@@ -390,12 +391,15 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	public List<InquiryVO> getinquiryList(String fk_userid) {
 	    List<Map<String, String>> inquiryLista = dao.getinquiryList(fk_userid);
 	    List<InquiryVO> inquiryList = new ArrayList<>(); // 초기화
+	    
+	    System.out.println("getinquiryList fk_userid : " + fk_userid);
 
 	    if (inquiryLista != null && !inquiryLista.isEmpty()) {
 	        for (Map<String, String> inquiryMap : inquiryLista) {
 	            InquiryVO inquiryVO = new InquiryVO(); // 새 객체 생성
 	            
 	            inquiryVO.setInquiryseq(inquiryMap.get("inquiryseq"));
+	            inquiryVO.setTitle(inquiryMap.get("title"));
 	            inquiryVO.setContent(inquiryMap.get("content"));
 	            inquiryVO.setFk_userid(inquiryMap.get("fk_userid"));
 	            inquiryVO.setEmail(inquiryMap.get("email"));
@@ -425,26 +429,15 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	@Override
 	public int getTotalInquiryCount(Map<String, String> paraMap) {
 		int totalCount = dao.getTotalInquiryCount(paraMap);
+		System.out.println("getTotalInquiryCount fk_userid : " + paraMap.get("fk_userid"));
 		return totalCount;
 	}
 
 	
 	@Override
 	public List<InquiryVO> getPaginginquiryList(Map<String, String> paraMap) {
-		
-		String fk_userid = paraMap.get("fk_userid");
-		
-		List<InquiryVO> inquiryPagingList = null;
-		
-		if(fk_userid == "admin") {
-			// 전체 문의목록 가져오기 (운영자일 경우)
-			inquiryPagingList = dao.getAllInquiry();
-		}
-		else {
-			inquiryPagingList = dao.getPaginginquiryList(paraMap);	
-		}
-		
-		 
+		List<InquiryVO> inquiryPagingList = dao.getPaginginquiryList(paraMap); 
+		System.out.println("getPaginginquiryList fk_userid : " + paraMap.get("fk_userid"));
 		return inquiryPagingList;
 	}
 
@@ -468,6 +461,42 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		InquiryFileVO inquiryfilevo = dao.getView_inquiry(paraMap);
 		return inquiryfilevo;
 	}
+
+	
+	
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor= {Throwable.class})
+	public int addInquiryAD(Map<String, String> paraMap) throws Throwable {
+		int n = 0; int result = 0;
+		
+		n = dao.addInquiryAD(paraMap);
+		
+		if(n == 1) { 
+			  result = dao.updateInquiryAW(paraMap); 
+			  // 답변 등록하면 답변대기 -> 답변완료로 변경 //
+		  }
+		
+		return result;
+	}
+
+	@Override
+	public List<InquiryAnswersVO> readInquiryAW(String inquiryseq) {
+		List<InquiryAnswersVO> inquiryanswersList = dao.readInquiryAW(inquiryseq);
+		return inquiryanswersList;
+	}
+
+	@Override
+	public int delInquiryAW(Map<String, String> paraMap) {
+		int n = dao.delInquiryAW(paraMap);
+		return n;
+	}
+
+	@Override
+	public int editInquiryAW(Map<String, String> paraMap) {
+		int n = dao.editInquiryAW(paraMap);
+		return n;
+	}
+
 
 
 }

@@ -603,3 +603,54 @@ from tbl_clubmember A join tbl_member B
 on A.fk_userid = B.userid
 where A.clubseq = 3))
 where rn between 1 and 7;
+
+select * from tbl_club;
+
+select sportname, count(*) cnt
+		from tbl_club A right join tbl_sport B
+		on A.fk_sportseq = B.sportseq
+		group by B.sportname;
+
+select sportname, count(clubname) cnt
+from tbl_club A right join tbl_sport B
+on A.fk_sportseq = B.sportseq
+group by B.sportname;
+
+select * from tbl_matching;
+
+
+select matchingseq, C.clubname myteam, D.clubname, to_char(B.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, area
+		from tbl_matching A join tbl_matchingreg B
+		on A.matchingregseq = B.matchingregseq
+		join tbl_club C
+		on B.clubseq = C.clubseq
+		join tbl_club D
+		on A.clubseq2 = D.clubseq
+		join tbl_member E
+		on C.fk_userid = E.userid
+		where E.userid = 'test3' and A.result1 = 0;
+
+select * from tbl_club;
+
+
+
+select C.clubname regteam, D.clubname appteam, to_char(A.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, A.area
+		from tbl_matchingreg A join tbl_matchingapply B
+		on A.matchingregseq = B.matchingregseq
+		join tbl_club C
+		on A.clubseq = C.clubseq
+		join tbl_club D
+		on B.clubseq =  D.clubseq
+		join tbl_member E
+		on C.fk_userid = E.userid
+		join tbl_member F
+		on D.fk_userid = F.userid
+		where B.status = 1 and (C.clubseq=29 or D.clubseq=29)
+        order by 3;
+
+
+select * from TBL_CLUBBOARD;
+
+
+
+

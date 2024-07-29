@@ -149,9 +149,9 @@ $(document).ready(function(){
 	       
 	        <div>
 	            <div id="content1" style="border:solid 1px red; width: 50%;  margin: 3% auto;" >
-	                <div class="item1">&nbsp;회원 정보 수정</div>
+	                <div class="item1">&nbsp;1:1 문의 내역</div>
 	                <hr class="hr1">
-	                <div id="memberInfo">
+	                <div id="memberInfo" style="border: solid 1px blue;">
 
 	                </div>
 	                

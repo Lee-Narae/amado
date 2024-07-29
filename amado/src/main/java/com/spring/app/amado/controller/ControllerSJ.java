@@ -29,6 +29,7 @@ import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.ClubmemberVO;
+import com.spring.app.domain.InquiryAnswersVO;
 import com.spring.app.domain.InquiryFileVO;
 import com.spring.app.domain.InquiryVO;
 import com.spring.app.domain.MemberVO;
@@ -1379,11 +1380,11 @@ public class ControllerSJ {
 		
 		HttpSession session = request.getSession();
 		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser"); 
-				String fk_userid = loginuser.getUserid();
+				String fk_userid = loginuser.getUserid();
 		
 		loginuser = service.getMemberInfo(fk_userid);
 		
-		request.setAttribute("fk_userid", fk_userid);		request.setAttribute("loginuser", loginuser);		
+		request.setAttribute("fk_userid", fk_userid);		request.setAttribute("loginuser", loginuser);		
 		return "community/inquiry.tiles2";
 	}
 
@@ -1393,12 +1394,14 @@ public class ControllerSJ {
 	@PostMapping(value = "/community/inquiryEnd.do", produces = "text/plain;charset=UTF-8")
 	public String inquiryEnd(ModelAndView mav, HttpServletRequest request, MultipartHttpServletRequest mrequest) {
 		
+		String title = request.getParameter("title");
 		String searchtype_a = request.getParameter("searchtype_a");
 		String searchtype_b = request.getParameter("searchtype_b");
 		String content = request.getParameter("content");
 		String email = request.getParameter("email");
 		String phone = request.getParameter("phone");
 		String fk_userid = request.getParameter("fk_userid");
+		System.out.println("확인용~~ title : " + title);
 		System.out.println("확인용~~ searchType_a : " + searchtype_a);
 		System.out.println("확인용~~ searchType_b : " + searchtype_b);
 		System.out.println("확인용~~ content : " + content);
@@ -1424,6 +1427,7 @@ public class ControllerSJ {
 
 		JSONObject jsonObj = new JSONObject();
 		Map<String, Object> paraMap = new HashMap<>();
+		paraMap.put("title", title);
 		paraMap.put("searchtype_a", searchtype_a);
 		paraMap.put("searchtype_b", searchtype_b);
 		paraMap.put("content", content);
@@ -1567,10 +1571,12 @@ public class ControllerSJ {
 			
 			String searchtype_a = request.getParameter("searchtype_a");
 			String searchtype_b = request.getParameter("searchtype_b");
-			String searchtype_fk_userid = request.getParameter("searchtype_fk_userid");
 			String searchtype_answer = request.getParameter("searchtype_answer");
 			String searchWord = request.getParameter("searchWord");
 			String str_currentShowPageNo = request.getParameter("currentShowPageNo"); 
+			
+			// 관리자 검색용귀찮아서 넣어둠
+			String searchtype_fk_userid = "0";
 			
 		  System.out.println("~~ 확인용 str_currentShowPageNo : " + str_currentShowPageNo);
 			
@@ -1581,13 +1587,8 @@ public class ControllerSJ {
 			if(searchtype_b == null) {
 				searchtype_b = "0";
 			}
-			
-			if(searchtype_fk_userid == null) {
-				searchtype_fk_userid = "0";
-			}
-			
 			if(searchtype_answer == null) {
-				searchtype_answer = "0";
+				searchtype_answer = "99";
 			}
 			
 			if(searchWord == null) {
@@ -1603,8 +1604,8 @@ public class ControllerSJ {
 			Map<String, String> paraMap = new HashMap<>();
 			paraMap.put("searchtype_a", searchtype_a);
 			paraMap.put("searchtype_b", searchtype_b);
-			paraMap.put("searchtype_fk_userid", searchtype_fk_userid);
 			paraMap.put("searchtype_answer", searchtype_answer);
+			paraMap.put("searchtype_fk_userid", searchtype_fk_userid);
 			paraMap.put("searchWord", searchWord);
 			paraMap.put("fk_userid", fk_userid);
 					
@@ -1655,7 +1656,7 @@ public class ControllerSJ {
 			
 			
 			// 검색시 검색조건 및 검색어 값 유지시키기
-			if(searchtype_a != "0" || searchtype_b != "0" || searchWord != "") {
+			if(searchtype_a != "0" || searchtype_b != "0" || searchtype_answer != "99" || searchWord != "") {
 				request.setAttribute("paraMap", paraMap);
 			}
 			
@@ -1671,8 +1672,8 @@ public class ControllerSJ {
 			
 			// === [맨처음][이전] 만들기 === //
 			if(pageNo != 1) {
-				pageBar += "<li style='display:inline-block; width:70px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchtype_answer="+searchtype_answer+"&searchWord="+searchWord+"&currentShowPageNo=1'>[맨처음]</a></li>";
-				pageBar += "<li style='display:inline-block; width:50px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchtype_answer="+searchtype_answer+"&searchWord="+searchWord+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a></li>"; 
+				pageBar += "<li style='display:inline-block; width:70px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_answer="+searchtype_answer+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchWord="+searchWord+"&currentShowPageNo=1'>[맨처음]</a></li>";
+				pageBar += "<li style='display:inline-block; width:50px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_answer="+searchtype_answer+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchWord="+searchWord+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a></li>"; 
 			}
 			
 			while( !(loop > blockSize || pageNo > totalPage) ) {
@@ -1681,7 +1682,7 @@ public class ControllerSJ {
 					pageBar += "<li style='display:inline-block; width:30px; font-size:12pt; border:solid 1px gray; color:red; padding:2px 4px;'>"+pageNo+"</li>";
 				}
 				else {
-					pageBar += "<li style='display:inline-block; width:30px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchtype_answer="+searchtype_answer+"&searchWord="+searchWord+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a></li>"; 
+					pageBar += "<li style='display:inline-block; width:30px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_answer="+searchtype_answer+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchWord="+searchWord+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a></li>"; 
 				}
 				
 				loop++;
@@ -1690,8 +1691,8 @@ public class ControllerSJ {
 			
 			// === [다음][마지막] 만들기 === //
 			if(pageNo <= totalPage) {
-				pageBar += "<li style='display:inline-block; width:50px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchtype_answer="+searchtype_answer+"&searchWord="+searchWord+"&currentShowPageNo="+pageNo+"'>[다음]</a></li>";
-				pageBar += "<li style='display:inline-block; width:70px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchtype_answer="+searchtype_answer+"&searchWord="+searchWord+"&currentShowPageNo="+totalPage+"'>[마지막]</a></li>"; 
+				pageBar += "<li style='display:inline-block; width:50px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_answer="+searchtype_answer+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchWord="+searchWord+"&currentShowPageNo="+pageNo+"'>[다음]</a></li>";
+				pageBar += "<li style='display:inline-block; width:70px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_answer="+searchtype_answer+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchWord="+searchWord+"&currentShowPageNo="+totalPage+"'>[마지막]</a></li>"; 
 			}
 			
 			pageBar += "</ul>";
@@ -1699,8 +1700,6 @@ public class ControllerSJ {
 			request.setAttribute("pageBar", pageBar);
 			
 			String goBackURL = MyUtil.getCurrentURL(request);
-			//	System.out.println("~~~ 확인용(list.action) goBackURL : " + goBackURL); 
-
 			request.setAttribute("goBackURL", goBackURL);
 			
 			//////////////////////////////////////////////
@@ -1708,7 +1707,6 @@ public class ControllerSJ {
 			request.setAttribute("totalCount", totalCount);  // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.
 			request.setAttribute("currentShowPageNo", currentShowPageNo); // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.
 			request.setAttribute("sizePerPage", sizePerPage); // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.			
-			
 		}
 		return "/community/inquiryList.tiles2";
 	}
@@ -1749,6 +1747,8 @@ public class ControllerSJ {
 		mav.addObject("inquiryvo", inquiryvo); // 1대1문의 상세정보
 		mav.addObject("inquiryfileList", inquiryfileList); // 1대1문의 상세정보 파일
 		// 답변(운영자가) (여기해야함!!)
+		
+		mav.addObject("goBackURL", goBackURL);
 
 		mav.setViewName("community/inquiryGoDetail.tiles2");
 		
@@ -1796,6 +1796,332 @@ public class ControllerSJ {
 	
 	
 	
+
+	
+	// 문의 답변
+	@GetMapping("admin/reg/ASinquiryList")
+	public String ASinquiryList(HttpServletRequest request) {
+		
+		
+		String fk_userid = "admin";
+		
+		request.setAttribute("fk_userid", fk_userid);
+		
+		List<InquiryVO> inquiryPagingList = null;
+		
+		if(fk_userid != null) {
+			// 문의목록 가져오기
+			List<InquiryVO> inquiryList = service.getinquiryList(fk_userid);
+			request.setAttribute("inquiryList", inquiryList);
+			
+			String searchtype_a = request.getParameter("searchtype_a");
+			String searchtype_b = request.getParameter("searchtype_b");
+			String searchtype_answer = request.getParameter("searchtype_answer");
+			String searchtype_fk_userid = request.getParameter("searchtype_fk_userid");
+			String searchWord = request.getParameter("searchWord");
+			String str_currentShowPageNo = request.getParameter("currentShowPageNo"); 
+			
+		  System.out.println("~~ 확인용 str_currentShowPageNo : " + str_currentShowPageNo);
+			
+			if(searchtype_a == null) {
+				searchtype_a = "0";
+			}
+			
+			if(searchtype_b == null) {
+				searchtype_b = "0";
+			}
+			if(searchtype_answer == null) {
+				searchtype_answer = "99";
+			}
+			if(searchtype_fk_userid == null) {
+				searchtype_fk_userid = "0";
+			}
+			
+			if(searchWord == null) {
+				searchWord = "";
+			}
+			
+			if(searchWord != null) {
+				searchWord = searchWord.trim();
+				// "    연습   " ==> "연습"
+				// "        " ==> ""  
+			}			
+			
+			Map<String, String> paraMap = new HashMap<>();
+			paraMap.put("searchtype_a", searchtype_a);
+			paraMap.put("searchtype_b", searchtype_b);
+			paraMap.put("searchtype_answer", searchtype_answer);
+			paraMap.put("searchtype_fk_userid", searchtype_fk_userid);
+			paraMap.put("searchWord", searchWord);
+			paraMap.put("fk_userid", fk_userid);
+					
+			// 먼저, 총 게시물 건수(totalCount)를 구해와야 한다.
+			// 총 게시물 건수(totalCount)는  검색조건이 있을 때와 없을때로 나뉘어진다.
+			int totalCount = 0;        // 총 게시물 건수
+			int sizePerPage = 10;      // 한 페이지당 보여줄 게시물 건수 
+			int currentShowPageNo = 0; // 현재 보여주는 페이지 번호로서, 초기치로는 1페이지로 설정함. 
+			int totalPage = 0;         // 총 페이지수(웹브라우저상에서 보여줄 총 페이지 개수, 페이지바) 			
+			
+			totalCount = service.getTotalInquiryCount(paraMap);
+			
+			System.out.println("totalCount" + totalCount);
+			
+			totalPage = (int) Math.ceil((double)totalCount/sizePerPage); 
+			
+			if(str_currentShowPageNo == null) {
+				// 문의 게시판에 보여지는 초기화면
+				currentShowPageNo = 1;
+			}
+			else {
+				
+				try {
+					currentShowPageNo = Integer.parseInt(str_currentShowPageNo);
+					
+					if(currentShowPageNo < 1 || currentShowPageNo > totalPage) {
+						// get 방식이므로 사용자가 str_currentShowPageNo 에 입력한 값이 0 또는 음수를 입력하여 장난친 경우 
+						// get 방식이므로 사용자가 str_currentShowPageNo 에 입력한 값이 실제 데이터베이스에 존재하는 페이지수 보다 더 큰값을 입력하여 장난친 경우 
+						currentShowPageNo = 1;
+					}
+					
+				} catch (NumberFormatException e) {
+					// get 방식이므로 사용자가 str_currentShowPageNo 에 입력한 값이 숫자가 아닌 문자를 입력하여 장난친 경우 
+					currentShowPageNo = 1; 
+				}
+			}
+			
+			int startRno = ((currentShowPageNo - 1) * sizePerPage) + 1; // 시작 행번호 
+			int endRno = startRno + sizePerPage - 1; // 끝 행번호
+			
+			System.out.println("여기 @! startRno : " + startRno);
+			System.out.println("여기 @! endRno : " + endRno);
+			
+			paraMap.put("startRno", String.valueOf(startRno));
+			paraMap.put("endRno", String.valueOf(endRno));
+			
+			// 문의목록 페이징 처리
+			inquiryPagingList = service.getPaginginquiryList(paraMap);
+			request.setAttribute("inquiryPagingList", inquiryPagingList);
+			
+			
+			
+			// 검색시 검색조건 및 검색어 값 유지시키기
+			if(searchtype_a != "0" || searchtype_b != "0" || searchWord != "") {
+				request.setAttribute("paraMap", paraMap);
+			}
+			
+			int blockSize = 10;
+			// blockSize 는 1개 블럭(토막)당 보여지는 페이지번호의 개수이다.
+			
+			int loop = 1;
+			
+			int pageNo = ((currentShowPageNo - 1)/blockSize) * blockSize + 1;
+			
+			String pageBar = "<ul style='list-style:none;'>";
+			String url = "/amado/admin/reg/ASinquiryList";
+			
+			// === [맨처음][이전] 만들기 === //
+			if(pageNo != 1) {
+				pageBar += "<li style='display:inline-block; width:70px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_answer="+searchtype_answer+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchWord="+searchWord+"&currentShowPageNo=1'>[맨처음]</a></li>";
+				pageBar += "<li style='display:inline-block; width:50px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_answer="+searchtype_answer+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchWord="+searchWord+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a></li>"; 
+			}
+			
+			while( !(loop > blockSize || pageNo > totalPage) ) {
+				
+				if(pageNo == currentShowPageNo) {
+					pageBar += "<li style='display:inline-block; width:30px; font-size:12pt; border:solid 1px gray; color:red; padding:2px 4px;'>"+pageNo+"</li>";
+				}
+				else {
+					pageBar += "<li style='display:inline-block; width:30px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_answer="+searchtype_answer+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchWord="+searchWord+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a></li>"; 
+				}
+				
+				loop++;
+				pageNo++;
+			}// end of while------------------------
+			
+			// === [다음][마지막] 만들기 === //
+			if(pageNo <= totalPage) {
+				pageBar += "<li style='display:inline-block; width:50px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_answer="+searchtype_answer+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchWord="+searchWord+"&currentShowPageNo="+pageNo+"'>[다음]</a></li>";
+				pageBar += "<li style='display:inline-block; width:70px; font-size:12pt;'><a href='"+url+"?searchtype_a="+searchtype_a+"&searchtype_b="+searchtype_b+"&searchtype_answer="+searchtype_answer+"&searchtype_fk_userid="+searchtype_fk_userid+"&searchWord="+searchWord+"&currentShowPageNo="+totalPage+"'>[마지막]</a></li>"; 
+			}
+			
+			pageBar += "</ul>";
+			
+			request.setAttribute("pageBar", pageBar);
+			
+			String goBackURL = MyUtil.getCurrentURL(request);
+			//	System.out.println("~~~ 확인용(list.action) goBackURL : " + goBackURL); 
+
+			request.setAttribute("goBackURL", goBackURL);
+			
+			//////////////////////////////////////////////
+			
+			request.setAttribute("totalCount", totalCount);  // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.
+			request.setAttribute("currentShowPageNo", currentShowPageNo); // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.
+			request.setAttribute("sizePerPage", sizePerPage); // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.			
+			
+		}
+		return "reg/ASinquiryList.tiles3";
+	}
+	
+
+	
+	
+	
+	@PostMapping(value = "admin/reg/inquiryGoDetail")
+	public ModelAndView inquiryGoDetail(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+		
+		
+		String inquiryseq = "";
+		String goBackURL = "";
+		String searchtype_a = "";
+		String searchtype_b = "";
+		String searchtype_fk_userid = "";
+		String searchtype_answer = "";
+		String searchWord = "";
+
+		
+		inquiryseq = request.getParameter("inquiryseq");
+		goBackURL = request.getParameter("goBackURL");
+		searchtype_a = request.getParameter("searchtype_a");
+		searchtype_b = request.getParameter("searchtype_b");
+		searchtype_b = request.getParameter("searchtype_fk_userid");
+		searchtype_b = request.getParameter("searchtype_answer");
+		searchWord = request.getParameter("searchWord");
+		
+		/*
+		 * System.out.println("inquiryseq : " + inquiryseq);
+		 * System.out.println("goBackURL : " + goBackURL);
+		 * System.out.println("searchtype_a : " + searchtype_a);
+		 * System.out.println("searchtype_b : " + searchtype_b);
+		 * System.out.println("searchWord : " + searchWord);
+		 */
+		
+		mav.setViewName("community/inquiryList.tiles2");
+		
+		// 1대1 문의 상세조회 하나 가져오기
+		InquiryVO inquiryvo = service.inquiryGoDetail(inquiryseq);
+		
+		// 1대1 문의 상세조회 파일들 가져오기
+		List<InquiryFileVO> inquiryfileList = service.inquiryFileGoDetail(inquiryseq);
+		
+		mav.addObject("goBackURL", goBackURL);
+		mav.addObject("inquiryvo", inquiryvo); // 1대1문의 상세정보
+		mav.addObject("inquiryfileList", inquiryfileList); // 1대1문의 상세정보 파일
+		// 답변(운영자가) (여기해야함!!)
+
+		mav.setViewName("reg/inquiryGoDetail.tiles3");
+		
+		return mav;
+		
+	}
+	
+	
+	
+	// === 운영자 문의 답변쓰기(Ajax 로 처리) === //
+	@ResponseBody
+	@PostMapping(value = "/admin/reg/addInquiryAD", produces = "text/plain;charset=UTF-8")
+	public String addInquiryAD(HttpServletRequest request) {
+
+		
+		String content = request.getParameter("content");
+		String inquiryseq = request.getParameter("inquiryseq");
+		
+		
+		System.out.println("inquiryseq : " + inquiryseq);
+		System.out.println("content : " + content);
+		System.out.println("inquiryseq : " + inquiryseq);
+		
+		
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("content", content);
+		paraMap.put("inquiryseq", inquiryseq);
+		String fk_userid = "admin";
+		paraMap.put("fk_userid", "admin");
+		
+		int n = 0;
+		try {
+			n = service.addInquiryAD(paraMap);
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+
+		JSONObject jsonObject = new JSONObject(); // {}
+		jsonObject.put("n", n); // 정상일 경우 {"n":1} 문제가 생겼을 경우{"n":0}
+
+		return jsonObject.toString();
+		// 정상일 경우 {"n":1, "name":"엄정화"} 문제가 생겼을 경우(point 300 넘을 경우){"n":0, "name":"엄정화"}
+	}
+
+	
+	
+	@ResponseBody
+	@GetMapping(value = "admin/reg/readInquiryAW", produces = "text/plain;charset=UTF-8")
+	public String readInquiryAW(HttpServletRequest request) {
+		
+		String inquiryseq = request.getParameter("inquiryseq");
+		
+		List<InquiryAnswersVO> inquiryanswersList = service.readInquiryAW(inquiryseq);
+		
+		JSONArray jsonArr = new JSONArray(); // []
+
+		if (inquiryanswersList != null) {
+			for (InquiryAnswersVO inquiryanswersvo : inquiryanswersList) {
+				JSONObject jsonObj = new JSONObject(); // {}
+				jsonObj.put("inquiryanswerseq", inquiryanswersvo.getInquiryanswerseq()); 
+				System.out.println("inquiryanswersvo.getInquiryanswerseq() : " + inquiryanswersvo.getInquiryanswerseq());
+				jsonObj.put("content", inquiryanswersvo.getContent()); 
+				jsonObj.put("fk_userid", inquiryanswersvo.getFk_userid()); 
+				jsonObj.put("inquiryseq", inquiryanswersvo.getInquiryseq()); 
+				jsonObj.put("registerdate", inquiryanswersvo.getRegisterdate()); 
+				
+				System.out.println("inquiryanswersvo.getContent()" + inquiryanswersvo.getContent());
+				jsonArr.put(jsonObj);
+			}
+		}
+		
+		return jsonArr.toString(); 
+	}
+	
+	
+	@ResponseBody
+	@PostMapping(value = "admin/reg/delInquiryAW", produces = "text/plain;charset=UTF-8") 
+	public String delInquiryAW(HttpServletRequest request) {
+		
+		String inquiryanswerseq = request.getParameter("inquiryanswerseq");
+		String inquiryseq = request.getParameter("inquiryseq");
+
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("inquiryanswerseq", inquiryanswerseq);
+		paraMap.put("inquiryseq", inquiryseq);
+
+		int n = service.delInquiryAW(paraMap);
+
+		JSONObject jsonObject = new JSONObject(); // {}
+		jsonObject.put("n", n); // 정상일 경우 {"n":1} 문제가 생겼을 경우{"n":0}
+		
+		return jsonObject.toString();
+	}
+	
+	
+	@ResponseBody
+	@PostMapping(value = "/admin/reg/editInquiryAW", produces = "text/plain;charset=UTF-8") 
+	public String editInquiryAW(HttpServletRequest request) {
+		
+		String edit_comment_text = request.getParameter("edit_comment_text");
+		String inquiryanswerseq = request.getParameter("inquiryanswerseq");
+		
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("edit_comment_text", edit_comment_text);
+		paraMap.put("inquiryanswerseq", inquiryanswerseq);
+
+		int n = service.editInquiryAW(paraMap);
+
+		JSONObject jsonObject = new JSONObject(); // {}
+		jsonObject.put("n", n); // 정상일 경우 {"n":1} 문제가 생겼을 경우{"n":0}
+
+		
+		return jsonObject.toString();
+	}
 	
 
 }

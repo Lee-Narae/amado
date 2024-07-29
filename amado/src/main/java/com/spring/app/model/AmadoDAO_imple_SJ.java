@@ -12,6 +12,7 @@ import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.ClubmemberVO;
+import com.spring.app.domain.InquiryAnswersVO;
 import com.spring.app.domain.InquiryFileVO;
 import com.spring.app.domain.InquiryVO;
 import com.spring.app.domain.MemberVO;
@@ -310,11 +311,34 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 		return inquiryfilevo;
 	}
 
-	// 전체 문의목록 가져오기
 	@Override
-	public List<InquiryVO> getAllInquiry() {
-		List<InquiryVO> inquiryList = sqlsession.selectList("SJ.getAllInquiry");
-		return inquiryList;
+	public int addInquiryAD(Map<String, String> paraMap) {
+		int n = sqlsession.insert("SJ.addInquiryAD", paraMap);
+		return n;
+	}
+
+	@Override
+	public int updateInquiryAW(Map<String, String> paraMap) {
+		int result = sqlsession.update("SJ.updateInquiryAW", paraMap);
+		return result;
+	}
+
+	@Override
+	public List<InquiryAnswersVO> readInquiryAW(String inquiryseq) {
+		List<InquiryAnswersVO> inquiryanswersList = sqlsession.selectList("SJ.readInquiryAW", inquiryseq);
+		return inquiryanswersList;
+	}
+
+	@Override
+	public int delInquiryAW(Map<String, String> paraMap) {
+		int n = sqlsession.delete("SJ.delInquiryAW", paraMap);
+		return n;
+	}
+
+	@Override
+	public int editInquiryAW(Map<String, String> paraMap) {
+		int n = sqlsession.update("SJ.editInquiryAW", paraMap);
+		return n;
 	}
 
 

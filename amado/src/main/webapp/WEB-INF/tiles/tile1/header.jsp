@@ -163,6 +163,7 @@ $(document).ready(function(){
 		</div>
 		<div class="tabs" style="margin-right: 2%;">
 			<div onclick="location.href='<%=ctxPath%>/gym/rental_gym.do'">체육관 찾기</div>
+			<div onclick="location.href='<%=ctxPath%>/gym/registerGym.do'">체육관 등록하기</div>
 			<div onclick="location.href='#'">My 예약 조회</div>
 		</div>
 		<div class="tabs">

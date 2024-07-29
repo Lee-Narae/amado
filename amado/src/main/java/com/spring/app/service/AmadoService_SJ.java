@@ -7,6 +7,7 @@ import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.ClubmemberVO;
+import com.spring.app.domain.InquiryAnswersVO;
 import com.spring.app.domain.InquiryFileVO;
 import com.spring.app.domain.InquiryVO;
 import com.spring.app.domain.MemberVO;
@@ -113,6 +114,14 @@ public interface AmadoService_SJ {
 	List<InquiryFileVO> inquiryFileGoDetail(String inquiryseq);
 
 	InquiryFileVO getView_inquiry(Map<String, String> paraMap);
+
+	int addInquiryAD(Map<String, String> paraMap) throws Throwable;
+
+	List<InquiryAnswersVO> readInquiryAW(String inquiryseq);
+
+	int delInquiryAW(Map<String, String> paraMap);
+
+	int editInquiryAW(Map<String, String> paraMap);
 
 
 }

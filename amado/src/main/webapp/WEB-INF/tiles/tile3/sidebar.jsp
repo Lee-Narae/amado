@@ -54,11 +54,11 @@ background-color: #247AFB; border-radius: 10px; font-weight: bold; color: white;
 	<div class="text" onclick="location.href='<%=ctxPath%>/admin/manage/...'" id="gymM">대관 관리</div>
 </div>
 <hr>
-<div id="middle2" style="height: 150px;" align="center">
+<div id="middle2" style="height: 200px;" align="center">
 <div class="minitext">등록</div>
 	<div class="text" onclick="location.href='<%=ctxPath%>/admin/reg/notice'" id="noticeR">공지사항 등록</div>
 	<div class="text" onclick="location.href='<%=ctxPath%>/admin/reg/gym'" id="gymR">체육관 등록</div>
-	<div class="text" onclick="location.href='<%=ctxPath%>/community/inquiryList.do'" id="inquiryA">문의답변 등록</div>
+	<div class="text" onclick="location.href='<%=ctxPath%>/admin/reg/ASinquiryList'" id="inquiryA">문의답변 등록</div>
 </div>
 <hr>
 <div id="bottom" style="height: 100px;" align="center">

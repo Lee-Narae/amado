@@ -208,8 +208,8 @@
 		<result property="cnt" column="cnt" javaType="String"/>
 	</resultMap>
 	<select id="getSportPerClubCount" resultMap="clubCountMap">
-		select sportname, count(*) cnt
-		from tbl_club A join tbl_sport B
+		select sportname, count(clubname) cnt
+		from tbl_club A right join tbl_sport B
 		on A.fk_sportseq = B.sportseq
 		group by B.sportname
 	</select>
@@ -486,7 +486,7 @@
 		on B.clubseq = D.clubseq
 		join tbl_sport E
 		on B.sportseq = E.sportseq
-		where D.fk_userid = #{userid} and A.status = 0
+		<![CDATA[ where D.fk_userid = #{userid} and A.status = 0 and B.matchdate > sysdate ]]>
 	</select>
 	
 	
@@ -525,7 +525,8 @@
 		on C.fk_userid = E.userid
 		join tbl_member F
 		on D.fk_userid = F.userid
-		where B.status = 1 and (C.clubseq=#{clubseq} or D.clubseq=#{clubseq})
+		<![CDATA[ where B.status = 1 and (C.clubseq=#{clubseq} or D.clubseq=#{clubseq}) and A.matchdate >= sysdate ]]>
+		order by 3
 	</select>
 	
 	<select id="getGymseq" resultType="String">
@@ -633,7 +634,7 @@
 		on A.clubseq2 = D.clubseq
 		join tbl_member E
 		on C.fk_userid = E.userid
-		where E.userid = #{userid} and A.result1 = 0
+		<![CDATA[ where E.userid = #{userid} and A.result1 = 0 and B.matchdate < sysdate ]]>
 	</select>
 	
 	<update id="updateMatchResult">

@@ -9,14 +9,19 @@
 
 <style type="text/css">
     
-   	td.content{
+   	td.title{
 	    width: 600px; /* 최대 너비를 적절히 설정 */
 	    max-width: 600px; /* 최대 너비를 적절히 설정 */
 	    overflow: hidden;
 	    text-overflow: ellipsis;
 	    white-space: nowrap;
 	}
-    
+	
+	td.title:hover{
+	font-weight: bold;
+	color: #0066ff;
+	cursor: pointer;
+	}
     
     .subjectStyle {font-weight: bold;
                    color: fff;
@@ -34,14 +39,6 @@
 <script type="text/javascript">
 
  	$(document).ready(function(){
-
-		// 내용 위에 마우스 올리면
-		$("td.content").hover(function(e){
-			$(e.target).addClass("subjectStyle");
-		}, function(e) {
-			$(e.target).removeClass("subjectStyle");
-		});
-		
 		
 		$("input:text[name='searchWord']").bind("keyup", function(e){
 			if(e.keyCode == 13){ // 엔터를 했을 경우
@@ -49,7 +46,7 @@
 			}
 		});
 		
-		 $("select[name='searchtype_a'], select[name='searchtype_b']").on("change", function(){
+		 $("select[name='searchtype_a'], select[name='searchtype_b'], select[name='searchtype_answer'], select[name='searchtype_fk_userid']").on("change", function(){
 			 goSearch();
 		 });// end of searchType
 		
@@ -58,15 +55,16 @@
 			$("select[name='searchtype_a']").val("${requestScope.paraMap.searchtype_a}");
 			updateSearchTypeB();
 			$("select[name='searchtype_b']").val("${requestScope.paraMap.searchtype_b}");
+			$("select[name='searchtype_fk_userid']").val("${requestScope.paraMap.searchtype_fk_userid}");
+			$("select[name='searchtype_answer']").val("${requestScope.paraMap.searchtype_answer}");
 			$("input[name='searchWord']").val("${requestScope.paraMap.searchWord}");
 		}
-		
 	}); // end of $(document).ready 
 	
 	function goSearch() {
 		 const frm = document.searchFrm;
 	 	 frm.method = "get";
-	  	 frm.action = "<%= ctxPath%>/community/inquiryList.do";
+	  	 frm.action = "<%= ctxPath%>/admin/reg/ASinquiryList";
 	     frm.submit(); 
 	}// end of function goSearch()-------------------	
 
@@ -107,9 +105,11 @@
 		if(${not empty requestScope.paraMap}) { // 검색조건이 있을 경우
 			frm.searchtype_a.value = "${requestScope.paraMap.searchtype_a}";
 			frm.searchtype_b.value = "${requestScope.paraMap.searchtype_b}";
+			frm.searchtype_answer.value = "${requestScope.paraMap.searchtype_answer}";
+			frm.searchtype_fk_userid.value = "${requestScope.paraMap.searchtype_fk_userid}";
 			frm.searchWord.value = "${requestScope.paraMap.searchWord}";
 		}
-		frm.action = "<%=ctxPath%>/community/inquiryGoDetail.do";
+		frm.action = "<%=ctxPath%>/admin/reg/inquiryGoDetail";
 		frm.method = "post";
 		frm.submit();
     	
@@ -118,9 +118,10 @@
 </script>
 
 <div style="display: flex;">
-<div style="margin: auto; padding-left: 3%;">
+<div class="mt-5" style="margin: auto; padding-left: 3%;">
 
 	<h2 style="margin-bottom: 30px;">문의내역</h2>
+	<div style="cursor: pointer; text-decoration: underline;" onclick="location.href='<%=ctxPath%>/admin/reg/ASinquiryList'" >처음으로</div>
 	
 	<form name="searchFrm" style="margin-top: 20px; margin-bottom: 20px;">
 		<select id="searchtype_a" name="searchtype_a" onchange="updateSearchTypeB()">
@@ -133,6 +134,15 @@
 		<select class="ml-2" id="searchtype_b" name="searchtype_b">
 			<option value="0">선택해주세요</option>
 		</select>
+		<select class="ml-2" id="searchtype_answer" name="searchtype_answer">
+			<option value="99">답변여부검색시</option>
+			<option value="0">답변대기</option>
+			<option value="1">답변완료</option>
+		</select>
+		<select class="ml-2" id="searchtype_fk_userid" name="searchtype_fk_userid">
+			<option value="0">아이디검색시(관리자)</option>
+			<option value="1">아이디검색</option>
+		</select>
 		<button type="button" class="float-right btn btn-secondary btn-sm" onclick="goSearch()">검색</button>
 		<input class="mr-2 ml-2 float-right" type="text" name="searchWord" size="40" autocomplete="off" /> 
 		<input type="hidden" name="userid" value="${requestScope.fk_userid}" /> 
@@ -144,7 +154,7 @@
 		<thead>
 		    <tr style="background-color: #ccf3ff;">
 		    	<th style="width: 80px;  text-align: center;">글번호</th>
-				<th style="width: 220px; text-align: center;">내용</th>
+				<th style="width: 220px; text-align: center;">제목</th>
 				<th style="width: 120px; text-align: center;">답변여부</th>
 				<th style="width: 120px;  text-align: center;">아이디</th>
 				<th style="width: 200px;  text-align: center;">타입</th>
@@ -153,11 +163,11 @@
 		</thead>
 		
 		<tbody>
-			<c:if test="${not empty requestScope.inquiryList}">
-			   <c:forEach var="inquiryvo" items="${requestScope.inquiryList}" varStatus="status">
+			<c:if test="${not empty requestScope.inquiryPagingList}">
+			   <c:forEach var="inquiryvo" items="${requestScope.inquiryPagingList}" varStatus="status">
 			     <tr onclick="goDetail('${inquiryvo.inquiryseq}')">
 			        <td align="center">${inquiryvo.inquiryseq}</td>
-			        <td align="center" class="content">${inquiryvo.content}</td>
+			        <td align="center" class="title">${inquiryvo.title}</td>
 				    
 				    <c:choose>
 				        <c:when test="${inquiryvo.answer == 0}">
@@ -218,7 +228,7 @@
 			   </c:forEach>
 			</c:if>
 			
-			<c:if test="${empty requestScope.inquiryList}">
+			<c:if test="${empty requestScope.inquiryPagingList}">
 			    <tr>
 			       <td colspan="5">데이터가 없습니다</td>
 			    </tr>
@@ -238,6 +248,8 @@
    <input type="hidden" name="goBackURL" />
    <input type="hidden" name="searchtype_a" />
    <input type="hidden" name="searchtype_b" />
+   <input type="hidden" name="searchtype_fk_userid" />
+   <input type="hidden" name="searchtype_answer" />
    <input type="hidden" name="searchWord" />
    <input type="hidden" name="fk_userid" />
 </form>	     
