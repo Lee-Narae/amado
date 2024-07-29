@@ -123,7 +123,11 @@ public interface AmadoDAO_JY {
 
 	int deleteCBoard(String clubboardseq);
 
-	int add_withFile2(ClubBoardVO cvo);
+	int add_withFile2(Map<String, String> paramap);
+
+	int add(Map<String, String> paraMap);
+
+	List<Map<String, String>> getGymBarchart();
 
 	
 

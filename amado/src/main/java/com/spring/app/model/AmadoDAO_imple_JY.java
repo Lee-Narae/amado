@@ -384,10 +384,23 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 		return n;
 	}
 
+	
+	// 동호회게ㅛ시판글쓰기
 	@Override
-	public int add_withFile2(ClubBoardVO cvo) {
-		int n = sqlsession.insert("JY.add_withFile2",cvo);
+	public int add_withFile2(Map<String, String> paramap) {
+		int n = sqlsession.insert("JY.add_withFile2",paramap);
 		return n;
+	}
+	@Override
+	public int add(Map<String, String> paraMap) {
+		int n = sqlsession.insert("JY.add", paraMap);
+		return n;
+	}
+
+	@Override
+	public List<Map<String, String>> getGymBarchart() {
+		List<Map<String, String>> mapList = sqlsession.selectList("JY.getGymBarchart");
+		return mapList;
 	}
 	
 

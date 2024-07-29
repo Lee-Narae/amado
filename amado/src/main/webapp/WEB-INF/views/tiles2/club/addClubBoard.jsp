@@ -60,16 +60,6 @@ $(document).ready(function(){
     $("button#btnWrite").click(function(){
       
     	
-    	 let b_requiredInfo = true;
-			
-		    const category = $("select#category").val();
-		    const city = $("select#city").val();
-		    
-		    
-		    
-		  
-		    
-		   
        <%-- === 스마트 에디터 구현 시작 === --%>
         // id가 content인 textarea에 에디터에서 대입
           obj.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
@@ -114,13 +104,13 @@ $(document).ready(function(){
              return; // 종료
           }
           
-          if(b_requiredInfo){
-	          // 폼(form)을 전송(submit)
-	          const frm = document.addFrm;
-	          frm.method = "post";
-	          frm.action = "<%= ctxPath%>/club/addEndClubBoard.do";
-	          frm.submit();
-          }
+          
+          
+        // 폼(form)을 전송(submit)
+        const frm = document.addFrm;
+        frm.method = "post";
+        frm.action = "<%= ctxPath%>/club/addEndClubBoard.do";
+        frm.submit();
     });
     
     
@@ -240,6 +230,15 @@ $(document).ready(function(){
             </td>
          </tr>
          
+         <%-- === #170. 파일첨부 타입 추가하기 === --%>
+		 <tr>
+			<th style="width: 15%; background-color: #DDDDDD;">파일첨부</th>  
+			<td>
+			    <input type="file" name="attach" />
+			</td>
+		 </tr>
+         
+         
          <tr>
             <th style="width: 15%; background-color: #DDDDDD;">글암호</th> 
             <td>
@@ -258,7 +257,7 @@ $(document).ready(function(){
         	유효성 검사를 하지 않고 GET 방식으로 넘어가버린다. 
          --%>
         
-     
+    <input type="text" name="clubseq" value="${requestScope.clubseq }" />
      
   </div>
 </div>

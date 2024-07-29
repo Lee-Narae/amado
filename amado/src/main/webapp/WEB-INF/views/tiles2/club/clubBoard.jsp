@@ -107,10 +107,13 @@ function goSearch(){
 		return;
 	}
 	
-	
-	
 	const frm = document.searchFrm;
 	frm.submit();
+}
+
+
+function goWrite(clubseq){
+	location.href = "<%= ctxPath%>/club/addClubBoard.do?clubseq="+clubseq;
 }
 	
 
@@ -118,7 +121,7 @@ function goSearch(){
 
 <div id="wrap" style="width: 100%; padding: 5% 0;" align="center">
 	<div id="top" class="mb-5" style="font-size: 35pt; font-weight: bolder; text-align: center;">[${requestScope.clubname}]<br><span style='color: #00588f;'>${requestScope.sportname}</span>&nbsp;동호회 게시판</div>
-
+	<button style='margin-left: 70%; margin-bottom: 4%;'   type="button" class="btn btn-info btn-sm" onclick="goWrite('${requestScope.clubseq}')">작성하기</button>
 	<div id="bottom" style="width: 80%;">
 		<table class="mb-5" style="width: 100%;">
 			<thead>

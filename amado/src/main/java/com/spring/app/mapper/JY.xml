@@ -519,12 +519,32 @@
 	</delete>
 	
 	
-	<insert id="add_withFile2"  parameterType="ClubBoardVO">
-		insert into tbl_clubboardcomment(clubboardcommentseq, clubboardseq, comment_text, registerdate , fk_userid)
-		values(seq_clubboardcomment.nextval, #{clubboardseq}, #{comment_text}, default, #{fk_userid});
+	<insert id="add_withFile2"  parameterType="HashMap">
+		insert into tbl_clubboard(clubboardseq, clubseq, title, content, fk_userid, registerdate ,password, commentcount, viewcount, status, filename, orgfilename)
+		values(seq_clubboard.nextval, #{clubseq}, #{title}, #{content}, #{fk_userid}, default, #{password}, 0, 0, 1, #{filename}, #{orgfilename});
 	</insert>
 	
+	<insert id="add" parameterType="HashMap">
+          insert into tbl_clubboard(clubboardseq, clubseq, title, content, fk_userid, registerdate ,password, commentcount, viewcount, status)
+          values(seq_clubboard.nextval, #{clubseq}, #{title}, #{content}, #{fk_userid}, default, #{password}, 0, 0, 1) 
+    </insert>
 	
+	
+	<!-- -->
+	<resultMap type="HashMap" id="seoul_bicycle_Map">
+		<result property="time" 			column="time"  		javaType="String" />
+		<result property="gymname" 			column="gymname"  		javaType="String" /> 
+		<result property="reservation_count" 	column="reservation_count"  javaType="String" />
+	</resultMap>
+	<select id="getGymBarchart" resultMap="seoul_bicycle_Map">
+		SELECT A.time,  B.gymname, A.reservation_count, B.gymname
+		FROM (
+		    SELECT fk_gymseq, time, COUNT(*) AS reservation_count
+		    FROM tbl_gymres
+		    GROUP BY fk_gymseq, time
+		) A
+		JOIN tbl_gym B ON A.fk_gymseq = B.gymseq;
+	</select> 
 	
 
 </mapper>

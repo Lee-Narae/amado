@@ -395,4 +395,38 @@ select clubboardcommentseq, clubboardseq, comment_text, to_char(registerdate, 'y
 select *
 from tbl_clubboard
 
+--동호회 게시판 글쓰기
+insert into tbl_clubboard(clubboardseq, clubseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status)
+values(seq_clubboard.nextval, 2, '토마토맛토마토맛토', '먹어볼사람', 'leejy', sysdate , '1234', 0 , 0, 1);
+
+select *
+from tbl_gym
+
+-- 체육관 시간대별 예약통계 막대차트 그래프
+SELECT A.time, B.gymseq, B.gymname, A.reservation_count
+FROM (
+    SELECT time, COUNT(*) AS reservation_count
+    FROM tbl_gymres
+    GROUP BY fk_gymseq, time
+) A
+JOIN tbl_gym B 
+ON A.fk_gymseq = B.gymseq;
+
+
+
+
+SELECT TO_CHAR(A.time, 'HH24:00') AS time, A.fk_gymseq, B.gymname, A.reservation_count
+FROM (
+    SELECT fk_gymseq, TRUNC(time, 'HH24') AS time, COUNT(*) AS reservation_count
+    FROM tbl_gymres
+    GROUP BY fk_gymseq, TRUNC(time, 'HH24')
+) A
+JOIN tbl_gym B ON A.fk_gymseq = B.gymseq
+ORDER BY A.fk_gymseq, A.time;
+
+
+
+
+
+
 

@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -752,13 +755,18 @@ public class ControllerJY {
 	// 동호회게시판 글 작성하기 뷰단
 	@GetMapping(value="/club/addClubBoard.do")
 	public ModelAndView requiredLogin_addClubBoard(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+		
+		String clubseq = request.getParameter("clubseq");
+		//System.out.println("글쓰기뷰단"+clubseq);
+		
+		mav.addObject("clubseq", clubseq);
 		mav.setViewName("club/addClubBoard.tiles2");
 		return mav;
 		
 	}
 	
 	
-	// 글쓰기
+	// 글쓰기 완료
 	@PostMapping(value="/club/addEndClubBoard.do" , produces="text/plain;charset=UTF-8")
 	public ModelAndView requiredLogin_addEndClubBoard(HttpServletRequest request, HttpServletResponse response, ModelAndView mav, Map<String, String> paraMap, ClubBoardVO cvo, MultipartHttpServletRequest mrequest) throws Exception {
 		
@@ -820,9 +828,9 @@ public class ControllerJY {
 	             
 	         */
 				
-				cvo.setWasfileName(newFileName);
+				cvo.setFilename(newFileName);
 				//was(톰캣)에 저장된 파일명(2024062712075997631067179400.jpg)
-				cvo.setFilename(originalFilename);
+				cvo.setOrgfilename(originalFilename);
 				// 게시판 페이지에서 첨부된 파일(LG_싸이킹청소기_사용설명서.pdf)을 보여줄 때 사용.
 	            // 또한 사용자가 파일을 다운로드 할때 사용되어지는 파일명으로 사용.
 				
@@ -851,17 +859,50 @@ public class ControllerJY {
 			*/
 		// === !!! 첨부파일이 있는 경우 작업 끝 !!! ===	
 
+		String clubseq = request.getParameter("clubseq");
+		//System.out.println("글쓰기완료"+clubseq);
+		
+		
+		paraMap.put("clubboardseq", cvo.getClubboardseq());
+		paraMap.put("title", cvo.getTitle());
+		paraMap.put("content", cvo.getContent());
+		paraMap.put("fk_userid", cvo.getFk_userid());
+		paraMap.put("registerdate", cvo.getRegisterdate());
+		paraMap.put("password", cvo.getPassword());
+		paraMap.put("commentcount", cvo.getCommentcount());
+		paraMap.put("viewcount", cvo.getViewcount());
+		paraMap.put("status", cvo.getStatus());
+		paraMap.put("orgfilename", cvo.getOrgfilename());
+		paraMap.put("filename", cvo.getFilename());
+		paraMap.put("wasfileName", cvo.getWasfileName());
+		//paraMap.put("filesize", cvo.getFilesize());
+		paraMap.put("clubseq", clubseq); //cvo에서 가져온값 x
+		
+		System.out.println("파일"    + cvo.getWasfileName() +  cvo.getFilename());
+		// 파일   null   court.png   null
+		
 		int n =0;
 		
-		if(!(attach.isEmpty())) {
+		
+		if(attach.isEmpty()) {
+			// 파일첨부가 없는 경우라면
+			n = service.add(paraMap); // <== 파일첨부가 없는 글쓰기 
+		}
+		else{
 			//파일첨부가 있는 경우라면
-			n=service.add_withFile2(cvo);
+			n=service.add_withFile2(paraMap);
 			
 		}
 		
-		mav.setViewName("redirect:/club/clubBoard.do"); //상품 등록이 완료되면 결과가 적용된 페이지로 가야하기때문에 redirect를 써줘여 함.
-		//  /WEB-INF/views/tiles1/board/error/add_error.jsp 파일을 생성한다.
-
+		
+		if(n==1) {
+			mav.setViewName("redirect:/club/clubBoard.do"); //상품 등록이 완료되면 결과가 적용된 페이지로 가야하기때문에 redirect를 써줘여 함.
+			//  /WEB-INF/views/tiles1/board/error/add_error.jsp 파일을 생성한다.
+		}
+		else {
+			mav.setViewName("error/add_error.tiles1");
+			//  /WEB-INF/views/tiles1/board/error/add_error.jsp 파일을 생성한다.
+		}
 			
 		return mav;
 		
@@ -1805,5 +1846,45 @@ public class ControllerJY {
 		return mav;
 	}
 
+	
+	
+	
+	
+	
+	
+	// 대관관리
+	@ResponseBody
+	@GetMapping(value="/admin/manage/gym.do", produces="text/plain;charset=UTF-8")
+	public String getGymBarchart() {
+		
+		List<Map<String, String>> mapList = service.getGymBarchart();
+		
+		
+		
+		JSONArray jsonArr = new JSONArray();
+		
+		if(mapList != null) {
+			for(Map<String, String> map : mapList) {
+				JSONObject jsonObj = new JSONObject();
+				jsonObj.put("time", map.get("time"));
+				jsonObj.put("gymname", map.get("gymname"));
+				jsonObj.put("reservation_count", map.get("reservation_count"));
+				
+				jsonArr.put(jsonObj);
+			}// end of for----------------------
+		}
+				
+		return jsonArr.toString();
+ 		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

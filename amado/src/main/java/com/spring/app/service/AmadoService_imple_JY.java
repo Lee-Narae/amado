@@ -380,9 +380,22 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 
 
 	@Override
-	public int add_withFile2(ClubBoardVO cvo) {
-		int n = dao.add_withFile2(cvo); //첨부파일이 있는경우
+	public int add_withFile2(Map<String, String> paraMap) {
+		int n = dao.add_withFile2(paraMap); //첨부파일이 있는경우
 		return n;
+	}
+	@Override
+	public int add(Map<String, String> paraMap) {
+		int n = dao.add(paraMap);
+		return n;
+	}
+
+
+
+	@Override
+	public List<Map<String, String>> getGymBarchart() {
+		List<Map<String, String>> mapList = dao.getGymBarchart();
+		return mapList;
 	}
 
 
