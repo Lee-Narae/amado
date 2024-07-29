@@ -404,6 +404,15 @@ function goMatchResult(matchingseq){
 	
 }
 
+
+function goClubDetail(clubseq){
+	const f = document.clubDetailFrm;
+	f.clubseq.value = clubseq;
+	f.sportseq.value = '${requestScope.sportseq}';
+	f.action = "<%=ctxPath%>/club/myClub_plus.do";
+	f.submit();
+}
+
 </script>
 
 <div id="container">
@@ -559,7 +568,7 @@ function goMatchResult(matchingseq){
 					</div>
 				</div>
 			</div>
-			<div id="more" style="text-align: right; margin: 3% 8% 0 0; color: #8a8a8a;"><a href="<%= ctxPath%>/club/myClub_plus.do">동호회 정보 더보기 ▶</a></div>
+			<div id="more" style="text-align: right; margin: 3% 8% 0 0; color: #8a8a8a;" onclick="goClubDetail(${requestScope.club.clubseq})">동호회 정보 더보기 ▶</div>
 		</div>
 		
 		
@@ -606,7 +615,9 @@ function goMatchResult(matchingseq){
 				  </table>
 				</div>
 			</div>
-			<div id="more" style="text-align: right; margin: 3.5% 8% 0 0; color: #8a8a8a;">우리 팀 매치 일정 더보기 ▶</div>
+			<c:if test="${not empty requestScope.matchList}">
+				<div id="more" style="text-align: right; margin: 3.5% 8% 0 0; color: #8a8a8a;">우리 팀 매치 일정 더보기 ▶</div>
+			</c:if>
 		</div>
 	</div>
 
@@ -753,3 +764,8 @@ function goMatchResult(matchingseq){
 </c:if>
 
 </div>
+
+<form name="clubDetailFrm">
+	<input type="hidden" name="clubseq" />
+	<input type="hidden" name="sportseq" />
+</form>

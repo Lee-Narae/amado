@@ -88,6 +88,7 @@ public class ControllerNR {
 		String sportseq = request.getParameter("sportseq");
 		// System.out.println("sportseq: "+sportseq); 확인 완료
 		paramap.put("sportseq", sportseq);
+		mav.addObject("sportseq", sportseq);
 		
 		String clubseq = service.getClubseq(paramap);
 		// System.out.println("clubseq: "+clubseq); 확인 완료
