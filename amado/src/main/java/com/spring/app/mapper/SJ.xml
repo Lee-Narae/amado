@@ -472,8 +472,8 @@
     
     
 	<insert id="Inquiry" parameterType="HashMap">
-		insert into tbl_inquiry(inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer)
-		values(seq_inquiry.nextval, #{content}, #{fk_userid}, #{email}, #{phone}, default, to_number(#{searchtype_a}), to_number(#{searchtype_b}), default, default)
+		insert into tbl_inquiry(inquiryseq, title, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer)
+		values(seq_inquiry.nextval, #{title}, #{content}, #{fk_userid}, #{email}, #{phone}, default, to_number(#{searchtype_a}), to_number(#{searchtype_b}), default, default)
     </insert>
     
     <select id="findseq_inquiry" parameterType="HashMap" resultType="int">
@@ -507,6 +507,7 @@
     <!-- 1대1 문의 목록 가져오기 -->
 	<resultMap type="HashMap" id="getinquiryList_Map">
 	    <result property="inquiryseq"  		column="inquiryseq"  	javaType="String" />
+	    <result property="title"  			column="title"  		javaType="String" />
 	    <result property="content"  		column="content"  		javaType="String" />
 	    <result property="fk_userid"  		column="fk_userid"  	javaType="String" />
 	    <result property="email"  			column="email"  		javaType="String" />
@@ -519,139 +520,131 @@
 	    <result property="filename"  		column="filename"  		javaType="String" />
 	    <result property="filesize"  		column="filesize"  		javaType="String" />
 	</resultMap>    
-    <select id="getinquiryList" parameterType="String" resultMap="getinquiryList_Map">
-		WITH InquiryWithFiles AS (
-		  SELECT I.inquiryseq, I.content, I.fk_userid, I.email, I.phone, I.registerdate, I.searchtype_a, I.searchtype_b, I.status, I.answer,
-		         F.orgfilename, F.filename, F.filesize,
-		         ROW_NUMBER() OVER (PARTITION BY I.inquiryseq ORDER BY F.filename) AS row_num
-		  FROM tbl_inquiryFile F
-		  JOIN tbl_inquiry I ON F.inquiryseq = I.inquiryseq
-		  WHERE I.fk_userid = #{fk_userid} AND I.status = 1
-		)
-		SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer,
-		       orgfilename, filename, filesize
-		FROM InquiryWithFiles
-		WHERE row_num = 1
-		ORDER BY inquiryseq DESC
-    </select>
+	<select id="getinquiryList" parameterType="String" resultMap="getinquiryList_Map">
+	    WITH InquiryWithFiles AS (
+	        SELECT I.inquiryseq, I.title, I.content, I.fk_userid, I.email, I.phone, I.registerdate, I.searchtype_a, I.searchtype_b, I.status, I.answer,
+	               F.orgfilename, F.filename, F.filesize,
+	               ROW_NUMBER() OVER (PARTITION BY I.inquiryseq ORDER BY F.filename) AS row_num
+	        FROM tbl_inquiryFile F
+	        JOIN tbl_inquiry I ON F.inquiryseq = I.inquiryseq
+	        WHERE I.status = 1 
+	        <choose>
+	            <when test="fk_userid != 'admin'">
+	                AND I.fk_userid = #{fk_userid}
+	            </when>
+	            <when test="fk_userid == 'admin'">
+	            </when>
+	        </choose>
+	    )
+	    SELECT inquiryseq, title, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer,
+	           orgfilename, filename, filesize
+	    FROM InquiryWithFiles
+	    WHERE row_num = 1
+	    ORDER BY inquiryseq desc, fk_userid desc 
+	</select>
+
     
-    <select id="getTotalInquiryCount" parameterType="HashMap" resultType="int">
+	<select id="getTotalInquiryCount" parameterType="HashMap" resultType="int">
 	    select count(*)
 	    from tbl_inquiry
-	    where status = 1 and fk_userid = #{fk_userid}
+	    where status = 1
 	    <choose>
-		   <when test='searchtype_a == "0" and searchtype_b == "0" and searchWord == ""'>
-		   </when>
-		   <when test='searchtype_a == "0" and searchtype_b == "0" and searchWord != ""'>
-		      and lower(fk_userid) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   
-		   <when test='searchtype_a != "0" and searchtype_b == "0" and searchWord != ""'>
-		      and searchtype_a = #{searchtype_a} and lower(fk_userid) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a != "0" and searchtype_b == "0" and searchWord == ""'>
-		      and searchtype_a = #{searchtype_a}
-		   </when>
-		   
-		   <when test='searchtype_a == "0" and searchtype_b != "0" and searchWord != ""'>
-		      and searchtype_b = #{searchtype_b} and lower(fk_userid) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a == "0" and searchtype_b != "0" and searchWord == ""'>
-		      and searchtype_b = #{searchtype_b}
-		   </when>
-		   
-		   <when test='searchtype_a != "0" and searchtype_b != "0" and searchWord != ""'>
-		      and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b} and lower(fk_userid) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a != "0" and searchtype_b != "0" and searchWord == ""'>
-		      and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b}  
-		   </when>
-		   
-		   <otherwise></otherwise>
-		</choose>
+	        <when test="fk_userid != 'admin'">
+	            and fk_userid = #{fk_userid}
+	        </when>
+	        <when test="fk_userid == 'admin'">
+	        </when>
+	    </choose>
+	    <choose>
+	        <when test='searchtype_a == "0" and searchtype_b == "0"'>
+	        </when>
+	        <when test='searchtype_a != "0" and searchtype_b == "0"'>
+	            and searchtype_a = #{searchtype_a}
+	        </when>
+	        <when test='searchtype_a != "0" and searchtype_b != "0"'>
+	            and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b}
+	        </when>
+	        <otherwise></otherwise>
+	    </choose>
+	    
+	    
+	    <choose>
+	        <when test='searchtype_answer != "99"'>
+	            and answer = #{searchtype_answer}
+	        </when>
+	        <otherwise></otherwise>
+	    </choose>
+	    <choose>
+	        <when test='searchtype_fk_userid == "0" and searchWord == ""'>
+	        </when>
+	        <when test='searchtype_fk_userid == "0" and searchWord != ""'>
+    		    and lower(content) like CONCAT(CONCAT('%', lower(#{searchWord})), '%')
+	            or lower(title) like CONCAT(CONCAT('%', lower(#{searchWord})), '%')
+	        </when>
+	        <when test='searchtype_fk_userid != "0" and searchWord == ""'>
+	        </when>
+	        <when test='searchtype_fk_userid != "0" and searchWord != ""'>
+	            and lower(fk_userid) like CONCAT(CONCAT('%', lower(#{searchWord})), '%')
+	        </when>
+	    </choose>
 	</select>
-    
-    
-    
-    <select id="getPaginginquiryList" parameterType="HashMap" resultType="InquiryVO">
-	    SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
-		FROM
-(        select row_number() over(order by inquiryseq asc) AS rno 
-             , inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
-             
-        from tbl_inquiry
-        where status = 1
-        <if test='fk_userid != "admin"'>
-        	and fk_userid = #{fk_userid} 
-        </if>
-       		
-	    <choose>
-		   <when test='searchtype_a == "0" and searchtype_b == "0" and searchWord == ""'>
-		   </when>
-		   <when test='searchtype_a == "0" and searchtype_b == "0" and searchWord != ""'>
-		      and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   
-		   <when test='searchtype_a != "0" and searchtype_b == "0" and searchWord != ""'>
-		      and searchtype_a = #{searchtype_a} and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a != "0" and searchtype_b == "0" and searchWord == ""'>
-		      and searchtype_a = #{searchtype_a}
-		   </when>
-		   
-		   <when test='searchtype_a == "0" and searchtype_b != "0" and searchWord != ""'>
-		      and searchtype_b = #{searchtype_b} and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a == "0" and searchtype_b != "0" and searchWord == ""'>
-		      and searchtype_b = #{searchtype_b}
-		   </when>
-		   
-		   <when test='searchtype_a != "0" and searchtype_b != "0" and searchWord != ""'>
-		      and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b} and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a != "0" and searchtype_b != "0" and searchWord == ""'>
-		      and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b}  
-		   </when>
-		   
 
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer == "0" and searchWord == ""'>
-		   </when>
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer == "0" and searchWord != ""'>
-		      and lower(fk_userid) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer == "0" and searchWord != ""'>
-		      and fk_userid = #{searchtype_fk_userid} and lower(fk_userid) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer == "0" and searchWord == ""'>
-		      and fk_userid = #{searchtype_fk_userid}
-		   </when>
-		   
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer != "0" and searchWord != ""'>
-		      and answer = TO_NUMBER(#{searchtype_answer}) and lower(fk_userid) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer != "0" and searchWord == ""'>
-		      and answer = TO_NUMBER(#{searchtype_answer})
-		   </when>
-		   
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer != "0" and searchWord != ""'>
-		      and fk_userid = #{searchtype_fk_userid} and answer = TO_NUMBER(#{searchtype_answer}) and lower(fk_userid) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer != "0" and searchWord == ""'>
-		      and fk_userid = #{searchtype_fk_userid} and answer = TO_NUMBER(#{searchtype_answer})  
-		   </when>		   
-		   
-		   <otherwise></otherwise>
-		</choose>      
-        order by rno desc
-)
-where rno between #{startRno} and #{endRno}   
     
-    </select>
+    
+    
+	<select id="getPaginginquiryList" parameterType="HashMap" resultType="InquiryVO">
+	    SELECT inquiryseq, title, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
+	    FROM (
+	        SELECT row_number() over(order by inquiryseq desc) AS rno,
+	               inquiryseq, title, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
+	        FROM tbl_inquiry
+	        WHERE status = 1
+	        <choose>
+	            <when test="fk_userid != 'admin'">
+	                and fk_userid = #{fk_userid}
+	            </when>
+	            <when test="fk_userid == 'admin'">
+	            </when>
+	        </choose>
+	        <choose>
+	            <when test='searchtype_a == "0" and searchtype_b == "0"'>
+	            </when>
+	            <when test='searchtype_a != "0" and searchtype_b == "0"'>
+	                and searchtype_a = #{searchtype_a}
+	            </when>
+	            <when test='searchtype_a != "0" and searchtype_b != "0"'>
+	                and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b}
+	            </when>
+	            <otherwise></otherwise>
+	        </choose>
+	        <choose>
+	            <when test='searchtype_answer != "99"'>
+	                and answer = #{searchtype_answer}
+	            </when>
+	            <otherwise></otherwise>
+	        </choose>
+		    <choose>
+		        <when test='searchtype_fk_userid == "0" and searchWord == ""'>
+		        </when>
+		        <when test='searchtype_fk_userid == "0" and searchWord != ""'>
+		            and lower(content) like CONCAT(CONCAT('%', lower(#{searchWord})), '%')
+		            or lower(title) like CONCAT(CONCAT('%', lower(#{searchWord})), '%')
+		        </when>
+		        <when test='searchtype_fk_userid != "0" and searchWord == ""'>
+		        </when>
+		        <when test='searchtype_fk_userid != "0" and searchWord != ""'>
+		            and lower(fk_userid) like CONCAT(CONCAT('%', lower(#{searchWord})), '%')
+		        </when>
+		    </choose>
+	        ORDER BY fk_userid DESC, rno asc
+	    )
+	    WHERE rno BETWEEN #{startRno} AND #{endRno}
+	</select>
+
     
     
     <select id="inquiryGoDetail" parameterType="String" resultType="InquiryVO">
-	        SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
+	        SELECT inquiryseq, title, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
 	        FROM tbl_inquiry
             where inquiryseq = #{inquiryseq}
 	        ORDER BY inquiryseq DESC    
@@ -674,83 +667,31 @@ where rno between #{startRno} and #{endRno}
     </select>
     
     
-    <!-- 전체 문의목록 가져오기 -->
-    <select id="getAllInquiry" resultType="InquiryVO">
-		SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
-		FROM
-(        select row_number() over(order by inquiryseq asc) AS rno 
-             , inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
-             
-        from tbl_inquiry
-        where status = 1 
-        <if test='fk_userid != "admin"'>
-        	and fk_userid = #{fk_userid} 
-        </if>
-       		
-	    <choose>
-		   <when test='searchtype_a == "0" and searchtype_b == "0" and searchWord == ""'>
-		   </when>
-		   <when test='searchtype_a == "0" and searchtype_b == "0" and searchWord != ""'>
-		      and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   
-		   <when test='searchtype_a != "0" and searchtype_b == "0" and searchWord != ""'>
-		      and searchtype_a = #{searchtype_a} and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a != "0" and searchtype_b == "0" and searchWord == ""'>
-		      and searchtype_a = #{searchtype_a}
-		   </when>
-		   
-		   <when test='searchtype_a == "0" and searchtype_b != "0" and searchWord != ""'>
-		      and searchtype_b = #{searchtype_b} and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a == "0" and searchtype_b != "0" and searchWord == ""'>
-		      and searchtype_b = #{searchtype_b}
-		   </when>
-		   
-		   <when test='searchtype_a != "0" and searchtype_b != "0" and searchWord != ""'>
-		      and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b} and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_a != "0" and searchtype_b != "0" and searchWord == ""'>
-		      and searchtype_a = #{searchtype_a} and searchtype_b = #{searchtype_b}  
-		   </when>
-		   
-		   
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer == "0" and searchWord == ""'>
-		   </when>
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer == "0" and searchWord != ""'>
-		      and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer == "0" and searchWord != ""'>
-		      and fk_userid = #{searchtype_fk_userid} and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer == "0" and searchWord == ""'>
-		      and fk_userid = #{searchtype_fk_userid}
-		   </when>
-		   
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer != "0" and searchWord != ""'>
-		      and answer = TO_NUMBER(#{searchtype_answer}) and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_fk_userid == "0" and searchtype_answer != "0" and searchWord == ""'>
-		      and answer = TO_NUMBER(#{searchtype_answer})
-		   </when>
-		   
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer != "0" and searchWord != ""'>
-		      and fk_userid = #{searchtype_fk_userid} and answer = TO_NUMBER(#{searchtype_answer}) and lower(content) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchtype_fk_userid != "0" and searchtype_answer != "0" and searchWord == ""'>
-		      and fk_userid = #{searchtype_fk_userid} and answer = TO_NUMBER(#{searchtype_answer})  
-		   </when>
-		   
-
-		   
-		   <otherwise></otherwise>
-		</choose>      
-        order by fk_userid ASC, rno desc
-)
-where rno between #{startRno} and #{endRno} 
-		
+    <insert id="addInquiryAD" parameterType="HashMap">
+		insert into tbl_inquiryanswers(inquiryanswerseq, inquiryseq, content, registerdate, fk_userid) 
+		values(seq_inquiryanswers.nextval, to_number(#{inquiryseq}), #{content}, default, #{fk_userid})
+    </insert>
+    
+	<update id="updateInquiryAW" parameterType="HashMap">
+		update tbl_inquiry set answer = 1
+		where inquiryseq = #{inquiryseq}
+	</update>
+    
+    <select id="readInquiryAW" parameterType="String" resultType="InquiryAnswersVO">
+		select inquiryanswerseq, inquiryseq, content, registerdate, fk_userid
+		from tbl_inquiryanswers
+		where inquiryseq = #{inquiryseq}
+		order by registerdate desc
     </select>
+	
+	
+	<delete id="delInquiryAW" parameterType="HashMap">
+		delete from tbl_inquiryanswers
+		where inquiryanswerseq = #{inquiryanswerseq} and inquiryseq = #{inquiryseq}
+	</delete>
+	<update id="editInquiryAW" parameterType="HashMap">
+		update tbl_inquiryanswers set content = #{edit_comment_text} || ' (' || to_char(sysdate, 'yyyy-mm-dd hh24:mi:ss') || ') (수정됨)'
+		where inquiryanswerseq = #{inquiryanswerseq}
+	</update>
 	
 </mapper>
