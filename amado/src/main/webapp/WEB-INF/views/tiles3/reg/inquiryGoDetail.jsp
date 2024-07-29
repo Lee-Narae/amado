@@ -8,6 +8,7 @@
 %>
 
 <style type="text/css">
+
 .title {
 width: 10%;
 background-color: #0076d1;
@@ -17,8 +18,6 @@ align-content: center;
 font-weight: bold;
 border-radius: 20px;
 }
-
-
 
 .move:hover{
 font-weight: bold;
@@ -50,7 +49,93 @@ opacity: 0.8;
 		});
 		
 		
+		// 댓글 삭제
+		$(document).on("click", "span#delComment", function(e){
+
+			if(confirm('댓글을 삭제하시겠습니까?')){
+		        const inquiryanswerseq = $(e.target).parent().parent().children("input#inquiryanswerseq").val();
+		        const inquiryseq = "${requestScope.inquiryvo.inquiryseq}";
+		        
+		        alert(inquiryanswerseq);
+		        alert(inquiryseq);
+				
+				$.ajax({
+					url: "<%=ctxPath%>/admin/reg/delInquiryAW",
+					type: "post",
+					data: {"inquiryanswerseq": inquiryanswerseq, "inquiryseq":inquiryseq},
+					dataType: "json",
+					success: function(json){
+						if(json.n == 1){
+							goReadInquiryAW();
+						}
+					},
+					error: function(request, status, error){
+			               alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			        }
+				});
+			
+			}
+
+		});
+		
+		// 댓글 수정
+		$(document).on("click", "span#editComment", function(e){
+			
+			const inquiryanswerseq = $(e.target).parent().parent().children("input#inquiryanswerseq").val();
+			const org_comment_text = $(e.target).parent().parent().children("span#comment_text").text();
+//			alert(org_comment_text);
+
+			$("span#editOrDel").hide();
+
+			$(e.target).parent().parent().children("span#comment_text").html(`
+			    <input type="text" id="comment_text_edit" name="comment_text_edit" maxlength="200" style="width: 70%; height: 70px;" value="\${org_comment_text}"/>&nbsp;&nbsp;
+			    <button type="button" class="btn btn-primary btn-sm" onclick="commentEdit('\${inquiryanswerseq}')">수정하기</button>&nbsp;&nbsp;
+			    <button type="button" class="btn btn-secondary btn-sm" onclick="cancelEditComment('\${org_comment_text}')">취소</button>
+			`);
+
+
+		});
+		
+		
+		$(document).on("keyup", "input#comment_text_edit", function(e){
+			if(e.keyCode == 13){
+//				alert($(e.target).parent().parent().find("input#inquiryanswerseq").val());
+				commentEdit($(e.target).parent().parent().find("input#inquiryanswerseq").val());
+			}
+		});
+		
+		
+		
 	}); // end of $(document).ready
+	
+	
+	function commentEdit(inquiryanswerseq){
+
+//		alert(inquiryanswerseq);
+		
+		const edit_comment_text = $("input#comment_text_edit").val().trim();
+
+//		alert(edit_comment_text);
+		
+		$.ajax({ 
+			url: "<%=ctxPath%>/admin/reg/editInquiryAW",
+			data: {"edit_comment_text": edit_comment_text, "inquiryanswerseq": inquiryanswerseq},
+			dataType: "json",
+			type: "post",
+			success: function(json){
+				goReadInquiryAW();
+			},
+			error: function(request, status, error){
+	            alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+	        }
+		});
+
+	}
+
+	function cancelEditComment(org_comment_text){
+		$("span#editOrDel").show();
+		$(event.target).parent().html(org_comment_text);
+	}
 	
 	
 	function regComment() {
@@ -92,7 +177,6 @@ opacity: 0.8;
 	}
 	
 	
-	
 
 	function goReadInquiryAW() { // 페이징 처리 안한 댓글 읽어오기
 	    $.ajax({
@@ -104,14 +188,14 @@ opacity: 0.8;
 	            
 	            if(json.length > 0) {
 	                $.each(json, function(index, item){
-	                	v_html += "<div style='text-align: left; border: solid 0px red;'>";
+	                	v_html += "<div style='text-align: left; border: solid 0.5px #e3e3e3; height: 150px; padding: 10px;' class='mb-2'>";
 	                	v_html += "<input id='inquiryanswerseq' type='hidden' value='" +item.inquiryanswerseq + "'/>";
-	                	v_html += "<span style='font-size: 10pt; font-weight: bold;'>" +item.fk_userid +"</span>&nbsp;&nbsp;";
-	                	v_html += "<span style='font-size: 10pt;'>" +item.registerdate+ "</span>";
-	                	v_html += "</span>";
+	                	v_html += "<span style='font-size: 14pt; font-weight: bold;'>" +item.fk_userid +"&nbsp[관리자]</span>&nbsp;&nbsp;";
+	                	v_html += "<span style='font-size: 14pt;'>" +item.registerdate+ "</span>";
 	                	v_html += "<span id='comment_text' class='ml-3' style='font-size: 14pt; width: 100%; border: solid 0px red;'>" +item.content+ "</span>";
 	                	v_html += "<span id='editOrDel' style='border: solid 0px red;' class='float-right'>";
 	                	v_html += "<span id='editComment' class='commentBtn''>수정</span>&nbsp;|&nbsp;<span id='delComment' class='commentBtn'>삭제</span>";
+	                	v_html += "</span>";
 	                	v_html += "</div>";
 
 	                });
@@ -134,6 +218,11 @@ opacity: 0.8;
 	        }
 	    });
 	} // end of goReadComment
+	
+	function goback(){
+		const gobackurl = $("input[name='goBackURL']").val();
+		location.href="<%=ctxPath%>"+gobackurl;
+	}
 
 </script>
 
@@ -144,8 +233,8 @@ opacity: 0.8;
 <div id="line" class="py-5" style="width: 80%; border: solid 0.5px #e3e3e3; min-height: auto;">
 	<div id="top">
 		<div class="tr row" style="align-content: center; margin-left: 12%; display: flex; margin-bottom: 0.5%;">
-				<div class="title col-md-2" style="text-align: left;">내용</div>
-				<div class="col-md-8" style="text-align: left; width: 70%; margin-top: 0.5%;" align="left">${requestScope.inquiryvo.content}</div>
+				<div class="title col-md-2" style="text-align: left;">제목</div>
+				<div class="col-md-8" style="text-align: left; width: 70%; margin-top: 0.5%;" align="left">${requestScope.inquiryvo.title}</div>
 		</div>
 		<div class="tr row" style="align-content: center; margin-left: 12%; display: flex; margin-bottom: 0.5%;">
 			<div class="title col-md-2" style="text-align: left;">첨부파일</div>
@@ -220,7 +309,7 @@ opacity: 0.8;
 	</div>
 	<hr style="width: 75%;">
 	<div id="bottom" style="border: solid 0.5px #e3e3e3; width: 75%; padding: 5% 0;">
-	${requestScope.notice.content}
+	${requestScope.inquiryvo.content}
 	</div>
 	<hr style="width: 75%;">
 	
@@ -232,8 +321,8 @@ opacity: 0.8;
 	</div>
 	
 	<div id="commentWrite" class="mt-3 p-3" style="border: solid 0.5px #e3e3e3; width: 75%" align="left">
-		<input type="text" name="comment_text" maxlength="200" style="width: 87%; height: 70px;"/>
-		<button type="button" class="btn btn-primary btn-lg ml-3 regComment" style="font-size: 13pt;" onclick="regComment()">등록하기</button>	
+		<input type="text" class="col-md-11" name="comment_text" maxlength="200" style="width: 87%; height: 70px;"/>
+		<button type="button" class="btn btn-primary btn-lg float-right regComment" style="height: 70px; font-size: 16pt;" onclick="regComment()">등록하기</button>	
 	</div>
 	
 	<div id="pre_next_notice" class="mt-3 p-3" style="width: 75%" align="left">
@@ -251,5 +340,7 @@ opacity: 0.8;
 	
 	<div align="right" style="margin-right: 12.5%;" onclick="goback()"><button type="button" class="btn btn-light">목록으로 돌아가기</button></div>
 </div>	
+
+<input type="hidden" name="goBackURL" value="${requestScope.goBackURL}" />
 
 </div>

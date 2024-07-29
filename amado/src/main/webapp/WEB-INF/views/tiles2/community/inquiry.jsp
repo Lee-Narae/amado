@@ -178,19 +178,7 @@ div.fileDrop>div.fileList>span.fileSize {
 		        	const fileName = f.name; // 파일명	
 	        	
 	        	    fileSize = fileSize < 1 ? fileSize.toFixed(3) : fileSize.toFixed(1);
-	        	    // fileSize 가 1MB 보다 작으면 소수부는 반올림하여 소수점 3자리까지 나타내며, 
-	                // fileSize 가 1MB 이상이면 소수부는 반올림하여 소수점 1자리까지 나타낸다. 만약에 소수부가 없으면 소수점은 0 으로 표시한다.
-	                /* 
-	                     numObj.toFixed([digits]) 의 toFixed() 메서드는 숫자를 고정 소수점 표기법(fixed-point notation)으로 표시하여 나타난 수를 문자열로 반환해준다. 
-	                                     파라미터인 digits 는 소수점 뒤에 나타날 자릿수 로써, 0 이상 20 이하의 값을 사용할 수 있으며, 구현체에 따라 더 넓은 범위의 값을 지원할 수도 있다. 
-	                     digits 값을 지정하지 않으면 0 을 사용한다.
-	                     
-	                     var numObj = 12345.6789;
 
-						 numObj.toFixed();       // 결과값 '12346'   : 반올림하며, 소수 부분을 남기지 않는다.
-						 numObj.toFixed(1);      // 결과값 '12345.7' : 반올림한다.
-						 numObj.toFixed(6);      // 결과값 '12345.678900': 빈 공간을 0 으로 채운다.
-	                */
 	        	    html += 
 	                    "<div class='fileList'>" +
 	                        "<span class='delete'>&times;</span>" +  // &times; 는 x 로 보여주는 것이다.  
@@ -238,25 +226,6 @@ div.fileDrop>div.fileList>span.fileSize {
 	    	file_arr.splice(idx,1); // 드롭대상인 박스 안에 첨부파일을 드롭하면 파일들을 담아둘 배열인 file_arr 에서 파일을 제거시키도록 한다. 
 //	    	console.log(file_arr);
 	    	
-	    	
-
-	    	
-	    	
-	    	
-	    <%-- 
-	               배열명.splice() : 배열의 특정 위치에 배열 요소를 추가하거나 삭제하는데 사용한다. 
-		                                     삭제할 경우 리턴값은 삭제한 배열 요소이다. 삭제한 요소가 없으면 빈 배열( [] )을 반환한다.
-		
-		        배열명.splice(start, 0, element);  // 배열의 특정 위치에 배열 요소를 추가하는 경우 
-			             start   - 수정할 배열 요소의 인덱스
-                         0       - 요소를 추가할 경우
-                         element - 배열에 추가될 요소
-             
-                      배열명.splice(start, deleteCount); // 배열의 특정 위치의 배열 요소를 삭제하는 경우    
-                         start   - 수정할 배열 요소의 인덱스
-                         deleteCount - 삭제할 요소 개수
-		--%>
-	    
             $(e.target).parent().remove(); // <div class='fileList'> 태그를 삭제하도록 한다. 	    
 	    });
 
@@ -267,6 +236,31 @@ div.fileDrop>div.fileList>span.fileSize {
         <%-- 문의접수 버튼 눌렀을 경우 --%>
         $("button#inquiryWrite").click(function(){
         	
+        	
+	       	 let title_val = "<p>"; 
+	       	 title_val += $("textarea[name='title']").val().trim();
+	       	 title_val += "</p>";
+	       	
+//	    	 alert(title_val.length); // content 에 공백만 여러 개를 입력하여 쓸 경우
+	    	 // <p>&nbsp; &nbsp;&nbsp;</p> 이라고 나온다.
+	    	 
+	    	 title_val = title_val.replace(/&nbsp;/gi, ""); // 공백(&nbsp;)을 "" 으로 변환 (한번만 되서 정규표현식을 사용하여 전부 변환시켜준다.)
+	        	
+	    	 title_val = title_val.substring(title_val.indexOf("<p>")+3);
+	    	 title_val = title_val.substring(0, title_val.indexOf("</p>"));
+//	    	 alert(title_val); // content 에 공백만 여러 개를 입력하여 쓸 경우
+	    	 // 
+	    	 
+	    	 if(title_val.length == 0){
+	    		 alert("제목을 입력하세요!");
+	    		 return;
+	    	 }
+	    	 
+	    	 if(title_val.length >= 50){
+	    		 alert("제목은 50글자를 넘길 수 없습니다.");
+	    		 return;
+	    	 }
+	    	 
         	
         	if($("select#searchtype_a").val() == 0 || $("select#searchtype_b").val() == 0) {
         		alert("문의유형을 선택해주세요.");
@@ -447,6 +441,13 @@ div.fileDrop>div.fileList>span.fileSize {
 
 
 		<form name="inquiryFrm" enctype="multipart/form-data">
+		
+			<div class="row mt-5" style="height: 80px; border: solid 0px blue;">
+				<strong class="col-md-2 mt-2 mb-4" style="text-align: center;">문의제목</strong>
+				<textarea name="title" class="col-md6" rows="10" cols="78" style="height: 80px;"
+					placeholder="※상담사에게 폭언, 욕설 등을 하지 말아주세요. &#10;답변을 받지 못하거나 사전안내 없이 삭제될 수 있습니다."></textarea>
+			</div>
+		
 			<div class="row mt-5" style="height: 50px;">
 				<strong class="col-md-2 mt-3" style="text-align: center;">문의유형</strong>
 				<select class="col-md-3" id="searchtype_a" name="searchtype_a" onchange="updateSearchTypeB()">

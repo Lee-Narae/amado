@@ -329,5 +329,17 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 		return inquiryanswersList;
 	}
 
+	@Override
+	public int delInquiryAW(Map<String, String> paraMap) {
+		int n = sqlsession.delete("SJ.delInquiryAW", paraMap);
+		return n;
+	}
+
+	@Override
+	public int editInquiryAW(Map<String, String> paraMap) {
+		int n = sqlsession.update("SJ.editInquiryAW", paraMap);
+		return n;
+	}
+
 
 }

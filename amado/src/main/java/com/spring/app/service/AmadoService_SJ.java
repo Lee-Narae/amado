@@ -119,5 +119,9 @@ public interface AmadoService_SJ {
 
 	List<InquiryAnswersVO> readInquiryAW(String inquiryseq);
 
+	int delInquiryAW(Map<String, String> paraMap);
+
+	int editInquiryAW(Map<String, String> paraMap);
+
 
 }

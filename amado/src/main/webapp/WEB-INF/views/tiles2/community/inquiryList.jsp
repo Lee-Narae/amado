@@ -9,15 +9,19 @@
 
 <style type="text/css">
     
-   	td.content{
+   	td.title{
 	    width: 600px; /* 최대 너비를 적절히 설정 */
 	    max-width: 600px; /* 최대 너비를 적절히 설정 */
 	    overflow: hidden;
 	    text-overflow: ellipsis;
 	    white-space: nowrap;
 	}
-    
-    th {background-color: #ddd}
+	
+	td.title:hover{
+		font-weight: bold;
+		color: #0066ff;
+		cursor: pointer;
+	}
     
     .subjectStyle {font-weight: bold;
                    color: navy;
@@ -131,9 +135,9 @@
 	
 	<table style="width: 1280px" class="table table-bordered">
 		<thead>
-		    <tr>
+		    <tr style="background-color: #ccf3ff;">
 		    	<th style="width: 80px;  text-align: center;">글번호</th>
-				<th style="width: 220px; text-align: center;">내용</th>
+				<th style="width: 220px; text-align: center;">제목</th>
 				<th style="width: 120px; text-align: center;">답변여부</th>
 				<th style="width: 120px;  text-align: center;">아이디</th>
 				<th style="width: 200px;  text-align: center;">타입</th>
@@ -146,7 +150,7 @@
 			   <c:forEach var="inquiryvo" items="${requestScope.inquiryPagingList}" varStatus="status">
 			     <tr onclick="goDetail('${inquiryvo.inquiryseq}')">
 			        <td align="center">${inquiryvo.inquiryseq}</td>
-			        <td align="center" class="content">${inquiryvo.content}</td>
+			        <td align="center" class="title">${inquiryvo.title}</td>
 				    
 				    <c:choose>
 				        <c:when test="${inquiryvo.answer == 0}">

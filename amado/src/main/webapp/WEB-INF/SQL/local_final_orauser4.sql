@@ -1024,15 +1024,30 @@ select *
 from tbl_inquiryanswers
 order by registerdate desc
 
-   alter table tbl_inquiryanswers
-   add inquiryanswerseq number;
+   alter table tbl_inquiry
+   add title nvarchar2(50);
 
 alter table tbl_inquiryanswers add constraint PK_IQAS_inquiryanswerseq primary key(inquiryanswerseq);
 
 
-delete from tbl_inquiryanswers 
+delete from tbl_inquiryanswers
+where inquiryanswerseq = inquiryanswerseq and inquiryseq = inquiryseq
 
 commit
+
+select *
+from tbl_inquiry
+
+    update tbl_inquiry set title = '적당한 제목 만들기'
+    
+    commit
+    
+    where INQUIRYSEQ != 11;
+
+commit
+
+select *
+from tbl_inquiry
 
 -- 문의답변(운영자용)
 create table tbl_inquiryanswers
@@ -1234,15 +1249,15 @@ ORDER BY fk_userid ASC, inquiryseq DESC;
         
         
         
-        	    SELECT inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
+        	    SELECT title, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
 	    FROM (
-	        SELECT row_number() over(order by inquiryseq asc) AS rno,
-	               inquiryseq, content, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
+	        SELECT row_number() over(order by inquiryseq desc) AS rno,
+	               inquiryseq, title, fk_userid, email, phone, registerdate, searchtype_a, searchtype_b, status, answer
 	        FROM tbl_inquiry
 	        WHERE status = 1
-	        ORDER BY fk_userid DESC, rno DESC
+	        ORDER BY fk_userid DESC, rno asc
 	    )
-	    WHERE rno BETWEEN 11 AND 20
+	    WHERE rno BETWEEN 1 AND 10
         
         
         

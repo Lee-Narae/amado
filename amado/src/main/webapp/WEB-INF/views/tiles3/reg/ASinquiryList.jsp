@@ -9,14 +9,19 @@
 
 <style type="text/css">
     
-   	td.content{
+   	td.title{
 	    width: 600px; /* 최대 너비를 적절히 설정 */
 	    max-width: 600px; /* 최대 너비를 적절히 설정 */
 	    overflow: hidden;
 	    text-overflow: ellipsis;
 	    white-space: nowrap;
 	}
-    
+	
+	td.title:hover{
+	font-weight: bold;
+	color: #0066ff;
+	cursor: pointer;
+	}
     
     .subjectStyle {font-weight: bold;
                    color: fff;
@@ -34,14 +39,6 @@
 <script type="text/javascript">
 
  	$(document).ready(function(){
-
-		// 내용 위에 마우스 올리면
-		$("td.content").hover(function(e){
-			$(e.target).addClass("subjectStyle");
-		}, function(e) {
-			$(e.target).removeClass("subjectStyle");
-		});
-		
 		
 		$("input:text[name='searchWord']").bind("keyup", function(e){
 			if(e.keyCode == 13){ // 엔터를 했을 경우
@@ -67,7 +64,7 @@
 	function goSearch() {
 		 const frm = document.searchFrm;
 	 	 frm.method = "get";
-	  	 frm.action = "<%= ctxPath%>/admin/reg/ADinquiryList";
+	  	 frm.action = "<%= ctxPath%>/admin/reg/ASinquiryList";
 	     frm.submit(); 
 	}// end of function goSearch()-------------------	
 
@@ -124,6 +121,7 @@
 <div class="mt-5" style="margin: auto; padding-left: 3%;">
 
 	<h2 style="margin-bottom: 30px;">문의내역</h2>
+	<div style="cursor: pointer; text-decoration: underline;" onclick="location.href='<%=ctxPath%>/admin/reg/ASinquiryList'" >처음으로</div>
 	
 	<form name="searchFrm" style="margin-top: 20px; margin-bottom: 20px;">
 		<select id="searchtype_a" name="searchtype_a" onchange="updateSearchTypeB()">
@@ -156,7 +154,7 @@
 		<thead>
 		    <tr style="background-color: #ccf3ff;">
 		    	<th style="width: 80px;  text-align: center;">글번호</th>
-				<th style="width: 220px; text-align: center;">내용</th>
+				<th style="width: 220px; text-align: center;">제목</th>
 				<th style="width: 120px; text-align: center;">답변여부</th>
 				<th style="width: 120px;  text-align: center;">아이디</th>
 				<th style="width: 200px;  text-align: center;">타입</th>
@@ -169,7 +167,7 @@
 			   <c:forEach var="inquiryvo" items="${requestScope.inquiryPagingList}" varStatus="status">
 			     <tr onclick="goDetail('${inquiryvo.inquiryseq}')">
 			        <td align="center">${inquiryvo.inquiryseq}</td>
-			        <td align="center" class="content">${inquiryvo.content}</td>
+			        <td align="center" class="title">${inquiryvo.title}</td>
 				    
 				    <c:choose>
 				        <c:when test="${inquiryvo.answer == 0}">

@@ -1394,12 +1394,14 @@ public class ControllerSJ {
 	@PostMapping(value = "/community/inquiryEnd.do", produces = "text/plain;charset=UTF-8")
 	public String inquiryEnd(ModelAndView mav, HttpServletRequest request, MultipartHttpServletRequest mrequest) {
 		
+		String title = request.getParameter("title");
 		String searchtype_a = request.getParameter("searchtype_a");
 		String searchtype_b = request.getParameter("searchtype_b");
 		String content = request.getParameter("content");
 		String email = request.getParameter("email");
 		String phone = request.getParameter("phone");
 		String fk_userid = request.getParameter("fk_userid");
+		System.out.println("확인용~~ title : " + title);
 		System.out.println("확인용~~ searchType_a : " + searchtype_a);
 		System.out.println("확인용~~ searchType_b : " + searchtype_b);
 		System.out.println("확인용~~ content : " + content);
@@ -1425,6 +1427,7 @@ public class ControllerSJ {
 
 		JSONObject jsonObj = new JSONObject();
 		Map<String, Object> paraMap = new HashMap<>();
+		paraMap.put("title", title);
 		paraMap.put("searchtype_a", searchtype_a);
 		paraMap.put("searchtype_b", searchtype_b);
 		paraMap.put("content", content);
@@ -1662,7 +1665,7 @@ public class ControllerSJ {
 			int pageNo = ((currentShowPageNo - 1)/blockSize) * blockSize + 1;
 			
 			String pageBar = "<ul style='list-style:none;'>";
-			String url = "/amado/admin/reg/ADinquiryList";
+			String url = "/amado/community/inquiryList.do";
 			
 			// === [맨처음][이전] 만들기 === //
 			if(pageNo != 1) {
@@ -1694,8 +1697,6 @@ public class ControllerSJ {
 			request.setAttribute("pageBar", pageBar);
 			
 			String goBackURL = MyUtil.getCurrentURL(request);
-			//	System.out.println("~~~ 확인용(list.action) goBackURL : " + goBackURL); 
-
 			request.setAttribute("goBackURL", goBackURL);
 			
 			//////////////////////////////////////////////
@@ -1703,7 +1704,6 @@ public class ControllerSJ {
 			request.setAttribute("totalCount", totalCount);  // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.
 			request.setAttribute("currentShowPageNo", currentShowPageNo); // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.
 			request.setAttribute("sizePerPage", sizePerPage); // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.			
-			
 		}
 		return "/community/inquiryList.tiles2";
 	}
@@ -1744,6 +1744,8 @@ public class ControllerSJ {
 		mav.addObject("inquiryvo", inquiryvo); // 1대1문의 상세정보
 		mav.addObject("inquiryfileList", inquiryfileList); // 1대1문의 상세정보 파일
 		// 답변(운영자가) (여기해야함!!)
+		
+		mav.addObject("goBackURL", goBackURL);
 
 		mav.setViewName("community/inquiryGoDetail.tiles2");
 		
@@ -1912,7 +1914,7 @@ public class ControllerSJ {
 			int pageNo = ((currentShowPageNo - 1)/blockSize) * blockSize + 1;
 			
 			String pageBar = "<ul style='list-style:none;'>";
-			String url = "/amado/admin/reg/ADinquiryList";
+			String url = "/amado/admin/reg/ASinquiryList";
 			
 			// === [맨처음][이전] 만들기 === //
 			if(pageNo != 1) {
@@ -1955,7 +1957,7 @@ public class ControllerSJ {
 			request.setAttribute("sizePerPage", sizePerPage); // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.			
 			
 		}
-		return "reg/ADinquiryList.tiles3";
+		return "reg/ASinquiryList.tiles3";
 	}
 	
 
@@ -1999,6 +2001,7 @@ public class ControllerSJ {
 		// 1대1 문의 상세조회 파일들 가져오기
 		List<InquiryFileVO> inquiryfileList = service.inquiryFileGoDetail(inquiryseq);
 		
+		mav.addObject("goBackURL", goBackURL);
 		mav.addObject("inquiryvo", inquiryvo); // 1대1문의 상세정보
 		mav.addObject("inquiryfileList", inquiryfileList); // 1대1문의 상세정보 파일
 		// 답변(운영자가) (여기해야함!!)
@@ -2011,7 +2014,7 @@ public class ControllerSJ {
 	
 	
 	
-	// === 먼의 답변쓰기(Ajax 로 처리) === //
+	// === 운영자 문의 답변쓰기(Ajax 로 처리) === //
 	@ResponseBody
 	@PostMapping(value = "/admin/reg/addInquiryAD", produces = "text/plain;charset=UTF-8")
 	public String addInquiryAD(HttpServletRequest request) {
@@ -2062,6 +2065,7 @@ public class ControllerSJ {
 			for (InquiryAnswersVO inquiryanswersvo : inquiryanswersList) {
 				JSONObject jsonObj = new JSONObject(); // {}
 				jsonObj.put("inquiryanswerseq", inquiryanswersvo.getInquiryanswerseq()); 
+				System.out.println("inquiryanswersvo.getInquiryanswerseq() : " + inquiryanswersvo.getInquiryanswerseq());
 				jsonObj.put("content", inquiryanswersvo.getContent()); 
 				jsonObj.put("fk_userid", inquiryanswersvo.getFk_userid()); 
 				jsonObj.put("inquiryseq", inquiryanswersvo.getInquiryseq()); 
@@ -2075,6 +2079,46 @@ public class ControllerSJ {
 		return jsonArr.toString(); 
 	}
 	
+	
+	@ResponseBody
+	@PostMapping(value = "admin/reg/delInquiryAW", produces = "text/plain;charset=UTF-8") 
+	public String delInquiryAW(HttpServletRequest request) {
+		
+		String inquiryanswerseq = request.getParameter("inquiryanswerseq");
+		String inquiryseq = request.getParameter("inquiryseq");
+
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("inquiryanswerseq", inquiryanswerseq);
+		paraMap.put("inquiryseq", inquiryseq);
+
+		int n = service.delInquiryAW(paraMap);
+
+		JSONObject jsonObject = new JSONObject(); // {}
+		jsonObject.put("n", n); // 정상일 경우 {"n":1} 문제가 생겼을 경우{"n":0}
+		
+		return jsonObject.toString();
+	}
+	
+	
+	@ResponseBody
+	@PostMapping(value = "/admin/reg/editInquiryAW", produces = "text/plain;charset=UTF-8") 
+	public String editInquiryAW(HttpServletRequest request) {
+		
+		String edit_comment_text = request.getParameter("edit_comment_text");
+		String inquiryanswerseq = request.getParameter("inquiryanswerseq");
+		
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("edit_comment_text", edit_comment_text);
+		paraMap.put("inquiryanswerseq", inquiryanswerseq);
+
+		int n = service.editInquiryAW(paraMap);
+
+		JSONObject jsonObject = new JSONObject(); // {}
+		jsonObject.put("n", n); // 정상일 경우 {"n":1} 문제가 생겼을 경우{"n":0}
+
+		
+		return jsonObject.toString();
+	}
 	
 
 }

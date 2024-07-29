@@ -399,6 +399,7 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	            InquiryVO inquiryVO = new InquiryVO(); // 새 객체 생성
 	            
 	            inquiryVO.setInquiryseq(inquiryMap.get("inquiryseq"));
+	            inquiryVO.setTitle(inquiryMap.get("title"));
 	            inquiryVO.setContent(inquiryMap.get("content"));
 	            inquiryVO.setFk_userid(inquiryMap.get("fk_userid"));
 	            inquiryVO.setEmail(inquiryMap.get("email"));
@@ -482,6 +483,18 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	public List<InquiryAnswersVO> readInquiryAW(String inquiryseq) {
 		List<InquiryAnswersVO> inquiryanswersList = dao.readInquiryAW(inquiryseq);
 		return inquiryanswersList;
+	}
+
+	@Override
+	public int delInquiryAW(Map<String, String> paraMap) {
+		int n = dao.delInquiryAW(paraMap);
+		return n;
+	}
+
+	@Override
+	public int editInquiryAW(Map<String, String> paraMap) {
+		int n = dao.editInquiryAW(paraMap);
+		return n;
 	}
 
 
