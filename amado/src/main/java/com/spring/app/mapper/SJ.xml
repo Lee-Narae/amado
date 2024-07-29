@@ -665,8 +665,8 @@
     
     
     <insert id="addInquiryAD" parameterType="HashMap">
-		insert into tbl_inquiryanswers(inquiryseq, content, registerdate, fk_userid) 
-		values(to_number(#{inquiryseq}), #{content}, default, #{fk_userid})
+		insert into tbl_inquiryanswers(inquiryanswerseq, inquiryseq, content, registerdate, fk_userid) 
+		values(seq_inquiryanswers.nextval, to_number(#{inquiryseq}), #{content}, default, #{fk_userid})
     </insert>
     
 	<update id="updateInquiryAW" parameterType="HashMap">
@@ -674,5 +674,10 @@
 		where inquiryseq = #{inquiryseq}
 	</update>
     
+    <select id="readInquiryAW" parameterType="String" resultType="InquiryAnswersVO">
+		select inquiryseq, content, registerdate, fk_userid
+		from tbl_inquiryanswers
+		order by registerdate desc
+    </select>
 	
 </mapper>

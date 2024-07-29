@@ -1020,9 +1020,24 @@ nocache;
 
 commit
 
+select *
+from tbl_inquiryanswers
+order by registerdate desc
+
+   alter table tbl_inquiryanswers
+   add inquiryanswerseq number;
+
+alter table tbl_inquiryanswers add constraint PK_IQAS_inquiryanswerseq primary key(inquiryanswerseq);
+
+
+delete from tbl_inquiryanswers 
+
+commit
+
 -- 문의답변(운영자용)
 create table tbl_inquiryanswers
-(inquiryseq                  NUMBER   not null
+(inquiryanswerseq           number   not null
+,inquiryseq                  NUMBER   not null
 ,content                     nvarchar2(1000)   not null       -- 글내용
 ,registerdate                date default sysdate  not null   -- 작성일자
 ,fk_userid                   nvarchar2(20)  not null          -- 아이디(tbl_member 의 회원아이디)
@@ -1031,6 +1046,14 @@ create table tbl_inquiryanswers
 ,CONSTRAINT CK_tbl_iqryaws_admin CHECK (fk_userid = 'admin')
 );
 -- Table TBL_INQUIRYANSWERS이(가) 생성되었습니다.
+
+create sequence seq_inquiryanswers 
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
 
 commit;
 -- 커밋 완료.

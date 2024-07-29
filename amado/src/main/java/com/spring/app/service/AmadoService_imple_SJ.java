@@ -19,6 +19,7 @@ import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.ClubmemberVO;
+import com.spring.app.domain.InquiryAnswersVO;
 import com.spring.app.domain.InquiryFileVO;
 import com.spring.app.domain.InquiryVO;
 import com.spring.app.domain.MemberVO;
@@ -475,6 +476,12 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		  }
 		
 		return result;
+	}
+
+	@Override
+	public List<InquiryAnswersVO> readInquiryAW(String inquiryseq) {
+		List<InquiryAnswersVO> inquiryanswersList = dao.readInquiryAW(inquiryseq);
+		return inquiryanswersList;
 	}
 
 

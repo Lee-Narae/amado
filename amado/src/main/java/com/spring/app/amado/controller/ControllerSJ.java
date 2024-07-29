@@ -29,6 +29,7 @@ import com.spring.app.domain.BoardCommentVO;
 import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.ClubmemberVO;
+import com.spring.app.domain.InquiryAnswersVO;
 import com.spring.app.domain.InquiryFileVO;
 import com.spring.app.domain.InquiryVO;
 import com.spring.app.domain.MemberVO;
@@ -2044,7 +2045,35 @@ public class ControllerSJ {
 		return jsonObject.toString();
 		// 정상일 경우 {"n":1, "name":"엄정화"} 문제가 생겼을 경우(point 300 넘을 경우){"n":0, "name":"엄정화"}
 	}
+
 	
+	
+	@ResponseBody
+	@GetMapping(value = "admin/reg/readInquiryAW", produces = "text/plain;charset=UTF-8")
+	public String readInquiryAW(HttpServletRequest request) {
+		
+		String inquiryseq = request.getParameter("inquiryseq");
+		
+		List<InquiryAnswersVO> inquiryanswersList = service.readInquiryAW(inquiryseq);
+		
+		JSONArray jsonArr = new JSONArray(); // []
+
+		if (inquiryanswersList != null) {
+			for (InquiryAnswersVO inquiryanswersvo : inquiryanswersList) {
+				JSONObject jsonObj = new JSONObject(); // {}
+				jsonObj.put("inquiryanswerseq", inquiryanswersvo.getInquiryanswerseq()); 
+				jsonObj.put("content", inquiryanswersvo.getContent()); 
+				jsonObj.put("fk_userid", inquiryanswersvo.getFk_userid()); 
+				jsonObj.put("inquiryseq", inquiryanswersvo.getInquiryseq()); 
+				jsonObj.put("registerdate", inquiryanswersvo.getRegisterdate()); 
+				
+				System.out.println("inquiryanswersvo.getContent()" + inquiryanswersvo.getContent());
+				jsonArr.put(jsonObj);
+			}
+		}
+		
+		return jsonArr.toString(); 
+	}
 	
 	
 
