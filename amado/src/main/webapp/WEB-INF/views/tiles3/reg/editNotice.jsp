@@ -97,7 +97,7 @@ $(document).ready(function(){
 	     // form 전송
     	 const frm = document.addFrm;
 	     
-    	 if(frm.attach.value != '' && $("div#prevAttach").html() != ''){
+    	 if(frm.attach.value != '' && '${requestScope.editNotice.orgfilename}' != ''){
     		 if(confirm('기존 첨부파일을 삭제하지 않고 새로운 첨부파일을 등록하더라도 새로운 첨부파일만 업로드됩니다.')){
     			 frm.method = "post";
     	    	 frm.action = "<%= ctxPath%>/community/editNotice.do";
@@ -135,7 +135,7 @@ function display_none(){
 			<div class="title">첨부파일</div>
 			<div style="width: 70%;" align="left"><input type="file" name="attach" style="margin-top: 0.5%;" /></div>
 		</div>
-			<c:if test="${not empty requestScope.editNotice}">
+			<c:if test="${not empty requestScope.editNotice.orgfilename}">
 				<div id="prevAttach" style="border: solid 1px gray; width: 64.5%; height: 50px; margin-left: 10%; border-radius: 10px; background-color: white; text-align: left; padding: 1%;">
 				<span style="cursor: pointer;" onclick="display_none()">❌</span>&nbsp;&nbsp;<span>${requestScope.editNotice.orgfilename}</span>
 				</div>

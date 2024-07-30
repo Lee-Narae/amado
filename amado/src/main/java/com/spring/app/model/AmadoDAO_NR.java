@@ -240,5 +240,8 @@ public interface AmadoDAO_NR {
 	// My 동호회 - 동호회 최신 글 불러오기
 	List<Map<String, String>> getClubboard(String clubseq);
 
+	// 공지사항 - 검색어 자동완성
+	List<String> wordSearch(Map<String, String> paramap);
+
 	
 }
