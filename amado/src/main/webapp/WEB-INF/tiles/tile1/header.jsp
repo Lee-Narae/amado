@@ -6,6 +6,9 @@
 <%-- ===== #28. tile2 중 header 페이지 만들기 ===== --%> 
 <%
 	String ctxPath = request.getContextPath();
+	String serverIP = "192.168.0.205";
+	int portnumber = request.getServerPort();
+	String serverName = "http://"+serverIP+":"+portnumber;
 %>
 
 <style type="text/css">
@@ -171,6 +174,7 @@ $(document).ready(function(){
 			<div onclick="location.href='<%=ctxPath%>/community/list.do'">게시판</div>
 			<div onclick="location.href='<%=ctxPath%>/community/inquiry.do'">1:1 문의하기</div>
 			<div onclick="location.href='<%=ctxPath%>/community/SportsFacilitiesInfo.do'">전국체육시설 정보</div>
+			<div onclick="location.href='<%= serverName%><%=ctxPath%>/chatting/multichat.do'">웹채팅</div>
 		</div>
 	</div>
 </div>
