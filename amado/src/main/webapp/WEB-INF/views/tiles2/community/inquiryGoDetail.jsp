@@ -185,7 +185,7 @@ function goback(){
 		        
 		        
 		        <c:if test="${inquiryvo.searchtype_a == 3 && inquiryvo.searchtype_b == 1}">
-		        	<span>플리마켓 : 참가문의</span>
+		        	<span>플리마켓 : 결제문의</span>
 		        </c:if>
 		        <c:if test="${inquiryvo.searchtype_a == 3 && inquiryvo.searchtype_b == 2}">
 		        	<span>플리마켓 : 환불문의</span>

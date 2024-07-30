@@ -56,8 +56,8 @@ opacity: 0.8;
 		        const inquiryanswerseq = $(e.target).parent().parent().children("input#inquiryanswerseq").val();
 		        const inquiryseq = "${requestScope.inquiryvo.inquiryseq}";
 		        
-		        alert(inquiryanswerseq);
-		        alert(inquiryseq);
+//		        alert(inquiryanswerseq);
+//		        alert(inquiryseq);
 				
 				$.ajax({
 					url: "<%=ctxPath%>/admin/reg/delInquiryAW",
@@ -143,7 +143,7 @@ opacity: 0.8;
 //		alert("확인");
 
 			const comment_text = $("input:text[name='comment_text']").val();
-			const inquiryseq = ${inquiryvo.inquiryseq};
+			const inquiryseq = ${requestScope.inquiryvo.inquiryseq};
 			
 //			alert(inquiryseq);
 			
@@ -163,7 +163,8 @@ opacity: 0.8;
 			      success: function(json){
 			         console.log(JSON.stringify(json));
 			         
-			         	goReadInquiryAW(); // 페이징 처리 안한 댓글 읽어오기
+			         	emailWrite(comment_text, inquiryseq);
+			         	
 			        	 // 페이징 처리한 댓글 읽어오기
 			         
 			         $("input:text[name='comment_text']").val("");
@@ -174,6 +175,61 @@ opacity: 0.8;
 			        }
 			   });
 			}
+	}
+	
+	
+	function emailWrite(comment_text, inquiryseq) {
+		
+		   const title = "${requestScope.inquiryvo.title}";
+		   const searchtype_a = "${requestScope.inquiryvo.searchtype_a}";
+		   const searchtype_b = "${requestScope.inquiryvo.searchtype_b}";
+		   const email = "${requestScope.inquiryvo.email}";
+		   const registerdate = "${requestScope.inquiryvo.registerdate}";
+		   
+		   const searchType = "${inquiryvo.searchtype_a == 1 && inquiryvo.searchtype_b == 1 ? '동호회 : 대관문의' : 
+					            inquiryvo.searchtype_a == 1 && inquiryvo.searchtype_b == 2 ? '동호회 : 환불문의' :
+					            inquiryvo.searchtype_a == 1 && inquiryvo.searchtype_b == 3 ? '동호회 : 기타문의' :
+					            inquiryvo.searchtype_a == 2 && inquiryvo.searchtype_b == 1 ? '체육관 : 시설문의' :
+					            inquiryvo.searchtype_a == 2 && inquiryvo.searchtype_b == 2 ? '체육관 : 예약문의' :
+					            inquiryvo.searchtype_a == 2 && inquiryvo.searchtype_b == 3 ? '체육관 : 기타문의' :
+					            inquiryvo.searchtype_a == 3 && inquiryvo.searchtype_b == 1 ? '플리마켓 : 결제문의' :
+					            inquiryvo.searchtype_a == 3 && inquiryvo.searchtype_b == 2 ? '플리마켓 : 환불문의' :
+					            inquiryvo.searchtype_a == 3 && inquiryvo.searchtype_b == 3 ? '플리마켓 : 기타문의' :
+					            inquiryvo.searchtype_a == 4 && inquiryvo.searchtype_b == 1 ? '기타 : 일반문의' :
+					            inquiryvo.searchtype_a == 4 && inquiryvo.searchtype_b == 2 ? '기타 : 환불문의' :
+					            inquiryvo.searchtype_a == 4 && inquiryvo.searchtype_b == 3 ? '기타 : 기타문의' :
+					            ''}";
+
+			// alert(searchType);
+		   // 메일 보내기
+          $.ajax({
+              url : "<%= ctxPath%>/admin/reg/emailWrite",
+		      data: {"title": title,
+		    	  	 "content": comment_text,
+		    	     "inquiryseq": inquiryseq,
+		    	     "email": email,
+		    	     "registerdate": registerdate,
+		    	     "searchType": searchType},
+              type : "post",
+              dataType:"json",
+              success:function(json){
+            	  // console.log("~~~ 확인용 : " + JSON.stringify(json));
+                  // ~~~ 확인용 : {"result":1}
+            	  
+            	  goReadInquiryAW(); // 페이징 처리 안한 댓글 읽어오기
+            	  
+                  if(json.result == 1) {
+                	  alert("메일보내기가 성공했습니다.");
+                  }
+                  else {
+                	  alert("메일보내기가 실패했습니다.");
+                  }
+              },
+              error: function(request, status, error){
+  				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+  		      }
+          });
+		
 	}
 	
 	
@@ -258,46 +314,46 @@ opacity: 0.8;
 			<div class="col-md-10" style="text-align: left; width: 70%; margin-top: 0.5%;" align="left">
 	       	   
 	       	    <c:if test="${inquiryvo.searchtype_a == 1 && inquiryvo.searchtype_b == 1}">
-		        	<span>동호회 : 대관문의</span>
+		        	<span class="searchtype">동호회 : 대관문의</span>
 		        </c:if>
 		        <c:if test="${inquiryvo.searchtype_a == 1 && inquiryvo.searchtype_b == 2}">
-		        	<span>동호회 : 환불문의</span>
+		        	<span class="searchtype">동호회 : 환불문의</span>
 		        </c:if>
 		        <c:if test="${inquiryvo.searchtype_a == 1 && inquiryvo.searchtype_b == 3}">
-		        	<span>동호회 : 기타문의</span>
+		        	<span class="searchtype">동호회 : 기타문의</span>
 		        </c:if>
 		        
 		        
 		        <c:if test="${inquiryvo.searchtype_a == 2 && inquiryvo.searchtype_b == 1}">
-		        	<span>체육관 : 시설문의</span>
+		        	<span class="searchtype">체육관 : 시설문의</span>
 		        </c:if>
 		        <c:if test="${inquiryvo.searchtype_a == 2 && inquiryvo.searchtype_b == 2}">
-		        	<span>체육관 : 예약문의</span>
+		        	<span class="searchtype">체육관 : 예약문의</span>
 		        </c:if>
 		        <c:if test="${inquiryvo.searchtype_a == 2 && inquiryvo.searchtype_b == 3}">
-		        	<span>체육관 : 기타문의</span>
+		        	<span class="searchtype">체육관 : 기타문의</span>
 		        </c:if>
 		        
 		        
 		        <c:if test="${inquiryvo.searchtype_a == 3 && inquiryvo.searchtype_b == 1}">
-		        	<span>플리마켓 : 참가문의</span>
+		        	<span class="searchtype">플리마켓 : 결제문의</span>
 		        </c:if>
 		        <c:if test="${inquiryvo.searchtype_a == 3 && inquiryvo.searchtype_b == 2}">
-		        	<span>플리마켓 : 환불문의</span>
+		        	<span class="searchtype">플리마켓 : 환불문의</span>
 		        </c:if>
 		        <c:if test="${inquiryvo.searchtype_a == 3 && inquiryvo.searchtype_b == 3}">
-		        	<span>플리마켓 : 기타문의</span>
+		        	<span class="searchtype">플리마켓 : 기타문의</span>
 		        </c:if>
 		        
 		        
 		        <c:if test="${inquiryvo.searchtype_a == 4 && inquiryvo.searchtype_b == 1}">
-		        	<span>기타 : 일반문의</span>
+		        	<span class="searchtype">기타 : 일반문의</span>
 		        </c:if>
 		        <c:if test="${inquiryvo.searchtype_a == 4 && inquiryvo.searchtype_b == 2}">
-		        	<span>기타 : 환불문의</span>
+		        	<span class="searchtype">기타 : 환불문의</span>
 		        </c:if>
 		        <c:if test="${inquiryvo.searchtype_a == 4 && inquiryvo.searchtype_b == 3}">
-		        	<span>기타 : 기타문의</span>
+		        	<span class="searchtype">기타 : 기타문의</span>
 		        </c:if>
 		        
 			</div>
@@ -344,3 +400,4 @@ opacity: 0.8;
 <input type="hidden" name="goBackURL" value="${requestScope.goBackURL}" />
 
 </div>
+
