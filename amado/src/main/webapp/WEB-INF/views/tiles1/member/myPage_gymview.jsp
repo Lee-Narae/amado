@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
+
 <% String ctxPath = request.getContextPath(); %> 
 
 <style type="text/css">
@@ -170,44 +171,7 @@ button:hover {
     background-color: #0056b3;
 }
 
- 	      body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        table, th, td {
-            border: 1px solid #ccc;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .delete-btn {
-            background-color: #ff4d4d;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-        .delete-btn:hover {
-            background-color: #ff0000;
-        }
-        header {
-            background-color: #333;
-            color: white;
-            padding: 10px 0;
-            text-align: center;
-            margin-bottom: 20px;
-        }  
+ 
 </style>
 
 
@@ -268,70 +232,36 @@ $(document).ready(function(){
 	                <div id="memberInfo">
 	                	
 	                </div>
-	                
 	            </div>
 	            
-	<div class="container">
-        <h1>체육관 수정 페이지</h1>
-        <form>
-            <div class="form-group">
-                <label for="gymName">체육관명</label>
-                <input type="text" id="gymName" name="gymName" required>
-            </div>
-            <div class="form-group">
-                <label for="managerId">담당자아이디</label>
-               	<div class="input">${sessionScope.loginuser.userid}</div>
-            </div>
-            <div class="form-group">
-                <label for="address">주소</label>
-                <div class="address-group">
-                    <input type="text" id="address" name="address" required>
-                    <button type="button" id="findAddress">주소찾기</button>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="zipCode">우편번호</label>
-                <input type="text" id="zipCode" name="zipCode" required>
-            </div>
-            <div class="form-group">
-                <label for="detailedAddress">상세주소</label>
-                <input type="text" id="detailedAddress" name="detailedAddress" required>
-            </div>
-            <div class="form-group">
-                <label for="indoorOutdoor">실내/실외</label>
-                <select id="indoorOutdoor" name="indoorOutdoor" required>
-                    <option value="indoor">실내</option>
-                    <option value="outdoor">실외</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="cost">비용</label>
-                <input type="text" id="cost" name="cost" required>
-            </div>
-            <div class="form-group">
-                <label for="capacity">인원수</label>
-                <input type="text" id="capacity" name="capacity" required>
-            </div>
-            <div class="form-group">
-                <label for="image">이미지</label>
-                <input type="file" id="image" name="image" required>
-            </div>
-            <div class="form-group">
-                <label for="additionalImage">추가이미지</label>
-                <input type="file" id="additionalImage" name="additionalImage">
-            </div>
-            <div class="form-group">
-                <label for="spaceInfo">공간정보</label>
-                <textarea id="spaceInfo" name="spaceInfo" rows="4" required></textarea>
-            </div>
-            <div class="form-group">
-                <label for="caution">주의사항</label>
-                <textarea id="caution" name="caution" rows="4" required></textarea>
-            </div>
-            <button type="submit">수정하기</button>
-        </form>
-    </div>
+	          
+<div class="container">
+    <table class="table table-striped table-bordered" id="gymTable">
+        <thead class="thead-dark">
+            <tr>
+               
+                <th>체육관 이름</th>
+                <th>체육관 주소</th>
+                <th>삭제하기</th>
+            </tr>
+        </thead>
+          <c:forEach var="gym" items="${requestScope.allGymList}">      
+        <tbody>
+            <!-- 예시 데이터 -->
+            <tr>
+              
+                <td>${gym.gymname}</td>
+                <td>${gym.address}</td>
+                <td><button class="btn btn-danger btn-sm" onclick="deleteRow(this)">삭제하기</button></td>
+            </tr>
+            <!-- 추가적인 데이터는 이곳에 추가 -->
+        </tbody>
+         </c:forEach>
+    </table>
+</div>
 	            
+	            
+
 	            
 	        </div>
     	</div> 

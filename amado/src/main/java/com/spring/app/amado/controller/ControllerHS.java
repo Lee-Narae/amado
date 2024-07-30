@@ -587,6 +587,22 @@ public class ControllerHS {
 		      
 		      return mav;
 		   }
+		   
+		   @GetMapping("/member/myPage_gymview.do")
+		   public ModelAndView myPage_gymview(ModelAndView mav) {
+		      
+			   
+				// 모든 상품 select 해오기
+				List<GymVO> allGymList = service.getAllGymList(); // 디비에서 데이터를 불러만오는 거라 map에 넣어서 보낼게 없음!!!!
+
+				mav.addObject("allGymList", allGymList);
+
+				mav.setViewName("member/myPage_gymview.tiles1");
+				return mav;
+				// /WEB-INF/views/tiles1/opendata/korea_tour_api.jsp 페이지를 만들어야 한다.
+			  
+		   }
+	
 	
 
 }
