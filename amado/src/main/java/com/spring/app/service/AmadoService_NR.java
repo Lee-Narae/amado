@@ -240,6 +240,9 @@ public interface AmadoService_NR {
 	int getTotalClubMemberCount(Map<String, String> paramap);
 	int quitClubMember(Map<String, String> paramap);
 
+	// My 동호회 - 동호회 최신 글 불러오기
+	List<Map<String, String>> getClubBoard(String clubseq);
+
 
 	
 

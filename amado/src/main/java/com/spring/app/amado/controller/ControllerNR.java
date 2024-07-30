@@ -113,6 +113,13 @@ public class ControllerNR {
 			mav.addObject("matchList", matchList);
 		}
 		
+		
+		// 동호회 최신글 불러오기
+		if(clubseq != null) {
+			List<Map<String, String>> clubBoardList = service.getClubBoard(clubseq);
+			mav.addObject("clubBoardList", clubBoardList);
+		}
+		
 		mav.setViewName("club/myClub.tiles2");
 		// /WEB-INF/views/tiles2/club/myClub.jsp
 		return mav;

@@ -754,4 +754,21 @@
 	<delete id="quitClubMember" parameterType="HashMap">
 		delete from tbl_clubmember where fk_userid = #{userid} and clubseq = #{clubseq}
 	</delete>
+	
+	
+	<resultMap type="HashMap" id="clubboardMap">
+		<result column="clubboardseq" property="clubboardseq" javaType="String"/>	
+		<result column="clubseq" property="clubseq" javaType="String"/>
+		<result column="title" property="title" javaType="String"/>
+		<result column="fk_userid" property="fk_userid" javaType="String"/>
+		<result column="registerdate" property="registerdate" javaType="String"/>
+		<result column="commentcount" property="commentcount" javaType="String"/>
+		<result column="viewcount" property="viewcount" javaType="String"/>
+	</resultMap>
+	<select id="getClubBoard" parameterType="String" resultMap="clubboardMap">
+		select clubboardseq, clubseq, title, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, commentcount, viewcount
+		<![CDATA[ from TBL_CLUBBOARD where clubseq = #{clubseq} and registerdate > sysdate-7 ]]>
+		order by 5 desc
+	</select>
+	
 </mapper>

@@ -671,4 +671,11 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		return n;
 	}
 
+	// My 동호회 - 동호회 최신 글 불러오기
+	@Override
+	public List<Map<String, String>> getClubboard(String clubseq) {
+		List<Map<String, String>> clubboardList = sqlsession.selectList("NR.getClubBoard", clubseq);
+		return clubboardList;
+	}
+
 }

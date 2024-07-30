@@ -143,6 +143,12 @@ table#matchInfo > tbody > tr:nth-child(3) > td:nth-child(1),
 table#VsInfo > tbody > tr:nth-child(3) > td:nth-child(1) {
 border-bottom-left-radius: 20px; 
 }
+
+tr.clubboardTR:hover {
+cursor: pointer;
+opacity: 0.6;
+}
+
 </style>
 
 <script type="text/javascript">
@@ -413,6 +419,16 @@ function goClubDetail(clubseq){
 	f.submit();
 }
 
+
+function goClubBoardDetail(clubboardseq, clubseq){
+	const f = document.clubboardDetailFrm;
+	f.clubseq.value = clubseq;
+	f.clubboardseq.value = clubboardseq;
+	f.action = "<%=ctxPath%>/club/clubboardDetail.do";
+	f.method = "post";
+	f.submit();
+}
+
 </script>
 
 <div id="container">
@@ -615,15 +631,15 @@ function goClubDetail(clubseq){
 				  </table>
 				</div>
 			</div>
-			<c:if test="${not empty requestScope.matchList}">
+<%-- 			<c:if test="${not empty requestScope.matchList}">
 				<div id="more" style="text-align: right; margin: 3.5% 8% 0 0; color: #8a8a8a;">우리 팀 매치 일정 더보기 ▶</div>
-			</c:if>
+			</c:if> --%>
 		</div>
 	</div>
 
 	<div id="clubTitle" style="text-align: center; margin: 5% 0 0 0; font-size: 30pt; font-weight: bolder;">팀 커뮤니티 최신글</div>
 	<div id="clubboard" style="width: 88%; padding: 5% 3% 1% 3%; margin: 2% 0 5% 5%; border-radius: 70px; background-color: #e6f7ff; box-shadow: 0px 0px 10px #9ac5db;">
-		<div style="margin: 1% 0 1% 5%; font-size: 10pt;">※ 팀 커뮤니티 최신글은 최근 일주일간 작성된 팀 커뮤니티의 게시글만 노출됩니다.</div>
+		<div style="margin: 1% 0 1% 5%; font-size: 10pt;">※ 팀 커뮤니티 최신글은 최근 일주일간 작성된 팀 커뮤니티의 게시글 상위 7개만 노출됩니다.</div>
 		<div id="table" style="width: 90%; margin-left: 5%;">
 			<div class="tbl-header">
 			  <table cellpadding="0" cellspacing="0" border="0">
@@ -641,27 +657,24 @@ function goClubDetail(clubseq){
 			<div class="tbl-content">
 			  <table cellpadding="0" cellspacing="0" border="0">
 			    <tbody>
-			      <tr>
-					<td style="width: 7%;">1</td>
-					<td style="width: 41%;">제목</td>
-					<td style="width: 20%;">작성자</td>
-					<td style="width: 25%;">작성일자</td>
-					<td style="width: 7%;">조회수</td>
-				</tr>
-				<tr>
-					<td style="width: 7%;">2</td>
-					<td style="width: 41%;">제목</td>
-					<td style="width: 20%;">작성자</td>
-					<td style="width: 25%;">작성일자</td>
-					<td style="width: 7%;">조회수</td>
-				</tr>
-				<tr>
-					<td style="width: 7%;">3</td>
-					<td style="width: 41%;">제목</td>
-					<td style="width: 20%;">작성자</td>
-					<td style="width: 25%;">작성일자</td>
-					<td style="width: 7%;">조회수</td>
-				</tr>
+			    	<c:if test="${not empty requestScope.clubBoardList}">
+				    	<c:forEach items="${requestScope.clubBoardList}" var="board" varStatus="status">
+							<c:if test="${status.index < 7}">
+								<tr class="clubboardTR" onclick="goClubBoardDetail('${board.clubboardseq}', '${board.clubseq}')">
+									<td style="width: 7%;">${status.count}</td>
+									<td style="width: 41%;">${board.title}</td>
+									<td style="width: 20%;">${board.fk_userid}</td>
+									<td style="width: 25%;">${board.registerdate}</td>
+									<td style="width: 7%;">${board.viewcount}</td>
+								</tr>			    	
+							</c:if>
+				    	</c:forEach>
+			    	</c:if>
+			    	<c:if test="${empty requestScope.clubBoardList}">
+			    		<tr>
+			    			<td colspan="5">최신글이 없습니다.</td>
+			    		</tr>
+			    	</c:if>
 			    </tbody>
 			  </table>
 			</div>
@@ -768,4 +781,9 @@ function goClubDetail(clubseq){
 <form name="clubDetailFrm">
 	<input type="hidden" name="clubseq" />
 	<input type="hidden" name="sportseq" />
+</form>
+
+<form name="clubboardDetailFrm">
+	<input type="hidden" name="clubboardseq" />
+	<input type="hidden" name="clubseq" />
 </form>

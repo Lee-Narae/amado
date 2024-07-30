@@ -738,6 +738,13 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		return n;
 	}
 
+	// My 동호회 - 동호회 최신 글 불러오기
+	@Override
+	public List<Map<String, String>> getClubBoard(String clubseq) {
+		List<Map<String, String>> clubboardList = dao.getClubboard(clubseq);
+		return clubboardList;
+	}
+
 
 	
 	
