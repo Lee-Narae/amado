@@ -40,6 +40,8 @@ opacity: 0.8;
 
 	$(document).ready(function() {
 		
+		$("div#inquiryA").addClass("hover");
+		
 		goReadInquiryAW();
 		
 		$("input:text[name='comment_text']").bind("keyup", function(e){

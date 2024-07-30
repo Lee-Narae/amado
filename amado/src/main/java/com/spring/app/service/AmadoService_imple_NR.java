@@ -745,6 +745,13 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		return clubboardList;
 	}
 
+	// 공지사항 - 검색어 자동완성
+	@Override
+	public List<String> wordSearch(Map<String, String> paramap) {
+		List<String> wordList = dao.wordSearch(paramap);
+		return wordList;
+	}
+
 
 	
 	

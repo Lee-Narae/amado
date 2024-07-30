@@ -2691,5 +2691,35 @@ public class ControllerNR {
 		return mav;
 	}
 	
+	
+	@ResponseBody
+	@GetMapping(value="/community/wordSearch.do", produces="text/plain;charset=UTF-8")
+	public String wordSearch(HttpServletRequest request) {
+		
+		String searchType = request.getParameter("searchType");
+		String searchWord = request.getParameter("searchWord");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("searchType", searchType);
+		paramap.put("searchWord", searchWord);
+		
+		List<String> wordList = service.wordSearch(paramap);
+		
+		JSONArray jsonArr = new JSONArray();
+		
+		if(wordList != null) {
+			for(String word : wordList) {
+				JSONObject jsonObj = new JSONObject();
+			
+				jsonObj.put("word", word);
+				jsonArr.put(jsonObj);
+			}
+		}
+		
+		return jsonArr.toString();
+	}
+	
+	
+	
 }
 

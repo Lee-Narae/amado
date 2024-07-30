@@ -678,4 +678,11 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		return clubboardList;
 	}
 
+	// 공지사항 - 검색어 자동완성
+	@Override
+	public List<String> wordSearch(Map<String, String> paramap) {
+		List<String> wordList = sqlsession.selectList("NR.wordSearch", paramap);
+		return wordList;
+	}
+
 }
