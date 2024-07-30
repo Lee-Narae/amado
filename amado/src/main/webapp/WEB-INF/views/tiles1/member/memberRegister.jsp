@@ -545,6 +545,8 @@ $(document).ready(function () {
                 if(json.n == 0) {
                     // 입력한 email이 존재하지 않는 경우
                     $("span#emailCheckResult").html($("input#email").val()  + " 은(는) 사용 가능한 이메일입니다.").css({"color":"blue"});
+                    // 이메일 검사하게 실제로 랜덤값 보내주기 show() 로변경
+                    // 해당 ajax 를 실행할 function 만들고 이름(); 넣기
                 }
                 else {
                 	// 입력한 email이 이미 사용중이라면
