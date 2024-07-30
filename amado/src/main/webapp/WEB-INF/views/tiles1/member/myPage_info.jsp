@@ -208,6 +208,20 @@ $(document).ready(function(){
 	});
 	
 	
+	$(document).on("change", "input[name='attach']", function(e){
+		const input_file = $(e.target).get(0);
+		const fileReader = new FileReader();
+        fileReader.readAsDataURL(input_file.files[0]);
+        
+        fileReader.onload = function(){
+        	document.getElementById("memberImgView").src = fileReader.result;
+        };
+        
+	});
+	
+	
+	
+	
 }); // document.ready
 
 
@@ -556,8 +570,16 @@ function memberQuit(){
 	                	</div>
 	                	<div class="tr" style="display: flex;">
 	                		<div class="title">내 이미지</div>
-	                		<div class="input"><input type="file" name="attach" style="border: none;"/></div>
+	                		<div class="input"><input type="file" name="attach" style="border: none;" accept='image/*'/></div>
 	                	</div>
+                		<div style="border: solid 1px #d4d4d4; width: 11%; height: 100px; border-radius: 100%; margin-left: 18%; overflow: hidden; align-content: center;">
+                			<c:if test="${not empty sessionScope.loginuser.memberimg}">
+                				<img id="memberImgView" style="width: 100%;" src="<%=ctxPath%>/resources/images/${sessionScope.loginuser.memberimg}" />
+                			</c:if>
+                			<c:if test="${empty sessionScope.loginuser.memberimg}">
+                				<img id="memberImgView" style="width: 100%;" src="<%=ctxPath%>/resources/images/no_img.jpg" />
+                			</c:if>
+                		</div>
 	                	<div style="width: 100%; text-align: center; margin: 5% 0;">
 	                		<button type="button" class="btn btn-primary" onclick="infoEdit()">수정하기</button>
 	                		<button type="button" class="btn btn-secondary" onclick="javascript:history.back()">취소</button>

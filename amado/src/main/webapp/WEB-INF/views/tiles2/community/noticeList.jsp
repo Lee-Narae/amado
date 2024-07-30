@@ -89,7 +89,68 @@ $(document).ready(function(){
 		frm.submit();
 	
 	});
-});
+
+
+	// 검색어 자동완성
+	$("input[name='searchWord']").keyup(function(){
+		
+		const wordLength = $(this).val().trim().length;
+		if(wordLength == 0){
+			$("div#displayList").hide();
+		}
+		else{
+			
+			if($("select[name='searchType']").val() == 'title' ||
+			   $("select[name='searchType']").val() == 'content'){
+				
+				$.ajax({
+					url: "<%=ctxPath%>/community/wordSearch.do",
+					type: "get",
+					data: {"searchType": $("select[name='searchType']").val(),
+						   "searchWord": $("input[name='searchWord']").val()},
+					dataType: "json",
+					success: function(json){
+						
+						if(json.length > 0){ // 검색 데이터가 있는 경우
+							let v_html = ``;
+						
+							$.each(json, function(index, item){
+								const word = item.word;
+								
+								const idx = word.toLowerCase().indexOf($("input[name='searchWord']").val().toLowerCase());
+								
+								const len = $("input[name='searchWord']").val().length;
+								
+								const result = word.substring(0, idx)
+											  +"<span style='color: orange;'>"
+											  +word.substring(idx, idx+len)+"</span>"+word.substring(idx+len);
+								
+								v_html += `<span style='cursor: pointer;' class='result'>\${result}<br></span>`;
+							}); // end of for
+							
+							const width = $("input[name='searchWord']").css("width");
+							
+							$("div#displayList").css({"width": width});
+							
+							$("div#displayList").html(v_html);
+							$("div#displayList").show();
+						
+						}
+					},
+					error: function(request, status, error){
+				          alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			        }
+				});
+				
+			}
+			
+		}
+		
+	});
+
+
+
+}); // document.ready
 
 function goSearch(){
 	
@@ -125,7 +186,10 @@ function goSearch(){
 							<fmt:parseNumber var="currentShowPageNo" value="${requestScope.currentShowPageNo}" />
 	          				<fmt:parseNumber var="sizePerPage" value="${requestScope.sizePerPage}" />
 	          				<td align="center">${requestScope.totalMemberCount - (currentShowPageNo-1)*sizePerPage - status.index}</td>
-							<td>${notice.title}&nbsp;<c:if test="${notice.commentcount != 0}"><span id="commentCount">[${notice.commentcount}]</span></c:if></td>
+							<td>${notice.title}&nbsp;
+								<c:if test="${notice.commentcount != 0}"><span id="commentCount">[${notice.commentcount}]</span></c:if>
+								<c:if test="${not empty notice.orgfilename}">&nbsp;&nbsp;<img width="15" height="15" src="https://img.icons8.com/external-others-bomsymbols-/91/external-disk-flat-02-digital-design-others-bomsymbols-.png" alt="external-disk-flat-02-digital-design-others-bomsymbols-"/></c:if>
+								</td>
 							<td align="center">${notice.registerdate}<input id="noticeseq" type="hidden" name="noticeseq" value="${notice.noticeseq}" /></td>
 							<td align="center">${notice.viewcount}</td>
 						</tr>
@@ -147,6 +211,10 @@ function goSearch(){
 			<input type="text" style="display: none;" />
 			<button type="button" class="btn btn-light" style="font-size: 20pt; padding: 0;">🔎</button>
 		</form>
+		
+		<div id="displayList" style="border: solid 1px gray; width: 15%; margin-left: 5%; overflow: auto; position: relative; ">
+		
+		</div>
 		
 		
 		<div id="pageBar" style="margin-left: 36%;">

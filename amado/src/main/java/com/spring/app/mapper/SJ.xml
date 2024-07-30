@@ -689,9 +689,24 @@
 		delete from tbl_inquiryanswers
 		where inquiryanswerseq = #{inquiryanswerseq} and inquiryseq = #{inquiryseq}
 	</delete>
+	
+	
 	<update id="editInquiryAW" parameterType="HashMap">
 		update tbl_inquiryanswers set content = #{edit_comment_text} || ' (' || to_char(sysdate, 'yyyy-mm-dd hh24:mi:ss') || ') (수정됨)'
 		where inquiryanswerseq = #{inquiryanswerseq}
+	</update>
+	
+	
+	<select id="getInquiryCount" parameterType="HashMap" resultType="int">
+	    select count(*)
+	    from tbl_inquiryanswers
+	    where inquiryseq = #{inquiryseq}
+	</select>
+	
+	
+	<update id="updateAnswer" parameterType="HashMap">
+		update tbl_inquiry set answer = 0
+		where inquiryseq = #{inquiryseq}
 	</update>
 	
 </mapper>

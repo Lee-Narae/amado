@@ -77,6 +77,8 @@
     <script>
         $(document).ready(function(){
         	
+        	$("div#clubM").addClass("hover");
+        	
         	if("${requestScope.searchWord}" != "" && "${requestScope.searchType}" != ""){
         		$("input:text[name='searchWord']").val("${requestScope.searchWord}");
         		$("select[name='searchType']").val("${requestScope.searchType}");

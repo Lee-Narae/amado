@@ -248,7 +248,7 @@
 	</select>
 	
 	<select id="select_notice_paging" parameterType="HashMap" resultType="NoticeVO">
-		select rn, noticeseq, title, content, registerdate, viewcount, status, orgfilename, filename, filesize, commentcount
+		select rn, noticeseq, case when length(title) > 20 then substr(title, 0, 20)||'...' else title end title, content, registerdate, viewcount, status, orgfilename, filename, filesize, commentcount
 		from
 		(select rownum rn, noticeseq, title, content, registerdate, viewcount, status, orgfilename, filename, filesize, commentcount
 		from
@@ -754,4 +754,42 @@
 	<delete id="quitClubMember" parameterType="HashMap">
 		delete from tbl_clubmember where fk_userid = #{userid} and clubseq = #{clubseq}
 	</delete>
+	
+	
+	<resultMap type="HashMap" id="clubboardMap">
+		<result column="clubboardseq" property="clubboardseq" javaType="String"/>	
+		<result column="clubseq" property="clubseq" javaType="String"/>
+		<result column="title" property="title" javaType="String"/>
+		<result column="fk_userid" property="fk_userid" javaType="String"/>
+		<result column="registerdate" property="registerdate" javaType="String"/>
+		<result column="commentcount" property="commentcount" javaType="String"/>
+		<result column="viewcount" property="viewcount" javaType="String"/>
+	</resultMap>
+	<select id="getClubBoard" parameterType="String" resultMap="clubboardMap">
+		select clubboardseq, clubseq, title, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, commentcount, viewcount
+		<![CDATA[ from TBL_CLUBBOARD where clubseq = #{clubseq} and registerdate > sysdate-7 ]]>
+		order by 5 desc
+	</select>
+	
+	<select id="wordSearch" parameterType="HashMap" resultType="String">
+		<choose>
+			<when test="searchType == 'title'">
+				select distinct case when length(title) > 10 then substr(title, 0, 10)||'...' else title end title
+			</when>
+			<otherwise>
+				select distinct case when length(content) > 10 then substr(content, 0, 10)||'...' else content end content
+			</otherwise>
+		</choose>
+		from tbl_notice
+		where status = 0
+		<choose>
+			<when test="searchType == 'title' and searchWord != ''">
+				and lower(title) like '%'||lower(#{searchWord})||'%'
+			</when>
+			<otherwise>
+				and lower(content) like '%'||lower(#{searchWord})||'%'
+			</otherwise>
+		</choose>
+	</select>
+	
 </mapper>

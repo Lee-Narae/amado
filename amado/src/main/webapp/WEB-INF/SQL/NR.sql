@@ -630,7 +630,7 @@ select matchingseq, C.clubname myteam, D.clubname, to_char(B.matchdate, 'yyyy-mm
 		on C.fk_userid = E.userid
 		where E.userid = 'test3' and A.result1 = 0;
 
-select * from tbl_club;
+select * from tbl_clubmember;
 
 
 
@@ -649,8 +649,10 @@ select C.clubname regteam, D.clubname appteam, to_char(A.matchdate, 'yyyy-mm-dd 
         order by 3;
 
 
-select * from TBL_CLUBBOARD;
+select clubboardseq, clubseq, title, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, commentcount, viewcount
+		from TBL_CLUBBOARD where clubseq = 2 and registerdate > sysdate-7
+		order by 5 desc;
 
+select case when length(title) > 20 then substr(title, 0, 20)||'...' else title end title from tbl_notice;
 
-
-
+select * from tbl_notice;

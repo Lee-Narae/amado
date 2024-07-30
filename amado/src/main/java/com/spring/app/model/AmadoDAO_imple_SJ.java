@@ -341,5 +341,16 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 		return n;
 	}
 
+	@Override
+	public int getInquiryCount(Map<String, String> paraMap) {
+		int n2 = sqlsession.selectOne("SJ.getInquiryCount", paraMap);
+		return n2;
+	}
+
+	@Override
+	public void updateAnswer(Map<String, String> paraMap) {
+		sqlsession.update("SJ.updateAnswer", paraMap);
+	}
+
 
 }

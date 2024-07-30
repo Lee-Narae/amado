@@ -113,6 +113,13 @@ public class ControllerNR {
 			mav.addObject("matchList", matchList);
 		}
 		
+		
+		// 동호회 최신글 불러오기
+		if(clubseq != null) {
+			List<Map<String, String>> clubBoardList = service.getClubBoard(clubseq);
+			mav.addObject("clubBoardList", clubBoardList);
+		}
+		
 		mav.setViewName("club/myClub.tiles2");
 		// /WEB-INF/views/tiles2/club/myClub.jsp
 		return mav;
@@ -2683,6 +2690,36 @@ public class ControllerNR {
 		
 		return mav;
 	}
+	
+	
+	@ResponseBody
+	@GetMapping(value="/community/wordSearch.do", produces="text/plain;charset=UTF-8")
+	public String wordSearch(HttpServletRequest request) {
+		
+		String searchType = request.getParameter("searchType");
+		String searchWord = request.getParameter("searchWord");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("searchType", searchType);
+		paramap.put("searchWord", searchWord);
+		
+		List<String> wordList = service.wordSearch(paramap);
+		
+		JSONArray jsonArr = new JSONArray();
+		
+		if(wordList != null) {
+			for(String word : wordList) {
+				JSONObject jsonObj = new JSONObject();
+			
+				jsonObj.put("word", word);
+				jsonArr.put(jsonObj);
+			}
+		}
+		
+		return jsonArr.toString();
+	}
+	
+	
 	
 }
 

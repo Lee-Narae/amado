@@ -14,6 +14,11 @@
 
 </style>
 
+<script type="text/javascript">
+$(document).ready(function(){
+	$("div#memberM").addClass("hover");
+});
+</script>
 
 
 <div class="container pt-5 pb-5" style="min-height: 810px;">

@@ -445,7 +445,7 @@ div.fileDrop>div.fileList>span.fileSize {
 			<div class="row mt-5" style="height: 80px; border: solid 0px blue;">
 				<strong class="col-md-2 mt-2 mb-4" style="text-align: center;">문의제목</strong>
 				<textarea name="title" class="col-md6" rows="10" cols="78" style="height: 80px;"
-					placeholder="※상담사에게 폭언, 욕설 등을 하지 말아주세요. &#10;답변을 받지 못하거나 사전안내 없이 삭제될 수 있습니다."></textarea>
+					placeholder="※상담 가능한 내용이 아닐 경우, 답변을 받지 못할 수 있는 점 양해 부탁드립니다."></textarea>
 			</div>
 		
 			<div class="row mt-5" style="height: 50px;">

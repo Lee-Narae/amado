@@ -209,7 +209,11 @@ nocache;
 
 -- Sequence SEQ_SPORT이(가) 생성되었습니다.
 
+select *
+from tbl_club
 
+select *
+from tbl_gym
 
 
 insert into tbl_gym(gymseq ,gymname,fk_userid,postcode,address,detailaddress,status,info,imgfilename,cost,caution,membercount,likecount,insidestatus)
