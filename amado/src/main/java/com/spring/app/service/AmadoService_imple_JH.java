@@ -203,4 +203,20 @@ public class AmadoService_imple_JH implements AmadoService_JH {
 		return cost;
 	}
 
+
+
+	@Override
+	public List<Map<String, String>> getresinfo(String userid) {
+		List<Map<String, String>> resList = dao.getresinfo(userid);
+		return resList;
+	}
+
+
+
+	@Override
+	public int res_cancel(String gymseq) {
+		//int n = dao.res_cancel(gymseq);
+		return 0;
+	}
+
 }

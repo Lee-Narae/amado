@@ -55,5 +55,7 @@ public interface AmadoDAO_JH {
 
 	String getCost(String gymseq);
 
+	List<Map<String, String>> getresinfo(String userid);
+
 
 }

@@ -527,7 +527,6 @@ public class ControllerJH {
 		String reservation_date = request.getParameter("reservation_date");
 		String fk_gymseq = request.getParameter("fk_gymseq");
 		String fk_userid = request.getParameter("fk_userid");
-		
 		//System.out.println(numericPrice);
 		//System.out.println(reservation_date);
 		//System.out.println(fk_gymseq);
@@ -695,6 +694,70 @@ public class ControllerJH {
 		}
 	}
 			
+	
+	@GetMapping("/gym/view_reservation.do")
+	public ModelAndView view_reservation(ModelAndView mav, HttpServletRequest request) {
+
+		String userid = request.getParameter("userid");
+		
+		System.out.println(userid);
+		
+		List<Map<String, String>> resList = service.getresinfo(userid);
+		
+		
+		for(Map<String, String> resMap:resList) {
+			  System.out.println(resMap.get("time_range"));
+			  System.out.println(resMap.get("fk_gymseq"));
+			  System.out.println(resMap.get("fk_userid"));
+			  System.out.println(resMap.get("reservation_date")); 
+			  System.out.println(resMap.get("coinmoney"));
+			  System.out.println(resMap.get("gymname"));
+		}
+		
+		mav.addObject("resList", resList);
+		mav.setViewName("gym/view_reservation.tiles2");
+		// /WEB-INF/views/tiles2/gym/view_reservation.jsp
+		
+		return mav;
+	}	
+	
+	
+	@GetMapping("/weather/weatherXML.do")
+	public String weatherXML() {
+		return "weather/weatherXML";
+		//  /board/src/main/webapp/WEB-INF/views/weather/weatherXML.jsp 파일을 생성한다.  
+	}
+	
+	
+	
+	
+	@ResponseBody
+	@GetMapping(value="/gym/res_cancel.do", produces="text/plain;charset=UTF-8") 
+	public String res_cancel(HttpServletRequest request) throws IOException, ParseException {
+
+		System.out.println(request.getParameter("gymseq"));
+		System.out.println(request.getParameter("fk_userid"));
+		System.out.println(request.getParameter("reservation_date"));
+		System.out.println(request.getParameter("time_range"));
+		
+		String gymseq = request.getParameter("gymseq");
+		String fk_userid = request.getParameter("fk_userid");
+		String reservation_date = request.getParameter("reservation_date");
+		String time_range = request.getParameter("time_range");
+		String startTime = time_range.substring(0,5);
+		String endTime = time_range.substring(8,13);
+		
+		System.out.println("startTime"+startTime);
+		System.out.println("endTime"+endTime);
+		
+		
+		int n = service.res_cancel(gymseq); 
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+		
+		return jsonObj.toString();
+	}
 	
 	
 	
