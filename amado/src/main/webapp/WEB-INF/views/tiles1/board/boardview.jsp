@@ -75,6 +75,13 @@ a {
 		
 		goReadComment(); // 페이징 처리 안한 댓글 읽어오기
 		
+		
+		$(document).bind("keydown", function(e){
+		    if(e.keyCode == 13){
+		        e.preventDefault(); // 기본 동작 방지 (계속 댓글쓰기 엔터 누르면 뒤로가기 눌려 기본 동작 방지 작성)
+		    }
+		});
+		
 		$("input:text[name='comment_text']").bind("keyup", function(e){
 			if(e.keyCode == 13){
 				goAddWrite();
@@ -288,7 +295,7 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 		    // form태그의 선택자.serialize(); 을 해주면 form 태그내의 모든 값들을 name값을 키값으로 만들어서 보내준다. 
 		       const queryString = $("form[name='addWriteFrm']").serialize();
 		    --%>
-		   
+		    
 			const comment_text = $("input:text[name='comment_text']").val();
 			
 //			alert(comment_text);
@@ -303,13 +310,12 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 		   
 			   $.ajax({
 			      
-			      url: "<%=ctxPath%>/addCommentSJ.do",
+			      url: "<%=ctxPath%>/board/addCommentSJ",
 			      data: queryString,
 			      type: "post",     
 			      dataType: "json",
 			      success: function(json){
 			         console.log(JSON.stringify(json));
-			         
 			        	 goReadComment(); // 페이징 처리 안한 댓글 읽어오기
 			        	 // 페이징 처리한 댓글 읽어오기
 			         
