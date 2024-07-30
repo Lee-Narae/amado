@@ -392,8 +392,6 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	    List<Map<String, String>> inquiryLista = dao.getinquiryList(fk_userid);
 	    List<InquiryVO> inquiryList = new ArrayList<>(); // 초기화
 	    
-	    System.out.println("getinquiryList fk_userid : " + fk_userid);
-
 	    if (inquiryLista != null && !inquiryLista.isEmpty()) {
 	        for (Map<String, String> inquiryMap : inquiryLista) {
 	            InquiryVO inquiryVO = new InquiryVO(); // 새 객체 생성
@@ -429,7 +427,6 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	@Override
 	public int getTotalInquiryCount(Map<String, String> paraMap) {
 		int totalCount = dao.getTotalInquiryCount(paraMap);
-		System.out.println("getTotalInquiryCount fk_userid : " + paraMap.get("fk_userid"));
 		return totalCount;
 	}
 
@@ -437,7 +434,6 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	@Override
 	public List<InquiryVO> getPaginginquiryList(Map<String, String> paraMap) {
 		List<InquiryVO> inquiryPagingList = dao.getPaginginquiryList(paraMap); 
-		System.out.println("getPaginginquiryList fk_userid : " + paraMap.get("fk_userid"));
 		return inquiryPagingList;
 	}
 
@@ -472,6 +468,9 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		n = dao.addInquiryAD(paraMap);
 		
 		if(n == 1) { 
+			
+			// 이메일 보내기, 문자보내기
+			
 			  result = dao.updateInquiryAW(paraMap); 
 			  // 답변 등록하면 답변대기 -> 답변완료로 변경 //
 		  }
@@ -487,7 +486,21 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 
 	@Override
 	public int delInquiryAW(Map<String, String> paraMap) {
-		int n = dao.delInquiryAW(paraMap);
+		int n1 = dao.delInquiryAW(paraMap);
+		int result = 0;
+		int n = 0;
+		if(n1 == 1) {
+
+			// 현재 남아있는 답변 수를 확인
+			int n2 = dao.getInquiryCount(paraMap);
+			
+			if(n2 == 0) {
+				// 만약 답변이 없을 경우 답변대기로 바꿔준다.
+				dao.updateAnswer(paraMap);
+				n = 1;
+			}
+			
+		}
 		return n;
 	}
 

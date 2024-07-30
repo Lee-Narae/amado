@@ -80,7 +80,7 @@
             "0": [{"text": "선택해주세요", "value": "0"}],
             "1": [{"text": "전체", "value": "0"}, {"text": "대관문의", "value": "1"}, {"text": "환불문의", "value": "2"}, {"text": "기타문의", "value": "3"}],
             "2": [{"text": "전체", "value": "0"}, {"text": "시설문의", "value": "1"}, {"text": "예약문의", "value": "2"}, {"text": "기타문의", "value": "3"}],
-            "3": [{"text": "전체", "value": "0"}, {"text": "참가문의", "value": "1"}, {"text": "환불문의", "value": "2"}, {"text": "기타문의", "value": "3"}],
+            "3": [{"text": "전체", "value": "0"}, {"text": "결제문의", "value": "1"}, {"text": "환불문의", "value": "2"}, {"text": "기타문의", "value": "3"}],
             "4": [{"text": "전체", "value": "0"}, {"text": "일반문의", "value": "1"}, {"text": "환불문의", "value": "2"}, {"text": "기타문의", "value": "3"}]
         };
 
@@ -205,7 +205,7 @@
 			        
 			        
 			        <c:if test="${inquiryvo.searchtype_a == 3 && inquiryvo.searchtype_b == 1}">
-			        	<td align="center">플리마켓 : 참가문의</td>
+			        	<td align="center">플리마켓 : 결제문의</td>
 			        </c:if>
 			        <c:if test="${inquiryvo.searchtype_a == 3 && inquiryvo.searchtype_b == 2}">
 			        	<td align="center">플리마켓 : 환불문의</td>

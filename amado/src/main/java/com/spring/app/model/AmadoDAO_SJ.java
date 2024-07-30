@@ -140,6 +140,10 @@ public interface AmadoDAO_SJ {
 
 	int editInquiryAW(Map<String, String> paraMap);
 
+	int getInquiryCount(Map<String, String> paraMap);
+
+	void updateAnswer(Map<String, String> paraMap);
+
 	
 
 }
