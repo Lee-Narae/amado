@@ -40,6 +40,8 @@
 
  	$(document).ready(function(){
 		
+ 		$("div#inquiryA").addClass("hover");
+ 		
 		$("input:text[name='searchWord']").bind("keyup", function(e){
 			if(e.keyCode == 13){ // 엔터를 했을 경우
 				goSearch();
