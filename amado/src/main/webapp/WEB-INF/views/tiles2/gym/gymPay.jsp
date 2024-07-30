@@ -105,7 +105,30 @@
     color: white;
     border: 1px solid gray;
 }
+.btn-outline-primary:disabled {
+    background-color: gray;
+    color: white;
+    border: 1px solid gray;
+}
         
+        
+        
+.container {
+    position: relative; /* 부모 요소는 상대적으로 위치를 지정 */
+}
+
+.rainy-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1; /* 높은 z-index 값 */
+}
+
+.container1 {
+    position: relative;
+    z-index: 5; /* 낮은 z-index 값 */
+}
+
 </style>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3e40c6a4e83259bd26e2771ad2db4e63"></script>
     <script>
@@ -349,6 +372,67 @@
 			        error: function(request, status, error){
 			            alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 			        }
+			    });// end of ajax--------------------------------------
+			    
+			    
+			    
+			    
+			    
+			    
+			    $.ajax({
+					url:"<%= ctxPath%>/weather/weatherXML.do",
+					type:"get",
+					dataType:"xml",
+					success:function(xml){
+						const rootElement = $(xml).find(":root"); 
+						console.log("확인용 : " + $(rootElement).prop("tagName") );
+						// 확인용 : current
+						
+						const weather = rootElement.find("weather"); 
+						const updateTime = $(weather).attr("year")+"년 "+$(weather).attr("month")+"월 "+$(weather).attr("day")+"일 "+$(weather).attr("hour")+"시"; 
+						console.log(updateTime);
+						// 2024년 07월 19일 12시
+						
+						const localArr = rootElement.find("local");
+						console.log("지역개수 : " + localArr.length);
+						// 지역개수 : 97
+						
+					    
+					    // ====== XML 을 JSON 으로 변경하기  시작 ====== //
+						var jsonObjArr = [];
+						// ====== XML 을 JSON 으로 변경하기  끝 ====== //    
+					        
+					    for(let i=0; i<localArr.length; i++){
+					    	
+					    	let local = $(localArr).eq(i);
+							/* .eq(index) 는 선택된 요소들을 인덱스 번호로 찾을 수 있는 선택자이다. 
+							      마치 배열의 인덱스(index)로 값(value)를 찾는 것과 같은 효과를 낸다.
+							*/
+							
+					      // console.log( $(local).text() + " stn_id:" + $(local).attr("stn_id") + " icon:" + $(local).attr("icon") + " desc:" + $(local).attr("desc") + " ta:" + $(local).attr("ta") ); 
+					      //	속초 stn_id:90 icon:03 desc:구름많음 ta:29.0
+					      //	
+					    	
+					        let icon = $(local).attr("icon");  
+					        if(icon == "") {
+					        	icon = "없음";
+					        }
+					      
+							
+							// ====== XML 을 JSON 으로 변경하기  시작 ====== //
+						    var jsonObj = {"locationName":$(local).text(), "ta":$(local).attr("ta")};
+							   
+						    jsonObjArr.push(jsonObj);
+							// ====== XML 을 JSON 으로 변경하기  끝 ====== //
+							
+					    }// end of for------------------------ 
+					    
+					    
+					},// end of success: function(xml){ }------------------
+					
+					error: function(request, status, error){
+						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					}
 			    });
 			});
 		  
@@ -408,15 +492,13 @@
 		    			v_html += "<div class='section'>";
 		    			v_html += "<img src='<%=ctxPath%>/resources/images/1/"+json.orgfilename+"' class='gym-image' alt='체육관 사진'>";
 		    			v_html += "</div>";
-		    			v_html += "<div id='gymname' style='text-align: center; margin-top: 3%; margin-bottom: 10%; font-size: 30px; font-weight: bold'>"
+		    			v_html += "<div id='gymname' style='text-align: center; margin-top: 3%; margin-bottom: 13%; font-size: 25px; font-weight: bold'>"
 		    			v_html += json.gymname;
 		    			v_html += "</div>";
 				        
-		    			
-		    			
-		    			v_html += "<div class='section'>";
-		    			v_html += "    <label for='date'>날짜 선택:</label>";
-		    			v_html += "    <input type='date' id='date' class='form-control'>";
+		    			v_html += "<div class='section' style='display: flex; margin-bottom: 11%;'>";
+		    			v_html += "    <label style='padding-top:2%;' for='date'>날짜 선택:</label>";
+		    			v_html += "    <input style='margin-left:5%; margin-bottom:1%; width: 70%;' type='date' id='date' class='form-control'>";
 		    			v_html += "</div>";
 				
 				        v_html += "<div id='time'>"
@@ -555,19 +637,20 @@
 </head>
 <body>
 	<div style="display: flex">
+		<img style="width: 70px; margin: 18.8% 0 0 10.5%;" src="<%=ctxPath%>/resources/images/rain.gif" class="rainy-image" alt="Rainy Image">
 	    <div class="container">
 	    	<div class="container1">
 		        <!-- 체육관 사진 -->
 		        <div class="section">
 		            <img src="<%=ctxPath%>/resources/images/1/${requestScope.gymvo.orgfilename}" class="gym-image" alt="체육관 사진">
 		        </div>
-				<div id="gymname" style="text-align: center; margin-top: 3%; margin-bottom: 10%; font-size: 30px; font-weight: bold">
+				<div id="gymname" style="text-align: center; margin-top: 3%; margin-bottom: 13%; font-size: 25px; font-weight: bold">
 				 ${requestScope.gymvo.gymname}
 				</div>
 		        <!-- 날짜 선택 -->
-		        <div class="section">
-		            <label for="date">날짜 선택:</label>
-		            <input type="date" id="date" class="form-control">
+		        <div class="section" style="display: flex; margin-bottom: 11%;">
+		            <label style=padding-top:2%; for="date">날짜 선택: </label>
+		            <input style="margin-left:5%; margin-bottom:1%; width: 70%;" type="date" id="date" class="form-control">
 		        </div>
 		
 				<div id='time'>

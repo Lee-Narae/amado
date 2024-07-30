@@ -1,15 +1,52 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%
    String ctxPath = request.getContextPath();
 %>    
-
+<!-- 사용자 정의 JS -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var cells = document.querySelectorAll('.clickable');
+        cells.forEach(function(cell) {
+            cell.addEventListener('click', function() {
+                var content = cell.getAttribute('data-content');
+                document.getElementById('modalContent').innerText = content;
+                $('#infoModal').modal('show');
+            });
+        });
+    });
+    
+    
+    function res_cancel(gymseq,fk_userid,reservation_date,time_range){
+    	
+    	$.ajax({
+	        url:"<%= ctxPath %>/gym/res_cancel.do",
+	        data:{"gymseq":gymseq,
+	        	  "fk_userid":fk_userid,
+	        	  "reservation_date":reservation_date,
+	        	  "time_range":time_range,},
+	        dataType:"json",
+	        success:function(json){
+	            
+	        	if(json.n == 1){
+	        		alert('예약취소가 완료됐습니다!');
+	        		window.location.reload();
+	        	}
+	        },
+	        error: function(request, status, error){
+	            alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+	        }
+	    });// end of ajax--------------------------------------
+	    
+	    
+    }
+</script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>예약 관리 테이블</title>
+    <title>예약내역</title>
     <!-- 부트스트랩 CSS 링크 -->
     <link rel="stylesheet" type="text/css" href="<%= ctxPath%>/resources/bootstrap-4.6.2-dist/css/bootstrap.min.css">
     <style>
@@ -74,23 +111,27 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th>번호</th>
                         <th>예약장소</th>
                         <th>예약날짜</th>
                         <th>예약시간</th>
                         <th>예약금액</th>
-                        <th>액션</th>
+                        <th>예약취소</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach var="reservation" items="${reservations}" varStatus="status">
+                    <c:forEach var="reservation" items="${requestScope.resList}" varStatus="status">
                         <tr>
                             <td><c:out value="${status.index + 1}"/></td>
-                            <td class="clickable" data-content="<c:out value='${reservation.place}'/>"><c:out value="${reservation.place}"/></td>
-                            <td class="clickable" data-content="<c:out value='${reservation.date}'/>"><c:out value="${reservation.date}"/></td>
-                            <td class="clickable" data-content="<c:out value='${reservation.time}'/>"><c:out value="${reservation.time}"/></td>
-                            <td class="clickable" data-content="<c:out value='${reservation.amount}'/>"><c:out value="${reservation.amount}"/></td>
-                            <td><button class="btn-cancel">예약취소</button></td>
+                            <td class="clickable" data-content="<c:out value='${reservation.gymname}'/>"><c:out value="${reservation.gymname}"/></td>
+                            <td class="clickable" data-content="<c:out value='${reservation.reservation_date.substring(0, 10)}'/>">
+							  <c:out value="${reservation.reservation_date.substring(0, 10)}"/>
+							</td>
+                            <td class="clickable" data-content="<c:out value='${reservation.time_range}'/>"><c:out value="${reservation.time_range}"/></td>
+                            <td class="clickable" data-content="<fmt:formatNumber value='${reservation.coinmoney}' pattern='#,###'/>">
+							  <fmt:formatNumber value="${reservation.coinmoney}" pattern="#,###"/>원
+							</td>
+                            <td><button class="btn-cancel" onclick="res_cancel('${reservation.fk_gymseq}','${reservation.fk_userid}','${reservation.reservation_date.substring(0, 10)}','${reservation.time_range}')">예약취소</button></td>
                         </tr>
                     </c:forEach>
                 </tbody>
@@ -120,19 +161,6 @@
 
     <!-- 부트스트랩 JS 및 Popper.js 링크 (필요한 경우) -->
     <script src="<%= ctxPath%>/resources/bootstrap-4.6.2-dist/js/bootstrap.min.js"></script>
-    <script src="<%= ctxPath%>/resources/popper.js/2.11.6/umd/popper.min.js"></script>
 
-    <!-- 사용자 정의 JS -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var cells = document.querySelectorAll('.clickable');
-            cells.forEach(function(cell) {
-                cell.addEventListener('click', function() {
-                    var content = cell.getAttribute('data-content');
-                    document.getElementById('modalContent').innerText = content;
-                    $('#infoModal').modal('show');
-                });
-            });
-        });
-    </script>
+    
 </body>
