@@ -536,15 +536,28 @@
 		<result property="gymname" 			column="gymname"  		javaType="String" /> 
 		<result property="reservation_count" 	column="reservation_count"  javaType="String" />
 	</resultMap>
-	<select id="getGymBarchart" resultMap="seoul_bicycle_Map">
-		SELECT A.time,  B.gymname, A.reservation_count, B.gymname
+	<select id="getGymBarchart" resultMap="seoul_bicycle_Map"  parameterType="String">
+		SELECT A.time,  B.gymname, A.reservation_count
 		FROM (
 		    SELECT fk_gymseq, time, COUNT(*) AS reservation_count
 		    FROM tbl_gymres
 		    GROUP BY fk_gymseq, time
 		) A
-		JOIN tbl_gym B ON A.fk_gymseq = B.gymseq;
+		JOIN tbl_gym B ON A.fk_gymseq = B.gymseq
+		where B.gymname= #{gymname}
 	</select> 
+	
+	
+	
+	<select id="getGymList" resultType="GymVO">
+		select distinct(gymname), address
+		from tbl_gymres r
+		join tbl_gym g
+		on r.fk_gymseq = g.gymseq	
+	</select>
+	
+	
+	
 	
 
 </mapper>

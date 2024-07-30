@@ -10,6 +10,7 @@ import com.spring.app.domain.ClubBoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.ClubmemberVO;
 import com.spring.app.domain.FleamarketVO;
+import com.spring.app.domain.GymVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.domain.NoticeVO;
 
@@ -127,7 +128,9 @@ public interface AmadoDAO_JY {
 
 	int add(Map<String, String> paraMap);
 
-	List<Map<String, String>> getGymBarchart();
+	List<Map<String, String>> getGymBarchart(String gymname);
+
+	List<GymVO> getGymList();
 
 	
 

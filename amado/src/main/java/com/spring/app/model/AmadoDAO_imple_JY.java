@@ -15,6 +15,7 @@ import com.spring.app.domain.ClubBoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.ClubmemberVO;
 import com.spring.app.domain.FleamarketVO;
+import com.spring.app.domain.GymVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.domain.NoticeVO;
 
@@ -398,9 +399,17 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 	}
 
 	@Override
-	public List<Map<String, String>> getGymBarchart() {
-		List<Map<String, String>> mapList = sqlsession.selectList("JY.getGymBarchart");
+	public List<Map<String, String>> getGymBarchart(String gymname) {
+		List<Map<String, String>> mapList = sqlsession.selectList("JY.getGymBarchart", gymname);
 		return mapList;
+	}
+
+	
+	// 체육관이름 가져오기
+	@Override
+	public List<GymVO> getGymList() {
+		List<GymVO> gymList = sqlsession.selectList("JY.getGymList");
+		return gymList;
 	}
 	
 

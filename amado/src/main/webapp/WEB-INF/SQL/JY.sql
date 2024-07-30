@@ -399,34 +399,43 @@ from tbl_clubboard
 insert into tbl_clubboard(clubboardseq, clubseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status)
 values(seq_clubboard.nextval, 2, '토마토맛토마토맛토', '먹어볼사람', 'leejy', sysdate , '1234', 0 , 0, 1);
 
-select *
-from tbl_gym
 
 -- 체육관 시간대별 예약통계 막대차트 그래프
-SELECT A.time, B.gymseq, B.gymname, A.reservation_count
+SELECT A.time,  B.gymname, A.reservation_count
 FROM (
-    SELECT time, COUNT(*) AS reservation_count
+    SELECT fk_gymseq, time, COUNT(*) AS reservation_count
     FROM tbl_gymres
     GROUP BY fk_gymseq, time
 ) A
-JOIN tbl_gym B 
-ON A.fk_gymseq = B.gymseq;
-
-
-
-
-SELECT TO_CHAR(A.time, 'HH24:00') AS time, A.fk_gymseq, B.gymname, A.reservation_count
-FROM (
-    SELECT fk_gymseq, TRUNC(time, 'HH24') AS time, COUNT(*) AS reservation_count
-    FROM tbl_gymres
-    GROUP BY fk_gymseq, TRUNC(time, 'HH24')
-) A
 JOIN tbl_gym B ON A.fk_gymseq = B.gymseq
-ORDER BY A.fk_gymseq, A.time;
+where B.gymseq = 77
+
+
+-- 체육관 이름, 주소 가져오기
+select gymname, address
+from tbl_gym;
+
+
+SELECT *
+FROM tbl_gymres
 
 
 
 
+		SELECT A.time,  B.gymname, A.reservation_count
+		FROM (
+		    SELECT fk_gymseq, time, COUNT(*) AS reservation_count
+		    FROM tbl_gymres
+		    GROUP BY fk_gymseq, time
+		) A
+		JOIN tbl_gym B ON A.fk_gymseq = B.gymseq
+		where B.gymname= 'SJ 풋볼 아카데미'
 
 
+select distinct(gymname), address
+from tbl_gymres r
+join tbl_gym g
+on r.fk_gymseq = g.gymseq
 
+select gymname, address
+from tbl_gym	

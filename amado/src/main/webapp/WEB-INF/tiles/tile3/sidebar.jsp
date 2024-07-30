@@ -51,7 +51,7 @@ background-color: #247AFB; border-radius: 10px; font-weight: bold; color: white;
 	<div class="minitext">관리</div>
 	<div class="text" onclick="location.href='<%=ctxPath%>/admin/manage/member'" id="memberM">회원 관리</div>
 	<div class="text" onclick="location.href='<%=ctxPath%>/admin/manage/club'" id="clubM">동호회 관리</div>
-	<div class="text" onclick="location.href='<%=ctxPath%>/admin/manage/...'" id="gymM">대관 관리</div>
+	<div class="text" onclick="location.href='<%=ctxPath%>/admin/manage/gym'" id="gymM">대관 관리</div>
 </div>
 <hr>
 <div id="middle2" style="height: 200px;" align="center">

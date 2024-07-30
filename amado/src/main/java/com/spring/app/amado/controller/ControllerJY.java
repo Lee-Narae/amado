@@ -1,5 +1,7 @@
 package com.spring.app.amado.controller;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,6 +40,7 @@ import com.spring.app.domain.ClubBoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.ClubmemberVO;
 import com.spring.app.domain.FleamarketVO;
+import com.spring.app.domain.GymVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.domain.NoticeVO;
 import com.spring.app.service.AmadoService_JY;
@@ -1847,17 +1850,29 @@ public class ControllerJY {
 	}
 
 	
-	
-	
-	
-	
-	
 	// 대관관리
+	@GetMapping(value="/admin/manage/gym")
+	public ModelAndView gym (ModelAndView mav) {
+		
+		// 체육관 이름, 주소 가져오기
+		List<GymVO> gymList = service.getGymList();
+		
+		mav.addObject("gymList", gymList);
+		mav.setViewName("manage/gym.tiles3");
+		
+		return mav;
+		
+	}
+	
+	// 체육관 예약갯수 가져오기
 	@ResponseBody
 	@GetMapping(value="/admin/manage/gym.do", produces="text/plain;charset=UTF-8")
-	public String getGymBarchart() {
+	public String getGymBarchart(HttpServletRequest request) {
 		
-		List<Map<String, String>> mapList = service.getGymBarchart();
+		String gymname = request.getParameter("gymname");
+		
+		
+		List<Map<String, String>> mapList = service.getGymBarchart(gymname);
 		
 		
 		
@@ -1873,14 +1888,16 @@ public class ControllerJY {
 				jsonArr.put(jsonObj);
 			}// end of for----------------------
 		}
-				
+		
+		
+		
 		return jsonArr.toString();
  		
 	}
 	
 	
 	
-	
+
 	
 	
 	
