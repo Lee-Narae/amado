@@ -82,6 +82,9 @@ public class AmadoService_imple_HS implements AmadoService_HS {
 
 
 
+
+
+
 	
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor= {Throwable.class})
@@ -284,6 +287,16 @@ public class AmadoService_imple_HS implements AmadoService_HS {
 
 
 
+
+		//mypage의 체육관 보기
+		@Override
+		public List<GymVO> getmypageGymList(String fk_userid) {
+		
+			 List<GymVO> GymList = dao.getmypageGymList(fk_userid);
+				return GymList;
+		}
+
+	
 
 
 

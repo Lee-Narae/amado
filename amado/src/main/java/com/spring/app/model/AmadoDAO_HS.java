@@ -78,6 +78,9 @@ public interface AmadoDAO_HS {
 	// 관리자 - 클럽 상세정보
 	ClubVO getClubDetail(String clubname);
 
+	//mypage의 체육관 보기
+	List<GymVO> getmypageGymList(String fk_userid);
+
 	
 
 

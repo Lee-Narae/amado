@@ -76,6 +76,12 @@ public interface AmadoService_HS {
 	ClubVO getClubDetail(String clubname);
 
 
+
+
+
+	List<GymVO> getmypageGymList(String fk_userid);
+
+
 	
 
 

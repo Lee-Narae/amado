@@ -214,6 +214,12 @@ values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
 		where clubseq = #{clubseq}
 	</select>
 	
+	<select id="getmypageGymList" parameterType="String" resultType="GymVO">
+		select gymname,address
+		from tbl_gym
+		where fk_userid= #{fk_userid}
+	</select>
+	
 	
 	
 
