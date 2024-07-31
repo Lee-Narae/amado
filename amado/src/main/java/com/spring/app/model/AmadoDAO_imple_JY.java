@@ -411,6 +411,20 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 		List<GymVO> gymList = sqlsession.selectList("JY.getGymList");
 		return gymList;
 	}
+
+	
+	// 동호회 - 종목별로 가입요청이 가장 많은 동호회 이름 가져오기
+	@Override
+	public String getMostclubName(int i) {
+		String mostclubName = sqlsession.selectOne("JY.getMostclubName", i);
+		return mostclubName;
+	}
+
+	@Override
+	public Map<String, String> getMostclubNameSeq(int i) {
+		Map<String, String> mostclubNameSeq = sqlsession.selectOne("JY.getMostclubNameSeq", i);
+		return mostclubNameSeq;
+	}
 	
 
 

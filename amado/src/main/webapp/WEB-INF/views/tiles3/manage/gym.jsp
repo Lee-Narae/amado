@@ -345,7 +345,7 @@
 <div style="width: 90%; margin: 0 auto; padding: 1% 0;">
     <div class="row">
     	<div class="col-md-6 offset-md-3">
-    	  <p class="text-center h3 text-success pb-3"> 체육관 시간대별 예약통계 막대차트 그래프</p>
+    	  <p class="text-center h3 text-success pb-3"> 2024년 체육관 시간대별 예약통계</p>
     	</div>
     </div>
     

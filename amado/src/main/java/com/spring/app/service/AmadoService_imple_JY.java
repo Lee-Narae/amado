@@ -401,11 +401,27 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 
 
 
-	// 체육관이름 가져오기
+	// 관리자 - 체육관이름 가져오기
 	@Override
 	public List<GymVO> getGymList() {
 		 List<GymVO> gymList = dao.getGymList();
 		return gymList;
+	}
+
+
+	// 동호회 - 종목별로 가입요청이 가장 많은 동호회 이름 가져오기
+	@Override
+	public String getMostclubName(int i) {
+		String mostclubName = dao.getMostclubName(i);
+		return mostclubName;
+	}
+
+
+
+	@Override
+	public Map<String, String> getMostclubNameSeq(int i) {
+		Map<String, String> mostclubNameSeq = dao.getMostclubNameSeq(i);
+		return mostclubNameSeq;
 	}
 
 
