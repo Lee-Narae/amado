@@ -121,8 +121,8 @@
 	
 	
 	<insert id="gymPayEnd" parameterType="HashMap">
-		insert into tbl_gymres(gymresseq, fk_gymseq, fk_userid, reservation_date, time)
-		values(seq_gymresseq.nextval, #{fk_gymseq}, #{fk_userid}, TO_DATE(#{reservation_date}, 'YYYY-MM-DD'), #{time})
+		insert into tbl_gymres(gymresseq, fk_gymseq, fk_userid, reservation_date, time, coinmoney)
+		values(seq_gymresseq.nextval, #{fk_gymseq}, #{fk_userid}, TO_DATE(#{reservation_date}, 'YYYY-MM-DD'), #{time}, #{numericPrice})
 	</insert>
 	
 	
@@ -146,6 +146,99 @@
 		where gymseq = #{gymseq}
 	</select>
 	
+	
+	<resultMap type="HashMap" id="resMap"> 
+		<result property="reservation_date" column="reservation_date" javaType="String"/>
+		<result property="fk_gymseq" column="fk_gymseq" javaType="String"/>
+		<result property="fk_userid" column="fk_userid" javaType="String"/>
+		<result property="time_range" column="time_range" javaType="String"/>
+		<result property="coinmoney" column="coinmoney" javaType="String"/>
+		<result property="gymname" column="gymname" javaType="String"/>
+	</resultMap>
+	<select id="getresinfo" resultMap="resMap" parameterType="String">
+		WITH time_data AS (
+		    SELECT
+		        gymresseq,
+		        fk_gymseq,
+		        fk_userid,
+		        coinmoney,
+		        reservation_date,
+		        TO_DATE(time, 'HH24:MI') AS reservation_time,
+		        LAG(TO_DATE(time, 'HH24:MI')) OVER (
+		            PARTITION BY fk_gymseq, fk_userid, reservation_date
+		            ORDER BY TO_DATE(time, 'HH24:MI')
+		        ) AS prev_time
+		    FROM
+		        tbl_gymres
+		    WHERE
+		        fk_userid = #{userid}
+		),
+		grouped_data AS (
+		    SELECT
+		        gymresseq,
+		        fk_gymseq,
+		        coinmoney,
+		        fk_userid,
+		        reservation_date,
+		        reservation_time,
+		        prev_time,
+		        SUM(
+		            CASE
+		                WHEN reservation_time = prev_time + INTERVAL '60' MINUTE THEN 0
+		                ELSE 1
+		            END
+		        ) OVER (
+		            PARTITION BY fk_gymseq, fk_userid, reservation_date
+		            ORDER BY reservation_time
+		        ) AS grp
+		    FROM
+		        time_data
+		),
+		final_groups AS (
+		    SELECT
+		        fk_gymseq,
+		        fk_userid,
+		        coinmoney,
+		        reservation_date,
+		        MIN(reservation_time) AS start_time,
+		        MAX(reservation_time) AS end_time,
+		        grp
+		    FROM
+		        grouped_data
+		    GROUP BY
+		        fk_gymseq,
+		        fk_userid,
+		        coinmoney,
+		        reservation_date,
+		        grp
+		)
+		SELECT
+		    fg.fk_gymseq,
+		    fg.fk_userid,
+		    fg.coinmoney,
+		    fg.reservation_date,
+		    TO_CHAR(fg.start_time, 'HH24:MI') || ' ~ ' || TO_CHAR((CAST(fg.end_time AS TIMESTAMP) + INTERVAL '1' HOUR), 'HH24:MI') AS time_range,
+		    g.gymname
+		FROM
+		    final_groups fg
+		JOIN
+		    tbl_gym g ON fg.fk_gymseq = g.gymseq
+		ORDER BY
+		    fg.reservation_date, fg.start_time
+	</select>
+	
+	
+	<delete id="res_cancel" parameterType="HashMap">
+        DELETE FROM tbl_gymres
+		WHERE gymresseq IN (
+		    SELECT gymresseq
+		    FROM tbl_gymres
+		    WHERE fk_gymseq = #{gymseq}
+		      AND fk_userid = #{fk_userid}
+		      AND reservation_date = TO_DATE(#{reservation_date}, 'YY/MM/DD')
+		      AND TO_DATE(time, 'HH24:MI') BETWEEN TO_DATE(#{startTime}, 'HH24:MI') AND TO_DATE(#{endTime}, 'HH24:MI')
+		)
+    </delete>
 	
 	
 </mapper>

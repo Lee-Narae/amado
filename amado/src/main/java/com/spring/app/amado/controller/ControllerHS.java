@@ -563,7 +563,7 @@ public class ControllerHS {
 			String clubseq = request.getParameter("clubseq");
 			String goBackURL = request.getParameter("goBackURL");
 			
-			System.out.println("clubname: "+clubseq);
+			System.out.println("clubseq: "+clubseq);
 			
 			// System.out.println("userid: "+userid+"/"+"goBackURL: "+goBackURL); 확인 완료
 			
@@ -589,15 +589,19 @@ public class ControllerHS {
 		   }
 		   
 		   @GetMapping("/member/myPage_gymview.do")
-		   public ModelAndView myPage_gymview(ModelAndView mav) {
+		   public ModelAndView myPage_gymview(ModelAndView mav,HttpServletRequest request) {
 		      
-			   
+			   	String fk_userid = request.getParameter("fk_userid");
 				// 모든 상품 select 해오기
-				List<GymVO> allGymList = service.getAllGymList(); // 디비에서 데이터를 불러만오는 거라 map에 넣어서 보낼게 없음!!!!
+				List<GymVO> GymList = service.getmypageGymList(fk_userid); // 디비에서 데이터를 불러만오는 거라 map에 넣어서 보낼게 없음!!!!
+				//System.out.println(fk_userid);
+				//System.out.println(GymList.get(0).getGymname());
+				
+				
+				mav.addObject("GymList", GymList);
+				//System.out.println("GymList =>" +GymList);
 
-				mav.addObject("allGymList", allGymList);
-
-				mav.setViewName("member/myPage_gymview.tiles1");
+		    		mav.setViewName("member/myPage_gymview.tiles1");
 				return mav;
 				// /WEB-INF/views/tiles1/opendata/korea_tour_api.jsp 페이지를 만들어야 한다.
 			  

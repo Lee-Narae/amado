@@ -50,11 +50,19 @@ $(document).ready(function(){
 	}
 	
 	$("button.regComment").click(function(){
+		if('${sessionScope.loginuser.userid}' == ''){
+			alert('로그인이 필요합니다.');
+			return false;
+		}
 		viewComment();
 	});
 	
 	$("input[name='comment_text']").keyup(function(e){
 		if(e.keyCode == 13){
+			if('${sessionScope.loginuser.userid}' == ''){
+				alert('로그인이 필요합니다.');
+				return false;
+			}
 			viewComment();
 		}
 	});

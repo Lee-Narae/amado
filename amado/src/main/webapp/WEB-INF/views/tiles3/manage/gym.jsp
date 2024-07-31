@@ -72,6 +72,8 @@
 
 	$(document).ready(function(){
 		
+		$("div#gymM").addClass("hover");
+		
 		const gymname = $("select#selectgym option:first").text();
 		//alert(gymname);
 		

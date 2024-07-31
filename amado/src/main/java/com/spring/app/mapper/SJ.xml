@@ -20,8 +20,14 @@
 	
 	<!-- 회원가입 -->
 	<insert id="memberRegisterEnd" parameterType="MemberVO">
-		insert into tbl_member(userid, password, name, email, postcode, address, detailaddress, extraaddress, mobile, gender, birthday, registerday, lastpwdchangedate, status, memberrank, gymregisterstatus, speed, quick, power, earth, stretch, idle) 
-		values(#{userid}, #{password}, #{name}, #{email}, #{postcode}, #{address}, #{detailaddress}, #{extraaddress}, #{mobile}, to_number(#{gender}), #{birthday}, default, default, default, default, default, default, default, default, default, default, default)
+		insert into tbl_member(userid, password, name, email, postcode, address, detailaddress, extraaddress, mobile, gender, birthday, registerday, lastpwdchangedate, status, memberrank, gymregisterstatus, speed, quick, power, earth, stretch, idle, memberimg, orgfilename) 
+		values(#{userid}, #{password}, #{name}, #{email}, #{postcode}, #{address}, #{detailaddress}, #{extraaddress}, #{mobile}, to_number(#{gender}), #{birthday}, default, default, default, default, default, default, default, default, default, default, default, #{memberimg}, #{orgfilename})
+	</insert>
+	
+	<!-- 회원가입(이미지 있을 경우) -->
+	<insert id="memberRegisterEnd_withFile" parameterType="MemberVO">
+		insert into tbl_member(userid, password, name, email, postcode, address, detailaddress, extraaddress, mobile, gender, birthday, registerday, lastpwdchangedate, status, memberrank, gymregisterstatus, speed, quick, power, earth, stretch, idle, memberimg, orgfilename) 
+		values(#{userid}, #{password}, #{name}, #{email}, #{postcode}, #{address}, #{detailaddress}, #{extraaddress}, #{mobile}, to_number(#{gender}), #{birthday}, default, default, default, default, default, default, default, default, default, default, default, #{memberimg}, #{orgfilename})
 	</insert>
 
 
@@ -373,7 +379,7 @@
 	<!-- 댓글 수정 -->
 	<update id="updateComment" parameterType="HashMap">
 		update tbl_boardcomment set comment_text = #{comment_text} || ' (' || to_char(sysdate, 'yyyy-mm-dd hh24:mi:ss') || ') (수정됨)'
-		where boardcommentseq = to_number(#{boardcommentseq})
+		where boardcommentseq = #{boardcommentseq}
 	</update>	
 
 

@@ -98,13 +98,16 @@ public class ControllerNR {
 			mav.addObject("club", club);
 		}
 		
-		// 동호회장 한정 알림 불러오기(매치요청, 매치결과)
+		// 동호회장 한정 알림 불러오기(매치요청, 매치결과, 동호회 가입 승인)
 		if("1".equals(loginuser.getMemberrank())) {
 			List<Map<String,String>> alarmList = service.getClubAlarm(loginuser.getUserid());
 			mav.addObject("alarmList", alarmList);
 		
 			List<Map<String, String>> matchResultList = service.getMatchResult(loginuser.getUserid());
 			mav.addObject("matchResultList", matchResultList);
+			
+			List<Map<String, String>> clubJoinList = service.getClubJoinList(loginuser.getUserid());
+			mav.addObject("clubJoinList", clubJoinList);
 		}
 		
 		// 우리팀 매치일정 불러오기
@@ -1123,7 +1126,7 @@ public class ControllerNR {
 	
 
 	@GetMapping("/admin/reg/notice")
-	public ModelAndView notice(ModelAndView mav) {
+	public ModelAndView adminLogin_notice(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
 		
 		mav.setViewName("reg/notice.tiles3");
 		
@@ -1563,7 +1566,7 @@ public class ControllerNR {
 	
 	@ResponseBody
 	@PostMapping(value="/community/regComment.do", produces="text/plain;charset=UTF-8")
-	public String requiredLogin_regComment(HttpServletRequest request, HttpServletResponse response) {
+	public String regComment(HttpServletRequest request) {
 		
 		HttpSession session = request.getSession();
 		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
@@ -1819,8 +1822,8 @@ public class ControllerNR {
 	}
 	
 
-	@GetMapping("admin/reg/gym")
-	public ModelAndView AdminGymRegister(ModelAndView mav) {
+	@GetMapping("/admin/reg/gym")
+	public ModelAndView adminLogin_AdminGymRegister(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
 		
 		
 		mav.setViewName("reg/gym.tiles3");

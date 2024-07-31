@@ -752,6 +752,13 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		return wordList;
 	}
 
+	// 동호회 가입 승인 알림 불러오기
+	@Override
+	public List<Map<String, String>> getClubJoinList(String userid) {
+		List<Map<String, String>> clubJoinList = dao.getClubJoinList(userid);
+		return clubJoinList;
+	}
+
 
 	
 	

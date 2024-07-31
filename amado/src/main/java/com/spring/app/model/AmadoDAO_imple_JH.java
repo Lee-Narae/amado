@@ -153,5 +153,17 @@ public class AmadoDAO_imple_JH implements AmadoDAO_JH {
 		return cost;
 	}
 
+	@Override
+	public List<Map<String, String>> getresinfo(String userid) {
+		List<Map<String, String>> resList = sqlsession.selectList("JH.getresinfo", userid);
+		return resList;
+	}
+
+	@Override
+	public int res_cancel(Map<String, String> paraMap) {
+		int n = sqlsession.delete("JH.res_cancel", paraMap);
+		return n;
+	}
+
 
 }

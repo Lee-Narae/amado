@@ -75,6 +75,13 @@ a {
 		
 		goReadComment(); // 페이징 처리 안한 댓글 읽어오기
 		
+		
+		$(document).bind("keydown", function(e){
+		    if(e.keyCode == 13){
+		        e.preventDefault(); // 기본 동작 방지 (계속 댓글쓰기 엔터 누르면 뒤로가기 눌려 기본 동작 방지 작성)
+		    }
+		});
+		
 		$("input:text[name='comment_text']").bind("keyup", function(e){
 			if(e.keyCode == 13){
 				goAddWrite();
@@ -92,47 +99,56 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
     const fullText = $btn.closest('tr').children("td:nth-child(2)").text();
     const $content = $btn.closest('tr').children("td:nth-child(2)");
     
-    let beforeEdit;
-    const lastIndex20 = fullText.lastIndexOf("(20");
-    const lastIndexModify = fullText.lastIndexOf("수정");
+    var beforeEdit;
+    
+	const lastgoodIndex = fullText.indexOf("(2024-");
+	
+	if(lastgoodIndex != -1) {
+		beforeEdit = fullText.substring(0, lastgoodIndex);
+	}
+	
+	const lastIndex20 = fullText.lastIndexOf("(20"); // "(20"이 마지막으로 등장하는 위치를 찾습니다.
+	const lastIndexModify = fullText.lastIndexOf("수정"); // "(수정)"이 마지막으로 등장하는 위치를 찾습니다.
 
-    if (lastIndex20 == -1) {
-        beforeEdit = fullText.substring(0, lastIndexModify);
-    } else {
-        beforeEdit = fullText.substring(0, lastIndex20);
-    }
+	if (lastIndex20 == -1) {
+	    // "(20"이 문자열에 없는 경우
+	    beforeEdit = fullText.substring(0, lastIndexModify); // "(수정)" 이전까지의 부분을 가져옵니다.
+	} else {
+	    // "(20"이 문자열에 있는 경우
+	    beforeEdit = fullText.substring(0, lastIndex20); // "(20" 이전까지의 부분을 가져옵니다.
+	}
 
-    origin_comment_content = beforeEdit.trim();
-
-    $content.html(`<input id='comment_update' type='text' value='${origin_comment_content}' size='80' /><br>
-                   <button class='float-right' id='btnCancel' type='button'>취소</button>
-                   <input type='hidden' value='${boardcommentseq}' />
-                   <button class='btnUpdateComment float-right' id='btnComplete2' type='button'>완료</button>`); // 댓글 내용을 수정할 수 있도록 input 태그를 만들어준다.
-
+	 const origin_comment_content2 = htmlEscape(beforeEdit.trim());
+	
+	 $content.html(`
+	   <input id='comment_update2' type='text' value='${origin_comment_content2}' size='80' /><br>
+	   <button class='float-right' id='btnCancel' type='button'>취소</button>
+	   <input type='hidden' value='${boardcommentseq}' />
+	   <button class='btnUpdateComment float-right' id='btnComplete2' type='button'>완료</button>
+	 `);
+	 
+	 
     document.getElementById('btnCancel').addEventListener('click', function() {
     	goReadComment();
     });
 
-    $(document).on("keyup", "input#comment_update", function(e) {
+    $(document).on("keyup", "input#comment_update2", function(e) {
         if (e.keyCode == 13) {
-            $("button#btnComplete").trigger("click");
+            $("button#btnComplete2").trigger("click");
         }
     });
 
     // 완료 버튼 클릭 시
     $(document).on("click", "button#btnComplete2", function() {
-        const content = $("#comment_update").val();
+        const content = $("#comment_update2").val();
         
-        alert(boardcommentseq);
-        alert(content);
-
         $.ajax({
-            url: "${pageContext.request.contextPath}/updateCommentSJ.do",
+            url: "<%=ctxPath%>/updateCommentSJ.do",
             type: "post",
             data: { "boardcommentseq": boardcommentseq, "content": content },
             dataType: "json",
             success: function(json) {
-            	goReadComment();
+            	readReplyDisplay(boardcommentseq);
             },
             error: function(request, status, error) {
                 alert("code: " + request.status + "\n" + "message: " + request.responseText + "\n" + "error: " + error);
@@ -160,12 +176,9 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 //				alert($(e.target).parent().parent().children("td:nth-child(2)").text());
 				
 				var fullText = $(e.target).parent().parent().parent().text();
+				var beforeEdit;
 				
-				const lastgoodIndex = fullText.lastIndexOf("👍");
-				
-				if(lastgoodIndex != -1) {
-					fullText = fullText.substring(0, lastgoodIndex);
-				}
+				alert(fullText);
 				
 				const lastIndex20 = fullText.lastIndexOf("(20"); // "(20"이 마지막으로 등장하는 위치를 찾습니다.
 				const lastIndexModify = fullText.lastIndexOf("수정"); // "(수정)"이 마지막으로 등장하는 위치를 찾습니다.
@@ -178,8 +191,13 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 				    beforeEdit = fullText.substring(0, lastIndex20); // "(20" 이전까지의 부분을 가져옵니다.
 				}
 				
+				const lastgoodIndex = fullText.indexOf("(2024-");
+				if(lastgoodIndex != -1) {
+					beforeEdit = fullText.substring(0, lastgoodIndex);
+				}
+				
 				const $content = $(e.target).parent().parent().parent();
-				origin_comment_content = beforeEdit.trim();
+				origin_comment_content = htmlEscape(beforeEdit.trim());
 				
 				$content.html(`<input id='comment_update' type='text' value='\${origin_comment_content}' size='80' /><br>
 						<button class='float-right' id='btnCancel' type='button'>취소</button>
@@ -210,7 +228,7 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 				const boardcommentseq = $("#commentDisplay > tr > td.newcomment > input[type=hidden]:nth-child(4)").val();
 				
 				$.ajax({
-					url:"${pageContext.request.contextPath}/updateComment.do",
+					url:"<%=ctxPath%>/updateComment.do",
 					type:"post",
 					data:{"boardcommentseq":boardcommentseq,
 						  "content":content},
@@ -254,7 +272,7 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 				if(confirm("정말로 삭제하시겠습니까?")) {
 				
 					$.ajax({
-						url:"${pageContext.request.contextPath}/deleteComment.do",
+						url:"<%=ctxPath%>/deleteComment.do",
 						type:"post",
 						data:{"boardcommentseq":$(e.target).prev().val(),
 							  "parentseq":"${requestScope.boardvo.boardseq}",
@@ -279,6 +297,15 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 		
 	}); // end of document
 	
+	function htmlEscape(text) {
+		  return text.replace(/&/g, '&amp;')
+		             .replace(/</g, '&lt;')
+		             .replace(/>/g, '&gt;')
+		             .replace(/"/g, '&quot;')
+		             .replace(/'/g, '&#039;');
+	}
+	
+	
 	function goAddWrite(){
 		   
 //		alert("확인");
@@ -288,7 +315,7 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 		    // form태그의 선택자.serialize(); 을 해주면 form 태그내의 모든 값들을 name값을 키값으로 만들어서 보내준다. 
 		       const queryString = $("form[name='addWriteFrm']").serialize();
 		    --%>
-		   
+		    
 			const comment_text = $("input:text[name='comment_text']").val();
 			
 //			alert(comment_text);
@@ -303,13 +330,12 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 		   
 			   $.ajax({
 			      
-			      url: "<%=ctxPath%>/addCommentSJ.do",
+			      url: "<%=ctxPath%>/board/addCommentSJ",
 			      data: queryString,
 			      type: "post",     
 			      dataType: "json",
 			      success: function(json){
 			         console.log(JSON.stringify(json));
-			         
 			        	 goReadComment(); // 페이징 처리 안한 댓글 읽어오기
 			        	 // 페이징 처리한 댓글 읽어오기
 			         
@@ -364,9 +390,7 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 			                    
 		                        if($("input:hidden[name='fk_userid']").val() != null) {
 			                        v_html += "        <div class='float-left'>";
-			                        v_html += "        	   <button type='button'>👍</button>"; 
-			                        v_html += "        	   <button type='button'>👎</button>"; 
-			                        v_html += "        	   <button type='button' onclick='showAddReply("+item.boardcommentseq+")'>답글</button>"; 
+			                        v_html += "        	   <button style='background-color: white;' type='button' onclick='showAddReply("+item.boardcommentseq+")'>답글쓰기</button>"; 
 			                        v_html += "        	   <div class='hidden mt-3' id='"+item.boardcommentseq+"reply_comment'> ";
 			                        v_html += "        	   	<input type='text' size='70' maxlength='1000' class='"+item.boardcommentseq+"replyComment' />";
 			                        v_html += "			   	<br>";	
@@ -478,7 +502,7 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 		        dataType: "json",
 		        success: function (json) {
 		            let replyCount = json.length;
-		            let v_html = "<div class='mt-3 mb-2 rpyDp' style='font-weight: bold; cursor: pointer;'>답글 " + replyCount + " 개 <span class='arrow'>▼</span></div>";
+		            let v_html = "<div class='mt-3 mb-2 rpyDp' style='font-weight: bold; cursor: pointer; color: #06A1E7;'>답글 " + replyCount + " 개 <span class='arrow'>▼</span></div>";
 		            v_html += "<table class='reply-table hidden'><tbody>";
 
 		            if (replyCount > 0) {

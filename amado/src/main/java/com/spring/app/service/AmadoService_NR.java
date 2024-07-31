@@ -246,6 +246,9 @@ public interface AmadoService_NR {
 	// 공지사항 - 검색어 자동완성
 	List<String> wordSearch(Map<String, String> paramap);
 
+	// 동호회 가입 승인 알림 불러오기
+	List<Map<String, String>> getClubJoinList(String userid);
+
 
 	
 

@@ -656,3 +656,16 @@ select clubboardseq, clubseq, title, fk_userid, to_char(registerdate, 'yyyy-mm-d
 select case when length(title) > 20 then substr(title, 0, 20)||'...' else title end title from tbl_notice;
 
 select * from tbl_notice;
+
+select * from tbl_gymres;
+
+select * from tbl_club where fk_userid = 'leejy';
+
+
+select A.clubseq, A.clubname, B.fk_userid from tbl_club A join tbl_clubmember B 
+on A.clubseq = B.clubseq
+where A.fk_userid = 'leejy' and B.status = 0
+order by 1;
+
+
+

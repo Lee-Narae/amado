@@ -13,34 +13,18 @@ div#divRegisterFrm {
 
 table#tblMemberRegister {
  /*	border: solid 1px red; */ 
-	width: 93%;
+	width: 120%;
 	margin: 1% auto;
 }
 
-table#tblMemberRegister th {
-    border: solid 1px gray; 
-}
-
-table#tblMemberRegister th {
-	height: 60px;
-	background-color: silver;
-	font-size: 14pt;
-}
 
 table#tblMemberRegister td {
 	line-height: 200%;
 	padding: 1.2% 0;
 }
 
-span.star {
-	color: red;
-	font-weight: bold;
-	font-size: 13pt;
-}
-
-
 table#tblMemberRegister > tbody > tr > td:first-child {
-	width: 20%;
+	width: 18%;
 	font-weight: bold;
 	text-align: left;
 }
@@ -126,6 +110,33 @@ let b_zipcodeSearch_click = false;
 // "우편번호찾기" 를 클릭했는지 클릭을 안했는지 여부를 알아오기 위한 용도
 
 $(document).ready(function () {
+	
+	 // ==>> 제품이미지 파일선택을 선택하면 화면에 이미지를 미리 보여주기 시작 <<== //
+	 $(document).on("change", "input#attach", function(e){
+		
+		  const input_file =  $(e.target).get(0);
+		  // jQuery선택자.get(0) 은 jQuery 선택자인 jQuery Object 를 DOM(Document Object Model) element 로 바꿔주는 것이다. 
+		  // DOM element 로 바꿔주어야 순수한 javascript 문법과 명령어를 사용할 수 있게 된다. 
+		 
+		  // console.log(input_file);
+		  // <input type="file" name="pimage1" class="infoData img_file" accept="image/*"> 
+			
+		  // console.log(input_file.files);
+
+	 
+		  // 자바스크립트에서 file 객체의 실제 데이터(내용물)에 접근하기 위해 FileReader 객체를 생성하여 사용한다.
+		  const fileReader = new FileReader();
+		 
+		  fileReader.readAsDataURL(input_file.files[0]); 
+		  // FileReader.readAsDataURL() --> 파일을 읽고, result속성에 파일을 나타내는 URL을 저장 시켜준다.
+		 
+		  fileReader.onload = function(){ // FileReader.onload --> 파일 읽기 완료 성공시에만 작동하도록 하는 것임.
+
+	      document.getElementById("previewImg").src = fileReader.result;
+		  };
+		  
+	 });
+	
     $("button#rightPopover").hide();
     $("span.error").hide();
      
@@ -760,61 +771,62 @@ function goReset() {
 <%-- 변경한 곳 아래 --%>
    <div class="input-form col-md-12 mx-auto" style="margin: auto; padding-left: 3%;">
 <%-- 변경한 곳 위 --%>   
-      <form name="registerFrm">
+      <form name="registerFrm" enctype="multipart/form-data">
           <table id="tblMemberRegister">
              <thead>
-                <tr align="center">
-                   <th colspan="2">::: 회원가입 <span style="font-size: 10pt; font-style: italic;">(<span class="star">*</span>표시는 필수입력사항)</span> :::</th>
+                <tr align="left">
+                   <th><span style="font-size: 20pt;">회원가입</span></th>
                 </tr>
              </thead>
              
-             <tbody>
+             <tbody	>
+	            <tr>
+	                <td></td>
+	            </tr>
+
                 <tr>
-                    <td colspan="2" style="line-height: 50%;">&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>성명&nbsp;<span class="star">*</span></td>
+                    <td>성명&nbsp;</td>
                     <td>
                        <input type="text" name="name" id="name" maxlength="30" class="requiredInfo" />
-                       <span class="error">성명은 필수입력 사항입니다.</span>
+                       <span class="error" style="font-size: 8pt; color: red;">성명은 필수입력 사항입니다.</span>
                     </td>
                 </tr>
                 
                 <tr>
-                    <td>아이디&nbsp;<span class="star">*</span></td>
+                    <td>아이디&nbsp;</td>
                     <td>
                        <input type="text" name="userid" id="userid" maxlength="40" class="requiredInfo" />&nbsp;&nbsp;  
                        <%-- 아이디중복체크 --%>
                        <img src="<%= ctxPath%>/resources/images/id_check.png" id="idcheck" class="rounded" alt="round" width="25" />
                        <span id="idcheckResult"></span>
-                       <span class="error">아이디는 영문대소자 5~20 글자로 입력하세요.</span>
+                       <span class="error" style="font-size: 8pt; color: red;">아이디는 영문대소자 5~20 글자로 입력하세요.</span>
                     </td>
                 </tr>
                 
                 <tr>
-                    <td>비밀번호&nbsp;<span class="star">*</span></td>
+                    <td>비밀번호&nbsp;</td>
                     <td>
                        <input type="password" name="pwd" id="pwd" maxlength="15" class="requiredInfo" />
-                       <span class="error">암호는 영문자,숫자,특수기호가 혼합된 8~15 글자로 입력하세요.</span>
+                       <span class="error" style="font-size: 8pt; color: red;">암호는 영문자,숫자,특수기호가 혼합된 8~15 글자로 입력하세요.</span>
                     </td>
                 </tr>
                 
                 <tr>
-                    <td>비밀번호확인&nbsp;<span class="star">*</span></td>
+                    <td>비밀번호확인&nbsp;</td>
                     <td>
                        <input type="password" id="pwdcheck" maxlength="15" class="requiredInfo" />
-                       <span class="error">암호가 일치하지 않습니다.</span>
+                       <span class="error" style="font-size: 8pt; color: red;">암호가 일치하지 않습니다.</span>
                     </td>
                 </tr>
                 
                 <tr>
-                    <td>이메일&nbsp;<span class="star">*</span></td>
+                    <td>이메일&nbsp;</td>
                     <td>
                        <input type="text" name="email" id="email" maxlength="60" class="requiredInfo" />
                        <%-- 이메일중복체크 --%>
                        <span id="emailcheck">이메일중복확인</span>
                        <span id="emailCheckResult"></span>
-                       <span class="error">이메일 형식에 맞지 않습니다.</span>
+                       <span class="error" style="font-size: 8pt; color: red;">이메일 형식에 맞지 않습니다.</span>
                     </td>
                 </tr>
                 
@@ -825,7 +837,7 @@ function goReset() {
                        <input type="text" name="hp2" id="hp2" size="6" maxlength="4" />&nbsp;-&nbsp;
                        <input type="text" name="hp3" id="hp3" size="6" maxlength="4" />    
 <!--                        <span id="phonecheck">휴대폰확인</span> -->
-                       <span class="error">휴대폰 형식이 아닙니다.</span>
+                       <span class="error" style="font-size: 8pt; color: red;">휴대폰 형식이 아닙니다.</span>
                     </td>
                 </tr>
 <!--                 <tr>
@@ -834,7 +846,7 @@ function goReset() {
 						<input type="text" name="phoneCheckResultVal" id="phoneCheckResultVal" size="10" maxlength="10" />
 						<span id="phoneCheck">인증번호확인</span>
 						<span id="phoneCheckResult"></span>
-						<span class="error">올바른 인증번호가 아닙니다.</span>
+						<span class="error" style="font-size: 8pt; color: red;">올바른 인증번호가 아닙니다.</span>
                     </td>
                 </tr> -->
                 
@@ -844,7 +856,7 @@ function goReset() {
                        <input type="text" name="postcode" id="postcode" size="6" maxlength="5" />&nbsp;&nbsp;
                        <%-- 우편번호 찾기 --%>
                        <img src="<%= ctxPath%>/resources/images/address.png" id="zipcodeSearch" class="rounded" alt="round" width="25" />
-                       <span class="error">우편번호 형식에 맞지 않습니다.</span>
+                       <span class="error" style="font-size: 8pt; color: red;">우편번호 형식에 맞지 않습니다.</span>
                     </td>
                 </tr>
                 
@@ -853,7 +865,7 @@ function goReset() {
                     <td>
                        <input type="text" name="address" id="address" size="40" maxlength="200" placeholder="주소" /><br>
                        <input type="text" name="detailaddress" id="detailAddress" size="40" maxlength="200" placeholder="상세주소" />&nbsp;<input type="text" name="extraaddress" id="extraAddress" size="40" maxlength="200" placeholder="참고항목" />            
-                       <span class="error">주소를 입력하세요.</span>
+                       <span class="error" style="font-size: 8pt; color: red;">주소를 입력하세요.</span>
                     </td>
                 </tr>
                 
@@ -869,7 +881,7 @@ function goReset() {
                     <td>생년월일</td>
                     <td>
                        <input type="text" name="birthday" id="datepicker" maxlength="10" />
-                       <span class="error">생년월일은 마우스로만 클릭하세요.</span>
+                       <span class="error" style="font-size: 8pt; color: red;">생년월일은 마우스로만 클릭하세요.</span>
                     </td>
                 </tr>
                 
@@ -895,13 +907,13 @@ function goReset() {
                  
              </tbody>
              <tbody>
-             <tr> 
+             	<tr> 
 		            <td class="file-input-wrapper">
 		                <input type="file" name="attach" id="attach" />
         				<label for="attach">
-            				<img style="top: -630px; position: absolute; left: 420px;" src="<%= ctxPath%>/resources/images/이미지첨부.png" alt="파일 선택">
-            				<div style="border-radius:50%; background-color: white; border: solid 1px lightgray; width: 160%; height: 100%; position: absolute; top:  -562px; left: 490px; z-index: 2;"></div>
-            				<img style="width: 100%; height: 70%; position: absolute; top:   -556px; left: 497px; z-index: 3;" src="<%= ctxPath%>/resources/images/파일첨부2.png" alt="파일 선택">
+            				<img id="previewImg" style="top: -740px; position: absolute; left: 480px;" src="<%= ctxPath%>/resources/images/이미지첨부.png" class="rounded-circle" alt="파일 선택">
+            				<div style="border-radius:50%; background-color: white; border: solid 1px lightgray; width: 160%; height: 100%; position: absolute; top: -672px; left: 530px; z-index: 2;"></div>
+            				<img style="width: 100%; height: 70%; position: absolute; top: -666px; left: 537px; z-index: 3;" src="<%= ctxPath%>/resources/images/파일첨부2.png" alt="파일 선택">
         			    </label>
 		            </td>
 		        </tr>

@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <% String ctxPath = request.getContextPath(); %> 
 
@@ -199,7 +199,7 @@ $(document).ready(function(){
             <div style="border:solid 0px blue; width: 50%; display: flex; margin: 0 auto;" >
                   <button id="myinfo" class='mbtn' style="border-bottom: solid 3px #05203c;" onclick="location.href='<%=ctxPath%>/member/myPage.do'"><div><img src="<%= ctxPath%>/resources/images/zee/person2.png"></div>회원정보</button>
                   <button id="myclub" class='mbtn' style="border-bottom: solid 3px #05203c;" onclick="location.href='<%=ctxPath%>/member/myPage_club.do'"><div><img src="<%= ctxPath%>/resources/images/zee/team.png"></div>동호회 관리</button>
-                  <button id="mygym" class='mbtn' style="border-bottom: solid 3px #05203c;" onclick="location.href='<%=ctxPath%>/member/myPage_gym.do'"><div><img style="height:65px;"src="<%= ctxPath%>/resources/images/zee/court.png"></div>체육관 관리</button>
+                  <button id="mygym" class='mbtn' style="border-bottom: solid 3px #05203c;" onclick="location.href='<%=ctxPath%>/member/myPage_gymview.do?fk_userid=${sessionScope.loginuser.userid}'"><div><img style="height:65px;"src="<%= ctxPath%>/resources/images/zee/court.png"></div>체육관 관리</button>
                   <button id="etc" class='mbtn' style="border-bottom: solid 3px #05203c;" onclick="location.href='<%=ctxPath%>/member/myPage_etc.do'"><div><img src="<%= ctxPath%>/resources/images/zee/etc.png"></div>기타</button>
             </div>
         </div>
@@ -236,32 +236,38 @@ $(document).ready(function(){
 	            
 	          
 <div class="container">
-    <table class="table table-striped table-bordered" id="gymTable">
-        <thead class="thead-dark">
+<table class="table table-striped table-bordered" id="gymTable">
+    <thead class="thead-dark">
+        <tr>
+            <th>체육관 이름</th>
+            <th>체육관 주소</th>
+            <th>삭제하기</th>
+        </tr>
+    </thead>
+    <tbody>
+        <c:if test="${not empty requestScope.GymList}">
+            <!-- GymList가 비어있지 않을 때 데이터 출력 -->
+            <c:forEach var="gym" items="${requestScope.GymList}">
+                <tr>
+                    <td>${gym.gymname}</td>
+                    <td>${gym.address}</td>
+                    <td><button class="btn btn-danger btn-sm" onclick="deleteRow(this)">삭제하기</button></td>
+                </tr>
+            </c:forEach>
+        </c:if>
+        <c:if test="${empty requestScope.GymList}">
+            <!-- GymList가 비어있을 때 메시지 출력 -->
             <tr>
-               
-                <th>체육관 이름</th>
-                <th>체육관 주소</th>
-                <th>삭제하기</th>
+                <td colspan="3">등록한 체육관이 없습니다!</td>
             </tr>
-        </thead>
-          <c:forEach var="gym" items="${requestScope.allGymList}">      
-        <tbody>
-            <!-- 예시 데이터 -->
-            <tr>
-              
-                <td>${gym.gymname}</td>
-                <td>${gym.address}</td>
-                <td><button class="btn btn-danger btn-sm" onclick="deleteRow(this)">삭제하기</button></td>
-            </tr>
-            <!-- 추가적인 데이터는 이곳에 추가 -->
-        </tbody>
-         </c:forEach>
-    </table>
-</div>
-	            
-	            
+        </c:if>
+    </tbody>
+</table>
 
+</div>
+<form>
+		<input type='hidden' name='fk_userid' value='${sessionScope.loginuser.userid}' />
+</form>
 	            
 	        </div>
     	</div> 
