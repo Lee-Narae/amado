@@ -81,6 +81,29 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 
 		return n;
 	}
+	
+	// 회원가입 (이미지 파일이 있는 경우)
+	@Override
+	public int memberRegisterEnd_withFile(MemberVO membervo) {
+		String password = membervo.getPassword();
+		String email = membervo.getEmail();
+		String mobile = membervo.getMobile();
+
+		int n = 0;
+		try {
+			membervo.setPassword(Sha256.encrypt(password));
+			membervo.setEmail(aES256.encrypt(email));
+			membervo.setMobile(aES256.encrypt(mobile));
+
+			n = dao.memberRegisterEnd_withFile(membervo);
+		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+			e.printStackTrace();
+		}
+		return n;
+	}
+	
+	
+	
 
 	// 글쓰기
 	@Override
@@ -201,7 +224,7 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	
 	// 댓글 수정
 	@Override
-	public int updateComment(Map<String, String> paraMap) {
+	public int updateComment(Map<String, String> paraMap) throws Exception {
 		int n = dao.updateComment(paraMap);
 		return n;
 	}
@@ -509,7 +532,6 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		int n = dao.editInquiryAW(paraMap);
 		return n;
 	}
-
 
 
 }

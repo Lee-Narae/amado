@@ -48,6 +48,14 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 		return n;
 	}
 	
+	// 회원가입 이미지 있을 경우
+	@Override
+	public int memberRegisterEnd_withFile(MemberVO membervo) {
+		int n = 0;
+		n = sqlsession.insert("SJ.memberRegisterEnd_withFile", membervo);
+		return n;
+	}
+	
 
 	// 글쓰기
 	@Override

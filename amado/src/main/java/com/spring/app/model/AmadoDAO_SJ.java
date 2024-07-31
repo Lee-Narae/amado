@@ -22,6 +22,9 @@ public interface AmadoDAO_SJ {
 
 	// 회원가입
 	int memberRegisterEnd(MemberVO membervo);
+
+	// 회원가입(이미지 파일이 있는 경우)	
+	int memberRegisterEnd_withFile(MemberVO membervo);
 	
 
 	// 글쓰기
@@ -143,6 +146,8 @@ public interface AmadoDAO_SJ {
 	int getInquiryCount(Map<String, String> paraMap);
 
 	void updateAnswer(Map<String, String> paraMap);
+
+	
 
 	
 

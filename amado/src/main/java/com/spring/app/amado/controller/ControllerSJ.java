@@ -592,7 +592,12 @@ public class ControllerSJ {
 		paraMap.put("boardcommentseq", boardcommentseq);
 		paraMap.put("comment_text", content);
 
-		int n = service.updateComment(paraMap);
+		int n = 0;
+		try {
+			n = service.updateComment(paraMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("n", n);
@@ -611,7 +616,13 @@ public class ControllerSJ {
 		paraMap.put("boardcommentseq", boardcommentseq);
 		paraMap.put("comment_text", content);
 
-		int n = service.updateComment(paraMap);
+		int n = 0;
+		
+		try {
+			n = service.updateComment(paraMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("n", n);
@@ -787,7 +798,7 @@ public class ControllerSJ {
 
 	// 회원가입
 	@PostMapping("/member/memberRegister.do")
-	public ModelAndView memberRegisterEnd(HttpServletRequest request, MemberVO membervo, ModelAndView mav) {
+	public ModelAndView memberRegisterEnd(HttpServletRequest request, MemberVO membervo, ModelAndView mav, MultipartHttpServletRequest mrequest) {
 
 		String hp2 = request.getParameter("hp2");
 		String hp3 = request.getParameter("hp3");
@@ -807,9 +818,79 @@ public class ControllerSJ {
 //		System.out.println(membervo.getDetailaddress());
 //		System.out.println(membervo.getExtraaddress());
 //		System.out.println(membervo.getGender());
+		
+		
+		// === 첨부파일이 있는 경우 작업 시작 !!! ===
+		MultipartFile attach = membervo.getAttach();
+		
+		if (attach != null) {
+			// attach(첨부파일)가 비어 있지 않으면(즉, 첨부파일이 있는 경우라면)
 
-		int n = service.memberRegisterEnd(membervo);
+			String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\images";
+			
+			// 2. 파일첨부를 위한 변수의 설정 및 값을 초기화 한 후 파일 올리기
 
+			String newFileName = "";
+			// WAS(톰캣)의 디스크에 저장될 파일명
+
+			byte[] bytes = null;
+			// 첨부파일의 내용물을 담는 것
+
+			long fileSize = 0;
+			// 첨부파일의 크기
+			
+			try {
+				bytes = attach.getBytes();
+				// 첨부파일의 내용물을 읽어오는 것
+
+				String originalFilename = attach.getOriginalFilename();
+				// attach.getOriginalFilename() 이 첨부파일명의 파일명(예: 강아지.png) 이다.
+
+//             	System.out.println("~~~ 확인용 originalFilename => " + originalFilename); 
+				// ~~~ 확인용 originalFilename => LG_싸이킹청소기_사용설명서.pdf
+
+				newFileName = fileManager.doFileUpload(bytes, originalFilename, path);
+				// 첨부되어진 파일을 업로드 하는 것이다.
+
+//				System.out.println("~~~ 확인용 newFileName => " + newFileName);  
+				// ~~~ 확인용 newFileName => 2024062712072778335865583700.jpg
+
+				// 3. BoardVO boardvo 에 fileName 값과 orgFilename 값과 fileSize 값을 넣어주기
+
+				membervo.setMemberimg(newFileName);
+				// WAS(톰캣)에 저장된 파일명(2024062712072778335865583700.jpg)
+
+				membervo.setOrgfilename(originalFilename);
+				// 게시판 페이지에서 첨부된 파일(쉐보레전면.jpg)을 보여줄 때 사용.
+				// 또한 사용자가 파일을 다운로드 할때 사용되어지는 파일명으로 사용.
+
+				fileSize = attach.getSize(); // 첨부파일의 크기(단위는 byte임)
+				// membervo.setFilesize(String.valueOf(fileSize));
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+			
+			int n = 0;
+
+			if (attach.isEmpty()) {
+				// 파일첨부가 없는 경우라면
+
+				String filename = membervo.getMemberimg();
+				if (filename == null) {
+					membervo.setOrgfilename("");
+					membervo.setMemberimg("");
+					//membervo.setFilesize("0");
+				}
+			
+				n = service.memberRegisterEnd(membervo);
+
+			} else {
+				// 파일첨부가 있는 경우라면
+				n = service.memberRegisterEnd_withFile(membervo);
+			}
+				
 		if (n == 1) {
 			mav.setViewName("main/index.tiles2");
 		} else {
