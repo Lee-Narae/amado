@@ -61,7 +61,7 @@ public interface AmadoService_SJ {
 	int deleteComment(Map<String, String> paraMap) throws Throwable;
 
 	// 댓글 수정
-	int updateComment(Map<String, String> paraMap);
+	int updateComment(Map<String, String> paraMap) throws Exception;
 
 	// 답글 쓰기
 	int addReply(BoardCommentVO boardcommentvo);
@@ -122,6 +122,8 @@ public interface AmadoService_SJ {
 	int delInquiryAW(Map<String, String> paraMap);
 
 	int editInquiryAW(Map<String, String> paraMap);
+
+	int memberRegisterEnd_withFile(MemberVO membervo);
 
 
 }

@@ -26,6 +26,7 @@ public class MemberVO {
 	private String earth;
 	private String stretch;
 	private String memberimg;
+	private String orgfilename;
 	private MultipartFile attach;
 	
 	public MultipartFile getAttach() {
@@ -200,4 +201,11 @@ public class MemberVO {
 	public void setMemberimg(String memberimg) {
 		this.memberimg = memberimg;
 	}
+	public String getOrgfilename() {
+		return orgfilename;
+	}
+	public void setOrgfilename(String orgfilename) {
+		this.orgfilename = orgfilename;
+	}
+	
 }
