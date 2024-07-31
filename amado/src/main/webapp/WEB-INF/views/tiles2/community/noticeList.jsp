@@ -51,12 +51,30 @@ align-content: center;
 border: solid 1px gray;
 }
 
+#displayList {
+text-align: left;
+padding: 1%;
+border-top: none;
+width: 15.5%;
+margin-left: 5%;
+overflow: auto;
+position: relative;
+top: -55px;
+right: -3px;
+z-index: -5;
+border-bottom-right-radius: 10px;
+border-bottom-left-radius: 10px;
+background-color: #e3e3e3;
+}
+
 </style>
 
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" /> 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+	
+	$("div#displayList").hide();
 	
 	// 검색 버튼 눌렀을 때
 	$("button.btn-light").click(function(){
@@ -125,7 +143,9 @@ $(document).ready(function(){
 											  +"<span style='color: orange;'>"
 											  +word.substring(idx, idx+len)+"</span>"+word.substring(idx+len);
 								
-								v_html += `<span style='cursor: pointer;' class='result'>\${result}<br></span>`;
+								if(index < 10){
+									v_html += `<span style='cursor: pointer;' class='result'>\${result}<br></span>`;
+								}
 							}); // end of for
 							
 							const width = $("input[name='searchWord']").css("width");
@@ -212,7 +232,7 @@ function goSearch(){
 			<button type="button" class="btn btn-light" style="font-size: 20pt; padding: 0;">🔎</button>
 		</form>
 		
-		<div id="displayList" style="border: solid 1px gray; width: 15%; margin-left: 5%; overflow: auto; position: relative; ">
+		<div id="displayList">
 		
 		</div>
 		

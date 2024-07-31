@@ -505,7 +505,13 @@ function goClubBoardDetail(clubboardseq, clubseq){
 				</c:forEach>
 			</c:if>
 			
-			<c:if test="${empty requestScope.matchResultList && empty requestScope.alarmList}">
+			<c:if test="${not empty requestScope.clubJoinList}">
+				<div>
+					<%-- <div class="clubJoinDiv" data-toggle="modal" data-target="#clubJoinModal" onclick="openModal3()"><span style="color: blue;">${}</span>&nbsp;팀의 매치 요청</div> --%>
+				</div>
+			</c:if>
+			
+			<c:if test="${empty requestScope.matchResultList && empty requestScope.alarmList && empty requestScope.clubJoinList}">
 				알림이 없습니다.
 			</c:if>
 		</div>

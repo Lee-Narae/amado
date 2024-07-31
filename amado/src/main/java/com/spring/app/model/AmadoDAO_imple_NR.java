@@ -685,4 +685,11 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		return wordList;
 	}
 
+	// 동호회 가입 승인 알림 불러오기
+	@Override
+	public List<Map<String, String>> getClubJoinList(String userid) {
+		List<Map<String, String>> clubJoinList = sqlsession.selectList("NR.getClubJoinList", userid);
+		return clubJoinList;
+	}
+
 }
