@@ -122,6 +122,11 @@ public interface AmadoService_JY {
 
 	List<GymVO> getGymList();
 
+	String getMostclubName(int i);
+
+	Map<String, String> getMostclubNameSeq(int i);
+
+
 
 	
 

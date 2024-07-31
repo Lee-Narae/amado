@@ -67,8 +67,49 @@ public class ControllerJY {
 	
 	
 	@RequestMapping(value="/club/viewclub.do")
-	public ModelAndView viewclub(ModelAndView mav) {
+	public ModelAndView viewclub(HttpServletRequest request,ModelAndView mav) {
+		
+		
+		// 종목별로 가입요청이 가장 많은 동호회 이름 가져오기 
+		Map<String,String> soccerNameSeq = service.getMostclubNameSeq(1);
+		Map<String,String> baseballNameSeq = service.getMostclubNameSeq(2);
+		Map<String,String> vollyballNameSeq = service.getMostclubNameSeq(3);
+		Map<String,String> basketballNameSeq = service.getMostclubNameSeq(4);
+		Map<String,String> footballNameSeq = service.getMostclubNameSeq(5);
+		Map<String,String> tenisNameSeq = service.getMostclubNameSeq(6);
+		Map<String,String> vowlingNameSeq = service.getMostclubNameSeq(7);
+		Map<String,String> badmintonNameSeq = service.getMostclubNameSeq(8);
+		/*String soccerName = service.getMostclubName(1);
+		String baseballName = service.getMostclubName(2);
+		String vollyballName = service.getMostclubName(3);
+		String basketballName = service.getMostclubName(4);
+		String footballName = service.getMostclubName(5);
+		String tenisName = service.getMostclubName(6);
+		String vowlingName = service.getMostclubName(7);
+		String badmintonName = service.getMostclubName(8);
+		*/
+		System.out.println(soccerNameSeq.get("clubseq")+soccerNameSeq.get("clubname"));
+		//3최준혁과 친구들
+		
+		mav.addObject("soccerNameSeq", soccerNameSeq);
+		mav.addObject("baseballNameSeq", baseballNameSeq);
+		mav.addObject("vollyballNameSeq", vollyballNameSeq);
+		mav.addObject("basketballNameSeq", basketballNameSeq);
+		mav.addObject("footballNameSeq", footballNameSeq);
+		mav.addObject("tenisNameSeq", tenisNameSeq);
+		mav.addObject("vowlingNameSeq", vowlingNameSeq);
+		mav.addObject("badmintonNameSeq", badmintonNameSeq);
+		/*
+		mav.addObject("soccerName", soccerName);
+		mav.addObject("baseballName", baseballName);
+		mav.addObject("vollyballName", vollyballName);
+		mav.addObject("basketballName", basketballName);
+		mav.addObject("footballName", footballName);
+		mav.addObject("tenisName", tenisName);
+		mav.addObject("vowlingName", vowlingName);
+		mav.addObject("badmintonName", badmintonName);
 		mav.setViewName("club/viewclub.tiles2");
+		*/
 		//    /WEB-INF/views/club/viewclub.jsp
 		return mav;
 		
@@ -1852,7 +1893,7 @@ public class ControllerJY {
 	
 	// 대관관리
 	@GetMapping(value="/admin/manage/gym")
-	public ModelAndView gym (ModelAndView mav) {
+	public ModelAndView adminLogin_gym (HttpServletRequest request, HttpServletResponse response,ModelAndView mav) {
 		
 		// 체육관 이름, 주소 가져오기
 		List<GymVO> gymList = service.getGymList();
