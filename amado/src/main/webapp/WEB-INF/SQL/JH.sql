@@ -626,3 +626,26 @@ JOIN
     tbl_gym g ON fg.fk_gymseq = g.gymseq
 ORDER BY
     fg.reservation_date, fg.start_time;
+    
+    
+    
+    
+    
+    
+SELECT *
+FROM tbl_gymres
+WHERE gymresseq IN (
+    SELECT gymresseq
+    FROM tbl_gymres
+    WHERE fk_gymseq = 80
+      AND fk_userid = 'choijh'
+      AND reservation_date = TO_DATE('24/07/31', 'YY/MM/DD')
+      AND TO_DATE(time, 'HH24:MI') BETWEEN TO_DATE('21:00', 'HH24:MI') AND TO_DATE('00:00', 'HH24:MI')
+);    
+
+80
+choijh
+2024-07-31
+21:00 ~ 00:00
+startTime21:00
+endTime00:00

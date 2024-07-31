@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -704,7 +706,7 @@ public class ControllerJH {
 		
 		List<Map<String, String>> resList = service.getresinfo(userid);
 		
-		
+		/*
 		for(Map<String, String> resMap:resList) {
 			  System.out.println(resMap.get("time_range"));
 			  System.out.println(resMap.get("fk_gymseq"));
@@ -713,7 +715,7 @@ public class ControllerJH {
 			  System.out.println(resMap.get("coinmoney"));
 			  System.out.println(resMap.get("gymname"));
 		}
-		
+		*/
 		mav.addObject("resList", resList);
 		mav.setViewName("gym/view_reservation.tiles2");
 		// /WEB-INF/views/tiles2/gym/view_reservation.jsp
@@ -735,27 +737,44 @@ public class ControllerJH {
 	@GetMapping(value="/gym/res_cancel.do", produces="text/plain;charset=UTF-8") 
 	public String res_cancel(HttpServletRequest request) throws IOException, ParseException {
 
-		System.out.println(request.getParameter("gymseq"));
-		System.out.println(request.getParameter("fk_userid"));
-		System.out.println(request.getParameter("reservation_date"));
-		System.out.println(request.getParameter("time_range"));
+		//System.out.println(request.getParameter("gymseq"));
+		//System.out.println(request.getParameter("fk_userid"));
+		//System.out.println(request.getParameter("reservation_date"));
+		//System.out.println(request.getParameter("time_range"));
 		
 		String gymseq = request.getParameter("gymseq");
 		String fk_userid = request.getParameter("fk_userid");
 		String reservation_date = request.getParameter("reservation_date");
 		String time_range = request.getParameter("time_range");
 		String startTime = time_range.substring(0,5);
-		String endTime = time_range.substring(8,13);
+		String endTime1 = time_range.substring(8,13);
 		
-		System.out.println("startTime"+startTime);
-		System.out.println("endTime"+endTime);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTime time = LocalTime.parse(endTime1, formatter);
+
+        // 1시간 빼기
+        LocalTime newTime = time.minusHours(1);
+
+        // LocalTime을 다시 문자열로 변환
+        String endTime = newTime.format(formatter);
 		
 		
-		int n = service.res_cancel(gymseq); 
+		//System.out.println("startTime"+startTime);
+		//System.out.println("endTime"+endTime);
+		
+		Map<String, String> paraMap = new HashMap<>();
+		
+		paraMap.put("gymseq", gymseq);
+		paraMap.put("fk_userid", fk_userid);
+		paraMap.put("reservation_date", reservation_date);
+		paraMap.put("startTime", startTime);
+		paraMap.put("endTime", endTime);
+		
+		int n = service.res_cancel(paraMap); 
 		
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("n", n);
-		
+		//System.out.println(n);
 		return jsonObj.toString();
 	}
 	

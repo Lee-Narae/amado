@@ -29,8 +29,8 @@
 	        	  "time_range":time_range,},
 	        dataType:"json",
 	        success:function(json){
-	            
-	        	if(json.n == 1){
+	        	console.log(JSON.stringify(json));
+	        	if(json.n > 0){
 	        		alert('예약취소가 완료됐습니다!');
 	        		window.location.reload();
 	        	}

@@ -213,10 +213,11 @@ public class AmadoService_imple_JH implements AmadoService_JH {
 
 
 
+
 	@Override
-	public int res_cancel(String gymseq) {
-		//int n = dao.res_cancel(gymseq);
-		return 0;
+	public int res_cancel(Map<String, String> paraMap) {
+		int n = dao.res_cancel(paraMap);
+		return n;
 	}
 
 }
