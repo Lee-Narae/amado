@@ -115,7 +115,7 @@ background-color: rgba(230, 245, 255, 0.5);
 padding: 1.5%;
 }
 
-.alarmDiv:hover, .matchDiv:hover {
+.alarmDiv:hover, .matchDiv:hover, .clubJoinDiv:hover {
 cursor: pointer;
 font-weight: bold;
 color: #0099ff !important;
@@ -429,6 +429,14 @@ function goClubBoardDetail(clubboardseq, clubseq){
 	f.submit();
 }
 
+
+function openModal3(){
+	
+	$("div.modal3").empty();
+	
+	// 아이디, 이름, 연락처, 수락/거절 ==> 이후에 동호회원에게 무슨 액션이 있다면 좋을듯
+	
+}
 </script>
 
 <div id="container">
@@ -454,13 +462,22 @@ function goClubBoardDetail(clubboardseq, clubseq){
 </div>
 
 
-
+<!-- 모달2 -->
+<div class="modal modalclass" id="clubJoinModal" style="margin-top: 5%; height: auto;">
+  <div class="modal-dialog" style="height: auto;">
+    <div class="modal-content modal3">
+    
+    </div>
+  </div>
+</div>
 
 
 	<c:if test="${sessionScope.loginuser.memberrank == '1'}">
 		<div style="height: 60px;">
 			<div id="notice" align="right" style="margin-right: 10%;">
-				<span style="background-color: #0099ff; color: white; font-weight: bold; font-size: 20pt; display: inline-block; width: 40px; height: 40px; text-align: center; align-content: center; border-radius: 20px;">${requestScope.alarmList.size()+requestScope.matchResultList.size()}</span>
+				<span style="background-color: #0099ff; color: white; font-weight: bold; font-size: 20pt; display: inline-block; width: 40px; height: 40px; text-align: center; align-content: center; border-radius: 20px;">
+				${not empty requestScope.clubJoinList?requestScope.alarmList.size()+requestScope.matchResultList.size()+1:requestScope.alarmList.size()+requestScope.matchResultList.size()}
+				</span>
 				<img width="70" height="70" src="https://img.icons8.com/3d-fluency/94/bell.png" alt="bell"/>
 			</div>
 			
@@ -499,7 +516,7 @@ function goClubBoardDetail(clubboardseq, clubseq){
 							<input type="hidden" id="area" value="${alarm.area}" />
 							<input type="hidden" id="status" value="${alarm.status}" />
 						</div>
-					<c:if test="${status.index != requestScope.alarmList.size()-1}">
+					<c:if test="${status.index != requestScope.alarmList.size()-1 || not empty requestScope.clubJoinList}">
 						<hr>
 					</c:if>
 				</c:forEach>
@@ -507,7 +524,7 @@ function goClubBoardDetail(clubboardseq, clubseq){
 			
 			<c:if test="${not empty requestScope.clubJoinList}">
 				<div>
-					<%-- <div class="clubJoinDiv" data-toggle="modal" data-target="#clubJoinModal" onclick="openModal3()"><span style="color: blue;">${}</span>&nbsp;팀의 매치 요청</div> --%>
+					<div class="clubJoinDiv" data-toggle="modal" data-target="#clubJoinModal" onclick="openModal3()">동호회 <span style="color: blue;">가입 신청</span></div>
 				</div>
 			</c:if>
 			
