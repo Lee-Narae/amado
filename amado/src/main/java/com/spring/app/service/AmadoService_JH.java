@@ -48,7 +48,7 @@ public interface AmadoService_JH {
 
 	List<Map<String, String>> getresinfo(String userid);
 
-	int res_cancel(String gymseq);
+	int res_cancel(Map<String, String> paraMap);
 
 	
 }

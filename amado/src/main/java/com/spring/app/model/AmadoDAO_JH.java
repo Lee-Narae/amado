@@ -57,5 +57,7 @@ public interface AmadoDAO_JH {
 
 	List<Map<String, String>> getresinfo(String userid);
 
+	int res_cancel(Map<String, String> paraMap);
+
 
 }

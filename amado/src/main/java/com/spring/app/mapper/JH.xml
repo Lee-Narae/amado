@@ -228,5 +228,17 @@
 	</select>
 	
 	
+	<delete id="res_cancel" parameterType="HashMap">
+        DELETE FROM tbl_gymres
+		WHERE gymresseq IN (
+		    SELECT gymresseq
+		    FROM tbl_gymres
+		    WHERE fk_gymseq = #{gymseq}
+		      AND fk_userid = #{fk_userid}
+		      AND reservation_date = TO_DATE(#{reservation_date}, 'YY/MM/DD')
+		      AND TO_DATE(time, 'HH24:MI') BETWEEN TO_DATE(#{startTime}, 'HH24:MI') AND TO_DATE(#{endTime}, 'HH24:MI')
+		)
+    </delete>
+	
 	
 </mapper>
