@@ -82,6 +82,10 @@ public interface AmadoService_HS {
 	List<GymVO> getmypageGymList(String fk_userid);
 
 
+	//mypage 체육관지우기
+	int quitGym(Map<String, String> paramap);
+
+
 	
 
 

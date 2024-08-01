@@ -296,6 +296,16 @@ public class AmadoService_imple_HS implements AmadoService_HS {
 				return GymList;
 		}
 
+
+
+
+		//mypage 체육관지우기
+		@Override
+		public int quitGym(Map<String, String> paramap) {
+			int n = dao.quitGym(paramap);
+			return n;
+		}
+
 	
 
 

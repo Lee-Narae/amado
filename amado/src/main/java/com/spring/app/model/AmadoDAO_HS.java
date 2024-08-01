@@ -80,6 +80,9 @@ public interface AmadoDAO_HS {
 
 	//mypage의 체육관 보기
 	List<GymVO> getmypageGymList(String fk_userid);
+	
+	//mypage 체육관지우기
+	int quitGym(Map<String, String> paramap);
 
 	
 
