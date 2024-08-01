@@ -563,6 +563,7 @@ WITH time_data AS (
         fk_gymseq,
         fk_userid,
         coinmoney,
+        row_number() over(order by gymresseq desc) AS rno,
         reservation_date,
         TO_DATE(time, 'HH24:MI') AS reservation_time,
         LAG(TO_DATE(time, 'HH24:MI')) OVER (
@@ -580,6 +581,7 @@ grouped_data AS (
         fk_gymseq,
         coinmoney,
         fk_userid,
+        row_number() over(order by gymresseq desc) AS rno,
         reservation_date,
         reservation_time,
         prev_time,
@@ -624,6 +626,7 @@ FROM
     final_groups fg
 JOIN
     tbl_gym g ON fg.fk_gymseq = g.gymseq
+WHERE rno between 1 and 3
 ORDER BY
     fg.reservation_date, fg.start_time;
     
@@ -643,9 +646,81 @@ WHERE gymresseq IN (
       AND TO_DATE(time, 'HH24:MI') BETWEEN TO_DATE('21:00', 'HH24:MI') AND TO_DATE('00:00', 'HH24:MI')
 );    
 
-80
-choijh
-2024-07-31
-21:00 ~ 00:00
-startTime21:00
-endTime00:00
+
+select count(*)
+from tbl_gymres
+where fk_userid = 'choijh';
+
+
+
+
+SELECT COUNT(*)
+FROM (
+    WITH time_data AS (
+        SELECT
+            gymresseq,
+            fk_gymseq,
+            fk_userid,
+            coinmoney,
+            reservation_date,
+            TO_DATE(time, 'HH24:MI') AS reservation_time,
+            LAG(TO_DATE(time, 'HH24:MI')) OVER (
+                PARTITION BY fk_gymseq, fk_userid, reservation_date
+                ORDER BY TO_DATE(time, 'HH24:MI')
+            ) AS prev_time
+        FROM
+            tbl_gymres
+        WHERE
+            fk_userid = 'choijh'
+    ),
+    grouped_data AS (
+        SELECT
+            gymresseq,
+            fk_gymseq,
+            coinmoney,
+            fk_userid,
+            reservation_date,
+            reservation_time,
+            prev_time,
+            SUM(
+                CASE
+                    WHEN reservation_time = prev_time + INTERVAL '60' MINUTE THEN 0
+                    ELSE 1
+                END
+            ) OVER (
+                PARTITION BY fk_gymseq, fk_userid, reservation_date
+                ORDER BY reservation_time
+            ) AS grp
+        FROM
+            time_data
+    ),
+    final_groups AS (
+        SELECT
+            fk_gymseq,
+            fk_userid,
+            coinmoney,
+            reservation_date,
+            MIN(reservation_time) AS start_time,
+            MAX(reservation_time) AS end_time,
+            grp
+        FROM
+            grouped_data
+        GROUP BY
+            fk_gymseq,
+            fk_userid,
+            coinmoney,
+            reservation_date,
+            grp
+    )
+    SELECT
+        fg.fk_gymseq,
+        fg.fk_userid,
+        fg.coinmoney,
+        fg.reservation_date,
+        TO_CHAR(fg.start_time, 'HH24:MI') || ' ~ ' || TO_CHAR((CAST(fg.end_time AS TIMESTAMP) + INTERVAL '1' HOUR), 'HH24:MI') AS time_range,
+        g.gymname
+    FROM
+        final_groups fg
+    JOIN
+        tbl_gym g ON fg.fk_gymseq = g.gymseq
+) result_set; 

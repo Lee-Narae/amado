@@ -206,8 +206,8 @@ public class AmadoService_imple_JH implements AmadoService_JH {
 
 
 	@Override
-	public List<Map<String, String>> getresinfo(String userid) {
-		List<Map<String, String>> resList = dao.getresinfo(userid);
+	public List<Map<String, String>> getresinfo(Map<String, String> paraMap) {
+		List<Map<String, String>> resList = dao.getresinfo(paraMap);
 		return resList;
 	}
 
@@ -218,6 +218,22 @@ public class AmadoService_imple_JH implements AmadoService_JH {
 	public int res_cancel(Map<String, String> paraMap) {
 		int n = dao.res_cancel(paraMap);
 		return n;
+	}
+
+
+
+	@Override
+	public int getTotalCount(String userid) {
+		int totalCount = dao.getTotalCount(userid);
+		return totalCount;
+	}
+
+
+
+	@Override
+	public Map<String, String> getviewresList(String userid) {
+		Map<String, String> viewresMap = dao.getviewresList(userid);
+		return viewresMap;
 	}
 
 }
