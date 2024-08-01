@@ -234,6 +234,16 @@ public class AmadoDAO_imple_HS implements AmadoDAO_HS {
 
 
 
+		
+		//mypage 체육관지우기
+		@Override
+		public int quitGym(Map<String, String> paramap) {
+			int n = sqlsession.delete("HS.quitGym", paramap);
+			return n;
+		}
+
+
+
 
 
 
