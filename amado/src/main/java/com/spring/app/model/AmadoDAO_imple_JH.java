@@ -154,8 +154,8 @@ public class AmadoDAO_imple_JH implements AmadoDAO_JH {
 	}
 
 	@Override
-	public List<Map<String, String>> getresinfo(String userid) {
-		List<Map<String, String>> resList = sqlsession.selectList("JH.getresinfo", userid);
+	public List<Map<String, String>> getresinfo(Map<String, String> paraMap) {
+		List<Map<String, String>> resList = sqlsession.selectList("JH.getresinfo", paraMap);
 		return resList;
 	}
 
@@ -163,6 +163,18 @@ public class AmadoDAO_imple_JH implements AmadoDAO_JH {
 	public int res_cancel(Map<String, String> paraMap) {
 		int n = sqlsession.delete("JH.res_cancel", paraMap);
 		return n;
+	}
+
+	@Override
+	public int getTotalCount(String userid) {
+		int totalCount = sqlsession.selectOne("JH.getTotalCount", userid);
+		return totalCount;
+	}
+
+	@Override
+	public Map<String, String> getviewresList(String userid) {
+		Map<String, String> viewresMap = sqlsession.selectOne("JH.getviewresList", userid);
+		return viewresMap;
 	}
 
 

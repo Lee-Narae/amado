@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.spring.app.common.MyUtil;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
@@ -700,28 +701,92 @@ public class ControllerJH {
 	@GetMapping("/gym/view_reservation.do")
 	public ModelAndView view_reservation(ModelAndView mav, HttpServletRequest request) {
 
-		String userid = request.getParameter("userid");
-		
-		System.out.println(userid);
-		
-		List<Map<String, String>> resList = service.getresinfo(userid);
-		
-		/*
-		for(Map<String, String> resMap:resList) {
-			  System.out.println(resMap.get("time_range"));
-			  System.out.println(resMap.get("fk_gymseq"));
-			  System.out.println(resMap.get("fk_userid"));
-			  System.out.println(resMap.get("reservation_date")); 
-			  System.out.println(resMap.get("coinmoney"));
-			  System.out.println(resMap.get("gymname"));
-		}
-		*/
-		mav.addObject("resList", resList);
-		mav.setViewName("gym/view_reservation.tiles2");
-		// /WEB-INF/views/tiles2/gym/view_reservation.jsp
-		
-		return mav;
-	}	
+	    String userid = request.getParameter("userid");
+	    String str_currentShowPageNo = request.getParameter("currentShowPageNo");
+	    
+	    int totalCount = service.getTotalCount(userid);
+	    int sizePerPage = 10;
+	    int currentShowPageNo = 0;
+	    int totalPage = (int) Math.ceil((double) totalCount / sizePerPage);
+	    
+	    if (str_currentShowPageNo == null) {
+	        currentShowPageNo = 1;
+	    } else {
+	        try {
+	            currentShowPageNo = Integer.parseInt(str_currentShowPageNo);
+	            if (currentShowPageNo < 1 || currentShowPageNo > totalPage) {
+	                currentShowPageNo = 1;
+	            }
+	        } catch (NumberFormatException e) {
+	            currentShowPageNo = 1;
+	        }
+	    }
+	    
+	    int startRno = ((currentShowPageNo - 1) * sizePerPage) + 1;
+	    int endRno = startRno + sizePerPage - 1;
+	    
+	    Map<String, String> paraMap = new HashMap<>();
+	    paraMap.put("startRno", String.valueOf(startRno));
+	    paraMap.put("endRno", String.valueOf(endRno));
+	    paraMap.put("userid", userid);
+	    
+	    List<Map<String, String>> resList = service.getresinfo(paraMap);
+	    mav.addObject("resList", resList);
+	    
+	    int blockSize = 10;
+	    int loop = 1;
+	    int pageNo = ((currentShowPageNo - 1) / blockSize) * blockSize + 1;
+	    
+	    String contextPath = request.getContextPath();
+	    String url = contextPath + "/gym/view_reservation.do";
+	    
+	    StringBuilder pageBar = new StringBuilder("<ul style='list-style:none;'>");
+	    
+	    if (pageNo != 1) {
+	        pageBar.append("<li style='display:inline-block; width:70px; font-size:12pt;'><a href='")
+	               .append(url).append("?userid=").append(userid).append("'>[맨처음]</a></li>");
+	        pageBar.append("<li style='display:inline-block; width:50px; font-size:12pt;'><a href='")
+	               .append(url).append("?userid=").append(userid).append("&currentShowPageNo=")
+	               .append(pageNo - 1).append("'>[이전]</a></li>");
+	    }
+	    
+	    while (!(loop > blockSize || pageNo > totalPage)) {
+	        if (pageNo == currentShowPageNo) {
+	            pageBar.append("<li style='display:inline-block; width:30px; font-size:12pt; border:solid 0px gray; color:black; padding:2px 4px;'>")
+	                   .append(pageNo).append("</li>");
+	        } else {
+	            pageBar.append("<li style='display:inline-block; width:30px; font-size:12pt;'><a style='color:#999;' href='")
+	                   .append(url).append("?userid=").append(userid).append("&currentShowPageNo=")
+	                   .append(pageNo).append("'>").append(pageNo).append("</a></li>");
+	        }
+	        loop++;
+	        pageNo++;
+	    }
+	    
+	    if (pageNo <= totalPage) {
+	        pageBar.append("<li style='display:inline-block; width:50px; font-size:12pt;'><a href='")
+	               .append(url).append("?userid=").append(userid).append("&currentShowPageNo=")
+	               .append(pageNo).append("'>[다음]</a></li>");
+	        pageBar.append("<li style='display:inline-block; width:70px; font-size:12pt;'><a href='")
+	               .append(url).append("?userid=").append(userid).append("&currentShowPageNo=")
+	               .append(totalPage).append("'>[마지막]</a></li>");
+	    }
+	    
+	    pageBar.append("</ul>");
+	    
+	    mav.addObject("pageBar", pageBar.toString());
+	    
+	    String goBackURL = MyUtil.getCurrentURL(request);
+	    mav.addObject("goBackURL", goBackURL);
+	    
+	    mav.addObject("totalCount", totalCount);
+	    mav.addObject("currentShowPageNo", currentShowPageNo);
+	    mav.addObject("sizePerPage", sizePerPage);
+	    
+	    mav.setViewName("gym/view_reservation.tiles2");
+	    
+	    return mav;
+	}
 	
 	
 	@GetMapping("/weather/weatherXML.do")
@@ -775,6 +840,43 @@ public class ControllerJH {
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("n", n);
 		//System.out.println(n);
+		return jsonObj.toString();
+	}
+	
+	
+	
+	@ResponseBody
+	@GetMapping(value="/gym/viewres_JSON.do", produces="text/plain;charset=UTF-8") 
+	public String viewres_JSON(HttpServletRequest request) throws IOException, ParseException {
+		
+		String gymseq = request.getParameter("gymseq");
+		
+		System.out.println(gymseq);
+		
+		Map<String,String> viewresMap = service.getviewresList(gymseq); 
+		
+		JSONObject jsonObj = new JSONObject();           
+		jsonObj.put("lat", viewresMap.get("lat"));   //위도          
+		jsonObj.put("lng", viewresMap.get("lng")); 	//경도
+				
+		return jsonObj.toString();
+	}
+	
+	
+	@ResponseBody
+	@GetMapping(value="/gym/latlng.do", produces="text/plain;charset=UTF-8") 
+	public String latlng(HttpServletRequest request) throws IOException, ParseException {
+		
+		String gymseq = request.getParameter("gymseq");
+		
+		System.out.println(gymseq);
+		
+		Map<String,String> latlng = service.getviewresList(gymseq); 
+		
+		JSONObject jsonObj = new JSONObject();           
+		jsonObj.put("lat", latlng.get("lat"));   //위도          
+		jsonObj.put("lng", latlng.get("lng")); 	//경도
+				
 		return jsonObj.toString();
 	}
 	

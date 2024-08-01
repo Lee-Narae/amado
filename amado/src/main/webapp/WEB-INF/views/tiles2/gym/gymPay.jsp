@@ -682,7 +682,7 @@
 			</div>
 	        <!-- 예약하기 버튼 -->
 	        <div class="section">
-	            <button class="btn btn-primary btn-reserve" onclick="goCoinPurchaseEnd('<%= ctxPath%>','${sessionScope.loginuser.userid}','${requestScope.gymvo.gymname}')">예약하기</button>
+	            <button class="btn btn-primary btn-reserve" onclick="gymPayEndInsert()">예약하기</button>
 	        </div>
 	    </div>
 	    <div>
