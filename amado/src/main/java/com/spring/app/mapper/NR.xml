@@ -796,16 +796,24 @@
 		<result column="fk_userid" property="userid" javaType="String"/>
 		<result column="clubseq" property="clubseq" javaType="String"/>
 		<result column="clubname" property="clubname" javaType="String"/>
-		<result column="status" property="status" javaType="String"/>
+		<result column="name" property="name" javaType="String"/>
 	</resultMap>
 	<select id="getClubJoinList" parameterType="String" resultMap="clubJoinMap">
-		select A.clubseq, A.clubname, B.fk_userid from tbl_club A join tbl_clubmember B 
+		select A.clubseq, A.clubname, B.fk_userid, C.name from tbl_club A join tbl_clubmember B 
 		on A.clubseq = B.clubseq
-		where A.fk_userid = 'leejy' and B.status = 0
+        join tbl_member C
+        on B.fk_userid = C.userid
+		where A.fk_userid = #{userid} and B.status = 0
 		order by 1
 	</select>
 	
+	<update id="permitJoinClub" parameterType="HashMap">
+		update tbl_clubmember set status = 1
+		where fk_userid = #{userid} and clubseq = #{clubseq}
+	</update>
 	
-	
-	
+	<delete id="refuseJoinClub" parameterType="HashMap">
+		delete from tbl_clubmember
+		where fk_userid = #{userid} and clubseq = #{clubseq}
+	</delete>
 </mapper>

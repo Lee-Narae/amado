@@ -435,7 +435,39 @@ FROM tbl_gymres
 select distinct(gymname), address
 from tbl_gymres r
 join tbl_gym g
-on r.fk_gymseq = g.gymseq
+on r.fk_gymseq = g.gymseq;
 
 select gymname, address
-from tbl_gym	
+from tbl_gym;
+
+
+--종목별로 가입된 인원수가 가장 많은 동호회
+SELECT clubname, COUNT(*)
+FROM
+(
+    SELECT A.clubseq, B.clubname
+    FROM tbl_clubmember A
+    JOIN tbl_club B
+    ON A.clubseq = B.clubseq
+    WHERE A.sportseq = 1
+) V
+GROUP BY clubname;
+
+--스포츠이름, 클럽이름, 카운트
+		SELECT clubseq, clubname, club_cnt
+		FROM (
+		    SELECT clubname, clubseq,COUNT(*) AS club_cnt
+		    FROM (
+		        SELECT A.clubseq, B.clubname
+		        FROM tbl_clubmember A
+		        JOIN tbl_club B ON A.clubseq = B.clubseq
+		        WHERE A.sportseq = 1
+		    ) V
+		    GROUP BY clubname, clubseq
+		    ORDER BY COUNT(*) DESC
+		)
+		WHERE ROWNUM = 1
+
+
+
+

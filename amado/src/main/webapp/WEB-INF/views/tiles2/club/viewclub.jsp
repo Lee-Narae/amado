@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
    String ctxPath = request.getContextPath();
 %>    
@@ -9,6 +9,7 @@
 <style type="text/css">
     
 	.round-card {
+	border: solid 1px red;
     border-radius: 50%;
     width: 300px;
     height: 300px;
@@ -33,8 +34,8 @@ div.card{
 	position: relative;
 	border: solid 1px gray;
 	border-radius: 100%;
-	width: 200px;
-	height: 200px;
+	width: 270px;
+	height: 270px;
 	text-align: center;
 	padding-top: 25px; 
 	overflow: hidden;
@@ -50,6 +51,7 @@ div.hoverborder{
 	background-color: #254179;
 	transition: all 0.5s ease;
 	padding-bottom: 100%;
+	
 }
 
 .hoverborder:hover {/*------호버------*/
@@ -61,9 +63,19 @@ div.hoverborder{
 	cursor: pointer;
 }
 
-.hoverborder:hover a{
-	opacity: 0;
+
+
+.hoverborder:hover div:first-child {
+    display: none;
 }
+.hoverborder div.atag{
+	
+    display: none;
+}
+.hoverborder:hover div.atag {
+    display:block;
+}
+
 
 .sportsimage {
     position: absolute;
@@ -73,15 +85,20 @@ div.hoverborder{
     margin-top: -20px; /* Adjust this value as needed */
 }
 .sportsimg{
-	width: 80px;
+	width: 100px;
 }
-   
+div.hoverborder div{
+	margin-top: 18%;
+}
+.sbtn{
+	color: white;
+}
 </style>
     
     
     
     
-<div class="container" style="border:solid 0px black; margin-top: 12%;">
+<div id="container" style="border:solid 0px black; margin-top: 7%; margin-bottom: 5%;">
 	
 	<%-- 머릿말  --%>
 	<div style="text-align: center; ">
@@ -89,7 +106,7 @@ div.hoverborder{
 		<br>
 	</div>
 	    
-	<div style="display: flex;  margin-top: 5%; padding-right: 15%; ">
+	<div style="display: flex;  margin-top: 5%;  width: 80%;margin-left:5%;">
 		<div id="scategory" class="col-md-3 col-lg-2 offset-lg-1">
 			<div class="sportsimage">
 				<img class="sportsimg" src="<%= ctxPath%>/resources/images/zee/icons8-soccer-48.png"/>
@@ -98,10 +115,33 @@ div.hoverborder{
 				<div class="sports">축구</div>
 				
 				<div class="recommend">🔥많이 찾는 동호회</div>
-				<div class="recommend">ooo</div>
+				<c:if test="${requestScope.soccerNameSeq.clubname != null}">
+					<div class="rcmName">${requestScope.soccerNameSeq.clubname}</div>
+				</c:if>
+				<c:if test="${requestScope.soccerNameSeq.clubname == null}">
+					<div class="noName">개설된 동호회가 없습니다.</div>
+				</c:if>
+				
 				<div class="hoverborder">
-					<a href='#' class='sbtn'>자세히보기</a>
+					
+					<div>동호회찾기 시작</div>
+					<div class="atag">
+						<c:if test="${requestScope.soccerNameSeq.clubname != null}">
+							<a href='<%= ctxPath%>/club/myClub_plus.do?sportseq=1&clubseq=${requestScope.soccerNameSeq.clubseq}' class='sbtn'>${requestScope.soccerNameSeq.clubname} 바로가기 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+							<br><br>
+							<hr>
+							<br>
+							<a href='<%= ctxPath%>/club/findClub.do?sportseq=1' class='sbtn'>전체동호회 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+						</c:if>
+						
+						<c:if test="${requestScope.soccerNameSeq.clubname == null}">
+							<br><br>
+							<a href='<%= ctxPath%>/club/findClub.do?sportseq=1' class='sbtn'>전체동호회 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+						</c:if>
+					</div>
+					
 				</div>
+				
 			</div>
 		</div>
 		<div id="scategory" class="col-md-3 col-lg-2 offset-lg-1">
@@ -112,9 +152,30 @@ div.hoverborder{
 				<div class="sports">야구</div>
 				
 				<div class="recommend">🔥많이 찾는 동호회</div>
-				<div class="recommend">ooo</div>
+				<c:if test="${requestScope.baseballNameSeq.clubname != null}">
+					<div class="rcmName">${requestScope.baseballNameSeq.clubname}</div>
+				</c:if>
+				<c:if test="${requestScope.baseballNameSeq.clubname == null}">
+					<div class="recommend">개설된 동호회가 없습니다.</div>
+				</c:if>
 				<div class="hoverborder">
-					<a href='#' class='sbtn'></a>
+					
+					<div>동호회찾기 시작</div>
+					<div class="atag">
+						<c:if test="${requestScope.baseballNameSeq.clubname != null}">
+							<a href='<%= ctxPath%>/club/myClub_plus.do?sportseq=2&clubseq=${requestScope.baseballNameSeq.clubseq}' class='sbtn'>${requestScope.baseballNameSeq.clubname} 바로가기 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+							<br><br>
+							<hr>
+							<br>
+							<a href='<%= ctxPath%>/club/findClub.do?sportseq=2' class='sbtn'>전체동호회 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+						</c:if>
+						
+						<c:if test="${requestScope.baseballNameSeq.clubname == null}">
+							<br><br>
+							<a href='<%= ctxPath%>/club/findClub.do?sportseq=2' class='sbtn'>전체동호회 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+						</c:if>
+					</div>
+					
 				</div>
 			</div>
 		</div>
@@ -126,9 +187,30 @@ div.hoverborder{
 				<div class="sports">배구</div>
 				
 				<div class="recommend">🔥많이 찾는 동호회</div>
-				<div class="recommend">ooo</div>
+				<c:if test="${requestScope.vollyballNameSeq.clubname != null}">
+					<div class="rcmName">${requestScope.vollyballNameSeq.clubname}</div>
+				</c:if>
+				<c:if test="${requestScope.vollyballNameSeq.clubname == null}">
+					<div class="recommend">개설된 동호회가 없습니다.</div>
+				</c:if>
 				<div class="hoverborder">
-					<a href='#' class='sbtn'></a>
+					
+					<div>동호회찾기 시작</div>
+					<div class="atag">
+						<c:if test="${requestScope.vollyballNameSeq.clubname != null}">
+							<a href='<%= ctxPath%>/club/myClub_plus.do?sportseq=3&clubseq=${requestScope.vollyballNameSeq.clubseq}' class='sbtn'>${requestScope.vollyballNameSeq.clubname} 바로가기 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+							<br><br>
+							<hr>
+							<br>
+							<a href='<%= ctxPath%>/club/findClub.do?sportseq=3' class='sbtn'>전체동호회 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+						</c:if>
+						
+						<c:if test="${requestScope.vollyballNameSeq.clubname == null}">
+							<br><br>
+							<a href='<%= ctxPath%>/club/findClub.do?sportseq=3' class='sbtn'>전체동호회 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+						</c:if>
+					</div>
+					
 				</div>
 			</div>
 		</div>
@@ -140,9 +222,30 @@ div.hoverborder{
 				<div class="sports">농구</div>
 				
 				<div class="recommend">🔥많이 찾는 동호회</div>
-				<div class="recommend">ooo</div>
+				<c:if test="${requestScope.basketballNameSeq.clubname != null}">
+					<div class="rcmName">${requestScope.basketballNameSeq.clubname}</div>
+				</c:if>
+				<c:if test="${requestScope.basketballNameSeq.clubname == null}">
+					<div class="recommend">개설된 동호회가 없습니다.</div>
+				</c:if>
 				<div class="hoverborder">
-					<a href='#' class='sbtn'></a>
+					
+					<div>동호회찾기 시작</div>
+					<div class="atag">
+						<c:if test="${requestScope.basketballNameSeq.clubname != null}">
+							<a href='<%= ctxPath%>/club/myClub_plus.do?sportseq=4&clubseq=${requestScope.basketballNameSeq.clubseq}' class='sbtn'>${requestScope.basketballNameSeq.clubname} 바로가기 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+							<br><br>
+							<hr>
+							<br>
+							<a href='<%= ctxPath%>/club/findClub.do?sportseq=4' class='sbtn'>전체동호회 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+						</c:if>
+						
+						<c:if test="${requestScope.basketballNameSeq.clubname == null}">
+							<br><br>
+							<a href='<%= ctxPath%>/club/findClub.do?sportseq=4' class='sbtn'>전체동호회 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+						</c:if>
+					</div>
+					
 				</div>
 			</div>
 		</div>
@@ -162,7 +265,7 @@ div.hoverborder{
 	</div>
 	
 	
-	<div style="display: flex;  margin-top: 5%;  padding-right: 15%">
+	<div style="display: flex;  margin-top: 5%;  width: 80%; margin-left:5%;">
 		<div id="scategory" class="col-md-3 col-lg-2 offset-lg-1">
 			<div class="sportsimage">
 				<img class="sportsimg" src="<%= ctxPath%>/resources/images/zee/icons8-tennis-player-48.png"/>
@@ -171,9 +274,30 @@ div.hoverborder{
 				<div class="sports">테니스</div>
 				
 				<div class="recommend">🔥많이 찾는 동호회</div>
-				<div class="recommend">ooo</div>
+				<c:if test="${requestScope.tenisNameSeq.clubname != null}">
+					<div class="rcmName">${requestScope.tenisNameSeq.clubname}</div>
+				</c:if>
+				<c:if test="${requestScope.tenisNameSeq.clubname == null}">
+					<div class="recommend">개설된 동호회가 없습니다.</div>
+				</c:if>
 				<div class="hoverborder">
-					<a href='#' class='sbtn'></a>
+					
+					<div>동호회찾기 시작</div>
+					<div class="atag">
+						<c:if test="${requestScope.tenisNameSeq.clubname != null}">
+							<a href='<%= ctxPath%>/club/myClub_plus.do?sportseq=6&clubseq=${requestScope.tenisNameSeq.clubseq}' class='sbtn'>${requestScope.tenisNameSeq.clubname} 바로가기 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+							<br><br>
+							<hr>
+							<br>
+							<a href='<%= ctxPath%>/club/findClub.do?sportseq=6' class='sbtn'>전체동호회 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+						</c:if>
+						
+						<c:if test="${requestScope.tenisNameSeq.clubname == null}">
+							<br><br>
+							<a href='<%= ctxPath%>/club/findClub.do?sportseq=6' class='sbtn'>전체동호회 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+						</c:if>
+					</div>
+					
 				</div>
 			</div>
 		</div>
@@ -185,9 +309,30 @@ div.hoverborder{
 				<div class="sports">볼링</div>
 				
 				<div class="recommend">🔥많이 찾는 동호회</div>
-				<div class="recommend">ooo</div>
+				<c:if test="${requestScope.vowlingNameSeq.clubname != null}">
+					<div class="rcmName">${requestScope.vowlingNameSeq.clubname}</div>
+				</c:if>
+				<c:if test="${requestScope.vowlingNameSeq.clubname == null}">
+					<div class="recommend">개설된 동호회가 없습니다.</div>
+				</c:if>
 				<div class="hoverborder">
-					<a href='#' class='sbtn'></a>
+					
+					<div>동호회찾기 시작</div>
+					<div class="atag">
+						<c:if test="${requestScope.vowlingNameSeq.clubname != null}">
+							<a href='<%= ctxPath%>/club/myClub_plus.do?sportseq=7&clubseq=${requestScope.vowlingNameSeq.clubseq}' class='sbtn'>${requestScope.vowlingNameSeq.clubname} 바로가기 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+							<br><br>
+							<hr>
+							<br>
+							<a href='<%= ctxPath%>/club/findClub.do?sportseq=7' class='sbtn'>전체동호회 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+						</c:if>
+						
+						<c:if test="${requestScope.vowlingNameSeq.clubname == null}">
+							<br><br>
+							<a href='<%= ctxPath%>/club/findClub.do?sportseq=7' class='sbtn'>전체동호회 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+						</c:if>	
+					</div>
+					
 				</div>
 			</div>
 		</div>
@@ -199,9 +344,30 @@ div.hoverborder{
 				<div class="sports">족구</div>
 				
 				<div class="recommend">🔥많이 찾는 동호회</div>
-				<div class="recommend">ooo</div>
+				<c:if test="${requestScope.footballNameSeq.clubname != null}">
+					<div class="rcmName">${requestScope.footballNameSeq.clubname}</div>
+				</c:if>
+				<c:if test="${requestScope.footballNameSeq.clubname == null}">
+					<div class="recommend">개설된 동호회가 없습니다.</div>
+				</c:if>
 				<div class="hoverborder">
-					<a href='#' class='sbtn'></a>
+					
+					<div>동호회찾기 시작</div>
+					<div class="atag">
+						<c:if test="${requestScope.footballNameSeq.clubname != null}">
+							<a href='<%= ctxPath%>/club/myClub_plus.do?sportseq=5&clubseq=${requestScope.footballNameSeq.clubseq}' class='sbtn'>${requestScope.footballNameSeq.clubname} 바로가기 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+							<br><br>
+							<hr>
+							<br>
+							<a href='<%= ctxPath%>/club/findClub.do?sportseq=5' class='sbtn'>전체동호회 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+						</c:if>
+						
+						<c:if test="${requestScope.footballNameSeq.clubname == null}">
+							<br><br>
+							<a href='<%= ctxPath%>/club/findClub.do?sportseq=5' class='sbtn'>전체동호회 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+						</c:if>
+					</div>
+					
 				</div>
 			</div>
 		</div>
@@ -213,9 +379,29 @@ div.hoverborder{
 				<div class="sports">배드민턴</div>
 				
 				<div class="recommend">🔥많이 찾는 동호회</div>
-				<div class="recommend">ooo</div>
+				<c:if test="${requestScope.badmintonNameSeq.clubname != null}">
+					<div class="rcmName">${requestScope.badmintonNameSeq.clubname}</div>
+				</c:if>
+				<c:if test="${requestScope.badmintonNameSeq.clubname == null}">
+					<div class="recommend">개설된 동호회가 없습니다.</div>
+				</c:if>
 				<div class="hoverborder">
-					<a href='#' class='sbtn'></a>
+					
+					<div>동호회찾기 시작</div>
+					<div class="atag">
+						<c:if test="${requestScope.badmintonNameSeq.clubname != null}">
+							<a href='<%= ctxPath%>/club/myClub_plus.do?sportseq=8&clubseq=${requestScope.badmintonNameSeq.clubseq}' class='sbtn'>${requestScope.badmintonNameSeq.clubname} 바로가기 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+							<br><br>
+							<hr>
+							<br>
+							<a href='<%= ctxPath%>/club/findClub.do?sportseq=8' class='sbtn'>전체동호회 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+						</c:if>
+						
+						<c:if test="${requestScope.badmintonNameSeq.clubname == null}">
+							<br><br>
+							<a href='<%= ctxPath%>/club/findClub.do?sportseq=8' class='sbtn'>전체동호회 <img src="<%= ctxPath%>/resources/images/zee/arrow2.png"/></a>
+						</c:if>
+					</div>
 				</div>
 			</div>
 		</div>

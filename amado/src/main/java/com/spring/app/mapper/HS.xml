@@ -214,7 +214,15 @@ values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
 		where clubseq = #{clubseq}
 	</select>
 	
+	<select id="getmypageGymList" parameterType="String" resultType="GymVO">
+		select gymname,address,fk_userid,gymseq
+		from tbl_gym
+		where fk_userid= #{fk_userid}
+	</select>
 	
+	<delete id="quitGym" parameterType="HashMap">
+		delete from tbl_gym where fk_userid = #{fk_userid} and gymseq = #{gymseq}
+	</delete>
 	
 
 </mapper>

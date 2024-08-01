@@ -112,20 +112,19 @@ document.addEventListener("DOMContentLoaded", function() {
 	    
 	    <section id="indoor" class="product-section container mt-4">
 	        <div class="row">
-	            <!-- 실내 상품 카드들 -->
-	            <c:forEach var="gym" items="${requestScope.allGymList}">
-	            <c:if test="${gym.insidestatus == '0' && gym.status =='1'}">
-	            <div class="col-md-3 mb-4">
-			                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/gym/detail_gym.do?gymseq=${gym.gymseq}'">
-			                    <img src="<%=ctxPath%>/resources/images/1/${gym.filename}" class="card-img-top" alt="실내 상품 1">
-			                    <div class="card-body">
-			                        <h5 class="card-title">${gym.gymname}</h5>
-			                        <p class="card-text">${gym.cost}/1시간</p>
-			                    </div>
-			                </div>
-			            </div>
-	            </c:if>
-	            </c:forEach>
+				<c:forEach var="gym" items="${requestScope.allGymList}">
+	            	<c:if test="${gym.insidestatus == '0' && gym.status =='1'}">
+	                <div class="col-md-3 mb-4">
+                    	<div class="card" onclick="javascript:location.href='<%= ctxPath%>/gym/detail_gym.do?gymseq=${gym.gymseq}'">
+	                        <img src="<%=ctxPath%>/resources/images/1/${gym.filename}" class="card-img-top" alt="실내 상품 1" style="width: 100%; height: 200px;">
+		                    <div class="card-body">
+		                    	<h5 class="card-title" style="width: 170px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${gym.gymname}</h5>
+		                        <p class="card-text">${gym.cost}/1시간</p>
+		                    </div>
+	               	    </div>
+	                 </div>
+	              </c:if>
+               </c:forEach>
 	           <%--  <c:forEach var="gym" items="${requestScope.allGymList} ">
 		            <c:if test="${gym.insidestatus == '0'}">
 			            <div class="col-md-3 mb-4">
@@ -149,9 +148,9 @@ document.addEventListener("DOMContentLoaded", function() {
 		            <c:if test="${gym.insidestatus == '1' && gym.status =='1'}">
 			            <div class="col-md-3 mb-4">
 			                <div class="card" onclick="javascript:location.href='<%= ctxPath%>/gym/detail_gym.do?gymseq=${gym.gymseq}'">
-			                    <img src="<%=ctxPath%>/resources/images/1/${gym.filename}" class="card-img-top" alt="실내 상품 1">
+			                    <img src="<%=ctxPath%>/resources/images/1/${gym.filename}" class="card-img-top" alt="실내 상품 1" style="width: 100%; height: 200px;">
 			                    <div class="card-body">
-			                        <h5 class="card-title">${gym.gymname}</h5>
+			                        <h5 class="card-title" style="width: 170px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${gym.gymname}</h5>
 			                        <p class="card-text">${gym.cost}/1시간</p>
 			                    </div>
 			                </div>

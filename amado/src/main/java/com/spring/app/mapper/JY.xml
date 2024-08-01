@@ -558,6 +558,44 @@
 	
 	
 	
+	<!-- 종목별로 가입요청이 가장 많은 동호회 이름 가져오기  
+	<select id="getMostclubName" resultType="String"  parameterType="Int">
+		SELECT clubseq, clubname, club_cnt
+		FROM (
+		    SELECT clubname, clubseq,COUNT(*) AS club_cnt
+		    FROM (
+		        SELECT A.clubseq, B.clubname
+		        FROM tbl_clubmember A
+		        JOIN tbl_club B ON A.clubseq = B.clubseq
+		        WHERE A.sportseq = #{i}
+		    ) V
+		    GROUP BY clubname, clubseq
+		    ORDER BY COUNT(*) DESC
+		)
+		WHERE ROWNUM = 1
+	</select> 
+	-->
+	
+	<resultMap type="HashMap" id="MostclubNameSeq">
+		<result property="clubseq" 			column="clubseq"  		javaType="String" />
+		<result property="clubname" 			column="clubname"  		javaType="String" /> 
+	</resultMap>
+	<select id="getMostclubNameSeq" resultMap="MostclubNameSeq"  parameterType="Int">
+		SELECT clubseq, clubname
+		FROM (
+		    SELECT clubname, clubseq,COUNT(*) AS club_cnt
+		    FROM (
+		        SELECT A.clubseq, B.clubname
+		        FROM tbl_clubmember A
+		        JOIN tbl_club B ON A.clubseq = B.clubseq
+		        WHERE A.sportseq = #{i}
+		    ) V
+		    GROUP BY clubname, clubseq
+		    ORDER BY COUNT(*) DESC
+		)
+		WHERE ROWNUM = 1
+	</select> 
+	
 	
 
 </mapper>

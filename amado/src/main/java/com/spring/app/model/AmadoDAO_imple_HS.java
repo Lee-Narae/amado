@@ -223,6 +223,28 @@ public class AmadoDAO_imple_HS implements AmadoDAO_HS {
 
 
 
+		//mypage의 체육관 보기
+		@Override
+		public List<GymVO> getmypageGymList(String fk_userid) {
+		
+			   //리턴타입이 맵인경우 = 맵퍼에서 resultType이 map? 인경우에만 <result>쓴다.  지금은 x
+		      List<GymVO> GymList = sqlsession.selectList("HS.getmypageGymList" ,fk_userid);
+		      return GymList;
+		}
+
+
+
+		
+		//mypage 체육관지우기
+		@Override
+		public int quitGym(Map<String, String> paramap) {
+			int n = sqlsession.delete("HS.quitGym", paramap);
+			return n;
+		}
+
+
+
+
 
 
 	

@@ -2724,5 +2724,47 @@ public class ControllerNR {
 	
 	
 	
+	
+	@ResponseBody
+	@PostMapping(value="/club/permitJoinClub.do", produces="text/plain;charset=UTF-8")
+	public String permitJoinClub(HttpServletRequest request) {
+		
+		String userid = request.getParameter("userid");
+		String clubseq = request.getParameter("clubseq");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("userid", userid);
+		paramap.put("clubseq", clubseq);
+		
+		int n = service.permitJoinClub(paramap);
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+		
+		return jsonObj.toString();
+	}
+	
+	
+	
+	@ResponseBody
+	@PostMapping(value="/club/refuseJoinClub.do", produces="text/plain;charset=UTF-8")
+	public String refuseJoinClub(HttpServletRequest request) {
+		
+		String userid = request.getParameter("userid");
+		String clubseq = request.getParameter("clubseq");
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+		paramap.put("userid", userid);
+		paramap.put("clubseq", clubseq);
+		
+		int n = service.refuseJoinClub(paramap);
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("n", n);
+		
+		return jsonObj.toString();
+	}
+	
+	
 }
 
