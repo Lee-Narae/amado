@@ -1298,7 +1298,7 @@ function goAddWrite_reply(gymquestionseq){
 			<div style="width: 50%; margin: 5% auto;">
 			
 			 <c:forEach items="${requestScope.gymImgList}" var="img">	
-			<img src="<%=ctxPath%>/resources/images/1/${img.filename}" class="img-fluid"style="width: 100%;" /> 하이
+			<img src="<%=ctxPath%>/resources/images/1/${img.filename}" class="img-fluid mb-3"style="width: 100%;" />
 			</c:forEach>
 				
 			</div>
