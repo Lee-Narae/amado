@@ -1158,7 +1158,7 @@ function goAddWrite_reply(gymquestionseq){
     <div class="col-lg-8">
       <!-- 큰 사진 부분 -->
       <a href="#" data-toggle="modal" data-target="#myModal">
-        <img src="<%=ctxPath%>/resources/images/1/${gym.orgfilename}" class="img-fluid" alt="큰 사진">
+        <img src="<%=ctxPath%>/resources/images/1/${gym.filename}" class="img-fluid" alt="큰 사진" style="width: 100%; height: 500px;">
       </a>
     </div>
     <div class="col-lg-4">
@@ -1167,7 +1167,7 @@ function goAddWrite_reply(gymquestionseq){
         <c:forEach items="${requestScope.gymImgList}" var="img">
         <div class="col-6 mb-3">
           <a href="#" data-toggle="modal" data-target="#myModal">
-            <img src="<%=ctxPath%>/resources/images/1/${img.orgfilename}" class="img-fluid" alt="작은 사진 1">
+            <img src="<%=ctxPath%>/resources/images/1/${img.filename}" class="img-fluid" alt="작은 사진 1" style="width: 100%; height: 225px;">>
           </a>
         </div>
      </c:forEach>
@@ -1198,11 +1198,11 @@ function goAddWrite_reply(gymquestionseq){
           </ol>
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <img class="d-block w-100" src="<%=ctxPath%>/resources/images/1/${gym.orgfilename}" alt="첫 번째 사진">
+              <img class="d-block w-100" src="<%=ctxPath%>/resources/images/1/${gym.filename}" alt="첫 번째 사진" style="width: 100%; height: 700px;">
             </div>
             <c:forEach items="${requestScope.gymImgList}" var="img">
             <div class="carousel-item">
-              <img class="d-block w-100" src="<%=ctxPath%>/resources/images/1/${img.orgfilename}" alt="두 번째 사진">
+              <img class="d-block w-100" src="<%=ctxPath%>/resources/images/1/${img.filename}" alt="두 번째 사진" style="width: 100%; height: 700px;">
             </div>
             </c:forEach>
 
@@ -1298,7 +1298,7 @@ function goAddWrite_reply(gymquestionseq){
 			<div style="width: 50%; margin: 5% auto;">
 			
 			 <c:forEach items="${requestScope.gymImgList}" var="img">	
-			<img src="<%=ctxPath%>/resources/images/1/${img.orgfilename}" class="img-fluid"style="width: 100%;" /> 하이
+			<img src="<%=ctxPath%>/resources/images/1/${img.filename}" class="img-fluid"style="width: 100%;" /> 하이
 			</c:forEach>
 				
 			</div>
