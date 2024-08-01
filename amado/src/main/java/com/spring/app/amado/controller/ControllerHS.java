@@ -107,9 +107,11 @@ public class ControllerHS {
 		// 대표이미지
 		MultipartFile attach = gym.getAttach();
 
-		HttpSession session = mrequest.getSession();
-		String root = session.getServletContext().getRealPath("/");
-		String path = root + "resources" + File.separator + "files";
+//		HttpSession session = mrequest.getSession();
+//		String root = session.getServletContext().getRealPath("/");
+//		String path = root + "resources" + File.separator + "files";
+
+		String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\images\\1";
 
 		String newFileName = "";
 		byte[] bytes = null;
