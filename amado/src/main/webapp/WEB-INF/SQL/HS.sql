@@ -490,3 +490,7 @@ from tbl_member
 
 select *
 from tbl_club
+
+select gymname,address
+from tbl_gym
+where fk_userid= 'seosh'

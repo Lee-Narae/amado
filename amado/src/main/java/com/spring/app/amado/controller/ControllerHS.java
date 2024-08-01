@@ -591,9 +591,14 @@ public class ControllerHS {
 		   @GetMapping("/member/myPage_gymview.do")
 		   public ModelAndView myPage_gymview(ModelAndView mav,HttpServletRequest request) {
 		      
-			   	String fk_userid = request.getParameter("fk_userid");
+				/* String fk_userid = request.getParameter("fk_userid"); */
+			   
+			   HttpSession session = request.getSession();
+			   MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+			   
+			   
 				// 모든 상품 select 해오기
-				List<GymVO> GymList = service.getmypageGymList(fk_userid); // 디비에서 데이터를 불러만오는 거라 map에 넣어서 보낼게 없음!!!!
+				List<GymVO> GymList = service.getmypageGymList(loginuser.getUserid()); // 디비에서 데이터를 불러만오는 거라 map에 넣어서 보낼게 없음!!!!
 				//System.out.println(fk_userid);
 				//System.out.println(GymList.get(0).getGymname());
 				
@@ -608,5 +613,30 @@ public class ControllerHS {
 		   }
 	
 	
+		   @ResponseBody
+			@PostMapping(value="/member/gym_delete.do", produces="text/plain;charset=UTF-8")
+			public String quitgym(HttpServletRequest request) {
+				
+				String gymseq = request.getParameter("gymseq");
+				String fk_userid = request.getParameter("fk_userid");
+				
+				System.out.println("gymseq: "+gymseq);
+				System.out.println("fk_userid: "+fk_userid);
+				
+				Map<String, String> paramap = new HashMap<String, String>();
+				paramap.put("gymseq", gymseq);
+				paramap.put("fk_userid", fk_userid);
+				
+				int n = service.quitGym(paramap);
+				
+				JSONObject jsonObj = new JSONObject();
+				jsonObj.put("n", n);
+				
+				return jsonObj.toString();
+			}
+			
+		   
+		   
+		   
 
 }
