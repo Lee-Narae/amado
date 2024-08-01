@@ -667,5 +667,23 @@ on A.clubseq = B.clubseq
 where A.fk_userid = 'leejy' and B.status = 0
 order by 1;
 
+ALTER TABLE TBL_GYMANSWER DROP constraint FK_TBL_GYMAWR_GYMQUESTIONSEQ;
+select * from TBL_GYMANSWER;
+select * from user_constraints;
 
 
+alter table TBL_GYMANSWER add constraint FK_TBL_GYMAWR_GYMQUESTIONSEQ foreign key(gymquestionseq) references tbl_gymquestion(gymquestionseq) on delete cascade;
+
+
+select A.clubseq, A.clubname, B.fk_userid, C.name from tbl_club A join tbl_clubmember B 
+		on A.clubseq = B.clubseq
+        join tbl_member C
+        on B.fk_userid = C.userid
+		where A.fk_userid = 'leejy' and B.status = 0
+		order by 1;
+        
+select * from tbl_clubmember;
+select * from tbl_club;
+
+desc tbl_calendar_small_category;
+        

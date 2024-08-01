@@ -249,6 +249,10 @@ public interface AmadoService_NR {
 	// 동호회 가입 승인 알림 불러오기
 	List<Map<String, String>> getClubJoinList(String userid);
 
+	// 동호회장  - 동호회 가입 승인/거절하기
+	int permitJoinClub(Map<String, String> paramap);
+	int refuseJoinClub(Map<String, String> paramap);
+
 
 	
 

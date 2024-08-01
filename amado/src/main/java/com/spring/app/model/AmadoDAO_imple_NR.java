@@ -692,4 +692,16 @@ public class AmadoDAO_imple_NR implements AmadoDAO_NR {
 		return clubJoinList;
 	}
 
+	// 동호회장  - 동호회 가입 승인/거절하기
+	@Override
+	public int permitJoinClub(Map<String, String> paramap) {
+		int n = sqlsession.update("NR.permitJoinClub", paramap);
+		return n;
+	}
+	@Override
+	public int refuseJoinClub(Map<String, String> paramap) {
+		int n = sqlsession.delete("NR.refuseJoinClub", paramap);
+		return n;
+	}
+
 }

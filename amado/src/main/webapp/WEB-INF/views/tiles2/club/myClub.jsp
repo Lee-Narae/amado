@@ -149,6 +149,36 @@ cursor: pointer;
 opacity: 0.6;
 }
 
+table#clubJoinTbl > tbody > tr > td {
+border-top: solid 1px gray;
+}
+
+table#clubJoinTbl > thead {
+background-color: #3366ff;
+color: white;
+font-size: 12pt;
+}
+
+table#clubJoinTbl > thead > tr {
+border: none;
+}
+
+table#clubJoinTbl > thead > tr > td:nth-child(1) {
+border-top-left-radius: 10px;
+}
+
+table#clubJoinTbl > thead > tr > td:last-child {
+border-top-right-radius: 10px;
+}
+
+table#clubJoinTbl img {
+cursor: pointer;
+}
+
+table#clubJoinTbl > tbody > tr:hover {
+background-color: rgb(227, 227, 227, 0.2)
+}
+
 </style>
 
 <script type="text/javascript">
@@ -429,12 +459,71 @@ function goClubBoardDetail(clubboardseq, clubseq){
 	f.submit();
 }
 
+function goJoin(userid, clubseq){
 
-function openModal3(){
+	Swal.fire({
+		  text: "승인하시겠습니까?",
+		  showCancelButton: true,
+		  confirmButtonColor: "#3085d6",
+		  cancelButtonColor: "#d33",
+		  confirmButtonText: "네",
+		  cancelButtonText: "아니오"
+		}).then((result) => {
+		  if (result.isConfirmed) {
+		    
+			  $.ajax({
+					url: "<%=ctxPath%>/club/permitJoinClub.do",
+					data: {"userid": userid, "clubseq": clubseq},
+					dataType: "json",
+					type: "post",
+					success: function(json){
+						if(json.n == 1){
+							alert('승인 완료!');
+							location.reload(true);
+						}
+					},
+					error: function(request, status, error){
+						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					}
+				});
+			  
+			  
+		  }
+		});
 	
-	$("div.modal3").empty();
-	
-	// 아이디, 이름, 연락처, 수락/거절 ==> 이후에 동호회원에게 무슨 액션이 있다면 좋을듯
+}
+
+function goRefuse(userid, clubseq){
+
+	Swal.fire({
+		  text: "거부하시겠습니까?",
+		  showCancelButton: true,
+		  confirmButtonColor: "#3085d6",
+		  cancelButtonColor: "#d33",
+		  confirmButtonText: "네",
+		  cancelButtonText: "아니오"
+		}).then((result) => {
+		  if (result.isConfirmed) {
+		    
+			  $.ajax({
+					url: "<%=ctxPath%>/club/refuseJoinClub.do",
+					data: {"userid": userid, "clubseq": clubseq},
+					dataType: "json",
+					type: "post",
+					success: function(json){
+						if(json.n == 1){
+							alert('거절되었습니다.');
+							location.reload(true);
+						}
+					},
+					error: function(request, status, error){
+						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					}
+				});
+			  
+			  
+		  }
+		});
 	
 }
 </script>
@@ -462,11 +551,47 @@ function openModal3(){
 </div>
 
 
-<!-- 모달2 -->
+<!-- 모달3 -->
 <div class="modal modalclass" id="clubJoinModal" style="margin-top: 5%; height: auto;">
-  <div class="modal-dialog" style="height: auto;">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" style="height: auto;">
     <div class="modal-content modal3">
-    
+    	<div class="modal-header" align="center">
+	        <h5 class="modal-title" style="font-weight: bold; width: 100%; display: inline-block;">회원 승인하기</h5>
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	      </div>
+		<div class="modal-body" style="height: auto;">
+			<div style="width: 100%; height: auto;">
+		  		<table id="clubJoinTbl">
+		  			<thead>
+		  				<tr>
+		  					<td style="width: 10%;">번호</td>
+		  					<td style="width: 30%;">동호회</td>
+		  					<td style="width: 20%;">아이디</td>
+		  					<td style="width: 20%;">이름</td>
+		  					<td style="width: 20%;">승인</td>
+		  				</tr>
+		  			</thead>
+		  			<tbody>
+		  				<c:forEach items="${requestScope.clubJoinList}" var="member" varStatus="status">
+		  					<tr>
+								<td>${status.count}</td>
+			  					<td>${member.clubname}</td>
+			  					<td>${member.userid}</td>
+			  					<td>${member.name}</td>
+			  					<td>
+			  						<img width="30" onclick="goJoin('${member.userid}', '${member.clubseq}')" height="30" src="https://img.icons8.com/color/48/checked--v1.png" alt="checked--v1"/>&nbsp;&nbsp;
+			  						<img width="30" onclick="goRefuse('${member.userid}', '${member.clubseq}')" height="30" src="https://img.icons8.com/color/48/cancel--v1.png" alt="cancel--v1"/>
+			  					</td>	  					
+		  					</tr>
+		  				</c:forEach>
+		  			</tbody>
+		  		</table>
+		  	</div>
+	    </div>
+	    <div class="modal-footer">
+	    <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+	    <button type="button" class="btn btn-primary" onclick="">등록하기</button>
+	  </div>
     </div>
   </div>
 </div>
@@ -524,7 +649,7 @@ function openModal3(){
 			
 			<c:if test="${not empty requestScope.clubJoinList}">
 				<div>
-					<div class="clubJoinDiv" data-toggle="modal" data-target="#clubJoinModal" onclick="openModal3()">동호회 <span style="color: blue;">가입 신청</span></div>
+					<div class="clubJoinDiv" data-toggle="modal" data-target="#clubJoinModal">동호회 <span style="color: blue;">가입 신청</span></div>
 				</div>
 			</c:if>
 			
