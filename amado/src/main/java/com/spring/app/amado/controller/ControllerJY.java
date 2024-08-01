@@ -88,7 +88,7 @@ public class ControllerJY {
 		String vowlingName = service.getMostclubName(7);
 		String badmintonName = service.getMostclubName(8);
 		*/
-		System.out.println(soccerNameSeq.get("clubseq")+soccerNameSeq.get("clubname"));
+		//System.out.println(soccerNameSeq.get("clubseq")+soccerNameSeq.get("clubname"));
 		//3최준혁과 친구들
 		
 		mav.addObject("soccerNameSeq", soccerNameSeq);
@@ -108,9 +108,9 @@ public class ControllerJY {
 		mav.addObject("tenisName", tenisName);
 		mav.addObject("vowlingName", vowlingName);
 		mav.addObject("badmintonName", badmintonName);
-		mav.setViewName("club/viewclub.tiles2");
 		*/
 		//    /WEB-INF/views/club/viewclub.jsp
+		mav.setViewName("club/viewclub.tiles2");
 		return mav;
 		
 	}
