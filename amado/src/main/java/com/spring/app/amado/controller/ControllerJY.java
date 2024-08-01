@@ -157,6 +157,8 @@ public class ControllerJY {
 		String userid = request.getParameter("userid");
 		String category = request.getParameter("category");
 		
+		
+		
 		Map<String,String> paraMap = new HashMap<>();
 		
 		paraMap.put("userid", userid);
@@ -166,6 +168,7 @@ public class ControllerJY {
 		
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("checkseq", checkseq);
+		
 		
 		return jsonObj.toString();
 	}
@@ -266,9 +269,15 @@ public class ControllerJY {
 			*/
 		// === !!! 첨부파일이 있는 경우 작업 끝 !!! ===	
 
-		int n =0, n1=0;
+		int n =0, n1=0, n2=0;
 		
 		if(!(attach.isEmpty())) {
+			
+			// 새로 생길 동호회의 clubseq 채번
+			String clubseq = service.getNewClubseq();
+			
+			
+			clubvo.setClubseq(clubseq);
 			//파일첨부가 있는 경우라면
 			n=service.add_withFile(clubvo);
 			
@@ -281,8 +290,13 @@ public class ControllerJY {
 		}
 		if(n1==1) {
 			
-			service.insertCmemberTbl(clubvo); 
-			mav.setViewName("redirect:/club/findClub.tiles2");  // 결과물 보여줘야하니까 "club/findClub.tiles2" 아님!!!
+			n2 = service.insertCmemberTbl(clubvo); 
+		}
+		
+		if(n2==1) {
+			
+			service.insertCalcname(clubvo); 
+			mav.setViewName("redirect:/club/findClub.do?sportseq="+clubvo.getFk_sportseq());  // 결과물 보여줘야하니까 "club/findClub.tiles2" 아님!!!
 		    //  /list.action 페이지로 redirect(페이지이동)해라는 말이다.
 		}
 		else {
@@ -970,7 +984,9 @@ public class ControllerJY {
 		String sizePerPage = "10";
 		
 		//System.out.println("userid"+fk_userid);
-		System.out.println("clubseq"+clubseq);
+		//System.out.println("clubseq"+clubseq);
+		//System.out.println("clubname"+clubname);
+		//System.out.println("sportname"+sportname);
 		
 		if(searchType == null || !"title".equals(searchType) && !"content".equals(searchType)) {
 			searchType = "";
@@ -1023,10 +1039,10 @@ public class ControllerJY {
 		
 		// *** [맨처음][이전] 만들기 *** //
 		   
-           pageBar += "<li class='page-item'><a class='page-link' href='clubBoard.do?clubseq="+clubseq+"&searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo=1'>[맨처음]</a></li>";
+           pageBar += "<li class='page-item'><a class='page-link' href='clubBoard.do?clubseq="+clubseq+"&sportname="+sportname+"&clubname="+clubname+"&searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo=1'>[맨처음]</a></li>";
 
            if(pageNo != 1) {
-              pageBar += "<li class='page-item'><a class='page-link' href='clubBoard.do?clubseq="+clubseq+"&searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a></li>";
+              pageBar += "<li class='page-item'><a class='page-link' href='clubBoard.do?clubseq="+clubseq+"&sportname="+sportname+"&clubname="+clubname+"&searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a></li>";
            }
    
            while(!(loop > blockSize || pageNo > totalPage)) {
@@ -1036,7 +1052,7 @@ public class ControllerJY {
                  pageBar += "<li class='page-item active'><a class='page-link' href='#'>"+pageNo+"</a></li>";
               }
               else {
-                 pageBar += "<li class='page-item'><a class='page-link' href='clubBoard.do?clubseq="+clubseq+"&searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a></li>";
+                 pageBar += "<li class='page-item'><a class='page-link' href='clubBoard.do?clubseq="+clubseq+"&sportname="+sportname+"&clubname="+clubname+"&searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a></li>";
               }
               
               loop++;
@@ -1048,9 +1064,9 @@ public class ControllerJY {
            // *** [다음][마지막] 만들기 *** //
            // pageNo ==> 11
            if(pageNo <= totalPage) {
-              pageBar += "<li class='page-item'><a class='page-link' href='clubBoard.do?clubseq="+clubseq+"&searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"'>[다음]</a></li>";
+              pageBar += "<li class='page-item'><a class='page-link' href='clubBoard.do?clubseq="+clubseq+"&sportname="+sportname+"&clubname="+clubname+"&searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"'>[다음]</a></li>";
            }
-           pageBar += "<li class='page-item'><a class='page-link' href='clubBoard.do?clubseq="+clubseq+"&searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+totalPage+"'>[맨마지막]</a></li>";
+           pageBar += "<li class='page-item'><a class='page-link' href='clubBoard.do?clubseq="+clubseq+"&sportname="+sportname+"&clubname="+clubname+"&searchType="+searchType+"&searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+totalPage+"'>[맨마지막]</a></li>";
            
            
          // *** ==== 페이지바 만들기 끝 ==== *** ////
@@ -1068,9 +1084,11 @@ public class ControllerJY {
         // /member/memberList.up?searchType=name&searchWord=%EC%9C%A0&sizePerPage=5&currentShowPageNo=15
 
 		List<ClubBoardVO> clubboardList = service.select_clubboard_paging(paramap);
+		/*
 		for(ClubBoardVO board : clubboardList) {
 			System.out.println("viewcount: "+board.getViewcount());
 		}
+		*/
 		
 		mav.addObject("clubboardList", clubboardList);
 		
@@ -1411,17 +1429,23 @@ public class ControllerJY {
 	// 동호회캘린더에서 소분류  보여주기
 	@ResponseBody
 	@GetMapping(value="/schedule/showCompanyCalendar.do", produces="text/plain;charset=UTF-8")  
-	public String showCompanyCalendar() {
+	public String showCompanyCalendar(HttpServletRequest request) {
 		
-		List<Calendar_small_category_VO> calendar_small_category_VO_CompanyList = service.showCompanyCalendar();
+		String fk_userid = request.getParameter("fk_userid");
+		
+		//List<Calendar_small_category_VO> calendar_small_category_VO_CompanyList = service.showCompanyCalendar();
+		
+		
+		// 내가 속한 동호회 리스트 보여주기
+		List<Map<String,String>> myclubList = service.getMyclubList(fk_userid);
 		
 		JSONArray jsonArr = new JSONArray();
 		
-		if(calendar_small_category_VO_CompanyList != null) {
-			for(Calendar_small_category_VO smcatevo : calendar_small_category_VO_CompanyList) {
+		if(myclubList != null) {
+			for(Map<String, String> map : myclubList) {
 				JSONObject jsObj = new JSONObject();
-				jsObj.put("smcatgono", smcatevo.getSmcatgono());
-				jsObj.put("smcatgoname", smcatevo.getSmcatgoname());
+				jsObj.put("smcatgono", map.get("smcatgono"));
+				jsObj.put("smcatgoname", map.get("smcatgoname"));
 				jsonArr.put(jsObj);
 			}
 		}
@@ -1713,10 +1737,13 @@ public class ControllerJY {
 		paraMap.put("fk_userid", fk_userid);
 		
 		List<Calendar_small_category_VO> small_category_VOList = service.selectSmallCategory(paraMap);
-			
+		
 		JSONArray jsArr = new JSONArray();
 		if(small_category_VOList != null) {
 			for(Calendar_small_category_VO scvo : small_category_VOList) {
+				
+				System.out.println("smcatgono: "+scvo.getSmcatgono());
+				System.out.println("smcatgoname: "+scvo.getSmcatgoname());
 				JSONObject jsObj = new JSONObject();
 				jsObj.put("smcatgono", scvo.getSmcatgono());
 				jsObj.put("smcatgoname", scvo.getSmcatgoname());
@@ -1778,6 +1805,8 @@ public class ControllerJY {
 		
 		String content = request.getParameter("content");
 		String fk_userid = request.getParameter("fk_userid");
+		
+		System.out.println("fk_smcatgono: "+fk_smcatgono);
 		
 		Map<String,String> paraMap = new HashMap<String, String>();
 		paraMap.put("startdate", startdate);

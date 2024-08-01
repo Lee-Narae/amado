@@ -104,7 +104,7 @@ from tbl_clubmember;
 -- insert 하기 전에 이미 동호회장으로 가입한 sportseq 가 존재한다면 가입 안되게 하기
 select *
 from tbl_clubmember
-where fk_userid = 'leenr';
+where fk_userid = 'leejy';
 
 select count(*)
 from tbl_clubmember
@@ -193,6 +193,32 @@ select *
 from tbl_member
 
 ------------- >>>>>>>> 일정관리(풀캘린더) 시작 <<<<<<<< -------------
+-- 1내캘린더  2동호회캘린더
+select *
+from tbl_calendar_small_category
+where fk_lgcatgono =2 
+order by smcatgono asc
+        
+        
+select *
+from tbl_calendar_small_category;
+
+
+
+--ALTER TABLE tbl_calendar_small_category ADD (fk_clubseq NUMBER);
+--ALTER TABLE tbl_calendar_small_category ADD CONSTRAINT FK_clubseq_fk_clubseq FOREIGN KEY (fk_clubseq) REFERENCES tbl_club (clubseq);
+
+desc tbl_club
+
+select *
+from tbl_club
+
+insert into tbl_calendar_small_category(fk_lgcatgono, smcatgono, smcatgoname, fk_clubseq ,fk_userid)
+values(2, seq_smcatgono.nextval, '#{clubname}');
+
+
+
+
 show user;
 -- USER이(가) "MYMVC_USER"입니다.
 
@@ -216,6 +242,7 @@ commit;
 
 select * 
 from tbl_calendar_large_category;
+
 
 
 -- *** 캘린더 소분류 *** 
@@ -469,5 +496,13 @@ GROUP BY clubname;
 		WHERE ROWNUM = 1
 
 
+select * from user_sequences;
 
+select SEQ_CLUB.nextval
+from dual;
+
+select * from tbl_clubmember;
+
+select * from tbl_club;
+select * from tbl_sport;
 

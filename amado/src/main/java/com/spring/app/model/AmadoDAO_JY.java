@@ -30,7 +30,7 @@ public interface AmadoDAO_JY {
 	int updateRank(String fk_userid);
 	
 	// 동호회 등록완료 하면 tbl_clubmember 에 insert 하기
-	void insertCmemberTbl(ClubVO clubvo);
+	int insertCmemberTbl(ClubVO clubvo);
 
 	// 운동 종목 시퀀스가져오기
 	List<String> getSportList();
@@ -135,6 +135,12 @@ public interface AmadoDAO_JY {
 	String getMostclubName(int i);
 
 	Map<String, String> getMostclubNameSeq(int i);
+
+	String getNewClubseq();
+
+	List<Map<String,String>> getMyclubList(String fk_userid);
+
+	void insertCalcname(ClubVO clubvo);
 
 	
 

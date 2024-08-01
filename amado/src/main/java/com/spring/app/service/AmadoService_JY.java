@@ -31,7 +31,7 @@ public interface AmadoService_JY {
 	int updateRank(String string);
 	
 	// 동호회 등록완료 하면 tbl_clubmember 에 insert 하기
-	void insertCmemberTbl(ClubVO clubvo);
+	int insertCmemberTbl(ClubVO clubvo);
 
 	// 카테고리 상품 select 해오기
 	List<Map<String, String>> getSportNameList(String sportname);
@@ -125,6 +125,12 @@ public interface AmadoService_JY {
 	String getMostclubName(int i);
 
 	Map<String, String> getMostclubNameSeq(int i);
+
+	String getNewClubseq();
+
+	List<Map<String,String>> getMyclubList(String fk_userid);
+
+	void insertCalcname(ClubVO clubvo);
 
 
 

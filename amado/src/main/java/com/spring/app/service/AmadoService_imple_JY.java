@@ -71,9 +71,9 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 	
 	// 동호회 등록완료 하면 tbl_clubmember 에 insert 하기
 	@Override
-	public void insertCmemberTbl(ClubVO clubvo) {
-		dao.insertCmemberTbl(clubvo);
-			
+	public int insertCmemberTbl(ClubVO clubvo) {
+		int n2 = dao.insertCmemberTbl(clubvo);
+		return n2;	
 	}
 
 	// 상품 select 헤오기
@@ -422,6 +422,30 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 	public Map<String, String> getMostclubNameSeq(int i) {
 		Map<String, String> mostclubNameSeq = dao.getMostclubNameSeq(i);
 		return mostclubNameSeq;
+	}
+
+
+
+	@Override
+	public String getNewClubseq() {
+		String clubseq = dao.getNewClubseq();
+		return clubseq;
+	}
+
+
+
+	// 캘린더 - 내가 속한 동호회 리스트 보여주기
+	@Override
+	public List<Map<String,String>> getMyclubList(String fk_userid) {
+		List<Map<String,String>> myclubList = dao.getMyclubList(fk_userid);
+		return myclubList;
+	}
+
+
+
+	@Override
+	public void insertCalcname(ClubVO clubvo) {
+		dao.insertCalcname(clubvo);
 	}
 
 

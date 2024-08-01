@@ -63,8 +63,9 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 	
 	// 동호회 등록완료 하면 tbl_clubmember 에 insert 하기
 	@Override
-	public void insertCmemberTbl(ClubVO clubvo) {
-		sqlsession.insert("JY.insertCmemberTbl",clubvo);
+	public int insertCmemberTbl(ClubVO clubvo) {
+		int n2 = sqlsession.insert("JY.insertCmemberTbl",clubvo);
+		return n2;
 	}
 
 	
@@ -425,7 +426,27 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 		Map<String, String> mostclubNameSeq = sqlsession.selectOne("JY.getMostclubNameSeq", i);
 		return mostclubNameSeq;
 	}
+
+	@Override
+	public String getNewClubseq() {
+		String clubseq = sqlsession.selectOne("JY.getNewClubseq");
+		return clubseq;
+	}
+
 	
+
+	@Override
+	public void insertCalcname(ClubVO clubvo) {
+		sqlsession.insert("JY.insertCalcname", clubvo);
+		
+	}
+
+	@Override
+	public List<Map<String,String>> getMyclubList(String fk_userid) {
+		List<Map<String,String>> myclubList = sqlsession.selectOne("JY.getMyclubList", fk_userid);
+		return myclubList;
+	}
+
 
 
 

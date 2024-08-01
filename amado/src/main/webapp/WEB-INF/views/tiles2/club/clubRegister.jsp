@@ -153,12 +153,64 @@ $(document).ready(function(){
 					   "category": category},
 				dataType: "json",
 				success: function(json){
+					
 					console.log(JSON.stringify(json));
 					// {"checkseq":"1"} // 가입한 이력이있는
 					
 					if(json.checkseq == "1"){ //동일한 시퀀스로 가입ㅎ한 동회가 있을때
 						alert("이미 가입한 이력이 있는 종목은 가입이 불가합니다😰");
 						return;
+					}
+					
+					else{
+						
+						 let b_requiredInfo = true;
+							
+						   
+						    const city = $("select#city").val();
+						    
+						    if (category == "종목") {
+						        alert("종목을 선택해주세요!");
+						        b_requiredInfo = false;
+						        return false;
+						    }
+						    if (city =="선택해주세요") {
+						        alert("지역을 선택해주세요!");
+						        b_requiredInfo = false;
+						        return false;
+						    }
+						    const mcnt = $("input[name='membercount']").val();
+						    if( Number(mcnt) < 1 || Number(mcnt) > 30 ){
+						    	alert("정원은 최소 1 부터, 최대 30 까지입니다.");
+						    	b_requiredInfo = false;
+						    	return false;
+						    }
+						    
+						    if($("input.img_file").val() == ""){
+						    	alert("사진을 추가해주세요");
+						    	b_requiredInfo = false;
+						    	return false;
+						    }
+						    /*
+						    $("input").each(function() {
+						    	if ($(this).val().trim() === "") {
+						            alert("데이터를 입력해주세요!");
+						            b_requiredInfo = false; // 값이 하나라도 비어 있으면 true로 변경
+						            break; // 순회 중단
+						        }
+						    });
+						    */ 
+						    
+						    if(b_requiredInfo){
+						    	
+						    	//폼(form)을 전송(submit)
+							 	  const frm = document.registerClubFrm;
+							 	  frm.method = "post";
+							 	  frm.action = "<%= ctxPath%>/club/clubRegisterEnd.do";
+							 	  frm.submit();
+						    	
+						    }
+						
 					}
 					
 					
@@ -169,53 +221,8 @@ $(document).ready(function(){
 			 });
 		 
 		 
-		 let b_requiredInfo = true;
-				
-		   
-		    const city = $("select#city").val();
-		    
-		    if (category == "종목") {
-		        alert("종목을 선택해주세요!");
-		        b_requiredInfo = false;
-		        return false;
-		    }
-		    if (city =="선택해주세요") {
-		        alert("지역을 선택해주세요!");
-		        b_requiredInfo = false;
-		        return false;
-		    }
-		    const mcnt = $("input[name='membercount']").val();
-		    if( Number(mcnt) < 1 || Number(mcnt) > 30 ){
-		    	alert("정원은 최소 1 부터, 최대 30 까지입니다.");
-		    	b_requiredInfo = false;
-		    	return false;
-		    }
-		    
-		    if($("input.img_file").val() == ""){
-		    	alert("사진을 추가해주세요");
-		    	b_requiredInfo = false;
-		    	return false;
-		    }
-		    /*
-		    $("input").each(function() {
-		    	if ($(this).val().trim() === "") {
-		            alert("데이터를 입력해주세요!");
-		            b_requiredInfo = false; // 값이 하나라도 비어 있으면 true로 변경
-		            break; // 순회 중단
-		        }
-		    });
-		    */ 
-		    /*
-		    if(b_requiredInfo){
-		    	
-		    	//폼(form)을 전송(submit)
-			 	  const frm = document.registerClubFrm;
-			 	  frm.method = "post";
-			 	  frm.action = "<%= ctxPath%>/club/clubRegisterEnd.do";
-			 	  frm.submit();
-		    	
-		    }
-		*/	   
+
+			   
 			    
 	 });
 	
@@ -256,9 +263,9 @@ function goTop() {
 						<option value="2">야구</option>
 						<option value="3">배구</option>
 						<option value="4">농구</option>
-						<option value="5">테니스</option>
-						<option value="6">볼링</option>
-						<option value="7">족구</option>
+						<option value="6">테니스</option>
+						<option value="7">볼링</option>
+						<option value="5">족구</option>
 						<option value="8">배드민턴</option>
 					</select>
 					

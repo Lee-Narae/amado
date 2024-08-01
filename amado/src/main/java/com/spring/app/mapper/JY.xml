@@ -21,10 +21,17 @@
 	
 	
 	
+	<!-- 동호회 등록: 동호회seq 채번 -->
+	<select id="getNewClubseq" resultType="String">
+		select SEQ_CLUB.nextval
+		from dual
+	</select>
+	
+	
 	<!-- 동호회등록  완료 요청(파일첨부ㅇ) -->
 	<insert id="add_withFile"  parameterType="ClubVO">
 		insert into tbl_club(clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, local, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfileName)
-        values(seq_club.nextval, #{clubname},  #{clubimg}, #{fk_sportseq}, #{fk_userid}, #{clubtel}, #{city}, #{local}, #{clubgym}, #{clubtime}, #{membercount}, #{clubpay}, default, default, #{wasfileName} ) 
+        values(#{clubseq}, #{clubname},  #{clubimg}, #{fk_sportseq}, #{fk_userid}, #{clubtel}, #{city}, #{local}, #{clubgym}, #{clubtime}, #{membercount}, #{clubpay}, default, default, #{wasfileName} ) 
 	</insert>
 	
 	<!-- 동호회 등록후 회원등급 동호회장으로  업데이트 해주기 -->
@@ -34,9 +41,9 @@
 	</update>
 	
 	<!-- 동호회 등록완료 하면 tbl_clubmember 에 insert 하기 -->
-	<insert id="insertCmemberTbl" parameterType="Clubvo">
+	<insert id="insertCmemberTbl" parameterType="ClubVO">
 		insert into tbl_clubmember(fk_userid, sportseq, clubseq, status)
-		values(#{fk_userid}, #{sportseq}, #{clubseq}, 1)
+		values(#{fk_userid}, #{fk_sportseq}, #{clubseq}, 1)
 	</insert>
 	
 	
@@ -595,6 +602,39 @@
 		)
 		WHERE ROWNUM = 1
 	</select> 
+	
+	
+
+	
+	<insert id="insertCalcname" parameterType="ClubVO"> 
+		insert into tbl_calendar_small_category(fk_lgcatgono, smcatgono, smcatgoname, fk_clubseq ,fk_userid)
+		values(2, seq_smcatgono.nextval, '#{clubname}', #{clubseq}, #{fk_userid})
+	</insert>
+	
+	
+	
+	
+	<resultMap type="HashMap" id="calMap">
+		<result property="fk_lgcatgono" column="fk_lgcatgono" javaType="String"/>
+		<result property="smcatgono" column="smcatgono" javaType="String"/>
+		<result property="smcatgoname" column="smcatgoname" javaType="String"/>
+		<result property="fk_clubseq" column="fk_clubseq" javaType="String"/>
+		<result property="fk_userid" column="fk_userid" javaType="String"/>
+	</resultMap>
+	<select id="getMyclubList" parameterType="String" resultMap="calMap">
+		select fk_lgcatgono, smcatgono, smcatgoname, fk_clubseq ,fk_userid
+		from tbl_calendar_small_category
+		where fk_userid = #{fk_userid}
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 
