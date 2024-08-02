@@ -74,8 +74,8 @@
 
 	<!-- 상품등록  완료 요청(파일첨부ㅇ) -->
 	<insert id="add_withFilee"  parameterType="FleamarketVO">
-		insert into tbl_fleamarket(fleamarketseq, sportseq, city, local, title, content, cost, deal, fk_userid, registerdate, password, commentcount, viewcount, status, imgfilename)
-		values(seq_fleamarket.nextval, #{sportseq}, #{city}, #{local}, #{title}, #{content}, #{cost}, #{deal}, #{fk_userid}, default, #{password}, default, default, default, #{imgfilename})	
+		insert into tbl_fleamarket(fleamarketseq, sportseq, city, local, title, content, cost, deal, fk_userid, registerdate, commentcount, viewcount, status, imgfilename)
+		values(seq_fleamarket.nextval, #{sportseq}, #{city}, #{local}, #{title}, #{content}, #{cost}, #{deal}, #{fk_userid}, default, default, default, default, #{imgfilename})	
 	</insert>
 	
 	
@@ -124,12 +124,12 @@
 	
 	<!--  -->
 	<select id="select_clubboard_paging" parameterType="HashMap" resultType="ClubBoardVO">
-		select rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status
+		select rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, commentcount, viewcount, status, orgfilename, filename
 		from
-		(select rownum rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status
+		(select rownum rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, commentcount, viewcount, status, orgfilename, filename
 		from
 		(
-		select clubboardseq, clubseq, title, content, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, password, commentcount, viewcount, status
+		select clubboardseq, clubseq, title, content, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, commentcount, viewcount, status, orgfilename, filename
 		from tbl_clubboard)
 		<if test="searchType == 'title' and searchWord != ''">and title like '%'||#{searchWord}||'%'</if>
 		<if test="searchType == 'content' and searchWord != ''">and content like '%'||#{searchWord}||'%'</if>
@@ -153,7 +153,7 @@
 	
 	<!-- 동호회 게시판 - 디테일 -->
 	<select id="getClubboardDetail" parameterType="HashMap" resultType="ClubBoardVO">
-		select previousseq, previoustitle, clubboardseq, clubseq, title, content, fk_userid, registerdate, password, commentcount, viewcount, status, orgfilename, filename, filesize, nextseq, nexttitle
+		select previousseq, previoustitle, clubboardseq, clubseq, title, content, fk_userid, registerdate, commentcount, viewcount, status, orgfilename, filename, filesize, nextseq, nexttitle
 		from 
 		(
 		    select 
@@ -162,7 +162,7 @@
 		        clubboardseq, clubseq, title, content, registerdate, viewcount, orgfilename, filename, filesize,
 		        lead(clubboardseq, 1) over(order by clubboardseq desc) nextseq,
 		        lead(title, 1) over(order by clubboardseq desc) nexttitle,
-		        fk_userid, password, commentcount, status
+		        fk_userid, commentcount, status
 		    from tbl_clubboard
 		    where status = 1 and clubseq=#{clubseq}
 		) A
@@ -527,13 +527,13 @@
 	
 	
 	<insert id="add_withFile2"  parameterType="HashMap">
-		insert into tbl_clubboard(clubboardseq, clubseq, title, content, fk_userid, registerdate ,password, commentcount, viewcount, status, filename, orgfilename)
-		values(seq_clubboard.nextval, #{clubseq}, #{title}, #{content}, #{fk_userid}, default, #{password}, 0, 0, 1, #{filename}, #{orgfilename});
+		insert into tbl_clubboard(clubboardseq, clubseq, title, content, fk_userid, registerdate ,commentcount, viewcount, status, filename, orgfilename)
+		values(seq_clubboard.nextval, #{clubseq}, #{title}, #{content}, #{fk_userid}, default, 0, 0, 1, #{filename}, #{orgfilename})
 	</insert>
 	
 	<insert id="add" parameterType="HashMap">
-          insert into tbl_clubboard(clubboardseq, clubseq, title, content, fk_userid, registerdate ,password, commentcount, viewcount, status)
-          values(seq_clubboard.nextval, #{clubseq}, #{title}, #{content}, #{fk_userid}, default, #{password}, 0, 0, 1) 
+          insert into tbl_clubboard(clubboardseq, clubseq, title, content, fk_userid, registerdate ,commentcount, viewcount, status)
+          values(seq_clubboard.nextval, #{clubseq}, #{title}, #{content}, #{fk_userid}, default, 0, 0, 1) 
     </insert>
 	
 	
@@ -608,7 +608,7 @@
 	
 	<insert id="insertCalcname" parameterType="ClubVO"> 
 		insert into tbl_calendar_small_category(fk_lgcatgono, smcatgono, smcatgoname, fk_clubseq ,fk_userid)
-		values(2, seq_smcatgono.nextval, '#{clubname}', #{clubseq}, #{fk_userid})
+		values(2, seq_smcatgono.nextval, #{clubname}, #{clubseq}, #{fk_userid})
 	</insert>
 	
 	
@@ -629,10 +629,21 @@
 	
 	
 	
+	<select id="editCBoard_get" parameterType="String" resultType="ClubBoardVO">
+		select clubboardseq, title, content, orgfilename 
+		from tbl_clubboard 
+		where clubboardseq = #{clubboardseq}
+	</select>
 	
 	
-	
-	
+	<resultMap type="HashMap" id="cboardfileMap">
+		<result property="filename" column="filename" javaType="String"/>
+		<result property="orgfilename" column="orgfilename" javaType="String"/>
+	</resultMap>
+	<select id="getOrgfilename" parameterType="String" resultMap="cboardfileMap">
+		select filename, orgfilename from tbl_clubboard
+		where clubboardseq = #{clubboardseq}
+	</select>
 	
 	
 	

@@ -142,6 +142,12 @@ public interface AmadoDAO_JY {
 
 	void insertCalcname(ClubVO clubvo);
 
+	ClubBoardVO editClubBoard(String clubseq);
+
+	ClubBoardVO editCBoard_get(String clubboardseq);
+
+	Map<String, String> getOrgfilename(String clubboardseq);
+
 	
 
 

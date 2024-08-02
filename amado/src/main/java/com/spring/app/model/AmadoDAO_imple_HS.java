@@ -245,6 +245,16 @@ public class AmadoDAO_imple_HS implements AmadoDAO_HS {
 
 
 
+		//mypage 체육관지우기
+		@Override
+		public int Gymreg2(GymVO gym) {
+			int n = sqlsession.update("HS.Gymreg2", gym);
+			return n;
+		}
+
+
+
+
 
 
 	

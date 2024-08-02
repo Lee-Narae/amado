@@ -443,8 +443,26 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 
 	@Override
 	public List<Map<String,String>> getMyclubList(String fk_userid) {
-		List<Map<String,String>> myclubList = sqlsession.selectOne("JY.getMyclubList", fk_userid);
+		List<Map<String,String>> myclubList = sqlsession.selectList("JY.getMyclubList", fk_userid);
 		return myclubList;
+	}
+
+	@Override
+	public ClubBoardVO editClubBoard(String clubseq) {
+		ClubBoardVO editCBoard = sqlsession.selectOne("JY.editClubBoard", clubseq);
+		return editCBoard;
+	}
+
+	@Override
+	public ClubBoardVO editCBoard_get(String clubboardseq) {
+		ClubBoardVO editCBoard = sqlsession.selectOne("JY.editCBoard_get", clubboardseq);
+		return editCBoard;
+	}
+
+	@Override
+	public Map<String, String> getOrgfilename(String clubboardseq) {
+		Map<String, String> filenameMap = sqlsession.selectOne("JY.getOrgfilename", clubboardseq);
+		return filenameMap;
 	}
 
 
