@@ -506,3 +506,25 @@ select * from tbl_clubmember;
 select * from tbl_club;
 select * from tbl_sport;
 
+
+
+select fk_lgcatgono, smcatgono, smcatgoname, fk_clubseq ,fk_userid
+from tbl_calendar_small_category
+where fk_userid = 'leejy'
+
+select *
+from tbl_clubboard
+where clubboardseq = 6
+
+select filename, orgfilename from tbl_clubboard
+where clubboardseq = 12
+
+--할일--
+--종목하나당 동호회 하나씩만 만들게하기xml
+--캘린더 테스트해보고 userid 문제 해결하기
+--컨트롤러/community/editNotice.do 할 차례
+
+
+
+alter table tbl_fleamarket drop column password;
+
