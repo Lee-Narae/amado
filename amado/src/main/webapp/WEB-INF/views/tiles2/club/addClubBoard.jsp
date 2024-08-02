@@ -97,14 +97,6 @@ $(document).ready(function(){
            }
            
            
-        // 글암호 유효성 검사
-          const pw = $("input:password[name='password']").val().trim();
-          if(pw == ""){
-             alert("글암호를 입력하세요!!");
-             return; // 종료
-          }
-          
-          
           
         // 폼(form)을 전송(submit)
         const frm = document.addFrm;
@@ -239,12 +231,7 @@ $(document).ready(function(){
 		 </tr>
          
          
-         <tr>
-            <th style="width: 15%; background-color: #DDDDDD;">글암호</th> 
-            <td>
-                <input type="password" name="password" maxlength="20" />
-            </td>
-         </tr>   
+           
         </table>
         
         <div style="margin: 20px;">
@@ -257,7 +244,7 @@ $(document).ready(function(){
         	유효성 검사를 하지 않고 GET 방식으로 넘어가버린다. 
          --%>
         
-    <input type="text" name="clubseq" value="${requestScope.clubseq }" />
+    <input type="hidden" name="clubseq" value="${requestScope.clubseq }" />
      
   </div>
 </div>

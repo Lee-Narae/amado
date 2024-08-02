@@ -816,4 +816,33 @@
 		delete from tbl_clubmember
 		where fk_userid = #{userid} and clubseq = #{clubseq}
 	</delete>
+	
+	
+	<resultMap type="HashMap" id="clubseqMap">
+		<result column="team1" property="team1" javaType="String"/>
+		<result column="team2" property="team2" javaType="String"/>
+	</resultMap>
+	<select id="getMatchClubseq" parameterType="String" resultMap="clubseqMap">
+		select clubseq1 team1, clubseq2 team2 from tbl_matching where matchingseq = #{matchingseq}
+	</select>
+	
+	
+	<update id="addClubPoint">
+		update tbl_club set clubscore = clubscore + to_number(#{team1Point})
+		where clubseq = #{team1}
+	</update>
+	
+	<update id="addClubPoint2">
+		update tbl_club set clubscore = clubscore + to_number(#{team2Point})
+		where clubseq = #{team2}
+	</update>
+	
+	<select id="getClubname" parameterType="String" resultType="String">
+		select clubname from tbl_club where clubseq = #{clubseq}
+	</select>
+	
+	<insert id="insertCalcat" parameterType="HashMap">
+		insert into tbl_calendar_small_category(fk_lgcatgono, smcatgono, smcatgoname, fk_clubseq ,fk_userid)
+		values(2, seq_smcatgono.nextval, #{clubname}, #{clubseq}, #{userid})
+	</insert>
 </mapper>

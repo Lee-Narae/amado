@@ -583,8 +583,20 @@ public class ControllerHS {
 		
 		
 		   @GetMapping("/member/myPage_gym.do")
-		   public ModelAndView myPage_gym(ModelAndView mav) {
-		      
+		   public ModelAndView myPage_gym(ModelAndView mav, HttpServletRequest request) {
+			
+			   
+			   String gymseq = request.getParameter("gymseq");
+
+				// 모든 상품 select 해오기
+				GymVO gym = service.getGym(gymseq); // 디비에서 데이터를 불러만오는 거라 map에 넣어서 보낼게 없음!!!!
+
+				List<Map<String, String>> gymImgList = service.getGymImg(gymseq);
+
+				mav.addObject("gym", gym);
+				mav.addObject("gymImgList", gymImgList);
+
+			   
 		      mav.setViewName("member/myPage_gym.tiles1");
 		      
 		      return mav;
@@ -637,6 +649,82 @@ public class ControllerHS {
 				return jsonObj.toString();
 			}
 			
+		   
+		
+			//
+			@ResponseBody
+			@PostMapping(value = "/gym/editGymend.do", produces = "text/plain;charset=UTF-8")
+			public String gymEdit(GymVO gym, MultipartHttpServletRequest mrequest) {
+
+				System.out.println("gymseq: "+gym.getGymseq());
+				
+				// 대표이미지
+				MultipartFile attach = gym.getAttach();
+
+//				HttpSession session = mrequest.getSession();
+//				String root = session.getServletContext().getRealPath("/");
+//				String path = root + "resources" + File.separator + "files";
+
+				String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\images\\1";
+
+				String newFileName = "";
+				byte[] bytes = null;
+				long fileSize = 0;
+
+				try {
+					bytes = attach.getBytes();
+					String originalFilename = attach.getOriginalFilename();
+					newFileName = fileManager.doFileUpload(bytes, originalFilename, path);
+					fileSize = attach.getSize(); // 첨부파일의 크기(단위는 byte임)
+
+					gym.setFilename(newFileName);
+					gym.setOrgfilename(originalFilename);
+					gym.setFilesize(String.valueOf(fileSize));
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				int n = service.Gymreg2(gym);
+				System.out.println("n: " + n);
+				int n2 = 0;
+
+				if (n == 1) {
+
+					// 추가이미지
+					List<MultipartFile> fileList = mrequest.getFiles("file_arr");
+
+					for (MultipartFile mtfile : fileList) {
+						try {
+							bytes = mtfile.getBytes();
+							String originalFilename = mtfile.getOriginalFilename();
+							newFileName = fileManager.doFileUpload(bytes, originalFilename, path);
+							fileSize = mtfile.getSize(); // 첨부파일의 크기(단위는 byte임)
+
+							Map<String, String> paramap = new HashMap<String, String>();
+							paramap.put("gymseq", gym.getGymseq());
+							paramap.put("filename", newFileName);
+							paramap.put("orgfilename", originalFilename);
+							paramap.put("filesize", String.valueOf(fileSize));
+
+							// tbl_gymimg DB insert
+							n2 = service.insertGymImg(paramap);
+							System.out.println("n2: " + n2);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+
+				}
+
+				JSONObject jsonObj = new JSONObject();
+				jsonObj.put("n", n * n2);
+
+				return jsonObj.toString();
+			}
+
+		   
+		   
 		   
 		   
 		   

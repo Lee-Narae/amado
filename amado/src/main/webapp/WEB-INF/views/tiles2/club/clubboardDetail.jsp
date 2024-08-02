@@ -166,7 +166,7 @@ function editCBoard(seq){
 	
 	const frm4 = document.goViewFrm;
 	frm4.clubboardseq.value = seq;
-	frm4.action = "<%=ctxPath%>/admin/reg/notice";
+	frm4.action = "<%=ctxPath%>/club/addClubBoard.do";
 	frm4.method = "post";
 	frm4.submit();
 	
@@ -324,7 +324,7 @@ function viewCommentOnly(){
 		</div>
 		<div class="tr" style="align-content: center; margin-left: 8%; display: flex; margin-bottom: 0.5%;">
 			<div class="title">첨부파일</div>
-			<c:if test="${not empty requestScope.cboard.orgfilename}"><div style="width: 70%; margin-top: 0.5%;" align="left"><a href="noticeAttachDownload.do?noticeseq=${requestScope.cboard.noticeseq}">${requestScope.cboard.orgfilename}</a></div></c:if>
+			<c:if test="${not empty requestScope.cboard.orgfilename}"><div style="width: 70%; margin-top: 0.5%;" align="left"><a href="clubboardAttachDownload.do?clubboardseq=${requestScope.cboard.clubboardseq}">${requestScope.cboard.orgfilename}</a></div></c:if>
 			<c:if test="${empty requestScope.cboard.orgfilename}"><div style="width: 70%; margin-top: 0.5%;" align="left">첨부파일이 없습니다.</div></c:if>
 		</div>
 		<div class="tr" style="align-content: center; margin-left: 8%; display: flex; margin-bottom: 0.5%;">

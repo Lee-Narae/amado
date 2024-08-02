@@ -173,8 +173,8 @@
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
                 </div>
             </div>
-        </div>
-    </div>
+	        </div>
+	    </div>
 
     <!-- 사용자 정의 JS -->
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3e40c6a4e83259bd26e2771ad2db4e63"></script>

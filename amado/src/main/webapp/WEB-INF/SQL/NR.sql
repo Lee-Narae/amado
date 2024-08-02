@@ -686,4 +686,15 @@ select * from tbl_clubmember;
 select * from tbl_club;
 
 desc tbl_calendar_small_category;
-        
+
+
+select * from tbl_clubmember where status = 0;
+select * from tbl_matching;
+
+update tbl_matching set result1 = 0, result2 = 0, score1 = 0, score2 = 0
+where matchingseq = 25;
+commit;
+
+select * from tbl_calendar_small_category;
+
+select * from tbl_gym;

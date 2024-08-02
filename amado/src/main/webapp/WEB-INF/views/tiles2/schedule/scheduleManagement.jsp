@@ -477,6 +477,7 @@ function showCompanyCal(){
 	$.ajax({
 		 url:"<%= ctxPath%>/schedule/showCompanyCalendar.do",
 		 type:"get",
+		 data:{"fk_userid":"${sessionScope.loginuser.userid}"},
 		 dataType:"json",
 		 success:function(json){
 				 var html = "";

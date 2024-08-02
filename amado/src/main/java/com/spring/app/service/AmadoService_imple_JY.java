@@ -15,6 +15,7 @@ import com.spring.app.domain.ClubmemberVO;
 import com.spring.app.domain.FleamarketVO;
 import com.spring.app.domain.GymVO;
 import com.spring.app.domain.MemberVO;
+import com.spring.app.domain.NoticeVO;
 import com.spring.app.model.AmadoDAO_JY;
 
 @Service
@@ -447,6 +448,23 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 	public void insertCalcname(ClubVO clubvo) {
 		dao.insertCalcname(clubvo);
 	}
+
+
+
+	@Override
+	public ClubBoardVO editCBoard_get(String clubboardseq) {
+		ClubBoardVO editCBoard = dao.editCBoard_get(clubboardseq);
+		return editCBoard;
+	}
+
+
+
+	@Override
+	public Map<String, String> getOrgfilename(String clubboardseq) {
+		Map<String, String> filenameMap = dao.getOrgfilename(clubboardseq);
+		return filenameMap;
+	}
+
 
 
 	

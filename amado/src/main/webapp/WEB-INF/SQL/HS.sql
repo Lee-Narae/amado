@@ -386,7 +386,10 @@ create table tbl_gymanswer
 ,constraint FK_tbl_gymawr_gymquestionseq foreign key(gymquestionseq) references tbl_gymquestion(gymquestionseq)
 ,constraint FK_tbl_gymawr_fk_userid foreign key(fk_userid) references tbl_member(userid)
 );
+select *
+from tbl_gym
 
+desc tbl_gym
 
 content_reply
 

@@ -294,7 +294,7 @@ public class ControllerJY {
 		}
 		
 		if(n2==1) {
-			
+			//System.out.println("23223"+clubvo.getFk_userid());
 			service.insertCalcname(clubvo); 
 			mav.setViewName("redirect:/club/findClub.do?sportseq="+clubvo.getFk_sportseq());  // 결과물 보여줘야하니까 "club/findClub.tiles2" 아님!!!
 		    //  /list.action 페이지로 redirect(페이지이동)해라는 말이다.
@@ -446,12 +446,12 @@ public class ControllerJY {
 		mav.addObject("pageBar", pageBar);
 		
 		String goBackURL = MyUtil.getCurrentURL(request);
-		System.out.println("~~~ 확인용(list.do) goBackURL : " + goBackURL);
+		//System.out.println("~~~ 확인용(list.do) goBackURL : " + goBackURL);
 //		~~~ 확인용(list.action) goBackURL : /list.action
 //		~~~ 확인용(list.action) goBackURL : /list.action?searchType=&searchWord=&currentShowPageNo=5
 //		~~~ 확인용(list.action) goBackURL : /list.action?searchType=subject&searchWord=java
 //		~~~ 확인용(list.action) goBackURL : /list.action?searchType=subject&searchWord=%EC%A0%95%ED%99%94&currentShowPageNo=3
-//	 %EC%A0%95%ED%99%94 == 정화 (한글이라 변환된거임)
+//	 %EC%A0%95%ED%99%94 == 정화 (한글이라 변환된거임)  
 		
 		
 		///////////////////////////////////////////////////////////////
@@ -823,6 +823,21 @@ public class ControllerJY {
 		
 	}
 	
+	@PostMapping("/club/addClubBoard.do")
+	public ModelAndView editClubBoard(HttpServletRequest request, ModelAndView mav) {
+		
+		String clubboardseq = request.getParameter("clubboardseq");
+		
+		ClubBoardVO editCBoard = service.editCBoard_get(clubboardseq);
+		
+		if(editCBoard != null) {
+			mav.addObject("editCBoard", editCBoard);
+		}
+		mav.setViewName("club/editClubBoard.tiles2");
+		return mav;
+	}
+	
+	
 	
 	// 글쓰기 완료
 	@PostMapping(value="/club/addEndClubBoard.do" , produces="text/plain;charset=UTF-8")
@@ -1186,6 +1201,28 @@ public class ControllerJY {
 	
 	
 	
+	@GetMapping("/club/clubboardAttachDownload.do")
+	public void noticeAttachDownload(HttpServletRequest request, HttpServletResponse response) {
+		
+		String clubboardseq = request.getParameter("clubboardseq");
+	
+		// 파일관련 이름 알아오기
+		Map<String, String> filenameMap = service.getOrgfilename(clubboardseq);
+		
+		String filename = filenameMap.get("filename");
+		String orgfilename = filenameMap.get("orgfilename");
+		
+		HttpSession session = request.getSession(); 
+        String root = session.getServletContext().getRealPath("/");
+        String path = root+"resources"+File.separator+"files";
+		
+        fileManager.doFileDownload(filename, orgfilename, path, response);
+		
+	}
+
+	
+	
+	
 	// 글삭하기
 	@PostMapping("/club/deleteCBoard.do")
 	public ModelAndView deleteNotice(HttpServletRequest request, ModelAndView mav) {
@@ -1432,7 +1469,7 @@ public class ControllerJY {
 	public String showCompanyCalendar(HttpServletRequest request) {
 		
 		String fk_userid = request.getParameter("fk_userid");
-		
+		System.out.println(fk_userid);
 		//List<Calendar_small_category_VO> calendar_small_category_VO_CompanyList = service.showCompanyCalendar();
 		
 		
@@ -1966,7 +2003,7 @@ public class ControllerJY {
 	}
 	
 	
-	
+	//   /club/editClubBoard.do
 
 	
 	
