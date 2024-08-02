@@ -465,6 +465,14 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 		return filenameMap;
 	}
 
+	
+	// 동호회게시판 수정하기(1)
+	@Override
+	public int editCBoardBy1(ClubBoardVO cvo) {
+		int n = sqlsession.update("JY.editCBoardBy1", cvo);
+		return n;
+	}
+
 
 
 

@@ -25,6 +25,9 @@ public class ClubBoardVO {
 	      /board/src/main/webapp/WEB-INF/views/tiles1/board/view.jsp 파일에서 input type="file" 인 name 의 이름(attach)과  
 	        동일해야만 파일첨부가 가능해진다.!!!!
 	 */
+	
+	
+	
 	private String wasfileName;    // WAS(톰캣)에 저장될 파일명(2024070109291535243254235235234.png) 
 
 	// 이전글, 다음글 보기
