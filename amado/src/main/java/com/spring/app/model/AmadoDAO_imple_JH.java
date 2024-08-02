@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
+import com.spring.app.domain.FleamarketVO;
 import com.spring.app.domain.GymVO;
 import com.spring.app.domain.GymresVO;
 import com.spring.app.domain.MatchingVO;
@@ -175,6 +176,12 @@ public class AmadoDAO_imple_JH implements AmadoDAO_JH {
 	public Map<String, String> getviewresList(String userid) {
 		Map<String, String> viewresMap = sqlsession.selectOne("JH.getviewresList", userid);
 		return viewresMap;
+	}
+
+	@Override
+	public FleamarketVO getfleMap(String fleamarketseq) {
+		FleamarketVO fleMap = sqlsession.selectOne("JH.getfleMap", fleamarketseq);
+		return fleMap;
 	}
 
 

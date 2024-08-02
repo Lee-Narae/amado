@@ -13,6 +13,7 @@ import com.spring.app.common.AES256;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
+import com.spring.app.domain.FleamarketVO;
 import com.spring.app.domain.GymVO;
 import com.spring.app.domain.GymresVO;
 import com.spring.app.domain.MatchingVO;
@@ -40,7 +41,7 @@ public class AmadoService_imple_JH implements AmadoService_JH {
 		
 		n1 = dao.addComment(fmcommentvo); // 댓글쓰기(tbl_comment 테이블에 insert)
 		//System.out.println("~~~ 확인용n1: " + n1);
-		
+		//System.out.println("~~~ 확인용seq: " + fmcommentvo.getFleamarketseq());
 		if(n1 == 1) {
 			result = dao.updateCommentCount(fmcommentvo.getFleamarketseq());  // tbl_board 테이블에 commentCount 컬럼이 1증가(update)
 			//System.out.println("~~~ 확인용result: " + result);
@@ -234,6 +235,14 @@ public class AmadoService_imple_JH implements AmadoService_JH {
 	public Map<String, String> getviewresList(String userid) {
 		Map<String, String> viewresMap = dao.getviewresList(userid);
 		return viewresMap;
+	}
+
+
+
+	@Override
+	public FleamarketVO getfleMap(String fleamarketseq) {
+		FleamarketVO fleMap = dao.getfleMap(fleamarketseq);
+		return fleMap;
 	}
 
 }

@@ -32,6 +32,7 @@ import com.spring.app.common.MyUtil;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
+import com.spring.app.domain.FleamarketVO;
 import com.spring.app.domain.GymVO;
 import com.spring.app.domain.GymresVO;
 import com.spring.app.domain.MatchingVO;
@@ -46,10 +47,14 @@ public class ControllerJH {
 	private AmadoService_JH service; 
 	
 	@GetMapping("/club/sale.do")
-	public ModelAndView sale(ModelAndView mav) {
+	public ModelAndView sale(ModelAndView mav, HttpServletRequest request) {
 
-		//AmadoService_JH.sale();
+		String fleamarketseq = request.getParameter("fleamarketseq");
+		//System.out.println("16jbhv"+fleamarketseq);
+		FleamarketVO fleMap = service.getfleMap(fleamarketseq);
 		
+		//System.out.println("22222"+fleMap.getContent());
+		mav.addObject("fleMap",fleMap);
 		mav.setViewName("club/sale.tiles2");
 		// /WEB-INF/views/tiles2/main/index.jsp
 		
@@ -64,8 +69,8 @@ public class ControllerJH {
 		// 댓글쓰기에 첨부파일이 없는 경우
 		String name = request.getParameter("name");
 		String comment_text = request.getParameter("comment_text");
-		
-		//System.out.println(comment_text);
+		fmcommentvo.setFleamarketseq(request.getParameter("fleamarketseq"));
+		//System.out.println("gdgd"+request.getParameter("fleamarketseq"));
 		
 		int n = 0;
 		
@@ -95,6 +100,8 @@ public class ControllerJH {
 	public String readComment(HttpServletRequest request) {
 		
 		String parentSeq = request.getParameter("parentSeq"); 
+		
+		System.out.println(parentSeq);
 		
 		List<FleamarketCommentVO> commentList = service.getCommentList(parentSeq); 
 		

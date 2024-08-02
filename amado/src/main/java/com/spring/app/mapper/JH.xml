@@ -7,13 +7,13 @@
 <!-- #88. 댓글쓰기 (tbl_comment 테이블에 insert) -->
 	<insert id="addComment" parameterType="FleamarketCommentVO">
 		insert into tbl_fleamarketcomment(fleamarketcommentseq, fleamarketseq, comment_text, registerdate, fk_userid)
-		values(seq_fleamarketcomment.nextval, 1, #{comment_text}, default, #{fk_userid})
+		values(seq_fleamarketcomment.nextval, #{fleamarketseq}, #{comment_text}, default, #{fk_userid})
 	</insert>
 	
 	<!-- #89-1. tbl_board 테이블에 commentCount 컬럼이 1증가(update) -->
 	<update id="updateCommentCount" parameterType="String">
 		update tbl_fleamarket set commentcount = commentcount+1
-		where fleamarketseq = 1
+		where fleamarketseq = #{fleamarketseq}
 	</update>
 	
 	<!-- === #93. 원게시물에 딸린 댓글들을 조회해오기 === -->
@@ -339,4 +339,13 @@
 		from tbl_gym
 		where gymseq = #{gymseq}
 	</select>
+	
+	
+	
+	<select id="getfleMap" resultType="FleamarketVO" parameterType="String">
+		select *
+		from tbl_fleamarket
+		where fleamarketseq = #{fleamarketseq}
+	</select>
+	
 </mapper>
