@@ -771,6 +771,30 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 		return n;
 	}
 
+	// 동호회장 - 매치결과 등록 성공 시 점수 배분
+	@Override
+	public Map<String, String> getMatchClubseq(String matchingseq) {
+		Map<String, String> clubseqMap = dao.getMatchClubseq(matchingseq);
+		return clubseqMap;
+	}
+	@Override
+	public int addClubPoint(Map<String, String> clubseqMap) {
+		int n = dao.addClubPoint(clubseqMap);
+		return n;
+	}
+
+	// 동호회 가입 승인시 일정 테이블에 등록
+	@Override
+	public String getClubname(String clubseq) {
+		String clubname = dao.getClubname(clubseq);
+		return clubname;
+	}
+	@Override
+	public int insertCalcat(Map<String, String> paramap) {
+		int n = dao.insertCalcat(paramap);
+		return n;
+	}
+
 
 	
 	

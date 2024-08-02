@@ -1,241 +1,551 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%
+   String ctxPath = request.getContextPath();
+%>
+ <style>
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    #gym-registration-form {
+      max-width: 700px; /* 폼 전체의 최대 너비를 조정합니다 */
+      margin: 0 auto; /* 가운데 정렬을 위해 margin을 auto로 설정합니다 */
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
 
-<% String ctxPath = request.getContextPath(); %> 
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
 
-<style type="text/css">
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
 
-    .mbtn{
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    input[type="file"] {
+      font-size: 16px;
+    }
+
+    textarea {
+      height: 150px;
+    }
+
+    .form-group .note {
+      font-size: 14px;
+      color: #666;
+      margin-top: 5px;
+    }
+   
+      div.fileDrop{ display: inline-block; 
+                 width: 100%; 
+                 height: 100px;
+                 overflow: auto;
+                 background-color: #fff;
+                 padding-left: 10px;}
+                 
+    div.fileDrop > div.fileList > span.delete{display:inline-block; width: 20px; border: solid 1px gray; text-align: center;} 
+    div.fileDrop > div.fileList > span.delete:hover{background-color: #000; color: #fff; cursor: pointer;}
+    div.fileDrop > div.fileList > span.fileName{padding-left: 10px;}
+    div.fileDrop > div.fileList > span.fileSize{padding-right: 20px; float:right;} 
+
+
+	#plusImg {
+	width: 50%;
+	border: solid 1px gray;
+	background-color: white;
+	border-radius: 10px;
+	height: 120px;
+	padding: 1%;
+}
+.mbtn {
         font-weight: bold;
         height: 100px;
         margin-inline-end: .25rem;
-        background-color: white; 
-        border: none; 
+        background-color: white;
+        border: none;
         color: gray;
         width: 40%;
         cursor: pointer;
-        transition: box-shadow 0.3s ease; /* 호버 시 부드러운 전환 효과 */
+        transition: box-shadow 0.3s ease;
     }
 
     .mbtn:hover {
-        color: #05203c; 
+        color: #05203c;
     }
 
-    .hr1{
-        border-style:none; 
-        height: 2px; 
-        background-color : lightgray;
+    .hr1 {
+        border-style: none;
+        height: 2px;
+        background-color: lightgray;
     }
-    .item1{
+
+    .item1 {
         border-left: solid 3px #05203c;
     }
 
     #hr2-container {
         position: relative;
         height: 40px;
-        background-color : #98b6d5;
+        background-color: #98b6d5;
         display: flex;
         justify-content: center;
         align-items: center;
     }
-    #hrbtns{
-    border: solid 0px red;
-    margin-right:1.5%;
+
+    #hrbtns {
+        border: solid 0px red;
+        margin-right: 1.5%;
         display: flex;
-        gap: 70px; /* Adjust the gap between buttons */
+        gap: 70px;
         position: absolute;
         z-index: 1;
     }
-    .btn2{
-    font-size: 14px;
+
+    .btn2 {
+        font-size: 14px;
         cursor: pointer;
         border: none;
         background-color: inherit;
     }
-    
+
     .hover {
-    color: #05203c; 
-    font-weight: bold;
+        color: #05203c;
+        font-weight: bold;
     }
-    
+
     .title {
-     width: 15%;
-     background-color: #4db8ff; 
-     color: white; 
-     font-weight: bold; 
-     align-content: center; 
-     text-align: center; 
-     height: 40px; 
-     border-radius: 15px;
-     margin-right: 3%;
+        width: 15%;
+        background-color: #4db8ff;
+        color: white;
+        font-weight: bold;
+        align-content: center;
+        text-align: center;
+        height: 40px;
+        border-radius: 15px;
+        margin-right: 3%;
     }
-    
-    .tr{
-    align-content: center;
-    margin-bottom: 1%;
+
+    .tr {
+        align-content: center;
+        margin-bottom: 1%;
     }
-    
+
     .select {
-    width: 20%;
+        width: 20%;
     }
-    
+
     select {
-    width: 30%;
-    height: 40px;
-    text-align: center;
-    border-radius: 10px;
+        width: 30%;
+        height: 40px;
+        text-align: center;
+        border-radius: 10px;
     }
-    
+
     .btnInfoChange {
-    font-size: 8pt;
-    margin-left: 3%;
+        font-size: 8pt;
+        margin-left: 3%;
     }
-    
+
     .input {
-    width: 70%;
+        width: 70%;
     }
-    
+
     #memberInfo input {
-    height: 40px;
-    border-radius: 10px;
-    align-content: center;
-    padding-left: 1%;
-    border: solid 1px gray;
+        height: 40px;
+        border-radius: 10px;
+        align-content: center;
+        padding-left: 1%;
+        border: solid 1px gray;
     }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f4f7;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    .container h1 {
+        text-align: center;
+        color: #007BFF;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        width: 120px;
+        font-weight: bold;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="file"],
+    .form-group select,
+    .form-group textarea {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    .form-group textarea {
+        resize: vertical;
+    }
+
+   
+  </style>
+  <!-- Daum 주소 API 스크립트 -->
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/i18n/jquery-ui-i18n.min.js"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1d1ded080a235938c8e4701b8f4565e5&libraries=services"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript">   
+
+// Daum 주소 API를 이용한 주소 찾기 함수
+function searchAddress() {
+    new daum.Postcode({
+        oncomplete: function(data) {
+            document.getElementById('address').value = data.address;
+            document.getElementById('postcode').value = data.zonecode;
+            document.getElementById('detailaddress').focus();
+        }
+    }).open();
+}//end of function searchAddress
+
+let total_fileSize = 0;
+let lat = 0; // 위도
+let lng = 0; // 경도
+
+
+$(document).ready(function() {
+
+   /* //파일미리보기
+   $(document).on("change", "input#imgfilename", function(e) {
+       const inputFiles = e.target.files;
+       const previewImagesContainer = document.getElementById("previewImages");
+       previewImagesContainer.innerHTML = ""; 
+
+       for (let i = 0; i < inputFiles.length; i++) {
+           const fileReader = new FileReader();
+           const imgElement = document.createElement("img");
+           imgElement.style.width = "100px";
+
+           fileReader.onload = function(event) {
+               imgElement.src = event.target.result;
+           };
+
+           fileReader.readAsDataURL(inputFiles[i]);
+
+           previewImagesContainer.appendChild(imgElement);
+       }
+   });
+ */
+
+    // 비용(input[type="number"]) 입력 필드에 대한 숫자만 입력 유효성 검사
+    var costInput = document.getElementById("cost");
+    costInput.addEventListener("input", function(event) {
+        var value = event.target.value;
+        if (isNaN(value)) {
+            event.target.value = "";
+            alert("숫자만 입력할 수 있습니다.");
+        }
+    });
+
+    // 인원수(input[type="number"]) 입력 필드에 대한 숫자만 입력 유효성 검사
+    var memberCountInput = document.getElementById("membercount");
+    memberCountInput.addEventListener("input", function(event) {
+        var value = event.target.value;
+        if (isNaN(value)) {
+            event.target.value = "";
+            alert("숫자만 입력할 수 있습니다.");
+        }
+    });
     
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f4f7;
-    color: #333;
-    margin: 0;
-    padding: 0;
-}
-
-.container {
-    max-width: 800px;
-    margin: 50px auto;
-    background-color: #fff;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-}
-
-.container h1 {
-    text-align: center;
-    color: #007BFF;
-    margin-bottom: 20px;
-}
-
-.form-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.form-group label {
-    width: 120px;
-    font-weight: bold;
-}
-
-.form-group input[type="text"],
-.form-group input[type="file"],
-.form-group select,
-.form-group textarea {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-}
-
-.form-group textarea {
-    resize: vertical;
-}
-
-button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background-color: #007BFF;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-size: 18px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
- 	      body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        table, th, td {
-            border: 1px solid #ccc;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .delete-btn {
-            background-color: #ff4d4d;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-        .delete-btn:hover {
-            background-color: #ff0000;
-        }
-        header {
-            background-color: #333;
-            color: white;
-            padding: 10px 0;
-            text-align: center;
-            margin-bottom: 20px;
-        }  
-</style>
-
-
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<script type="text/javascript">
-
-$(document).ready(function(){
+    
+    
 	
-	// 첫화면 기본세팅
-	$("button#mygym").addClass('hover');
-	$("#payList").css({"font-weight": "bold"});
+	// file 태그에 첨부된 file 크기 누적용
+	$(document).on("change", "input[name='attach']", function(e){
+	       const input_file = $(e.target).get(0);
+	       total_fileSize += input_file.files[0].size;
+	       console.log(total_fileSize);
+	});
+	
+	// 추가이미지 드래그앤드롭
+	let file_arr = [];
+	$("div#plusImg").on("dragenter", function(e){
+		e.preventDefault();
+       e.stopPropagation();
+	}).on("dragover", function(e){ 
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).css("background-color", "#e0f1d0");
+    }).on("dragleave", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).css("background-color", "#fff");
+    }).on("drop", function(e){
+          e.preventDefault();
+          var files = e.originalEvent.dataTransfer.files;
+         
+          if(files != null && files != undefined){
+       	   let html = "";
+              const f = files[0]; // 어차피 files.length 의 값이 1 이므로 위의 for문을 사용하지 않고 files[0] 을 사용하여 1개만 가져오면 된다. 
+              let fileSize = f.size/1024/1024;
+
+              if( !(f.type == 'image/jpeg' || f.type == 'image/png') ) {
+               alert("jpg 또는 png파일만 가능합니다.");
+               $(this).css("background-color", "#fff");
+               return;
+           }
+              
+           else if(fileSize >= 10) {
+               alert("10MB 이상인 파일은 업로드할 수 없습니다.");
+               $(this).css("background-color", "#fff");
+               return;
+           }
+              
+           else {
+              
+        	   file_arr.push(f);
+               const fileName = f.name; // 파일명   
+              
+               fileSize = fileSize < 1 ? fileSize.toFixed(3) : fileSize.toFixed(1);
+                   
+                  html += "<div class='fileList'>" +
+                       "<span class='delete'>&times;</span>" +
+                       "<span class='fileName'>"+fileName+"</span>" +
+                       "<span class='fileSize'>"+fileSize+"MB</span>" +
+                       "<span class='clear'></span>" +
+                       "</div>";
+               $(this).append(html);
+           }
+              
+           }
+          
+         $(this).css("background-color", "#fff");
+          
+    });
+	              
+	$(document).on("click", "span.delete", function(e){
+		
+		let idx = $("span.delete").index($(e.target));
+		file_arr.splice(idx, 1);
+		
+		// console.log(file_arr);
+		$(e.target).parent().remove();
+	});
 	
 	
+	$(document).on("keyup", "input[name='detailaddress']", function(){
+		// 위경도 값 넣기
+        var geocoder = new kakao.maps.services.Geocoder();
+        // 주소-좌표 변환 객체를 생성한다
+        geocoder.addressSearch($("input[name='address']").val(), function(result, status) {
+
+        	lat = result[0].y;
+        	lng = result[0].x;
+     	    
+        	$("input[name='lat']").val(lat);
+        	$("input[name='lng']").val(lng);
+        	 
+     	});
+	});
+	
+	
+	// 등록하기
+	$("button[id='submit']").click(function(){
+		
+		if($("input[name='gymname']").val().trim() == ''){
+			swal('체육관 명을 입력하세요.');
+			return;
+		}
+		if($("input[name='postcode']").val().trim() == ''){
+			swal('우편번호를 입력하세요.');
+			return;
+		}
+		if($("input[name='address']").val().trim() == ''){
+			swal('주소를 입력하세요.');
+			return;
+		}
+		if($("input[name='detailaddress']").val().trim() == ''){
+			swal('상세주소를 입력하세요.');
+			return;
+		}
+		if($("textarea[name='info']").val().trim() == ''){
+			swal('공간정보를 입력하세요.');
+			return;
+		}
+		if($("input[name='cost']").val().trim() == '' || isNaN($("input[name='cost']").val().trim())){
+			swal('올바른 비용을 입력하세요.');
+			("input[name='cost']").val('');
+			return;
+		}
+		if($("textarea[name='caution']").val().trim() == ''){
+			swal('주의사항을 입력하세요.');
+			return;
+		}
+		if($("input[name='membercount']").val().trim() == '' || $("input[name='membercount']").val().trim()<0 ||
+		   $("input[name='membercount']").val().trim() > 500 || isNaN($("input[name='membercount']").val().trim())){
+			swal('올바른 수용인원을 입력하세요.');
+			$("input[name='membercount']").val('0');
+			return;
+		}
+		
+		if($("input[name='attach']").val().trim() == ''){
+			swal('대표이미지 파일을 첨부하세요.');
+			return;
+		}
+		
+		if(file_arr.length == 0){
+			swal('추가이미지 파일을 첨부하세요.');
+			return;
+		}
+		
+		if(file_arr.length < 1 || file_arr.length > 5){
+			swal('추가이미지는 최소 1개, 최대 5개까지 첨부 가능합니다.');
+			return;
+		}
+        
+		var formData = new FormData($("form[name='addFrm']")[0]);
+         
+        if(file_arr.length > 0){ // 추가 이미지 파일이 있을 경우
+         	// 첨부한 파일의 총합의 크기가 10MB 이상 이라면 전송을 하지 못하게 막는다.
+         
+         	let sum_file_size = 0;
+         	
+         	for(let i=0; i<file_arr.length; i++){
+         		sum_file_size += file_arr[i].size;
+         	};
+         	
+            // 첨부한 파일의 총량을 누적하는 용도 
+            total_fileSize += sum_file_size;
+         	
+			if( sum_file_size >= 10*1024*1024 ) { // 첨부한 파일의 총합의 크기가 10MB 이상 이라면 
+				alert("첨부한 추가이미지 파일의 총합의 크기가 10MB 이상이므로 등록이 불가합니다.");
+				return; // 종료
+	        }
+			else{
+				file_arr.forEach(function(item, index){
+					 formData.append("file_arr", item);
+				});
+			}
+			
+        } // end of if(file_arr.length > 0)
+         
+        // 첨부한 파일의 총량이 20MB 초과시 //   
+        if( total_fileSize > 20*1024*1024 ) {
+        	console.log
+             alert("첨부한 파일의 총합의 크기가 20MB를 넘어 등록이 불가합니다.");
+             return; // 종료
+        }
+
+        
+        /*
+	    	processData 관련하여, 일반적으로 서버에 전달되는 데이터는 query string(쿼리 스트링)이라는 형태로 전달된다. 
+	    	ex) http://localhost:9090/board/list.action?searchType=subject&searchWord=안녕
+	    	? 다음에 나오는 'searchType=subject&searchWord=안녕'이라는 것이 query string(쿼리 스트링)이다. 
+	    	
+	    	data 파라미터로 전달된 데이터를 jQuery에서는 내부적으로 query string으로 만든다. 
+	    	하지만 파일 전송의 경우 내부적으로 query string으로 만드는 작업을 하지 않아야 한다.
+	    	이와 같이 내부적으로 query string으로 만드는 작업을 하지 않도록 설정하는 것이 processData: false이다.
+	    */
+	
+	    /*
+	    	contentType 은 default 값이 "application/x-www-form-urlencoded; charset=UTF-8" 인데, 
+	    	"multipart/form-data" 로 전송이 되도록 하기 위해서는 false로 해야 한다. 
+	    	만약에 false 대신에 "multipart/form-data"를 넣어보면 제대로 작동하지 않는다.
+	    */
+
+        $.ajax({
+            url: "<%= ctxPath%>/gym/editGymend.do",
+            type: "post",
+            data: formData,
+            processData: false,  // 파일 전송시 설정 
+            contentType: false,  // 파일 전송시 설정
+            dataType: "json",
+            success: function(json){
+            	if(json.n == 1){
+            		alert('관리자가 승인해야 정상등록 됩니다!');
+            		location.href = "<%=ctxPath%>/gym/rental_gym.do";
+            	}
+            	
+            	else {
+            		alert('실패');
+            	}
+            },
+            error: function(request, status, error){
+               alert("첨부된 파일의 크기의 총합이 20MB를 초과하여 등록이 불가합니다.");
+          }
+            
+        });
+
+			
+	}); // $("input:button[id='btnRegister']").click
+	
+  
+  
+
+
+
+
+
 });
+
 
 </script>
 
-
-
-
-<div id="container">
-    <div style="border:solid 0px red;">
-        <%-- 마이페이지 서브메뉴 --%>
-        <div id="menu" style="border:solid 0px black; display: flex; margin-top: 3%; ">
-            <div style="border:solid 0px blue; width: 50%; display: flex; margin: 0 auto;" >
+<%-- 마이페이지 서브메뉴 --%>
+        <div id="menu" style="border:solid 0px black; display: flex; margin-top: 3%;">
+            <div style="border:solid 0px blue; width: 50%; display: flex; margin: 0 auto;">
                   <button id="myinfo" class='mbtn' style="border-bottom: solid 3px #05203c;" onclick="location.href='<%=ctxPath%>/member/myPage.do'"><div><img src="<%= ctxPath%>/resources/images/zee/person2.png"></div>회원정보</button>
                   <button id="myclub" class='mbtn' style="border-bottom: solid 3px #05203c;" onclick="location.href='<%=ctxPath%>/member/myPage_club.do'"><div><img src="<%= ctxPath%>/resources/images/zee/team.png"></div>동호회 관리</button>
-                 <button id="mygym" class='mbtn' style="border-bottom: solid 3px #05203c;" onclick="location.href='<%=ctxPath%>/member/myPage_gymview.do'"><div><img style="height:65px;"src="<%= ctxPath%>/resources/images/zee/court.png"></div>체육관 관리</button>
+                  <button id="mygym" class='mbtn' style="border-bottom: solid 3px #05203c;" onclick="location.href='<%=ctxPath%>/member/myPage_gymview.do'"><div><img style="height:65px;"src="<%= ctxPath%>/resources/images/zee/court.png"></div>체육관 관리</button>
                   <button id="etc" class='mbtn' style="border-bottom: solid 3px #05203c;" onclick="location.href='<%=ctxPath%>/member/myPage_etc.do'"><div><img src="<%= ctxPath%>/resources/images/zee/etc.png"></div>기타</button>
             </div>
         </div>
@@ -243,98 +553,92 @@ $(document).ready(function(){
         <br>
         
         <div>
-	       <div id="hr2-container">
-	            <div id="hrbtns">
-	                <button id="gymManage" class='btn2'>내 체육관 관리</button>
-	            </div>
-	        </div>
-
-	       
-	        <div>
-<!-- 	            <div id="content1" style="border:solid 1px red; width: 50%;  margin: 3% auto;" >
-	                <div class="item1">&nbsp;대관내역 조회</div>
-	                <hr class="hr1">
-	                <div id="memberInfo">
-	                	
-	                </div>
-	                
-	            </div> -->
-	            
-	            
-	            
-	            <div id="content2" style=" width: 50%;  margin: 3% auto;" >
-	                <div class="item1">&nbsp;내 체육관 관리</div>
-	                <hr class="hr1">
-	                <div id="memberInfo">
-	                	
-	                </div>
-	                
-	            </div>
-	            
-	<div class="container">
-        <h1>체육관 수정 페이지</h1>
-        <form>
-            <div class="form-group">
-                <label for="gymName">체육관명</label>
-                <input type="text" id="gymName" name="gymName" required>
-            </div>
-            <div class="form-group">
-                <label for="managerId">담당자아이디</label>
-               	<div class="input">${sessionScope.loginuser.userid}</div>
-            </div>
-            <div class="form-group">
-                <label for="address">주소</label>
-                <div class="address-group">
-                    <input type="text" id="address" name="address" required>
-                    <button type="button" id="findAddress">주소찾기</button>
+           <div id="hr2-container">
+                <div id="hrbtns">
+                    <button id="gymManage" class='btn2'>내 체육관 관리</button>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="zipCode">우편번호</label>
-                <input type="text" id="zipCode" name="zipCode" required>
-            </div>
-            <div class="form-group">
-                <label for="detailedAddress">상세주소</label>
-                <input type="text" id="detailedAddress" name="detailedAddress" required>
-            </div>
-            <div class="form-group">
-                <label for="indoorOutdoor">실내/실외</label>
-                <select id="indoorOutdoor" name="indoorOutdoor" required>
-                    <option value="indoor">실내</option>
-                    <option value="outdoor">실외</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="cost">비용</label>
-                <input type="text" id="cost" name="cost" required>
-            </div>
-            <div class="form-group">
-                <label for="capacity">인원수</label>
-                <input type="text" id="capacity" name="capacity" required>
-            </div>
-            <div class="form-group">
-                <label for="image">이미지</label>
-                <input type="file" id="image" name="image" required>
-            </div>
-            <div class="form-group">
-                <label for="additionalImage">추가이미지</label>
-                <input type="file" id="additionalImage" name="additionalImage">
-            </div>
-            <div class="form-group">
-                <label for="spaceInfo">공간정보</label>
-                <textarea id="spaceInfo" name="spaceInfo" rows="4" required></textarea>
-            </div>
-            <div class="form-group">
-                <label for="caution">주의사항</label>
-                <textarea id="caution" name="caution" rows="4" required></textarea>
-            </div>
-            <button type="submit">수정하기</button>
-        </form>
+
+
+
+
+<form name="addFrm" id="gym-registration-form" enctype="multipart/form-data">
+  
+    <div class="form-group">
+    
+ 
+     
+      <label for="gym-name">체육관명</label>
+      <input type="text" id="gymname" name="gymname" value="${gym.gymname}" required>
+   
     </div>
-	            
-	            
-	        </div>
-    	</div> 
-    	
+    
+    <div class="form-group">
+      <label for="manager-id">담당자 아이디</label>
+      <input type="text" name="fk_userid" value="${sessionScope.loginuser.userid}" required readonly>
     </div>
-</div>
+    <div class="form-group">
+        <label for="address">주소</label>
+        <input type="text" id="address" name="address" value="${gym.address}" required>
+         <br><br>
+        <button type="button" onclick="searchAddress()">주소 찾기</button>
+    </div>
+    <div class="form-group">
+        <label for="postcode">우편번호</label>
+        <input type="text" id="postcode" name="postcode"  value="${gym.postcode}" required>
+    </div>
+    <div class="form-group">
+        <label for="detailaddress">상세주소</label>
+        <input type="text" id="detailaddress" name="detailaddress" value="${gym.detailaddress}"  required>
+    </div>
+    
+    
+    <div class="form-group">
+      <label>실내/실외</label>
+      <select name="insidestatus">
+        <option selected>선택하세요</option>
+        <option value="0">실내</option>
+        <option value="1">실외</option>
+      </select>
+    </div>
+    
+  <div class="form-group">
+      <label for="cost">비용</label>
+      <input type="number" id="cost" name="cost" value="${gym.cost}"  required>
+    </div>
+    
+    <div class="form-group">
+      <label for="cost">인원수</label>
+      <input type="number" id="membercount" name="membercount" value="${gym.membercount}" required>
+    </div>
+    
+    <div class="form-group">
+     <label for="attachment">대표이미지</label>
+     <input type="file" id="imgfilename" name="attach" multiple>
+   </div>
+   <div class="tr" style="display: flex;">
+		<div class="td title">추가이미지</div>
+		<div id="plusImg" align="left" style="font-size: 10pt;">🖼️ 추가이미지 파일을 하나씩 드래그하세요.</div>
+	</div>
+       
+
+       
+    <div class="form-group">
+      <label for="notes">공간 정보</label>
+      <textarea id="info" name="info"  >${gym.info}</textarea>
+    </div>
+ 
+    <div class="form-group">
+      <label for="notes">주의 사항</label>
+      <textarea id="caution" name="caution" >${gym.caution}</textarea>
+    </div>
+ 
+    <input type="hidden" name="lat" value="${gym.lat}"/>
+	<input type="hidden" name="lng" value="${gym.lng}"/>
+	<input type="hidden" name="gymseq" value="${gym.gymseq}"/>
+  
+    <button id="submit" type="button">수정</button>
+    <button type="button" onclick="goBack()" class="btn btn-danger">취소</button>
+     
+</form>
+     
