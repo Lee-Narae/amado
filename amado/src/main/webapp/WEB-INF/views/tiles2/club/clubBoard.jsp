@@ -140,7 +140,10 @@ function goWrite(clubseq){
 							<fmt:parseNumber var="currentShowPageNo" value="${requestScope.currentShowPageNo}" />
 	          				<fmt:parseNumber var="sizePerPage" value="${requestScope.sizePerPage}" />
 	          				<td align="center">${requestScope.totalCount - (currentShowPageNo-1)*sizePerPage - status.index}</td>
-							<td>${cboard.title}&nbsp;<c:if test="${cboard.commentcount != 0}"><span id="commentCount">[${cboard.commentcount}]</span></c:if></td>
+							<td>${cboard.title}&nbsp;
+								<c:if test="${cboard.commentcount != 0}"><span id="commentCount">[${cboard.commentcount}]</span></c:if>
+								<c:if test="${not empty cboard.orgfilename}">&nbsp;&nbsp;<img width="15" height="15" src="<%=ctxPath %>/resources/images/zee/folder.png"/></c:if>
+							</td>
 							<td align="center">${cboard.fk_userid}</td>
 							<td align="center">${cboard.registerdate}<input id="clubboardseq" type="hidden" name="clubboardseq" value="${cboard.clubboardseq}" /></td>
 							<td align="center">${cboard.viewcount}</td>
