@@ -98,10 +98,10 @@ $(document).ready(function(){
 	     // form 전송
     	 const frm = document.addFrm;
 	     
-    	 if(frm.attach.value != '' && '${requestScope.editNotice.orgfilename}' != ''){
+    	 if(frm.attach.value != '' && '${requestScope.editCBoard.orgfilename}' != ''){
     		 if(confirm('기존 첨부파일을 삭제하지 않고 새로운 첨부파일을 등록하더라도 새로운 첨부파일만 업로드됩니다.')){
     			 frm.method = "post";
-    	    	 frm.action = "<%= ctxPath%>/community/editNotice.do";
+    	    	 frm.action = "<%= ctxPath%>/club/editClubBoard.do";
     	    	 frm.submit();
     		 }
     	 }
@@ -111,7 +111,13 @@ $(document).ready(function(){
 	     frm.submit();
 	     
      });
-
+     
+     
+     function display_none(){
+    	 alert("눌려라 좀");
+    	$("div#prevAttach").html("");
+    	$("input[name='deleteAttach']").val(1);
+     }
 
 
 	
@@ -186,7 +192,10 @@ $(document).ready(function(){
         	유효성 검사를 하지 않고 GET 방식으로 넘어가버린다. 
          --%>
         
-    <input type="hidden" name="clubseq" value="${requestScope.clubseq }" />
+    <c:if test="${not empty requestScope.editCBoard}">
+		<input type="hidden" name="clubboardseq" value="${requestScope.editCBoard.clubboardseq}"/>
+		<input type="hidden" name="deleteAttach" value="0" />
+	</c:if>
      
   </div>
 </div>

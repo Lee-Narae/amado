@@ -135,6 +135,8 @@ public interface AmadoService_JY {
 	ClubBoardVO editCBoard_get(String clubboardseq);
 
 	Map<String, String> getOrgfilename(String clubboardseq);
+
+	int editCBoardBy1(ClubBoardVO cvo);
 	
 
 
