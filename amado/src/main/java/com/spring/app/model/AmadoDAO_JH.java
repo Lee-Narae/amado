@@ -7,6 +7,7 @@ import java.util.Map;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
+import com.spring.app.domain.FleamarketVO;
 import com.spring.app.domain.GymVO;
 import com.spring.app.domain.GymresVO;
 import com.spring.app.domain.MatchingVO;
@@ -62,6 +63,8 @@ public interface AmadoDAO_JH {
 	int getTotalCount(String userid);
 
 	Map<String, String> getviewresList(String userid);
+
+	FleamarketVO getfleMap(String fleamarketseq);
 
 
 }

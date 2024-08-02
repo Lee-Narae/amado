@@ -180,6 +180,20 @@ rotate(
 		goReadComment();
 		
 		
+		// 현재 페이지의 URL을 가져옵니다.
+		const currentUrl = window.location.href;
+
+		// URL 객체를 생성합니다.
+		const url = new URL(currentUrl);
+
+		// URLSearchParams 객체를 사용하여 쿼리 파라미터를 가져옵니다.
+		const params = new URLSearchParams(url.search);
+
+		// 특정 파라미터의 값을 가져옵니다.
+		const fleamarketseq = params.get('fleamarketseq');
+		
+		
+		
 		// ======= 추가이미지 캐러젤로 보여주기(Bootstrap Carousel 4개 표시 하되 1번에 1개 진행) 시작 ======= //
 	 	   $('div#recipeCarousel').carousel({
 	        	interval : 2000  <%-- 2000 밀리초(== 2초) 마다 자동으로 넘어가도록 함(2초마다 캐러젤을 클릭한다는 말이다.) --%>
@@ -372,7 +386,7 @@ rotate(
     		$(document).on("click", "button.btnDeleteComment", function(e){
     			if($(e.target).text() == "취소"){
     			 // alert("댓글수정취소");
-    			 	alert($(e.target).parent().parent().children("div:nth-child(2)").children().html());
+    			 //	alert($(e.target).parent().parent().children("div:nth-child(2)").children().html());
     			    const $content = $(e.target).parent().parent().children("div:nth-child(2)").children(); 
     			    $content.html(`\${origin_comment_content}`);
     			 
@@ -389,7 +403,7 @@ rotate(
     				    	 url:"${pageContext.request.contextPath}/deleteComment.action",
     				    	 type:"post",
     				    	 data:{"fleamarketcommentseq":$(e.target).next().val(),
-    				    		   "parentSeq":"1"},
+    				    		   "parentSeq":fleamarketseq},
     				    	 dataType:"json",
     				    	 success:function(json){
     				    	 	 goReadComment();  // 페이징 처리 안한 댓글 읽어오기
@@ -596,6 +610,10 @@ rotate(
 			alert("댓글 내용을 입력하세요!!");
 			return; // 종료
 		}
+		if( $("input[name='fk_userid']").val() == ''){
+			alert("댓글은 로그인 후 작성 가능합니다");
+			return; // 종료
+		}
 		
 		
 		goAddWrite_noAttach();
@@ -608,6 +626,18 @@ rotate(
    
    function goAddWrite_noAttach(){
 		
+		// 현재 페이지의 URL을 가져옵니다.
+		const currentUrl = window.location.href;
+
+		// URL 객체를 생성합니다.
+		const url = new URL(currentUrl);
+
+		// URLSearchParams 객체를 사용하여 쿼리 파라미터를 가져옵니다.
+		const params = new URLSearchParams(url.search);
+
+		// 특정 파라미터의 값을 가져옵니다.
+		const fleamarketseq = params.get('fleamarketseq');
+		
 		<%--
 	        // 보내야할 데이터를 선정하는 또 다른 방법
 	        // jQuery에서 사용하는 것으로써,
@@ -616,14 +646,15 @@ rotate(
 	    --%>
    
 	    const queryString = $("form[name='commentFrm']").serialize();
-	    
+	   	console.log(queryString);
 		$.ajax({
 			url:"<%= ctxPath%>/addComment.do",
 		/*
 			data:{"fk_userid":$("input:hidden[name='fk_userid']").val() 
 	             ,"name":$("input:text[name='name']").val() 
 	             ,"content":$("input:text[name='content']").val()
-	             ,"parentSeq":$("input:hidden[name='parentSeq']").val()},
+	             ,"parentSeq":$("input:hidden[name='parentSeq']").val()
+	             ,"fleamarketseq":fleamarketseq},
 	    */
 	    	// 또는
 	    	data:queryString,
@@ -658,9 +689,21 @@ rotate(
 	
 	function goReadComment(){
 		
+		// 현재 페이지의 URL을 가져옵니다.
+		const currentUrl = window.location.href;
+
+		// URL 객체를 생성합니다.
+		const url = new URL(currentUrl);
+
+		// URLSearchParams 객체를 사용하여 쿼리 파라미터를 가져옵니다.
+		const params = new URLSearchParams(url.search);
+
+		// 특정 파라미터의 값을 가져옵니다.
+		const fleamarketseq = params.get('fleamarketseq');
+		
 		$.ajax({
 			url:"<%= ctxPath%>/readComment.action",
-			data:{"parentSeq":"1"},
+			data:{"parentSeq":fleamarketseq},
 			dataType:"json",
 			success:function(json){
 				// console.log(JSON.stringify(json));
@@ -1086,7 +1129,7 @@ function goViewComment(currentShowPageNo){
 				<div>
 					<div style="width: 400%;">
 						<%-- <img src="<%=ctxPath%>/resources/images/다운로드.jpg" style="width: 100%;" /> --%>
-						<img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/다운로드.jpg" style="cursor: pointer;" onclick="openPopup()" />
+						<img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/${fleMap.imgfilename}" style="cursor: pointer;" onclick="openPopup()" />
 					</div>
 				</div>
 			</div>
@@ -1094,18 +1137,20 @@ function goViewComment(currentShowPageNo){
 
 		<div class="col-md-6 pl-5">
 			<ul class="list-unstyled">
-				<li style="font-size: 25px; font-family: 'Roboto', sans-serif; font-weight: 700;">호날두가 신었던 축구화 팝니다!!</li>
-				<li style="font-size: 32px; font-family: 'Roboto', sans-serif; font-weight: 1000;">50,000,000 원</li>
+				<li style="font-size: 25px; font-family: 'Roboto', sans-serif; font-weight: 700;">${fleMap.title}</li>
+				<li style="font-size: 32px; font-family: 'Roboto', sans-serif; font-weight: 1000;">
+				    <fmt:formatNumber value="${fleMap.cost}" type="number" groupingUsed="true" />원
+				</li>
 				<hr>
-				<li style="color: #bfbfbf; ">👀 조회수  |  🕓 올린시간</li>
+				<li style="color: #bfbfbf; ">👀 조회수  ${fleMap.viewcount} |  🕓  ${fleMap.registerdate}</li>
 				<br>
 				<li>
 					<span style="font-size: 14px; color: #8c8c8c;" >거래방법</span>
-					<span style="font-size: 14px; margin-left: 4%; font-family: 'Volt220', sans-serif; font-weight: 700; ">직거래</span>
+					<span style="font-size: 14px; margin-left: 4%; font-family: 'Volt220', sans-serif; font-weight: 700; ">${fleMap.deal}</span>
 				</li>
 				<li>
 					<span style="font-size: 14px; color: #8c8c8c;" >직거래 지역</span>
-					<span style="font-size: 14px; margin-left: 4%; font-family: 'Volt220', sans-serif; font-weight: 700; ">우리집 앞까지 오셔요</span>
+					<span style="font-size: 14px; margin-left: 4%; font-family: 'Volt220', sans-serif; font-weight: 700; ">${fleMap.city}${fleMap.local}</span>
 				</li>
 			</ul>
 
@@ -1163,12 +1208,13 @@ function goViewComment(currentShowPageNo){
 	
 	<hr>
 	
-	<div style="width: 50%; margin: 10% auto 15% auto;">
-			<img src="<%=ctxPath%>/resources/images/다운로드1.jpg" class="img-fluid"
+	<div style="width: 50%; margin: 10% 12% 15% 12%;">
+			<%-- <img src="<%=ctxPath%>/resources/images/다운로드1.jpg" class="img-fluid"
 				style="width: 100%;" /> 제가 직접 신었답니다ㅎㅎ
 				
 			<img src="<%=ctxPath%>/resources/images/다운로드2.jpg" class="img-fluid"
-			style="width: 100%;" /> 내가 바로 크리스티아누 호우~
+			style="width: 100%;" /> 내가 바로 크리스티아누 호우~ --%>
+			${fleMap.content}
 	</div>
 	
 	<div style="font-size: 11pt;">
@@ -1189,7 +1235,7 @@ function goViewComment(currentShowPageNo){
 				<textarea name="comment_text" style="font-size: 12pt; width: 100%; height: 100px;"></textarea>
 				<input type="hidden" name="fk_userid" value="${sessionScope.loginuser.userid}" />
 				<input type="hidden" name="name" value="${sessionScope.loginuser.name}" />
-				<input type="hidden" name="fleamarketseq" value="${requestScope.pvo.pnum}" />
+				<input type="hidden" name="fleamarketseq" value="${fleMap.fleamarketseq}" />
 			</div>
 			<div style="text-align: right; font-size: 12pt;">
 				<button type="button" class="btn btn-outline-secondary"

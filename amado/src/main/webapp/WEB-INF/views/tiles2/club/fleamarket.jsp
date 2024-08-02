@@ -101,7 +101,7 @@ $(document).ready(function(){
 							             <li><label class='prodInfo' style="font-weight: bold;">글제목: <span style="font-weight: normal;">\${item.title}</sapn></label></li>
 							             <li><label class='prodInfo' style="font-weight: bold;">가격: <span style="font-weight: normal;">\${Number(item.cost).toLocaleString('en')}원</sapn></label></li> 
 							             <li><label class='prodInfo' style="font-weight: bold;">장소: <span style="font-weight: normal;">\${item.city}&nbsp;\${item.local}</sapn></label><span style="color: red;"></span></li> 
-							             <li class='text-center'><a href='/amado/club/prodView.do?fleamarketseq=\${item.fleamarketseq}' class='stretched-link btn btn-outline-dark btn-sm' role='button'>자세히보기</a></li> 
+							             <li class='text-center'><a href='/amado/club/sale.do?fleamarketseq=\${item.fleamarketseq}' class='stretched-link btn btn-outline-dark btn-sm' role='button'>자세히보기</a></li> 
 						            	         <%-- 카드 내부의 링크에 .stretched-link 클래스를 추가하면 전체 카드를 클릭할 수 있고 호버링할 수 있습니다(카드가 링크 역할을 함). --%>
 							          </ul>
 							       </div>

@@ -813,3 +813,12 @@ ORDER BY
     
     select *
     from tbl_gym
+    
+    
+select to_char(registerdate, 'YY-MM-DD HH24:MI') as registerdate
+from tbl_fleamarket
+where fleamarketseq = 50
+
+select *
+from tbl_fleamarket
+where fleamarketseq = 50
