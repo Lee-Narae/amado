@@ -86,6 +86,10 @@ public interface AmadoService_HS {
 	int quitGym(Map<String, String> paramap);
 
 
+	//체육관 수정하기
+	int Gymreg2(GymVO gym);
+
+
 	
 
 

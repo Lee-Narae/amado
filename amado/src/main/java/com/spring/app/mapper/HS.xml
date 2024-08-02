@@ -224,5 +224,11 @@ values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
 		delete from tbl_gym where fk_userid = #{fk_userid} and gymseq = #{gymseq}
 	</delete>
 	
+	<update id="Gymreg2" parameterType="GymVO">
+	update tbl_gym set gymname = #{gymname}, postcode = #{postcode}, address = #{address}, detailaddress = #{detailaddress}, status= 0, info = #{info}, cost = #{cost}, caution = #{caution}, membercount = #{membercount}, insidestatus = #{insidestatus}, orgfilename = #{orgfilename}, filename = #{filename}
+		,filesize = #{filesize},lat = #{lat},lng = #{lng}
+		where gymseq = #{gymseq}
+
+	</update>
 
 </mapper>

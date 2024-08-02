@@ -84,6 +84,9 @@ public interface AmadoDAO_HS {
 	//mypage 체육관지우기
 	int quitGym(Map<String, String> paramap);
 
+	//mypage 체육관수정하기
+	int Gymreg2(GymVO gym);
+
 	
 
 

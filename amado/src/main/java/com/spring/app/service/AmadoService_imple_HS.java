@@ -306,6 +306,16 @@ public class AmadoService_imple_HS implements AmadoService_HS {
 			return n;
 		}
 
+
+
+
+		//체욱관 수정하기
+		@Override
+		public int Gymreg2(GymVO gym) {
+			int n = dao.Gymreg2(gym);
+			return n;
+		}
+
 	
 
 

@@ -172,44 +172,10 @@
     button:hover {
         background-color: #0056b3;
     }
-
-/* 모달 배경 스타일 */
-.modal-backdrop.show {
-    background-color: rgba(0, 0, 0, 0.5);
+/* .clickable 클래스를 가진 td 요소에 손가락 모양 커서 적용 */
+.clickable {
+    cursor: pointer;
 }
-
-/* 모달창 스타일 */
-.modal-content {
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-    overflow: hidden;
-}
-
-/* 모달 헤더 스타일 */
-.modal-header {
-    border-bottom: 1px solid #e9ecef;
-    background-color: #f7f7f7;
-    padding: 1.25rem 1.5rem;
-    position: relative;
-}
-
-/* 모달 제목 스타일 */
-.modal-title {
-    font-size: 1.25rem;
-    font-weight: 500;
-}
-
-/* 닫기 버튼 스타일 */
-.modal-header .close {
-    padding: 0.75rem 1.25rem;
-    margin: -0.75rem -1.25rem -0.75rem auto;
-    color: #000;
-    background: transparent;
-    border: none;
-}
-
-
  	
 </style>
 
@@ -225,15 +191,7 @@ $(document).ready(function(){
     $("button#mygym").addClass('hover');
     $("#payList").css({"font-weight": "bold"});
     
-    // 클릭 가능한 셀 설정
-    $('.clickable').on('click', function() {
-        var gymName = $(this).closest('tr').find('td:nth-child(1)').text();
-        var gymAddress = $(this).closest('tr').find('td:nth-child(2)').text();
-        var modalContent = "체육관 이름: " + gymName + " \n체육관 주소: " + gymAddress;
-        $('#modalContent').text(modalContent);
-        $('#infoModal').modal('show');
-    });
-});
+  
 
 function gym_delete(gymseq,fk_userid){
     $.ajax({
@@ -255,6 +213,8 @@ function gym_delete(gymseq,fk_userid){
         }
     });
 }
+
+
 
 </script>
 
@@ -300,9 +260,9 @@ function gym_delete(gymseq,fk_userid){
                             <c:if test="${not empty requestScope.GymList}">
                                 <!-- GymList가 비어있지 않을 때 데이터 출력 -->
                                 <c:forEach var="gym" items="${requestScope.GymList}">
-                                    <tr>
-                                        <td class="clickable">${gym.gymname}</td>
-                                        <td class="clickable">${gym.address}</td>
+                                    <tr>  
+                                        <td class="clickable"  onclick="location.href='<%= ctxPath %>/member/myPage_gym.do?gymseq=${gym.gymseq}'">${gym.gymname}</td>
+                                        <td class="clickable"  onclick="location.href='<%= ctxPath %>/member/myPage_gym.do?gymseq=${gym.gymseq}'">${gym.address}</td>
                                         <td><button class="btn btn-danger btn-sm" onclick="gym_delete('${gym.gymseq}', ${gym.fk_userid})">삭제하기</button></td>
                                     </tr>
                                 </c:forEach>
@@ -317,25 +277,7 @@ function gym_delete(gymseq,fk_userid){
                     </table>
                 </div>
 
-<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="infoModalLabel">상세</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p id="modalContent">여기에 내용을 추가하세요.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">상세보기</button>
-                <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">수정</button>
-            </div>
-        </div>
-    </div>
-</div>
+
 
                 <form>
                     <input type='hidden' name='fk_userid' value='${sessionScope.loginuser.userid}' />
