@@ -53,6 +53,10 @@ public class ControllerJH {
 		//System.out.println("16jbhv"+fleamarketseq);
 		FleamarketVO fleMap = service.getfleMap(fleamarketseq);
 		
+		if(fleMap != null) {
+			service.viewcount(fleamarketseq);
+		}
+		
 		//System.out.println("22222"+fleMap.getContent());
 		mav.addObject("fleMap",fleMap);
 		mav.setViewName("club/sale.tiles2");

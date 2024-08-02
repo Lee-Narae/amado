@@ -348,4 +348,10 @@
 		where fleamarketseq = #{fleamarketseq}
 	</select>
 	
+	
+	<update id="viewcount" parameterType="String">
+		update tbl_fleamarket set viewcount = viewcount+1
+		where fleamarketseq = #{fleamarketseq}
+	</update>
+	
 </mapper>

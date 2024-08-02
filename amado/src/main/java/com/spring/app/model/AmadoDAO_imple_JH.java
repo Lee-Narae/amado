@@ -184,5 +184,10 @@ public class AmadoDAO_imple_JH implements AmadoDAO_JH {
 		return fleMap;
 	}
 
+	@Override
+	public void viewcount(String fleamarketseq) {
+		sqlsession.update("JH.viewcount", fleamarketseq);
+	}
+
 
 }

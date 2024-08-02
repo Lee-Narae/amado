@@ -57,5 +57,7 @@ public interface AmadoService_JH {
 
 	FleamarketVO getfleMap(String fleamarketseq);
 
+	void viewcount(String fleamarketseq);
+
 	
 }

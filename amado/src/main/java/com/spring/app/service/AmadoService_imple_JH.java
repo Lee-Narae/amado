@@ -245,4 +245,11 @@ public class AmadoService_imple_JH implements AmadoService_JH {
 		return fleMap;
 	}
 
+
+
+	@Override
+	public void viewcount(String fleamarketseq) {
+		dao.viewcount(fleamarketseq);
+	}
+
 }

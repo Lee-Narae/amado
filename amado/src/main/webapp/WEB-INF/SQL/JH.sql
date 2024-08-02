@@ -821,4 +821,8 @@ where fleamarketseq = 50
 
 select *
 from tbl_fleamarket
-where fleamarketseq = 50
+where sportseq = 1
+
+
+update tbl_fleamarket set viewcount = viewcount+1
+		where fleamarketseq = 50
