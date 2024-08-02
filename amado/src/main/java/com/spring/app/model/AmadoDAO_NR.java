@@ -250,5 +250,13 @@ public interface AmadoDAO_NR {
 	int permitJoinClub(Map<String, String> paramap);
 	int refuseJoinClub(Map<String, String> paramap);
 
+	// 동호회장 - 매치결과 등록 성공 시 점수 배분
+	Map<String, String> getMatchClubseq(String matchingseq);
+	int addClubPoint(Map<String, String> clubseqMap);
+
+	// 동호회 가입 승인시 일정 테이블에 등록
+	String getClubname(String clubseq);
+	int insertCalcat(Map<String, String> paramap);
+
 	
 }

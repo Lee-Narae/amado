@@ -1137,7 +1137,7 @@ public class ControllerNR {
 	
 	
 	@PostMapping("/admin/reg/notice")
-	public ModelAndView editNotice(HttpServletRequest request, ModelAndView mav) {
+	public ModelAndView adminLogin_editNotice(HttpServletRequest request, ModelAndView mav) {
 		
 		String noticeseq = request.getParameter("noticeseq");
 		
@@ -2134,7 +2134,7 @@ public class ControllerNR {
 		String result1 = "";
 		String result2 = "";
 		
-		if(Integer.parseInt(score1) > Integer.parseInt(score2)) {
+		if(Integer.parseInt(score1) > Integer.parseInt(score2)) { // 승: 1, 패: 2, 무: 3
 			result1 = "1";
 			result2 = "2";
 		}
@@ -2154,6 +2154,35 @@ public class ControllerNR {
 		
 		
 		int n = service.updateMatchResult(paramap);
+		
+		if(n==1) {
+			Map<String, String> clubseqMap = service.getMatchClubseq(matchingseq);	// 해당 매치의 팀1, 팀2 구해오기
+
+			String team1Point = "";
+			String team2Point = "";
+			
+			switch (result1) {
+			case "1":
+				team1Point = "20";
+				team2Point = "5";
+				break;
+			case "2":
+				team1Point = "5";
+				team2Point = "20";
+				break;
+			case "3":
+				team1Point = "10";
+				team2Point = "10";
+				break;				
+			default:
+				break;
+			}
+			
+			clubseqMap.put("team1Point", team1Point);
+			clubseqMap.put("team2Point", team2Point);
+			
+			n = service.addClubPoint(clubseqMap);	// 각 팀에 점수 분배(승: 20점, 패: 5점, 무승부: 10점)
+		}
 		
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("n", n);
@@ -2737,6 +2766,14 @@ public class ControllerNR {
 		paramap.put("clubseq", clubseq);
 		
 		int n = service.permitJoinClub(paramap);
+		
+		if(n==1) {
+			String clubname = service.getClubname(clubseq);
+			paramap.put("clubname", clubname);
+			
+			n = service.insertCalcat(paramap);
+		}
+		
 		
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("n", n);
