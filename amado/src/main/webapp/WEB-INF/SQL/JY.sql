@@ -528,3 +528,12 @@ where clubboardseq = 12
 
 alter table tbl_fleamarket drop column password;
 
+
+	    select *
+	    from tbl_fleamarket
+	    where status = 0
+        
+select title
+from tbl_fleamarket
+where status = 0 and lower(title) like '%' || lower('호날두') || '%'
+order by registerdate desc
