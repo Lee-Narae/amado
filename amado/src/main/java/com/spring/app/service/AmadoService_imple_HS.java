@@ -316,6 +316,56 @@ public class AmadoService_imple_HS implements AmadoService_HS {
 			return n;
 		}
 
+
+
+
+		
+
+
+
+
+
+
+
+
+		@Override
+		public List<GymVO> select_gym_paging(Map<String, String> paramap) {
+			List<GymVO> gymList = dao.select_gym_paging(paramap);
+			
+			return gymList;
+		}
+
+
+
+
+
+		@Override
+		public int getTotalgymCount(Map<String, String> paramap) {
+			int n = dao.getTotalgymCount(paramap);
+			return n;
+		}
+
+
+
+
+		@Override
+		public int getgymTotalPage(Map<String, String> paramap) {
+			int n = dao.getgymTotalPage(paramap);
+			return n;
+		}
+
+
+
+
+
+	
+
+
+
+
+
+		
+
 	
 
 
