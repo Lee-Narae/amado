@@ -256,6 +256,36 @@ public class AmadoDAO_imple_HS implements AmadoDAO_HS {
 
 
 
+		@Override
+		public int getgymTotalPage(Map<String, String> paramap) {
+			int n = sqlsession.selectOne("HS.getgymTotalPage", paramap);
+			return n;
+		}
+
+
+
+
+
+		@Override
+		public List<GymVO> select_gym_paging(Map<String, String> paramap) {
+			List<GymVO> gymList = sqlsession.selectList("HS.select_gym_paging", paramap);
+			return gymList;
+		}
+
+
+
+
+
+		@Override
+		public int getTotalgymCount(Map<String, String> paramap) {
+			int n = sqlsession.selectOne("HS.getTotalgymCount", paramap);
+			return n;
+		}
+
+
+
+
+
 
 	
 

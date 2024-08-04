@@ -56,6 +56,7 @@ public class ControllerHS {
 
 		String gymseq = request.getParameter("gymseq");
 
+		
 		// 모든 상품 select 해오기
 		GymVO gym = service.getGym(gymseq); // 디비에서 데이터를 불러만오는 거라 map에 넣어서 보낼게 없음!!!!
 
@@ -71,8 +72,131 @@ public class ControllerHS {
 
 	// 체육관 전체보기
 	@GetMapping(value = "/gym/rental_gym.do")
-	public ModelAndView rental_gym(ModelAndView mav) {
+	public ModelAndView rental_gym(ModelAndView mav,HttpServletRequest request,GymVO gymvo) {
+		
+		String searchWord = request.getParameter("searchWord");
+		String sizePerPage = request.getParameter("sizePerPage");
+		String currentShowPageNo = request.getParameter("currentShowPageNo");
+		
+		if(sizePerPage == null || !"3".equals(sizePerPage) && !"5".equals(sizePerPage) && !"10".equals(sizePerPage)) {
+			sizePerPage = "10";
+		}
+		
+	
+		if(searchWord == null || searchWord != null && searchWord.trim().isEmpty()) {
+			searchWord = "";
+		}
+		
+		if(currentShowPageNo == null) {
+			currentShowPageNo = "1";
+		}
+		
+		Map<String, String> paramap = new HashMap<String, String>();
+	
+		paramap.put("searchWord", searchWord);
+		paramap.put("sizePerPage", sizePerPage);
+		paramap.put("currentShowPageNo", currentShowPageNo);
 
+		// 페이징처리를 한 모든 회원 or 검색한 회원 목록 보여주기
+		int totalPage = service.getgymTotalPage(paramap);
+		
+		// === GET 방식이므로 사용자가 웹브라우저 주소창에서 currentShowPageNo 에 totalPage 값보다 더 큰 값을 입력하여 장난친 경우
+		// === GET 방식이므로 사용자가 웹브라우저 주소창에서 currentShowPageNo 에 0 또는 음수를 입력하여 장난친 경우
+		// === GET 방식이므로 사용자가 웹브라우저 주소창에서 currentShowPageNo 에 숫자가 아닌 문자열을 입력하여 장난친 경우 
+		// 아래처럼 막아주도록 하겠다.
+		try {
+			if(Integer.parseInt(currentShowPageNo) > totalPage || Integer.parseInt(currentShowPageNo) < 0) {
+				currentShowPageNo = "1";
+				paramap.put("currentShowPageNo", currentShowPageNo);
+			}
+		}catch (NumberFormatException e) {
+			currentShowPageNo = "1";
+			paramap.put("currentShowPageNo", currentShowPageNo);
+		}
+		
+		
+		
+		// 페이지바 만들기		
+		String pageBar = "";
+		int blockSize = 5; // blockSize 는 블럭(토막)당 보여지는 페이지 번호의 개수이다.
+		int loop = 1;  // loop 는 1부터 증가하여 1개 블럭을 이루는 페이지번호의 개수(지금은 10개)까지만 증가하는 용도이다.
+
+		// pageNo  ==> ( (currentShowPageNo - 1)/blockSize ) * blockSize + 1
+		int pageNo = ((Integer.parseInt(currentShowPageNo)-1)/blockSize)*blockSize+1;
+		// pageNo는 페이지바에서 보여지는 첫 번째 번호이다.
+		
+		
+		// *** [맨처음][이전] 만들기 *** //
+		   
+           pageBar += "<li class='page-item'><a class='page-link' href='rental_gym?searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo=1'>[맨처음]</a></li>";
+
+           if(pageNo != 1) {
+              pageBar += "<li class='page-item'><a class='page-link' href='rental_gym?searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a></li>";
+           }
+   
+           while(!(loop > blockSize || pageNo > totalPage)) {
+              
+              
+              if(pageNo ==  Integer.parseInt(currentShowPageNo)) {
+                 pageBar += "<li class='page-item active'><a class='page-link' href='#'>"+pageNo+"</a></li>";
+              }
+              else {
+                 pageBar += "<li class='page-item'><a class='page-link' href='rental_gym?searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a></li>";
+              }
+              
+              loop++;
+              
+              pageNo++;
+              
+           }// end of while(!( )) {}------------------- 
+           
+           // *** [다음][마지막] 만들기 *** //
+           // pageNo ==> 11
+           if(pageNo <= totalPage) {
+              pageBar += "<li class='page-item'><a class='page-link' href='rental_gym?searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"'>[다음]</a></li>";
+           }
+           pageBar += "<li class='page-item'><a class='page-link' href='rental_gym?searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+totalPage+"'>[맨마지막]</a></li>";
+           
+           
+         // *** ==== 페이지바 만들기 끝 ==== *** //
+		
+           
+           
+        
+           
+        // *** ====== 현재 페이지를 돌아갈 페이지(goBackURL)로 주소 지정하기 ======= *** //
+        
+        String currentURL = MyUtil.getCurrentURL(request);
+        // 회원조회를 했을시 현재 그 페이지로 그대로 되돌아가길 위한 용도로 쓰임.
+        
+        // System.out.println(currentURL);
+        // /member/memberList.up?searchType=name&searchWord=%EC%9C%A0&sizePerPage=5&currentShowPageNo=15
+
+		List<GymVO> gymList = service.select_gym_paging(paramap);
+		
+		mav.addObject("gymList", gymList);
+		
+	
+		if(searchWord != null && !searchWord.trim().isEmpty()) {
+			mav.addObject("searchWord", searchWord);
+		}
+		
+		mav.addObject("sizePerPage", sizePerPage);
+		mav.addObject("pageBar", pageBar);
+		
+		mav.addObject("currentURL", currentURL); 
+		
+		
+		
+		// >>> 뷰단(memberList.jsp)에서 "페이징 처리시 보여주는 순번 공식" 에서 사용하기 위해 
+        	        //검색이 있는 또는 검색이 없는 회원의 총개수 알아오기 <<< 
+		int totalMemberCount = service.getTotalgymCount(paramap);
+		
+		mav.addObject("totalMemberCount", totalMemberCount);
+		mav.addObject("currentShowPageNo", currentShowPageNo);
+
+		
+		
 		// 모든 상품 select 해오기
 		List<GymVO> allGymList = service.getAllGymList(); // 디비에서 데이터를 불러만오는 거라 map에 넣어서 보낼게 없음!!!!
 
