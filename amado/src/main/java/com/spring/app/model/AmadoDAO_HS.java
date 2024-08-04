@@ -89,6 +89,14 @@ public interface AmadoDAO_HS {
 
 	
 
+	int getgymTotalPage(Map<String, String> paramap);
+
+	List<GymVO> select_gym_paging(Map<String, String> paramap);
+
+	int getTotalgymCount(Map<String, String> paramap);
+
+	
+
 
 
 

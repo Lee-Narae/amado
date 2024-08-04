@@ -87,10 +87,36 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // 기본적으로 실내 상품을 보이게 설정
     indoorSection.classList.add('active');
+    
+    
+    if("${requestScope.searchWord}" != "" && "${requestScope.searchType}" != ""){
+		$("input:text[name='searchWord']").val("${requestScope.searchWord}");
+		$("select[name='searchType']").val("${requestScope.searchType}");
+	}
+	
+	$("select[name='sizePerPage']").val("${requestScope.sizePerPage}");
+	
+	
+    
 });
 
+$("select[name='sizePerPage']").bind('change', function(){
+	const frm = document.member_search_frm;
+	frm.submit();
+});
+    
 
-
+// 검색 버튼 클릭 시 검증 후 폼 제출
+function goSearch() {
+    if ($("input:text[name='searchWord']").val() == "") {
+        alert("검색어를 입력하세요.");
+        return;
+    }
+    
+ 
+    const frm = document.member_search_frm;
+    frm.submit();
+}
 
 
 </script>
@@ -101,7 +127,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	            <button id="outdoorBtn" class="btn btn-secondary mx-2">실외 </button>
 	        </nav>
 	 <div class="search-box">
-            <input type="text" class="form-control" placeholder="검색">	
+            <input type="text"  name="searchWord" id="searchWord" class="form-control" onclick="goSearch()" placeholder="검색">	
             <button class="btn btn-primary btn-circle">
   			<i class="fa-solid fa-magnifying-glass"></i>
  				 </button>
@@ -160,30 +186,18 @@ document.addEventListener("DOMContentLoaded", function() {
 	        </div>
 	        
 	        
-	        <%-- === HIT 상품을 모두 가져와서 디스플레이(더보기 방식으로 페이징 처리한 것) === --%>
-	<%--    <div>
-	      <p class="h3 my-3 text-center">- HIT 상품(스크롤) -</p>
-		
-		<div class="row" id="displayHIT" style="text-align: left;"></div> 더보기할때 들어오는곳
-	      
-	      <div>
-	         <p class="text-center">
-	              <span id="end" style="display:block; margin:20px; font-size: 14pt; font-weight: bold; color: red;"></span>  글씨가 들어오는곳
-	          	  <span id="totalHITCount">${requestScope.totalHITCount}</span>   
-	           	  <span id="countHIT">0</span>
-	         </p>
-	      </div>
-		
-		  <div style="display: flex;">
-	         <div style="margin: 20px 0 20px auto;">
-	            <button class="btn btn-info" onclick="goTop()">맨위로가기(scrollTop 1로 설정함)</button>
-	         </div>
-	      </div>	
-	   </div>
-	        
-	         --%>
+	 
 	    </section>
 	    
+	      <div id="pageBar" style="margin-left: 37%;">
+            <nav>
+                <ul class="pagination">${requestScope.pageBar}</ul>
+            </nav>
+        </div>
+	    <form name="goViewFrm">
+	<input type="hidden" name="gymseq" /> 
+	<input type="hidden" name="goBackURL" value="${requestScope.currentURL}"/> 
+</form>
 	    
 </body>
 </html>

@@ -437,7 +437,7 @@ function goSearch() {
 		<div style="border:solid 0px black; text-align: center; ">
 			<h3 style="font-weight: bold;">아마두 플리마켓🧺</h3>
 			<br>
-			
+			<!--  
 			<form name="item_searchFrm" style="margin-top: 20px;">
 		      <select name="searchType" style="height: 26px;">
 		         <option value="subject">글제목</option>
@@ -447,12 +447,12 @@ function goSearch() {
 		      <input type="text" style="display: none;"/> <%-- form 태그내에 input 태그가 오로지 1개 뿐일경우에는 엔터를 했을 경우 검색이 되어지므로 이것을 방지하고자 만든것이다. --%> 
 		      <button type="button" class="btn btn-secondary btn-sm" onclick="goSearch()">검색</button>
 		    </form>
-		    
+		   
 			<%-- === #114. 검색어 입력시 자동글 완성하기 1 === --%>
 			<div id="disp  layList" style="border:solid 1px gray; border-top:0px; height:100px; margin-left:13.2%; margin-top:-1px; margin-bottom:30px; overflow:auto;">
 				
 			</div>
-		
+		 -->
 		</div>
 		
 		<%-- 종목 카테고리 --%>
@@ -494,30 +494,11 @@ function goSearch() {
 	     
 	</div>
 	
-	
-	<%-- 최근 본 상품 --%>
-	<div id="item2" style="border-left:solid 1px lightgray ; width: 20%; height: 400px; ">
-		<div style="background-color: #f1f5f9; width: 60%; height: 40px; border-radius: 20px; margin-left: 3%;" ><!-- 스크롤할때 같이 움직이기 -->
-			<div id="recentItem" style="text-align: center; padding-top: 3%;">
-		      <div  style="color:gray; padding-top: 3%;">최근 본 상품</div>
-		      <hr>
-		      <br>
-		      <div>
-		      	<a id="rItem" href="#"><img style="width: 90px; height:85px;" src="<%= ctxPath%>/resources/images/zee/영학선생님.png" /><!-- 카드뒤집기해서 정보넣기 --></a>
-		      </div>
-		      <br>
-		      <div>
-		      	<a id="rItem" href="#"><img style="width: 90px; height:85px;" src="<%= ctxPath%>/resources/images/zee/웜벳.png" /></a>
-		      </div>
-		      <br><br><br>
-		      <div>더보기 ></div>
-		    </div>
-	    </div>
-	</div>
+
 	
 <form name="goViewFrm">
-	<input type="text" name="seq" /> 
-	<input type="text" name="goBackURL" /> 
+	<input type="hidden" name="seq" /> 
+	<input type="hidden" name="goBackURL" /> 
 </form>
 	
 	
