@@ -1189,6 +1189,37 @@ public class ControllerSJ {
 		return jsonObj.toString();
 	}
 
+	// 메인페이지
+	@GetMapping("/club/mainClubRank.do")
+	public ModelAndView mainClubRank(ModelAndView mav, HttpServletRequest request) {
+		
+		List<ClubVO> clubList = null;
+		List<ClubVO> clubPagingList = null;
+
+		String url = MyUtil.getCurrentURL(request);
+		String params = url.substring(url.indexOf('=') + 1);
+		// sportseq 값(사이드 선택시)
+
+		if (request.getParameter("sportseq") != null) {
+			params = request.getParameter("sportseq");
+		}
+		
+		System.out.println("params : " + params);
+
+		String currentURL = MyUtil.getCurrentURL(request);
+
+		// === 페이징 처리를 안한 검색어가 없는 전체 동호회 보여주기 (랭킹 3위까지 사진보여주기 위한 것) === //
+		clubList = service.clubListNoSearch(params);
+		mav.addObject("clubList", clubList);
+
+		mav.addObject("params", params);	
+		
+		mav.setViewName("/main/index.tiles2");
+		
+		return mav;
+	}
+	
+	
 	// 동호회 찾기
 	@GetMapping("/club/findClub.do")
 	public ModelAndView findClub(ModelAndView mav, HttpServletRequest request) {

@@ -48,7 +48,7 @@
  		from tbl_club
 		where clubstatus = 1
 		<choose>
-			<when test="params == '/club/findClub.do'">
+			<when test="params == '/club/findClub.do' or params == 'undefined'">
 				and fk_sportseq = 1
 			</when>
 			<otherwise>and fk_sportseq = to_number(#{params})</otherwise>
