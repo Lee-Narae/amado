@@ -59,6 +59,9 @@ $(document).ready(function(){
      // 글쓰기버튼 클릭 시
      $("button#btnEdit").click(function(){
 
+    	 alert("나와");
+    	 
+    	 
     	 // 글제목 유효성 검사
     	 if($("input:text[name='title']").val().trim() == ""){
     		 alert("글 제목을 입력하세요.");
@@ -97,15 +100,6 @@ $(document).ready(function(){
 
 	     // form 전송
     	 const frm = document.addFrm;
-	     
-    	 if(frm.attach.value != '' && '${requestScope.editCBoard.orgfilename}' != ''){
-    		 if(confirm('기존 첨부파일을 삭제하지 않고 새로운 첨부파일을 등록하더라도 새로운 첨부파일만 업로드됩니다.')){
-    			 frm.method = "post";
-    	    	 frm.action = "<%= ctxPath%>/club/editClubBoard.do";
-    	    	 frm.submit();
-    		 }
-    	 }
-	     
     	 frm.method = "post";
     	 frm.action = "<%= ctxPath%>/club/editClubBoard.do";
 	     frm.submit();
@@ -113,12 +107,7 @@ $(document).ready(function(){
      });
      
      
-     function display_none(){
-    	 alert("눌려라 좀");
-    	$("div#prevAttach").html("");
-    	$("input[name='deleteAttach']").val(1);
-     }
-
+     
 
 	
 });// end of $(document).ready(function(){})---------------------------
@@ -165,20 +154,6 @@ $(document).ready(function(){
             </td>
          </tr>
          
-         <%-- === #170. 파일첨부 타입 추가하기 === --%>
-		 <tr>
-			<th style="width: 15%; background-color: #DDDDDD;">파일첨부</th>  
-			<td>
-			    <input type="file" name="attach" />
-			</td>
-			<c:if test="${not empty requestScope.editCBoard.orgfilename}">
-				<div id="prevAttach" style="border: solid 1px gray; width: 64.5%; height: 50px; margin-left: 10%; border-radius: 10px; background-color: white; text-align: left; padding: 1%;">
-				<span style="cursor: pointer;" onclick="display_none()">❌</span>&nbsp;&nbsp;<span>${requestScope.editCBoard.orgfilename}</span>
-				</div>
-			</c:if>
-		 </tr>
-         
-         
         
         </table>
         
@@ -194,7 +169,6 @@ $(document).ready(function(){
         
     <c:if test="${not empty requestScope.editCBoard}">
 		<input type="hidden" name="clubboardseq" value="${requestScope.editCBoard.clubboardseq}"/>
-		<input type="hidden" name="deleteAttach" value="0" />
 	</c:if>
      
   </div>

@@ -71,25 +71,25 @@ public class ControllerNR {
 	
 	@GetMapping("/index.do")
 	public ModelAndView index(ModelAndView mav, HttpServletRequest request) {
-
-		String params = "";
 		
-		String url = MyUtil.getCurrentURL(request);
-		if (url == null || !url.contains("=")) {
-		    params = "1";  // 기본값 설정
-		} else {
-		    params = url.substring(url.indexOf('=') + 1);
-		    if ("/index.do".equals(params)) {
-		        params = "1";
-		    }
-		}
-		
-	    if (params != null && params.contains("&")) {
-	        params = params.substring(0, params.indexOf('&'));
-	    }
-		
-		mav = service.index(mav, params);
-		
+	      String params = "";
+	      
+	      String url = MyUtil.getCurrentURL(request);
+	      if (url == null || !url.contains("=")) {
+	          params = "1";  // 기본값 설정
+	      } else {
+	          params = url.substring(url.indexOf('=') + 1);
+	          if ("/index.do".equals(params)) {
+	              params = "1";
+	          }
+	      }
+	      
+	       if (params != null && params.contains("&")) {
+	           params = params.substring(0, params.indexOf('&'));
+	       }
+	      
+	      mav = service.index(mav, params);
+	
 		return mav;
 	}	
 	
