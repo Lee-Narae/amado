@@ -646,17 +646,11 @@
 	</select>
 	
 	
-	<update id="editCBoardBy1" parameterType="ClubBoardVO">
-		update tbl_clubboard set 
-		title = #{title},
-		content = #{content},
-		registerdate = sysdate,
-		orgfilename = null,
-        filename = null,
-        filesize = null
-        where clubboardseq = #{clubboardseq}
-	</update>
-	
+	<update id="edit" parameterType="ClubBoardVO">
+        update tbl_clubboard set title = #{title}
+                           , content = #{content}
+        where clubboardseq = #{clubboardseq}                      
+    </update>
 	
 
 </mapper>

@@ -157,6 +157,7 @@ function goWrite(clubseq){
 		
 		</table>
 		
+		<!-- 
 		<form name="searchFrm" class="mb-5">
 			<select name="searchType" >
 				<option value="title">글제목</option>
@@ -166,7 +167,7 @@ function goWrite(clubseq){
 			<input type="text" style="display: none;" />
 			<button type="button" class="btn btn-light" style="font-size: 20pt; padding: 0;">🔎</button>
 		</form>
-		
+		 -->
 		
 		<div id="pageBar" style="margin-left: 36%;">
 	       <nav>

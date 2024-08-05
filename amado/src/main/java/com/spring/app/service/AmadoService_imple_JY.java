@@ -466,16 +466,14 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 	}
 
 
-	// 동호회게시판 수정하기(1)
+
 	@Override
-	public int editCBoardBy1(ClubBoardVO cvo) {
-		int n = dao.editCBoardBy1(cvo);
+	public int edit(ClubBoardVO cvo) {
+		int n = dao.edit(cvo);
 		return n;
 	}
 
 
-
-	
 
 
 	
