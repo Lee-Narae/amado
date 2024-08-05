@@ -533,5 +533,23 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		return n;
 	}
 
+	@Override
+	public ClubVO rankF(String params) {
+		ClubVO rankF = dao.rankF(params);
+		return rankF;
+	}
+
+	@Override
+	public ClubVO rankS(String params) {
+		ClubVO rankS = dao.rankS(params);
+		return rankS;
+	}
+
+	@Override
+	public ClubVO rankT(String params) {
+		ClubVO rankT = dao.rankT(params);
+		return rankT;
+	}
+
 
 }

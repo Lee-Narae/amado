@@ -89,6 +89,19 @@ public interface AmadoService_HS {
 	//체육관 수정하기
 	int Gymreg2(GymVO gym);
 
+	
+	//체육관페이징처리
+	
+
+
+	int getgymTotalPage(Map<String, String> paramap);
+
+
+	List<GymVO> select_gym_paging(Map<String, String> paramap);
+
+
+	int getTotalgymCount(Map<String, String> paramap);
+
 
 	
 

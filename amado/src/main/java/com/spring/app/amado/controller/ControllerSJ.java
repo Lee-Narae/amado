@@ -1189,6 +1189,40 @@ public class ControllerSJ {
 		return jsonObj.toString();
 	}
 
+	// 메인페이지
+	@GetMapping("/club/mainClubRank.do")
+	public ModelAndView mainClubRank(ModelAndView mav, HttpServletRequest request) {
+		
+		List<ClubVO> clubList = null;
+
+		String url = MyUtil.getCurrentURL(request);
+		String params = url.substring(url.indexOf('=') + 1);
+		// sportseq 값(사이드 선택시)
+
+		if (request.getParameter("sportseq") != null) {
+			params = request.getParameter("sportseq");
+		}
+		
+		System.out.println("params : " + params);
+
+		// === 페이징 처리를 안한 검색어가 없는 전체 동호회 보여주기 (랭킹 3위까지 사진보여주기 위한 것) === //
+		ClubVO rankF = service.rankF(params);
+		ClubVO rankS = service.rankS(params);
+		ClubVO rankT = service.rankT(params);
+
+
+		mav.addObject("rankF", rankF);
+		mav.addObject("rankS", rankS);
+		mav.addObject("rankT", rankT);
+
+		mav.addObject("params", params);	
+		
+		mav.setViewName("/main/index.tiles2");
+		
+		return mav;
+	}
+	
+	
 	// 동호회 찾기
 	@GetMapping("/club/findClub.do")
 	public ModelAndView findClub(ModelAndView mav, HttpServletRequest request) {
@@ -1802,7 +1836,7 @@ public class ControllerSJ {
 	@GetMapping("/chatting/multichat.do")
 	public String requiredLogin_multichat(HttpServletRequest request, HttpServletResponse response) {
 
-		return "chatting/multichat.tiles1";
+		return "chatting/multichat";
 	}
 
 	// 문의 답변

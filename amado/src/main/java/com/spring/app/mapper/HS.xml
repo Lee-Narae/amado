@@ -230,5 +230,38 @@ values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
 		where gymseq = #{gymseq}
 
 	</update>
+	
+	
+	
+	<select id="getgymTotalPage" parameterType="HashMap" resultType="int">
+		select ceil(count(*)/#{sizePerPage})
+		from tbl_gym
+		where 1=1
+		
+	</select>
+	
+	<select id="select_gym_paging" parameterType="HashMap" resultType="GymVO">
+		SELECT rn, gymseq ,gymname,fk_userid,postcode,address,detailaddress,status,info,orgfilename,filename,filesize,cost,caution,membercount,likecount,insidestatus,lng,lat
+	FROM (
+    SELECT rownum rn, gymseq ,gymname,fk_userid,postcode,address,detailaddress,status,info,orgfilename,filename,filesize,cost,caution,membercount,likecount,insidestatus,lng,lat
+    FROM tbl_gym
+    WHERE 1=1
+    
+	)
+	WHERE rn BETWEEN (TO_NUMBER(#{currentShowPageNo}) - 1) * TO_NUMBER(#{sizePerPage}) + 1 AND TO_NUMBER(#{currentShowPageNo}) * TO_NUMBER(#{sizePerPage})
+
+	</select>
+	
+	<select id="getTotalgymCount" parameterType="HashMap" resultType="int">
+		select count(*)
+		from tbl_gym
+		where 1=1
+		
+	</select>
+	
+	
+	
+	
+	
 
 </mapper>

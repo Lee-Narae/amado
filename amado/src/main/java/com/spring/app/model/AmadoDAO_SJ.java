@@ -147,6 +147,10 @@ public interface AmadoDAO_SJ {
 
 	void updateAnswer(Map<String, String> paraMap);
 
+	ClubVO rankF(String params);
+	ClubVO rankS(String params);
+	ClubVO rankT(String params);
+
 	
 
 	
