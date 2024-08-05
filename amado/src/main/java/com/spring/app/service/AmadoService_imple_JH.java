@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.app.common.AES256;
+import com.spring.app.domain.ClubBoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
@@ -250,6 +251,14 @@ public class AmadoService_imple_JH implements AmadoService_JH {
 	@Override
 	public void viewcount(String fleamarketseq) {
 		dao.viewcount(fleamarketseq);
+	}
+
+
+
+	@Override
+	public List<ClubBoardVO> getclboList(String clubseq) {
+		List<ClubBoardVO> clubboardList = dao.getclboList(clubseq);
+		return clubboardList;
 	}
 
 }

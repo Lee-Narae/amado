@@ -31,6 +31,7 @@ select{
    
 </style>
  
+
 <script type="text/javascript">
 
 $(document).ready(function(){
@@ -57,7 +58,7 @@ $(document).ready(function(){
      
      
      // 글쓰기버튼 클릭 시
-     $("button#btnEdit").click(function(){
+     $("button#btnEdit1").click(function(){
 
     	 alert("나와");
     	 
@@ -158,7 +159,7 @@ $(document).ready(function(){
         </table>
         
         <div style="margin: 20px;">
-            <button type="button" class="btn btn-secondary btn-sm mr-3" id="btnEdit">수정하기</button>
+            <button type="button" class="btn btn-secondary btn-sm mr-3" id="btnEdit1">수정하기</button>
             <button type="button" class="btn btn-secondary btn-sm" onclick="javascript:history.back()">취소</button>  
         </div>
         <%-- form 태그 안에

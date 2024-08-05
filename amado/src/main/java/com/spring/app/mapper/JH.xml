@@ -354,4 +354,13 @@
 		where fleamarketseq = #{fleamarketseq}
 	</update>
 	
+	
+	<select id="getclboList" resultType="ClubBoardVO" parameterType="String">
+		select *
+		from tbl_clubboard
+		where clubseq = #{clubseq}
+		order by registerdate desc
+	</select>
+	
+	
 </mapper>

@@ -3,6 +3,7 @@ package com.spring.app.service;
 import java.util.List;
 import java.util.Map;
 
+import com.spring.app.domain.ClubBoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
@@ -58,6 +59,8 @@ public interface AmadoService_JH {
 	FleamarketVO getfleMap(String fleamarketseq);
 
 	void viewcount(String fleamarketseq);
+
+	List<ClubBoardVO> getclboList(String clubseq);
 
 	
 }

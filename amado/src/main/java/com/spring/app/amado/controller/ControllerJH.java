@@ -29,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.app.common.MyUtil;
+import com.spring.app.domain.ClubBoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
@@ -450,7 +451,10 @@ public class ControllerJH {
 			}
 		}
 		
-		
+		List<ClubBoardVO> clubboardList = service.getclboList(clubseq);
+		String goBackURL = MyUtil.getCurrentURL(request);
+		mav.addObject("goBackURL", goBackURL);
+		mav.addObject("clubboardList", clubboardList);
 		mav.addObject("clubvo", clubvo);
 		mav.addObject("matchingList", matchingList);
 		mav.setViewName("club/myClub_plus.tiles2");

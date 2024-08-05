@@ -826,3 +826,19 @@ where sportseq = 1
 
 update tbl_fleamarket set viewcount = viewcount+1
 		where fleamarketseq = 50
+
+
+select *
+from tbl_clubboard
+order by registerdate desc;
+
+select rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, commentcount, viewcount, status, orgfilename, filename
+		from
+		(select rownum rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, commentcount, viewcount, status, orgfilename, filename
+		from
+		(
+		select clubboardseq, clubseq, title, content, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, commentcount, viewcount, status, orgfilename, filename
+		from tbl_clubboard)
+		where clubseq = 2
+		order by registerdate desc
+		)
