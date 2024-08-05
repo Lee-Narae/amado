@@ -46,7 +46,6 @@ import com.spring.app.domain.GymVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.domain.NoticeVO;
 import com.spring.app.service.AmadoService_NR;
-import com.spring.app.service.AmadoService_SJ;
 
 @Controller
 public class ControllerNR {
@@ -54,9 +53,6 @@ public class ControllerNR {
 
 	@Autowired
 	private AmadoService_NR service;
-	
-	@Autowired
-	private AmadoService_SJ serviceSJ;
 	
 	@Autowired
 	private FileManager fileManager;
@@ -75,29 +71,24 @@ public class ControllerNR {
 	@GetMapping("/index.do")
 	public ModelAndView index(ModelAndView mav, HttpServletRequest request) {
 		
-		List<ClubVO> clubList = null;
-
+	      String params = "";
+	      
 	      String url = MyUtil.getCurrentURL(request);
-	      String params = url.substring(url.indexOf('=') + 1);
-	      // sportseq 값(사이드 선택시)
-
-	      if (request.getParameter("sportseq") != null) {
-	         params = request.getParameter("sportseq");
+	      if (url == null || !url.contains("=")) {
+	          params = "1";  // 기본값 설정
+	      } else {
+	          params = url.substring(url.indexOf('=') + 1);
+	          if ("/index.do".equals(params)) {
+	              params = "1";
+	          }
 	      }
 	      
-	      // === 페이징 처리를 안한 검색어가 없는 전체 동호회 보여주기 (랭킹 3위까지 사진보여주기 위한 것) === //
-	      ClubVO rankF = service.rankF(params);
-	      ClubVO rankS = service.rankS(params);
-	      ClubVO rankT = service.rankT(params);
+	       if (params != null && params.contains("&")) {
+	           params = params.substring(0, params.indexOf('&'));
+	       }
+	      
+	      mav = service.index(mav, params);
 
-
-	      mav.addObject("rankF", rankF);
-	      mav.addObject("rankS", rankS);
-	      mav.addObject("rankT", rankT);
-
-	      mav.addObject("params", params);   
-
-		mav = service.index(mav);
 		
 		return mav;
 	}	
