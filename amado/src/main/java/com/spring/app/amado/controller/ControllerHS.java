@@ -75,14 +75,14 @@ public class ControllerHS {
 	public ModelAndView rental_gym(ModelAndView mav,HttpServletRequest request,GymVO gymvo) {
 		
 		String searchWord = request.getParameter("searchWord");
-		String sizePerPage = request.getParameter("sizePerPage");
+		String sizePerPage = "8";
 		String currentShowPageNo = request.getParameter("currentShowPageNo");
+		String insidestatus = request.getParameter("insidestatus");
 		
-		if(sizePerPage == null || !"3".equals(sizePerPage) && !"5".equals(sizePerPage) && !"10".equals(sizePerPage)) {
-			sizePerPage = "10";
+		if(insidestatus == null || insidestatus != null && insidestatus.trim().isEmpty()) {
+			insidestatus = "0";
 		}
 		
-	
 		if(searchWord == null || searchWord != null && searchWord.trim().isEmpty()) {
 			searchWord = "";
 		}
@@ -96,7 +96,8 @@ public class ControllerHS {
 		paramap.put("searchWord", searchWord);
 		paramap.put("sizePerPage", sizePerPage);
 		paramap.put("currentShowPageNo", currentShowPageNo);
-
+		paramap.put("insidestatus", insidestatus);
+		
 		// 페이징처리를 한 모든 회원 or 검색한 회원 목록 보여주기
 		int totalPage = service.getgymTotalPage(paramap);
 		
@@ -128,10 +129,10 @@ public class ControllerHS {
 		
 		// *** [맨처음][이전] 만들기 *** //
 		   
-           pageBar += "<li class='page-item'><a class='page-link' href='rental_gym?searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo=1'>[맨처음]</a></li>";
+           pageBar += "<li class='page-item'><a class='page-link' href='rental_gym.do?searchWord="+searchWord+"&insidestatus="+insidestatus+"&currentShowPageNo=1'>[맨처음]</a></li>";
 
            if(pageNo != 1) {
-              pageBar += "<li class='page-item'><a class='page-link' href='rental_gym?searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a></li>";
+              pageBar += "<li class='page-item'><a class='page-link' href='rental_gym.do?searchWord="+searchWord+"&insidestatus="+insidestatus+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a></li>";
            }
    
            while(!(loop > blockSize || pageNo > totalPage)) {
@@ -141,7 +142,7 @@ public class ControllerHS {
                  pageBar += "<li class='page-item active'><a class='page-link' href='#'>"+pageNo+"</a></li>";
               }
               else {
-                 pageBar += "<li class='page-item'><a class='page-link' href='rental_gym?searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a></li>";
+                 pageBar += "<li class='page-item'><a class='page-link' href='rental_gym.do?searchWord="+searchWord+"&insidestatus="+insidestatus+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a></li>";
               }
               
               loop++;
@@ -153,9 +154,9 @@ public class ControllerHS {
            // *** [다음][마지막] 만들기 *** //
            // pageNo ==> 11
            if(pageNo <= totalPage) {
-              pageBar += "<li class='page-item'><a class='page-link' href='rental_gym?searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+pageNo+"'>[다음]</a></li>";
+              pageBar += "<li class='page-item'><a class='page-link' href='rental_gym.do?searchWord="+searchWord+"&insidestatus="+insidestatus+"&currentShowPageNo="+pageNo+"'>[다음]</a></li>";
            }
-           pageBar += "<li class='page-item'><a class='page-link' href='rental_gym?searchWord="+searchWord+"&sizePerPage="+sizePerPage+"&currentShowPageNo="+totalPage+"'>[맨마지막]</a></li>";
+           pageBar += "<li class='page-item'><a class='page-link' href='rental_gym.do?searchWord="+searchWord+"&insidestatus="+insidestatus+"&currentShowPageNo="+totalPage+"'>[맨마지막]</a></li>";
            
            
          // *** ==== 페이지바 만들기 끝 ==== *** //
@@ -198,9 +199,7 @@ public class ControllerHS {
 		
 		
 		// 모든 상품 select 해오기
-		List<GymVO> allGymList = service.getAllGymList(); // 디비에서 데이터를 불러만오는 거라 map에 넣어서 보낼게 없음!!!!
-
-		mav.addObject("allGymList", allGymList);
+		// List<GymVO> allGymList = service.getAllGymList(); // 디비에서 데이터를 불러만오는 거라 map에 넣어서 보낼게 없음!!!!
 
 		mav.setViewName("/gym/rental_gym.tiles2");
 		return mav;
@@ -346,6 +345,7 @@ public class ControllerHS {
 																			// "fk_userid":"seoyh","name":서영학,"content":"첫번째
 																			// 댓글입니다. ㅎㅎㅎ","regdate":"2024-06-18
 																			// 15:36:31"}
+				jsonObj.put("category", questionvo.getCategory());
 				jsonObj.put("memberimg", questionvo.getMemberimg());
 				jsonObj.put("changestatus", questionvo.getChangestatus());
 

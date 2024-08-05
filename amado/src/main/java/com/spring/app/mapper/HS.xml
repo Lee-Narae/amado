@@ -79,7 +79,7 @@ values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
     <select id="getCommentList" parameterType="String" resultType="QuestionVO">
 		select gymquestionseq, fk_userid,category, content, changestatus
 		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') AS registerdate
-             , V.memberimg
+             , V.memberimg, category
 		from tbl_gymquestion A join tbl_member V
 		ON A.fk_userid = V.userid
 		where A.gymseq = #{parentSeq}
@@ -236,8 +236,7 @@ values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
 	<select id="getgymTotalPage" parameterType="HashMap" resultType="int">
 		select ceil(count(*)/#{sizePerPage})
 		from tbl_gym
-		where 1=1
-		
+		where insidestatus = #{insidestatus}
 	</select>
 	
 	<select id="select_gym_paging" parameterType="HashMap" resultType="GymVO">
@@ -245,8 +244,8 @@ values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
 	FROM (
     SELECT rownum rn, gymseq ,gymname,fk_userid,postcode,address,detailaddress,status,info,orgfilename,filename,filesize,cost,caution,membercount,likecount,insidestatus,lng,lat
     FROM tbl_gym
-    WHERE 1=1
-    
+    where insidestatus = #{insidestatus}
+     <if test="searchWord != ''">AND gymname LIKE '%' || #{searchWord} || '%'</if>
 	)
 	WHERE rn BETWEEN (TO_NUMBER(#{currentShowPageNo}) - 1) * TO_NUMBER(#{sizePerPage}) + 1 AND TO_NUMBER(#{currentShowPageNo}) * TO_NUMBER(#{sizePerPage})
 
@@ -255,8 +254,6 @@ values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
 	<select id="getTotalgymCount" parameterType="HashMap" resultType="int">
 		select count(*)
 		from tbl_gym
-		where 1=1
-		
 	</select>
 	
 	

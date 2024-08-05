@@ -893,7 +893,12 @@ function goAddWrite(){
 	}
 	
 	goAddWrite_noAttach();
+	// textarea를 초기화합니다.
+	$("textarea[name='content']").val('');
 	
+	 if(item.category == "default"){
+		 return;
+	 }
 	
 }// end of fucntion goAddWrite(){}------------------
 
@@ -983,6 +988,22 @@ function goReadComment(){
 		    	    if (${sessionScope.loginuser != null} && "${sessionScope.loginuser.userid}" == item.fk_userid) {
 		    	        v_html += "<br><button class='btnUpdateComment' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>수정</button>&nbsp;&nbsp;<button class='btnDeleteComment' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>삭제</button>";
 		    	    }
+		    	    
+		    	    if(item.category == "0"){
+		    	    	v_html += "<span>[가격문의]</span>";
+		    	    }
+		    	    else if(item.category =="1"){
+		    	    	v_html += "<span>[일정문의]</span>";
+		    	    }
+		    	    else if(item.category =="2"){
+		    	    	v_html += "<span>[공간정보문의]</span>";
+		    	    }
+		    	    else if(item.category =="3"){
+		    	    	v_html += "<span>[물품이용문의]</span>";
+		    	    }
+		    	    else {
+		    	    	v_html += "<span>[기타]</span>";
+		    	    }
 		    	    v_html += "<input type='hidden' value='"+item.gymquestionseq+"' />"
 		    	    v_html += "<div class='input_reply' style='width: 100%;'>";
 		    	    v_html += "</div>";
@@ -1009,7 +1030,7 @@ function goReadComment(){
 		    
 		    
 		    else {
-		    	v_html += "<div colspan='4'>댓글이 없습니다</td>";
+		    	v_html += "<div colspan='4'>문의가 없습니다</td>";
 		    }
 		    
 		    $("div#commentView").html(v_html);
@@ -1056,7 +1077,7 @@ function readcommentreply(gymquestionseq){
 			    	    v_html += "<div id='content_reply' style='margin-left: 2%; text-align: left;'>" + item.content_reply + "</div>";
 			    	    v_html += "<div class='comment' style='color:#999999; font-size:10pt; margin-top: 0.4%; margin-left: 1.5%; display: flex; width: 50%;'>" + item.registerdate; 
 			    	    if(item.changestatus > 0){
-			    	    	v_html += " (수정됨)";
+			    	    	v_html += " (됨)";
 			    	    }
 			    	    
 			    	    if (${sessionScope.loginuser != null} && "${sessionScope.loginuser.userid}" == item.fk_userid) {
@@ -1403,7 +1424,7 @@ function goAddWrite_reply(gymquestionseq){
 	
 	<div>
 	 <br>
-	${gym.lng}
+	
 	</div>
 	<%-- CSS 로딩화면 구현한것--%>
 	<div

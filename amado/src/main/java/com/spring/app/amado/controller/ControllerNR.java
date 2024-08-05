@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,6 +46,7 @@ import com.spring.app.domain.GymVO;
 import com.spring.app.domain.MemberVO;
 import com.spring.app.domain.NoticeVO;
 import com.spring.app.service.AmadoService_NR;
+import com.spring.app.service.AmadoService_SJ;
 
 @Controller
 public class ControllerNR {
@@ -69,10 +70,26 @@ public class ControllerNR {
 	}
 	
 	@GetMapping("/index.do")
-	public ModelAndView index(ModelAndView mav) {
-
-		mav = service.index(mav);
+	public ModelAndView index(ModelAndView mav, HttpServletRequest request) {
 		
+	      String params = "";
+	      
+	      String url = MyUtil.getCurrentURL(request);
+	      if (url == null || !url.contains("=")) {
+	          params = "1";  // 기본값 설정
+	      } else {
+	          params = url.substring(url.indexOf('=') + 1);
+	          if ("/index.do".equals(params)) {
+	              params = "1";
+	          }
+	      }
+	      
+	       if (params != null && params.contains("&")) {
+	           params = params.substring(0, params.indexOf('&'));
+	       }
+	      
+	      mav = service.index(mav, params);
+	
 		return mav;
 	}	
 	

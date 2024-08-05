@@ -22,9 +22,6 @@
   <%-- Font Awesome 6 Icons --%>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-  <%-- 직접 만든 CSS 1 --%>
-  <link rel="stylesheet" type="text/css" href="<%= ctxPath%>/resources/css/style1.css" />
-
   <%-- Optional JavaScript --%>
   <script type="text/javascript" src="<%= ctxPath%>/resources/js/jquery-3.7.1.min.js"></script>
   <script type="text/javascript" src="<%= ctxPath%>/resources/bootstrap-4.6.2-dist/js/bootstrap.bundle.min.js" ></script>
@@ -38,6 +35,18 @@
   <script type="text/javascript" src="<%= ctxPath%>/resources/js/jquery.form.min.js"></script> 
 
 </head>
+
+<style type="text/css">
+@font-face {
+    font-family: 'MYArirang_gothic';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2206-02@1.0/MYArirang_gothic.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+*{font-family: 'MYArirang_gothic';}
+
+</style>
 
 <script type="text/javascript">
 
@@ -109,7 +118,7 @@
      // === 웹소켓에 최초로 연결이 되었을 경우에 실행되어지는 콜백함수 정의하기 === //
      websocket.onopen = function(){
 	   // alert("웹소켓 연결됨!!"); 
-    	  $("div#chatStatus").text("정보: 웹소켓에 연결이 성공됨!!"); 
+    	  $("div#chatStatus").text("✅"); 
 	    
     	 /*   
 	  	    messageObj.message = "채팅방에 <span style='color: red;'>입장</span> 했습니다.";
@@ -284,34 +293,37 @@
   	   isOnlyOneDialog = false; // 귀속말 대화가 아닌 모두에게 공개되는 대화임을 지정.
      });
      
+     $("input#quitchat").click(function(){
+    	 window.close();
+     });
+     
  });// end of $(document).ready(function()){})-------------
 
 </script>
 
 
-<div class="container-fluid">
+<div class="container-fluid" style="width: 450px; height: 700px;">
 <div class="row">
 <div class="col-md-10 offset-md-1">
-	<div id="chatStatus"></div>
-	<div class="my-3">
-	- 상대방의 대화내용이 검정색으로 보이면 채팅에 참여한 모두에게 보여지는 것입니다.<br>
+	<div id="chatStatus" align="center"></div>
+	<div class="my-3" style="font-size: 10pt;">
 	- 상대방의 대화내용이 <span style="color: red;">붉은색</span>으로 보이면 나에게만 보여지는 1:1 귓속말 입니다.<br>
-	- 1:1 채팅(귓속말)을 하시려면 예를 들어, 채팅시 보이는 [이순신]대화내용 에서 이순신을 클릭하시면 됩니다.
+	- 1:1 채팅(귓속말)을 하시려면 상대방 이름을 클릭하세요.
 	</div>
 	<input type="hidden" id="to" placeholder="귓속말대상웹소켓.getId()"/>
 	<br/>
 	♡ 귓속말대상 : <span id="privateWho" style="font-weight: bold; color: red;"></span>
-	<br>
 	<button type="button" id="btnAllDialog" class="btn btn-secondary btn-sm">귀속말대화끊기</button>
-	<br><br>
+	<br>
 	현재접속자명단:<br/>
 	<div id="connectingUserList" style=" max-height: 100px; overFlow: auto;"></div>
 	
 	<div id="chatMessage" style="max-height: 500px; overFlow: auto; margin: 20px 0;"></div>
 
-	<input type="text"   id="message" class="form-control" placeholder="메시지 내용"/>
-	<input type="button" id="btnSendMessage" class="btn btn-success btn-sm my-3" value="메시지보내기" />
-	<input type="button" class="btn btn-danger btn-sm my-3 mx-3" onclick="javascript:location.href='<%=request.getContextPath() %>/index.do'" value="채팅방나가기" />
+	<div style="display: flex; align-content: center;">
+		<input type="text"   id="message" class="form-control" placeholder="메시지 내용" style="width: 80%; margin-top: 3.5%;"/>&nbsp;&nbsp;<input type="button" id="btnSendMessage" class="btn btn-success btn-sm my-3" value="🔼" />
+	</div>
+	<input type="button" class="btn btn-danger btn-sm my-3 mx-3" id="quitchat" value="채팅방나가기" />
 </div>
 </div>
 </div>  
