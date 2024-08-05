@@ -29,6 +29,8 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 	// Type 에 따라 Spring 컨테이너가 알아서 bean 으로 등록된 com.spring.board.model.BoardDAO_imple 의 bean 을  dao 에 주입시켜준다. 
     // 그러므로 dao 는 null 이 아니다.
 	
+	@Autowired
+	private AmadoService_SJ service_SJ;
 	
 	// === #45. 양방향 암호화 알고리즘인 AES256 를 사용하여 복호화 하기 위한 클래스 의존객체 주입하기(DI: Dependency Injection) ===
     @Autowired
@@ -39,7 +41,18 @@ public class AmadoService_imple_NR implements AmadoService_NR {
 	
 	
 	@Override
-	public ModelAndView index(ModelAndView mav) {
+	public ModelAndView index(ModelAndView mav, String params) {
+		
+		// === 페이징 처리를 안한 검색어가 없는 전체 동호회 보여주기 (랭킹 3위까지 사진보여주기 위한 것) === //
+		ClubVO rankF = service_SJ.rankF(params);
+		ClubVO rankS = service_SJ.rankS(params);
+		ClubVO rankT = service_SJ.rankT(params);
+
+
+		mav.addObject("rankF", rankF);
+		mav.addObject("rankS", rankS);
+		mav.addObject("rankT", rankT);
+		mav.addObject("params", params);
 		
 		mav.setViewName("main/index.tiles2");
 		// /WEB-INF/views/tiles2/main/index.jsp

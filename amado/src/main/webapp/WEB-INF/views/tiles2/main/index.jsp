@@ -62,11 +62,11 @@ function scrollToSection(sectionId) {
 }
 
 function mainClubRank(sportseq) {
-	location.href = '<%=ctxPath %>/club/mainClubRank.do?sportseq=' + sportseq + '&scrollTo=rankSection';
+	location.href = '<%=ctxPath %>/index.do?sportseq=' + sportseq + '&scrollTo=ksjMain';
 }
 
 function mainClubRankF(sportseq) {
-	location.href='<%=ctxPath %>/club/mainClubRank.do?sportseq='+sportseq;
+	location.href='<%=ctxPath %>/index.do?sportseq='+sportseq;
 }
 
 function goView(clubseq, fk_sportseq) {
@@ -164,7 +164,6 @@ function goView(clubseq, fk_sportseq) {
 			</div>
 		</div>
 		
-		<div id="rankSection">
 			<div class="podium" style="margin-top: 120px;">
 			
 				<%-- 2등 시작 --%>
@@ -225,8 +224,6 @@ function goView(clubseq, fk_sportseq) {
 				<%-- 3등 끝 --%>
 			
 			</div>		
-		</div>
-		
     </div>
     
   </body>

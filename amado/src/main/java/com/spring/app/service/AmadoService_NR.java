@@ -16,7 +16,7 @@ import com.spring.app.domain.NoticeVO;
 public interface AmadoService_NR {
 
 	// 메인 페이지
-	ModelAndView index(ModelAndView mav);
+	ModelAndView index(ModelAndView mav, String params);
 
 	// 로그인 처리
 	ModelAndView loginEnd(Map<String, String> paramap, ModelAndView mav, HttpServletRequest request);
