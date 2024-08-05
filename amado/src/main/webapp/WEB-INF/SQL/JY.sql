@@ -520,9 +520,8 @@ select filename, orgfilename from tbl_clubboard
 where clubboardseq = 12
 
 --할일--
---종목하나당 동호회 하나씩만 만들게하기xml
 --캘린더 테스트해보고 userid 문제 해결하기
---컨트롤러/community/editNotice.do 할 차례
+
 
 
 
@@ -530,10 +529,31 @@ alter table tbl_fleamarket drop column password;
 
 
 	    select *
-	    from tbl_fleamarket
-	    where status = 0
+	    from tbl_clubboard
+	    
         
 select title
 from tbl_fleamarket
 where status = 0 and lower(title) like '%' || lower('호날두') || '%'
 order by registerdate desc
+
+
+
+select rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, commentcount, viewcount, status, orgfilename, filename
+		from
+		(select rownum rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, commentcount, viewcount, status, orgfilename, filename
+		from
+		(
+		select clubboardseq, clubseq, title, content, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, commentcount, viewcount, status, orgfilename, filename
+		from tbl_clubboard)
+		where clubseq = 2
+		order by registerdate desc
+		)
+		where rn between to_number(1)*to_number(10)-(to_number(10)-1) and to_number(1)*to_number(10)	
+
+DELETE FROM tbl_clubboard where status = 1;
+
+
+select *
+from tbl_clubboard
+order by registerdate desc;

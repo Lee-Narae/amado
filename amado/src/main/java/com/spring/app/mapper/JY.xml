@@ -131,8 +131,6 @@
 		(
 		select clubboardseq, clubseq, title, content, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, commentcount, viewcount, status, orgfilename, filename
 		from tbl_clubboard)
-		<if test="searchType == 'title' and searchWord != ''">and title like '%'||#{searchWord}||'%'</if>
-		<if test="searchType == 'content' and searchWord != ''">and content like '%'||#{searchWord}||'%'</if>
 		where clubseq = #{clubseq}
 		order by registerdate desc
 		)
@@ -144,8 +142,6 @@
 	<select id="getTotalCount" parameterType="HashMap" resultType="int">
 		select count(*)
 		from tbl_clubboard
-		<if test="searchType == 'title' and searchWord != ''">and title like '%'||#{searchWord}||'%'</if>
-		<if test="searchType == 'content' and searchWord != ''">and content like '%'||#{searchWord}||'%'</if>
 		where clubseq = #{clubseq}
 	</select>
 	

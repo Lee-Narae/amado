@@ -44,7 +44,7 @@ $(document).ready(function(){
       //스마트에디터 프레임생성
       nhn.husky.EZCreator.createInIFrame({
           oAppRef: obj,
-          elPlaceHolder: "CONTENT", // id가 content인 textarea에 에디터를 넣어준다.
+          elPlaceHolder: "content", // id가 content인 textarea에 에디터를 넣어준다.
           sSkinURI: "<%= ctxPath%>/resources/smarteditor/SmartEditor2Skin.html",
           htParams : {
               // 툴바 사용 여부 (true:사용/ false:사용하지 않음)
@@ -72,7 +72,7 @@ $(document).ready(function(){
     	 
     	 <%-- === 스마트 에디터 구현 시작 === --%>
          // id가 content인 textarea에 에디터에서 대입
-         obj.getById["CONTENT"].exec("UPDATE_CONTENTS_FIELD", []);
+         obj.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
          <%-- === 스마트 에디터 구현 끝 === --%>
     	 
          // 글내용 유효성 검사(스마트에디터를 사용할 경우)
