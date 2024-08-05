@@ -91,7 +91,7 @@ function goView(clubseq, fk_sportseq) {
   <body>
     <div class="jb-box">
       <video muted autoplay loop>
-        <source src="<%=ctxPath%>/resources/videos/nike.mp4" type="video/mp4">
+        <source src="<%=ctxPath%>/resources/videos/메인영상.mp4" type="video/mp4">
         <strong>Your browser does not support the video tag.</strong>
       </video>
       <div class="jb-text">
