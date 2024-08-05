@@ -4,6 +4,14 @@ from tbl_member
 select *
 from tbl_gym
 
+select *
+from tbl_gymquestion
+
+update tbl_gymquestion set category = 1;
+commit;
+
+select * from tbl_category;
+
 desc tbl_fleamarketcomment      
 
 create table tbl_member    
