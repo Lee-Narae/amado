@@ -168,6 +168,12 @@ rotate(
       border-radius: 50%; /* 원형으로 만들기 */
       object-fit: cover; /* 이미지를 컨테이너에 맞추어 자르기 */
   }
+  
+.carousel-item img {
+      width: 100%; /* 컨테이너에 맞게 너비를 조정 */
+      height: 130px; /* 원하는 높이로 조정 */
+      object-fit: cover; /* 비율을 유지하면서 컨테이너에 맞게 조정 */
+  }  
 </style>
 
 <%-- <script type="text/javascript" src="<%= ctxPath%>/resources/js/myshop/categoryListJSON.js"></script> --%>
@@ -564,7 +570,7 @@ rotate(
 	
    let popup; // 추가이미지 파일을 클릭했을때 기존에 띄어진 팝업창에 추가이미지가 또 추가되지 않도록 하기 위해 밖으로 뺌.   
 	   
-   function openPopup() {
+   function openPopup(imgfile) {
 	   
 	 // alert(src);
 	 
@@ -584,7 +590,7 @@ rotate(
 	    popup.document.writeln("<html>");
 	    popup.document.writeln("<head><title>제품이미지 확대보기</title></head>");
 	    popup.document.writeln("<body align='center'>");
-	    popup.document.writeln("<img src='<%=ctxPath%>/resources/images/다운로드.jpg' />");
+	    popup.document.writeln("<img src='<%=ctxPath%>/resources/images/"+imgfile+"' />");
 	    popup.document.writeln("<br><br><br>");
 	    popup.document.writeln("<button type='button' onclick='window.close()'>팝업창닫기</button>");
 	    popup.document.writeln("</body>");
@@ -1129,7 +1135,7 @@ function goViewComment(currentShowPageNo){
 				<div>
 					<div style="width: 400%;">
 						<%-- <img src="<%=ctxPath%>/resources/images/다운로드.jpg" style="width: 100%;" /> --%>
-						<img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/${fleMap.imgfilename}" style="cursor: pointer;" onclick="openPopup()" />
+						<img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/${fleMap.imgfilename}" style="cursor: pointer;" onclick="openPopup('${fleMap.imgfilename}')" />
 					</div>
 				</div>
 			</div>
@@ -1150,7 +1156,7 @@ function goViewComment(currentShowPageNo){
 				</li>
 				<li>
 					<span style="font-size: 14px; color: #8c8c8c;" >직거래 지역</span>
-					<span style="font-size: 14px; margin-left: 4%; font-family: 'Volt220', sans-serif; font-weight: 700; ">${fleMap.city}${fleMap.local}</span>
+					<span style="font-size: 14px; margin-left: 4%; font-family: 'Volt220', sans-serif; font-weight: 700; ">${fleMap.city}&nbsp;${fleMap.local}</span>
 				</li>
 			</ul>
 
@@ -1168,30 +1174,11 @@ function goViewComment(currentShowPageNo){
 	    <div class="row mx-auto my-auto">
 	        <div id="recipeCarousel" class="carousel slide w-100" data-ride="carousel">
 	            <div class="carousel-inner w-100" role="listbox">
-	                <div class="carousel-item active">
-	                    <img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/다운로드.jpg">
-	                </div>
-	                <div class="carousel-item">
-	                    <img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/다운로드.jpg">
-	                </div>
-	                <div class="carousel-item">
-	                    <img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/다운로드.jpg">
-	                </div>
-	                <div class="carousel-item">
-	                    <img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/다운로드.jpg">
-	                </div>
-	                <div class="carousel-item">
-	                    <img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/다운로드.jpg">
-	                </div>
-	                <div class="carousel-item">
-	                    <img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/다운로드.jpg">
-	                </div>
-	                <div class="carousel-item">
-	                    <img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/다운로드.jpg">
-	                </div>
-	                <div class="carousel-item">
-	                    <img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/다운로드.jpg">
-	                </div>
+	                <c:forEach var="imgList" items="${requestScope.imgList}" varStatus="status">
+			            <div class="carousel-item ${status.first ? 'active' : ''}">
+			                <img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/zee/${imgList.imgfilename}" onclick="window.location.href='<%=ctxPath%>/club/sale.do?fleamarketseq=${imgList.fleamarketseq}'">
+			            </div>
+			        </c:forEach>
 	            </div>
 	            <a class="carousel-control-prev" href="#recipeCarousel" role="button" data-slide="prev">
 	                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -1284,49 +1271,6 @@ function goViewComment(currentShowPageNo){
 	   --%>
 		<%-- === 그냥 이미지로 보여주는 것 끝 === --%>
 
-		<%-- /////// 추가이미지 캐러젤로 보여주는 것 시작 //////// --%>
-		<div class="row mx-auto my-auto" style="width: 100%;">
-			<div id="recipeCarousel" class="carousel slide w-100"
-				data-ride="carousel">
-				<div class="carousel-inner w-100" role="listbox">
-					<c:forEach var="imgfilename" items="${requestScope.imgList}"
-						varStatus="status">
-						<c:if test="${status.index == 0}">
-							<div class="carousel-item active">
-								<%--   <img class="d-block col-3 img-fluid" src="<%= ctxPath%>/images/${imgfilename}" style="cursor: pointer;" onclick="openPopup('<%= ctxPath%>/images/${imgfilename}')" />  --%>
-								<img class="d-block col-3 img-fluid"
-									src="<%= ctxPath%>/images/${imgfilename}"
-									style="cursor: pointer;" data-toggle="modal"
-									data-target="#add_image_modal_view" data-dismiss="modal"
-									onclick="modal_content(this)" />
-							</div>
-						</c:if>
-						<c:if test="${status.index > 0}">
-							<div class="carousel-item">
-								<%--   <img class="d-block col-3 img-fluid" src="<%= ctxPath%>/images/${imgfilename}" style="cursor: pointer;" onclick="openPopup('<%= ctxPath%>/images/${imgfilename}')" />  --%>
-								<img class="d-block col-3 img-fluid"
-									src="<%= ctxPath%>/images/${imgfilename}"
-									style="cursor: pointer;" data-toggle="modal"
-									data-target="#add_image_modal_view" data-dismiss="modal"
-									onclick="modal_content(this)" />
-							</div>
-						</c:if>
-					</c:forEach>
-				</div>
-				<a class="carousel-control-prev" href="#recipeCarousel"
-					role="button" data-slide="prev"> <span
-					class="carousel-control-prev-icon" aria-hidden="true"></span> <span
-					class="sr-only">Previous</span>
-				</a> <a class="carousel-control-next" href="#recipeCarousel"
-					role="button" data-slide="next"> <span
-					class="carousel-control-next-icon" aria-hidden="true"></span> <span
-					class="sr-only">Next</span>
-				</a>
-			</div>
-
-
-
-		</div>
 
 
 		<%-- /////// 추가이미지 캐러젤로 보여주는 것 끝 //////// --%>

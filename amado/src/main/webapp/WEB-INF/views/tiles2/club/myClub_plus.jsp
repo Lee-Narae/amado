@@ -229,7 +229,7 @@ margin-left: 2%;
 
 
 <div id="clubTitle" style="text-align: center; margin: 8% 0 0 0; font-size: 30pt; font-weight: bolder;">최근 전적</div>
-	<div id="clubboard" style="width: 88%; padding: 4% 3% 1% 3%; margin: 2% auto 5% auto; border-radius: 20px; box-shadow: 0px 11px 22px #9e9e9e6b;">
+	<div id="clubboard" style="width: 88%; padding: 4% 3% 5% 3%; margin: 2% auto 5% auto; border-radius: 20px; box-shadow: 0px 11px 22px #9e9e9e6b;">
 		
 		<div style="display: flex;">
 		
@@ -329,20 +329,19 @@ margin-left: 2%;
 			  </table>
 			</div>
 		</div>
-		<div id="more" style="text-align: right; margin: 4% 5% 2% 0; color: #8a8a8a;">최근 전적 더보기 ▶</div>
 	</div>
 	
 
 
 
 	<div id="clubTitle" style="text-align: center; margin: 8% 0 0 0; font-size: 30pt; font-weight: bolder;">팀 커뮤니티 최신글</div>
-	<div id="clubboard" style="width: 88%; padding: 5% 3% 1% 3%; margin: 2% auto 5% auto; border-radius: 70px; background-color: #e6f7ff; box-shadow: 0px 0px 10px #9ac5db;">
+	<div id="clubboard" style="width: 88%; padding: 4% 3% 2% 3%; margin: 2% auto 5% auto; border-radius: 20px; box-shadow: 0px 11px 22px #9e9e9e6b;">
 		<div style="margin: 1% 0 1% 5%; font-size: 10pt;">※ 팀 커뮤니티 최신글은 최근 일주일간 작성된 팀 커뮤니티의 게시글만 노출됩니다.</div>
 		<div id="table" style="width: 90%; margin-left: 5%;">
 			<div class="tbl-header">
 			  <table cellpadding="0" cellspacing="0" border="0">
 			    <thead>
-			      <tr>
+			      <tr style="border-bottom: solid 3px #1264b970;">
 			        <th style="width: 7%;">글번호</th>
 					<th style="width: 41%;">제목</th>
 					<th style="width: 20%;">작성자</th>
@@ -355,35 +354,32 @@ margin-left: 2%;
 			<div class="tbl-content">
 			  <table cellpadding="0" cellspacing="0" border="0">
 			    <tbody>
-			      <tr>
-					<td style="width: 7%;">1</td>
-					<td style="width: 41%;">제목</td>
-					<td style="width: 20%;">작성자</td>
-					<td style="width: 25%;">작성일자</td>
-					<td style="width: 7%;">조회수</td>
-				</tr>
-				<tr>
-					<td style="width: 7%;">2</td>
-					<td style="width: 41%;">제목</td>
-					<td style="width: 20%;">작성자</td>
-					<td style="width: 25%;">작성일자</td>
-					<td style="width: 7%;">조회수</td>
-				</tr>
-				<tr>
-					<td style="width: 7%;">3</td>
-					<td style="width: 41%;">제목</td>
-					<td style="width: 20%;">작성자</td>
-					<td style="width: 25%;">작성일자</td>
-					<td style="width: 7%;">조회수</td>
-				</tr>
+			       <c:forEach var="clubboardList" items="${requestScope.clubboardList}" varStatus="index">
+		                <c:if test="${index.index < 5}"> <!-- 인덱스가 5보다 작은 경우만 반복 -->
+		                    <tr>
+		                        <td style="width: 7%">${index.index + 1}</td>
+		                        <td style="width: 41%">${clubboardList.title}</td>
+		                        <td style="width: 20%">${clubboardList.fk_userid}</td>
+		                        <td style="width: 25%">${clubboardList.registerdate}</td>
+		                        <td style="width: 7%">${clubboardList.viewcount} <input id="clubboardseq" type="hidden" name="clubboardseq" value="${clubboardList.clubboardseq}" /></td>
+		                        
+		                    </tr>
+		                </c:if>
+		            </c:forEach>
 			    </tbody>
 			  </table>
 			</div>
 		</div>
-		<div id="more" style="text-align: right; margin: 5% 5% 2% 0; color: #8a8a8a;">게시판 바로가기 ▶</div>
+		<div id="more" style="text-align: right; margin: 3% 5% 2% 0; color: #8a8a8a;" onclick="goBoard('${requestScope.clubvo.clubseq}', '${requestScope.clubvo.clubname}', '${requestScope.clubvo.sportname}')">게시판 바로가기 ▶</div>
 	</div>
 	
-
+<form name="goViewFrm">
+		<input type="hidden" name="clubseq" />
+		<input type="hidden" name="clubboardseq" />
+		<input type="hidden" name="goBackURL" />
+		<input type="hidden" name="searchType" />
+		<input type="hidden" name="searchWord" />
+</form>
 
 </div>
 
@@ -400,8 +396,27 @@ $(document).ready(function(){
 	});
 	
 	
+	$("tbody > tr *").click(function(e){
+
+		let clubseq = '${requestScope.clubvo.clubseq}';
+		let clubboardseq = $(e.target).parent().find("input[name='clubboardseq']").val();
+		
+		const frm = document.goViewFrm;
+		frm.clubboardseq.value = clubboardseq;
+		frm.clubseq.value = clubseq;
+		frm.goBackURL.value = "${requestScope.currentURL}";
+		
+		frm.method = "post";
+		frm.action = "<%=ctxPath%>/club/clubboardDetail.do";
+		frm.submit();
+	
+	});
+	
 });
 
+function goBoard(clubseq, clubname, sportname){
+	location.href = "<%= ctxPath%>/club/clubBoard.do?clubname="+clubname+"&clubseq="+clubseq+"&sportname="+sportname;
+}
 </script>
 
 

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import com.spring.app.domain.ClubBoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
@@ -187,6 +188,18 @@ public class AmadoDAO_imple_JH implements AmadoDAO_JH {
 	@Override
 	public void viewcount(String fleamarketseq) {
 		sqlsession.update("JH.viewcount", fleamarketseq);
+	}
+
+	@Override
+	public List<ClubBoardVO> getclboList(String clubseq) {
+		List<ClubBoardVO> clubboardList = sqlsession.selectList("JH.getclboList", clubseq);
+		return clubboardList;
+	}
+
+	@Override
+	public List<Map<String, String>> getimgList(String sportseq) {
+		List<Map<String, String>> imgList = sqlsession.selectList("JH.getimgList", sportseq); 
+		return imgList;
 	}
 
 

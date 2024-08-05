@@ -354,4 +354,24 @@
 		where fleamarketseq = #{fleamarketseq}
 	</update>
 	
+	
+	<select id="getclboList" resultType="ClubBoardVO" parameterType="String">
+		select *
+		from tbl_clubboard
+		where clubseq = #{clubseq}
+		order by registerdate desc
+	</select>
+	
+	
+	
+	<resultMap type="HashMap" id="fleMap"> 
+		<result property="imgfilename" column="imgfilename" javaType="String"/>
+		<result property="fleamarketseq" column="fleamarketseq" javaType="String"/>
+	</resultMap>
+	<select id="getimgList" resultMap="fleMap" parameterType="String">
+		select imgfilename, fleamarketseq
+		from tbl_fleamarket
+		where sportseq = #{sportseq}
+	</select>
+	
 </mapper>

@@ -29,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.app.common.MyUtil;
+import com.spring.app.domain.ClubBoardVO;
 import com.spring.app.domain.ClubVO;
 import com.spring.app.domain.FleamarketCommentReVO;
 import com.spring.app.domain.FleamarketCommentVO;
@@ -57,7 +58,13 @@ public class ControllerJH {
 			service.viewcount(fleamarketseq);
 		}
 		
+		String sportseq = fleMap.getSportseq();
+		//System.out.println(sportseq);
+		
+		List<Map<String, String>> imgList = service.getimgList(sportseq);
+		
 		//System.out.println("22222"+fleMap.getContent());
+		mav.addObject("imgList",imgList);
 		mav.addObject("fleMap",fleMap);
 		mav.setViewName("club/sale.tiles2");
 		// /WEB-INF/views/tiles2/main/index.jsp
@@ -450,7 +457,10 @@ public class ControllerJH {
 			}
 		}
 		
-		
+		List<ClubBoardVO> clubboardList = service.getclboList(clubseq);
+		String goBackURL = MyUtil.getCurrentURL(request);
+		mav.addObject("goBackURL", goBackURL);
+		mav.addObject("clubboardList", clubboardList);
 		mav.addObject("clubvo", clubvo);
 		mav.addObject("matchingList", matchingList);
 		mav.setViewName("club/myClub_plus.tiles2");
