@@ -360,5 +360,23 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 		sqlsession.update("SJ.updateAnswer", paraMap);
 	}
 
+	@Override
+	public ClubVO rankF(String params) {
+		ClubVO rankF = sqlsession.selectOne("SJ.rankF", params);
+		return rankF;
+	}
+
+	@Override
+	public ClubVO rankS(String params) {
+		ClubVO rankS = sqlsession.selectOne("SJ.rankS", params);
+		return rankS;
+	}
+
+	@Override
+	public ClubVO rankT(String params) {
+		ClubVO rankT = sqlsession.selectOne("SJ.rankT", params);
+		return rankT;
+	}
+
 
 }

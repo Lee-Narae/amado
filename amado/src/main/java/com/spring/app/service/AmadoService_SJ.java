@@ -125,5 +125,11 @@ public interface AmadoService_SJ {
 
 	int memberRegisterEnd_withFile(MemberVO membervo);
 
+	ClubVO rankF(String params);
+
+	ClubVO rankS(String params);
+
+	ClubVO rankT(String params);
+
 
 }
