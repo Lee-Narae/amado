@@ -1262,3 +1262,137 @@ ORDER BY fk_userid ASC, inquiryseq DESC;
         
         
         
+
+select gymimgseq,gymseq,filename,orgfilename    
+from tbl_gymimg  
+where gymseq = 125
+
+select *
+from tbl_gym
+where gymseq = 125
+
+desc tbl_gym
+
+ALTER TABLE tbl_gym
+MODIFY CAUTION NVARCHAR2(2000);
+
+
+ALTER TABLE tbl_gym
+MODIFY INFO NVARCHAR2(2000);
+
+commit
+
+select *
+from tbl_member
+where userid = 'ksj1024sj'
+
+
+select *
+from tbl_club
+where clubname = '테스트클럽3'
+
+select *
+from tbl_clubmember
+where clubseq = 15
+
+update tbl_clubmember set status = 1
+where fk_userid = 'ksj1024sj' and clubseq = 15
+
+commit
+
+
+
+select * from tab
+
+
+TBL_BOARD
+TBL_BOARDCOMMENT
+
+TBL_CALENDAR_LARGE_CATEGORY
+TBL_CALENDAR_SCHEDULE
+TBL_CALENDAR_SMALL_CATEGORY
+TBL_CATEGORY
+TBL_CITY
+
+TBL_CLUB
+TBL_CLUBBOARD
+TBL_CLUBBOARDCOMMENT
+TBL_CLUBMEMBER
+
+TBL_FLEAMARKET
+TBL_FLEAMARKETCOMMENT
+TBL_FLEAMARKETCOMMENTREPLY
+TBL_FLEAMARKETIMG
+
+TBL_GYM
+TBL_GYMANSWER
+TBL_GYMIMG
+TBL_GYMQUESTION
+TBL_GYMRES
+
+TBL_INQUIRY
+TBL_INQUIRYANSWERS
+TBL_INQUIRYFILE
+
+TBL_LOCAL
+TBL_LOGINHISTORY
+
+TBL_MATCHING
+TBL_MATCHINGAPPLY
+TBL_MATCHINGREG
+
+TBL_MEMBER
+
+TBL_NOTICE
+TBL_NOTICECOMMENT
+
+TBL_OPENDATA_GYM
+TBL_SPORT
+
+
+select *
+from TBL_GYMQUESTION
+
+
+
+SELECT *
+FROM (
+    SELECT clubseq, clubname, clubimg, fk_sportseq, clubtel
+         , city, local, clubgym, clubtime
+         , membercount, clubpay, clubstatus, clubscore
+         , ROW_NUMBER() OVER (ORDER BY clubscore DESC) AS rank
+    FROM tbl_club
+    WHERE clubstatus = 1 AND fk_sportseq = 1
+)
+WHERE rank IN (1)
+ORDER BY rank;
+
+
+SELECT clubseq, clubname, clubimg, fk_sportseq, clubtel
+         , city, local, clubgym, clubtime
+         , membercount, clubpay, clubstatus, clubscore
+         , rank
+FROM (
+    SELECT clubseq, clubname, clubimg, fk_sportseq, clubtel
+         , city, local, clubgym, clubtime
+         , membercount, clubpay, clubstatus, clubscore
+         , ROW_NUMBER() OVER (ORDER BY clubscore DESC) AS rank
+    FROM tbl_club
+    WHERE clubstatus = 1 AND fk_sportseq = 1
+)
+WHERE rank IN (2)
+ORDER BY rank;
+
+
+
+SELECT *
+FROM (
+    SELECT clubseq, clubname, clubimg, fk_sportseq, clubtel
+         , city, local, clubgym, clubtime
+         , membercount, clubpay, clubstatus, clubscore
+         , ROW_NUMBER() OVER (ORDER BY clubscore DESC) AS rank
+    FROM tbl_club
+    WHERE clubstatus = 1 AND fk_sportseq = 1
+)
+WHERE rank IN (3)
+ORDER BY rank;

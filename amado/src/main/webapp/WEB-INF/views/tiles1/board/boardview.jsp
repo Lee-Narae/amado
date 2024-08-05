@@ -565,7 +565,7 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 
 		<c:if test="${not empty requestScope.boardvo}">
 
-			<table class="table table-bordered table-dark" style="width: 1024px; word-wrap: break-word; table-layout: fixed;">
+			<table class="table table-bordered" style="width: 1024px; word-wrap: break-word; table-layout: fixed;">
 				<tr>
 					<th style="width: 15%">글번호</th>
 					<td>${requestScope.boardvo.boardseq}</td>

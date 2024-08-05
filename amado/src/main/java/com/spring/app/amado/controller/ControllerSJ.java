@@ -1194,7 +1194,6 @@ public class ControllerSJ {
 	public ModelAndView mainClubRank(ModelAndView mav, HttpServletRequest request) {
 		
 		List<ClubVO> clubList = null;
-		List<ClubVO> clubPagingList = null;
 
 		String url = MyUtil.getCurrentURL(request);
 		String params = url.substring(url.indexOf('=') + 1);
@@ -1206,11 +1205,15 @@ public class ControllerSJ {
 		
 		System.out.println("params : " + params);
 
-		String currentURL = MyUtil.getCurrentURL(request);
-
 		// === 페이징 처리를 안한 검색어가 없는 전체 동호회 보여주기 (랭킹 3위까지 사진보여주기 위한 것) === //
-		clubList = service.clubListNoSearch(params);
-		mav.addObject("clubList", clubList);
+		ClubVO rankF = service.rankF(params);
+		ClubVO rankS = service.rankS(params);
+		ClubVO rankT = service.rankT(params);
+
+
+		mav.addObject("rankF", rankF);
+		mav.addObject("rankS", rankS);
+		mav.addObject("rankT", rankT);
 
 		mav.addObject("params", params);	
 		

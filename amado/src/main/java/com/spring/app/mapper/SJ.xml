@@ -48,7 +48,7 @@
  		from tbl_club
 		where clubstatus = 1
 		<choose>
-			<when test="params == '/club/findClub.do' or params == 'undefined'">
+			<when test="params == '/club/findClub.do'">
 				and fk_sportseq = 1
 			</when>
 			<otherwise>and fk_sportseq = to_number(#{params})</otherwise>
@@ -714,5 +714,59 @@
 		update tbl_inquiry set answer = 0
 		where inquiryseq = #{inquiryseq}
 	</update>
+	
+	
+	
+	<select id="rankF" parameterType="String" resultType="ClubVO">
+		SELECT clubseq, clubname, clubimg, fk_sportseq, clubtel
+	         , city, local, clubgym, clubtime
+	         , membercount, clubpay, clubstatus, clubscore
+	         , rank
+		FROM (
+		    SELECT clubseq, clubname, clubimg, fk_sportseq, clubtel
+		         , city, local, clubgym, clubtime
+		         , membercount, clubpay, clubstatus, clubscore
+		         , ROW_NUMBER() OVER (ORDER BY clubscore DESC) AS rank
+		    FROM tbl_club
+		    WHERE clubstatus = 1 and fk_sportseq = to_number(#{params})
+		)
+		WHERE rank IN (1)
+		ORDER BY rank
+	</select>
+	
+	<select id="rankS" parameterType="String" resultType="ClubVO">
+		SELECT clubseq, clubname, clubimg, fk_sportseq, clubtel
+	         , city, local, clubgym, clubtime
+	         , membercount, clubpay, clubstatus, clubscore
+	         , rank
+		FROM (
+		    SELECT clubseq, clubname, clubimg, fk_sportseq, clubtel
+		         , city, local, clubgym, clubtime
+		         , membercount, clubpay, clubstatus, clubscore
+		         , ROW_NUMBER() OVER (ORDER BY clubscore DESC) AS rank
+		    FROM tbl_club
+		    WHERE clubstatus = 1 and fk_sportseq = to_number(#{params})
+		)
+		WHERE rank IN (2)
+		ORDER BY rank	
+	</select>
+	
+	<select id="rankT" parameterType="String" resultType="ClubVO">
+		SELECT clubseq, clubname, clubimg, fk_sportseq, clubtel
+	         , city, local, clubgym, clubtime
+	         , membercount, clubpay, clubstatus, clubscore
+	         , rank
+		FROM (
+		    SELECT clubseq, clubname, clubimg, fk_sportseq, clubtel
+		         , city, local, clubgym, clubtime
+		         , membercount, clubpay, clubstatus, clubscore
+		         , ROW_NUMBER() OVER (ORDER BY clubscore DESC) AS rank
+		    FROM tbl_club
+		    WHERE clubstatus = 1 and fk_sportseq = to_number(#{params})
+		)
+		WHERE rank IN (3)
+		ORDER BY rank
+	</select>
+	
 	
 </mapper>
