@@ -62,5 +62,7 @@ public interface AmadoService_JH {
 
 	List<ClubBoardVO> getclboList(String clubseq);
 
+	List<Map<String, String>> getimgList(String sportseq);
+
 	
 }

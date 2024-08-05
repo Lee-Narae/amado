@@ -196,5 +196,11 @@ public class AmadoDAO_imple_JH implements AmadoDAO_JH {
 		return clubboardList;
 	}
 
+	@Override
+	public List<Map<String, String>> getimgList(String sportseq) {
+		List<Map<String, String>> imgList = sqlsession.selectList("JH.getimgList", sportseq); 
+		return imgList;
+	}
+
 
 }

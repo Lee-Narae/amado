@@ -71,5 +71,7 @@ public interface AmadoDAO_JH {
 
 	List<ClubBoardVO> getclboList(String clubseq);
 
+	List<Map<String, String>> getimgList(String sportseq);
+
 
 }

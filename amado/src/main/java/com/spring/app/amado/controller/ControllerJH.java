@@ -58,7 +58,13 @@ public class ControllerJH {
 			service.viewcount(fleamarketseq);
 		}
 		
+		String sportseq = fleMap.getSportseq();
+		//System.out.println(sportseq);
+		
+		List<Map<String, String>> imgList = service.getimgList(sportseq);
+		
 		//System.out.println("22222"+fleMap.getContent());
+		mav.addObject("imgList",imgList);
 		mav.addObject("fleMap",fleMap);
 		mav.setViewName("club/sale.tiles2");
 		// /WEB-INF/views/tiles2/main/index.jsp

@@ -828,9 +828,9 @@ update tbl_fleamarket set viewcount = viewcount+1
 		where fleamarketseq = 50
 
 
-select *
-from tbl_clubboard
-order by registerdate desc;
+select imgfilename
+from tbl_fleamarket
+where sportseq = 1
 
 select rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, commentcount, viewcount, status, orgfilename, filename
 		from

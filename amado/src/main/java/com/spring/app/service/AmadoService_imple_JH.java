@@ -261,4 +261,12 @@ public class AmadoService_imple_JH implements AmadoService_JH {
 		return clubboardList;
 	}
 
+
+
+	@Override
+	public List<Map<String, String>> getimgList(String sportseq) {
+		List<Map<String, String>> imgList = dao.getimgList(sportseq);
+		return imgList;
+	}
+
 }
