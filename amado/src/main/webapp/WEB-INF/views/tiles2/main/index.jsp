@@ -89,6 +89,24 @@ opacity: 0.7;
 
    $(document).ready(function(){
       
+	    var urlParams = new URLSearchParams(window.location.search);
+	    var scrollTo = urlParams.get('scrollTo');
+	    
+	    if (scrollTo) {
+	        scrollToSection(scrollTo);
+	    }
+
+	    if (${empty requestScope.params}) {
+	        mainClubRank(1);    
+	    }
+
+	   
+	   
+	   
+	   
+	   
+	   
+	   
       loopshowNowTime();
       
       showWeather();
@@ -319,7 +337,29 @@ opacity: 0.7;
 function openChat(){
 	window.open('http://192.168.0.204:9099/amado/chatting/multichat.do','_blank','width=450, height=700, top=50, left=50');	
 }
-   
+
+function scrollToSection(sectionId) {
+    var section = document.getElementById(sectionId);
+    if (section) {
+        // 해당 섹션의 위치로 스크롤
+        section.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+function mainClubRank(sportseq) {
+   // alert(sportseq);
+
+   location.href = '<%=ctxPath %>/club/mainClubRank.do?sportseq=' + sportseq + '&scrollTo=rankSection';
+
+}
+
+function goView(clubseq, fk_sportseq) {
+   //alert('ClubSeq: ' + clubseq + ', FK_SportSeq: ' + fk_sportseq);
+   location.href = "<%=ctxPath%>/club/myClub_plus.do?clubseq="+clubseq+"&sportseq="+fk_sportseq;
+}
+
+
+
 </script>
 
 
