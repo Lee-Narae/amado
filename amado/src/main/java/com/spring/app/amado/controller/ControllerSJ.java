@@ -1836,7 +1836,7 @@ public class ControllerSJ {
 	@GetMapping("/chatting/multichat.do")
 	public String requiredLogin_multichat(HttpServletRequest request, HttpServletResponse response) {
 
-		return "chatting/multichat.tiles1";
+		return "chatting/multichat";
 	}
 
 	// 문의 답변
