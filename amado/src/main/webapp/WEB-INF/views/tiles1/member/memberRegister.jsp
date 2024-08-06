@@ -161,7 +161,7 @@ $(document).ready(function () {
 
 
     $("input#userid").blur((e) => {
-        const regExp_userid = new RegExp(/^[a-zA-Z]{4,19}$/g);
+        const regExp_userid = new RegExp(/^[a-zA-Z0-9]{4,19}$/g);
         const bool = regExp_userid.test($(e.target).val());
         if (!bool) {
             // 아이디가 정규표현식에 위배된 경우
