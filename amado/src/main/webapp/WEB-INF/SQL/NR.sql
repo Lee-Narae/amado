@@ -713,13 +713,58 @@ update tbl_member set memberrank = 2 where userid = 'leenr';
 commit;
 
 
-select * from tab;
-
-drop table tbl_watch purge;
-
-purge recyclebin;
-
-
-delete from TBL_NOTICECOMMENT;
-
+select * from tbl_club where fk_userid in ('amado11', 'amado12', 'amado13');
+update tbl_club set clubname = 'FC 허수아비' where clubseq = 89;
 commit;
+
+delete from tbl_member where userid like 'amado%';
+commit;
+desc tbl_notice;
+select * from tbl_notice;
+update tbl_gym set status = 1;
+delete from tbl_club where clubseq = 112;
+commit;
+select * from user_sequences;
+/*
+begin
+    for i in 1..100 loop
+        insert into tbl_notice(noticeseq, title, content, registerdate, viewcount, status, commentcount)
+        values(SEQ_NOTICE.nextval, '공지'||i, '공지사항입니다.', sysdate, 0, 1, 0);
+    end loop;
+end;
+*/
+commit;
+
+
+ALTER TABLE tbl_notice ADD (ex_content nvarchar2(000));
+UPDATE tbl_notice SET ex_content = content;
+UPDATE tbl_notice SET CONTENT = NULL;
+ALTER TABLE tbl_notice DROP COLUMN content;
+ALTER TABLE tbl_notice RENAME COLUMN ex_content TO content;
+
+
+desc tbl_notice;
+select * from tbl_notice;
+update tbl_notice set status = 0;
+commit;
+
+select previousseq, previoustitle, noticeseq, title, content, registerdate, viewcount, orgfilename, filename, filesize, nextseq, nexttitle
+		from 
+		(
+		select lag(noticeseq, 1) over(order by noticeseq desc) previousseq,
+		       lag(title, 1) over(order by noticeseq desc) previoustitle,
+		       noticeseq, title, content, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, viewcount, orgfilename, filename, filesize,
+		       lead(noticeseq, 1) over(order by noticeseq desc) nextseq,
+		       lead(title, 1) over(order by noticeseq desc) nexttitle
+		from tbl_notice
+		where status = 0
+		<if test="searchType == 'title' and searchWord != ''">and title like '%'||#{searchWord}||'%'</if>
+		<if test="searchType == 'content' and searchWord != ''">and content like '%'||#{searchWord}||'%'</if>
+		) A
+		where A.noticeseq = #{noticeseq};
+        
+        
+select distinct case when length(content) > 10 then substr(content, 0, 10)||'...' else content end content
+from tbl_notice
+where status = 0
+and DBMS_LOB.INSTR(content, '공지')>0;
