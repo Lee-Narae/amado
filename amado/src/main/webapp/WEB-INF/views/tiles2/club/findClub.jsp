@@ -218,7 +218,7 @@
 	                <c:when test="${clubvo.rank == '2'}">
 	                    <div class="podium-item podium-2nd">
 	                        <div class="podium-rank">2등</div>
-	                        <img onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})" src="<%=ctxPath %>/resources/images/zee/${clubvo.wasfileName}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+	                        <img onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})" src="<%=ctxPath %>/resources/images/uploadImg/${clubvo.wasfileName}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
 	                        <div>${clubvo.clubname}</div>
 	                    </div>
 	                </c:when>
@@ -241,7 +241,7 @@
 	            	<c:when test="${clubvo.rank == '1'}">
 	                    <div class="podium-item podium-1st">
 	                        <div class="podium-rank">1등</div>
-	                        <img onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})" src="<%=ctxPath %>/resources/images/zee/${clubvo.wasfileName}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+	                        <img onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})" src="<%=ctxPath %>/resources/images/uploadImg/${clubvo.wasfileName}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
 	                        <div>${clubvo.clubname}</div>
 	                    </div>
 	                </c:when>
@@ -258,7 +258,7 @@
 	                <c:when test="${clubvo.rank == '3'}">
 	                    <div class="podium-item podium-3rd">
 	                        <div class="podium-rank">3등</div>
-	                        <img onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})" src="<%=ctxPath %>/resources/images/zee/${clubvo.wasfileName}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+	                        <img onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})" src="<%=ctxPath %>/resources/images/uploadImg/${clubvo.wasfileName}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
 	                        <div>${clubvo.clubname}</div>
 	                    </div>
 	                </c:when>
@@ -356,7 +356,7 @@
 					<tr>
 					    <td class="align-middle text-center" onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})">${clubvo.rank}</td>
 					    <td class="align-middle text-center">
-					        <img onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})" src="<%=ctxPath %>/resources/images/zee/${clubvo.wasfileName}" class="rounded" alt="round" style="width:70px; height:70px; display:block; margin:auto; vertical-align: middle;"  onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/>
+					        <img onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})" src="<%=ctxPath %>/resources/images/uploadImg/${clubvo.wasfileName}" class="rounded" alt="round" style="width:70px; height:70px; display:block; margin:auto; vertical-align: middle;"  onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'"/>
 					    </td>
 					    <td class="align-middle text-center" onclick="goView(${clubvo.clubseq}, ${clubvo.fk_sportseq})">${clubvo.clubname}</td>
 					    <td class="align-middle text-center">${clubvo.clubscore}점</td>
