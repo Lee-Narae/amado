@@ -378,5 +378,11 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 		return rankT;
 	}
 
+	@Override
+	public ClubmemberVO getClubmember(String clubseq) {
+		ClubmemberVO clubvo = sqlsession.selectOne("SJ.getClubmember", clubseq);
+		return clubvo;
+	}
+
 
 }

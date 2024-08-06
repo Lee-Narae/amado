@@ -130,6 +130,13 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	@Override
 	public List<ClubVO> searchPaging(Map<String, String> paraMap) {
 		List<ClubVO> clubPagingList = dao.searchPaging(paraMap);
+		
+		for(ClubVO clubvo : clubPagingList) {
+			clubvo.setClubmembervo(dao.getClubmember(clubvo.getClubseq()));
+			
+			clubPagingList.add(clubvo);
+		}
+		
 		return clubPagingList;
 	}
 
