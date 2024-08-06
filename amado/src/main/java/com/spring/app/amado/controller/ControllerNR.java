@@ -1027,13 +1027,13 @@ public class ControllerNR {
 	            	// 행의 열 번째 열(phone2)
 	            	cell = row.getCell(9);
 	            	if(cell != null) {
-	            		mobile += String.valueOf(cellReader(cell));
+	            		mobile += String.valueOf(cellReader(cell)).substring(0, 4);
 	            	}
 	            	
 	            	// 행의 열한 번째 열(phone3)
 	            	cell = row.getCell(10);
 	            	if(cell != null) {
-	            		mobile += String.valueOf(cellReader(cell));
+	            		mobile += String.valueOf(cellReader(cell)).substring(0, 4);
 	            	}
 	            	
 	            	paramap.put("mobile", aES256.encrypt(mobile));
