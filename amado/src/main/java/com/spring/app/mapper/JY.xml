@@ -124,17 +124,20 @@
 	
 	<!--  -->
 	<select id="select_clubboard_paging" parameterType="HashMap" resultType="ClubBoardVO">
-		select rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, commentcount, viewcount, status, orgfilename, filename
-		from
-		(select rownum rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, commentcount, viewcount, status, orgfilename, filename
-		from
-		(
-		select clubboardseq, clubseq, title, content, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, commentcount, viewcount, status, orgfilename, filename
-		from tbl_clubboard)
-		where clubseq = #{clubseq}
-		order by registerdate desc
-		)
-		where rn between to_number(#{currentShowPageNo})*to_number(#{sizePerPage})-(to_number(#{sizePerPage})-1) and to_number(#{currentShowPageNo})*to_number(#{sizePerPage})	
+		SELECT rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, commentcount, viewcount, status, orgfilename, filename
+		FROM (
+		    SELECT rownum rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, commentcount, viewcount, status, orgfilename, filename
+		    FROM (
+		        SELECT clubboardseq, clubseq, title, content, fk_userid, 
+		               TO_CHAR(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, 
+		               commentcount, viewcount, status, orgfilename, filename
+		        FROM tbl_clubboard
+		        WHERE clubseq = #{clubseq}
+		        ORDER BY registerdate DESC
+		    )
+		) 
+		WHERE rn BETWEEN TO_NUMBER(#{currentShowPageNo})*TO_NUMBER(#{sizePerPage})-(to_number(#{sizePerPage})-1) AND TO_NUMBER(#{currentShowPageNo})*TO_NUMBER(#{sizePerPage})
+		ORDER BY rn
 	</select>
 	
 	
