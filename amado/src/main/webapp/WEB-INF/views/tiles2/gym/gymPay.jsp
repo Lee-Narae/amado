@@ -637,7 +637,7 @@
 </head>
 <body>
 	<div style="display: flex">
-		<img style="width: 70px; margin: 18.8% 0 0 10.5%;" src="<%=ctxPath%>/resources/images/rain.gif" class="rainy-image" alt="Rainy Image">
+		<%-- <img style="width: 70px; margin: 18.8% 0 0 10.5%;" src="<%=ctxPath%>/resources/images/rain.gif" class="rainy-image" alt="Rainy Image"> --%>
 	    <div class="container">
 	    	<div class="container1">
 		        <!-- 체육관 사진 -->

@@ -191,7 +191,7 @@ $(document).ready(function(){
     $("button#mygym").addClass('hover');
     $("#payList").css({"font-weight": "bold"});
     
-  
+});
 
 function gym_delete(gymseq,fk_userid){
     $.ajax({
@@ -263,7 +263,7 @@ function gym_delete(gymseq,fk_userid){
                                     <tr>  
                                         <td class="clickable"  onclick="location.href='<%= ctxPath %>/member/myPage_gym.do?gymseq=${gym.gymseq}'">${gym.gymname}</td>
                                         <td class="clickable"  onclick="location.href='<%= ctxPath %>/member/myPage_gym.do?gymseq=${gym.gymseq}'">${gym.address}</td>
-                                        <td><button class="btn btn-danger btn-sm" onclick="gym_delete('${gym.gymseq}', ${gym.fk_userid})">삭제하기</button></td>
+                                        <td><button class="btn btn-danger btn-sm" onclick="gym_delete('${gym.gymseq}', '${gym.fk_userid}')">삭제하기</button></td>
                                     </tr>
                                 </c:forEach>
                             </c:if>

@@ -566,10 +566,11 @@ rotate(
 				     $.ajax({
 				    	 url:"${pageContext.request.contextPath}/deleteComment2.action",
 				    	 type:"post",
-				    	 data:{"gymquestionseq":$(e.target).next().val(),
-				    		   "parentSeq":"1"},
+				    	 data:{"gymquestionseq":$(e.target).next().next().val(),
+				    		   "parentSeq":$("input#gymseq").val()},
 				    	 dataType:"json",
 				    	 success:function(json){
+				    		 console.log("삭제시 n값: "+json.n);
 				    	 	 goReadComment();  // 페이징 처리 안한 댓글 읽어오기
 				    	 //  goViewComment(1); // 페이징 처리 한 댓글 읽어오기
 				    	 },
@@ -727,11 +728,11 @@ rotate(
 		
 		
 
-		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-	    mapOption = { 
-	        center: new kakao.maps.LatLng(${gym.lat}, ${gym.lng}), // 지도의 중심좌표
-	        level: 4 // 지도의 확대 레벨
-	    };
+	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+    mapOption = { 
+        center: new kakao.maps.LatLng(${gym.lat}, ${gym.lng}), // 지도의 중심좌표
+        level: 4 // 지도의 확대 레벨
+    };
 
 	var map = new kakao.maps.Map(mapContainer, mapOption);
 
@@ -880,6 +881,13 @@ $(function(){
  	
 //== 댓글쓰기 == //
 function goAddWrite(){
+ 		
+ 	const categoryval = $("select[name='category']").val();
+ 	
+ 	if(categoryval == 'default'){
+ 		alert('문의 유형을 선택하세요.');
+ 		return;
+ 	}
    
 	const comment_content = $("textarea[name='content']").val().trim();
 	if(comment_content == ""){
@@ -896,9 +904,7 @@ function goAddWrite(){
 	// textarea를 초기화합니다.
 	$("textarea[name='content']").val('');
 	
-	 if(item.category == "default"){
-		 return;
-	 }
+	
 	
 }// end of fucntion goAddWrite(){}------------------
 
@@ -959,7 +965,7 @@ function goReadComment(){
 		data:{"parentSeq":"${gym.gymseq}"},
 		dataType:"json",
 		success:function(json){
-			// console.log(JSON.stringify(json));
+			console.log(JSON.stringify(json));
 		    // [{"name":"서영학","regdate":"2024-06-18 16:09:06","fk_userid":"seoyh","seq":"6","content":"여섯번째로 쓰는 댓글입니다."},{"name":"서영학","regdate":"2024-06-18 16:08:56","fk_userid":"seoyh","seq":"5","content":"다섯번째로 쓰는 댓글입니다."},{"name":"서영학","regdate":"2024-06-18 16:08:49","fk_userid":"seoyh","seq":"4","content":"네번째로 쓰는 댓글입니다."},{"name":"서영학","regdate":"2024-06-18 16:08:43","fk_userid":"seoyh","seq":"3","content":"세번째로 쓰는 댓글입니다."},{"name":"서영학","regdate":"2024-06-18 16:05:51","fk_userid":"seoyh","seq":"2","content":"두번째로 쓰는 댓글입니다."},{"name":"서영학","regdate":"2024-06-18 15:36:31","fk_userid":"seoyh","seq":"1","content":"첫번째 댓글입니다. ㅎㅎㅎ"}]
 		    // 또는
 		    // []
@@ -1179,7 +1185,7 @@ function goAddWrite_reply(gymquestionseq){
     <div class="col-lg-8">
       <!-- 큰 사진 부분 -->
       <a href="#" data-toggle="modal" data-target="#myModal">
-        <img src="<%=ctxPath%>/resources/images/1/${gym.filename}" class="img-fluid" alt="큰 사진" style="width: 100%; height: 500px;">
+        <img src="<%=ctxPath%>/resources/images/uploading/${gym.filename}" class="img-fluid" alt="큰 사진" style="width: 100%; height: 500px;">
       </a>
     </div>
     <div class="col-lg-4">
@@ -1188,7 +1194,7 @@ function goAddWrite_reply(gymquestionseq){
         <c:forEach items="${requestScope.gymImgList}" var="img">
         <div class="col-6 mb-3">
           <a href="#" data-toggle="modal" data-target="#myModal">
-            <img src="<%=ctxPath%>/resources/images/1/${img.filename}" class="img-fluid" alt="작은 사진 1" style="width: 100%; height: 225px;">>
+            <img src="<%=ctxPath%>/resources/images/uploading/${img.filename}" class="img-fluid" alt="작은 사진 1" style="width: 100%; height: 225px;">>
           </a>
         </div>
      </c:forEach>
@@ -1219,11 +1225,11 @@ function goAddWrite_reply(gymquestionseq){
           </ol>
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <img class="d-block w-100" src="<%=ctxPath%>/resources/images/1/${gym.filename}" alt="첫 번째 사진" style="width: 100%; height: 700px;">
+              <img class="d-block w-100" src="<%=ctxPath%>/resources/images/uploading/${gym.filename}" alt="첫 번째 사진" style="width: 100%; height: 700px;">
             </div>
             <c:forEach items="${requestScope.gymImgList}" var="img">
             <div class="carousel-item">
-              <img class="d-block w-100" src="<%=ctxPath%>/resources/images/1/${img.filename}" alt="두 번째 사진" style="width: 100%; height: 700px;">
+              <img class="d-block w-100" src="<%=ctxPath%>/resources/images/uploading/${img.filename}" alt="두 번째 사진" style="width: 100%; height: 700px;">
             </div>
             </c:forEach>
 
@@ -1319,7 +1325,7 @@ function goAddWrite_reply(gymquestionseq){
 			<div style="width: 50%; margin: 5% auto;">
 			
 			 <c:forEach items="${requestScope.gymImgList}" var="img">	
-			<img src="<%=ctxPath%>/resources/images/1/${img.filename}" class="img-fluid mb-3"style="width: 100%;" />
+			<img src="<%=ctxPath%>/resources/images/uploading/${img.filename}" class="img-fluid mb-3"style="width: 100%;" />
 			</c:forEach>
 				
 			</div>
@@ -1358,9 +1364,11 @@ function goAddWrite_reply(gymquestionseq){
 
 		<%-- === 문의 내용 보여주기 === --%>
 	<div id="inquiry-section" class="text-left">
+	
+	<form name="commentFrm">
 			<hr>
 			<h3 style="margin-top: 50px;">문의</h3>
-	 		 	<select name="" id="">
+	 		 	<select name="category">
 	 		    <option value="default">문의 유형을 선택하세요</option>
    			 	<option value="0">가격문의</option>
     			<option value="1">일정문의</option>
@@ -1373,12 +1381,12 @@ function goAddWrite_reply(gymquestionseq){
 	<%-- === #94. 댓글 내용 보여주기 === --%>
      
      <div>
-		<form name="commentFrm">
+		
 			<div>
 				<textarea name="content" style="font-size: 12pt; width: 100%; height: 100px;"></textarea>
 				<input class="userid" type="hidden" name="fk_userid" value="${sessionScope.loginuser.userid}" />
 				<input type="hidden" name="name" value="${sessionScope.loginuser.name}" />
-				<input type="hidden" name="gymseq" value="${requestScope.gym.gymseq}" />
+				<input type="hidden" name="gymseq" id="gymseq" value="${requestScope.gym.gymseq}" />
 				
 			</div>
 			<div style="text-align: right; font-size: 12pt;">
@@ -1387,7 +1395,7 @@ function goAddWrite_reply(gymquestionseq){
 					<span style="font-size: 10pt;">등록</span>
 				</button>
 			</div>
-		</form>
+
 	</div>
 
 		<%-- === 댓글 내용 보여주기 === --%>
@@ -1397,7 +1405,7 @@ function goAddWrite_reply(gymquestionseq){
 	
    
    
-   
+   </form>
    
     <%--  <h3 style="margin-top: 50px;">문의내용</h3>
       <div>
