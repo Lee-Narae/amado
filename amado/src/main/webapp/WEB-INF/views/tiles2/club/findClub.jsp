@@ -387,7 +387,7 @@
 					    </c:if>
 					    
 					    <td class="align-middle text-center">${clubvo.city}&nbsp;${clubvo.local}</td>
-					    <td class="align-middle text-center">${clubvo.clubmembercnt}명</td>
+					    <td class="align-middle text-center">${clubvo.clubmembercnt}/${clubvo.membercount}명</td>
 					    
 					    <c:if test="${not empty requestScope.fk_userid}">
 					    	<c:if test="${clubvo.clubmembervo.status == 1}">
