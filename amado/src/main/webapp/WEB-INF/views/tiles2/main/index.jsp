@@ -103,6 +103,11 @@ opacity: 0.7;
 
 </style>
 
+<script src="<%= ctxPath%>/resources/Highcharts-10.3.1/code/highcharts.js"></script>
+<script src="<%= ctxPath%>/resources/Highcharts-10.3.1/code/modules/exporting.js"></script>
+<script src="<%= ctxPath%>/resources/Highcharts-10.3.1/code/modules/export-data.js"></script>
+<script src="<%= ctxPath%>/resources/Highcharts-10.3.1/code/modules/accessibility.js"></script>
+
 
  <script type="text/javascript">
 
@@ -206,134 +211,30 @@ opacity: 0.7;
             // 확인용 : current
             
             const weather = rootElement.find("weather"); 
-            const updateTime = $(weather).attr("year")+"년 "+$(weather).attr("month")+"월 "+$(weather).attr("day")+"일 "+$(weather).attr("hour")+"시"; 
-         //   console.log(updateTime);
-            // 2024년 07월 19일 12시
             
             const localArr = rootElement.find("local");
-         //   console.log("지역개수 : " + localArr.length);
-            // 지역개수 : 97
+         
+            let v_html = "";
             
-            let html = "";
-             
-             // ====== XML 을 JSON 으로 변경하기  시작 ====== //
-            var jsonObjArr = [];
-            // ====== XML 을 JSON 으로 변경하기  끝 ====== //    
-                 
-            for(let i=11; i<localArr.length; i++){
-               if (i === 11) {
-                  
-                   let local = $(localArr).eq(i);
-                  /* .eq(index) 는 선택된 요소들을 인덱스 번호로 찾을 수 있는 선택자이다. 
-                        마치 배열의 인덱스(index)로 값(value)를 찾는 것과 같은 효과를 낸다.
-                  */
-                  
-                  // console.log( $(local).text() + " stn_id:" + $(local).attr("stn_id") + " icon:" + $(local).attr("icon") + " desc:" + $(local).attr("desc") + " ta:" + $(local).attr("ta") ); 
-                  //   속초 stn_id:90 icon:03 desc:구름많음 ta:29.0
-                  //   
-                   
-                    let icon = $(local).attr("icon");  
+            for(let i=0; i<localArr.length; i++){
+            	let local = $(localArr).eq(i);
+            	
+            	if($(local).text() == '서울') {
+            		
+            		let icon = $(local).attr("icon");  
                     if(icon == "") {
                        icon = "없음";
                     }
                   
-                    html += "<div style='border: solid 0px black; display: inline-block; background-color:lightgray; border-radius: 15px; padding:0 4%;'>";
-                  html += "<span>"+$(local).text()+"</span><span><img src='<%= ctxPath%>/resources/images/weather/"+icon+".png' />"+$(local).attr("desc")+"</span>&nbsp;<span style='font-weight:bolder;'>"+$(local).attr("ta")+"</span>";
-                  html += "</div>";
-                    
-                  
-                  // ====== XML 을 JSON 으로 변경하기  시작 ====== //
-                   var jsonObj = {"locationName":$(local).text(), "ta":$(local).attr("ta")};
-                     
-                   jsonObjArr.push(jsonObj);
-                  // ====== XML 을 JSON 으로 변경하기  끝 ====== //
-               }
-                else {
-                    break; // 첫 번째 항목 이후에는 반복문 종료
-                }
-             }// end of for------------------------ 
+                    v_html += "<div style='border: solid 0px black; display: inline-block; background-color:lightgray; border-radius: 15px; padding:0 4%;'>";
+                    v_html += "<span>"+$(local).text()+"</span><span><img src='<%= ctxPath%>/resources/images/weather/"+icon+".png' />"+$(local).attr("desc")+"</span>&nbsp;<span style='font-weight:bolder;'>"+$(local).attr("ta")+"</span>"; 
+                    v_html += "</div>";
+            		
+            		break;
+            	}
+            }
              
-             $("div#displayWeather").html(html);
-             
-             
-          // ====== XML 을 JSON 으로 변경된 데이터를 가지고 차트그리기 시작  ====== //
-            var str_jsonObjArr = JSON.stringify(jsonObjArr); 
-                              // JSON객체인 jsonObjArr를 String(문자열) 타입으로 변경해주는 것 
-                              
-            $.ajax({
-               url:"<%= request.getContextPath()%>/weather/weatherXMLtoJSON.do",
-               type:"POST",
-               data:{"str_jsonObjArr":str_jsonObjArr},
-               dataType:"JSON",
-               success:function(json){
-                  
-                  // alert(json.length);
-                  // 21
-                  
-                  // ======== chart 그리기 ========= // 
-                  var dataArr = [];
-                  $.each(json, function(index, item){
-                     dataArr.push([item.locationName, 
-                                  Number(item.ta)]);
-                  });// end of $.each(json, function(index, item){})------------
-                  
-                  
-                  Highcharts.chart('weather_chart_container', {
-                      chart: {
-                          type: 'table'
-                      },
-                      title: {
-                          text: '오늘의 전국 기온(℃)'   // 'ㄹ' 을 누르면 ℃ 가 나옴.
-                      },
-                      subtitle: {
-                      //    text: 'Source: <a href="http://en.wikipedia.org/wiki/List_of_cities_proper_by_population">Wikipedia</a>'
-                      },
-                      xAxis: {
-                          type: 'category',
-                          labels: {
-                              rotation: -45,
-                              style: {
-                                  fontSize: '10px',
-                                  fontFamily: 'Verdana, sans-serif'
-                              }
-                          }
-                      },
-                      yAxis: {
-                          min: -10,
-                          title: {
-                              text: '온도 (℃)'
-                          }
-                      },
-                      legend: {
-                          enabled: false
-                      },
-                      tooltip: {
-                          pointFormat: '현재기온: <b>{point.y:.1f} ℃</b>'
-                      },
-                      series: [{
-                          name: '지역',
-                          data: dataArr, // **** 위에서 만든것을 대입시킨다. **** 
-                          dataLabels: {
-                              enabled: true,
-                              rotation: -90,
-                              color: '#FFFFFF',
-                              align: 'right',
-                              format: '{point.y:.1f}', // one decimal
-                              y: 10, // 10 pixels down from the top
-                              style: {
-                                  fontSize: '10px',
-                                  fontFamily: 'Verdana, sans-serif'
-                              }
-                          }
-                      }]
-                  });
-                  // ====== XML 을 JSON 으로 변경된 데이터를 가지고 차트그리기 끝  ====== //
-               },
-               error: function(request, status, error){
-                  alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-               }
-            });                  
-            ///////////////////////////////////////////////////
+            $("div#displayWeather").html(v_html);
             
          },// end of success: function(xml){ }------------------
          

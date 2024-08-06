@@ -538,19 +538,20 @@ where status = 0 and lower(title) like '%' || lower('호날두') || '%'
 order by registerdate desc
 
 
-
-select rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, commentcount, viewcount, status, orgfilename, filename
-		from
-		(select rownum rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, commentcount, viewcount, status, orgfilename, filename
-		from
-		(
-		select clubboardseq, clubseq, title, content, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, commentcount, viewcount, status, orgfilename, filename
-		from tbl_clubboard)
-		where clubseq = 2
-		order by registerdate desc
-		)
-		where rn between to_number(1)*to_number(10)-(to_number(10)-1) and to_number(1)*to_number(10)
-        order by registerdate desc
+SELECT rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, commentcount, viewcount, status, orgfilename, filename
+FROM (
+    SELECT rownum rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, commentcount, viewcount, status, orgfilename, filename
+    FROM (
+        SELECT clubboardseq, clubseq, title, content, fk_userid, 
+               TO_CHAR(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, 
+               commentcount, viewcount, status, orgfilename, filename
+        FROM tbl_clubboard
+        WHERE clubseq = 2
+        ORDER BY registerdate DESC
+    )
+) 
+WHERE rn BETWEEN TO_NUMBER(#{currentShowPageNo})*TO_NUMBER(#{sizePerPage})-(to_number(#{sizePerPage})-1) AND TO_NUMBER(#{currentShowPageNo})*TO_NUMBER(#{sizePerPage})
+ORDER BY rn;
 
 DELETE FROM tbl_clubboard where status = 1;
 
