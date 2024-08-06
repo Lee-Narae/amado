@@ -39,6 +39,7 @@ public class ClubVO {
 	private String clubscore;		// 점수
 	private String viewcount;		// 조회수
 	
+	
 	// 나래 - 마이페이지 용으로 만든 거
 	private String sportname;
 
@@ -178,8 +179,6 @@ public class ClubVO {
 	public void setClubmembervo(ClubmemberVO clubmembervo) {
 		this.clubmembervo = clubmembervo;
 	}
-	
-	
 	
 	
 	

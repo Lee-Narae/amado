@@ -81,7 +81,7 @@
     </update>
     
     <select id="getMyClub" resultType="ClubVO" parameterType="HashMap">
-		select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, local, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, viewcount
+		select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, local, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, viewcount, wasfilename
 		from tbl_club
 		where clubseq = #{clubseq}
 	</select>

@@ -229,7 +229,7 @@ margin-left: 2%;
                 </div>
                 <div class="crest">
                     <div class="img">
-                        <img class='uniform-size' style="margin-left: 102%;" src="<%=ctxPath%>/resources/images/${requestScope.clubvo.clubimg}">
+                        <img class='uniform-size' style="margin-left: 102%;" src="<%=ctxPath%>/resources/images/uploadImg/${requestScope.clubvo.wasfileName}">
                     </div>
                 </div>
             </div>
@@ -243,7 +243,7 @@ margin-left: 2%;
 		<!-- 동호회 여러개 가입시 캐러셀 적용 -->
 		<div id="myclub" style="width: 38%; margin: 5% 0 0 8%;">
 			<div style="text-align: center;">
-				<img class='uniform-size1' src="<%=ctxPath%>/resources/images/${requestScope.clubvo.clubimg}">
+				<img class='uniform-size1' src="<%=ctxPath%>/resources/images/uploadImg/${requestScope.clubvo.wasfileName}">
 			</div>
 			<div style="text-align: center; margin-top: 5%; font-size: 25px; font-weight: bold;">${requestScope.clubvo.clubname}</div>
 		</div>
@@ -281,7 +281,7 @@ margin-left: 2%;
 		
 			<div style="display: flex; margin-left: 3%; width: 56%;">
 				<div>
-					<img class='uniform-size' style="margin-left: 90%;" src="<%=ctxPath%>/resources/images/${requestScope.clubvo.clubimg}">
+					<img class='uniform-size' style="margin-left: 90%;" src="<%=ctxPath%>/resources/images/uploadImg/${requestScope.clubvo.wasfileName}">
 				</div>
 				<div style="font-family: 'Roboto', sans-serif; font-weight: bold; font-size: 45px; margin-top: 2%; margin-left:15%; color: #2929a3;">${requestScope.clubvo.clubname}</div>
 			</div>
