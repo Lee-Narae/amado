@@ -2277,7 +2277,33 @@ public class ControllerSJ {
 	}
 
 	
-	
+	// === 게시글 검색어 입력시 자동글 완성하기 3 ===
+	@ResponseBody
+	@GetMapping(value="/wordSearchShow.do", produces="text/plain;charset=UTF-8") 
+	public String wordSearchShow(HttpServletRequest request) {
+		
+		String searchType = request.getParameter("searchType");
+		String searchWord = request.getParameter("searchWord");
+		
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("searchType", searchType);
+		paraMap.put("searchWord", searchWord);
+		
+		List<String> wordList = service.wordSearchShow(paraMap); 
+		
+		JSONArray jsonArr = new JSONArray(); // []
+		
+		if(wordList != null) {
+			for(String word : wordList) {
+				JSONObject jsonObj = new JSONObject(); // {} 
+				jsonObj.put("word", word);
+				
+				jsonArr.put(jsonObj); // [{},{},{}]
+			}// end of for-----------------
+		}
+		
+		return jsonArr.toString();
+	}	
 	
 	
 	

@@ -773,4 +773,41 @@
 	</select>
 	
 	
+		<!-- === 검색어 입력시 자동글 완성하기  ===  -->
+	<select id="wordSearchShow" parameterType="HashMap" resultType="String">
+	    <choose>
+	       <when test='searchType == "title"'>
+	          select title
+	       </when>
+	       <otherwise>
+	          select distinct fk_userid
+	       </otherwise>
+	    </choose>
+	    from tbl_board
+	    where status = 1
+	    <choose>
+	       <when test='searchType == "title" and searchWord != ""'>
+	          and lower(title) like '%'||lower(#{searchWord})||'%'  
+	       </when>
+	       <otherwise>
+	          and lower(fk_userid) like '%'||lower(#{searchWord})||'%' 
+	       </otherwise>
+	    </choose>
+	    
+	    <!-- 
+		   select 문에서 distinct 와 order by 절을 함께 사용할때는 조심해야 한다.
+           order by 절에는 select 문에서 사용된 컬럼만 들어올 수가 있다.
+                        또는 order by 절을 사용하지 않아야 한다.
+		-->
+	    <choose>
+	    	<when test='searchType == "title"'>
+	    	    order by registerdate desc
+	    	</when>
+	    	<otherwise>
+	    	    order by fk_userid asc
+	    	</otherwise>
+	    </choose>
+	
+	</select>
+	
 </mapper>

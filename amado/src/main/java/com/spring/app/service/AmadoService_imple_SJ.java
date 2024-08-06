@@ -562,5 +562,12 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		return rankT;
 	}
 
+	// === 검색어 입력시 자동글 완성하기 4 ===
+	@Override
+	public List<String> wordSearchShow(Map<String, String> paraMap) {
+		List<String> wordList = dao.wordSearchShow(paraMap);
+		return wordList;
+	}
+
 
 }
