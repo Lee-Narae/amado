@@ -64,7 +64,7 @@
 		<result property="imgfilename" column="imgfilename" javaType="String"/>
 	</resultMap>
 	<select id="getSportNameList" resultMap="sportMap" parameterType="String">
-		select fleamarketseq, S.sportseq, city, local, title, content, cost, deal, fk_userid, to_char(registerdate,'yyyy-mm-dd hh24:mi:ss') AS registerdate, commentcount, viewcount, status, imgfilename
+		select fleamarketseq, S.sportseq, city, local, title, content, cost, deal, fk_userid, to_char(registerdate,'yyyy-mm-dd hh24:mi:ss') AS registerdate, commentcount, viewcount, status, imgfilename, F.wasfilename
 		from tbl_sport S
 		JOIN tbl_fleamarket F
 		ON S.sportseq = F.sportseq
@@ -81,7 +81,7 @@
 	
 	<!-- 모든 상품 select 해오기 -->
 	<select id="getAllItemList" resultType="FleamarketVO" >
-		select fleamarketseq,  city, local, title, content, cost, deal, fk_userid, to_char(registerdate,'yyyy-mm-dd hh24:mi:ss') AS registerdate, commentcount, viewcount, status, imgfilename
+		select fleamarketseq,  city, local, title, content, cost, deal, fk_userid, to_char(registerdate,'yyyy-mm-dd hh24:mi:ss') AS registerdate, commentcount, viewcount, status, imgfilename, wasfilename
 		from tbl_fleamarket
 	</select>
 	

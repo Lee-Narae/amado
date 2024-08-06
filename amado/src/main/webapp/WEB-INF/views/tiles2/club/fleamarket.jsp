@@ -95,7 +95,7 @@ $(document).ready(function(){
         		}
 	            v_html += `<div class='col-md-6 col-lg-2 offset-lg-1'>
 				 			   <div class="card mb-3" >
-								   <img style="height: 140px;" src='<%= ctxPath%>/resources/images/zee/\${item.imgfilename}' class='card-img-top'/>
+								   <img style="height: 140px;" src='<%= ctxPath%>/resources/images/uploadImg/\${item.wasfilename}' class='card-img-top'/>
 								   <div class='card-body' style='padding: 0; font-size: 9pt;'>
 									  <ul class='list-unstyled mt-3 pl-3'> 
 							             <li><label class='prodInfo' style="font-weight: bold;">글제목: <span style="font-weight: normal;">\${item.title}</sapn></label></li>
@@ -243,7 +243,7 @@ $(document).ready(function(){
 	        		}
 		            v_html += `<div class='col-md-6 col-lg-2 offset-lg-1'>
 					 			   <div class="card mb-3" >
-									   <img style="height: 140px;" src='<%= ctxPath%>/resources/images/zee/\${item.imgfilename}' class='card-img-top'/>
+									   <img style="height: 140px;" src='<%= ctxPath%>/resources/images/uploadImg/\${item.wasfilename}' class='card-img-top'/>
 									   <div class='card-body' style='padding: 0; font-size: 9pt;'>
 										  <ul class='list-unstyled mt-3 pl-3'> 
 								             <li><label class='prodInfo' style="font-weight: bold;">글제목: <span style="font-weight: normal;">\${item.title}</sapn></label></li>
@@ -331,7 +331,7 @@ $(document).ready(function(){
 		        		}
 			            v_html += `<div class='col-md-6 col-lg-2 offset-lg-1'>
 						 			   <div class="card mb-3" >
-										   <img style="height: 140px;" src='<%= ctxPath%>/resources/images/zee/\${item.imgfilename}' class='card-img-top'/>
+										   <img style="height: 140px;" src='<%= ctxPath%>/resources/images/uploadImg/\${item.wasfilename}' class='card-img-top'/>
 										   <div class='card-body' style='padding: 0; font-size: 9pt;'>
 											  <ul class='list-unstyled mt-3 pl-3'> 
 									             <li><label class='prodInfo' style="font-weight: bold;">글제목: <span style="font-weight: normal;">\${item.title}</sapn></label></li>
