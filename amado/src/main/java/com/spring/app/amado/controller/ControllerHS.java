@@ -255,6 +255,9 @@ public class ControllerHS {
 			e.printStackTrace();
 		}
 
+		gym.setInfo(gym.getInfo().replaceAll("\n", "<br>"));
+		gym.setCaution(gym.getCaution().replaceAll("\n", "<br>"));
+		
 		int n = service.Gymreg(gym);
 		System.out.println("n: " + n);
 		int n2 = 0;
