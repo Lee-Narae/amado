@@ -36,7 +36,7 @@ select{
 
 $(document).ready(function(){
 	
-	alert("gg");
+	//alert("gg");
 	
 	  <%-- === #166. 스마트 에디터 구현 시작 === --%>
       //전역변수

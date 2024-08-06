@@ -1,20 +1,14 @@
 package com.spring.app.amado.controller;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -33,16 +27,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.app.common.FileManager;
 import com.spring.app.common.MyUtil;
-import com.spring.app.domain.BoardVO;
 import com.spring.app.domain.Calendar_schedule_VO;
 import com.spring.app.domain.Calendar_small_category_VO;
 import com.spring.app.domain.ClubBoardVO;
 import com.spring.app.domain.ClubVO;
-import com.spring.app.domain.ClubmemberVO;
 import com.spring.app.domain.FleamarketVO;
 import com.spring.app.domain.GymVO;
 import com.spring.app.domain.MemberVO;
-import com.spring.app.domain.NoticeVO;
 import com.spring.app.service.AmadoService_JY;
 
 
@@ -1002,6 +993,7 @@ public class ControllerJY {
 		//System.out.println("clubseq"+clubseq);
 		//System.out.println("clubname"+clubname);
 		//System.out.println("sportname"+sportname);
+		System.out.println("currentShowPageNo"+currentShowPageNo);
 		
 		if(searchType == null || !"title".equals(searchType) && !"content".equals(searchType)) {
 			searchType = "";
@@ -1015,6 +1007,7 @@ public class ControllerJY {
 			currentShowPageNo = "1";
 		}
 		
+	    
 		Map<String, String> paramap = new HashMap<String, String>();
 		paramap.put("searchType", searchType);
 		paramap.put("searchWord", searchWord);
@@ -1024,8 +1017,9 @@ public class ControllerJY {
 		paramap.put("clubname", clubname);
 		paramap.put("sportname", sportname);
 		
-		int totalPage = service.getTotalPage(paramap);
 		
+		int totalPage = service.getTotalPage(paramap);
+		System.out.println("total"+totalPage);
 		// === GET 방식이므로 사용자가 웹브라우저 주소창에서 currentShowPageNo 에 totalPage 값보다 더 큰 값을 입력하여 장난친 경우
 		// === GET 방식이므로 사용자가 웹브라우저 주소창에서 currentShowPageNo 에 0 또는 음수를 입력하여 장난친 경우
 		// === GET 방식이므로 사용자가 웹브라우저 주소창에서 currentShowPageNo 에 숫자가 아닌 문자열을 입력하여 장난친 경우 
@@ -1039,6 +1033,8 @@ public class ControllerJY {
 			currentShowPageNo = "1";
 			paramap.put("currentShowPageNo", currentShowPageNo);
 		}
+		
+		
 		
 		
 		
@@ -2010,9 +2006,8 @@ public class ControllerJY {
 		int n = service.edit(cvo);
 		
 		if(n==1) {
-			mav.addObject("message", "글 수정 성공!!");
-			mav.addObject("loc", request.getContextPath()+"/clubboard.do?seq="+cvo.getClubboardseq());
-			mav.setViewName("msg");
+			
+			mav.setViewName("redirect:/club/clubboard.do");
 		}
 		
 		return mav;

@@ -549,7 +549,8 @@ select rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, comme
 		where clubseq = 2
 		order by registerdate desc
 		)
-		where rn between to_number(1)*to_number(10)-(to_number(10)-1) and to_number(1)*to_number(10)	
+		where rn between to_number(1)*to_number(10)-(to_number(10)-1) and to_number(1)*to_number(10)
+        order by registerdate desc
 
 DELETE FROM tbl_clubboard where status = 1;
 
@@ -557,3 +558,8 @@ DELETE FROM tbl_clubboard where status = 1;
 select *
 from tbl_clubboard
 order by registerdate desc;
+
+
+select *
+from tbl_clubboard
+
