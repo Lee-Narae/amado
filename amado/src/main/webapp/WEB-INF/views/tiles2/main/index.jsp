@@ -374,7 +374,7 @@ function goView(clubseq, fk_sportseq) {
                   <c:when test="${not empty rankS}">
                       <div class="podium-item podium-2nd">
                           <div class="podium-rank">2등</div>
-                          <img onclick="goView(${rankS.clubseq}, ${rankS.fk_sportseq})" src="<%=ctxPath %>/resources/images/zee/${rankS.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+                          <img onclick="goView(${rankS.clubseq}, ${rankS.fk_sportseq})" src="<%=ctxPath %>/resources/images/zee/${rankS.wasfileName}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
                           <div>${rankS.clubname}</div>
                       </div>
                   </c:when>
@@ -393,7 +393,7 @@ function goView(clubseq, fk_sportseq) {
                   <c:when test="${not empty rankF}">
                       <div class="podium-item podium-1st">
                           <div class="podium-rank">1등</div>
-                          <img onclick="goView(${rankF.clubseq}, ${rankF.fk_sportseq})" src="<%=ctxPath %>/resources/images/zee/${rankF.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+                          <img onclick="goView(${rankF.clubseq}, ${rankF.fk_sportseq})" src="<%=ctxPath %>/resources/images/zee/${rankF.wasfileName}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
                           <div>${rankF.clubname}</div>
                       </div>
                   </c:when>
@@ -412,7 +412,7 @@ function goView(clubseq, fk_sportseq) {
                   <c:when test="${not empty rankT}">
                       <div class="podium-item podium-3rd">
                           <div class="podium-rank">3등</div>
-                          <img onclick="goView(${rankT.clubseq}, ${rankT.fk_sportseq})" src="<%=ctxPath %>/resources/images/zee/${rankT.clubimg}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
+                          <img onclick="goView(${rankT.clubseq}, ${rankT.fk_sportseq})" src="<%=ctxPath %>/resources/images/zee/${rankT.wasfileName}" class="podium-img" onerror="javascript:this.src='<%=ctxPath %>/resources/images/noimg.jpg'" />
                           <div>${rankT.clubname}</div>
                       </div>
                   </c:when>

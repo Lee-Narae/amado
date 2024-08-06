@@ -419,7 +419,7 @@ public class ControllerSJ {
 				// ~~~ 확인용 webapp 의 절대경로 =>
 				// C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\board\
 
-				String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\file";
+				String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\images\\uploadImg";
 				/*
 				 * File.separator 는 운영체제에서 사용하는 폴더와 파일의 구분자이다. 운영체제가 Windows 이라면 File.separator
 				 * 는 "\" 이고, 운영체제가 UNIX, Linux, 매킨토시(맥) 이라면 File.separator 는 "/" 이다.
@@ -514,7 +514,7 @@ public class ControllerSJ {
 				// ~~~ 확인용 webapp 의 절대경로 =>
 				// C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\amado\
 
-				String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\file";
+				String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\images\\uploadImg";
 				/*
 				 * File.separator 는 운영체제에서 사용하는 폴더와 파일의 구분자이다. 운영체제가 Windows 이라면 File.separator
 				 * 는 "\" 이고, 운영체제가 UNIX, Linux, 매킨토시(맥) 이라면 File.separator 는 "/" 이다.
@@ -713,7 +713,7 @@ public class ControllerSJ {
 			// ~~~ 확인용 webapp 의 절대경로 =>
 			// C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\board\
 
-			String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\file";
+			String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\images\\uploadImg";
 
 			// 2. 파일첨부를 위한 변수의 설정 및 값을 초기화 한 후 파일 올리기
 
@@ -826,8 +826,7 @@ public class ControllerSJ {
 		if (attach != null) {
 			// attach(첨부파일)가 비어 있지 않으면(즉, 첨부파일이 있는 경우라면)
 
-			String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\images";
-			
+			String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\images\\uploadImg";
 			// 2. 파일첨부를 위한 변수의 설정 및 값을 초기화 한 후 파일 올리기
 
 			String newFileName = "";
@@ -971,7 +970,7 @@ public class ControllerSJ {
 			// ~~~ 확인용 webapp 의 절대경로 =>
 			// C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\board\
 
-			String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\file";
+			String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\images\\uploadImg";
 
 			// 2. 파일첨부를 위한 변수의 설정 및 값을 초기화 한 후 파일 올리기
 
@@ -1126,7 +1125,7 @@ public class ControllerSJ {
 			// ~~~ 확인용 webapp 의 절대경로 =>
 			// C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\board\
 
-			String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\file";
+			String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\images\\uploadImg";
 			/*
 			 * File.separator 는 운영체제에서 사용하는 폴더와 파일의 구분자이다. 운영체제가 Windows 이라면 File.separator
 			 * 는 "\" 이고, 운영체제가 UNIX, Linux, 매킨토시(맥) 이라면 File.separator 는 "/" 이다.
@@ -1462,7 +1461,7 @@ public class ControllerSJ {
 
 		HttpSession session = mrequest.getSession();
 		String root = session.getServletContext().getRealPath("/");
-		String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\file";
+		String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\images\\uploadImg";
 
 		File dir = new File(path);
 		if (!dir.exists()) {
