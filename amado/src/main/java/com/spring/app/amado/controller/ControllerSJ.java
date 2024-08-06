@@ -1709,8 +1709,6 @@ public class ControllerSJ {
 			// 관리자 검색용귀찮아서 넣어둠
 			String searchtype_fk_userid = "0";
 
-			System.out.println("~~ 확인용 str_currentShowPageNo : " + str_currentShowPageNo);
-
 			if (searchtype_a == null) {
 				searchtype_a = "0";
 			}
@@ -1749,7 +1747,6 @@ public class ControllerSJ {
 
 			totalCount = service.getTotalInquiryCount(paraMap);
 
-			System.out.println("totalCount" + totalCount);
 
 			totalPage = (int) Math.ceil((double) totalCount / sizePerPage);
 
