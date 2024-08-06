@@ -1036,8 +1036,6 @@ public class ControllerNR {
 	            		mobile += String.valueOf(cellReader(cell)).substring(0, 4);
 	            	}
 	            	
-	            	System.out.println("mobile: "+mobile);
-	            	
 	            	paramap.put("mobile", aES256.encrypt(mobile));
 	            	
 	            	// 행의 열두 번째 열(gender)
