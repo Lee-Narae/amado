@@ -93,6 +93,49 @@ margin-left: 2%;
     height: 300px;
     object-fit: cover; /* 이미지 비율을 유지하면서 크기를 맞춤 */
 }
+.highcharts-figure,
+.highcharts-data-table table {
+    min-width: 320px;
+    max-width: 700px;
+    margin: 1em auto;
+}
+
+.highcharts-data-table table {
+    font-family: Verdana, sans-serif;
+    border-collapse: collapse;
+    border: 1px solid #ebebeb;
+    margin: 10px auto;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+}
+
+.highcharts-data-table caption {
+    padding: 1em 0;
+    font-size: 1.2em;
+    color: #555;
+}
+
+.highcharts-data-table th {
+    font-weight: 600;
+    padding: 0.5em;
+}
+
+.highcharts-data-table td,
+.highcharts-data-table th,
+.highcharts-data-table caption {
+    padding: 0.5em;
+}
+
+.highcharts-data-table thead tr,
+.highcharts-data-table tr:nth-child(even) {
+    background: #f8f8f8;
+}
+
+.highcharts-data-table tr:hover {
+    background: #f1f7ff;
+}
+
 </style>
 
 <div id="container">
@@ -210,7 +253,11 @@ margin-left: 2%;
 			<div id="clubTitle" style="text-align: center; margin: 3% 0 3% 0; font-size: 30pt; font-weight: bolder;">${requestScope.clubvo.clubname} 스탯</div>
 			<div style="width: 100%; display: flex;" >
 				<div>
-					<img style="width: 70%; margin: 5% 20%;" src="<%=ctxPath%>/resources/images/스탯.png">
+					<figure class="highcharts-figure">
+					    <div id="stat" style="width: 70%; height: 40%;"></div>
+					    <p class="highcharts-description">
+					    </p>
+					</figure>
 				</div>
 				<ul style="list-style: none; width: 50%; margin: 4% 10% 0 0; font-family: 'Roboto', sans-serif;">
 					<li><span style="font-weight: bolder;">대표 연락처:  </span>${requestScope.clubvo.clubtel}</li>
@@ -372,6 +419,9 @@ margin-left: 2%;
 		</div>
 		<div id="more" style="text-align: right; margin: 3% 5% 2% 0; color: #8a8a8a;" onclick="goBoard('${requestScope.clubvo.clubseq}', '${requestScope.clubvo.clubname}', '${requestScope.clubvo.sportname}')">게시판 바로가기 ▶</div>
 	</div>
+
+	
+		
 	
 <form name="goViewFrm">
 		<input type="hidden" name="clubseq" />
@@ -383,6 +433,11 @@ margin-left: 2%;
 
 </div>
 
+<script src="<%= ctxPath%>/resources/Highcharts-10.3.1/code/highcharts.js"></script>
+<script src="<%= ctxPath%>/resources/Highcharts-10.3.1/code/highcharts-more.js"></script>
+<script src="<%= ctxPath%>/resources/Highcharts-10.3.1/code/modules/exporting.js"></script>
+<script src="<%= ctxPath%>/resources/Highcharts-10.3.1/code/modules/export-data.js"></script>
+<script src="<%= ctxPath%>/resources/Highcharts-10.3.1/code/modules/accessibility.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -417,6 +472,78 @@ $(document).ready(function(){
 function goBoard(clubseq, clubname, sportname){
 	location.href = "<%= ctxPath%>/club/clubBoard.do?clubname="+clubname+"&clubseq="+clubseq+"&sportname="+sportname;
 }
+
+
+Highcharts.chart('stat', {
+
+    chart: {
+        polar: true,
+        type: 'line'
+    },
+
+    accessibility: {
+        description: ''
+    },
+
+    title: {
+        text: '',
+        x: -55
+    },
+
+    pane: {
+        size: '80%'
+    },
+
+    xAxis: {
+        categories: ['speed', 'quick', 'power', 'earth',
+            'stretch'],
+        tickmarkPlacement: 'on',
+        lineWidth: 0
+    },
+
+    yAxis: {
+        gridLineInterpolation: 'polygon',
+        lineWidth: 0,
+        min: 0
+    },
+
+    tooltip: {
+        shared: true,
+        pointFormat: '<span style="color:{series.color}">{series.name}: <b>\${point.y:,.0f}</b><br/>'
+    },
+
+    legend: {
+        align: 'right',
+        verticalAlign: 'middle',
+        layout: 'vertical'
+    },
+
+    series: [{
+        name: '스탯 평균',
+        data: [2, 1, 1, 3, 2],
+        pointPlacement: 'on'
+    }],
+
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 500
+            },
+            chartOptions: {
+                legend: {
+                    align: 'center',
+                    verticalAlign: 'bottom',
+                    layout: 'horizontal'
+                },
+                pane: {
+                    size: '70%'
+                }
+            }
+        }]
+    }
+
+});
+
 </script>
 
 

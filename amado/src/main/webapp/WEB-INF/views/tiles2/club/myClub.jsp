@@ -26,11 +26,6 @@ cursor: pointer;
 text-decoration: underline;
 }
 
-#bossname:hover {
-cursor: pointer;
-font-weight: bold;
-}
-
 #forhover {
 display: inline-block;
 width: 25%;
@@ -590,7 +585,6 @@ function goRefuse(userid, clubseq){
 	    </div>
 	    <div class="modal-footer">
 	    <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
-	    <button type="button" class="btn btn-primary" onclick="">등록하기</button>
 	  </div>
     </div>
   </div>
@@ -712,7 +706,7 @@ function goRefuse(userid, clubseq){
 				<div style="width: 75%;">
 					<div id="clubboss" style="width: 100%; margin-bottom: 2%;">
 						<span class="title">동호회 회장</span>
-						<span class="detail" id="bossname">${requestScope.club.name}</span><span id="forhover">◁ 클릭하여 정보보기</span>
+						<span class="detail" id="bossname">${requestScope.club.name}</span>
 					</div>
 					<div id="tel" style="width: 100%; margin-bottom: 2%;">
 						<span class="title">연락처</span>
