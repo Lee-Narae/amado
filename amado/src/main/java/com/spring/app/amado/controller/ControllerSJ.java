@@ -2071,8 +2071,8 @@ public class ControllerSJ {
 		Map<String, String> paraMap = new HashMap<>();
 		paraMap.put("content", content);
 		paraMap.put("inquiryseq", inquiryseq);
-		String fk_userid = "admin";
-		paraMap.put("fk_userid", "admin");
+		String fk_userid = "leenr";
+		paraMap.put("fk_userid", "leenr");
 
 		int n = 0;
 		try {
