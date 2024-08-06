@@ -574,7 +574,7 @@ function memberQuit(){
 	                	</div>
                 		<div style="border: solid 1px #d4d4d4; width: 11%; height: 100px; border-radius: 100%; margin-left: 18%; overflow: hidden; align-content: center;">
                 			<c:if test="${not empty sessionScope.loginuser.memberimg}">
-                				<img id="memberImgView" style="width: 100%;" src="<%=ctxPath%>/resources/images/${sessionScope.loginuser.memberimg}" />
+                				<img id="memberImgView" style="width: 100%;" src="<%=ctxPath%>/resources/images/uploadImg/${sessionScope.loginuser.memberimg}" />
                 			</c:if>
                 			<c:if test="${empty sessionScope.loginuser.memberimg}">
                 				<img id="memberImgView" style="width: 100%;" src="<%=ctxPath%>/resources/images/no_img.jpg" />
