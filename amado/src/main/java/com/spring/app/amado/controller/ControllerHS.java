@@ -234,7 +234,8 @@ public class ControllerHS {
 //		String root = session.getServletContext().getRealPath("/");
 //		String path = root + "resources" + File.separator + "files";
 
-		String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\images\\1";
+		String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\images\\uploading";
+		
 
 		String newFileName = "";
 		byte[] bytes = null;
@@ -297,12 +298,6 @@ public class ControllerHS {
 	public String addComment(QuestionVO questionvo, HttpServletRequest request) {
 		// 댓글쓰기에 첨부파일이 없는 경우
 		String name = request.getParameter("name");
-		String content = request.getParameter("content");
-		String fk_userid = request.getParameter("fk_userid");
-
-		System.out.println("gymseq: " + questionvo.getGymseq());
-		System.out.println(content);
-		System.out.println(fk_userid);
 
 		int n = 0;
 
@@ -332,11 +327,14 @@ public class ControllerHS {
 		String parentSeq = request.getParameter("parentSeq");
 		System.out.println(parentSeq);
 		List<QuestionVO> commentList = service.getCommentList(parentSeq);
-
+		
 		JSONArray jsonArr = new JSONArray(); // []
 
 		if (commentList != null) {
 			for (QuestionVO questionvo : commentList) {
+				
+				System.out.println("카테고리: "+questionvo.getCategory());
+				
 				JSONObject jsonObj = new JSONObject(); // {}
 				jsonObj.put("gymquestionseq", questionvo.getGymquestionseq()); // {"seq":1}
 				jsonObj.put("fk_userid", questionvo.getFk_userid()); // {"seq":1, "fk_userid":"seoyh"}
@@ -386,6 +384,9 @@ public class ControllerHS {
 		String gymquestionseq = request.getParameter("gymquestionseq");
 		String gymseq = request.getParameter("parentSeq");
 
+		System.out.println("1. gymquestionseq: "+gymquestionseq);
+		System.out.println("gymseq: "+gymseq);
+		
 		Map<String, String> paraMap = new HashMap<>();
 		paraMap.put("gymquestionseq", gymquestionseq);
 		paraMap.put("gymseq", gymseq);
@@ -409,7 +410,7 @@ public class ControllerHS {
 
 		String gymquestionseq = request.getParameter("gymquestionseq");
 
-		// System.out.println(gymquestionseq);
+		System.out.println("gymquestionseq: "+gymquestionseq);
 		List<AnswerVO> commentreList = service.getCommentreList(gymquestionseq);
 
 		JSONArray jsonArr = new JSONArray(); // []
@@ -789,7 +790,7 @@ public class ControllerHS {
 //				String root = session.getServletContext().getRealPath("/");
 //				String path = root + "resources" + File.separator + "files";
 
-				String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\images\\1";
+				String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\images\\uploading";
 
 				String newFileName = "";
 				byte[] bytes = null;

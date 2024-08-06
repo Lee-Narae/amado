@@ -174,6 +174,7 @@ function goSearch() {
 	    
 	    
 	   <!--  <section id="indoor" class="product-section container mt-4"> -->
+        <div style="width: 70%; margin: 0 auto;">
 	        <div class="row">
 				<c:forEach var="gym" items="${requestScope.gymList}">
 	            	<c:if test="${gym.status =='1'}">
@@ -202,6 +203,7 @@ function goSearch() {
 		            </c:if>
 	            </c:forEach> --%>
 	             </div>
+             </div>
 	  <!--   </section> -->
 	    
 <%-- 	    

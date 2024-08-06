@@ -63,8 +63,8 @@ values(seq_photo.nextval,#{fk_gymseq},#{several_photos})
 
 <!-- #88. 댓글쓰기 (tbl_comment 테이블에 insert) -->
 	<insert id="addComment" parameterType="QuestionVO">
-		insert into tbl_gymquestion(gymquestionseq, gymseq, content, registerdate, fk_userid)
-		values(seq_gymquestion.nextval, #{gymseq}, #{content}, sysdate, #{fk_userid})
+		insert into tbl_gymquestion(gymquestionseq, gymseq, content, registerdate, fk_userid, category)
+		values(seq_gymquestion.nextval, #{gymseq}, #{content}, sysdate, #{fk_userid}, #{category})
 	</insert>
 	
 	<!-- #89-1. tbl_board 테이블에 commentCount 컬럼이 1증가(update) -->
