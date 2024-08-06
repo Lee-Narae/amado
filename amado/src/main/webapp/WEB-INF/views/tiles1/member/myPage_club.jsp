@@ -803,7 +803,7 @@ function sendMail(email){
 	                			<div class="back" align="center" style="padding: 10% 0;">
 	                				<c:if test="${not empty requestScope.soccer}">
 		                				<div id="clubname" style="font-size: 15pt; font-weight: bold; margin-bottom: 5%;">${requestScope.soccer.clubname }</div>
-										<div style="width: 100%;" align="center"><img style="width: 50%;" src="<%=ctxPath%>/resources/images/zee/${requestScope.soccer.clubimg}"/></div>
+										<div style="width: 100%;" align="center"><img style="width: 50%;" src="<%=ctxPath%>/resources/images/uploadImg/${requestScope.soccer.wasfilename}"/></div>
 										<div style="font-size: 10pt;">${requestScope.soccer.city}&nbsp;${requestScope.soccer.local}</div>
 										<div style="font-size: 13pt;">${requestScope.soccer.clubgym}</div>
 										<div style="font-size: 11pt;">${requestScope.soccer.clubtel}</div>
@@ -820,7 +820,7 @@ function sendMail(email){
 	                			<div class="back">
 									<c:if test="${not empty requestScope.baseball}">
 		                				<div style="font-size: 15pt; font-weight: bold; margin-bottom: 5%;">${requestScope.baseball.clubname }</div>
-										<div style="width: 100%;" align="center"><img style="width: 50%;" src="<%=ctxPath%>/resources/images/zee/${requestScope.baseball.clubimg}"/></div>
+										<div style="width: 100%;" align="center"><img style="width: 50%;" src="<%=ctxPath%>/resources/images/uploadImg/${requestScope.baseball.wasfilename}"/></div>
 										<div style="font-size: 10pt;">${requestScope.baseball.city}&nbsp;${requestScope.baseball.local}</div>
 										<div style="font-size: 13pt;">${requestScope.baseball.clubgym}</div>
 										<div style="font-size: 11pt;">${requestScope.baseball.clubtel}</div>
@@ -837,7 +837,7 @@ function sendMail(email){
 	                			<div class="back">
 	                				<c:if test="${not empty requestScope.volley}">
 		                				<div style="font-size: 15pt; font-weight: bold; margin-bottom: 5%;">${requestScope.volley.clubname }</div>
-										<div style="width: 100%;" align="center"><img style="width: 50%;" src="<%=ctxPath%>/resources/images/zee/${requestScope.volley.clubimg}"/></div>
+										<div style="width: 100%;" align="center"><img style="width: 50%;" src="<%=ctxPath%>/resources/images/uploadImg/${requestScope.volley.wasfilename}"/></div>
 										<div style="font-size: 10pt;">${requestScope.volley.city}&nbsp;${requestScope.volley.local}</div>
 										<div style="font-size: 13pt;">${requestScope.volley.clubgym}</div>
 										<div style="font-size: 11pt;">${requestScope.volley.clubtel}</div>
@@ -854,7 +854,7 @@ function sendMail(email){
 	                			<div class="back">
 	                				<c:if test="${not empty requestScope.basket}">
 		                				<div style="font-size: 15pt; font-weight: bold; margin-bottom: 5%;">${requestScope.basket.clubname }</div>
-										<div style="width: 100%;" align="center"><img style="width: 50%;" src="<%=ctxPath%>/resources/images/zee/${requestScope.basket.clubimg}"/></div>
+										<div style="width: 100%;" align="center"><img style="width: 50%;" src="<%=ctxPath%>/resources/images/uploadImg/${requestScope.basket.wasfilename}"/></div>
 										<div style="font-size: 10pt;">${requestScope.basket.city}&nbsp;${requestScope.basket.local}</div>
 										<div style="font-size: 13pt;">${requestScope.basket.clubgym}</div>
 										<div style="font-size: 11pt;">${requestScope.basket.clubtel}</div>
@@ -873,7 +873,7 @@ function sendMail(email){
 								<div class="back">
 									<c:if test="${not empty requestScope.tennis}">
 		                				<div style="font-size: 15pt; font-weight: bold; margin-bottom: 5%;">${requestScope.tennis.clubname }</div>
-										<div style="width: 100%;" align="center"><img style="width: 50%;" src="<%=ctxPath%>/resources/images/zee/${requestScope.tennis.clubimg}"/></div>
+										<div style="width: 100%;" align="center"><img style="width: 50%;" src="<%=ctxPath%>/resources/images/uploadImg/${requestScope.tennis.wasfilename}"/></div>
 										<div style="font-size: 10pt;">${requestScope.tennis.city}&nbsp;${requestScope.tennis.local}</div>
 										<div style="font-size: 13pt;">${requestScope.tennis.clubgym}</div>
 										<div style="font-size: 11pt;">${requestScope.tennis.clubtel}</div>
@@ -890,7 +890,7 @@ function sendMail(email){
 								<div class="back">
 									<c:if test="${not empty requestScope.bowling}">
 		                				<div style="font-size: 15pt; font-weight: bold; margin-bottom: 5%;">${requestScope.bowling.clubname }</div>
-										<div style="width: 100%;" align="center"><img style="width: 50%;" src="<%=ctxPath%>/resources/images/zee/${requestScope.bowling.clubimg}"/></div>
+										<div style="width: 100%;" align="center"><img style="width: 50%;" src="<%=ctxPath%>/resources/images/uploadImg/${requestScope.bowling.wasfilename}"/></div>
 										<div style="font-size: 10pt;">${requestScope.bowling.city}&nbsp;${requestScope.bowling.local}</div>
 										<div style="font-size: 13pt;">${requestScope.bowling.clubgym}</div>
 										<div style="font-size: 11pt;">${requestScope.bowling.clubtel}</div>
@@ -907,7 +907,7 @@ function sendMail(email){
 								<div class="back">
 									<c:if test="${not empty requestScope.jokgu}">
 		                				<div style="font-size: 15pt; font-weight: bold; margin-bottom: 5%;">${requestScope.jokgu.clubname }</div>
-										<div style="width: 100%;" align="center"><img style="width: 50%;" src="<%=ctxPath%>/resources/images/zee/${requestScope.jokgu.clubimg}"/></div>
+										<div style="width: 100%;" align="center"><img style="width: 50%;" src="<%=ctxPath%>/resources/images/uploadImg/${requestScope.jokgu.wasfilename}"/></div>
 										<div style="font-size: 10pt;">${requestScope.jokgu.city}&nbsp;${requestScope.jokgu.local}</div>
 										<div style="font-size: 13pt;">${requestScope.jokgu.clubgym}</div>
 										<div style="font-size: 11pt;">${requestScope.jokgu.clubtel}</div>
@@ -924,7 +924,7 @@ function sendMail(email){
 								<div class="back">
 									<c:if test="${not empty requestScope.minton}">
 		                				<div style="font-size: 15pt; font-weight: bold; margin-bottom: 5%;">${requestScope.minton.clubname }</div>
-										<div style="width: 100%;" align="center"><img style="width: 50%;" src="<%=ctxPath%>/resources/images/zee/${requestScope.minton.clubimg}"/></div>
+										<div style="width: 100%;" align="center"><img style="width: 50%;" src="<%=ctxPath%>/resources/images/uploadImg/${requestScope.minton.wasfilename}"/></div>
 										<div style="font-size: 10pt;">${requestScope.minton.city}&nbsp;${requestScope.minton.local}</div>
 										<div style="font-size: 13pt;">${requestScope.minton.clubgym}</div>
 										<div style="font-size: 11pt;">${requestScope.minton.clubtel}</div>
@@ -953,7 +953,7 @@ function sendMail(email){
 									
 									<c:forEach items="${requestScope.clubList}" var="club">
 										<div align="center" style="border-radius: 20px;	width: 450px; height: 600px; padding: 30px; margin: 0;">
-											<div class="clubimg mb-3"><img style="width: 100%;" src="<%=ctxPath%>/resources/images/zee/${club.clubimg}"/></div>
+											<div class="clubimg mb-3"><img style="width: 100%;" src="<%=ctxPath%>/resources/images/uploadImg/${club.wasfileName}"/></div>
 											<div style="font-size: 10pt; font-weight: bold;">${club.sportname}</div>
 											<div style="font-size: 20pt; font-weight: bold;">${club.clubname}</div>
 											<div id="tableDiv" align="left">
