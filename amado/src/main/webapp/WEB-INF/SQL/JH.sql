@@ -842,3 +842,16 @@ select rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, comme
 		where clubseq = 2
 		order by registerdate desc
 		)
+        
+        
+        
+        
+        
+        
+        
+        
+        select speed, quick, power, earth, stretch
+        from tbl_clubmember c
+        join tbl_member m
+        on c.fk_userid = m.userid
+        where clubseq = 15
