@@ -508,7 +508,12 @@ public class ControllerSJ {
 				// ~~~ 확인용 webapp 의 절대경로 =>
 				// C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\board\
 
-				String path =root+"resources" +File.separator+"files";
+				// String path =root+"resources" +File.separator+"files";
+				
+				// 가져오는거 어케해야하지?
+				String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\images\\uploadImg";
+				
+				
 				/*
 				 * File.separator 는 운영체제에서 사용하는 폴더와 파일의 구분자이다. 운영체제가 Windows 이라면 File.separator
 				 * 는 "\" 이고, 운영체제가 UNIX, Linux, 매킨토시(맥) 이라면 File.separator 는 "/" 이다.
