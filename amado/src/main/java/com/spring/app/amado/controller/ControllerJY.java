@@ -1125,6 +1125,7 @@ public class ControllerJY {
         	        검색이 있는 또는 검색이 없는 회원의 총개수 알아오기 <<< */
 		int totalCount = service.getTotalCount(paramap);
 		
+		mav.addObject("sizePerPage", sizePerPage);
 		mav.addObject("totalCount", totalCount);
 		mav.addObject("currentShowPageNo", currentShowPageNo);
 

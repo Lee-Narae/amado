@@ -9,7 +9,7 @@
 
 <style>
   body { padding: 0px; margin: 0px; }
-  .jb-box { width: 100%; height: 1000px; overflow: hidden;margin: 0px auto; position: relative; }
+  .jb-box {position: relative; width: 100%; height: 1000px; overflow: hidden;margin: 0px auto; position: relative; }
   video { width: 100%; }
   .jb-text { position: absolute; top: 50%; width: 100%; }
   .jb-text p { margin-top: -24px; text-align: center; font-size: 48px; color: #ffffff; }
@@ -77,7 +77,24 @@
         .carousel-inner img {
             cursor: pointer;
         }
-
+.overlay {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100px;
+      width: 15%;
+      z-index: 1;
+       background: rgba(255, 255, 255, 0);  /* Optional: semi-transparent background */
+    }
+    .overlay-content {
+      height: 100%;
+      overflow: hidden;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    .overlay .highcharts-figure {
+      margin: 20px 0;
+    }
 
 #chatIcon:hover {
 cursor: pointer;
@@ -197,59 +214,54 @@ opacity: 0.7;
          //   console.log("지역개수 : " + localArr.length);
             // 지역개수 : 97
             
-            let html = "날씨정보 발표시각 : <span style='font-weight:bold;'>"+updateTime+"</span>&nbsp;";
-                  html += "<span style='color:blue; cursor:pointer; font-size:9pt;' onclick='javascript:showWeather();'>업데이트</span><br/><br/>";
-                  html += "<table class='table table-hover' align='center'>";
-                 html += "<tr>";
-                 html += "<th>지역</th>";
-                 html += "<th>날씨</th>";
-                 html += "<th>기온</th>";
-                 html += "</tr>";
+            let html = "";
              
              // ====== XML 을 JSON 으로 변경하기  시작 ====== //
             var jsonObjArr = [];
             // ====== XML 을 JSON 으로 변경하기  끝 ====== //    
                  
-             for(let i=0; i<localArr.length; i++){
-                
-                let local = $(localArr).eq(i);
-               /* .eq(index) 는 선택된 요소들을 인덱스 번호로 찾을 수 있는 선택자이다. 
-                     마치 배열의 인덱스(index)로 값(value)를 찾는 것과 같은 효과를 낸다.
-               */
-               
-               // console.log( $(local).text() + " stn_id:" + $(local).attr("stn_id") + " icon:" + $(local).attr("icon") + " desc:" + $(local).attr("desc") + " ta:" + $(local).attr("ta") ); 
-               //   속초 stn_id:90 icon:03 desc:구름많음 ta:29.0
-               //   
-                
-                 let icon = $(local).attr("icon");  
-                 if(icon == "") {
-                    icon = "없음";
-                 }
-               
-                 html += "<tr>";
-               html += "<td>"+$(local).text()+"</td><td><img src='<%= ctxPath%>/resources/images/weather/"+icon+".png' />"+$(local).attr("desc")+"</td><td>"+$(local).attr("ta")+"</td>";
-               html += "</tr>";
-                 
-               
-               // ====== XML 을 JSON 으로 변경하기  시작 ====== //
-                var jsonObj = {"locationName":$(local).text(), "ta":$(local).attr("ta")};
+            for(let i=11; i<localArr.length; i++){
+               if (i === 11) {
                   
-                jsonObjArr.push(jsonObj);
-               // ====== XML 을 JSON 으로 변경하기  끝 ====== //
-               
+                   let local = $(localArr).eq(i);
+                  /* .eq(index) 는 선택된 요소들을 인덱스 번호로 찾을 수 있는 선택자이다. 
+                        마치 배열의 인덱스(index)로 값(value)를 찾는 것과 같은 효과를 낸다.
+                  */
+                  
+                  // console.log( $(local).text() + " stn_id:" + $(local).attr("stn_id") + " icon:" + $(local).attr("icon") + " desc:" + $(local).attr("desc") + " ta:" + $(local).attr("ta") ); 
+                  //   속초 stn_id:90 icon:03 desc:구름많음 ta:29.0
+                  //   
+                   
+                    let icon = $(local).attr("icon");  
+                    if(icon == "") {
+                       icon = "없음";
+                    }
+                  
+                    html += "<div style='border: solid 0px black; display: inline-block; background-color:lightgray; border-radius: 15px; padding:0 4%;'>";
+                  html += "<span>"+$(local).text()+"</span><span><img src='<%= ctxPath%>/resources/images/weather/"+icon+".png' />"+$(local).attr("desc")+"</span>&nbsp;<span style='font-weight:bolder;'>"+$(local).attr("ta")+"</span>";
+                  html += "</div>";
+                    
+                  
+                  // ====== XML 을 JSON 으로 변경하기  시작 ====== //
+                   var jsonObj = {"locationName":$(local).text(), "ta":$(local).attr("ta")};
+                     
+                   jsonObjArr.push(jsonObj);
+                  // ====== XML 을 JSON 으로 변경하기  끝 ====== //
+               }
+                else {
+                    break; // 첫 번째 항목 이후에는 반복문 종료
+                }
              }// end of for------------------------ 
-             
-             html += "</table>";
              
              $("div#displayWeather").html(html);
              
              
           // ====== XML 을 JSON 으로 변경된 데이터를 가지고 차트그리기 시작  ====== //
-             var str_jsonObjArr = JSON.stringify(jsonObjArr); 
+            var str_jsonObjArr = JSON.stringify(jsonObjArr); 
                               // JSON객체인 jsonObjArr를 String(문자열) 타입으로 변경해주는 것 
                               
             $.ajax({
-               url:"<%= request.getContextPath()%>/weather/weatherXMLtoJSON.action",
+               url:"<%= request.getContextPath()%>/weather/weatherXMLtoJSON.do",
                type:"POST",
                data:{"str_jsonObjArr":str_jsonObjArr},
                dataType:"JSON",
@@ -268,7 +280,7 @@ opacity: 0.7;
                   
                   Highcharts.chart('weather_chart_container', {
                       chart: {
-                          type: 'column'
+                          type: 'table'
                       },
                       title: {
                           text: '오늘의 전국 기온(℃)'   // 'ㄹ' 을 누르면 ℃ 가 나옴.
@@ -371,26 +383,22 @@ function goView(clubseq, fk_sportseq) {
   <video muted autoplay loop>
     <source src="<%=ctxPath%>/resources/videos/nike.mp4" type="video/mp4">
   </video>
+  
+  <!-- 지윤 시작 -->
+  <div class="overlay">
+      <div class="overlay-content">
+        <div id="displayWeather" style="min-width: 90%; margin-top: 40px; margin-bottom: 70px;"></div>
+        <div class="highcharts-figure">
+          <div id="weather_chart_container"></div>
+        </div>
+      </div>
+    </div>
+  <!-- 지윤 끝 -->
+  
 </div>
 <!-- 준혁 끝 -->
 
-<!-- 지윤 시작 -->
-<div style="min-height: 1100px; margin-bottom: 50px;">
- <div style="text-align: center; font-size: 16pt;">
-    현재시각 :&nbsp; <span id="clock" style="color:green; font-weight:bold;"></span>
- </div>
- 
- <div id="displayWeather" style="min-width: 90%; max-height: 500px; overflow-y: scroll; margin-top: 40px; margin-bottom: 70px; padding-left: 10px; padding-right: 10px;"></div> 
 
- <div style="margin: 20px;">
-    <%-- 차트그리기 --%>
-      <figure class="highcharts-figure">
-          <div id="weather_chart_container"></div>
-      </figure> 
-   </div>
-</div> 
-
-<!-- 지윤 끝 -->
 
 <!-- 승진 시작 -->
     <div id="ksjMain">
