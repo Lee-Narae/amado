@@ -2782,6 +2782,9 @@ public class ControllerNR {
 		paramap.put("userid", userid);
 		paramap.put("clubseq", clubseq);
 		
+		System.out.println("userid" + userid);
+		System.out.println("clubseq" + clubseq);
+		
 		int n = service.permitJoinClub(paramap);
 		
 		if(n==1) {

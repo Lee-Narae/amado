@@ -129,10 +129,14 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	// 검색타입 있는 리스트 가져오기(페이징)
 	@Override
 	public List<ClubVO> searchPaging(Map<String, String> paraMap) {
-		List<ClubVO> clubPagingList = dao.searchPaging(paraMap);
+		List<ClubVO> clubPagingList2 = dao.searchPaging(paraMap);
 		
-		for(ClubVO clubvo : clubPagingList) {
-			clubvo.setClubmembervo(dao.getClubmember(clubvo.getClubseq()));
+		List<ClubVO> clubPagingList = new ArrayList<ClubVO>();
+		
+		for(ClubVO clubvo : clubPagingList2) {
+			int clubMemberCnt = dao.getClubMemberCnt(clubvo.getClubseq());
+			
+			clubvo.setClubmembercnt(clubMemberCnt);
 			
 			clubPagingList.add(clubvo);
 		}

@@ -57,6 +57,8 @@ public class ClubVO {
 
 	
 	   private ClubmemberVO clubmembervo;
+	   
+	   private int clubmembercnt;
 	
 		
 	public String getSportname() {
@@ -178,6 +180,12 @@ public class ClubVO {
 	}
 	public void setClubmembervo(ClubmemberVO clubmembervo) {
 		this.clubmembervo = clubmembervo;
+	}
+	public int getClubmembercnt() {
+		return clubmembercnt;
+	}
+	public void setClubmembercnt(int clubmembercnt) {
+		this.clubmembercnt = clubmembercnt;
 	}
 	
 	

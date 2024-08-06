@@ -151,7 +151,7 @@ public interface AmadoDAO_SJ {
 	ClubVO rankS(String params);
 	ClubVO rankT(String params);
 
-	ClubmemberVO getClubmember(String clubseq);
+	int getClubMemberCnt(String clubseq);
 
 	
 

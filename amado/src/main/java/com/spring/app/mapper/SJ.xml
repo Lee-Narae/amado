@@ -445,17 +445,17 @@
         where boardseq = #{boardseq}                      
     </update>
     
-    <select id="getClubmember" parameterType="String" resultType="ClubmemberVO">
-       	select fk_userid, sportseq, clubseq, status
+    <select id="getClubMemberCnt" parameterType="String" resultType="int">
+    	select count(*)
     	from tbl_clubmember
-    	where fk_userid = #{fk_userid}
+    	where clubseq = #{clubseq}
     </select>
     
     <!-- // 내가 가입한 클럽 가져오기 -->
     <select id="getClubmemberList" parameterType="String" resultType="ClubmemberVO">
-    	select fk_userid, sportseq, clubseq, status
+	    select fk_userid, sportseq, clubseq, status
     	from tbl_clubmember
-    	where clubseq = #{clubseq}
+    	where fk_userid = #{fk_userid}
     </select>
     
     
