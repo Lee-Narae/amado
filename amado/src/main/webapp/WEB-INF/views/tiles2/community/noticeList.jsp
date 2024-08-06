@@ -74,6 +74,12 @@ background-color: #e3e3e3;
 <script type="text/javascript">
 $(document).ready(function(){
 	
+	if(${not empty requestScope.searchType && not empty requestScope.searchWord}){
+		$("select[name='searchType']").val('${requestScope.searchType}');
+		$("input[name='searchWord']").val('${requestScope.searchWord}');
+	}
+	
+	
 	$("div#displayList").hide();
 	
 	// 검색 버튼 눌렀을 때

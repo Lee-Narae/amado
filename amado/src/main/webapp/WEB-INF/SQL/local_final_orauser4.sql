@@ -1022,8 +1022,25 @@ nocache;
 commit
 
 select *
+from tbl_club
+where CLUBSEQ = 121
+
+select *
+from tbl_member
+
+delete from tbl_club
+where CLUBSEQ = 121
+commit
+
+select *
 from tbl_inquiryanswers
 order by registerdate desc
+
+
+SELECT constraint_name, table_name, column_name, r_constraint_name
+FROM all_cons_columns
+WHERE constraint_name = 'FK_TBL_IQRYAWS_FK_USERID';
+
 
    alter table tbl_inquiry
    add title nvarchar2(50);
@@ -1050,6 +1067,13 @@ commit
 select *
 from tbl_inquiry
 
+drop table tbl_inquiryanswers purge;
+
+select *
+from tbl_member
+
+
+
 -- 문의답변(운영자용)
 create table tbl_inquiryanswers
 (inquiryanswerseq           number   not null
@@ -1062,6 +1086,13 @@ create table tbl_inquiryanswers
 ,CONSTRAINT CK_tbl_iqryaws_admin CHECK (fk_userid = 'admin')
 );
 -- Table TBL_INQUIRYANSWERS이(가) 생성되었습니다.
+
+-- 지금 admin 이 아니라 MEMBERRANK == 2 이걸로 관리자 권한 만들었음
+
+ALTER TABLE tbl_inquiryanswers
+DROP CONSTRAINT CK_tbl_iqryaws_admin;
+
+
 
 create sequence seq_inquiryanswers 
 start with 1
@@ -1102,6 +1133,8 @@ select *
 from tbl_inquiry
 order by inquiryseq desc
 
+select *
+from tbl_inquiryFile
 
 SELECT I.inquiryseq, I.content, I.fk_userid, I.email, I.phone, I.registerdate, I.searchtype_a, I.searchtype_b, I.status
      , F.orgfilename, F.filename, F.filesize  
@@ -1396,3 +1429,9 @@ FROM (
 )
 WHERE rank IN (3)
 ORDER BY rank;
+
+select *
+from tbl_member
+
+select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, LOCAL, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfilename, viewcount
+from tbl_club

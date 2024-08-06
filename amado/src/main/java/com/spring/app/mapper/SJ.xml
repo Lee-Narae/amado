@@ -41,9 +41,9 @@
 
 	<!-- 페이징 처리를 안한 검색어가 없는 전체 동아리목록 보여주기 -->
 	<select id="clubListNoSearch" parameterType="String" resultType="ClubVO">
-		select clubseq, clubname, clubimg, fk_sportseq, clubtel
-		 , city, local, clubgym, clubtime
-		 , membercount, clubpay, clubstatus, clubscore
+		select clubseq, clubname, clubimg, fk_sportseq, fk_userid
+			 , clubtel, city, local, clubgym, clubtime, membercount
+			 , clubpay, clubstatus, clubscore, wasfileName, viewcount
 		 , ROW_NUMBER() over(order by clubscore desc) AS rank	
  		from tbl_club
 		where clubstatus = 1
@@ -135,16 +135,16 @@
 	
 	<!-- // === 페이징 처리를 한 검색어가 없는 전체 동호회 보여주기 === // -->
 	<select id="searchPaging" parameterType="HashMap" resultType="ClubVO">
-	    SELECT clubseq, clubname, clubimg, fk_sportseq, clubtel
-			 , city, local, clubgym, clubtime
-			 , membercount, clubpay, clubstatus, clubscore
+	    SELECT clubseq, clubname, clubimg, fk_sportseq, fk_userid
+			 , clubtel, city, local, clubgym, clubtime, membercount
+			 , clubpay, clubstatus, clubscore, wasfileName, viewcount
 			 , rank	
 		FROM
 		(
 		select row_number() over(order by clubscore desc) AS rno 
-		 , clubseq, clubname, clubimg, fk_sportseq, clubtel
-		 , city, local, clubgym, clubtime
-		 , membercount, clubpay, clubstatus, clubscore
+		 	 , clubseq, clubname, clubimg, fk_sportseq, fk_userid
+			 , clubtel, city, local, clubgym, clubtime, membercount
+			 , clubpay, clubstatus, clubscore, wasfileName, viewcount
 		 , ROW_NUMBER() over(order by clubscore desc) AS rank	
  		from tbl_club
 		where clubstatus = 1
@@ -718,14 +718,14 @@
 	
 	
 	<select id="rankF" parameterType="String" resultType="ClubVO">
-		SELECT clubseq, clubname, clubimg, fk_sportseq, clubtel
-	         , city, local, clubgym, clubtime
-	         , membercount, clubpay, clubstatus, clubscore
+		SELECT clubseq, clubname, clubimg, fk_sportseq, fk_userid
+			 , clubtel, city, local, clubgym, clubtime, membercount
+			 , clubpay, clubstatus, clubscore, wasfileName, viewcount
 	         , rank
 		FROM (
-		    SELECT clubseq, clubname, clubimg, fk_sportseq, clubtel
-		         , city, local, clubgym, clubtime
-		         , membercount, clubpay, clubstatus, clubscore
+		    SELECT clubseq, clubname, clubimg, fk_sportseq, fk_userid
+				 , clubtel, city, local, clubgym, clubtime, membercount
+				 , clubpay, clubstatus, clubscore, wasfileName, viewcount
 		         , ROW_NUMBER() OVER (ORDER BY clubscore DESC) AS rank
 		    FROM tbl_club
 		    WHERE clubstatus = 1 and fk_sportseq = to_number(#{params})
@@ -735,14 +735,14 @@
 	</select>
 	
 	<select id="rankS" parameterType="String" resultType="ClubVO">
-		SELECT clubseq, clubname, clubimg, fk_sportseq, clubtel
-	         , city, local, clubgym, clubtime
-	         , membercount, clubpay, clubstatus, clubscore
+		SELECT clubseq, clubname, clubimg, fk_sportseq, fk_userid
+			 , clubtel, city, local, clubgym, clubtime, membercount
+			 , clubpay, clubstatus, clubscore, wasfileName, viewcount
 	         , rank
 		FROM (
-		    SELECT clubseq, clubname, clubimg, fk_sportseq, clubtel
-		         , city, local, clubgym, clubtime
-		         , membercount, clubpay, clubstatus, clubscore
+		    SELECT clubseq, clubname, clubimg, fk_sportseq, fk_userid
+				 , clubtel, city, local, clubgym, clubtime, membercount
+				 , clubpay, clubstatus, clubscore, wasfileName, viewcount
 		         , ROW_NUMBER() OVER (ORDER BY clubscore DESC) AS rank
 		    FROM tbl_club
 		    WHERE clubstatus = 1 and fk_sportseq = to_number(#{params})
@@ -752,14 +752,14 @@
 	</select>
 	
 	<select id="rankT" parameterType="String" resultType="ClubVO">
-		SELECT clubseq, clubname, clubimg, fk_sportseq, clubtel
-	         , city, local, clubgym, clubtime
-	         , membercount, clubpay, clubstatus, clubscore
+		SELECT clubseq, clubname, clubimg, fk_sportseq, fk_userid
+			 , clubtel, city, local, clubgym, clubtime, membercount
+			 , clubpay, clubstatus, clubscore, wasfileName, viewcount
 	         , rank
 		FROM (
-		    SELECT clubseq, clubname, clubimg, fk_sportseq, clubtel
-		         , city, local, clubgym, clubtime
-		         , membercount, clubpay, clubstatus, clubscore
+		    SELECT clubseq, clubname, clubimg, fk_sportseq, fk_userid
+				 , clubtel, city, local, clubgym, clubtime, membercount
+				 , clubpay, clubstatus, clubscore, wasfileName, viewcount
 		         , ROW_NUMBER() OVER (ORDER BY clubscore DESC) AS rank
 		    FROM tbl_club
 		    WHERE clubstatus = 1 and fk_sportseq = to_number(#{params})

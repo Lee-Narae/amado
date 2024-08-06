@@ -787,7 +787,7 @@
 				and lower(title) like '%'||lower(#{searchWord})||'%'
 			</when>
 			<otherwise>
-				and lower(content) like '%'||lower(#{searchWord})||'%'
+				<![CDATA[and DBMS_LOB.INSTR(lower(content), '%'||lower(#{searchWord})||'%')>0 ]]>
 			</otherwise>
 		</choose>
 	</select>
