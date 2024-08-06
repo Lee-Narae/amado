@@ -701,7 +701,7 @@ function goRefuse(userid, clubseq){
 			<div id="sport" style="text-align: center;">${requestScope.club.sportname}</div>
 			<div id="info" style="background-color: transparent; display: flex; margin: 5% 0 0 0; width: 100%; opacity: 1; height: auto;">
 				<div id="clubimg" style="border: solid 1px grey; width: 25%; height: 200px; margin-left: 5%; overflow: hidden;">
-					<img width="100%" src="<%=ctxPath %>/resources/images/zee/${requestScope.club.clubimg}" />
+					<img width="100%" src="<%=ctxPath %>/resources/images/uploadImg/${requestScope.club.wasfilename}" />
 				</div>
 				<div style="width: 75%;">
 					<div id="clubboss" style="width: 100%; margin-bottom: 2%;">

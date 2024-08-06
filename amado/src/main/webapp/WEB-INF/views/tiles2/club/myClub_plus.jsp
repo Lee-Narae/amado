@@ -89,7 +89,7 @@ margin-left: 2%;
     object-fit: cover; /* 이미지 비율을 유지하면서 크기를 맞춤 */
 }
 .uniform-size1{
-	width: 320px;
+	width: 280px;
     height: 300px;
     object-fit: cover; /* 이미지 비율을 유지하면서 크기를 맞춤 */
 }
@@ -143,7 +143,7 @@ margin-left: 2%;
 <div class="board_header"  style="display: flex; margin-left: 16.5%; color: white; padding: 3%;">
     <div class="tit">
         <h1>${requestScope.clubvo.clubname}</h1>
-        <div class="desc">호날두가 속한 동호회 입니다.</div>
+        <div class="desc">${requestScope.clubvo.fk_userid}가 속한 동호회 입니다.</div>
     </div>
     
 
@@ -156,10 +156,10 @@ margin-left: 2%;
 		                	동호회장
 		                </div>
 		                <div>
-		                    <a href="#" class="btn_profile_link">
+		                    
 		                        <span class="coach" style="font-size: 15pt;">${requestScope.clubvo.fk_userid}</span>
 		                        <span class="ico ico_profile_link"></span>
-		                    </a>
+		                    
 		                </div>
 	                </div>
 	                <div class="info" style="margin-top: 15%;">
@@ -229,7 +229,7 @@ margin-left: 2%;
                 </div>
                 <div class="crest">
                     <div class="img">
-                        <img class='uniform-size' style="margin-left: 120%;" src="<%=ctxPath%>/resources/images/zee/${requestScope.clubvo.clubimg}">
+                        <img class='uniform-size' style="margin-left: 102%;" src="<%=ctxPath%>/resources/images/uploadImg/${requestScope.clubvo.wasfileName}">
                     </div>
                 </div>
             </div>
@@ -243,7 +243,7 @@ margin-left: 2%;
 		<!-- 동호회 여러개 가입시 캐러셀 적용 -->
 		<div id="myclub" style="width: 38%; margin: 5% 0 0 8%;">
 			<div style="text-align: center;">
-				<img class='uniform-size1' src="<%=ctxPath%>/resources/images/zee/${requestScope.clubvo.clubimg}">
+				<img class='uniform-size1' src="<%=ctxPath%>/resources/images/uploadImg/${requestScope.clubvo.wasfileName}">
 			</div>
 			<div style="text-align: center; margin-top: 5%; font-size: 25px; font-weight: bold;">${requestScope.clubvo.clubname}</div>
 		</div>
@@ -251,10 +251,10 @@ margin-left: 2%;
 		
 		<div id="clubmatch" style="width: 43%; margin: 2% 0 0 0; border-radius: 20px; box-shadow: 0px 11px 22px #9e9e9e6b;">
 			<div id="clubTitle" style="text-align: center; margin: 3% 0 3% 0; font-size: 30pt; font-weight: bolder;">${requestScope.clubvo.clubname} 스탯</div>
-			<div style="width: 100%; display: flex;" >
+			<div style="width: 100%; display: flex; margin-left: 13%;" >
 				<div>
 					<figure class="highcharts-figure">
-					    <div id="stat" style="width: 70%; height: 40%;"></div>
+					    <div id="stat" style="width: 75%; height: 257px;"></div>
 					    <p class="highcharts-description">
 					    </p>
 					</figure>
@@ -269,7 +269,6 @@ margin-left: 2%;
 					<li style="margin-top: 4%;"><span style="font-weight: bolder;">랭크 점수:  </span>${requestScope.clubvo.clubscore}</li>
 				</ul>
 			</div>
-			<div id="more" style="text-align: right; margin: 1% 7% 0 0; color: #8a8a8a;">우리 팀 매치 일정 더보기 ▶</div>
 		</div>
 	</div>
 
@@ -282,7 +281,7 @@ margin-left: 2%;
 		
 			<div style="display: flex; margin-left: 3%; width: 56%;">
 				<div>
-					<img class='uniform-size' style="margin-left: 90%;" src="<%=ctxPath%>/resources/images/zee/${requestScope.clubvo.clubimg}">
+					<img class='uniform-size' style="margin-left: 90%;" src="<%=ctxPath%>/resources/images/uploadImg/${requestScope.clubvo.wasfileName}">
 				</div>
 				<div style="font-family: 'Roboto', sans-serif; font-weight: bold; font-size: 45px; margin-top: 2%; margin-left:15%; color: #2929a3;">${requestScope.clubvo.clubname}</div>
 			</div>
