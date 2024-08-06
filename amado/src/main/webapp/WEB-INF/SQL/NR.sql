@@ -667,12 +667,12 @@ on A.clubseq = B.clubseq
 where A.fk_userid = 'leejy' and B.status = 0
 order by 1;
 
-ALTER TABLE TBL_GYMANSWER DROP constraint FK_TBL_GYMAWR_GYMQUESTIONSEQ;
+ALTER TABLE TBL_CLUB DROP constraint FK_TBL_CLUB_SPORTSEQ;
 select * from TBL_GYMANSWER;
 select * from user_constraints;
-
-
-alter table TBL_GYMANSWER add constraint FK_TBL_GYMAWR_GYMQUESTIONSEQ foreign key(gymquestionseq) references tbl_gymquestion(gymquestionseq) on delete cascade;
+select * from TBL_CLUB;
+select * from user_constraints where constraint_type = 'R' and delete_rule = 'NO ACTION';
+alter table TBL_CLUB add constraint FK_TBL_CLUB_SPORTSEQ foreign key(fk_sportseq) references tbl_sport(sportseq) on delete cascade;
 
 
 select A.clubseq, A.clubname, B.fk_userid, C.name from tbl_club A join tbl_clubmember B 
@@ -698,3 +698,28 @@ commit;
 select * from tbl_calendar_small_category;
 
 select * from tbl_gym;
+
+select * from tbl_clubmember;
+delete from tbl_clubmember where fk_userid like 'test%';
+insert into tbl_clubmember values('test4', 1, 3, 1);
+commit;
+
+select * from tbl_matchingreg order by 2, 5;
+delete from tbl_matchingreg where matchingregseq in (17, 16, 10);
+commit;
+
+select * from tbl_member where userid = 'leenr';
+update tbl_member set memberrank = 2 where userid = 'leenr';
+commit;
+
+
+select * from tab;
+
+drop table tbl_watch purge;
+
+purge recyclebin;
+
+
+delete from TBL_NOTICECOMMENT;
+
+commit;
