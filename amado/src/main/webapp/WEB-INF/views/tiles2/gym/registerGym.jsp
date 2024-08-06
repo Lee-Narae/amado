@@ -96,6 +96,10 @@
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">   
 
+
+
+
+
 // Daum 주소 API를 이용한 주소 찾기 함수
 function searchAddress() {
     new daum.Postcode({
@@ -113,6 +117,47 @@ let lng = 0; // 경도
 
 
 $(document).ready(function() {
+	
+	$("input#cost").next().hide();
+	$("input#membercount").next().hide();
+	
+	// 비용 / 인원수 유효성 검사
+	// 1. 비용
+	$("input#cost").change(function(e){
+		if($(e.target).val() < 0){
+			$(e.target).next().show();
+		}
+		else {
+			$(e.target).next().hide();
+		}
+	});
+	
+	$("input#cost").keyup(function(e){
+		if($(e.target).val() < 0){
+			$(e.target).next().show();
+		}
+		else {
+			$(e.target).next().hide();
+		}
+	});
+	
+	$("input#membercount").change(function(e){
+		if($(e.target).val() < 0){
+			$(e.target).next().show();
+		}
+		else {
+			$(e.target).next().hide();
+		}
+	});
+	$("input#membercount").keyup(function(e){
+		if($(e.target).val() < 0){
+			$(e.target).next().show();
+		}
+		else {
+			$(e.target).next().hide();
+		}
+	});	
+	
 
    /* //파일미리보기
    $(document).on("change", "input#imgfilename", function(e) {
@@ -375,13 +420,13 @@ $(document).ready(function() {
 	}); // $("input:button[id='btnRegister']").click
 	
   
-  
-
-
-
-
-
+ 
+	
+	
+	
 });
+
+
 
 
 </script>
@@ -427,12 +472,14 @@ $(document).ready(function() {
     
     <div class="form-group">
       <label for="cost">비용</label>
-      <input type="number" id="cost" name="cost" required>
+      <input type="number" id="cost" name="cost" >
+      <div style="color: red;">비용은 0이상의 숫자만 가능합니다.</div>
     </div>
     
     <div class="form-group">
       <label for="cost">인원수</label>
-      <input type="number" id="membercount" name="membercount" required>
+      <input type="number" id="membercount" name="membercount" >
+      <div style="color: red;">인원수는 0이상의 숫자만 가능합니다.</div>
     </div>
     
     <div class="form-group">
