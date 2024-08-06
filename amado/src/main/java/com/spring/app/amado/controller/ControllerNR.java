@@ -1154,7 +1154,7 @@ public class ControllerNR {
 	
 	
 	@PostMapping("/admin/reg/notice")
-	public ModelAndView adminLogin_editNotice(HttpServletRequest request, ModelAndView mav) {
+	public ModelAndView adminLogin_editNotice(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
 		
 		String noticeseq = request.getParameter("noticeseq");
 		
