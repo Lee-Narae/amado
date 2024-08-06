@@ -234,7 +234,7 @@ public class ControllerHS {
 //		String root = session.getServletContext().getRealPath("/");
 //		String path = root + "resources" + File.separator + "files";
 
-		String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\images\\uploading";
+		String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\images\\uploadimg";
 		
 
 		String newFileName = "";
@@ -793,7 +793,7 @@ public class ControllerHS {
 //				String root = session.getServletContext().getRealPath("/");
 //				String path = root + "resources" + File.separator + "files";
 
-				String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\images\\uploading";
+				String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\images\\uploadimg";
 
 				String newFileName = "";
 				byte[] bytes = null;
