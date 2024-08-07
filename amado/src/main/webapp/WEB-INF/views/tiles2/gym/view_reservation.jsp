@@ -125,7 +125,12 @@
                 <tbody>
                     <c:forEach var="reservation" items="${requestScope.resList}" varStatus="status">
                         <tr class="clickable">
-                            <td style="text-align: center;"><c:out value="${status.index + 1}"/></td>
+                        <c:if test="${status.index != 9}">
+                            <td style="text-align: center;"><c:out value="${requestScope.currentShowPageNo - 1}${status.index + 1}"/></td>
+                        </c:if>
+                        <c:if test="${status.index == 9}">
+                            <td style="text-align: center;"><c:out value="${requestScope.currentShowPageNo}0"/></td>
+                        </c:if>     
                             <td style="text-align: center;" data-content="<c:out value='${reservation.gymname}'/>"><c:out value="${reservation.gymname}"/></td>
                             <td style="text-align: center;" data-content="<c:out value='${reservation.reservation_date.substring(0, 10)}'/>">
 							  <c:out value="${reservation.reservation_date.substring(0, 10)}"/>
