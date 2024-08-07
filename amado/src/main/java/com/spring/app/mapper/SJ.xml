@@ -362,7 +362,7 @@
 	<select id="readComment" parameterType="String" resultType="BoardCommentVO">
 		select boardcommentseq, parentseq, comment_text
 		     , to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') as registerdate
-		     , fk_userid, status, groupno, fk_boardcommentseq, depthno
+		     , fk_userid, status, groupno, fk_boardcommentseq, depthno, changestatus
 		from tbl_boardcomment
 		where status = 1 and parentseq = #{parentseq}
 		order by boardcommentseq desc
@@ -382,7 +382,7 @@
 	
 	<!-- 댓글 수정 -->
 	<update id="updateComment" parameterType="HashMap">
-		update tbl_boardcomment set comment_text = #{comment_text} || ' (' || to_char(sysdate, 'yyyy-mm-dd hh24:mi:ss') || ') (수정됨)'
+		update tbl_boardcomment set comment_text = #{comment_text}, changestatus = changestatus + 1
 		where boardcommentseq = #{boardcommentseq}
 	</update>	
 

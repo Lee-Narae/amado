@@ -1555,3 +1555,19 @@ where STATUS = 0;
 
 commit
 
+
+
+select *
+from tab
+
+select *
+from TBL_BOARDCOMMENT
+
+alter table TBL_BOARDCOMMENT
+add changestatus number default 0 not null;
+
+select *
+from TBL_FLEAMARKETCOMMENT
+
+select *
+from TBL_FLEAMARKETCOMMENTREPLY

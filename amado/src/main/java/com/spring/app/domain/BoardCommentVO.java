@@ -10,7 +10,7 @@ boardcommentseq          NUMBER                                   -- 댓글번�
 ,fk_userid                nvarchar2(20)                            -- 아이디(FK) 	
 */
 	
-	private String boardcommentseq, parentseq, comment_text, registerdate, fk_userid, status, groupno, fk_boardcommentseq, depthno;
+	private String boardcommentseq, parentseq, comment_text, registerdate, fk_userid, status, groupno, fk_boardcommentseq, depthno, changestatus;
 
 	public String getBoardcommentseq() {
 		return boardcommentseq;
@@ -82,6 +82,14 @@ boardcommentseq          NUMBER                                   -- 댓글번�
 
 	public void setDepthno(String depthno) {
 		this.depthno = depthno;
+	}
+
+	public String getChangestatus() {
+		return changestatus;
+	}
+
+	public void setChangestatus(String changestatus) {
+		this.changestatus = changestatus;
 	}
 	
 	

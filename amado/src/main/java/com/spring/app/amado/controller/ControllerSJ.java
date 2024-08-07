@@ -443,6 +443,7 @@ public class ControllerSJ {
 				jsonObj.put("groupno", bdcmtvo.getGroupno());
 				jsonObj.put("fk_boardcommentseq", bdcmtvo.getFk_boardcommentseq());
 				jsonObj.put("depthno", bdcmtvo.getDepthno());
+				jsonObj.put("changestatus", bdcmtvo.getChangestatus());
 
 				MemberVO loginuser = service.getMemberInfo(bdcmtvo.getFk_userid());
 				jsonObj.put("memberimg", loginuser.getMemberimg());
