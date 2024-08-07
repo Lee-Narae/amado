@@ -279,9 +279,9 @@ $(document).ready(function(){
 						<option value="2">야구</option>
 						<option value="3">배구</option>
 						<option value="4">농구</option>
-						<option value="5">테니스</option>
-						<option value="6">볼링</option>
-						<option value="7">족구</option>
+						<option value="6">테니스</option>
+						<option value="7">볼링</option>
+						<option value="5">족구</option>
 						<option value="8">배드민턴</option>
 					</select>
 				</div>			
