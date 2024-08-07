@@ -358,7 +358,7 @@ public class ControllerSJ {
 	@PostMapping(value = "/board/addCommentSJ", produces = "text/plain;charset=UTF-8")
 	public String addComment(BoardCommentVO boardcommentvo) {
 		// 댓글쓰기에 첨부파일이 없는 경우
-
+		
 		int n = 0;
 		try {
 			n = service.addBoardComment(boardcommentvo);
@@ -370,7 +370,6 @@ public class ControllerSJ {
 		jsonObject.put("n", n); // 정상일 경우 {"n":1} 문제가 생겼을 경우{"n":0}
 
 		return jsonObject.toString();
-		// 정상일 경우 {"n":1, "name":"엄정화"} 문제가 생겼을 경우(point 300 넘을 경우){"n":0, "name":"엄정화"}
 	}
 
 	// === 답글쓰기(Ajax 로 처리) === //
@@ -445,6 +444,9 @@ public class ControllerSJ {
 				jsonObj.put("fk_boardcommentseq", bdcmtvo.getFk_boardcommentseq());
 				jsonObj.put("depthno", bdcmtvo.getDepthno());
 
+				MemberVO loginuser = service.getMemberInfo(bdcmtvo.getFk_userid());
+				jsonObj.put("memberimg", loginuser.getMemberimg());
+				
 				jsonArr.put(jsonObj);
 			}
 		}
@@ -747,6 +749,9 @@ public class ControllerSJ {
 				jsonObj.put("groupno", commentrevo.getGroupno());
 				jsonObj.put("parentseq", commentrevo.getParentseq());
 				jsonObj.put("registerdate", commentrevo.getRegisterdate());
+				
+				MemberVO loginuser = service.getMemberInfo(commentrevo.getFk_userid());
+				jsonObj.put("memberimg", loginuser.getMemberimg());
 
 				jsonArr.put(jsonObj);
 			} // end of for-----------------------

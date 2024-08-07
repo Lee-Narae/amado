@@ -220,6 +220,9 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 
 		String boardcommentseq = paraMap.get("boardcommentseq");
 		String parentseq = paraMap.get("parentseq");
+		
+		System.out.println("boardcommentseq : " + boardcommentseq);
+		System.out.println("parentseq : " + parentseq);
 
 		n = dao.deleteComment(boardcommentseq); // 댓글 삭제
 //		System.out.println("~~~ 확인용 n1 : " + n1);
