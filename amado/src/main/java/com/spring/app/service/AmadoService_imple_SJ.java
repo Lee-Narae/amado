@@ -134,6 +134,7 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		List<ClubVO> clubPagingList = new ArrayList<ClubVO>();
 		
 		for(ClubVO clubvo : clubPagingList2) {
+			// 멤버수 가져오기
 			int clubMemberCnt = dao.getClubMemberCnt(clubvo.getClubseq());
 			
 			clubvo.setClubmembercnt(clubMemberCnt);
