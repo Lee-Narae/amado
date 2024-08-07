@@ -27,11 +27,11 @@
             padding: 20px;
         }
         .table thead th {
-            background-color: #81d4fa; /* 하늘색 헤더 */
-            color: #01579b; /* 어두운 하늘색 글자 */
-            font-weight: bold;
-            text-align: center;
-            border-bottom: 2px solid #01579b; /* 헤더 밑에 테두리 */
+            background-color: #01579b;
+		    color: #ffffff;
+		    font-weight: 100;
+		    text-align: center;
+		    border-bottom: 2px solid #01579b;
         }
         .table tbody tr {
             transition: background-color 0.3s;
@@ -140,6 +140,7 @@
                     </c:forEach>
                 </tbody>
             </table>
+            <c:if test="${sessionScope.loginuser == null}"><br><br><div style="text-align: center; font-size: 20px; font-weight: bold;">로그인 후 사용해주세요</div><br><br></c:if>
         </div>
     </div>
 
@@ -150,7 +151,7 @@
     <!-- 모달 HTML -->
     <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content" style="width: 120%;">
+            <div class="modal-content" style="width: 140%;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="infoModalLabel">상세 정보</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -166,7 +167,7 @@
                     <input type="hidden" id="modalGymSeq" value="" />
                     <div style="border-left: solid 3px #01579b; padding-left:2%;" id="gymmap">찾아가는 길</div>
                     <div align="center">
-						 <div id="map" style="margin-top:2%; width:500px; height:300px;"></div>
+						 <div id="map" style="margin-top:2%; width:600px; height:400px;"></div>
 					</div>
                 </div>
                 <div class="modal-footer">
@@ -228,7 +229,7 @@
                 		    		  	center 에 할당할 값은 kakao.maps.LatLng 클래스를 사용하여 생성한다.
                 		    		  	kakao.maps.LatLng 클래스의 2개 인자값은 첫번째 파라미터는 위도(latitude)이고, 두번째 파라미터는 경도(longitude)이다.
                 		    		 --%>
-                		    	 	level: 4  // 지도의 레벨(확대, 축소 정도). 숫자가 클수록 축소된다. 4가 적당함.
+                		    	 	level: 3  // 지도의 레벨(확대, 축소 정도). 숫자가 클수록 축소된다. 4가 적당함.
                 		     };
                 			
                 			// 지도 생성 및 생성된 지도객체 리턴
