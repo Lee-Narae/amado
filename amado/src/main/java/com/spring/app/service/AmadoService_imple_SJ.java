@@ -129,7 +129,18 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	// 검색타입 있는 리스트 가져오기(페이징)
 	@Override
 	public List<ClubVO> searchPaging(Map<String, String> paraMap) {
-		List<ClubVO> clubPagingList = dao.searchPaging(paraMap);
+		List<ClubVO> clubPagingList2 = dao.searchPaging(paraMap);
+		
+		List<ClubVO> clubPagingList = new ArrayList<ClubVO>();
+		
+		for(ClubVO clubvo : clubPagingList2) {
+			int clubMemberCnt = dao.getClubMemberCnt(clubvo.getClubseq());
+			
+			clubvo.setClubmembercnt(clubMemberCnt);
+			
+			clubPagingList.add(clubvo);
+		}
+		
 		return clubPagingList;
 	}
 
@@ -549,6 +560,13 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 	public ClubVO rankT(String params) {
 		ClubVO rankT = dao.rankT(params);
 		return rankT;
+	}
+
+	// === 검색어 입력시 자동글 완성하기 4 ===
+	@Override
+	public List<String> wordSearchShow(Map<String, String> paraMap) {
+		List<String> wordList = dao.wordSearchShow(paraMap);
+		return wordList;
 	}
 
 

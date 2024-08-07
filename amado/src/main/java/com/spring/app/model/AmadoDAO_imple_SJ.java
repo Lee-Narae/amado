@@ -379,4 +379,19 @@ public class AmadoDAO_imple_SJ implements AmadoDAO_SJ {
 	}
 
 
+	@Override
+	public int getClubMemberCnt(String clubseq) {
+		int clubMemberCnt = sqlsession.selectOne("SJ.getClubMemberCnt", clubseq);
+		return clubMemberCnt;
+	}
+
+	// === 검색어 입력시 자동글 완성하기 5 === //
+	@Override
+	public List<String> wordSearchShow(Map<String, String> paraMap) {
+		List<String> wordList = sqlsession.selectList("SJ.wordSearchShow", paraMap);
+		return wordList;
+	}
+
+
+
 }

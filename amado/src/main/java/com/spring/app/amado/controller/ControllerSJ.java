@@ -3,6 +3,9 @@ package com.spring.app.amado.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.spring.app.common.FileManager;
 import com.spring.app.common.GoogleMail;
@@ -200,28 +205,64 @@ public class ControllerSJ {
 		String goBackURL = "";
 		String searchType = "";
 		String searchWord = "";
+		
+		
+		Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
+		// redirect 되어서 넘어온 데이터가 있는지 꺼내어 와본다.
+		
+		if(inputFlashMap != null) { // redirect 되어서 넘어온 데이터가 있다 라면 
+			
+			@SuppressWarnings("unchecked") // 경고 표시를 하지 말라는 뜻이다.
+			Map<String, String> redirect_map = (Map<String, String>) inputFlashMap.get("redirect_map");
+			// "redirect_map" 값은  /view_2.action 에서  redirectAttr.addFlashAttribute("키", 밸류값); 을 할때 준 "키" 이다. 
+			// "키" 값을 주어서 redirect 되어서 넘어온 데이터를 꺼내어 온다. 
+			// "키" 값을 주어서 redirect 되어서 넘어온 데이터의 값은 Map<String, String> 이므로 Map<String, String> 으로 casting 해준다.
 
-		boardseq = request.getParameter("boardseq");
-		goBackURL = request.getParameter("goBackURL");
-		searchType = request.getParameter("searchType");
-		searchWord = request.getParameter("searchWord");
-
-		if (searchType == null) {
-			searchType = "";
+		  	
+		//	System.out.println("~~~ 확인용 seq : " + redirect_map.get("seq"));  
+			boardseq = redirect_map.get("boardseq");
+			
+			// === #143. 이전글제목, 다음글제목 보기 시작 === //
+			searchType = redirect_map.get("searchType");
+			
+			try {
+			     searchWord = URLDecoder.decode(redirect_map.get("searchWord"), "UTF-8"); // 한글데이터가 포함되어 있으면 반드시 한글로 복구해 주어야 한다. 
+			     goBackURL = URLDecoder.decode(redirect_map.get("goBackURL"), "UTF-8");   // 한글데이터가 포함되어 있으면 반드시 한글로 복구해 주어야 한다.
+			} catch (UnsupportedEncodingException e) {
+			    e.printStackTrace();
+			} 
+			
+		//  System.out.println("~~~ 확인용 searchType : " + searchType);
+		//  System.out.println("~~~ 확인용 searchWord : " + searchWord);
+		//  System.out.println("~~~ 확인용 goBackURL : " + goBackURL);
+		//  === #143. 이전글제목, 다음글제목 보기 끝 === //
+		    
 		}
-		if (searchWord == null) {
-			searchWord = "";
+		
+		////////////////////////////////////////////////////////////
+		
+		else {
+		
+			boardseq = request.getParameter("boardseq");
+			goBackURL = request.getParameter("goBackURL");
+			searchType = request.getParameter("searchType");
+			searchWord = request.getParameter("searchWord");
+	
+			if (searchType == null) {
+				searchType = "";
+			}
+			if (searchWord == null) {
+				searchWord = "";
+			}
+		
 		}
 
-		/*
-		 * System.out.println("확인용 ~~ boardseq : " + boardseq);
-		 * System.out.println("확인용 ~~ goBackURL : " + goBackURL);
-		 * System.out.println("확인용 ~~ searchType : " + searchType);
-		 * System.out.println("확인용 ~~ searchWord : " + searchWord); 확인용 ~~ boardseq : 7
-		 * 확인용 ~~ goBackURL :
-		 * /community/list.do?searchType=title&searchWord=%ED%85%8C&sportseq=%
-		 * 2Fcommunity%2Flist.do 확인용 ~~ searchType : title 확인용 ~~ searchWord : 테스트
-		 */
+		
+//		  System.out.println("확인용 ~~ boardseq : " + boardseq);
+//		  System.out.println("확인용 ~~ goBackURL : " + goBackURL);
+//		  System.out.println("확인용 ~~ searchType : " + searchType);
+//		  System.out.println("확인용 ~~ searchWord : " + searchWord); 
+
 
 		mav.addObject("goBackURL", goBackURL);
 
@@ -263,6 +304,54 @@ public class ControllerSJ {
 		}
 		return mav;
 	}
+	
+	
+	
+	@PostMapping("/board/boardview_2.do")
+	public ModelAndView view_2(ModelAndView mav, HttpServletRequest request, RedirectAttributes redirectAttr) {
+		
+		// 조회하고자 하는 글번호 받아오기
+		String boardseq = request.getParameter("boardseq");
+		
+		//  이전글제목, 다음글제목 보기 시작 //
+		String goBackURL = request.getParameter("goBackURL");
+		String searchType = request.getParameter("searchType");
+		String searchWord = request.getParameter("searchWord");
+		
+		try {
+			searchWord = URLEncoder.encode(searchWord, "UTF-8");
+			goBackURL = URLEncoder.encode(goBackURL, "UTF-8");
+				
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		// 이전글제목, 다음글제목 보기 끝  //
+		
+		
+		HttpSession session = request.getSession();
+		session.setAttribute("readCountPermission", "yes");
+		
+		// ==== redirect(GET방식임) 시 데이터를 넘길때 GET 방식이 아닌 POST 방식처럼 데이터를 넘기려면 RedirectAttributes 를 사용하면 된다. 시작 ==== //
+		
+		Map<String, String> redirect_map = new HashMap<>();
+		redirect_map.put("boardseq", boardseq);
+		
+		// === #142. 이전글제목, 다음글제목 보기 시작 === //
+		redirect_map.put("goBackURL", goBackURL);
+		redirect_map.put("searchType", searchType);
+		redirect_map.put("searchWord", searchWord);
+		// === #142. 이전글제목, 다음글제목 보기 끝 === //
+		
+		redirectAttr.addFlashAttribute("redirect_map", redirect_map);
+		// redirectAttr.addFlashAttribute("키", 밸류값); 으로 사용하는데 오로지 1개의 데이터만 담을 수 있으므로 여러개의 데이터를 담으려면 Map 을 사용해야 한다. 
+		
+		mav.setViewName("redirect:/board/boardview.do"); // 실제로 redirect:/view.action 은 POST 방식이 아닌 GET 방식이다.
+		// ==== redirect(GET방식임) 시 데이터를 넘길때 GET 방식이 아닌 POST 방식처럼 데이터를 넘기려면 RedirectAttributes 를 사용하면 된다. 끝 ==== //
+		
+		return mav;
+	}
+	
+	
 
 	// === 댓글쓰기(Ajax 로 처리) === //
 	@ResponseBody
@@ -419,7 +508,12 @@ public class ControllerSJ {
 				// ~~~ 확인용 webapp 의 절대경로 =>
 				// C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\board\
 
-				String path =root+"resources" +File.separator+"files";
+				// String path =root+"resources" +File.separator+"files";
+				
+				// 가져오는거 어케해야하지?
+				String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\images\\uploadImg";
+				
+				
 				/*
 				 * File.separator 는 운영체제에서 사용하는 폴더와 파일의 구분자이다. 운영체제가 Windows 이라면 File.separator
 				 * 는 "\" 이고, 운영체제가 UNIX, Linux, 매킨토시(맥) 이라면 File.separator 는 "/" 이다.
@@ -699,6 +793,9 @@ public class ControllerSJ {
 
 		mav.addObject("params", params);
 
+		// 글 내용 띄어쓰기
+		boardvo.setContent(boardvo.getContent().replaceAll("\n", "<br>"));
+		
 		// === 첨부파일이 있는 경우 작업 시작 !!! ===
 		MultipartFile attach = boardvo.getAttach();
 
@@ -1451,13 +1548,8 @@ public class ControllerSJ {
 		String email = request.getParameter("email");
 		String phone = request.getParameter("phone");
 		String fk_userid = request.getParameter("fk_userid");
-		System.out.println("확인용~~ title : " + title);
-		System.out.println("확인용~~ searchType_a : " + searchtype_a);
-		System.out.println("확인용~~ searchType_b : " + searchtype_b);
-		System.out.println("확인용~~ content : " + content);
-		System.out.println("확인용~~ email : " + email);
-		System.out.println("확인용~~ phone : " + phone);
-		System.out.println("확인용~~ fk_userid : " + fk_userid);
+
+		content = content.replaceAll("\n", "<br>");
 
 		List<MultipartFile> fileList = mrequest.getFiles("file_arr");
 
@@ -1622,8 +1714,6 @@ public class ControllerSJ {
 			// 관리자 검색용귀찮아서 넣어둠
 			String searchtype_fk_userid = "0";
 
-			System.out.println("~~ 확인용 str_currentShowPageNo : " + str_currentShowPageNo);
-
 			if (searchtype_a == null) {
 				searchtype_a = "0";
 			}
@@ -1662,7 +1752,6 @@ public class ControllerSJ {
 
 			totalCount = service.getTotalInquiryCount(paraMap);
 
-			System.out.println("totalCount" + totalCount);
 
 			totalPage = (int) Math.ceil((double) totalCount / sizePerPage);
 
@@ -2192,4 +2281,36 @@ public class ControllerSJ {
 
 	}
 
+	
+	// === 게시글 검색어 입력시 자동글 완성하기 3 ===
+	@ResponseBody
+	@GetMapping(value="/wordSearchShow.do", produces="text/plain;charset=UTF-8") 
+	public String wordSearchShow(HttpServletRequest request) {
+		
+		String searchType = request.getParameter("searchType");
+		String searchWord = request.getParameter("searchWord");
+		
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("searchType", searchType);
+		paraMap.put("searchWord", searchWord);
+		
+		List<String> wordList = service.wordSearchShow(paraMap); 
+		
+		JSONArray jsonArr = new JSONArray(); // []
+		
+		if(wordList != null) {
+			for(String word : wordList) {
+				JSONObject jsonObj = new JSONObject(); // {} 
+				jsonObj.put("word", word);
+				
+				jsonArr.put(jsonObj); // [{},{},{}]
+			}// end of for-----------------
+		}
+		
+		return jsonArr.toString();
+	}	
+	
+	
+	
+	
 }

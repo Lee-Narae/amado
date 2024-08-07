@@ -32,6 +32,7 @@
                    
     a {text-decoration: none !important;} /* 페이지바의 a 태그에 밑줄 없애기 */
     
+    
 </style>
 
 <script type="text/javascript">
@@ -56,6 +57,98 @@ $(document).ready(function() {
 		$("input[name='searchWord']").val("${requestScope.paraMap.searchWord}");
 		$("select#searchType_a").val("${requestScope.params}");
 	}
+	
+	
+	<%-- === 검색어 입력시 자동글 완성하기  === --%>
+	$("div#displayList").hide();
+	
+	$("input[name='searchWord']").keyup(function(){
+		
+		const wordLength = $(this).val().trim().length;
+		// 검색어에서 공백을 제거한 길이를 알아온다.
+		
+		if(wordLength == 0){
+			$("div#displayList").hide();
+			// 검색어가 공백이거나 검색어 입력후 백스페이스키를 눌러서 검색어를 모두 지우면 검색된 내용이 안 나오도록 해야 한다. 
+		}
+		
+		else {
+			
+			if( $("select[name='searchType']").val() == "title" ||
+				$("select[name='searchType']").val() == "fk_userid" ) {
+				
+				$.ajax({
+					url:"<%= ctxPath%>/wordSearchShow.do",
+					type:"get",
+					data:{"searchType":$("select[name='searchType']").val()
+						 ,"searchWord":$("input[name='searchWord']").val()}, 
+					dataType:"json",
+					success:function(json){
+					 //	console.log(JSON.stringify(json));
+						/*
+						  [{"word":"JSP/Servlet 에 대해서 질문있어요~~"},{"word":"처음으로 Jsp에 대해서 배워요"},{"word":"저는 jAVA에 대해서 궁금해요~~"},{"word":"친구가 java 공부를 하래요"},{"word":"Java 배우기가 어렵나요?"},{"word":"다음달 부터 JAVA 를 배우려구요"},{"word":"javascript 가 뭔가요?"},{"word":"웹을 하려면 jaVaScript 를 해야하나요?"}]
+						     또는 
+						  [] 
+						*/
+						
+						<%-- === #120. 검색어 입력시 자동글 완성하기 7 === --%>
+						if(json.length > 0){
+							// 검색된 데이터가 있는 경우임.
+							
+							let v_html = ``;
+							
+							$.each(json, function(index, item){
+								const word = item.word;
+								// word ==> 저는 jAVA에 대해서 궁금해요~~
+								// word ==> Java 배우기가 어렵나요?
+								// word ==> 웹을 하려면 jaVaScript 를 해야하나요?
+										
+							//	word.toLowerCase() 은 word 를 모두 소문자로 변경하는 것이다.
+								// word ==> 저는 java에 대해서 궁금해요~~
+								// word ==> java 배우기가 어렵나요?
+								// word ==> 웹을 하려면 javascript 를 해야하나요?
+										
+							    const idx = word.toLowerCase().indexOf($("input[name='searchWord']").val().toLowerCase());
+								// 만약에 검색어가 JavA 이라면 
+								/*
+								      저는 java에 대해서 궁금해요~~         은 idx 가 3  이다.
+								   java 배우기가 어렵나요?            은 idx 가 0  이다.
+								      웹을 하려면 javascript 를 해야하나요?  은 idx 가 7  이다.
+								*/
+								
+								const len = $("input[name='searchWord']").val().length; 
+								// 검색어(JavA)의 길이 len 은 4가 된다.
+							
+							/*	
+								console.log("~~~~~ 시작 ~~~~~~");
+								console.log(word.substring(0, idx));       // 검색어(JavA) 앞까지의 글자         ==> 저는 
+								console.log(word.substring(idx, idx+len)); // 검색어(JavA) 글자                     ==> jAVA
+								console.log(word.substring(idx+len));      // 검색어(JavA) 뒤부터 끝까지 글자  ==> 에 대해서 궁금해요~~ 
+								console.log("~~~~~ 끝 ~~~~~~");
+							*/
+							
+							    const result = word.substring(0, idx) + "<span style='color:purple;'>"+word.substring(idx, idx+len)+"</span>"+ word.substring(idx+len); 
+							    
+							    v_html += `<span style='cursor:pointer;' class='result'>\${result}</span><br>`;
+							    
+							});// end of $.each()----------------------
+							
+							const input_width = $("input[name='searchWord']").css("width"); // 검색어 input 태그 width 값 알아오기
+							
+							$("div#displayList").css({"width":input_width}); // 검색결과 div 의 width 크기를 검색어 입력 input 태그의 width 와 일치시키기 
+							
+							$("div#displayList").html(v_html);
+							$("div#displayList").show();
+						}
+					},
+					error: function(request, status, error){
+					   alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					}
+				});
+			}
+		}
+	});// end of $("input[name='searchWord']").keyup(function(){})--------
+	
 	
 	
 }); // end of $(document).ready(function() -------
@@ -192,9 +285,9 @@ $(document).ready(function() {
 	</c:if>		
 	<c:if test="${requestScope.params == '8'}">
 		<h2 style="text-align:center; margin-bottom: 30px;">배드민턴 게시판</h2>
-	</c:if>		
-	
-		<form name="searchFrm" class="float-right" style="text-align:right; margin-bottom: 20px; margin-top: 20px;">
+	</c:if>	
+		
+		<form name="searchFrm" class="float-right" style="text-align:right; margin-top: 20px;">
 		    <select id="searchType_a" name="searchType_a" style="height: 26px;" onchange="navigate()">
 		        <option value="/community/list.do">전체</option>
 		        <option value="1">축구</option>
@@ -217,7 +310,15 @@ $(document).ready(function() {
 	        <button type="button" class="btn btn-secondary btn-sm" onclick="goSearch()">검색</button>
 	        <input type="hidden" name="sportseq" value="${requestScope.params}" />
 		</form>	
+		
+		<%-- === 검색어 입력시 자동글 완성하기  === --%>
+		<div id="displayList" style="border:solid 1px gray; border-top:0px; height:100px; margin-left:68%; margin-top:-30px; overflow:auto;">
+		</div>	
 
+		<br><br>
+
+		<div class="mt-4" style="margin-top: 80px;">
+		
 		<table class="table table-bordered">
 			<thead>
 				<tr>
@@ -544,6 +645,8 @@ $(document).ready(function() {
 
 			</tbody>
 		</table>
+		
+		</div>
 		
 		<div style="display: flex;"  class="float-right">
 			<button type="button" class="btn btn-secondary btn-sm" style="margin: auto 0 auto auto;" onclick="goAdd()">글쓰기</button>

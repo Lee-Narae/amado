@@ -553,6 +553,34 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 		    });
 		} // end of readReplyDisplay
 
+		
+		
+		// === #139. 이전글제목, 다음글제목 보기 === //
+		function goView(boardseq){
+			
+			const goBackURL = "${requestScope.goBackURL}";
+		//	      goBackURL = "/list.action?searchType=subject&searchWord=정화&currentShowPageNo=3"; 
+		<%--	
+		         아래처럼 get 방식으로 보내면 안된다. 왜냐하면 get방식에서 &는 전송될 데이터의 구분자로 사용되기 때문이다. 
+			location.href=`<%= ctxPath%>/view.action?seq=\${seq}&goBackURL=\${goBackURL}`;        
+		--%>
+		
+		<%-- 그러므로 & 를 글자 그대로 인식하는 post 방식으로 보내야 한다.
+		           아래에 #132 에 표기된 form 태그를 먼저 만든다. --%>  
+		     const frm = document.goViewFrm; 
+		     frm.boardseq.value = boardseq;
+		     frm.goBackURL.value = goBackURL;
+		     
+		     if(${not empty requestScope.paraMap}){ // 검색조건이 있을 경우 
+		    	 frm.searchType.value = "${requestScope.paraMap.searchType}";
+		    	 frm.searchWord.value = "${requestScope.paraMap.searchWord}";
+		     }
+		     
+		     frm.method = "post";
+		     frm.action = "<%= ctxPath%>/board/boardview_2.do";
+		     frm.submit();
+		     
+		}// end of function goView(seq)--------------	
 
 
 </script>
@@ -637,11 +665,13 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 
 		<div class="mt-5">
 			<%-- 글조회수 1 증가를 위해서  view.do 대신에 view_2.do 으로 바꾼다. --%>
-			<div style="margin-bottom: 1%;">이전글제목&nbsp;&nbsp;<span class="move" onclick="javascript:location.href='view_2.do?seq=${requestScope.boardvo.previousseq}'">${requestScope.boardvo.previoussubject}</span>
-			</div>
-			<div style="margin-bottom: 1%;"> 다음글제목&nbsp;&nbsp;<span class="move" onclick="javascript:location.href='view_2.do?seq=${requestScope.boardvo.nextseq}'">${requestScope.boardvo.nextsubject}</span>
-			</div>
-			<br>
+		    <div style="margin-bottom: 1%;">이전글제목&nbsp;&nbsp;<span class="move" onclick="goView('${requestScope.boardvo.previousseq}')">${requestScope.boardvo.previoussubject}</span></div>
+		 	<div style="margin-bottom: 1%;">다음글제목&nbsp;&nbsp;<span class="move" onclick="goView('${requestScope.boardvo.nextseq}')">${requestScope.boardvo.nextsubject}</span></div>
+		    <%-- >>> 글목록에서 검색되어진 글내용일 경우 이전글제목, 다음글제목은 검색되어진 결과물내의 이전글과 다음글이 나오도록 하기 위한 것이다.  끝  <<< --%>   
+		    	
+		 	<br>
+
+
 
 			<button type="button" class="btn btn-secondary btn-sm mr-3" onclick="javascript:location.href='<%=ctxPath%>/community/list.do'">전체목록보기</button>
 
