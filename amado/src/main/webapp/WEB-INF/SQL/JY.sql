@@ -562,5 +562,6 @@ order by registerdate desc;
 
 
 select *
-from tbl_clubboard
+from tbl_fleamarket
 
+commit;
