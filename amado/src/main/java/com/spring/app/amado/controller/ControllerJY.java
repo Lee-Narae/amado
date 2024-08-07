@@ -1015,9 +1015,9 @@ public class ControllerJY {
 		String sizePerPage = "10";
 		
 		//System.out.println("userid"+fk_userid);
-		//System.out.println("clubseq"+clubseq);
-		//System.out.println("clubname"+clubname);
-		//System.out.println("sportname"+sportname);
+		System.out.println("clubseq"+clubseq);
+		System.out.println("clubname"+clubname);
+		System.out.println("sportname"+sportname);
 		System.out.println("currentShowPageNo"+currentShowPageNo);
 		
 		if(searchType == null || !"title".equals(searchType) && !"content".equals(searchType)) {
