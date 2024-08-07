@@ -1418,16 +1418,16 @@ ORDER BY rank;
 
 
 
-SELECT *
+SELECT clubname
 FROM (
     SELECT clubseq, clubname, clubimg, fk_sportseq, clubtel
          , city, local, clubgym, clubtime
          , membercount, clubpay, clubstatus, clubscore
          , ROW_NUMBER() OVER (ORDER BY clubscore DESC) AS rank
     FROM tbl_club
-    WHERE clubstatus = 1 AND fk_sportseq = 1
+    WHERE clubstatus = 1 AND fk_sportseq = 2
 )
-WHERE rank IN (3)
+WHERE rank IN (1)
 ORDER BY rank;
 
 
@@ -1446,10 +1446,29 @@ from tbl_member
 
 
 
+-- 여기서 1등 클럽이름 조회
+
+SELECT clubname
+FROM (
+    SELECT clubseq, clubname, clubimg, fk_sportseq, clubtel
+         , city, local, clubgym, clubtime
+         , membercount, clubpay, clubstatus, clubscore
+         , ROW_NUMBER() OVER (ORDER BY clubscore DESC) AS rank
+    FROM tbl_club
+    WHERE clubstatus = 1 AND fk_sportseq = 2
+)
+WHERE rank IN (1)
+ORDER BY rank;
+
+-- 클럽 시퀀스 조회
+
 select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, LOCAL, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfilename, viewcount
 from tbl_club
-<<<<<<< HEAD
+where clubname = '크로우즈'
 
+select *
+from tbl_clubmember
+where clubseq = 78
 
 select *
 from tab
@@ -1466,14 +1485,14 @@ where clubseq = 123
 
 select *
 from tbl_board
-=======
+
 where fk_userid = 'amado2' and fk_sportseq = 1
 
 
 
 select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, LOCAL, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfilename, viewcount
 from tbl_club
-where clubname = '배턴하는날'
+where clubname = '최강볼링'
 where clubseq = 130
 
 select *
@@ -1526,12 +1545,13 @@ select *
 from tbl_clubmember
 where STATUS = 0
 
+
+select *
+from tbl_clubmember
+order by clubseq desc
+
 update tbl_clubmember set STATUS = 1
 where STATUS = 0;
 
 commit
 
-
-
-
->>>>>>> branch 'main' of https://github.com/Lee-Narae/amado.git
