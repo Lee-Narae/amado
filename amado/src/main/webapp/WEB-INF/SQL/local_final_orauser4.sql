@@ -1430,17 +1430,6 @@ FROM (
 WHERE rank IN (3)
 ORDER BY rank;
 
-select *
-from tbl_member
-
-select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, LOCAL, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfilename, viewcount
-from tbl_club
-where fk_userid = 'adtes6'
-
-select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, LOCAL, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfilename, viewcount
-from tbl_club
-where clubname = '턍초야다'
-
 
 select *
 from tbl_calendar_small_category
@@ -1448,9 +1437,38 @@ from tbl_calendar_small_category
 select *
 from TBL_CATEGORY
 
+
+
+
+
+select *
+from tbl_member
+
+
+
+select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, LOCAL, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfilename, viewcount
+from tbl_club
+where fk_userid = 'amado2' and fk_sportseq = 4
+
+
+
+select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, LOCAL, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfilename, viewcount
+from tbl_club
+where clubname = '턍초야다'
+
+
+
+
 select *
 from tbl_matchingreg
-where clubseq = '149'
+where sportseq = 3 and clubseq = '136';
+
+
+update tbl_matchingreg set MATCHDATE = '24/06/22'
+where MATCHINGREGSEQ = 124;
+
+commit
+
 
 delete from tbl_matchingreg
 where MATCHINGREGSEQ > 90 and clubseq = 149;
@@ -1458,8 +1476,18 @@ where MATCHINGREGSEQ > 90 and clubseq = 149;
 commit
 
 
-   
-update tbl_matchingreg set MATCHDATE = '24/07/13'
-where MATCHINGREGSEQ = 90;
+select *
+from tbl_clubmember
 
 
+
+
+
+select *
+from tbl_clubmember
+where STATUS = 0
+
+update tbl_clubmember set STATUS = 1
+where STATUS = 0;
+
+commit
