@@ -56,10 +56,6 @@ nav ul li button {
       	margin-left: 80px;
         }
 
-#mycontent > nav {
-margin-right: 80px;
-margin-top: 100px;
-}
 
 .container {
     padding: 0 30px; /* 컨테이너의 좌우 여백을 설정하여 전체 레이아웃의 여백을 추가 */
@@ -86,8 +82,9 @@ margin-top: 100px;
     object-fit: cover; /* 이미지 비율 유지하며 잘라내기 */
 }
 
-.card-body {
-    padding:   px; /* 카드 본문 내부의 패딩 설정 (필요에 따라 조정) */
+
+#mycontent > nav {
+margin-right: 270px;
 }
 
 </style>
@@ -156,11 +153,11 @@ function goSearch() {
 </script>
 	<body>
 	      <h1 class="text-center py-3">체육관 대관하기</h1>
-	        <nav class="d-flex justify-content-end">
-	            <button id="indoorBtn" class="btn btn-primary mx-2" style="margin-left: -30px;">실내</button>
-				<button id="outdoorBtn" class="btn btn-secondary mx-2" style="margin-left: -30px;">실외</button>
+	        <nav class="d-flex justify-content-end" style="margin-left:500px;">
+	            <button id="indoorBtn" class="btn btn-primary mx-2" >실내</button>
+				<button id="outdoorBtn" class="btn btn-secondary mx-2" >실외</button>
 	        </nav>
-	 <div class="search-box">
+	 <div class="search-box" style="margin-left:210px">
             <form name="gymSearchFrm">
 	            <input type="text"  name="searchWord" id="searchWord" placeholder="검색">	
 	            <input type="hidden" name="insidestatus" />
@@ -233,6 +230,7 @@ function goSearch() {
         <ul class="pagination">${requestScope.pageBar}</ul>
     </nav>
 </div>
+<br><br>
 	    <form name="goViewFrm">
 	<input type="hidden" name="gymseq" /> 
 	<input type="hidden" name="goBackURL" value="${requestScope.currentURL}"/> 

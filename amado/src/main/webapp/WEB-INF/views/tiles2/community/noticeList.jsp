@@ -143,14 +143,16 @@ $(document).ready(function(){
 								
 								const idx = word.toLowerCase().indexOf($("input[name='searchWord']").val().toLowerCase());
 								
-								const len = $("input[name='searchWord']").val().length;
-								
-								const result = word.substring(0, idx)
-											  +"<span style='color: orange;'>"
-											  +word.substring(idx, idx+len)+"</span>"+word.substring(idx+len);
-								
-								if(index < 10){
-									v_html += `<span style='cursor: pointer;' class='result'>\${result}<br></span>`;
+								if(idx != -1){
+									const len = $("input[name='searchWord']").val().length;
+									
+									const result = word.substring(0, idx)
+												  +"<span style='color: orange;'>"
+												  +word.substring(idx, idx+len)+"</span>"+word.substring(idx+len);
+									
+									if(index < 10){
+										v_html += `<span style='cursor: pointer;' class='result'>\${result}<br></span>`;
+									}
 								}
 							}); // end of for
 							
