@@ -309,9 +309,8 @@ public class ControllerJY {
 	public ModelAndView fleamarket(ModelAndView mav, HttpServletRequest request) {
 		
 		// 모든 상품 select 해오기
-		List<FleamarketVO> allItemList = service.getAllItemList(); //where조건 없이 디비에서 데이터를 불러만오는 거라  map에 넣어서 보낼게 없음!!!!  //(); 괄호에 뭐가 들어갈땐 조건이 있어서 그 조건을 디비에보내서 결과물 가져올때임
+		List<FleamarketVO> allItemList = null; //where조건 없이 디비에서 데이터를 불러만오는 거라  map에 넣어서 보낼게 없음!!!!  //(); 괄호에 뭐가 들어갈땐 조건이 있어서 그 조건을 디비에보내서 결과물 가져올때임
 		
-		mav.addObject("allItemList", allItemList);
 		// ----------------------------------
 		
 		
@@ -331,6 +330,8 @@ public class ControllerJY {
 			// " 연 습" ==> "연 습"
 		}
 		
+		
+		//-------------------------------
 		Map<String, String> paraMap = new HashMap<>();
 		paraMap.put("searchType", searchType);
 		paraMap.put("searchWord", searchWord);
@@ -370,6 +371,9 @@ public class ControllerJY {
 		int endRno = startRno + sizePerPage - 1; // 끝 행번호
 		paraMap.put("startRno", Integer.toString(startRno));
 		paraMap.put("endRno", Integer.toString(endRno));
+		//-------------------------------
+		
+		
 		
 		// 검색시 검색조건 및 검색어 값 유지시키기
 		// 1. equals: 문자열비교 / 대소문자 구분을 하여 비교한다. 2. equalsIgnoreCase: 문자열비교 / 대소문자 구분을 하지
@@ -445,8 +449,10 @@ public class ControllerJY {
 //	 %EC%A0%95%ED%99%94 == 정화 (한글이라 변환된거임)  
 		
 		
-		///////////////////////////////////////////////////////////////
+		allItemList = service.getAllItemList(paraMap);
 		
+		///////////////////////////////////////////////////////////////
+		mav.addObject("allItemList", allItemList);
 		mav.addObject("cnt", cnt); // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.
 		mav.addObject("currentShowPageNo", currentShowPageNo); // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.
 		mav.addObject("sizePerPage", sizePerPage); // 페이징 처리시 보여주는 순번을 나타내기 위한 것임.
@@ -467,9 +473,18 @@ public class ControllerJY {
 	// 전체 상품 보여주기
 	@ResponseBody
 	@GetMapping(value="/allview.do")
-	public String allview() {
+	public String allview(HttpServletRequest request) {
 		
-		List<FleamarketVO> allItemList = service.getAllItemList();
+		String searchType = request.getParameter("searchType");
+		String searchWord = request.getParameter("searchWord");
+		
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("searchType", searchType);
+		paraMap.put("searchWord", searchWord);
+		
+		List<FleamarketVO> allItemList = null;
+		
+		allItemList = service.getAllItemList(paraMap);
 		
 		JSONArray jsonArr = new JSONArray();
 		/*
@@ -808,9 +823,13 @@ public class ControllerJY {
 	public ModelAndView requiredLogin_addClubBoard(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
 		
 		String clubseq = request.getParameter("clubseq");
+		String sportname = request.getParameter("sportname");
+		String clubname = request.getParameter("clubname");
 		//System.out.println("글쓰기뷰단"+clubseq);
 		
 		mav.addObject("clubseq", clubseq);
+		mav.addObject("sportname", sportname);
+		mav.addObject("clubname", clubname);
 		mav.setViewName("club/addClubBoard.tiles2");
 		return mav;
 		
@@ -926,6 +945,8 @@ public class ControllerJY {
 		// === !!! 첨부파일이 있는 경우 작업 끝 !!! ===	
 
 		String clubseq = request.getParameter("clubseq");
+		String clubname = request.getParameter("clubname");
+		String sportname = request.getParameter("sportname");
 		//System.out.println("글쓰기완료"+clubseq);
 		
 		
@@ -943,6 +964,8 @@ public class ControllerJY {
 		paraMap.put("wasfileName", cvo.getWasfileName());
 		//paraMap.put("filesize", cvo.getFilesize());
 		paraMap.put("clubseq", clubseq); //cvo에서 가져온값 x
+		paraMap.put("clubname", clubname); //cvo에서 가져온값 x
+		paraMap.put("sportname", sportname); //cvo에서 가져온값 x
 		
 		System.out.println("파일"    + cvo.getWasfileName() +  cvo.getFilename());
 		// 파일   null   court.png   null
@@ -2024,6 +2047,41 @@ public class ControllerJY {
 		return "weather/weatherXML";
 		//  /board/src/main/webapp/WEB-INF/views/weather/weatherXML.jsp 파일을 생성한다.  
 	}
+	
+	
+	
+	// 플리마켓 - 검색어 입력시 자동글 완성하기
+	@ResponseBody
+	@GetMapping(value="/fleamatket/wordSearchShoww.do", produces="text/plain;charset=UTF-8") 
+	public String wordSearchShoww(HttpServletRequest request) {
+		
+		String searchType = request.getParameter("searchType");
+		String searchWord = request.getParameter("searchWord");
+		
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("searchType", searchType);
+		paraMap.put("searchWord", searchWord);
+		
+		List<String> wordList = service.wordSearchShoww(paraMap); 
+		
+		JSONArray jsonArr = new JSONArray(); // []
+		
+		if(wordList != null) {
+			for(String word : wordList) {
+				JSONObject jsonObj = new JSONObject(); // {} 
+				jsonObj.put("word", word);
+				
+				jsonArr.put(jsonObj); // [{},{},{}] 
+			}// end of for-----------------
+		}
+		
+		return jsonArr.toString();
+	}
+
+	
+	
+	
+	
 	
 	
 }
