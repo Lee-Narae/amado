@@ -202,7 +202,7 @@ function viewComment(){
 										<div class="mr-3">`;
 										
 						if(item.memberimg != null){
-							v_html += `<img width="50" height="50" style="border-radius: 50px;" src="<%=ctxPath%>/resources/images/\${item.memberimg}"/>`;
+							v_html += `<img width="50" height="50" style="border-radius: 50px;" src="<%=ctxPath%>/resources/images/uploadImg/\${item.memberimg}"/>`;
 						}
 						else {
 							v_html += `<img width="50" height="50" style="border-radius: 50px;" src="<%=ctxPath%>/resources/images/기본이미지.png"/>`;
@@ -219,7 +219,7 @@ function viewComment(){
 						}			
 										
 						v_html += `</span>
-							<div style="text-align: left;">\${item.comment_text }</div>
+							<div style="text-align: left;" id="comment_text">\${item.comment_text }</div>
 							</div>
 						</div>`;					
 												
@@ -348,7 +348,7 @@ function viewCommentOnly(){
 			<c:forEach var="comment" items="${requestScope.commentList}" varStatus="status">
 				<div style="display: flex;">
 					<div class="mr-3">
-						<c:if test="${comment.memberimg != null}"><img width="50" height="50" style="border-radius: 50px;" src="<%=ctxPath%>/resources/images/${comment.memberimg}"/></c:if>
+						<c:if test="${comment.memberimg != null}"><img width="50" height="50" style="border-radius: 50px;" src="<%=ctxPath%>/resources/images/uploadImg/${comment.memberimg}"/></c:if>
 						<c:if test="${comment.memberimg == null}"><img width="50" height="50" style="border-radius: 50px;" src="<%=ctxPath%>/resources/images/기본이미지.png"/></c:if>
 					</div>
 					<div align="left" style="width: 100%;">

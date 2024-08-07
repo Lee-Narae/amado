@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <% String ctxPath = request.getContextPath(); %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <link rel="stylesheet" href="<%=ctxPath%>/resources/bootstrap-4.6.2-dist/css/bootstrap.min.css" type="text/css">
 <style type="text/css">
@@ -140,7 +141,7 @@ margin-left: 2%;
 
 <div id="container">
 <div  style="background-color: #4040bf">
-<div class="board_header"  style="display: flex; margin-left: 16.5%; color: white; padding: 3%;">
+<div class="board_header"  style="display: flex; margin-left: 15.5%; color: white; padding: 3%;">
     <div class="tit">
         <h1>${requestScope.clubvo.clubname}</h1>
         <div class="desc">${requestScope.clubvo.fk_userid}가 속한 동호회 입니다.</div>
@@ -172,58 +173,58 @@ margin-left: 2%;
                 <div class="rank">
                     <div class="img">
                     	<c:if test="${requestScope.clubvo.clubscore < 100}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank17.png" />
+                    		<img style="margin-left: 70%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank17.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 100 && requestScope.clubvo.clubscore < 200}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank16.png" />
+                    		<img style="margin-left: 70%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank16.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 200 && requestScope.clubvo.clubscore < 300}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank15.png" />
+                    		<img style="margin-left: 70%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank15.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 300 && requestScope.clubvo.clubscore < 400}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank14.png" />
+                    		<img style="margin-left: 70%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank14.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 400 && requestScope.clubvo.clubscore < 500}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank13.png" />
+                    		<img style="margin-left: 70%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank13.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 500 && requestScope.clubvo.clubscore < 600}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank12.png" />
+                    		<img style="margin-left: 70%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank12.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 600 && requestScope.clubvo.clubscore < 700}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank11.png" />
+                    		<img style="margin-left: 70%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank11.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 700 && requestScope.clubvo.clubscore < 800}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank10.png" />
+                    		<img style="margin-left: 70%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank10.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 800 && requestScope.clubvo.clubscore < 900}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank9.png" />
+                    		<img style="margin-left: 70%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank9.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 900 && requestScope.clubvo.clubscore < 1000}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank8.png" />
+                    		<img style="margin-left: 70%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank8.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 1000 && requestScope.clubvo.clubscore < 1100}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank7.png" />
+                    		<img style="margin-left: 70%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank7.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 1100 && requestScope.clubvo.clubscore < 1200}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank6.png" />
+                    		<img style="margin-left: 70%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank6.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 1200 && requestScope.clubvo.clubscore < 1300}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank5.png" />
+                    		<img style="margin-left: 70%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank5.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 1300 && requestScope.clubvo.clubscore < 1400}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank4.png" />
+                    		<img style="margin-left: 70%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank4.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 1400 && requestScope.clubvo.clubscore < 1500}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank3.png" />
+                    		<img style="margin-left: 70%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank3.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 1500 && requestScope.clubvo.clubscore < 1600}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank2.png" />
+                    		<img style="margin-left: 70%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank2.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 1600 && requestScope.clubvo.clubscore < 1700}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank1.png" />
+                    		<img style="margin-left: 70%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank1.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore > 1700}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank0.png" />
+                    		<img style="margin-left: 70%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank0.png" />
                     	</c:if>
                     </div>
                 </div>
@@ -241,7 +242,7 @@ margin-left: 2%;
 </div>
 	<div id="top2" style="display: flex; height: 500px; margin-top: 5%;">
 		<!-- 동호회 여러개 가입시 캐러셀 적용 -->
-		<div id="myclub" style="width: 38%; margin: 5% 0 0 8%;">
+		<div id="myclub" style="width: 38%; margin: 5% 0 0 5%;">
 			<div style="text-align: center;">
 				<img class='uniform-size1' src="<%=ctxPath%>/resources/images/uploadImg/${requestScope.clubvo.wasfileName}">
 			</div>
@@ -259,13 +260,21 @@ margin-left: 2%;
 					    </p>
 					</figure>
 				</div>
+				
+				<%-- 클럽 전화번호를 변수에 할당 --%>
+				<c:set var="clubTel" value="${requestScope.clubvo.clubtel}" />
+				
+				<%-- 전화번호를 010-1234-1234 형식으로 포맷 --%>
+				<c:set var="formattedTel" value="${clubTel.substring(0, 3)}-${clubTel.substring(3, 7)}-${clubTel.substring(7)}" />
+				
+				
 				<ul style="list-style: none; width: 50%; margin: 4% 10% 0 0; font-family: 'Roboto', sans-serif;">
-					<li><span style="font-weight: bolder;">대표 연락처:  </span>${requestScope.clubvo.clubtel}</li>
+					<li><span style="font-weight: bolder;">대표 연락처:  </span>${formattedTel}</li>
 					<li style="margin-top: 4%;"><span style="font-weight: bolder;">지역:  </span>${requestScope.clubvo.city} ${requestScope.clubvo.local}</li>
 					<li style="margin-top: 4%;"><span style="font-weight: bolder;">활동구장:  </span>${requestScope.clubvo.clubgym}</li>
 					<li style="margin-top: 4%;"><span style="font-weight: bolder;">운영시간:  </span>${requestScope.clubvo.clubtime}</li>
 					<li style="margin-top: 4%;"><span style="font-weight: bolder;">정원:  </span>${requestScope.clubvo.membercount}</li>
-					<li style="margin-top: 4%;"><span style="font-weight: bolder;">회비:  </span>${requestScope.clubvo.clubpay}원</li>
+					<li style="margin-top: 4%;"><span style="font-weight: bolder;">회비:  </span><fmt:formatNumber value="${requestScope.clubvo.clubpay}" type="number" pattern="#,###" />원</li>
 					<li style="margin-top: 4%;"><span style="font-weight: bolder;">랭크 점수:  </span>${requestScope.clubvo.clubscore}</li>
 				</ul>
 			</div>
@@ -432,6 +441,12 @@ margin-left: 2%;
 
 </div>
 
+<input id="speed" type="hidden" value="${requestScope.statList.speed}"></input>
+<input id="quick" type="hidden" value="${requestScope.statList.quick}"></input>
+<input id="power" type="hidden" value="${requestScope.statList.power}"></input>
+<input id='earth' type="hidden" value="${requestScope.statList.earth}"></input>
+<input id='stretch' type="hidden" value="${requestScope.statList.stretch}"></input>
+
 <script src="<%= ctxPath%>/resources/Highcharts-10.3.1/code/highcharts.js"></script>
 <script src="<%= ctxPath%>/resources/Highcharts-10.3.1/code/highcharts-more.js"></script>
 <script src="<%= ctxPath%>/resources/Highcharts-10.3.1/code/modules/exporting.js"></script>
@@ -494,21 +509,27 @@ Highcharts.chart('stat', {
     },
 
     xAxis: {
-        categories: ['speed', 'quick', 'power', 'earth',
-            'stretch'],
+        categories: ['속력', '순발력', '근력', '지구력',
+            '유연성'],
         tickmarkPlacement: 'on',
-        lineWidth: 0
+        lineWidth: 0,
+        labels: {
+            style: {
+                fontSize: '14px' // 글자 크기를 14px로 설정
+            }
+        }
     },
 
     yAxis: {
         gridLineInterpolation: 'polygon',
         lineWidth: 0,
-        min: 0
+        min: 0,
+        max: 5 // 최대치를 5로 설정
     },
 
     tooltip: {
         shared: true,
-        pointFormat: '<span style="color:{series.color}">{series.name}: <b>\${point.y:,.0f}</b><br/>'
+        pointFormat: '<span style="color:{series.color}">{series.name}: <b>\{point.y:,.0f}</b><br/>'
     },
 
     legend: {
@@ -519,8 +540,8 @@ Highcharts.chart('stat', {
 
     series: [{
         name: '스탯 평균',
-        data: [2, 1, 1, 3, 2],
-        pointPlacement: 'on'
+        data: [parseFloat($("input#speed").val()), parseFloat($("input#quick").val()), parseFloat($("input#power").val()), parseFloat($("input#earth").val()), parseFloat($("input#stretch").val())],
+        pointPlacement: 'off'
     }],
 
     responsive: {

@@ -86,16 +86,16 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 
 	// 상품등록  완료 요청(파일첨부ㅇ)
 	@Override
-	public int add_withFile(FleamarketVO fvo) {
+	public int add_withFilee(FleamarketVO fvo) {
 		int n = sqlsession.insert("JY.add_withFilee",fvo);
 		return n;
 	}
 
 	// 모든 상품 select 해오기
 	@Override
-	public List<FleamarketVO> getAllItemList() { 
+	public List<FleamarketVO> getAllItemList(Map<String, String> paraMap) { 
 		//리턴타입이 맵인경우 = 맵퍼에서 resultType이 map? 인경우에만 <result>쓴다.  지금은 x
-		List<FleamarketVO> allItemList = sqlsession.selectList("JY.getAllItemList");
+		List<FleamarketVO> allItemList = sqlsession.selectList("JY.getAllItemList", paraMap);
 		return allItemList;
 	}
 
@@ -470,6 +470,14 @@ public class AmadoDAO_imple_JY implements AmadoDAO_JY {
 	public int edit(ClubBoardVO cvo) {
 		int n = sqlsession.update("JY.edit", cvo);
 		return n;
+	}
+
+	
+	// 플리마켓 - 검색어 입력시 자동글 완성하기
+	@Override
+	public List<String> wordSearchShoww(Map<String, String> paraMap) {
+		List<String> wordList = sqlsession.selectList("JY.wordSearchShow", paraMap);
+		return wordList;
 	}
 
 

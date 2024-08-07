@@ -538,8 +538,6 @@ public class ControllerNR {
 		paramap.put("localname", localname);
 		paramap.put("matchdate", matchdate);
 		
-		
-		
 		List<Map<String,String>> matchList = service.searchMatch(paramap);
 		
 		JSONArray jsonArr = new JSONArray();
@@ -598,8 +596,6 @@ public class ControllerNR {
 	public String getClubseq(HttpServletRequest request) {
 		
 		String sportname = request.getParameter("sportname");
-		
-		System.out.println("sportname: "+sportname);
 		
 		HttpSession session = request.getSession();
 		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
@@ -668,7 +664,10 @@ public class ControllerNR {
 		String local = request.getParameter("local");
 		String area = request.getParameter("area");
 		String hour = request.getParameter("hour");
-		hour = (Integer.parseInt(hour) < 10)?"0"+hour:hour;
+		int int_hour = Integer.parseInt(hour);
+		if(int_hour < 10) {
+			hour = "0"+int_hour;
+		}
 		String minute = request.getParameter("minute");
 		minute = (Integer.parseInt(minute) < 10)?"0"+minute:minute;
 		
@@ -676,8 +675,6 @@ public class ControllerNR {
 		
 		String clubseq = service.getClubseq_forReg(clubname);
 		String sportseq = service.getSportseq_forReg(sportname);
-		
-		// System.out.println(clubseq+","+sportseq); 확인 완료
 		
 		Map<String, String> paramap = new HashMap<String, String>();
 		paramap.put("clubseq", clubseq);

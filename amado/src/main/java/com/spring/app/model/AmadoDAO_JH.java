@@ -73,5 +73,7 @@ public interface AmadoDAO_JH {
 
 	List<Map<String, String>> getimgList(String sportseq);
 
+	Map<String, String> getstat(String clubseq);
+
 
 }

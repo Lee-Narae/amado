@@ -32,7 +32,7 @@
     <select id="getClubseq" parameterType="HashMap" resultType="String">
     	select clubseq
 		from tbl_clubmember
-		where fk_userid = #{userid} and sportseq = #{sportseq}
+		where fk_userid = #{userid} and sportseq = #{sportseq} and status = 1
     </select>
 
 
@@ -109,10 +109,10 @@
 		join tbl_sport C
 		on A.sportseq = C.sportseq
 		where C.sportname = #{sportname}
+		and to_date(matchdate, 'yyyy-mm-dd hh24:mi') >=  to_date(sysdate, 'yyyy-mm-dd hh24:mi')
 		<if test="cityname != ''">and A.city = #{cityname}</if>
 		<if test="localname != '선택하세요'">and A.local = #{localname}</if>
 		<if test="matchdate != ''">and to_char(A.matchdate, 'yyyy-mm-dd') >= #{matchdate}</if>
-		<if test="matchdate == ''">and matchdate >= sysdate</if>
 		order by matchdate, matchtime
 	</select>
 	
@@ -486,7 +486,7 @@
 		on B.clubseq = D.clubseq
 		join tbl_sport E
 		on B.sportseq = E.sportseq
-		<![CDATA[ where D.fk_userid = #{userid} and A.status = 0 and B.matchdate > sysdate ]]>
+		<![CDATA[ where D.fk_userid = #{userid} and A.status = 0 and B.matchdate >= sysdate ]]>
 	</select>
 	
 	
@@ -778,7 +778,7 @@
 				select distinct case when length(title) > 10 then substr(title, 0, 10)||'...' else title end title
 			</when>
 			<otherwise>
-				select distinct case when length(content) > 10 then substr(content, 0, 10)||'...' else content end content
+				select distinct to_char(case when length(content) > 10 then substr(content, 0, 10)||'...' else content end) content
 			</otherwise>
 		</choose>
 		from tbl_notice
@@ -788,7 +788,7 @@
 				and lower(title) like '%'||lower(#{searchWord})||'%'
 			</when>
 			<otherwise>
-				<![CDATA[and DBMS_LOB.INSTR(lower(content), '%'||lower(#{searchWord})||'%')>0 ]]>
+				and lower(content) like '%'||lower(#{searchWord})||'%'
 			</otherwise>
 		</choose>
 	</select>

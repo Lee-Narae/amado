@@ -316,6 +316,8 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 		       const queryString = $("form[name='addWriteFrm']").serialize();
 		    --%>
 		    
+		    const fk_userid = "${sessionScope.loginuser.userid}";
+		    
 			const comment_text = $("input:text[name='comment_text']").val();
 			
 //			alert(comment_text);
@@ -694,8 +696,7 @@ $(document).on("click", "button.btnUpdateReply", function(e) {
 							<td>
 								<input type="text" id="comment_text" name="comment_text" size="100" maxlength="1000" />
 	  							<input type="hidden" name="parentseq" value="${requestScope.boardvo.boardseq}" />  
-	  							<input type="hidden" name="fk_userid" value="${requestScope.boardvo.fk_userid}" />
-	  							<input type="hidden" id="userid" value="${sessionScope.loginuser.userid}">  
+	  							<input type="hidden" id="userid" name="fk_userid" value="${sessionScope.loginuser.userid}">  
 							</td>
 						</tr>
 

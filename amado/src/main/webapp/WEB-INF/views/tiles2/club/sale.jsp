@@ -726,7 +726,7 @@ rotate(
 			    	        v_html += "<div style='width: 6%;'><img class='profile-img' src='<%=ctxPath%>/resources/images/기본이미지.png'></div>";
 			    	    }
 			    	    if (item.memberimg != null) {
-			    	        v_html += "<div style='width: 6%;'><img class='profile-img' src='<%=ctxPath%>/resources/images/" + item.memberimg + "'></div>";
+			    	        v_html += "<div style='width: 6%;'><img class='profile-img' src='<%=ctxPath%>/resources/images/uploadImg/" + item.memberimg + "'></div>";
 			    	    }
 			    	    v_html += "<div style='width: 85%;'>";
 			    	    v_html += "<div style='font-size:12pt; font-weight: bold; margin-bottom: 2.3%;'>" + item.fk_userid + "</div>";
@@ -810,7 +810,7 @@ rotate(
 				    	        v_html += "<div style='width: 6%;'><img class='profile-img' src='<%=ctxPath%>/resources/images/기본이미지.png'></div>";
 				    	    }
 				    	    if (item.memberimg != null) {
-				    	        v_html += "<div style='width: 6%;'><img class='profile-img' src='<%=ctxPath%>/resources/images/" + item.memberimg + "'></div>";
+				    	        v_html += "<div style='width: 6%;'><img class='profile-img' src='<%=ctxPath%>/resources/images/uploadImg/" + item.memberimg + "'></div>";
 				    	    }
 				    	    v_html += "<div style='display: flex; margin-top:0.7%; margin-left: 2%; width: 120%'>";
 				    	    v_html += "<div style='font-size:12pt; font-weight: bold; margin-bottom: 1.5%;'>" + item.fk_userid + "</div>";
@@ -1122,7 +1122,7 @@ function goViewComment(currentShowPageNo){
 
 <div style="font-weight: bolder; font-size: 10pt;">
 	<img style="width: 1.2%; margin-bottom: 0.2%;" src="<%=ctxPath%>/resources/images/홈.png">
-	<a style="text-decoration: none; color: black;" href="<%=ctxPath%>/club/oldshop.do">&nbsp;플리마켓 홈</a>
+	<a style="text-decoration: none; color: black;" href="<%=ctxPath%>/club/fleamarket.do">&nbsp;플리마켓 홈</a>
 </div>
 <hr>
 <div style="width: 70%; margin: 0 auto;">
@@ -1135,7 +1135,7 @@ function goViewComment(currentShowPageNo){
 				<div>
 					<div style="width: 400%;">
 						<%-- <img src="<%=ctxPath%>/resources/images/다운로드.jpg" style="width: 100%;" /> --%>
-						<img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/${fleMap.imgfilename}" style="cursor: pointer;" onclick="openPopup('${fleMap.imgfilename}')" />
+						<img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/uploadImg/${fleMap.wasfileName}" style="cursor: pointer;" onclick="openPopup('${fleMap.wasfileName}')" />
 					</div>
 				</div>
 			</div>
@@ -1176,7 +1176,7 @@ function goViewComment(currentShowPageNo){
 	            <div class="carousel-inner w-100" role="listbox">
 	                <c:forEach var="imgList" items="${requestScope.imgList}" varStatus="status">
 			            <div class="carousel-item ${status.first ? 'active' : ''}">
-			                <img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/zee/${imgList.imgfilename}" onclick="window.location.href='<%=ctxPath%>/club/sale.do?fleamarketseq=${imgList.fleamarketseq}'">
+			                <img class="d-block col-3 img-fluid" src="<%=ctxPath%>/resources/images/uploadImg/${imgList.wasfilename}" onclick="window.location.href='<%=ctxPath%>/club/sale.do?fleamarketseq=${imgList.fleamarketseq}'">
 			            </div>
 			        </c:forEach>
 	            </div>

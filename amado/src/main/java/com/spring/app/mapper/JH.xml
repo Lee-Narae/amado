@@ -367,11 +367,29 @@
 	<resultMap type="HashMap" id="fleMap"> 
 		<result property="imgfilename" column="imgfilename" javaType="String"/>
 		<result property="fleamarketseq" column="fleamarketseq" javaType="String"/>
+		<result property="wasfilename" column="wasfilename" javaType="String"/>
 	</resultMap>
 	<select id="getimgList" resultMap="fleMap" parameterType="String">
-		select imgfilename, fleamarketseq
+		select imgfilename, fleamarketseq, wasfilename
 		from tbl_fleamarket
 		where sportseq = #{sportseq}
 	</select>
+	
+	
+	<resultMap type="HashMap" id="statMap"> 
+		<result property="speed" column="speed" javaType="String"/>
+		<result property="quick" column="quick" javaType="String"/>
+		<result property="power" column="power" javaType="String"/>
+		<result property="earth" column="earth" javaType="String"/>
+		<result property="stretch" column="stretch" javaType="String"/>
+	</resultMap>
+	<select id="getstat" resultMap="statMap" parameterType="String">
+		select avg(speed) as speed, avg(quick) as quick, avg(power) as power, avg(earth) as earth, avg(stretch) as stretch
+        from tbl_clubmember c
+        join tbl_member m
+        on c.fk_userid = m.userid
+        where clubseq = #{clubseq}
+	</select>
+	
 	
 </mapper>

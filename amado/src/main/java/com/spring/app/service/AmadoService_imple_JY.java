@@ -87,16 +87,16 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 
 	// 상품등록  완료 요청(파일첨부ㅇ)
 	@Override
-	public int add_withFile(FleamarketVO fvo) {
-		int n = dao.add_withFile(fvo); //첨부파일이 있는경우
+	public int add_withFilee(FleamarketVO fvo) {
+		int n = dao.add_withFilee(fvo); //첨부파일이 있는경우
 		return n;
 	}
 
 
 	// 모든 상품 select 해오기
 	@Override
-	public List<FleamarketVO> getAllItemList() {
-		List<FleamarketVO> allItemList = dao.getAllItemList();
+	public List<FleamarketVO> getAllItemList(Map<String, String> paraMap) {
+		List<FleamarketVO> allItemList = dao.getAllItemList(paraMap);
 		return allItemList;
 	}
 
@@ -471,6 +471,15 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 	public int edit(ClubBoardVO cvo) {
 		int n = dao.edit(cvo);
 		return n;
+	}
+
+
+
+	// 플리마켓 - 검색어 입력시 자동글 완성하기
+	@Override
+	public List<String> wordSearchShoww(Map<String, String> paraMap) {
+		List<String> wordList = dao.wordSearchShoww(paraMap);
+		return wordList;
 	}
 
 

@@ -37,10 +37,10 @@ public interface AmadoService_JY {
 	List<Map<String, String>> getSportNameList(String sportname);
 
 	// 상품등록  완료 요청(파일첨부ㅇ)
-	int add_withFile(FleamarketVO fvo);
+	int add_withFilee(FleamarketVO fvo);
 
 	// 모든 상품 select 해오기
-	List<FleamarketVO> getAllItemList();
+	List<FleamarketVO> getAllItemList(Map<String, String> paraMap);
 
 	// 상품 전체 개수 불러오기
 	int getItemCnt(Map<String, String> paraMap);
@@ -137,6 +137,8 @@ public interface AmadoService_JY {
 	Map<String, String> getOrgfilename(String clubboardseq);
 
 	int edit(ClubBoardVO cvo);
+
+	List<String> wordSearchShoww(Map<String, String> paraMap);
 	
 
 
