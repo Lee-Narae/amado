@@ -668,7 +668,10 @@ public class ControllerNR {
 		String local = request.getParameter("local");
 		String area = request.getParameter("area");
 		String hour = request.getParameter("hour");
-		hour = (Integer.parseInt(hour) < 10)?"0"+hour:hour;
+		int int_hour = Integer.parseInt(hour);
+		if(int_hour < 10) {
+			hour = "0"+int_hour;
+		}
 		String minute = request.getParameter("minute");
 		minute = (Integer.parseInt(minute) < 10)?"0"+minute:minute;
 		
@@ -676,8 +679,6 @@ public class ControllerNR {
 		
 		String clubseq = service.getClubseq_forReg(clubname);
 		String sportseq = service.getSportseq_forReg(sportname);
-		
-		// System.out.println(clubseq+","+sportseq); 확인 완료
 		
 		Map<String, String> paramap = new HashMap<String, String>();
 		paramap.put("clubseq", clubseq);
