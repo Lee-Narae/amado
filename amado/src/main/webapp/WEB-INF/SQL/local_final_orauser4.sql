@@ -1435,3 +1435,20 @@ from tbl_member
 
 select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, LOCAL, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfilename, viewcount
 from tbl_club
+
+
+select *
+from tab
+
+select *
+from TBL_CLUBBOARD
+
+select *
+from TBL_CLUBBOARDCOMMENT
+
+select *
+from tbl_clubmember
+where clubseq = 123
+
+select *
+from tbl_board
