@@ -769,4 +769,28 @@ from tbl_notice
 where status = 0
 and DBMS_LOB.INSTR(content, '공지')>0;
 
+select * from tbl_clubmember;
 
+delete from tbl_matchingreg where matchingregseq = 49;
+commit;
+
+
+select * from tbl_matchingreg;
+
+delete from tbl_member where userid like 'test%';
+commit;
+
+select * from tbl_clubmember;
+update tbl_clubmember set status = 1;
+commit;
+
+
+desc tbl_notice;
+
+alter table tbl_notice drop column ex_content;
+
+ALTER TABLE tbl_clubboard MODIFY content nVARCHAR2(2000);
+
+
+select * from tbl_inquiry;
+select * from tbl_member;

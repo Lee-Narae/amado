@@ -611,7 +611,7 @@ function goRefuse(userid, clubseq){
 							<input type="hidden" id="matchdate" value="${match.matchdate}" />
 							<input type="hidden" id="area" value="${match.area}" />
 						</div>
-					<c:if test="${not empty requestScope.alarmList || not empty requestScope.clubJoinList}">
+					<c:if test="${not empty requestScope.alarmList || not empty requestScope.clubJoinList || status.index < requestScope.matchResultList.size() - 1}">
 						<hr>
 					</c:if>
 				</c:forEach>

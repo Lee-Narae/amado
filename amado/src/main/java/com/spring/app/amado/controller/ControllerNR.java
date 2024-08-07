@@ -538,8 +538,6 @@ public class ControllerNR {
 		paramap.put("localname", localname);
 		paramap.put("matchdate", matchdate);
 		
-		
-		
 		List<Map<String,String>> matchList = service.searchMatch(paramap);
 		
 		JSONArray jsonArr = new JSONArray();
@@ -598,8 +596,6 @@ public class ControllerNR {
 	public String getClubseq(HttpServletRequest request) {
 		
 		String sportname = request.getParameter("sportname");
-		
-		System.out.println("sportname: "+sportname);
 		
 		HttpSession session = request.getSession();
 		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");

@@ -126,11 +126,11 @@ function goWrite(clubseq){
 		<table class="mb-5" style="width: 100%;">
 			<thead>
 				<tr>
-					<th width="10">순번</th>
-					<th width="45">제목</th>
-					<th width="10">작성자</th>
-					<th width="15">작성일자</th>
-					<th width="10">조회수</th>
+					<th style="width: 10%;">순번</th>
+					<th style="width: 45%;">제목</th>
+					<th style="width: 10%;">작성자</th>
+					<th style="width: 15%;">작성일자</th>
+					<th style="width: 10%;">조회수</th>
 				</tr>
 			</thead>
 			<tbody>
