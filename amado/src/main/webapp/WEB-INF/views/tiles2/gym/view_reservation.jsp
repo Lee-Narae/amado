@@ -225,9 +225,8 @@
             				
             				// 지도를 담을 영역의 DOM 레퍼런스
                 			var mapContainer = document.getElementById("map");
-                			console.log(lat)
-        					console.log(lng)
-                			// 지도를 생성할때 필요한 기본 옵션
+
+            				// 지도를 생성할때 필요한 기본 옵션
                 			var options = {
                 		    	 	center: new kakao.maps.LatLng(lat, lng), // 지도의 중심좌표. 반드시 존재해야함.
                 		    	 	<%--
@@ -292,8 +291,8 @@
                				
                		    	// 마커이미지의 크기 
                			    var imageSize = new kakao.maps.Size(34, 39);
-               		        
-               			    // 마커이미지의 옵션. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정한다. 
+
+               		    	// 마커이미지의 옵션. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정한다. 
                			    var imageOption = {offset: new kakao.maps.Point(15, 39)};
                				
                				// 마커의 이미지정보를 가지고 있는 마커이미지를 생성한다. 
@@ -308,7 +307,6 @@
                			    
                				marker.setMap(mapobj); // 지도에 마커를 표시한다
                				
-               				
                				// == 인포윈도우를 생성하기 == 
                				var infowindow = new kakao.maps.InfoWindow({
                					content: position.content,
@@ -318,8 +316,20 @@
                				
                				// 인포윈도우를 가지고 있는 객체배열에 넣기 
                				infowindowArr.push(infowindow);
-                				
-                				
+                			
+               				setTimeout(function(){
+               					mapobj.relayout();
+               					
+               				// 이동할 위도 경도 위치를 생성합니다 
+                   			    var moveLatLon = new kakao.maps.LatLng(lat, lng);
+                   			    
+                   			    // 지도 중심을 이동 시킵니다
+                   			    mapobj.setCenter(moveLatLon);
+               					
+               				}, 100);
+                		
+               			
+               			
                 			// ============ 지도에 매장위치 마커 보여주기 끝 ============ //
             			},// end of success: function(xml){ }------------------
             			
