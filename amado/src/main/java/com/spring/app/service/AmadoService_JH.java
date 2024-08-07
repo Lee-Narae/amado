@@ -64,5 +64,7 @@ public interface AmadoService_JH {
 
 	List<Map<String, String>> getimgList(String sportseq);
 
+	Map<String, String> getstat(String clubseq);
+
 	
 }

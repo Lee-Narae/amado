@@ -777,7 +777,7 @@ public class ControllerJY {
 		
 		if(!(attach.isEmpty())) {
 			//파일첨부가 있는 경우라면
-			n=service.add_withFile(fvo);
+			n=service.add_withFilee(fvo);
 			
 		}
 		

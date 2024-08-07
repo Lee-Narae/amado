@@ -202,5 +202,11 @@ public class AmadoDAO_imple_JH implements AmadoDAO_JH {
 		return imgList;
 	}
 
+	@Override
+	public Map<String, String> getstat(String clubseq) {
+		Map<String, String> statList = sqlsession.selectOne("JH.getstat", clubseq);
+		return statList;
+	}
+
 
 }

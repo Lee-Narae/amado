@@ -778,7 +778,7 @@
 				select distinct case when length(title) > 10 then substr(title, 0, 10)||'...' else title end title
 			</when>
 			<otherwise>
-				select distinct case when length(content) > 10 then substr(content, 0, 10)||'...' else content end content
+				select distinct to_char(case when length(content) > 10 then substr(content, 0, 10)||'...' else content end) content
 			</otherwise>
 		</choose>
 		from tbl_notice
@@ -788,7 +788,7 @@
 				and lower(title) like '%'||lower(#{searchWord})||'%'
 			</when>
 			<otherwise>
-				<![CDATA[and DBMS_LOB.INSTR(lower(content), '%'||lower(#{searchWord})||'%')>0 ]]>
+				and lower(content) like '%'||lower(#{searchWord})||'%'
 			</otherwise>
 		</choose>
 	</select>

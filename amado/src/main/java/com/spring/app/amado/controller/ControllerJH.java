@@ -460,10 +460,14 @@ public class ControllerJH {
 		
 		List<ClubBoardVO> clubboardList = service.getclboList(clubseq);
 		String goBackURL = MyUtil.getCurrentURL(request);
+		
+		Map<String, String> statList = service.getstat(clubseq);
+		
 		mav.addObject("goBackURL", goBackURL);
 		mav.addObject("clubboardList", clubboardList);
 		mav.addObject("clubvo", clubvo);
 		mav.addObject("matchingList", matchingList);
+		mav.addObject("statList", statList);
 		mav.setViewName("club/myClub_plus.tiles2");
 		// /WEB-INF/views/tiles2/main/index.jsp
 		
