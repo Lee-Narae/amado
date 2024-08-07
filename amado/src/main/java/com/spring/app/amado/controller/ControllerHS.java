@@ -719,6 +719,9 @@ public class ControllerHS {
 
 				List<Map<String, String>> gymImgList = service.getGymImg(gymseq);
 
+				gym.setInfo(gym.getInfo().replaceAll("<br>", "\r\n"));
+				gym.setCaution(gym.getCaution().replaceAll("<br>", "\r\n"));
+				
 				mav.addObject("gym", gym);
 				mav.addObject("gymImgList", gymImgList);
 
@@ -809,8 +812,9 @@ public class ControllerHS {
 					e.printStackTrace();
 				}
 
+				gym.setInfo(gym.getInfo().replaceAll("\r\n", "<br>"));
+				gym.setCaution(gym.getCaution().replaceAll("\r\n", "<br>"));
 				int n = service.Gymreg2(gym);
-				System.out.println("n: " + n);
 				int n2 = 0;
 
 				if (n == 1) {
