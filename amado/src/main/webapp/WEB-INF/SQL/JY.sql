@@ -553,11 +553,11 @@ FROM (
 WHERE rn BETWEEN TO_NUMBER(#{currentShowPageNo})*TO_NUMBER(#{sizePerPage})-(to_number(#{sizePerPage})-1) AND TO_NUMBER(#{currentShowPageNo})*TO_NUMBER(#{sizePerPage})
 ORDER BY rn;
 
-DELETE FROM tbl_clubboard where status = 1;
+DELETE FROM tbl_fleamarket where title = '축구화 팝니다~~';
 
 
 select *
-from tbl_clubboard
+from tbl_fleamarket
 order by registerdate desc;
 
 

@@ -780,7 +780,7 @@ public class ControllerJY {
 			n=service.add_withFilee(fvo);
 			
 		}
-		
+		mav.addObject("wasfileName", fvo.getWasfileName());
 		mav.setViewName("redirect:/club/fleamarket.do"); //상품 등록이 완료되면 결과가 적용된 페이지로 가야하기때문에 redirect를 써줘여 함.
 		//  /WEB-INF/views/tiles1/board/error/add_error.jsp 파일을 생성한다.
 
