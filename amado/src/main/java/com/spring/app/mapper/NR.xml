@@ -32,7 +32,7 @@
     <select id="getClubseq" parameterType="HashMap" resultType="String">
     	select clubseq
 		from tbl_clubmember
-		where fk_userid = #{userid} and sportseq = #{sportseq}
+		where fk_userid = #{userid} and sportseq = #{sportseq} and status = 1
     </select>
 
 

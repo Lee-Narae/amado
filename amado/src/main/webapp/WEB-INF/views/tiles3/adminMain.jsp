@@ -26,6 +26,7 @@ justify-content: space-between;
 
 .name {
 margin: 11% 0 0 12%;
+font-size: 11pt;
 }
 
 .cnt {

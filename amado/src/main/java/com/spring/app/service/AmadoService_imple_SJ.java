@@ -134,6 +134,7 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		List<ClubVO> clubPagingList = new ArrayList<ClubVO>();
 		
 		for(ClubVO clubvo : clubPagingList2) {
+			// 멤버수 가져오기
 			int clubMemberCnt = dao.getClubMemberCnt(clubvo.getClubseq());
 			
 			clubvo.setClubmembercnt(clubMemberCnt);
@@ -249,7 +250,7 @@ public class AmadoService_imple_SJ implements AmadoService_SJ {
 		int result = 0;
 		
 		int groupno = dao.getGroupnoMax()+1;
-		System.out.println("groupno 확인용~~ : " + groupno);
+//		System.out.println("groupno 확인용~~ : " + groupno);
 		boardcommentvo.setGroupno(Integer.toString(groupno)); 
 		
 		boardcommentvo.setGroupno(String.valueOf(groupno));

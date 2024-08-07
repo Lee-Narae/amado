@@ -1430,8 +1430,67 @@ FROM (
 WHERE rank IN (3)
 ORDER BY rank;
 
+
+select *
+from tbl_calendar_small_category
+
+select *
+from TBL_CATEGORY
+
+
+
+
+
 select *
 from tbl_member
 
+
+
 select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, LOCAL, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfilename, viewcount
 from tbl_club
+where fk_userid = 'amado2' and fk_sportseq = 1
+
+
+
+select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, LOCAL, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfilename, viewcount
+from tbl_club
+where clubname = '턍초야다'
+
+
+
+
+select *
+from tbl_matchingreg
+where sportseq = 4 and clubseq = '139';
+
+
+update tbl_matchingreg set MATCHDATE = '24/08/08'
+where MATCHINGREGSEQ = 140;
+
+commit
+
+
+delete from tbl_matchingreg
+where MATCHINGREGSEQ > 90 and clubseq = 149;
+
+commit
+
+
+select *
+from tbl_clubmember
+
+
+select *
+from tbl_board
+
+update tbl_board set COMMENTCOUNT = 0
+commit
+
+select *
+from tbl_clubmember
+where STATUS = 0
+
+update tbl_clubmember set STATUS = 1
+where STATUS = 0;
+
+commit
