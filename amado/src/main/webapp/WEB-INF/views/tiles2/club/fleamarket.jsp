@@ -73,6 +73,10 @@
 		margin-top: 5%;
 		
 	}
+	
+	#mycontent{
+		margin-top: 0px;
+	}
 </style>
 
 <script type="text/javascript">
@@ -85,35 +89,85 @@ $(document).ready(function(){
         success:function(json){
         	//alert("전체보여주기 성공하나요~~~???")
         	
+        	let number=0;
         	let v_html=``;
         	
         	$.each(json, function(index, item) {
         		
-        		if((index+1)%4==1){
-        			v_html += `<div style='display:flex;' >`;
-        			
-        		}
-	            v_html += `<div class='col-md-6 col-lg-2 offset-lg-1'>
-				 			   <div class="card mb-3" >
-								   <img style="height: 140px;" src='<%= ctxPath%>/resources/images/uploadImg/\${item.wasfilename}' class='card-img-top'/>
-								   <div class='card-body' style='padding: 0; font-size: 9pt;'>
-									  <ul class='list-unstyled mt-3 pl-3'> 
-							             <li><label class='prodInfo' style="font-weight: bold;">글제목: <span style="font-weight: normal;">\${item.title}</sapn></label></li>
-							             <li><label class='prodInfo' style="font-weight: bold;">가격: <span style="font-weight: normal;">\${Number(item.cost).toLocaleString('en')}원</sapn></label></li> 
-							              <li><label class='prodInfo' style="font-weight: bold;">장소: <span style="font-weight: normal;">\${item.city}&nbsp;\${item.local}</sapn></label><span style="color: red;"></span></li> 
-							             <li class='text-center'><a href='/amado/club/sale.do?fleamarketseq=\${item.fleamarketseq}' class='stretched-link btn btn-outline-dark btn-sm' role='button'>자세히보기</a></li> 
-						            	         <%-- 카드 내부의 링크에 .stretched-link 클래스를 추가하면 전체 카드를 클릭할 수 있고 호버링할 수 있습니다(카드가 링크 역할을 함). --%>
-							          </ul>
-							       </div>
-						      	</div>
-					      	</div>`;
-        			      	
-	            if((index+1)%4==0 || (json.length-1)==index){ //json.length는 전체 개수, item은 json 안의 하나하나
-        			v_html += `</div>`;
+        		if(index < 12){
+        			number = index+1;
+	        		if((index+1)%4==1){
+	        			v_html += `<div style='display:flex;' >`;
+	        			
+	        		}
+		            v_html += `<div class='col-md-6 col-lg-2 offset-lg-1'>
+					 			   <div class="card mb-3" >
+									   <img style="height: 140px;" src='<%= ctxPath%>/resources/images/uploadImg/\${item.wasfilename}' class='card-img-top'/>
+									   <div class='card-body' style='padding: 0; font-size: 9pt;'>
+										  <ul class='list-unstyled mt-3 pl-3'> 
+								             <li><label class='prodInfo' style="font-weight: bold;">글제목: <span style="font-weight: normal;">\${item.title}</sapn></label></li>
+								             <li><label class='prodInfo' style="font-weight: bold;">가격: <span style="font-weight: normal;">\${Number(item.cost).toLocaleString('en')}원</sapn></label></li> 
+								              <li><label class='prodInfo' style="font-weight: bold;">장소: <span style="font-weight: normal;">\${item.city}&nbsp;\${item.local}</sapn></label><span style="color: red;"></span></li> 
+								             <li class='text-center'><a href='/amado/club/sale.do?fleamarketseq=\${item.fleamarketseq}' class='stretched-link btn btn-outline-dark btn-sm' role='button'>자세히보기</a></li> 
+							            	         <%-- 카드 내부의 링크에 .stretched-link 클래스를 추가하면 전체 카드를 클릭할 수 있고 호버링할 수 있습니다(카드가 링크 역할을 함). --%>
+								          </ul>
+								       </div>
+							      	</div>
+						      	</div>`;
+	        			      	
+		            if((index+1)%4==0 || (json.length-1)==index){ //json.length는 전체 개수, item은 json 안의 하나하나
+	        			v_html += `</div>`;
+	        		}
         		}
         	});
     	
 			$("div#product").html(v_html);
+			console.log(number);
+			$("#loadMoreBtn").on("click", function() {
+				$.each(json, function(index, item) {
+					
+					if(number < json.length){
+						$("button#loadMoreBtn").show();
+					}
+					
+	        		if(index >= number && index < number+8){
+	        			
+		        		if((index+1)%4==1){
+		        			v_html += `<div style='display:flex;' >`;
+		        			
+		        		}
+			            v_html += `<div class='col-md-6 col-lg-2 offset-lg-1'>
+						 			   <div class="card mb-3" >
+										   <img style="height: 140px;" src='<%= ctxPath%>/resources/images/uploadImg/\${item.wasfilename}' class='card-img-top'/>
+										   <div class='card-body' style='padding: 0; font-size: 9pt;'>
+											  <ul class='list-unstyled mt-3 pl-3'> 
+									             <li><label class='prodInfo' style="font-weight: bold;">글제목: <span style="font-weight: normal;">\${item.title}</sapn></label></li>
+									             <li><label class='prodInfo' style="font-weight: bold;">가격: <span style="font-weight: normal;">\${Number(item.cost).toLocaleString('en')}원</sapn></label></li> 
+									              <li><label class='prodInfo' style="font-weight: bold;">장소: <span style="font-weight: normal;">\${item.city}&nbsp;\${item.local}</sapn></label><span style="color: red;"></span></li> 
+									             <li class='text-center'><a href='/amado/club/sale.do?fleamarketseq=\${item.fleamarketseq}' class='stretched-link btn btn-outline-dark btn-sm' role='button'>자세히보기</a></li> 
+								            	         <%-- 카드 내부의 링크에 .stretched-link 클래스를 추가하면 전체 카드를 클릭할 수 있고 호버링할 수 있습니다(카드가 링크 역할을 함). --%>
+									          </ul>
+									       </div>
+								      	</div>
+							      	</div>`;
+		        			      	
+			            if((index+1)%4==0 || (json.length-1)==index){ //json.length는 전체 개수, item은 json 안의 하나하나
+		        			v_html += `</div>`;
+		        		}
+	        		}
+	        		
+	        		
+	        		if(index == json.length-1){
+						number = number+8;
+					}
+					
+	        	});
+	    	
+				$("div#product").html(v_html);
+				if(number > json.length){
+					$("button#loadMoreBtn").hide();
+				}
+			});
         	
         
 		},
@@ -233,36 +287,92 @@ $(document).ready(function(){
 	        success:function(json){
 	        	//alert("전체보여주기 성공하나요~~~???")
 	        	
+	        	let number1=0;
 	        	let v_html=``;
+	        	
+	        	if(json.length > 11){
+					$("button#loadMoreBtn").show();
+				}
 	        	
 	        	$.each(json, function(index, item) {
 	        		
-	        		if((index+1)%4==1){
-	        			v_html += `<div style='display:flex;' >`;
-	        			
-	        		}
-		            v_html += `<div class='col-md-6 col-lg-2 offset-lg-1'>
-					 			   <div class="card mb-3" >
-									   <img style="height: 140px;" src='<%= ctxPath%>/resources/images/uploadImg/\${item.wasfilename}' class='card-img-top'/>
-									   <div class='card-body' style='padding: 0; font-size: 9pt;'>
-										  <ul class='list-unstyled mt-3 pl-3'> 
-								             <li><label class='prodInfo' style="font-weight: bold;">글제목: <span style="font-weight: normal;">\${item.title}</sapn></label></li>
-								             <li><label class='prodInfo' style="font-weight: bold;">가격: <span style="font-weight: normal;">\${Number(item.cost).toLocaleString('en')}원</sapn></label></li> 
-								             <li><label class='prodInfo' style="font-weight: bold;">장소: <span style="font-weight: normal;">\${item.city}&nbsp;\${item.local}</sapn></label><span style="color: red;"></span></li> 
-								             <li class='text-center'><a href='/amado/club/prodView.do?fleamarketseq=\${item.fleamarketseq}' class='stretched-link btn btn-outline-dark btn-sm' role='button'>자세히보기</a></li> 
-							            	         <%-- 카드 내부의 링크에 .stretched-link 클래스를 추가하면 전체 카드를 클릭할 수 있고 호버링할 수 있습니다(카드가 링크 역할을 함). --%>
-								          </ul>
-								       </div>
-							      	</div>
-						      	</div>`;
-	        			      	
-		            if((index+1)%4==0 || (json.length-1)==index){ //json.length는 전체 개수, item은 json 안의 하나하나
-	        			v_html += `</div>`;
+	        		if(index < 12){
+	        			number1 = index+1;
+		        		if((index+1)%4==1){
+		        			v_html += `<div style='display:flex;' >`;
+		        			
+		        		}
+			            v_html += `<div class='col-md-6 col-lg-2 offset-lg-1'>
+						 			   <div class="card mb-3" >
+										   <img style="height: 140px;" src='<%= ctxPath%>/resources/images/uploadImg/\${item.wasfilename}' class='card-img-top'/>
+										   <div class='card-body' style='padding: 0; font-size: 9pt;'>
+											  <ul class='list-unstyled mt-3 pl-3'> 
+									             <li><label class='prodInfo' style="font-weight: bold;">글제목: <span style="font-weight: normal;">\${item.title}</sapn></label></li>
+									             <li><label class='prodInfo' style="font-weight: bold;">가격: <span style="font-weight: normal;">\${Number(item.cost).toLocaleString('en')}원</sapn></label></li> 
+									              <li><label class='prodInfo' style="font-weight: bold;">장소: <span style="font-weight: normal;">\${item.city}&nbsp;\${item.local}</sapn></label><span style="color: red;"></span></li> 
+									             <li class='text-center'><a href='/amado/club/sale.do?fleamarketseq=\${item.fleamarketseq}' class='stretched-link btn btn-outline-dark btn-sm' role='button'>자세히보기</a></li> 
+								            	         <%-- 카드 내부의 링크에 .stretched-link 클래스를 추가하면 전체 카드를 클릭할 수 있고 호버링할 수 있습니다(카드가 링크 역할을 함). --%>
+									          </ul>
+									       </div>
+								      	</div>
+							      	</div>`;
+		        			      	
+			            if((index+1)%4==0 || (json.length-1)==index){ //json.length는 전체 개수, item은 json 안의 하나하나
+		        			v_html += `</div>`;
+		        		}
 	        		}
 	        	});
-        	
+	    	
 				$("div#product").html(v_html);
-	        	
+				console.log(number1);
+				$("#loadMoreBtn").on("click", function() {
+					$.each(json, function(index, item) {
+						
+						if(number1 < json.length){
+							$("button#loadMoreBtn").show();
+						}
+						
+		        		if(index >= number1 && index < number1+8){
+		        			
+			        		if((index+1)%4==1){
+			        			v_html += `<div style='display:flex;' >`;
+			        			
+			        		}
+				            v_html += `<div class='col-md-6 col-lg-2 offset-lg-1'>
+							 			   <div class="card mb-3" >
+											   <img style="height: 140px;" src='<%= ctxPath%>/resources/images/uploadImg/\${item.wasfilename}' class='card-img-top'/>
+											   <div class='card-body' style='padding: 0; font-size: 9pt;'>
+												  <ul class='list-unstyled mt-3 pl-3'> 
+										             <li><label class='prodInfo' style="font-weight: bold;">글제목: <span style="font-weight: normal;">\${item.title}</sapn></label></li>
+										             <li><label class='prodInfo' style="font-weight: bold;">가격: <span style="font-weight: normal;">\${Number(item.cost).toLocaleString('en')}원</sapn></label></li> 
+										              <li><label class='prodInfo' style="font-weight: bold;">장소: <span style="font-weight: normal;">\${item.city}&nbsp;\${item.local}</sapn></label><span style="color: red;"></span></li> 
+										             <li class='text-center'><a href='/amado/club/sale.do?fleamarketseq=\${item.fleamarketseq}' class='stretched-link btn btn-outline-dark btn-sm' role='button'>자세히보기</a></li> 
+									            	         <%-- 카드 내부의 링크에 .stretched-link 클래스를 추가하면 전체 카드를 클릭할 수 있고 호버링할 수 있습니다(카드가 링크 역할을 함). --%>
+										          </ul>
+										       </div>
+									      	</div>
+								      	</div>`;
+			        			      	
+				            if((index+1)%4==0 || (json.length-1)==index){ //json.length는 전체 개수, item은 json 안의 하나하나
+			        			v_html += `</div>`;
+			        		}
+		        		}
+		        		
+		        		
+		        		if(index == json.length-1){
+							number1 = number1+8;
+						}
+		        		if(number1 > json.length){
+							$("button#loadMoreBtn").hide();
+						}
+		        	});
+		    	
+					$("div#product").html(v_html);
+					
+					
+				});
+				
+				
 	        
 			},
 	        error: function(request, status, error){
@@ -273,6 +383,7 @@ $(document).ready(function(){
 	
 	$(document).on("click","button.cbtn", function(e){
 		//alert($(e.target).text());
+		
 		
 		$("button.cbtn").css("background-color", "");   // 원래 색상 css 전체 적용
 		$(e.target).css("background-color", "#05203c"); // 클릭된 버튼 색상 변경
@@ -289,7 +400,13 @@ $(document).ready(function(){
 	        	
 	        	let v_html=``;
 	        	
-	        	
+
+        		if(json.length > 11){
+					$("button#loadMoreBtn").show();
+				}
+        		else{
+        			$("button#loadMoreBtn").hide();
+        		}
 	        	
 	        	
 	        	if(json.length == 0) {
@@ -323,36 +440,88 @@ $(document).ready(function(){
 	        	
 	        	else if(json.length > 0) {
 	        		
-		        	$.each(json, function(index, item) {
-		        		
-		        		if((index+1)%4==1){
-		        			v_html += `<div style='display:flex;' >`;
-		        			
-		        		}
-			            v_html += `<div class='col-md-6 col-lg-2 offset-lg-1'>
-						 			   <div class="card mb-3" >
-										   <img style="height: 140px;" src='<%= ctxPath%>/resources/images/uploadImg/\${item.wasfilename}' class='card-img-top'/>
-										   <div class='card-body' style='padding: 0; font-size: 9pt;'>
-											  <ul class='list-unstyled mt-3 pl-3'> 
-									             <li><label class='prodInfo' style="font-weight: bold;">글제목: <span style="font-weight: normal;">\${item.title}</sapn></label></li>
-									             <li><label class='prodInfo' style="font-weight: bold;">가격: <span style="font-weight: normal;">\${Number(item.cost).toLocaleString('en')}원</sapn></label></li> 
-									             <li><label class='prodInfo' style="font-weight: bold;">장소: <span style="font-weight: normal;">\${item.city}&nbsp;\${item.local}</sapn></label><span style="color: red;"></span></li> 
-									             <li class='text-center'><a href='/amado/club/prodView.do?fleamarketseq=\${item.fleamarketseq}' class='stretched-link btn btn-outline-dark btn-sm' role='button'>자세히보기</a></li> 
-								            	         <%-- 카드 내부의 링크에 .stretched-link 클래스를 추가하면 전체 카드를 클릭할 수 있고 호버링할 수 있습니다(카드가 링크 역할을 함). --%>
-									          </ul>
-									       </div>
-								      	</div>
-							      	</div>`;
-		        			      	
-			            if((index+1)%4==0 || (json.length-1)==index){
-		        			v_html += `</div>`;
-		        		}
-						
-			            
-			            
-		        	});
+	        		let number2=0;
+	            	
+	            	$.each(json, function(index, item) {
+	            		
+	            		
+	            		if(index < 12){
+	            			number2 = index+1;
+	    	        		if((index+1)%4==1){
+	    	        			v_html += `<div style='display:flex;' >`;
+	    	        			
+	    	        		}
+	    		            v_html += `<div class='col-md-6 col-lg-2 offset-lg-1'>
+	    					 			   <div class="card mb-3" >
+	    									   <img style="height: 140px;" src='<%= ctxPath%>/resources/images/uploadImg/\${item.wasfilename}' class='card-img-top'/>
+	    									   <div class='card-body' style='padding: 0; font-size: 9pt;'>
+	    										  <ul class='list-unstyled mt-3 pl-3'> 
+	    								             <li><label class='prodInfo' style="font-weight: bold;">글제목: <span style="font-weight: normal;">\${item.title}</sapn></label></li>
+	    								             <li><label class='prodInfo' style="font-weight: bold;">가격: <span style="font-weight: normal;">\${Number(item.cost).toLocaleString('en')}원</sapn></label></li> 
+	    								              <li><label class='prodInfo' style="font-weight: bold;">장소: <span style="font-weight: normal;">\${item.city}&nbsp;\${item.local}</sapn></label><span style="color: red;"></span></li> 
+	    								             <li class='text-center'><a href='/amado/club/sale.do?fleamarketseq=\${item.fleamarketseq}' class='stretched-link btn btn-outline-dark btn-sm' role='button'>자세히보기</a></li> 
+	    							            	         <%-- 카드 내부의 링크에 .stretched-link 클래스를 추가하면 전체 카드를 클릭할 수 있고 호버링할 수 있습니다(카드가 링크 역할을 함). --%>
+	    								          </ul>
+	    								       </div>
+	    							      	</div>
+	    						      	</div>`;
+	    	        			      	
+	    		            if((index+1)%4==0 || (json.length-1)==index){ //json.length는 전체 개수, item은 json 안의 하나하나
+	    	        			v_html += `</div>`;
+	    	        		}
+	            		}
+	            	});
 	        	
-					$("div#product").html(v_html);
+	    			$("div#product").html(v_html);
+	    			console.log(number2);
+	    			$("#loadMoreBtn").on("click", function() {
+
+	    				if(number2 < json.length){
+							$("button#loadMoreBtn").show();
+						}
+    	        		
+	    				$.each(json, function(index, item) {
+	    					
+	    	        		if(index >= number2 && index < number2+8){
+	    	        			
+	    		        		if((index+1)%4==1){
+	    		        			v_html += `<div style='display:flex;' >`;
+	    		        			
+	    		        		}
+	    			            v_html += `<div class='col-md-6 col-lg-2 offset-lg-1'>
+	    						 			   <div class="card mb-3" >
+	    										   <img style="height: 140px;" src='<%= ctxPath%>/resources/images/uploadImg/\${item.wasfilename}' class='card-img-top'/>
+	    										   <div class='card-body' style='padding: 0; font-size: 9pt;'>
+	    											  <ul class='list-unstyled mt-3 pl-3'> 
+	    									             <li><label class='prodInfo' style="font-weight: bold;">글제목: <span style="font-weight: normal;">\${item.title}</sapn></label></li>
+	    									             <li><label class='prodInfo' style="font-weight: bold;">가격: <span style="font-weight: normal;">\${Number(item.cost).toLocaleString('en')}원</sapn></label></li> 
+	    									              <li><label class='prodInfo' style="font-weight: bold;">장소: <span style="font-weight: normal;">\${item.city}&nbsp;\${item.local}</sapn></label><span style="color: red;"></span></li> 
+	    									             <li class='text-center'><a href='/amado/club/sale.do?fleamarketseq=\${item.fleamarketseq}' class='stretched-link btn btn-outline-dark btn-sm' role='button'>자세히보기</a></li> 
+	    								            	         <%-- 카드 내부의 링크에 .stretched-link 클래스를 추가하면 전체 카드를 클릭할 수 있고 호버링할 수 있습니다(카드가 링크 역할을 함). --%>
+	    									          </ul>
+	    									       </div>
+	    								      	</div>
+	    							      	</div>`;
+	    		        			      	
+	    			            if((index+1)%4==0 || (json.length-1)==index){ //json.length는 전체 개수, item은 json 안의 하나하나
+	    		        			v_html += `</div>`;
+	    		        		}
+	    	        		}
+	    	        		
+	    	        		
+	    	        		if(index == json.length-1){
+	    						number2 = number2+8;
+	    					}
+	    					
+	    	        	});
+	    	    	
+	    				$("div#product").html(v_html);
+	    				
+	    				if(number2 > json.length){
+							$("button#loadMoreBtn").hide();
+						}
+	    			});
+	    			
 	        	}
 			     
 	        },
@@ -471,7 +640,8 @@ function goSearch() {
 		
 		<!-- 상품  -->
 		<div id="product" style="margin-top: 5%; margin-right: 8%; border:solid 0px red; "></div>
-	    
+		<div style="text-align: center; margin-top: 4%;"><button id="loadMoreBtn" class="btn btn-secondary">더보기</button></div>
+		
 		<%-- 페이지 바 --%>
 		<div aria-label="Page navigation" class="pn" style="border:solid 0px red; padding: 10% 35%;">
 			   <nav>

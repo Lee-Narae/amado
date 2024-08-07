@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -819,35 +821,47 @@ public class ControllerJY {
 
 	// ========== 동호회 게시판 ==========
 	// 동호회게시판 글 작성하기 뷰단
-	@GetMapping(value="/club/addClubBoard.do")
-	public ModelAndView requiredLogin_addClubBoard(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
-		
-		String clubseq = request.getParameter("clubseq");
-		String sportname = request.getParameter("sportname");
-		String clubname = request.getParameter("clubname");
-		//System.out.println("글쓰기뷰단"+clubseq);
-		
-		mav.addObject("clubseq", clubseq);
-		mav.addObject("sportname", sportname);
-		mav.addObject("clubname", clubname);
-		mav.setViewName("club/addClubBoard.tiles2");
-		return mav;
-		
+	
+	@GetMapping(value="/club/addClubboard.do") public ModelAndView
+	  requiredLogin_addClubBoard(HttpServletRequest request, HttpServletResponse
+	  response, ModelAndView mav) {
+	  
+	  String clubseq = request.getParameter("clubseq"); String sportname =
+	  request.getParameter("sportname"); String clubname =
+	  request.getParameter("clubname"); //System.out.println("글쓰기뷰단"+clubseq);
+	  
+	  mav.addObject("clubseq", clubseq); mav.addObject("sportname", sportname);
+	  mav.addObject("clubname", clubname);
+	  mav.setViewName("club/addClubBoard.tiles2"); return mav;
+	  
 	}
+	 
 	
 	@PostMapping("/club/addClubBoard.do")
 	public ModelAndView editClubBoard(HttpServletRequest request, ModelAndView mav) {
 		
 		String clubboardseq = request.getParameter("clubboardseq");
+		String clubname = request.getParameter("clubname");
+		String sportname = request.getParameter("sportname");
+		String clubseq = request.getParameter("clubseq");
+		
+		//System.out.println(clubboardseq);
+		//System.out.println(sportname);
+		//System.out.println(clubseq);
 		
 		ClubBoardVO editCBoard = service.editCBoard_get(clubboardseq);
 		
 		if(editCBoard != null) {
 			mav.addObject("editCBoard", editCBoard);
 		}
+		mav.addObject("clubname", clubname);
+		mav.addObject("sportname", sportname);
+		mav.addObject("clubseq", clubseq);
 		mav.setViewName("club/editClubBoard.tiles2");
 		return mav;
 	}
+	
+	
 	
 	
 	
@@ -1018,7 +1032,7 @@ public class ControllerJY {
 		//System.out.println("clubseq"+clubseq);
 		//System.out.println("clubname"+clubname);
 		//System.out.println("sportname"+sportname);
-		System.out.println("currentShowPageNo"+currentShowPageNo);
+		//System.out.println("currentShowPageNo"+currentShowPageNo);
 		
 		if(searchType == null || !"title".equals(searchType) && !"content".equals(searchType)) {
 			searchType = "";
@@ -1170,6 +1184,8 @@ public class ControllerJY {
 		String goBackURL = request.getParameter("goBackURL");
 		String searchType = request.getParameter("searchType");
 		String searchWord = request.getParameter("searchWord");
+		String clubname = request.getParameter("clubname");
+		String sportname = request.getParameter("sportname");
 		
 		//System.out.println(clubboardseq +goBackURL +searchType +searchWord);
 		Map<String, String> paramap = new HashMap<String, String>();
@@ -1210,6 +1226,8 @@ public class ControllerJY {
 		service.updateCboardViewcount(clubboardseq);
 		
 		
+		mav.addObject("clubname", clubname);
+		mav.addObject("sportname", sportname);
 		mav.addObject("clubseq", clubseq);
 		mav.addObject("cboard", cboard);
 		mav.addObject("clubboardseq", clubboardseq);
@@ -2027,16 +2045,32 @@ public class ControllerJY {
 	
 	
 	@PostMapping("/club/editClubBoard.do")
-	public ModelAndView editCBoardeEnd(ClubBoardVO cvo, ModelAndView mav, HttpServletRequest request) {
+	public ModelAndView editClubBoardEnd(ClubBoardVO cvo, HttpServletRequest request) {
+	    
+	    // 클라이언트에서 전달된 파라미터 가져오기
+	    String clubseq = request.getParameter("clubseq");
+	    String clubname = request.getParameter("clubname");
+	    String sportname = request.getParameter("sportname");
 
-		int n = service.edit(cvo);
-		
-		if(n==1) {
-			
-			mav.setViewName("redirect:/club/clubboard.do");
-		}
-		
-		return mav;
+	    // 서비스 호출 및 결과 확인
+	    int n = service.edit(cvo);
+
+	    // ModelAndView 객체를 생성하여 리다이렉트 설정
+	    ModelAndView mav = new ModelAndView();
+	    
+	    if (n == 1) {
+	        // URL 인코딩
+	        String encodedClubseq = URLEncoder.encode(clubseq, StandardCharsets.UTF_8);
+	        String encodedClubname = URLEncoder.encode(clubname, StandardCharsets.UTF_8);
+	        String encodedSportname = URLEncoder.encode(sportname, StandardCharsets.UTF_8);
+	        
+	        // 리다이렉트 URL 설정
+	        String redirectUrl = String.format("/club/clubBoard.do?clubname=%s&clubseq=%s&sportname=%s",
+	                                             encodedClubname, encodedClubseq, encodedSportname);
+	        mav.setViewName("redirect:" + redirectUrl);
+	    }
+
+	    return mav;
 	}
 
 
