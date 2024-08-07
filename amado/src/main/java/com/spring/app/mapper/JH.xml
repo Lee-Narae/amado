@@ -367,9 +367,10 @@
 	<resultMap type="HashMap" id="fleMap"> 
 		<result property="imgfilename" column="imgfilename" javaType="String"/>
 		<result property="fleamarketseq" column="fleamarketseq" javaType="String"/>
+		<result property="wasfilename" column="wasfilename" javaType="String"/>
 	</resultMap>
 	<select id="getimgList" resultMap="fleMap" parameterType="String">
-		select imgfilename, fleamarketseq
+		select imgfilename, fleamarketseq, wasfilename
 		from tbl_fleamarket
 		where sportseq = #{sportseq}
 	</select>

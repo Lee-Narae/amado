@@ -219,7 +219,7 @@ function viewComment(){
 						}			
 										
 						v_html += `</span>
-							<div style="text-align: left;">\${item.comment_text }</div>
+							<div style="text-align: left;" id="comment_text">\${item.comment_text }</div>
 							</div>
 						</div>`;					
 												

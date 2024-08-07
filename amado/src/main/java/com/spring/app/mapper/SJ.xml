@@ -136,100 +136,104 @@
 	<!-- // === 페이징 처리를 한 검색어가 없는 전체 동호회 보여주기 === // -->
 	<select id="searchPaging" parameterType="HashMap" resultType="ClubVO">
 	    SELECT clubseq, clubname, clubimg, fk_sportseq, fk_userid
-			 , clubtel, city, local, clubgym, clubtime, membercount
-			 , clubpay, clubstatus, clubscore, wasfileName, viewcount
-			 , rank	
-		FROM
-		(
-		select row_number() over(order by clubscore desc) AS rno 
-		 	 , clubseq, clubname, clubimg, fk_sportseq, fk_userid
-			 , clubtel, city, local, clubgym, clubtime, membercount
-			 , clubpay, clubstatus, clubscore, wasfileName, viewcount
-		 , ROW_NUMBER() over(order by clubscore desc) AS rank	
- 		from tbl_club
-		where clubstatus = 1
-		<choose>
-			<when test="params == '/club/findClub.do'">
-				and fk_sportseq = 1
-			</when>
-			<otherwise>and fk_sportseq = to_number(#{params})</otherwise>
-		</choose>
-		)
-		where rno between to_number(#{startRno}) and to_number(#{endRno})
-		<choose>
-			<when test="searchType_b == 'none'"></when>
-			<when test="searchType_b == 'seoul'">
-				and city like '%'||'서울'||'%'
-			</when>
-			<when test="searchType_b == 'busan'">
-				and city like '%'||'부산'||'%'
-			</when>
-			<when test="searchType_b == 'daegu'">
-				and city like '%'||'대구'||'%'			
-			</when>
-			<when test="searchType_b == 'incheon'">
-				and city like '%'||'인천'||'%'
-			</when>
-			<when test="searchType_b == 'gwangju'">
-				and city like '%'||'광주'||'%'
-			</when>
-			<when test="searchType_b == 'daejeon'">
-				and city like '%'||'대전'||'%'
-			</when>
-			<when test="searchType_b == 'ulsan'">
-				and city like '%'||'울산'||'%'
-			</when>
-			<when test="searchType_b == 'sejong'">
-				and city like '%'||'세종'||'%'
-			</when>
-			<when test="searchType_b == 'gyeonggi'">
-				and city like '%'||'경기'||'%'
-			</when>
-			<when test="searchType_b == 'gangwon'">
-				and city like '%'||'강원'||'%'
-			</when>
-			<when test="searchType_b == 'chung-cheong_bukdo'">
-				and city like '%'||'충청북'||'%' or city like '%'||'충북'||'%'
-			</when>
-			<when test="searchType_b == 'chung-cheong_namdo'">
-				and city like '%'||'충청남'||'%' or city like '%'||'충남'||'%'
-			</when>
-			<when test="searchType_b == 'jeonbuk'">
-				and city like '%'||'전라북'||'%' or city like '%'||'전북'||'%'
-			</when>
-			<when test="searchType_b == 'jeonnam'">
-				and city like '%'||'전라남'||'%' or city like '%'||'전남'||'%'
-			</when>
-			<when test="searchType_b == 'gyeongbuk'">
-				and city like '%'||'경상북'||'%' or city like '%'||'경북'||'%'
-			</when>
-			<when test="searchType_b == 'gyeongnam'">
-				and city like '%'||'경상남'||'%' or city like '%'||'경남'||'%'
-			</when>
-			<when test="searchType_b == 'jeju'">
-				and city like '%'||'제주'||'%'
-			</when>
-			<otherwise></otherwise>
-		</choose>
-		
-		<if test='!searchWord.equals("")'>
-		    and clubname like '%' || #{searchWord} || '%'
-		</if>
-		
-		<choose>
-			<when test="searchType_a == 'rank'">
-				order by rno asc	
-			</when>
-			<when test="searchType_a == 'memberM'">
-				order by membercount desc	
-			</when>
-			<when test="searchType_a == 'memberL'">
-				order by membercount asc	
-			</when>
-			<otherwise></otherwise>
-		</choose>	
-	
+	           , clubtel, city, local, clubgym, clubtime, membercount
+	           , clubpay, clubstatus, clubscore, wasfileName, viewcount
+	           , rank
+	    FROM
+	    (
+	        SELECT row_number() over(order by clubscore desc) AS rno 
+	             , clubseq, clubname, clubimg, fk_sportseq, fk_userid
+	             , clubtel, city, local, clubgym, clubtime, membercount
+	             , clubpay, clubstatus, clubscore, wasfileName, viewcount
+	             , ROW_NUMBER() over(order by clubscore desc) AS rank
+	             , (SELECT COUNT(*) FROM tbl_clubmember cm WHERE cm.clubseq = tbl_club.clubseq) AS memberCountInTblClubmember
+	        FROM tbl_club
+	        WHERE clubstatus = 1
+	        <choose>
+	            <when test="params == '/club/findClub.do'">
+	                AND fk_sportseq = 1
+	            </when>
+	            <otherwise>
+	                AND fk_sportseq = to_number(#{params})
+	            </otherwise>
+	        </choose>
+	    )
+	    WHERE rno BETWEEN to_number(#{startRno}) AND to_number(#{endRno})
+	    <choose>
+	        <when test="searchType_b == 'none'"></when>
+	        <when test="searchType_b == 'seoul'">
+	            AND city LIKE '%' || '서울' || '%'
+	        </when>
+	        <when test="searchType_b == 'busan'">
+	            AND city LIKE '%' || '부산' || '%'
+	        </when>
+	        <when test="searchType_b == 'daegu'">
+	            AND city LIKE '%' || '대구' || '%'
+	        </when>
+	        <when test="searchType_b == 'incheon'">
+	            AND city LIKE '%' || '인천' || '%'
+	        </when>
+	        <when test="searchType_b == 'gwangju'">
+	            AND city LIKE '%' || '광주' || '%'
+	        </when>
+	        <when test="searchType_b == 'daejeon'">
+	            AND city LIKE '%' || '대전' || '%'
+	        </when>
+	        <when test="searchType_b == 'ulsan'">
+	            AND city LIKE '%' || '울산' || '%'
+	        </when>
+	        <when test="searchType_b == 'sejong'">
+	            AND city LIKE '%' || '세종' || '%'
+	        </when>
+	        <when test="searchType_b == 'gyeonggi'">
+	            AND city LIKE '%' || '경기' || '%'
+	        </when>
+	        <when test="searchType_b == 'gangwon'">
+	            AND city LIKE '%' || '강원' || '%'
+	        </when>
+	        <when test="searchType_b == 'chung-cheong_bukdo'">
+	            AND (city LIKE '%' || '충청북' || '%' OR city LIKE '%' || '충북' || '%')
+	        </when>
+	        <when test="searchType_b == 'chung-cheong_namdo'">
+	            AND (city LIKE '%' || '충청남' || '%' OR city LIKE '%' || '충남' || '%')
+	        </when>
+	        <when test="searchType_b == 'jeonbuk'">
+	            AND (city LIKE '%' || '전라북' || '%' OR city LIKE '%' || '전북' || '%')
+	        </when>
+	        <when test="searchType_b == 'jeonnam'">
+	            AND (city LIKE '%' || '전라남' || '%' OR city LIKE '%' || '전남' || '%')
+	        </when>
+	        <when test="searchType_b == 'gyeongbuk'">
+	            AND (city LIKE '%' || '경상북' || '%' OR city LIKE '%' || '경북' || '%')
+	        </when>
+	        <when test="searchType_b == 'gyeongnam'">
+	            AND (city LIKE '%' || '경상남' || '%' OR city LIKE '%' || '경남' || '%')
+	        </when>
+	        <when test="searchType_b == 'jeju'">
+	            AND city LIKE '%' || '제주' || '%'
+	        </when>
+	        <otherwise></otherwise>
+	    </choose>
+	    
+	    <if test='!searchWord.equals("")'>
+	        AND clubname LIKE '%' || #{searchWord} || '%'
+	    </if>
+	    
+	    <choose>
+	        <when test="searchType_a == 'rank'">
+	            ORDER BY rno ASC
+	        </when>
+	        <when test="searchType_a == 'memberM'">
+	            ORDER BY memberCountInTblClubmember DESC
+	        </when>
+	        <when test="searchType_a == 'memberL'">
+	            ORDER BY memberCountInTblClubmember ASC
+	        </when>
+	        <otherwise></otherwise>
+	    </choose>
 	</select>
+		
+	
 
 
 

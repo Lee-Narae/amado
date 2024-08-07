@@ -234,6 +234,12 @@ function emailDuplicateCheck(){
 		return;
 	}
 	
+	if(email == '${sessionScope.loginuser.email}'){
+		$("span#emailCheckResult").html(email + "은(는) 사용 가능한 이메일입니다.").css({"color":"blue", "font-size": "10pt"});
+		emailDuplicate = true;
+		return;
+	}
+	
 	$.ajax({
 		url: "<%=ctxPath%>/emailDuplicateCheck.do",
 		data: {"email": email},
@@ -279,7 +285,7 @@ function infoEdit(){
 		return;
 	}
 	if(emailDuplicate == false){
-		alert('이메일이 중복되어 사용하실 수 없습니다.');
+		alert('이메일이 중복 확인을 진행하세요.');
 		return;
 	}
 	if(postcode == '' || address == '' || detailaddress == '' || extraaddress == ''){

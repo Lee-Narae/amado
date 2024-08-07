@@ -554,6 +554,24 @@
       	// === 포트원(구 아임포트) 결제를 해주는 함수 === //
 		function goCoinPurchaseEnd(ctxPath, userid, gymname) {
 			
+			var priceText = $("#totalPrice").text();
+            
+		   	/////////////////////////////////////////////////////////
+            // ₩, 원, , 문자를 제거합니다.
+            var numericPrice = priceText.replace(/[₩,원]/g, '');
+            const time = $("button.btn-custom.selected").text();
+            const reservation_date = $("#date").val();
+      		
+      		if(reservation_date == ""){
+      			alert("날짜를 선택해주세요!");
+      			return;
+      		}
+      		
+      		if(numericPrice == "0"){
+      			alert("시간을 선택해주세요!");
+      			return;
+      		}
+      		
       		if(userid == ''){
       			alert("로그인 후 결제해주세요!");
       			return;
@@ -682,6 +700,7 @@
 			</div>
 	        <!-- 예약하기 버튼 -->
 	        <div class="section">
+	            <%-- <button class="btn btn-primary btn-reserve" onclick="goCoinPurchaseEnd('<%= ctxPath%>', '${sessionScope.loginuser.userid}', '${requestScope.gymvo.gymname}')">예약하기</button> --%>
 	            <button class="btn btn-primary btn-reserve" onclick="gymPayEndInsert()">예약하기</button>
 	        </div>
 	    </div>
