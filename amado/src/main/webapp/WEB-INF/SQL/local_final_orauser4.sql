@@ -1454,18 +1454,35 @@ where fk_userid = 'amado2' and fk_sportseq = 1
 
 select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, LOCAL, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfilename, viewcount
 from tbl_club
-where clubname = '턍초야다'
+where clubname = '배턴하는날'
+where clubseq = 130
 
+select *
+from tab
 
+select *
+from TBL_MATCHINGREG
 
+select *
+from TBL_MATCHINGAPPLY
+where clubseq = '146';
 
 select *
 from tbl_matchingreg
-where sportseq = 4 and clubseq = '139';
+where sportseq = 8 and clubseq = '135';
 
+select *
+from TBL_MATCHINGREG
+where sportseq = 3 and clubseq = '130';
 
-update tbl_matchingreg set MATCHDATE = '24/08/08'
-where MATCHINGREGSEQ = 140;
+update TBL_MATCHINGREG set STATUS = 1
+where sportseq = 3 and clubseq = '130';
+
+update tbl_matchingreg set STATUS = 0
+where MATCHINGREGSEQ = 152;
+
+update tbl_matchingreg set MATCHDATE = '24/06/22'
+where MATCHINGREGSEQ = 180;
 
 commit
 
@@ -1494,3 +1511,7 @@ update tbl_clubmember set STATUS = 1
 where STATUS = 0;
 
 commit
+
+
+
+
