@@ -62,7 +62,7 @@ $(document).ready(function(){
      // 글쓰기버튼 클릭 시
      $("button#btnEdit1").click(function(){
 
-    	 alert("나와");
+    	 //alert("나와");
     	 
     	 
     	 // 글제목 유효성 검사
@@ -172,6 +172,9 @@ $(document).ready(function(){
         
     <c:if test="${not empty requestScope.editCBoard}">
 		<input type="hidden" name="clubboardseq" value="${requestScope.editCBoard.clubboardseq}"/>
+		<input type="hidden" name="clubname" value="${requestScope.clubname}"/>
+		<input type="hidden" name="sportname" value="${requestScope.sportname}"/>
+		<input type="hidden" name="clubseq" value="${requestScope.clubseq}"/>
 	</c:if>
      
   </div>

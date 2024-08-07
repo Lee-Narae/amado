@@ -85,8 +85,6 @@ $(document).ready(function(){
 		const frm = document.goViewFrm;
 		frm.clubboardseq.value = clubboardseq;
 		frm.clubseq.value = clubseq;
-		frm.clubname.value = clubseq;
-		frm.clubseq.value = clubseq;
 		frm.goBackURL.value = "${requestScope.currentURL}";
 		
 		if(${not empty requestScope.paramap.searchType}){ // 검색을 했을 경우
@@ -114,8 +112,10 @@ function goSearch(){
 }
 
 
-function goWrite(clubseq,clubname,sportseq){
-	location.href = "<%= ctxPath%>/club/addClubBoard.do?clubseq="+clubseq+"clubname="+clubname+"sportname="+sportname;
+function goWrite(clubseq,clubname,sportname){
+	//alert("dddd");
+	location.href = "<%= ctxPath%>/club/addClubboard.do?clubseq="+clubseq+"&clubname="+clubname+"&sportname="+sportname;
+
 }
 	
 
@@ -180,7 +180,9 @@ function goWrite(clubseq,clubname,sportseq){
 	</div>
 	
 	<form name="goViewFrm">
-		<input type="hidden" name="clubseq" />
+		<input type="hidden" name="clubseq" value="${requestScope.clubseq}"/>
+		<input type="hidden" name="clubname" value="${requestScope.clubname}"/>
+		<input type="hidden" name="sportname" value="${requestScope.sportname}"/>
 		<input type="hidden" name="clubboardseq" />
 		<input type="hidden" name="goBackURL" />
 		<input type="hidden" name="searchType" />
