@@ -140,7 +140,7 @@ margin-left: 2%;
 
 <div id="container">
 <div  style="background-color: #4040bf">
-<div class="board_header"  style="display: flex; margin-left: 16.5%; color: white; padding: 3%;">
+<div class="board_header"  style="display: flex; margin-left: 15.5%; color: white; padding: 3%;">
     <div class="tit">
         <h1>${requestScope.clubvo.clubname}</h1>
         <div class="desc">${requestScope.clubvo.fk_userid}가 속한 동호회 입니다.</div>
@@ -172,58 +172,58 @@ margin-left: 2%;
                 <div class="rank">
                     <div class="img">
                     	<c:if test="${requestScope.clubvo.clubscore < 100}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank17.png" />
+                    		<img style="margin-left: 66%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank17.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 100 && requestScope.clubvo.clubscore < 200}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank16.png" />
+                    		<img style="margin-left: 66%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank16.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 200 && requestScope.clubvo.clubscore < 300}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank15.png" />
+                    		<img style="margin-left: 66%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank15.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 300 && requestScope.clubvo.clubscore < 400}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank14.png" />
+                    		<img style="margin-left: 66%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank14.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 400 && requestScope.clubvo.clubscore < 500}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank13.png" />
+                    		<img style="margin-left: 66%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank13.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 500 && requestScope.clubvo.clubscore < 600}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank12.png" />
+                    		<img style="margin-left: 66%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank12.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 600 && requestScope.clubvo.clubscore < 700}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank11.png" />
+                    		<img style="margin-left: 66%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank11.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 700 && requestScope.clubvo.clubscore < 800}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank10.png" />
+                    		<img style="margin-left: 66%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank10.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 800 && requestScope.clubvo.clubscore < 900}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank9.png" />
+                    		<img style="margin-left: 66%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank9.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 900 && requestScope.clubvo.clubscore < 1000}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank8.png" />
+                    		<img style="margin-left: 66%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank8.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 1000 && requestScope.clubvo.clubscore < 1100}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank7.png" />
+                    		<img style="margin-left: 66%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank7.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 1100 && requestScope.clubvo.clubscore < 1200}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank6.png" />
+                    		<img style="margin-left: 66%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank6.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 1200 && requestScope.clubvo.clubscore < 1300}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank5.png" />
+                    		<img style="margin-left: 66%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank5.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 1300 && requestScope.clubvo.clubscore < 1400}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank4.png" />
+                    		<img style="margin-left: 66%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank4.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 1400 && requestScope.clubvo.clubscore < 1500}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank3.png" />
+                    		<img style="margin-left: 66%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank3.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 1500 && requestScope.clubvo.clubscore < 1600}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank2.png" />
+                    		<img style="margin-left: 66%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank2.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore >= 1600 && requestScope.clubvo.clubscore < 1700}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank1.png" />
+                    		<img style="margin-left: 66%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank1.png" />
                     	</c:if>
                     	<c:if test="${requestScope.clubvo.clubscore > 1700}">
-                    		<img style="margin-left: 80%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank0.png" />
+                    		<img style="margin-left: 66%; margin-top: 15%;" src="<%=ctxPath%>/resources/images/rank0.png" />
                     	</c:if>
                     </div>
                 </div>
@@ -241,7 +241,7 @@ margin-left: 2%;
 </div>
 	<div id="top2" style="display: flex; height: 500px; margin-top: 5%;">
 		<!-- 동호회 여러개 가입시 캐러셀 적용 -->
-		<div id="myclub" style="width: 38%; margin: 5% 0 0 8%;">
+		<div id="myclub" style="width: 38%; margin: 5% 0 0 5%;">
 			<div style="text-align: center;">
 				<img class='uniform-size1' src="<%=ctxPath%>/resources/images/uploadImg/${requestScope.clubvo.wasfileName}">
 			</div>
