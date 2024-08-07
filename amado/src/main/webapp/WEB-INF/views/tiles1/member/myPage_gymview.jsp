@@ -110,7 +110,7 @@
 
     body {
         font-family: Arial, sans-serif;
-        background-color: #f0f4f7;
+        
         color: #333;
         margin: 0;
         padding: 0;
@@ -119,10 +119,10 @@
     .container {
         max-width: 800px;
         margin: 50px auto;
-        background-color: #fff;
+       
         padding: 20px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
+       
+ 
     }
 
     .container h1 {
@@ -157,21 +157,7 @@
         resize: vertical;
     }
 
-    button {
-        display: block;
-        width: 100%;
-        padding: 10px;
-        background-color: #007BFF;
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        font-size: 18px;
-        cursor: pointer;
-    }
-
-    button:hover {
-        background-color: #0056b3;
-    }
+  
 /* .clickable 클래스를 가진 td 요소에 손가락 모양 커서 적용 */
 .clickable {
     cursor: pointer;
