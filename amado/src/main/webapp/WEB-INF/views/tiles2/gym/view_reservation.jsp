@@ -151,7 +151,7 @@
     <!-- 모달 HTML -->
     <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content" style="width: 140%;">
+            <div class="modal-content" style="width: 130%;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="infoModalLabel">상세 정보</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">

@@ -846,7 +846,8 @@ select rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, comme
         
         
         
-        
+        select *
+        from tbl_fleamarket
         
         
         
@@ -854,10 +855,22 @@ select rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, comme
         from tbl_clubmember c
         join tbl_member m
         on c.fk_userid = m.userid
-        where clubseq = 15
+        where clubseq = 123
         
         select *
-        from tbl_club
+        from tbl_member
         
         select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, local, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, viewcount, wasfilename
 		from tbl_club
+        
+         select *
+         from tab;
+         
+        desc 
+        
+        select *
+        from tbl_boardcomment
+        
+        SELECT distinct(column_name)
+        FROM all_tab_columns
+        WHERE owner = 'FINAL_ORAUSER4';
