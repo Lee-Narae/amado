@@ -850,8 +850,14 @@ select rn, clubboardseq, clubseq, title, content, fk_userid, registerdate, comme
         
         
         
-        select speed, quick, power, earth, stretch
+        select avg(speed) as speed, avg(quick) as quick, avg(power) as power, avg(earth) as earth, avg(stretch) as stretch
         from tbl_clubmember c
         join tbl_member m
         on c.fk_userid = m.userid
         where clubseq = 15
+        
+        select *
+        from tbl_club
+        
+        select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, local, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, viewcount, wasfilename
+		from tbl_club

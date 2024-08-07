@@ -87,8 +87,8 @@ public class AmadoService_imple_JY implements AmadoService_JY {
 
 	// 상품등록  완료 요청(파일첨부ㅇ)
 	@Override
-	public int add_withFile(FleamarketVO fvo) {
-		int n = dao.add_withFile(fvo); //첨부파일이 있는경우
+	public int add_withFilee(FleamarketVO fvo) {
+		int n = dao.add_withFilee(fvo); //첨부파일이 있는경우
 		return n;
 	}
 

@@ -432,6 +432,12 @@ margin-left: 2%;
 
 </div>
 
+<input id="speed" type="hidden" value="${requestScope.statList.speed}"></input>
+<input id="quick" type="hidden" value="${requestScope.statList.quick}"></input>
+<input id="power" type="hidden" value="${requestScope.statList.power}"></input>
+<input id='earth' type="hidden" value="${requestScope.statList.earth}"></input>
+<input id='stretch' type="hidden" value="${requestScope.statList.stretch}"></input>
+
 <script src="<%= ctxPath%>/resources/Highcharts-10.3.1/code/highcharts.js"></script>
 <script src="<%= ctxPath%>/resources/Highcharts-10.3.1/code/highcharts-more.js"></script>
 <script src="<%= ctxPath%>/resources/Highcharts-10.3.1/code/modules/exporting.js"></script>
@@ -494,16 +500,22 @@ Highcharts.chart('stat', {
     },
 
     xAxis: {
-        categories: ['speed', 'quick', 'power', 'earth',
-            'stretch'],
+        categories: ['속력', '순발력', '근력', '지구력',
+            '유연성'],
         tickmarkPlacement: 'on',
-        lineWidth: 0
+        lineWidth: 0,
+        labels: {
+            style: {
+                fontSize: '14px' // 글자 크기를 14px로 설정
+            }
+        }
     },
 
     yAxis: {
         gridLineInterpolation: 'polygon',
         lineWidth: 0,
-        min: 0
+        min: 0,
+        max: 5 // 최대치를 5로 설정
     },
 
     tooltip: {
@@ -519,8 +531,8 @@ Highcharts.chart('stat', {
 
     series: [{
         name: '스탯 평균',
-        data: [2, 1, 1, 3, 2],
-        pointPlacement: 'on'
+        data: [parseFloat($("input#speed").val()), parseFloat($("input#quick").val()), parseFloat($("input#power").val()), parseFloat($("input#earth").val()), parseFloat($("input#stretch").val())],
+        pointPlacement: 'off'
     }],
 
     responsive: {
