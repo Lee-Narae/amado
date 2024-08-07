@@ -125,7 +125,12 @@
                 <tbody>
                     <c:forEach var="reservation" items="${requestScope.resList}" varStatus="status">
                         <tr class="clickable">
-                            <td style="text-align: center;"><c:out value="${status.index + 1}"/></td>
+                        <c:if test="${status.index != 9}">
+                            <td style="text-align: center;"><c:out value="${requestScope.currentShowPageNo - 1}${status.index + 1}"/></td>
+                        </c:if>
+                        <c:if test="${status.index == 9}">
+                            <td style="text-align: center;"><c:out value="${requestScope.currentShowPageNo}0"/></td>
+                        </c:if>     
                             <td style="text-align: center;" data-content="<c:out value='${reservation.gymname}'/>"><c:out value="${reservation.gymname}"/></td>
                             <td style="text-align: center;" data-content="<c:out value='${reservation.reservation_date.substring(0, 10)}'/>">
 							  <c:out value="${reservation.reservation_date.substring(0, 10)}"/>
@@ -151,7 +156,7 @@
     <!-- 모달 HTML -->
     <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content" style="width: 140%;">
+            <div class="modal-content" style="width: 130%;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="infoModalLabel">상세 정보</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">

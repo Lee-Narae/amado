@@ -152,10 +152,10 @@ $(document).ready(function(){
 		}
 		else {
 			if( $("select[name='searchType']").val() == "subject" || 
-				$("select[name='searchType']").val() == "name" ) {
+				$("select[name='searchType']").val() == "location" ) {
 				
 				$.ajax({
-					url:"<%= ctxPath%>/wordSearchShow.action",
+					url:"<%= ctxPath%>/fleamatket/wordSearchShoww.do",
 					type:"get",
 					data:{"searchType":$("select[name='searchType']").val(),
 						  "searchWord":$("input[name='searchWord']").val()},
@@ -189,7 +189,7 @@ $(document).ready(function(){
 								console.log(word.substring(idx+len));       // 검색어(JavA) 이후의 글자 ==> Script 효과주는 다른 언어는 없나요?
 								console.log("~~~~ 끝 ~~~~");
 */
-								const result = word.substring(0, idx) + "<span style='color:purple;'>" + word.substring(idx, idx+len) + "</span>" + word.substring(idx+len);
+								const result = word.substring(0, idx) + "<span style='color:#17a2b8;'>" + word.substring(idx, idx+len) + "</span>" + word.substring(idx+len);
 								
 								v_html += `<span style='cursor:pointer;' class='result'>\${result}</span><br>`;
 							}); // end of $.each
@@ -384,8 +384,8 @@ function goView(seq) {
   // & 가 종결자이기 때문에 GET 방식으로는 보낼 수 없다!! (매우중요!!!)
   // 그렇기 때문에 POST 방식으로 보내야한다!!
   // 아래처럼 get 방식으로 보내면 안된다. 왜냐하면 get방식에서 &는 전송될 데이터의 구분자로 사용되기 때문이다. 
-//	location.href = "<%= ctxPath%>/view.action?seq="+seq; // 쌍따움표일 경우 	
-//	location.href = `<%= ctxPath%>/view.action?seq=\${seq}&goBackURL=\${goBackURL}`; //백틱 `` 이기 때문에 \${}
+//	location.href = "<%= ctxPath%>/view.do?seq="+seq; // 쌍따움표일 경우 	
+//	location.href = `<%= ctxPath%>/view.do?seq=\${seq}&goBackURL=\${goBackURL}`; //백틱 `` 이기 때문에 \${}
 
 //그러므로 & 를 글자 그대로 인식하는 post 방식으로 보내야 한다.
 //아래에 #132. 에 표기된 from 태그를 먼저 만든다.
@@ -398,7 +398,7 @@ function goView(seq) {
 		frm.searchType.value = "${requestScope.paraMap.searchType}";
 		frm.searchWord.value = "${requestScope.paraMap.searchWord}";
 	}
-	frm.action = "<%= ctxPath %>/view.action";
+	frm.action = "<%= ctxPath %>/view.do";
 	frm.method = "post";
 	frm.submit();
 
@@ -413,10 +413,6 @@ function goSearch() {
 		return;
 	}
 	
-	if($("select[name='searchType']").val() == ""){ // select태그의 option 중 value 값을 넣어야 한다.
-		alert("검색 대상을 선택하세요.");
-		return;
-	}
 	const frm = document.item_searchFrm;
 <%--	frm.method = "get";	
 	frm.action = "<%= ctxPath%>/fleamarket.action";
@@ -437,7 +433,7 @@ function goSearch() {
 		<div style="border:solid 0px black; text-align: center; ">
 			<h3 style="font-weight: bold;">아마두 플리마켓🧺</h3>
 			<br>
-			<!--  
+			<!--  -->
 			<form name="item_searchFrm" style="margin-top: 20px;">
 		      <select name="searchType" style="height: 26px;">
 		         <option value="subject">글제목</option>
@@ -445,14 +441,14 @@ function goSearch() {
 		      </select>
 		   	  <input type="text" name="searchWord" size="40" autocomplete="off" /> 
 		      <input type="text" style="display: none;"/> <%-- form 태그내에 input 태그가 오로지 1개 뿐일경우에는 엔터를 했을 경우 검색이 되어지므로 이것을 방지하고자 만든것이다. --%> 
-		      <button type="button" class="btn btn-secondary btn-sm" onclick="goSearch()">검색</button>
+		      <button type="button" class="btn btn-info btn-sm" onclick="goSearch()">검색</button>
 		    </form>
 		   
 			<%-- === #114. 검색어 입력시 자동글 완성하기 1 === --%>
-			<div id="disp  layList" style="border:solid 1px gray; border-top:0px; height:100px; margin-left:13.2%; margin-top:-1px; margin-bottom:30px; overflow:auto;">
+			<div id="displayList" style="border:solid 1px gray; border-top:0px; height:100px; margin-left:13.2%; margin-top:-1px; margin-bottom:30px; overflow:auto;">
 				
 			</div>
-		 -->
+		 
 		</div>
 		
 		<%-- 종목 카테고리 --%>

@@ -62,6 +62,7 @@
 		<result property="viewcount" column="viewcount" javaType="String"/>
 		<result property="status" column="status" javaType="String"/>
 		<result property="imgfilename" column="imgfilename" javaType="String"/>
+		<result property="wasfilename" column="wasfilename" javaType="String"/>
 	</resultMap>
 	<select id="getSportNameList" resultMap="sportMap" parameterType="String">
 		select fleamarketseq, S.sportseq, city, local, title, content, cost, deal, fk_userid, to_char(registerdate,'yyyy-mm-dd hh24:mi:ss') AS registerdate, commentcount, viewcount, status, imgfilename, F.wasfilename
@@ -83,6 +84,17 @@
 	<select id="getAllItemList" resultType="FleamarketVO" >
 		select fleamarketseq,  city, local, title, content, cost, deal, fk_userid, to_char(registerdate,'yyyy-mm-dd hh24:mi:ss') AS registerdate, commentcount, viewcount, status, imgfilename, wasfilename
 		from tbl_fleamarket
+		where status = 0
+		<choose>
+		   <when test='searchType == "subject" and searchWord != ""'>
+		      and lower(title) like '%'||lower(#{searchWord})||'%' 
+		   </when>
+		   <when test='searchType == "location" and searchWord != ""'>
+		      and (lower(city) like '%'||lower(#{searchWord})||'%' or lower(local) like '%'||lower(#{searchWord})||'%')  
+		   </when>
+		   <otherwise></otherwise>
+		</choose>
+		order by fleamarketseq desc
 	</select>
 	
 	<!-- 상품 전체 개수 불러오기 -->
@@ -650,6 +662,44 @@
                            , content = #{content}
         where clubboardseq = #{clubboardseq}                      
     </update>
+    
+    
+	<select id="wordSearchShow" parameterType="HashMap" resultType="String">
+	    <choose>
+	        <when test="searchType == 'subject'">
+	            select title
+	        </when>
+	        <when test="searchType == 'location'">
+	            select city, local
+	        </when>
+	    </choose>
+	    from tbl_fleamarket
+	    where status = 0
+	    <choose>
+	        <when test="searchType == 'subject' and searchWord != ''">
+	            and lower(title) like '%' || lower(#{searchWord}) || '%'
+	        </when>
+	        <when test="searchType == 'location' and searchWord != ''">
+	            and (lower(city) like '%' || lower(#{searchWord}) || '%' or lower(local) like '%' || lower(#{searchWord}) || '%')
+	        </when>
+	    </choose>
+	    
+	    <!-- 
+	       select 문에서 distinct 와 order by 절을 함께 사용할때는 조심해야 한다.
+	       order by 절에는 select 문에서 사용된 컬럼만 들어올 수가 있다.
+	       또는 order by 절을 사용하지 않아야 한다.
+	    -->
+	    <choose>
+	        <when test="searchType == 'subject'">
+	            order by registerdate desc
+	        </when>
+	    </choose>
+	</select>
+
+    
+    
+    
+    
 	
 
 </mapper>

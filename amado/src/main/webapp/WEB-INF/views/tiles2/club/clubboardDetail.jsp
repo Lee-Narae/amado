@@ -218,7 +218,7 @@ function viewComment(){
 						}			
 										
 						v_html += `</span>
-							<div style="text-align: left;">\${item.comment_text }</div>
+							<div id="comment_text" style="text-align: left;">\${item.comment_text }</div>
 							</div>
 						</div>`;					
 												
@@ -396,6 +396,8 @@ function viewCommentOnly(){
 
 <form name="goViewFrm">
 	<input type="hidden" name="clubseq" />
+	<input type="hidden" name="clubname" />
+	<input type="hidden" name="sportname" />
 	<input type="hidden" name="clubboardseq" />
 	<input type="hidden" name="goBackURL" />
 	<input type="hidden" name="searchType" />

@@ -85,6 +85,8 @@ $(document).ready(function(){
 		const frm = document.goViewFrm;
 		frm.clubboardseq.value = clubboardseq;
 		frm.clubseq.value = clubseq;
+		frm.clubname.value = clubseq;
+		frm.clubseq.value = clubseq;
 		frm.goBackURL.value = "${requestScope.currentURL}";
 		
 		if(${not empty requestScope.paramap.searchType}){ // 검색을 했을 경우
@@ -112,8 +114,8 @@ function goSearch(){
 }
 
 
-function goWrite(clubseq){
-	location.href = "<%= ctxPath%>/club/addClubBoard.do?clubseq="+clubseq;
+function goWrite(clubseq,clubname,sportseq){
+	location.href = "<%= ctxPath%>/club/addClubBoard.do?clubseq="+clubseq+"clubname="+clubname+"sportname="+sportname;
 }
 	
 
@@ -121,7 +123,7 @@ function goWrite(clubseq){
 
 <div id="wrap" style="width: 100%; padding: 5% 0;" align="center">
 	<div id="top" class="mb-5" style="font-size: 35pt; font-weight: bolder; text-align: center;">[${requestScope.clubname}]<br><span style='color: #00588f;'>${requestScope.sportname}</span>&nbsp;동호회 게시판</div>
-	<button style='margin-left: 70%; margin-bottom: 4%;'   type="button" class="btn btn-info btn-sm" onclick="goWrite('${requestScope.clubseq}')">작성하기</button>
+	<button style='margin-left: 70%; margin-bottom: 4%;'   type="button" class="btn btn-info btn-sm" onclick="goWrite('${requestScope.clubseq}','${requestScope.clubname}','${requestScope.sportname}')">작성하기</button>
 	<div id="bottom" style="width: 80%;">
 		<table class="mb-5" style="width: 100%;">
 			<thead>

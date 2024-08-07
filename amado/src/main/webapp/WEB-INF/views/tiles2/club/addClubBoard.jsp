@@ -245,6 +245,8 @@ $(document).ready(function(){
          --%>
         
     <input type="hidden" name="clubseq" value="${requestScope.clubseq }" />
+    <input type="hidden" name="clubname" value="${requestScope.clubname }" />
+    <input type="hidden" name="sportname" value="${requestScope.clubseq }" />
      
   </div>
 </div>

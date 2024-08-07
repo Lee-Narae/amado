@@ -600,6 +600,7 @@ rotate(
 				   v_html += "<div>";
 				   v_html += "<form name='recommentFrm'>";
     			   v_html += "<textarea name='content_reply' style='font-size: 12pt; width: 100%; height: 60px;'></textarea>";
+    			   v_html += "<input type='hidden'/>";
     			   v_html += "<div style='text-align: right; font-size: 12pt;'>";
     			   v_html += "<button type='button' class='btn btn-outline-secondary' id='btnCommentOK' style='margin: auto; padding: 0.5% 1.5%;' onclick='goAddWritere("+gymquestionseq+")'>";
 			       v_html += "<span style='font-size: 8pt;'>등록</span>";
@@ -990,9 +991,9 @@ function goReadComment(){
 		    	    if(item.changestatus > 0){
 		    	    	v_html += " (수정됨)";
 		    	    }
-		    	    v_html += " &nbsp;&nbsp;<button class='btnReply' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>답글쓰기</button>";
+		    	    v_html += " &nbsp;&nbsp;<button type='button' class='btnReply' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>답글쓰기</button>";
 		    	    if (${sessionScope.loginuser != null} && "${sessionScope.loginuser.userid}" == item.fk_userid) {
-		    	        v_html += "<br><button class='btnUpdateComment' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>수정</button>&nbsp;&nbsp;<button class='btnDeleteComment' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>삭제</button>";
+		    	        v_html += "<br><button type='button' class='btnUpdateComment' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>수정</button>&nbsp;&nbsp;<button class='btnDeleteComment' style='background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;'>삭제</button>";
 		    	    }
 		    	    
 		    	    if(item.category == "0"){
@@ -1076,12 +1077,12 @@ function readcommentreply(gymquestionseq){
 			    	        v_html += "<div style='width: 6%;'><img class='profile-img' src='<%=ctxPath%>/resources/images/기본이미지.png'></div>";
 			    	    }
 			    	    if (item.memberimg != null) {
-			    	        v_html += "<div style='width: 6%;'><img class='profile-img' src='<%=ctxPath%>/resources/images/" + item.memberimg + "'></div>";
+			    	        v_html += "<div style='width: 6%;'><img class='profile-img' src='<%=ctxPath%>/resources/images/uploadImg/" + item.memberimg + "'></div>";
 			    	    }
 			    	    v_html += "<div style='display: flex; margin-top:0.7%; margin-left: 2%; width: 120% '>";
 			    	    v_html += "<div style='font-size:12pt; font-weight: bold; margin-bottom: 1.5%;'>" + item.fk_userid + "</div>";
 			    	    v_html += "<div id='content_reply' style='margin-left: 2%; text-align: left;'>" + item.content_reply + "</div>";
-			    	    v_html += "<div class='comment' style='color:#999999; font-size:10pt; margin-top: 0.4%; margin-left: 1.5%; display: flex; width: 50%;'>" + item.registerdate; 
+			    	    v_html += "<div class='comment'  style='color:#999999; font-size:10pt; margin-top: 0.4%; margin-left: 1.5%; display: flex; width: 50%;'>" + item.registerdate; 
 			    	    if(item.changestatus > 0){
 			    	    	v_html += " (됨)";
 			    	    }

@@ -1430,17 +1430,6 @@ FROM (
 WHERE rank IN (3)
 ORDER BY rank;
 
-select *
-from tbl_member
-
-select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, LOCAL, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfilename, viewcount
-from tbl_club
-where fk_userid = 'adtes6'
-
-select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, LOCAL, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfilename, viewcount
-from tbl_club
-where clubname = '턍초야다'
-
 
 select *
 from tbl_calendar_small_category
@@ -1448,9 +1437,55 @@ from tbl_calendar_small_category
 select *
 from TBL_CATEGORY
 
+
+
+
+
+select *
+from tbl_member
+
+
+
+select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, LOCAL, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfilename, viewcount
+from tbl_club
+where fk_userid = 'amado2' and fk_sportseq = 1
+
+
+
+select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, LOCAL, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfilename, viewcount
+from tbl_club
+where clubname = '배턴하는날'
+where clubseq = 130
+
+select *
+from tab
+
+select *
+from TBL_MATCHINGREG
+
+select *
+from TBL_MATCHINGAPPLY
+where clubseq = '146';
+
 select *
 from tbl_matchingreg
-where clubseq = '149'
+where sportseq = 8 and clubseq = '135';
+
+select *
+from TBL_MATCHINGREG
+where sportseq = 3 and clubseq = '130';
+
+update TBL_MATCHINGREG set STATUS = 1
+where sportseq = 3 and clubseq = '130';
+
+update tbl_matchingreg set STATUS = 0
+where MATCHINGREGSEQ = 152;
+
+update tbl_matchingreg set MATCHDATE = '24/06/22'
+where MATCHINGREGSEQ = 180;
+
+commit
+
 
 delete from tbl_matchingreg
 where MATCHINGREGSEQ > 90 and clubseq = 149;
@@ -1458,8 +1493,25 @@ where MATCHINGREGSEQ > 90 and clubseq = 149;
 commit
 
 
-   
-update tbl_matchingreg set MATCHDATE = '24/07/13'
-where MATCHINGREGSEQ = 90;
+select *
+from tbl_clubmember
+
+
+select *
+from tbl_board
+
+update tbl_board set COMMENTCOUNT = 0
+commit
+
+select *
+from tbl_clubmember
+where STATUS = 0
+
+update tbl_clubmember set STATUS = 1
+where STATUS = 0;
+
+commit
+
+
 
 
