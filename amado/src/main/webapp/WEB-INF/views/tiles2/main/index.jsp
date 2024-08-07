@@ -282,8 +282,10 @@ function goView(clubseq, fk_sportseq) {
 <!-- 준혁 시작 -->
 <div class="jb-box">
   <video muted autoplay loop>
-    <source src="<%=ctxPath%>/resources/videos/nike.mp4" type="video/mp4">
+    <source src="<%=ctxPath%>/resources/videos/메인영상.mp4" type="video/mp4">
   </video>
+  
+  <div style="font-size: 140px; position: relative; top: -50%; left: 35%; color: white; font-weight: bolder;">AMADO</div>
   
   <!-- 지윤 시작 -->
   <div class="overlay">
