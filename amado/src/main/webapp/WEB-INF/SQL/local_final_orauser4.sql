@@ -1448,7 +1448,7 @@ from tbl_member
 
 select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, LOCAL, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfilename, viewcount
 from tbl_club
-where fk_userid = 'amado2' and fk_sportseq = 4
+where fk_userid = 'amado2' and fk_sportseq = 1
 
 
 
@@ -1461,11 +1461,11 @@ where clubname = '턍초야다'
 
 select *
 from tbl_matchingreg
-where sportseq = 3 and clubseq = '136';
+where sportseq = 4 and clubseq = '139';
 
 
-update tbl_matchingreg set MATCHDATE = '24/06/22'
-where MATCHINGREGSEQ = 124;
+update tbl_matchingreg set MATCHDATE = '24/08/08'
+where MATCHINGREGSEQ = 140;
 
 commit
 
@@ -1480,8 +1480,11 @@ select *
 from tbl_clubmember
 
 
+select *
+from tbl_board
 
-
+update tbl_board set COMMENTCOUNT = 0
+commit
 
 select *
 from tbl_clubmember
