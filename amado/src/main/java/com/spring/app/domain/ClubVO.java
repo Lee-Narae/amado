@@ -39,6 +39,7 @@ public class ClubVO {
 	private String clubscore;		// 점수
 	private String viewcount;		// 조회수
 	
+	
 	// 나래 - 마이페이지 용으로 만든 거
 	private String sportname;
 
@@ -52,7 +53,7 @@ public class ClubVO {
 	      /board/src/main/webapp/WEB-INF/views/tiles1/board/view.jsp 파일에서 input type="file" 인 name 의 이름(attach)과  
 	        동일해야만 파일첨부가 가능해진다.!!!!
 	 */
-	   private String wasfileName;    // WAS(톰캣)에 저장될 파일명(2024070109291535243254235235234.png) 
+	   private String wasfilename;    // WAS(톰캣)에 저장될 파일명(2024070109291535243254235235234.png) 
 
 	
 	   private ClubmemberVO clubmembervo;
@@ -65,10 +66,10 @@ public class ClubVO {
 		this.sportname = sportname;
 	}
 	public String getWasfileName() {
-		return wasfileName;
+		return wasfilename;
 	}
-	public void setWasfileName(String wasfileName) {
-		this.wasfileName = wasfileName;
+	public void setWasfileName(String wasfilename) {
+		this.wasfilename = wasfilename;
 	}
 	public String getClubseq() {
 		return clubseq;
@@ -178,8 +179,6 @@ public class ClubVO {
 	public void setClubmembervo(ClubmemberVO clubmembervo) {
 		this.clubmembervo = clubmembervo;
 	}
-	
-	
 	
 	
 	

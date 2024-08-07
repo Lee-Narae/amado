@@ -677,9 +677,10 @@
 		<result column="clubgym" property="clubgym" javaType="String"/>
 		<result column="clubgym" property="clubgym" javaType="String"/>
 		<result column="clubtime" property="clubtime" javaType="String"/>
+		<result column="wasfilename" property="wasfilename" javaType="String"/>
 	</resultMap>
 	<select id="getClubMap" parameterType="String" resultMap="clubMap">
-		select sportseq, A.clubseq, clubname, clubimg, clubtel, city, local, clubgym, clubgym, clubtime
+		select sportseq, A.clubseq, clubname, clubimg, clubtel, city, local, clubgym, clubgym, clubtime, wasfilename
 		from tbl_clubmember A join tbl_club B
 		on A.clubseq = B.clubseq
 		where A.fk_userid = #{userid} and sportseq = #{sportseq}

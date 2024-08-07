@@ -324,8 +324,8 @@ function viewCommentOnly(){
 		</div>
 		<div class="tr" style="align-content: center; margin-left: 8%; display: flex; margin-bottom: 0.5%;">
 			<div class="title">첨부파일</div>
-			<c:if test="${not empty requestScope.cboard.orgfilename}"><div style="width: 70%; margin-top: 0.5%;" align="left"><a href="clubboardAttachDownload.do?clubboardseq=${requestScope.cboard.clubboardseq}">${requestScope.cboard.orgfilename}</a></div></c:if>
-			<c:if test="${empty requestScope.cboard.orgfilename}"><div style="width: 70%; margin-top: 0.5%;" align="left">첨부파일이 없습니다.</div></c:if>
+			<c:if test="${not empty requestScope.cboard.filename}"><div style="width: 70%; margin-top: 0.5%;" align="left"><a href="clubboardAttachDownload.do?clubboardseq=${requestScope.cboard.clubboardseq}">${requestScope.cboard.filename}</a></div></c:if>
+			<c:if test="${empty requestScope.cboard.filename}"><div style="width: 70%; margin-top: 0.5%;" align="left">첨부파일이 없습니다.</div></c:if>
 		</div>
 		<div class="tr" style="align-content: center; margin-left: 8%; display: flex; margin-bottom: 0.5%;">
 			<div class="title">조회수</div>

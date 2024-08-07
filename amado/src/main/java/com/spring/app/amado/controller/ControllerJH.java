@@ -425,6 +425,7 @@ public class ControllerJH {
 		paraMap.put("sportseq", sportseq);
 
 		ClubVO clubvo = service.getMyClub(paraMap);
+		System.out.println(clubvo.getWasfileName());
 		clubvo.setClubseq(clubseq);
 		if(clubvo != null) {
 			service.updateviewcount(clubseq);

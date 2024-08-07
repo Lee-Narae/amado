@@ -494,6 +494,7 @@ public class ControllerJY {
 			jsonObj.put("imgfilename", fvo.getImgfilename());
 			jsonObj.put("local", fvo.getLocal());
 			jsonObj.put("title", fvo.getTitle());
+			jsonObj.put("wasfilename", fvo.getWasfileName());
 			
 			jsonArr.put(jsonObj);
 			// System.out.println("aaa"+jsonArr);
@@ -564,6 +565,7 @@ public class ControllerJY {
 			jsonObj.put("viewcount", productinfo.get("viewcount"));
 			jsonObj.put("status", productinfo.get("status"));
 			jsonObj.put("imgfilename", productinfo.get("imgfilename"));
+			jsonObj.put("wasfilename", productinfo.get("wasfilename"));
 			
 			jsonArr.put(jsonObj);
 			//System.out.println("aaa"+jsonArr);
