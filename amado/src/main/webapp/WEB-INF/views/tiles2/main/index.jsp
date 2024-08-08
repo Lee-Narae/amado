@@ -250,7 +250,7 @@ opacity: 0.7;
    }
    
 function openChat(){
-	window.open('http://192.168.0.204:9099/amado/chatting/multichat.do','_blank','width=450, height=700, top=50, left=50');	
+	window.open('http://43.200.1.34:9099/amado/chatting/multichat.do','_blank','width=450, height=700, top=50, left=50');	
 }
 
 function scrollToSection(sectionId) {
