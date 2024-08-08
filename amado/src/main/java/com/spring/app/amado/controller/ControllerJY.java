@@ -310,7 +310,7 @@ public class ControllerJY {
 	@RequestMapping(value="/club/fleamarket.do")
 	public ModelAndView fleamarket(ModelAndView mav, HttpServletRequest request) {
 		
-		// 모든 상품 select 해오기
+		//  상품 select 해오기
 		List<FleamarketVO> allItemList = null; //where조건 없이 디비에서 데이터를 불러만오는 거라  map에 넣어서 보낼게 없음!!!!  //(); 괄호에 뭐가 들어갈땐 조건이 있어서 그 조건을 디비에보내서 결과물 가져올때임
 		
 		// ----------------------------------
@@ -319,6 +319,9 @@ public class ControllerJY {
 		String searchType = request.getParameter("searchType");
 		String searchWord = request.getParameter("searchWord");
 		String str_currentShowPageNo = request.getParameter("currentShowPageNo");
+		
+		System.out.println("ddd"+searchType+searchWord);
+		
 		
 		if (searchType == null) {
 			searchType = "";

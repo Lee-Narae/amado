@@ -81,21 +81,22 @@
 	
 	
 	<!-- 모든 상품 select 해오기 -->
-	<select id="getAllItemList" resultType="FleamarketVO" >
-		select fleamarketseq,  city, local, title, content, cost, deal, fk_userid, to_char(registerdate,'yyyy-mm-dd hh24:mi:ss') AS registerdate, commentcount, viewcount, status, imgfilename, wasfilename
-		from tbl_fleamarket
-		where status = 0
-		<choose>
-		   <when test='searchType == "subject" and searchWord != ""'>
-		      and lower(title) like '%'||lower(#{searchWord})||'%' 
-		   </when>
-		   <when test='searchType == "location" and searchWord != ""'>
-		      and (lower(city) like '%'||lower(#{searchWord})||'%' or lower(local) like '%'||lower(#{searchWord})||'%')  
-		   </when>
-		   <otherwise></otherwise>
-		</choose>
-		order by fleamarketseq desc
-	</select>
+	<select id="getAllItemList" resultType="FleamarketVO">
+    select fleamarketseq, city, local, title, content, cost, deal, fk_userid, to_char(registerdate,'yyyy-mm-dd hh24:mi:ss') AS registerdate, commentcount, viewcount, status, imgfilename, wasfilename
+    from tbl_fleamarket
+    where status = 0
+    <choose>
+        <when test="searchType == 'subject' and searchWord != ''">
+            and lower(title) like '%' || lower(#{searchWord}) || '%'
+        </when>
+        <when test="searchType == 'location' and searchWord != ''">
+            and (lower(city) like '%' || lower(#{searchWord}) || '%' or lower(local) like '%' || lower(#{searchWord}) || '%')
+        </when>
+        <otherwise></otherwise>
+    </choose>
+    order by fleamarketseq desc
+</select>
+
 	
 	<!-- 상품 전체 개수 불러오기 -->
 	<select id="getItemCnt" resultType="Int" parameterType="HashMap">
@@ -670,7 +671,10 @@
 	            select title
 	        </when>
 	        <when test="searchType == 'location'">
-	            select city, local
+	            select distinct city
+	        </when>
+	        <when test="searchType == 'location'">
+	            select distinct local
 	        </when>
 	    </choose>
 	    from tbl_fleamarket

@@ -180,7 +180,7 @@ $(document).ready(function(){
 	
 	// 검색
 	$("input:text[name='searchWord']").bind("keyup", function(e){ // 키뗄때 자동검색
-		if(e.keyCode == 13){
+		if(e.keyCode == 13){ // 엔터를 했을 경우
 			goSearch();
 		}
 	});
@@ -543,7 +543,7 @@ $(document).ready(function(){
 	
 });// end of $(document).ready(function(){})-------------------
 
-
+/*
 //Function Declaration
 function goView(seq) {
 	
@@ -567,12 +567,12 @@ function goView(seq) {
 		frm.searchType.value = "${requestScope.paraMap.searchType}";
 		frm.searchWord.value = "${requestScope.paraMap.searchWord}";
 	}
-	frm.action = "<%= ctxPath %>/view.do";
 	frm.method = "post";
+	frm.action = "<%= ctxPath %>/view.do";
 	frm.submit();
 
 } // end of function goView(seq) -------------------- 	 	
-
+*/
 
 function goSearch() {
 	//alert("눌렀다");
@@ -602,7 +602,7 @@ function goSearch() {
 		<div style="border:solid 0px black; text-align: center; ">
 			<h3 style="font-weight: bold;">아마두 플리마켓🧺</h3>
 			<br>
-			<!--  -->
+			<!--  
 			<form name="item_searchFrm" style="margin-top: 20px;">
 		      <select name="searchType" style="height: 26px;">
 		         <option value="subject">글제목</option>
@@ -612,12 +612,12 @@ function goSearch() {
 		      <input type="text" style="display: none;"/> <%-- form 태그내에 input 태그가 오로지 1개 뿐일경우에는 엔터를 했을 경우 검색이 되어지므로 이것을 방지하고자 만든것이다. --%> 
 		      <button type="button" class="btn btn-info btn-sm" onclick="goSearch()">검색</button>
 		    </form>
-		   
+		  
 			<%-- === #114. 검색어 입력시 자동글 완성하기 1 === --%>
-			<div id="displayList" style="border:solid 1px gray; border-top:0px; height:100px; margin-left:29.82%; margin-top:-1px; margin-bottom:30px; overflow:auto;">
+			<div id="displayList" style="border:solid 1px gray; border-top:0px; height:100px; margin-left:37%; margin-top:-1px; margin-bottom:30px; overflow:auto;">
 				
 			</div>
-		 
+		  -->
 		</div>
 		
 		<%-- 종목 카테고리 --%>
@@ -642,21 +642,7 @@ function goSearch() {
 		<div id="product" style="margin-top: 5%; margin-right: 8%; border:solid 0px red; "></div>
 		<div style="text-align: center; margin-top: 4%;"><button id="loadMoreBtn" class="btn btn-secondary">더보기</button></div>
 		
-		<%-- 페이지 바 --%>
-		<div aria-label="Page navigation" class="pn" style="border:solid 0px red; padding: 10% 35%;">
-			   <nav>
-		          <ul class="pagination">${requestScope.pageBar}</ul>
-		       </nav>
-		       <!--  
-			  <a href="#">&laquo;</a>
-			  <a href="#">1</a>
-			  <a class="active" href="#">2</a>
-			  <a href="#">3</a>
-			  <a href="#">4</a>
-			  <a href="#">5</a>
-			  <a href="#">6</a>
-			  <a href="#">&raquo;</a>-->
-			</div>
+		
 	     
 	</div>
 	
