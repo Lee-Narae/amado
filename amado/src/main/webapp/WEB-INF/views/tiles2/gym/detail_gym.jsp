@@ -1291,9 +1291,9 @@ function goAddWrite_reply(gymquestionseq){
       
       <div class="action-buttons" style="display:flex;">
 	      <div class="right_area">
-	        <a href="javascript:;" class="icon heart">
+	       <!--  <a href="javascript:;" class="icon heart">
 	        <img src="https://cdn-icons-png.flaticon.com/512/812/812327.png" alt="찜하기"> 
-	        </a>
+	        </a>  -->
 	      </div>
 	         <button class="btn btn-success" style="padding: 10px 200px;" onclick="javascript:location.href='<%= ctxPath%>/gym/gymPay.do?gymseq=${gym.gymseq}'">예약하기</button>
       </div>
