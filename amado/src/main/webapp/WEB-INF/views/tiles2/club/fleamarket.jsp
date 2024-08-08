@@ -614,7 +614,7 @@ function goSearch() {
 		    </form>
 		   
 			<%-- === #114. 검색어 입력시 자동글 완성하기 1 === --%>
-			<div id="displayList" style="border:solid 1px gray; border-top:0px; height:100px; margin-left:13.2%; margin-top:-1px; margin-bottom:30px; overflow:auto;">
+			<div id="displayList" style="border:solid 1px gray; border-top:0px; height:100px; margin-left:29.82%; margin-top:-1px; margin-bottom:30px; overflow:auto;">
 				
 			</div>
 		 
