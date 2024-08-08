@@ -466,16 +466,16 @@ function goView(clubseq, fk_sportseq) {
                                 <div class="carousel-item">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <img class="img-responsive" src="<%=ctxPath%>/resources/images/1/영등포 SKY 풋살파크.jpg" alt="Slider Image 5" data-toggle="modal" data-target="#imageModal" onclick="showImage('<%=ctxPath%>/resources/images/1/영등포 SKY 풋살파크.jpg')">
+                                            <img class="img-responsive" src="<%=ctxPath%>/resources/images/쌈바 풋볼 파크.jpg" alt="Slider Image 5" data-toggle="modal" data-target="#imageModal" onclick="showImage('<%=ctxPath%>/resources/images/1/영등포 SKY 풋살파크.jpg')">
                                         </div>
                                         <div class="col-md-3">
-                                            <img class="img-responsive" src="<%=ctxPath%>/resources/images/1/유앤아이스포츠 명지대점.jpg" alt="Slider Image 6" data-toggle="modal" data-target="#imageModal" onclick="showImage('<%=ctxPath%>/resources/images/1/유앤아이스포츠 명지대점.jpg')">
+                                            <img class="img-responsive" src="<%=ctxPath%>/resources/images/미네르바콤플렉스 실내체육관(오바마홀).jpg" alt="Slider Image 6" data-toggle="modal" data-target="#imageModal" onclick="showImage('<%=ctxPath%>/resources/images/1/유앤아이스포츠 명지대점.jpg')">
                                         </div>
                                         <div class="col-md-3">
-                                            <img class="img-responsive" src="<%=ctxPath%>/resources/images/1/영등포 SKY 풋살파크.jpg" alt="Slider Image 7" data-toggle="modal" data-target="#imageModal" onclick="showImage('<%=ctxPath%>/resources/images/1/영등포 SKY 풋살파크.jpg')">
+                                            <img class="img-responsive" src="<%=ctxPath%>/resources/images/가천대학교(글로벌).jpg" alt="Slider Image 7" data-toggle="modal" data-target="#imageModal" onclick="showImage('<%=ctxPath%>/resources/images/1/영등포 SKY 풋살파크.jpg')">
                                         </div>
                                         <div class="col-md-3">
-                                            <img class="img-responsive" src="<%=ctxPath%>/resources/images/1/SJ 풋볼 아카데미.jpg" alt="Slider Image 8" data-toggle="modal" data-target="#imageModal" onclick="showImage('<%=ctxPath%>/resources/images/1/SJ 풋볼 아카데미.jpg')">
+                                            <img class="img-responsive" src="<%=ctxPath%>/resources/images/퀀텀바스켓볼 강남도산3.jpg" alt="Slider Image 8" data-toggle="modal" data-target="#imageModal" onclick="showImage('<%=ctxPath%>/resources/images/1/SJ 풋볼 아카데미.jpg')">
                                         </div>
                                     </div>
                                 </div>
