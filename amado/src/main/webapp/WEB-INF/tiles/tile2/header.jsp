@@ -17,8 +17,11 @@
 //  serverIP : 192.168.219.101
 
 
-    String serverIP = "192.168.0.204";
+//  String serverIP = "192.168.0.204";
  // String serverIP = "211.238.142.72"; 만약에 사용중인 IP주소가 고정IP 이라면 IP주소를 직접입력해주면 된다. 
+ 
+	String serverIP = "13.125.90.105";
+	// 자신의 EC2 (aws 퍼블릭 IPv4 주소 : 13.125.90.105)
  
     // === 서버 포트번호 알아오기 === //
     int portnumber = request.getServerPort();

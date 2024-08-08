@@ -250,7 +250,8 @@ opacity: 0.7;
    }
    
 function openChat(){
-	window.open('http://192.168.0.204:9099/amado/chatting/multichat.do','_blank','width=450, height=700, top=50, left=50');	
+	// 자신의 EC2 (aws 퍼블릭 IPv4 주소 : 13.125.90.105)
+	window.open('http://13.125.90.105:9099/amado/chatting/multichat.do','_blank','width=450, height=700, top=50, left=50');	
 }
 
 function scrollToSection(sectionId) {

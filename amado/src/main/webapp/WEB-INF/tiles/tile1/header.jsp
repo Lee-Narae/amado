@@ -6,7 +6,9 @@
 <%-- ===== #28. tile2 중 header 페이지 만들기 ===== --%> 
 <%
 	String ctxPath = request.getContextPath();
-	String serverIP = "192.168.0.204";
+//	String serverIP = "192.168.0.204";
+	String serverIP = "13.125.90.105";
+	// 자신의 EC2 (aws 퍼블릭 IPv4 주소 : 13.125.90.105)
 	int portnumber = request.getServerPort();
 	String serverName = "http://"+serverIP+":"+portnumber;
 %>
