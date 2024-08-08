@@ -398,9 +398,9 @@ function viewCommentOnly(){
 	<input type="hidden" name="clubseq" value="${requestScope.clubseq}"/>
 	<input type="hidden" name="clubname"  value="${requestScope.clubname}"/>
 	<input type="hidden" name="sportname"  value="${requestScope.sportname}"/>
-	<input type="hidden" name="clubboardseq" />
-	<input type="hidden" name="goBackURL" />
-	<input type="hidden" name="searchType" />
-	<input type="hidden" name="searchWord" />
+	<input type="hidden" name="clubboardseq"  value="${requestScope.clubboardseq}"/>
+	<input type="hidden" name="goBackURL"  value="${requestScope.goBackURL}"/>
+	<input type="hidden" name="searchType"  value="${requestScope.searchType}"/>
+	<input type="hidden" name="searchWord"  value="${requestScope.searchWord}"/>
 </form>
 </div>

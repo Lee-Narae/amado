@@ -333,7 +333,6 @@
 		update tbl_notice set 
 		title = #{title},
 		content = #{content},
-		registerdate = sysdate,
 		orgfilename = null,
         filename = null,
         filesize = null
@@ -344,7 +343,6 @@
 		update tbl_notice set 
 		title = #{title},
 		content = #{content},
-		registerdate = sysdate,
 		orgfilename = #{orgfilename},
         filename = #{filename},
         filesize = #{filesize} 
@@ -354,8 +352,7 @@
 	<update id="editNoticeBy3" parameterType="NoticeVO">
 		update tbl_notice set 
 		title = #{title},
-		content = #{content},
-		registerdate = sysdate 
+		content = #{content}
         where noticeseq = #{noticeseq}
 	</update>
 	

@@ -1360,7 +1360,9 @@ public class ControllerNR {
 			mav.addObject("searchWord", searchWord);
 		}
 		
-		mav.addObject("paramap", paramap);
+		if(noticeList != null) {
+			mav.addObject("paramap", paramap);
+		}
 		mav.addObject("pageBar", pageBar);
 		
 		mav.addObject("currentURL", currentURL); 

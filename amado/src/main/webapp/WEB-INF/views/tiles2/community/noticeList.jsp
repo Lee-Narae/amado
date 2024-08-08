@@ -244,12 +244,13 @@ function goSearch(){
 		
 		</div>
 		
-		
+		<c:if test="${not empty requestScope.noticeList}">
 		<div id="pageBar" style="margin-left: 36%;">
 	       <nav>
 	          <ul class="pagination">${requestScope.pageBar}</ul>
 	       </nav>
 	    </div>
+	    </c:if>
 		
 	</div>
 	
