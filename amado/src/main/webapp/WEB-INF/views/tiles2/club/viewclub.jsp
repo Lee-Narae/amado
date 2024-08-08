@@ -51,6 +51,7 @@ div.hoverborder{
 	background-color: #254179;
 	transition: all 0.5s ease;
 	padding-bottom: 100%;
+	color: white;
 	
 }
 
@@ -93,16 +94,31 @@ div.hoverborder div{
 .sbtn{
 	color: white;
 }
+.rcmName{
+    font-size: 14pt;
+    color: #003366;
+    position: relative;
+    animation: text-flicker 2s infinite;
+}
+
+@keyframes text-flicker {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
 </style>
     
     
     
     
-<div id="container" style="border:solid 0px black; margin-top: 7%; margin-bottom: 5%;">
+<div id="container" style="border:solid 0px black; font-weight: bold; margin-top: 7%; margin-bottom: 5%;">
 	
 	<%-- 머릿말  --%>
 	<div style="text-align: center; ">
-		<h3 style="font-weight: bold;">동호회 찾기👥</h3>
+		<h3 style="font-weight: bold; ">동호회 찾기👥</h3>
 		<br>
 	</div>
 	    

@@ -635,7 +635,7 @@
 	    		success:function(json){
 	    			
 	    			if(json.n == 1){
-	    				alert("insert 완료");
+	    				alert("예약 완료");
 	    				window.location.href = 'http://localhost:9099/amado/index.do';
 	    			}
 	    			else{
@@ -700,8 +700,8 @@
 			</div>
 	        <!-- 예약하기 버튼 -->
 	        <div class="section">
-	            <%-- <button class="btn btn-primary btn-reserve" onclick="goCoinPurchaseEnd('<%= ctxPath%>', '${sessionScope.loginuser.userid}', '${requestScope.gymvo.gymname}')">예약하기</button> --%>
-	            <button class="btn btn-primary btn-reserve" onclick="gymPayEndInsert()">예약하기</button>
+	            <button class="btn btn-primary btn-reserve" onclick="goCoinPurchaseEnd('<%= ctxPath%>', '${sessionScope.loginuser.userid}', '${requestScope.gymvo.gymname}')">예약하기</button>
+	            <!-- <button class="btn btn-primary btn-reserve" onclick="gymPayEndInsert()">예약하기</button> -->
 	        </div>
 	    </div>
 	    <div>
