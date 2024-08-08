@@ -511,10 +511,10 @@ public class ControllerSJ {
 				// ~~~ 확인용 webapp 의 절대경로 =>
 				// C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\board\
 
-				// String path =root+"resources" +File.separator+"files";
+			    String path =root+"resources" +File.separator+"files";
 				
 				// 가져오는거 어케해야하지?
-				String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\images\\uploadImg";
+				//String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\images\\uploadImg";
 				
 				
 				/*

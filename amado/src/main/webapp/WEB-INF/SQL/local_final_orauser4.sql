@@ -1464,11 +1464,11 @@ ORDER BY rank;
 
 select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, LOCAL, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfilename, viewcount
 from tbl_club
-where clubname = '크로우즈'
+where clubname = '육군전투축구회'
 
 select *
 from tbl_clubmember
-where clubseq = 78
+where clubseq = 144
 
 select *
 from tab
@@ -1492,8 +1492,12 @@ where fk_userid = 'amado2' and fk_sportseq = 1
 
 select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, LOCAL, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, wasfilename, viewcount
 from tbl_club
-where clubname = '최강볼링'
+where clubname = '육군전투축구회'
 where clubseq = 130
+
+select *
+from tbl_clubmember
+where clubseq = 144
 
 select *
 from tab
@@ -1585,3 +1589,20 @@ from tab
 
 select *
 from TBL_CLUBBOARD
+
+
+
+select *
+from tbl_club
+
+select *
+from tbl_gym
+
+delete from tbl_club
+where clubseq = 176
+
+
+delete from tbl_gym
+where gymseq = 251
+
+commit
