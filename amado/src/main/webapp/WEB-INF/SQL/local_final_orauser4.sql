@@ -1562,12 +1562,26 @@ from tab
 
 select *
 from TBL_BOARDCOMMENT
+order by registerdate desc
 
 alter table TBL_BOARDCOMMENT
 add changestatus number default 0 not null;
+
+commit;
 
 select *
 from TBL_FLEAMARKETCOMMENT
 
 select *
 from TBL_FLEAMARKETCOMMENTREPLY
+
+
+
+
+select *
+from tab
+
+
+
+select *
+from TBL_CLUBBOARD
