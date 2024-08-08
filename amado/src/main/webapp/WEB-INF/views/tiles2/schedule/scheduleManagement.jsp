@@ -54,6 +54,9 @@ button.btn_edit{
 	border: none;
 	background-color: #fff;
 }
+#mycontent {
+    margin-top: 0px;
+}
 </style>
 
 
