@@ -1605,4 +1605,7 @@ where clubseq = 176
 delete from tbl_gym
 where gymseq = 251
 
+select *
+from tbl_member
+
 commit

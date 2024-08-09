@@ -901,7 +901,7 @@ public class ControllerNR {
 		
 		PrintWriter out = null;
 		
-		String path = "C:\\git\\amado\\amado\\src\\main\\webapp\\resources\\file";
+		String path = "/home/ubuntu/websiteamado/resuorces/file";
 		
 		boolean flag = false; // file 다운로드 성공, 실패인지 여부를 알려주는 용도 
         
