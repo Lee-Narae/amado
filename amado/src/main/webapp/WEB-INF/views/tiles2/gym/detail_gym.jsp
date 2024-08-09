@@ -392,7 +392,7 @@ rotate(
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/myshop/categoryListJSON.js"></script>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3e40c6a4e83259bd26e2771ad2db4e63"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d509314e98607ec5568d0be7bbc72d27"></script>
 
 <script type="text/javascript">
 

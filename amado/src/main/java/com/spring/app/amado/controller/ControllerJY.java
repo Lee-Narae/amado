@@ -190,7 +190,7 @@ public class ControllerJY {
 			//System.out.println("~~~ 확인용 webapp 의 절대경로 => " + root);  
 			//~~~ 확인용 webapp 의 절대경로 => C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\board\
 			
-			String path =root+"resources" +File.separator+"files";
+			String path =root+"resources" +File.separator+"images"+File.separator+"uploadImg";
 			/* File.separator 는 운영체제에서 사용하는 폴더와 파일의 구분자이다.
             	운영체제가 Windows 이라면 File.separator 는  "\" 이고,
             	운영체제가 UNIX, Linux, 매킨토시(맥) 이라면  File.separator 는 "/" 이다. 
@@ -645,7 +645,7 @@ public class ControllerJY {
      // WAS 의 webapp 의 절대경로를 알아와야 한다.
      HttpSession session = request.getSession();
      String root = session.getServletContext().getRealPath("/");
-     String path = root + "resources"+File.separator+"photo_upload";
+     String path =root+"resources" +File.separator+"images"+File.separator+"uploadImg";
      // path 가 첨부파일들을 저장할 WAS(톰캣)의 폴더가 된다.
      
     // System.out.println("~~~ 확인용 path => " + path);
@@ -724,7 +724,7 @@ public class ControllerJY {
 			//System.out.println("~~~ 확인용 webapp 의 절대경로 => " + root);  
 			//~~~ 확인용 webapp 의 절대경로 => C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\board\
 			
-			String path =root+"resources" +File.separator+"files";
+			String path =root+"resources" +File.separator+"images"+File.separator+"uploadImg";
 			/* File.separator 는 운영체제에서 사용하는 폴더와 파일의 구분자이다.
             	운영체제가 Windows 이라면 File.separator 는  "\" 이고,
             	운영체제가 UNIX, Linux, 매킨토시(맥) 이라면  File.separator 는 "/" 이다. 
@@ -892,7 +892,7 @@ public class ControllerJY {
 			//System.out.println("~~~ 확인용 webapp 의 절대경로 => " + root);  
 			//~~~ 확인용 webapp 의 절대경로 => C:\NCS\workspace_spring_framework\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\board\
 			
-			String path =root+"resources" +File.separator+"files";
+			String path =root+"resources" +File.separator+"images"+File.separator+"uploadImg";
 			/* File.separator 는 운영체제에서 사용하는 폴더와 파일의 구분자이다.
             	운영체제가 Windows 이라면 File.separator 는  "\" 이고,
             	운영체제가 UNIX, Linux, 매킨토시(맥) 이라면  File.separator 는 "/" 이다. 
@@ -1257,7 +1257,7 @@ public class ControllerJY {
 		
 		HttpSession session = request.getSession(); 
         String root = session.getServletContext().getRealPath("/");
-        String path = root+"resources"+File.separator+"files";
+        String path =root+"resources" +File.separator+"images"+File.separator+"uploadImg";
 		
         fileManager.doFileDownload(filename, orgfilename, path, response);
 		

@@ -6,7 +6,8 @@
 <%-- ===== #28. tile2 중 header 페이지 만들기 ===== --%> 
 <%
 	String ctxPath = request.getContextPath();
-	String serverIP = "192.168.0.204";
+	// String serverIP = "192.168.0.204";
+	String serverIP = "43.200.7.123";
 	int portnumber = request.getServerPort();
 	String serverName = "http://"+serverIP+":"+portnumber;
 %>

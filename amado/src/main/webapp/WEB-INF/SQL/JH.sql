@@ -627,6 +627,86 @@ JOIN
 ORDER BY
     fg.reservation_date, fg.start_time;
     
+
+
+
+
+
+WITH time_data AS (
+    SELECT
+        gymresseq,
+        fk_gymseq,
+        fk_userid,
+        coinmoney,
+        reservation_date,
+        TO_DATE(time, 'HH24:MI') AS reservation_time,
+        LAG(TO_DATE(time, 'HH24:MI')) OVER (
+            PARTITION BY fk_gymseq, fk_userid, reservation_date
+            ORDER BY TO_DATE(time, 'HH24:MI')
+        ) AS prev_time
+    FROM
+        tbl_gymres
+    WHERE
+        fk_userid = 'choijh'
+),
+grouped_data AS (
+    SELECT
+        gymresseq,
+        fk_gymseq,
+        coinmoney,
+        fk_userid,
+        reservation_date,
+        reservation_time,
+        prev_time,
+        SUM(
+            CASE
+                WHEN reservation_time = prev_time + INTERVAL '60' MINUTE THEN 0
+                ELSE 1
+            END
+        ) OVER (
+            PARTITION BY fk_gymseq, fk_userid, reservation_date
+            ORDER BY reservation_time
+        ) AS grp
+    FROM
+        time_data
+),
+final_groups AS (
+    SELECT
+        fk_gymseq,
+        fk_userid,
+        coinmoney,
+        reservation_date,
+        MIN(reservation_time) AS start_time,
+        MAX(reservation_time) AS end_time,
+        grp
+    FROM
+        grouped_data
+    GROUP BY
+        fk_gymseq,
+        fk_userid,
+        coinmoney,
+        reservation_date,
+        grp
+)
+SELECT
+    fg.fk_gymseq,
+    fg.fk_userid,
+    fg.coinmoney,
+    fg.reservation_date,
+    TO_CHAR(fg.start_time, 'HH24:MI') || ' ~ ' || TO_CHAR((CAST(fg.end_time AS TIMESTAMP) + INTERVAL '1' HOUR), 'HH24:MI') AS time_range,
+    g.gymname
+FROM
+    final_groups fg
+JOIN
+    tbl_gym g ON fg.fk_gymseq = g.gymseq
+WHERE
+    TO_TIMESTAMP(fg.reservation_date || ' ' || TO_CHAR(fg.start_time, 'HH24:MI'), 'YY/MM/DD HH24:MI') >= SYSDATE
+ORDER BY
+    fg.reservation_date, fg.start_time;
+
+
+
+
     
     
     
@@ -726,6 +806,80 @@ FROM (
 
 
 
+SELECT COUNT(*)
+FROM (
+    WITH time_data AS (
+        SELECT
+            gymresseq,
+            fk_gymseq,
+            fk_userid,
+            coinmoney,
+            reservation_date,
+            TO_DATE(time, 'HH24:MI') AS reservation_time,
+            LAG(TO_DATE(time, 'HH24:MI')) OVER (
+                PARTITION BY fk_gymseq, fk_userid, reservation_date
+                ORDER BY TO_DATE(time, 'HH24:MI')
+            ) AS prev_time
+        FROM
+            tbl_gymres
+        WHERE
+            fk_userid = 'amado11'
+    ),
+    grouped_data AS (
+        SELECT
+            gymresseq,
+            fk_gymseq,
+            coinmoney,
+            fk_userid,
+            reservation_date,
+            reservation_time,
+            prev_time,
+            SUM(
+                CASE
+                    WHEN reservation_time = prev_time + INTERVAL '60' MINUTE THEN 0
+                    ELSE 1
+                END
+            ) OVER (
+                PARTITION BY fk_gymseq, fk_userid, reservation_date
+                ORDER BY reservation_time
+            ) AS grp
+        FROM
+            time_data
+    ),
+    final_groups AS (
+        SELECT
+            fk_gymseq,
+            fk_userid,
+            coinmoney,
+            reservation_date,
+            MIN(reservation_time) AS start_time,
+            MAX(reservation_time) AS end_time,
+            grp
+        FROM
+            grouped_data
+        GROUP BY
+            fk_gymseq,
+            fk_userid,
+            coinmoney,
+            reservation_date,
+            grp
+    )
+    SELECT
+        fg.fk_gymseq,
+        fg.fk_userid,
+        fg.coinmoney,
+        fg.reservation_date,
+        TO_CHAR(fg.start_time, 'HH24:MI') || ' ~ ' || TO_CHAR((CAST(fg.end_time AS TIMESTAMP) + INTERVAL '1' HOUR), 'HH24:MI') AS time_range,
+        g.gymname
+    FROM
+        final_groups fg
+    JOIN
+        tbl_gym g ON fg.fk_gymseq = g.gymseq
+    WHERE
+        TO_TIMESTAMP(fg.reservation_date || ' ' || TO_CHAR(fg.start_time, 'HH24:MI'), 'YY/MM/DD HH24:MI') >= SYSDATE
+) result_set;
+
+
 
 WITH time_data AS (
     SELECT
@@ -806,9 +960,107 @@ SELECT
     gymname
 FROM
     final_groups_with_rno
-WHERE rno BETWEEN 1 AND 6
+WHERE rno BETWEEN 1 AND 6 
 ORDER BY
     reservation_date, time_range;
+    
+    
+    
+    
+    
+    
+    WITH time_data AS (
+    SELECT
+        gymresseq,
+        fk_gymseq,
+        fk_userid,
+        coinmoney,
+        reservation_date,
+        TO_DATE(time, 'HH24:MI') AS reservation_time,
+        LAG(TO_DATE(time, 'HH24:MI')) OVER (
+            PARTITION BY fk_gymseq, fk_userid, reservation_date
+            ORDER BY TO_DATE(time, 'HH24:MI')
+        ) AS prev_time
+    FROM
+        tbl_gymres
+    WHERE
+        fk_userid = 'choijh'
+),
+grouped_data AS (
+    SELECT
+        gymresseq,
+        fk_gymseq,
+        coinmoney,
+        fk_userid,
+        reservation_date,
+        reservation_time,
+        prev_time,
+        SUM(
+            CASE
+                WHEN reservation_time = prev_time + INTERVAL '60' MINUTE THEN 0
+                ELSE 1
+            END
+        ) OVER (
+            PARTITION BY fk_gymseq, fk_userid, reservation_date
+            ORDER BY reservation_time
+        ) AS grp
+    FROM
+        time_data
+),
+final_groups AS (
+    SELECT
+        fk_gymseq,
+        fk_userid,
+        coinmoney,
+        reservation_date,
+        MIN(reservation_time) AS start_time,
+        MAX(reservation_time) AS end_time,
+        grp
+    FROM
+        grouped_data
+    GROUP BY
+        fk_gymseq,
+        fk_userid,
+        coinmoney,
+        reservation_date,
+        grp
+),
+final_groups_with_rno AS (
+    SELECT
+        fg.fk_gymseq,
+        fg.fk_userid,
+        fg.coinmoney,
+        fg.reservation_date,
+        TO_CHAR(fg.start_time, 'HH24:MI') || ' ~ ' || TO_CHAR((CAST(fg.end_time AS TIMESTAMP) + INTERVAL '1' HOUR), 'HH24:MI') AS time_range,
+        g.gymname,
+        ROW_NUMBER() OVER (ORDER BY fg.reservation_date, fg.start_time) AS rno,
+        -- Combine reservation_date and start_time to compare with SYSDATE
+        TO_TIMESTAMP(fg.reservation_date || ' ' || TO_CHAR(fg.start_time, 'HH24:MI'), 'YY/MM/DD HH24:MI') AS reservation_datetime
+    FROM
+        final_groups fg
+    JOIN
+        tbl_gym g ON fg.fk_gymseq = g.gymseq
+)
+SELECT
+    fk_gymseq,
+    fk_userid,
+    coinmoney,
+    reservation_date,
+    time_range,
+    gymname
+FROM
+    final_groups_with_rno
+WHERE
+    rno BETWEEN 1 AND 6
+    AND reservation_datetime >= SYSDATE -- Compare with SYSDATE
+ORDER BY
+    reservation_date, time_range;
+    
+    
+    
+    
+    
+    
     
     
     select *

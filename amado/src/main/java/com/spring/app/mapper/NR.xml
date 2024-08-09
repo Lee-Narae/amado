@@ -4,24 +4,24 @@
 
 <mapper namespace="NR">
 
-	<select id="getLoginMember" resultType="MemberVO" parameterType="HashMap">
-		select userid, name, email, postcode, address, detailaddress, extraaddress, mobile, gender, birthday, memberimg,
-		       memberrank, speed, quick, power, earth, stretch, pwdchangegap, NVL( lastlogingap, trunc( months_between(sysdate, registerday) ) ) AS lastlogingap
-		from
-		(select userid, password, name, email, postcode, address, detailaddress, extraaddress, mobile, gender,
-		       birthday, registerday, status, memberrank, gymregisterstatus, speed, quick, memberimg,
-		       power, earth, stretch, idle, trunc( months_between(sysdate, lastpwdchangedate) ) AS pwdchangegap
-		 from tbl_member
-		 where status = 1 and userid = #{userid} and password = #{password}) A
-		cross join
-		(select trunc(months_between(sysdate, max(logindate))) as lastlogingap
-		 from tbl_loginhistory
-		 where fk_userid = #{userid}) B
-	</select>
-	
+   <select id="getLoginMember" resultType="MemberVO" parameterType="HashMap">
+      select userid, name, email, postcode, address, detailaddress, extraaddress, mobile, gender, birthday, memberimg,
+             memberrank, speed, quick, power, earth, stretch, pwdchangegap, NVL( lastlogingap, trunc( months_between(sysdate, registerday) ) ) AS lastlogingap
+      from
+      (select userid, password, name, email, postcode, address, detailaddress, extraaddress, mobile, gender,
+             birthday, registerday, status, memberrank, gymregisterstatus, speed, quick, memberimg,
+             power, earth, stretch, idle, trunc( months_between(sysdate, lastpwdchangedate) ) AS pwdchangegap
+       from tbl_member
+       where status = 1 and userid = #{userid} and password = #{password}) A
+      cross join
+      (select trunc(months_between(sysdate, max(logindate))) as lastlogingap
+       from tbl_loginhistory
+       where fk_userid = #{userid}) B
+   </select>
+   
     <update id="updateIdle" parameterType="String">
-	   	update tbl_member set idle = 1
-	   	where userid = #{userid}
+         update tbl_member set idle = 1
+         where userid = #{userid}
     </update>
     
     <insert id="insert_tbl_loginhistory">
@@ -30,817 +30,817 @@
     </insert>
     
     <select id="getClubseq" parameterType="HashMap" resultType="String">
-    	select clubseq
-		from tbl_clubmember
-		where fk_userid = #{userid} and sportseq = #{sportseq} and status = 1
+       select clubseq
+      from tbl_clubmember
+      where fk_userid = #{userid} and sportseq = #{sportseq} and status = 1
     </select>
 
 
-	<resultMap type="HashMap" id="club">
-		<result property="clubseq" 		column="clubseq" 		javaType="String" />
-		<result property="clubname" 		column="clubname" 		javaType="String" />
-		<result property="clubimg" 		column="clubimg" 		javaType="String" />
-		<result property="fk_sportseq" 		column="fk_sportseq" 		javaType="String" />
-		<result property="fk_userid" 		column="fk_userid" 		javaType="String" />
-		<result property="clubtel" 		column="clubtel" 		javaType="String" />
-		<result property="city" 		column="city" 		javaType="String" />
-		<result property="local" 		column="local" 		javaType="String" />
-		<result property="clubgym" 		column="clubgym" 		javaType="String" />
-		<result property="clubtime" 		column="clubtime" 		javaType="String" />
-		<result property="membercount" 		column="membercount" 		javaType="String" />
-		<result property="clubpay" 		column="clubpay" 		javaType="String" />
-		<result property="clubstatus" 		column="clubstatus" 		javaType="String" />
-		<result property="clubscore" 		column="clubscore" 		javaType="String" />
-		<result property="name" 		column="name" 		javaType="String" />
-		<result property="sportname" 		column="sportname" 		javaType="String" />
-		<result property="wasfilename" 		column="wasfilename" 		javaType="String" />
-	</resultMap>
-	
-	<select id="getClubInfo" parameterType="String" resultMap="club">
-		select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, local, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, name, sportname, wasfilename
-		from tbl_club A join tbl_member B
-		on A.fk_userid = B.userid
-		join tbl_sport C
-		on A.fk_sportseq = C.sportseq
-		where clubseq = #{clubseq}
-	</select>
+   <resultMap type="HashMap" id="club">
+      <result property="clubseq"       column="clubseq"       javaType="String" />
+      <result property="clubname"       column="clubname"       javaType="String" />
+      <result property="clubimg"       column="clubimg"       javaType="String" />
+      <result property="fk_sportseq"       column="fk_sportseq"       javaType="String" />
+      <result property="fk_userid"       column="fk_userid"       javaType="String" />
+      <result property="clubtel"       column="clubtel"       javaType="String" />
+      <result property="city"       column="city"       javaType="String" />
+      <result property="local"       column="local"       javaType="String" />
+      <result property="clubgym"       column="clubgym"       javaType="String" />
+      <result property="clubtime"       column="clubtime"       javaType="String" />
+      <result property="membercount"       column="membercount"       javaType="String" />
+      <result property="clubpay"       column="clubpay"       javaType="String" />
+      <result property="clubstatus"       column="clubstatus"       javaType="String" />
+      <result property="clubscore"       column="clubscore"       javaType="String" />
+      <result property="name"       column="name"       javaType="String" />
+      <result property="sportname"       column="sportname"       javaType="String" />
+      <result property="wasfilename"       column="wasfilename"       javaType="String" />
+   </resultMap>
+   
+   <select id="getClubInfo" parameterType="String" resultMap="club">
+      select clubseq, clubname, clubimg, fk_sportseq, fk_userid, clubtel, city, local, clubgym, clubtime, membercount, clubpay, clubstatus, clubscore, name, sportname, wasfilename
+      from tbl_club A join tbl_member B
+      on A.fk_userid = B.userid
+      join tbl_sport C
+      on A.fk_sportseq = C.sportseq
+      where clubseq = #{clubseq}
+   </select>
 
 
-	<resultMap type="HashMap" id="cityMap">
-		<result property="cityseq" column="cityseq" javaType="String"/>
-		<result property="cityname" column="cityname" javaType="String"/>
-	</resultMap>
-	<select id="getCityList" resultMap="cityMap">
-		select cityseq, cityname from tbl_city
-	</select>
+   <resultMap type="HashMap" id="cityMap">
+      <result property="cityseq" column="cityseq" javaType="String"/>
+      <result property="cityname" column="cityname" javaType="String"/>
+   </resultMap>
+   <select id="getCityList" resultMap="cityMap">
+      select cityseq, cityname from tbl_city
+   </select>
 
 
-	<select id="getLocalList" parameterType="String" resultType="String">
-		select localname from tbl_local A join tbl_city B on A.fk_cityseq = B.cityseq where cityname = #{cityname}
-	</select>
-	
-	
-	<resultMap type="HashMap" id="sport">
-		<result property="sportseq" column="sportseq" javaType="String"/>
-		<result property="sportname" column="sportname" javaType="String"/>
-	</resultMap>
-	<select id="getSportList" resultMap="sport">
-		select sportseq, sportname from tbl_sport
-	</select>
-	
-	
-	<resultMap type="HashMap" id="matchMap">
-		<result property="matchingregseq" column="matchingregseq" javaType="String"/>
-		<result property="clubname" column="clubname" javaType="String"/>
-		<result property="membercount" column="membercount" javaType="String"/>
-		<result property="matchdate" column="matchdate" javaType="String"/>
-		<result property="matchtime" column="matchtime" javaType="String"/>
-		<result property="city" column="city" javaType="String"/>
-		<result property="local" column="local" javaType="String"/>
-		<result property="area" column="area" javaType="String"/>
-		<result property="status" column="status" javaType="String"/>
-	</resultMap>
-	<select id="searchMatch" parameterType="HashMap" resultMap="matchMap">
-		select matchingregseq, clubname, A.membercount,
-			   substr(to_char(matchdate, 'yyyy-mm-dd hh24:mi'), 0, 10) matchdate,
-			   substr(to_char(matchdate, 'yyyy-mm-dd hh24:mi'), 12) matchtime, A.city, A.local, A.area, A.status
-		from tbl_matchingreg A join tbl_club B
-		on A.clubseq = B.clubseq
-		join tbl_sport C
-		on A.sportseq = C.sportseq
-		where C.sportname = #{sportname}
-		and to_date(matchdate, 'yyyy-mm-dd hh24:mi') >=  to_date(sysdate, 'yyyy-mm-dd hh24:mi')
-		<if test="cityname != ''">and A.city = #{cityname}</if>
-		<if test="localname != '선택하세요'">and A.local = #{localname}</if>
-		<if test="matchdate != ''">and to_char(A.matchdate, 'yyyy-mm-dd') >= #{matchdate}</if>
-		order by matchdate, matchtime
-	</select>
-	
-	
-	<resultMap type="HashMap" id="getClubseq">
-		<result property="clubseq" column="clubseq" javaType="String"/>
-		<result property="clubname" column="clubname" javaType="String"/>
-	</resultMap>
-	<select id="getClubseq_forMatch" parameterType="HashMap" resultMap="getClubseq">
-		select A.clubseq, clubname from tbl_clubmember A join tbl_sport B
-		on A.sportseq = B.sportseq
-		join tbl_club C
-		on A.clubseq = C.clubseq
-		where A.fk_userid = #{userid} and sportname = #{sportname}
-	</select>
-	
-	<insert id="matchRegister" parameterType="HashMap">
-		insert into tbl_matchingreg(matchingregseq, clubseq, sportseq, membercount, matchdate, city, local, area, status)
-		values(SEQ_MATCHINGREG.nextval, #{clubseq}, #{sportseq}, #{membercount}, to_date(#{matchdate}, 'yyyy-mm-dd hh24:mi'), #{city}, #{local}, #{area}, 0)
-	</insert>
-	
-	<select id="getClubseq_forReg" resultType="String" parameterType="String">
-		select clubseq from tbl_club where clubname = #{clubname}
-	</select>
-	
-	<select id="getSportseq_forReg" resultType="String" parameterType="String">
-	select sportseq from tbl_sport where sportname = #{sportname}
-	</select>
-	
-	
-	<select id="getAdmin" parameterType="HashMap" resultType="MemberVO">
-		select userid, name, email, postcode, address, detailaddress, extraaddress, mobile, gender, birthday
-		from tbl_member
-		where userid = #{userid} and password = #{password} and memberrank = 2
-	</select>
-	
-	<select id="getMemberTotalPage" parameterType="HashMap" resultType="int">
-		select ceil(count(*)/#{sizePerPage})
-		from tbl_member
-		where 1=1
-		<if test="searchType == 'name' and searchWord != ''">and name like '%'||#{searchWord}||'%'</if>
-		<if test="searchType == 'userid' and searchWord != ''">and userid like '%'||#{searchWord}||'%'</if>
-		<if test="searchType == 'email' and searchWord != ''">and email like '%'||#{searchWord}||'%'</if>
-	</select>
-	
-	<select id="select_member_paging" parameterType="HashMap" resultType="MemberVO">
-		select rn, userid, name, email, gender, memberrank
-		from
-		(select rownum rn, userid, name, email, gender, memberrank
-		from
-		(select userid, name, email, gender, case memberrank when 0 then '일반회원' when 1 then '동호회장' else '관리자' end memberrank
-		from tbl_member
-		where 1=1
-		<if test="searchType == 'name' and searchWord != ''">and name like '%'||#{searchWord}||'%'</if>
-		<if test="searchType == 'userid' and searchWord != ''">and userid like '%'||#{searchWord}||'%'</if>
-		<if test="searchType == 'email' and searchWord != ''">and email like '%'||#{searchWord}||'%'</if>
-		order by registerday desc)
-		)
-		where rn between to_number(#{currentShowPageNo})*to_number(#{sizePerPage})-(to_number(#{sizePerPage})-1) and to_number(#{currentShowPageNo})*to_number(#{sizePerPage})
-	</select>
-	
-	<select id="getTotalMemberCount" parameterType="HashMap" resultType="int">
-		select count(*)
-		from tbl_member
-		where 1=1
-		<if test="searchType == 'name' and searchWord != ''">and name like '%'||#{searchWord}||'%'</if>
-		<if test="searchType == 'userid' and searchWord != ''">and userid like '%'||#{searchWord}||'%'</if>
-		<if test="searchType == 'email' and searchWord != ''">and email like '%'||#{searchWord}||'%'</if>
-	</select>
-	
-	
-	
-	<insert id="addMemberList" parameterType="HashMap">
-		insert into tbl_member(userid, password, name, email, postcode, address, detailaddress, extraaddress, mobile, gender, birthday, registerday, lastpwdchangedate, status, memberrank, gymregisterstatus, speed, quick, power, earth, stretch, idle)
-		values (#{userid}, #{password}, #{name}, #{email}, #{postcode}, #{address}, #{detailaddress}, #{extraaddress}, #{mobile}, #{gender}, to_char(sysdate, 'yyyy-mm-dd'), sysdate, sysdate, 1, 0, 0, 1, 1, 1, 1, 1, 0)
-	</insert>
-	
-	
-	<select id="getMemberDetail" parameterType="String" resultType="MemberVO">
-		select userid, name, email, postcode, address, detailaddress, extraaddress, mobile, gender, birthday, memberimg,
-		       memberrank, speed, quick, power, earth, stretch, registerday
-		from tbl_member
-		where userid = #{userid}
-	</select>
-	
-	<select id="getClubCount" resultType="int">
-		select count(*)
-		from tbl_club
-	</select>
-	
-	<resultMap type="HashMap" id="clubCountMap">
-		<result property="sportname" column="sportname" javaType="String"/>
-		<result property="cnt" column="cnt" javaType="String"/>
-	</resultMap>
-	<select id="getSportPerClubCount" resultMap="clubCountMap">
-		select sportname, count(clubname) cnt
-		from tbl_club A right join tbl_sport B
-		on A.fk_sportseq = B.sportseq
-		group by B.sportname
-	</select>
-	
-	<select id="getMemberCount" parameterType="int" resultType="int">
-		select count(*)
-		from tbl_member
-		<if test="i == 2">where registerday >= sysdate-7</if>
-		<if test="i == 3">where status = 0</if>
-		<if test="i == 4">where memberrank = 0</if>
-		<if test="i == 5">where memberrank = 2</if>
-	</select>
-	
-	<select id="getMemberStatic" parameterType="String" resultType="String">
-		select count(*)
-		from tbl_loginhistory
-		where logindate = #{str_twoWeekBefore}
-	</select>
-	
-	<insert id="addNotice" parameterType="NoticeVO">
-		insert into tbl_notice(noticeseq, title, content, registerdate, viewcount, status)
-		values (SEQ_NOTICE.nextval, #{title}, #{content}, sysdate, 0, 0)
-	</insert>
-	
-	<insert id="addNoticeWithFile" parameterType="NoticeVO">
-		insert into tbl_notice(noticeseq, title, content, registerdate, viewcount, status, orgfilename, filename, filesize)
-		values (SEQ_NOTICE.nextval, #{title}, #{content}, sysdate, 0, 0, #{orgfilename}, #{filename}, #{filesize})
-	</insert>
-	
-	<select id="getNoticeTotalPage" parameterType="HashMap" resultType="int">
-		select ceil(count(*)/#{sizePerPage})
-		from tbl_notice
-		where 1=1
-		<if test="searchType == 'title' and searchWord != ''">and title like '%'||#{searchWord}||'%'</if>
-		<if test="searchType == 'content' and searchWord != ''">and content like '%'||#{searchWord}||'%'</if>
-	</select>
-	
-	<select id="select_notice_paging" parameterType="HashMap" resultType="NoticeVO">
-		select rn, noticeseq, case when length(title) > 20 then substr(title, 0, 20)||'...' else title end title, content, registerdate, viewcount, status, orgfilename, filename, filesize, commentcount
-		from
-		(select rownum rn, noticeseq, title, content, registerdate, viewcount, status, orgfilename, filename, filesize, commentcount
-		from
-		(select noticeseq, title, content, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, viewcount, status, orgfilename, filename, filesize, commentcount
-		from tbl_notice
-		where 1=1
-		<if test="searchType == 'title' and searchWord != ''">and title like '%'||#{searchWord}||'%'</if>
-		<if test="searchType == 'content' and searchWord != ''">and content like '%'||#{searchWord}||'%'</if>
-		order by registerdate desc)
-		)
-		where rn between to_number(#{currentShowPageNo})*to_number(#{sizePerPage})-(to_number(#{sizePerPage})-1) and to_number(#{currentShowPageNo})*to_number(#{sizePerPage})
-	</select>
-	
-	<select id="getTotalNoticeCount" parameterType="HashMap" resultType="int">
-		select count(*)
-		from tbl_notice
-		where 1=1
-		<if test="searchType == 'title' and searchWord != ''">and title like '%'||#{searchWord}||'%'</if>
-		<if test="searchType == 'content' and searchWord != ''">and content like '%'||#{searchWord}||'%'</if>
-	</select>
-	
-	<select id="getNoticeDetail" parameterType="HashMap" resultType="NoticeVO">
-		select previousseq, previoustitle, noticeseq, title, content, registerdate, viewcount, orgfilename, filename, filesize, nextseq, nexttitle
-		from 
-		(
-		select lag(noticeseq, 1) over(order by noticeseq desc) previousseq,
-		       lag(title, 1) over(order by noticeseq desc) previoustitle,
-		       noticeseq, title, content, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, viewcount, orgfilename, filename, filesize,
-		       lead(noticeseq, 1) over(order by noticeseq desc) nextseq,
-		       lead(title, 1) over(order by noticeseq desc) nexttitle
-		from tbl_notice
-		where status = 0
-		<if test="searchType == 'title' and searchWord != ''">and title like '%'||#{searchWord}||'%'</if>
-		<if test="searchType == 'content' and searchWord != ''">and content like '%'||#{searchWord}||'%'</if>
-		) A
-		where A.noticeseq = #{noticeseq}
-	</select>
-	
-	<resultMap type="HashMap" id="commentMap">
-		<result property="noticecommentseq" column="noticecommentseq" javaType="String"/>
-		<result property="parentseq" column="parentseq" javaType="String"/>
-		<result property="comment_text" column="comment_text" javaType="String"/>
-		<result property="registerdate" column="registerdate" javaType="String"/>
-		<result property="fk_userid" column="fk_userid" javaType="String"/>
-		<result property="memberimg" column="memberimg" javaType="String"/>
-	</resultMap>
-	<select id="getNoticeComment" parameterType="String" resultMap="commentMap">
-		select noticecommentseq, parentseq, comment_text, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, fk_userid, memberimg
-		from tbl_noticecomment A join tbl_member B
-		on A.fk_userid = B.userid
-		where A.status = 1 and parentseq = #{noticeseq}
-		order by registerdate
-	</select>
-	
-	<select id="getNoticeCommentCount" parameterType="String" resultType="String">
-		select count(*)
-		from tbl_noticecomment
-		where status = 1 and parentseq = #{noticeseq}
-	</select>
-	
-	
-	<resultMap type="HashMap" id="noticefileMap">
-		<result property="filename" column="filename" javaType="String"/>
-		<result property="orgfilename" column="orgfilename" javaType="String"/>
-	</resultMap>
-	<select id="getOrgfilename" parameterType="String" resultMap="noticefileMap">
-		select filename, orgfilename from tbl_notice
-		where noticeseq = #{noticeseq}
-	</select>
-	
-	
-	<delete id="deleteNotice">
-		delete from tbl_notice where noticeseq = #{noticeseq}
-	</delete>
-	
-	
-	<select id="editNotice_get" parameterType="String" resultType="NoticeVO">
-		select noticeseq, title, content, orgfilename from tbl_notice where noticeseq = #{noticeseq}
-	</select>
-	
-	<update id="editNoticeBy1" parameterType="NoticeVO">
-		update tbl_notice set 
-		title = #{title},
-		content = #{content},
-		orgfilename = null,
+   <select id="getLocalList" parameterType="String" resultType="String">
+      select localname from tbl_local A join tbl_city B on A.fk_cityseq = B.cityseq where cityname = #{cityname}
+   </select>
+   
+   
+   <resultMap type="HashMap" id="sport">
+      <result property="sportseq" column="sportseq" javaType="String"/>
+      <result property="sportname" column="sportname" javaType="String"/>
+   </resultMap>
+   <select id="getSportList" resultMap="sport">
+      select sportseq, sportname from tbl_sport
+   </select>
+   
+   
+   <resultMap type="HashMap" id="matchMap">
+      <result property="matchingregseq" column="matchingregseq" javaType="String"/>
+      <result property="clubname" column="clubname" javaType="String"/>
+      <result property="membercount" column="membercount" javaType="String"/>
+      <result property="matchdate" column="matchdate" javaType="String"/>
+      <result property="matchtime" column="matchtime" javaType="String"/>
+      <result property="city" column="city" javaType="String"/>
+      <result property="local" column="local" javaType="String"/>
+      <result property="area" column="area" javaType="String"/>
+      <result property="status" column="status" javaType="String"/>
+   </resultMap>
+   <select id="searchMatch" parameterType="HashMap" resultMap="matchMap">
+      select matchingregseq, clubname, A.membercount,
+            substr(to_char(matchdate, 'yyyy-mm-dd hh24:mi'), 0, 10) matchdate,
+            substr(to_char(matchdate, 'yyyy-mm-dd hh24:mi'), 12) matchtime, A.city, A.local, A.area, A.status
+      from tbl_matchingreg A join tbl_club B
+      on A.clubseq = B.clubseq
+      join tbl_sport C
+      on A.sportseq = C.sportseq
+      where C.sportname = #{sportname}
+      and to_date(matchdate, 'yyyy-mm-dd hh24:mi') >=  to_date(sysdate, 'yyyy-mm-dd hh24:mi')
+      <if test="cityname != ''">and A.city = #{cityname}</if>
+      <if test="localname != '선택하세요'">and A.local = #{localname}</if>
+      <if test="matchdate != ''">and to_char(A.matchdate, 'yyyy-mm-dd') >= #{matchdate}</if>
+      order by matchdate, matchtime
+   </select>
+   
+   
+   <resultMap type="HashMap" id="getClubseq">
+      <result property="clubseq" column="clubseq" javaType="String"/>
+      <result property="clubname" column="clubname" javaType="String"/>
+   </resultMap>
+   <select id="getClubseq_forMatch" parameterType="HashMap" resultMap="getClubseq">
+      select A.clubseq, clubname from tbl_clubmember A join tbl_sport B
+      on A.sportseq = B.sportseq
+      join tbl_club C
+      on A.clubseq = C.clubseq
+      where A.fk_userid = #{userid} and sportname = #{sportname}
+   </select>
+   
+   <insert id="matchRegister" parameterType="HashMap">
+      insert into tbl_matchingreg(matchingregseq, clubseq, sportseq, membercount, matchdate, city, local, area, status)
+      values(SEQ_MATCHINGREG.nextval, #{clubseq}, #{sportseq}, #{membercount}, to_date(#{matchdate}, 'yyyy-mm-dd hh24:mi'), #{city}, #{local}, #{area}, 0)
+   </insert>
+   
+   <select id="getClubseq_forReg" resultType="String" parameterType="String">
+      select clubseq from tbl_club where clubname = #{clubname}
+   </select>
+   
+   <select id="getSportseq_forReg" resultType="String" parameterType="String">
+   select sportseq from tbl_sport where sportname = #{sportname}
+   </select>
+   
+   
+   <select id="getAdmin" parameterType="HashMap" resultType="MemberVO">
+      select userid, name, email, postcode, address, detailaddress, extraaddress, mobile, gender, birthday
+      from tbl_member
+      where userid = #{userid} and password = #{password} and memberrank = 2
+   </select>
+   
+   <select id="getMemberTotalPage" parameterType="HashMap" resultType="int">
+      select ceil(count(*)/#{sizePerPage})
+      from tbl_member
+      where 1=1
+      <if test="searchType == 'name' and searchWord != ''">and name like '%'||#{searchWord}||'%'</if>
+      <if test="searchType == 'userid' and searchWord != ''">and userid like '%'||#{searchWord}||'%'</if>
+      <if test="searchType == 'email' and searchWord != ''">and email like '%'||#{searchWord}||'%'</if>
+   </select>
+   
+   <select id="select_member_paging" parameterType="HashMap" resultType="MemberVO">
+      select rn, userid, name, email, gender, memberrank
+      from
+      (select rownum rn, userid, name, email, gender, memberrank
+      from
+      (select userid, name, email, gender, case memberrank when 0 then '일반회원' when 1 then '동호회장' else '관리자' end memberrank
+      from tbl_member
+      where 1=1
+      <if test="searchType == 'name' and searchWord != ''">and name like '%'||#{searchWord}||'%'</if>
+      <if test="searchType == 'userid' and searchWord != ''">and userid like '%'||#{searchWord}||'%'</if>
+      <if test="searchType == 'email' and searchWord != ''">and email like '%'||#{searchWord}||'%'</if>
+      order by registerday desc)
+      )
+      where rn between to_number(#{currentShowPageNo})*to_number(#{sizePerPage})-(to_number(#{sizePerPage})-1) and to_number(#{currentShowPageNo})*to_number(#{sizePerPage})
+   </select>
+   
+   <select id="getTotalMemberCount" parameterType="HashMap" resultType="int">
+      select count(*)
+      from tbl_member
+      where 1=1
+      <if test="searchType == 'name' and searchWord != ''">and name like '%'||#{searchWord}||'%'</if>
+      <if test="searchType == 'userid' and searchWord != ''">and userid like '%'||#{searchWord}||'%'</if>
+      <if test="searchType == 'email' and searchWord != ''">and email like '%'||#{searchWord}||'%'</if>
+   </select>
+   
+   
+   
+   <insert id="addMemberList" parameterType="HashMap">
+      insert into tbl_member(userid, password, name, email, postcode, address, detailaddress, extraaddress, mobile, gender, birthday, registerday, lastpwdchangedate, status, memberrank, gymregisterstatus, speed, quick, power, earth, stretch, idle)
+      values (#{userid}, #{password}, #{name}, #{email}, #{postcode}, #{address}, #{detailaddress}, #{extraaddress}, #{mobile}, #{gender}, to_char(sysdate, 'yyyy-mm-dd'), sysdate, sysdate, 1, 0, 0, 1, 1, 1, 1, 1, 0)
+   </insert>
+   
+   
+   <select id="getMemberDetail" parameterType="String" resultType="MemberVO">
+      select userid, name, email, postcode, address, detailaddress, extraaddress, mobile, gender, birthday, memberimg,
+             memberrank, speed, quick, power, earth, stretch, registerday
+      from tbl_member
+      where userid = #{userid}
+   </select>
+   
+   <select id="getClubCount" resultType="int">
+      select count(*)
+      from tbl_club
+   </select>
+   
+   <resultMap type="HashMap" id="clubCountMap">
+      <result property="sportname" column="sportname" javaType="String"/>
+      <result property="cnt" column="cnt" javaType="String"/>
+   </resultMap>
+   <select id="getSportPerClubCount" resultMap="clubCountMap">
+      select sportname, count(clubname) cnt
+      from tbl_club A right join tbl_sport B
+      on A.fk_sportseq = B.sportseq
+      group by B.sportname
+   </select>
+   
+   <select id="getMemberCount" parameterType="int" resultType="int">
+      select count(*)
+      from tbl_member
+      <if test="i == 2">where registerday >= sysdate-7</if>
+      <if test="i == 3">where status = 0</if>
+      <if test="i == 4">where memberrank = 0</if>
+      <if test="i == 5">where memberrank = 2</if>
+   </select>
+   
+   <select id="getMemberStatic" parameterType="String" resultType="String">
+      select count(*)
+      from tbl_loginhistory
+      where logindate = TO_DATE(#{str_twoWeekBefore}, 'yy/mm/dd')
+   </select>
+   
+   <insert id="addNotice" parameterType="NoticeVO">
+      insert into tbl_notice(noticeseq, title, content, registerdate, viewcount, status)
+      values (SEQ_NOTICE.nextval, #{title}, #{content}, sysdate, 0, 0)
+   </insert>
+   
+   <insert id="addNoticeWithFile" parameterType="NoticeVO">
+      insert into tbl_notice(noticeseq, title, content, registerdate, viewcount, status, orgfilename, filename, filesize)
+      values (SEQ_NOTICE.nextval, #{title}, #{content}, sysdate, 0, 0, #{orgfilename}, #{filename}, #{filesize})
+   </insert>
+   
+   <select id="getNoticeTotalPage" parameterType="HashMap" resultType="int">
+      select ceil(count(*)/#{sizePerPage})
+      from tbl_notice
+      where 1=1
+      <if test="searchType == 'title' and searchWord != ''">and title like '%'||#{searchWord}||'%'</if>
+      <if test="searchType == 'content' and searchWord != ''">and content like '%'||#{searchWord}||'%'</if>
+   </select>
+   
+   <select id="select_notice_paging" parameterType="HashMap" resultType="NoticeVO">
+      select rn, noticeseq, case when length(title) > 20 then substr(title, 0, 20)||'...' else title end title, content, registerdate, viewcount, status, orgfilename, filename, filesize, commentcount
+      from
+      (select rownum rn, noticeseq, title, content, registerdate, viewcount, status, orgfilename, filename, filesize, commentcount
+      from
+      (select noticeseq, title, content, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, viewcount, status, orgfilename, filename, filesize, commentcount
+      from tbl_notice
+      where 1=1
+      <if test="searchType == 'title' and searchWord != ''">and title like '%'||#{searchWord}||'%'</if>
+      <if test="searchType == 'content' and searchWord != ''">and content like '%'||#{searchWord}||'%'</if>
+      order by registerdate desc)
+      )
+      where rn between to_number(#{currentShowPageNo})*to_number(#{sizePerPage})-(to_number(#{sizePerPage})-1) and to_number(#{currentShowPageNo})*to_number(#{sizePerPage})
+   </select>
+   
+   <select id="getTotalNoticeCount" parameterType="HashMap" resultType="int">
+      select count(*)
+      from tbl_notice
+      where 1=1
+      <if test="searchType == 'title' and searchWord != ''">and title like '%'||#{searchWord}||'%'</if>
+      <if test="searchType == 'content' and searchWord != ''">and content like '%'||#{searchWord}||'%'</if>
+   </select>
+   
+   <select id="getNoticeDetail" parameterType="HashMap" resultType="NoticeVO">
+      select previousseq, previoustitle, noticeseq, title, content, registerdate, viewcount, orgfilename, filename, filesize, nextseq, nexttitle
+      from 
+      (
+      select lag(noticeseq, 1) over(order by noticeseq desc) previousseq,
+             lag(title, 1) over(order by noticeseq desc) previoustitle,
+             noticeseq, title, content, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, viewcount, orgfilename, filename, filesize,
+             lead(noticeseq, 1) over(order by noticeseq desc) nextseq,
+             lead(title, 1) over(order by noticeseq desc) nexttitle
+      from tbl_notice
+      where status = 0
+      <if test="searchType == 'title' and searchWord != ''">and title like '%'||#{searchWord}||'%'</if>
+      <if test="searchType == 'content' and searchWord != ''">and content like '%'||#{searchWord}||'%'</if>
+      ) A
+      where A.noticeseq = #{noticeseq}
+   </select>
+   
+   <resultMap type="HashMap" id="commentMap">
+      <result property="noticecommentseq" column="noticecommentseq" javaType="String"/>
+      <result property="parentseq" column="parentseq" javaType="String"/>
+      <result property="comment_text" column="comment_text" javaType="String"/>
+      <result property="registerdate" column="registerdate" javaType="String"/>
+      <result property="fk_userid" column="fk_userid" javaType="String"/>
+      <result property="memberimg" column="memberimg" javaType="String"/>
+   </resultMap>
+   <select id="getNoticeComment" parameterType="String" resultMap="commentMap">
+      select noticecommentseq, parentseq, comment_text, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, fk_userid, memberimg
+      from tbl_noticecomment A join tbl_member B
+      on A.fk_userid = B.userid
+      where A.status = 1 and parentseq = #{noticeseq}
+      order by registerdate
+   </select>
+   
+   <select id="getNoticeCommentCount" parameterType="String" resultType="String">
+      select count(*)
+      from tbl_noticecomment
+      where status = 1 and parentseq = #{noticeseq}
+   </select>
+   
+   
+   <resultMap type="HashMap" id="noticefileMap">
+      <result property="filename" column="filename" javaType="String"/>
+      <result property="orgfilename" column="orgfilename" javaType="String"/>
+   </resultMap>
+   <select id="getOrgfilename" parameterType="String" resultMap="noticefileMap">
+      select filename, orgfilename from tbl_notice
+      where noticeseq = #{noticeseq}
+   </select>
+   
+   
+   <delete id="deleteNotice">
+      delete from tbl_notice where noticeseq = #{noticeseq}
+   </delete>
+   
+   
+   <select id="editNotice_get" parameterType="String" resultType="NoticeVO">
+      select noticeseq, title, content, orgfilename from tbl_notice where noticeseq = #{noticeseq}
+   </select>
+   
+   <update id="editNoticeBy1" parameterType="NoticeVO">
+      update tbl_notice set 
+      title = #{title},
+      content = #{content},
+      orgfilename = null,
         filename = null,
         filesize = null
         where noticeseq = #{noticeseq}
-	</update>
-	
-	<update id="editNoticeBy2" parameterType="NoticeVO">
-		update tbl_notice set 
-		title = #{title},
-		content = #{content},
-		orgfilename = #{orgfilename},
+   </update>
+   
+   <update id="editNoticeBy2" parameterType="NoticeVO">
+      update tbl_notice set 
+      title = #{title},
+      content = #{content},
+      orgfilename = #{orgfilename},
         filename = #{filename},
         filesize = #{filesize} 
         where noticeseq = #{noticeseq}
-	</update>
-	
-	<update id="editNoticeBy3" parameterType="NoticeVO">
-		update tbl_notice set 
-		title = #{title},
-		content = #{content}
+   </update>
+   
+   <update id="editNoticeBy3" parameterType="NoticeVO">
+      update tbl_notice set 
+      title = #{title},
+      content = #{content}
         where noticeseq = #{noticeseq}
-	</update>
-	
-	<update id="updateNoticeViewcount" parameterType="String">
-		update tbl_notice set viewcount = viewcount + 1
-		where noticeseq = #{nocticeseq}
-	</update>
-	
-	<insert id="insertNoticeComment" parameterType="HashMap">
-		insert into tbl_noticecomment(noticecommentseq, parentseq, comment_text, registerdate, fk_userid, status)
-		values (seq_noticecomment.nextval, #{parentseq}, #{comment_text}, sysdate, #{fk_userid}, 1)
-	</insert>
-	
-	<update id="updateNoticeCommentcount" parameterType="String">
-		update tbl_notice set commentcount = commentcount+1
-		where noticeseq = #{parentseq}
-	</update>
-	
-	<delete id="delNoticeComment" parameterType="String">
-		delete from tbl_noticecomment where noticecommentseq = #{noticecommentseq}
-	</delete>
-	
-	<update id="updateNoticeCommentcount_del" parameterType="String">
-		update tbl_notice set commentcount = commentcount-1
-		where noticeseq = #{parentseq}
-	</update>
-	
-	<update id="editNoticeComment" parameterType="HashMap">
-		update tbl_noticecomment set comment_text = #{comment_text}, registerdate = sysdate
-		where noticecommentseq = #{noticecommentseq}
-	</update>
-	
-	<select id="getSportseq" parameterType="String" resultType="String">
-		select sportseq from tbl_matchingreg where matchingregseq = #{matchingregseq}
-	</select>
-	
-	
-	<resultMap type="HashMap" id="resultmap">
-		<result property="clubname" column="clubname" javaType="String"/>
-		<result property="clubseq" column="clubseq" javaType="String"/>
-	</resultMap>
-	<select id="getUserClubname" parameterType="HashMap" resultMap="resultmap">
-		select clubname, A.clubseq
-		from tbl_clubmember A join tbl_club B
-		on A.clubseq = B.clubseq
-		where A.sportseq = #{sportseq} and A.fk_userid = #{fk_userid}
-	</select>
-	
-	<insert id="applyMatch" parameterType="HashMap">
-		<if test="message != ''">
-		insert into tbl_matchingapply(matchingapplyseq, matchingregseq, clubseq, membercount, message, status)
-		values (SEQ_MATCHINGAPPLY.nextval, #{matchingregseq}, #{appclubseq}, #{membercount}, #{message}, 0)
-		</if>
-		<if test="message == ''">
-		insert into tbl_matchingapply(matchingapplyseq, matchingregseq, clubseq, membercount, status)
-		values (SEQ_MATCHINGAPPLY.nextval, #{matchingregseq}, #{appclubseq}, #{membercount}, 0)
-		</if>
-	</insert>
-	
-	<select id="searchApply" parameterType="HashMap" resultType="int">
-		select count(*)
-		from tbl_matchingapply
-		where matchingregseq = #{matchingregseq} and clubseq = #{clubseq}
-	</select>	
-	
-	<select id="findId" parameterType="HashMap" resultType="MemberVO">
-		select userid from tbl_member
-		where name = #{name} and email = #{email}
-	</select>
-	
-	<select id="findpw" parameterType="HashMap" resultType="MemberVO">
-		select userid from tbl_member
-		where name = #{name} and userid = #{userid} and email = #{email}
-	</select>
-	
-	<select id="checkBeforePw" parameterType="HashMap" resultType="int">
-		select count(*) from tbl_member where userid = #{userid} and password = #{newpw}
-	</select>
-	
-	<update id="findPwUpdatePw" parameterType="HashMap">
-		update tbl_member set password = #{newpw}
-		where userid = #{userid}
-	</update>
-	
-	<select id="getGymStatus" resultType="GymVO">
-		select gymseq, gymname, fk_userid, postcode, address, detailaddress, status, info, cost, caution, membercount, likecount, insidestatus, orgfilename, filename, filesize
-		from tbl_gym
-		where status = 0
-	</select>
-	
-	<select id="getGymInfo" parameterType="String" resultType="GymVO">
-		select gymseq, gymname, fk_userid, postcode, address, detailaddress, status, info, cost, caution, membercount, likecount, insidestatus, orgfilename, filename, filesize
-		from tbl_gym
-		where gymseq = #{gymseq}
-	</select>
-	
-	<update id="gymPermit" parameterType="String">
-		update tbl_gym set status = 1 where gymseq = #{gymseq}
-	</update>
-	
-	
-	
-	<resultMap type="HashMap" id="alarmMap">
-		<result property="matchingapplyseq" column="matchingapplyseq" javaType="String"/>
-		<result property="matchingregseq" column="matchingregseq" javaType="String"/>
-		<result property="sportname" column="sportname" javaType="String"/>
-		<result property="Aseq" column="Aseq" javaType="String"/>
-		<result property="A_name" column="A-name" javaType="String"/>
-		<result property="fk_userid" column="fk_userid" javaType="String"/>
-		<result property="Bseq" column="Bseq" javaType="String"/>
-		<result property="B_name" column="B-name" javaType="String"/>
-		<result property="message" column="message" javaType="String"/>
-		<result property="membercount" column="membercount" javaType="String"/>
-		<result property="matchdate" column="matchdate" javaType="String"/>
-		<result property="city" column="city" javaType="String"/>
-		<result property="local" column="local" javaType="String"/>
-		<result property="area" column="area" javaType="String"/>
-		<result property="status" column="status" javaType="String"/>
-	</resultMap>
-	<select id="getClubAlarm" parameterType="String" resultMap="alarmMap">
-		select matchingapplyseq, B.matchingregseq, E.sportname, B.clubseq Aseq, D.clubname "A-name", D.fk_userid, A.clubseq Bseq,
-			   C.clubname "B-name", A.message, A.membercount, to_char(B.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, B.city, B.local, B.area, B.status
-		from tbl_matchingapply A join tbl_matchingreg B
-		on A.matchingregseq = B.matchingregseq
-		join tbl_club C
-		on A.clubseq = C.clubseq
-		join tbl_club D
-		on B.clubseq = D.clubseq
-		join tbl_sport E
-		on B.sportseq = E.sportseq
-		<![CDATA[ where D.fk_userid = #{userid} and A.status = 0 and B.matchdate >= sysdate ]]>
-	</select>
-	
-	
-	<update id="updateMatchingApply1" parameterType="HashMap">
-		update tbl_matchingapply set status = 1 where matchingapplyseq = #{matchingapplyseq}
-	</update>
-	
-	<update id="updateMatchingApply2">
-		update tbl_matchingapply set status = 2 where matchingregseq = #{matchingregseq} and matchingapplyseq != #{matchingapplyseq}
-	</update>
-	
-	<update id="updateMatchingReg">
-		update tbl_matchingreg set status = 1 where matchingregseq = #{matchingregseq}
-	</update>
-	
-	<insert id="insertMatching">
-		insert into tbl_matching(matchingseq, matchingregseq, clubseq1, clubseq2, result1, result2, score1, score2)
-		values(SEQ_MATCHING.nextval, #{matchingregseq}, #{Aseq}, #{Bseq}, 0, 0, 0, 0)
-	</insert>
-	
-	<resultMap type="HashMap" id="matchMap2">
-		<result property="regteam" column="regteam" javaType="String"/>
-		<result property="appteam" column="appteam" javaType="String"/>
-		<result property="matchdate" column="matchdate" javaType="String"/>
-		<result property="area" column="area" javaType="String"/>
-	</resultMap>
-	<select id="getMatchList" parameterType="String" resultMap="matchMap2">
-		select C.clubname regteam, D.clubname appteam, to_char(A.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, A.area
-		from tbl_matchingreg A join tbl_matchingapply B
-		on A.matchingregseq = B.matchingregseq
-		join tbl_club C
-		on A.clubseq = C.clubseq
-		join tbl_club D
-		on B.clubseq =  D.clubseq
-		join tbl_member E
-		on C.fk_userid = E.userid
-		join tbl_member F
-		on D.fk_userid = F.userid
-		<![CDATA[ where B.status = 1 and (C.clubseq=#{clubseq} or D.clubseq=#{clubseq}) and A.matchdate >= sysdate ]]>
-		order by 3
-	</select>
-	
-	<select id="getGymseq" resultType="String">
-		select SEQ_GYM.nextval from dual
-	</select>
-	
-	<insert id="adminGymreg" parameterType="GymVO">
-	insert into tbl_gym(gymseq, gymname, fk_userid, postcode, address, detailaddress, status, info, cost, caution,
-						membercount, likecount, insidestatus, orgfilename, filename, filesize, lat, lng)
-	values(#{gymseq}, #{gymname}, 'admin', #{postcode}, #{address}, #{detailaddress}, 1, #{info}, #{cost}, #{caution},
-  		   #{membercount}, 0, #{insidestatus}, #{orgfilename}, #{filename}, #{filesize}, #{lat}, #{lng})
-	</insert>
-	
-	<insert id="insertGymImg" parameterType="HashMap">
-		insert into tbl_gymimg(gymimgseq, gymseq, filename, orgfilename, filesize)
-		values(SEQ_GYMIMG.nextval, #{gymseq}, #{filename}, #{orgfilename}, #{filesize})
-	</insert>
-	
-	<insert id="insertOpendata">
-		insert into tbl_opendata_gym(opendata_gymseq, name, type, status, postcode, oldAdd, newAdd, city)
-		values (opendata_gymseq.nextval, #{name}, #{type}, #{status}, #{postcode}, #{oldAdd}, #{newAdd}, #{city})
-	</insert>
-	
-	<resultMap type="HashMap" id="searchFacByCityMap">
-		<result column="city" property="city" javaType="String"/>
-		<result column="cnt" property="cnt" javaType="String"/>
-	</resultMap>
-	<select id="searchFacByCity" resultMap="searchFacByCityMap">
-		select city, count(*) cnt
-		from tbl_opendata_gym
-		group by city
-		order by 1
-	</select>
-	
-	
-	<resultMap type="HashMap" id="searchFacByLocalMap">
-		<result column="local" property="local" javaType="String"/>
-		<result column="cnt" property="cnt" javaType="String"/>
-	</resultMap>
-	<select id="searchFacByLocal" parameterType="String" resultMap="searchFacByLocalMap">
-		select substr(oldadd,instr(oldadd, ' ', 1, 1)+1,instr(oldadd, ' ', 1, 2)-1-instr(oldadd, ' ', 1, 1)) local, count(*) cnt
-		from tbl_opendata_gym
-		where city = #{city}
-		group by city, substr(oldadd,instr(oldadd, ' ', 1, 1)+1,instr(oldadd, ' ', 1, 2)-1-instr(oldadd, ' ', 1, 1))
-		order by 1, 2
-	</select>
-	
-	<resultMap type="HashMap" id="facMap">
-		<result column="opendata_gymseq" property="opendata_gymseq" javaType="String"/>
-		<result column="name" property="name" javaType="String"/>
-		<result column="type" property="type" javaType="String"/>
-		<result column="status" property="status" javaType="String"/>
-		<result column="newadd" property="newadd" javaType="String"/>
-		<result column="city" property="city" javaType="String"/>
-	</resultMap>
-	<select id="getFacList" resultMap="facMap" parameterType="HashMap">
-		select rn, name, type, status, newadd, city
-		from
-		(select rownum rn, name, type, status, newadd, city
-		from     
-		(select distinct name, type, status, newadd, city
-		from tbl_opendata_gym
-		where 1=1
-		<if test="searchType == 'name' and searchWord != ''">and name like '%'||#{searchWord}||'%'</if>
-		<if test="searchType == 'type' and searchWord != ''">and type like '%'||#{searchWord}||'%'</if>
-		<if test="searchType == 'newadd' and searchWord != ''">and newadd like '%'||#{searchWord}||'%'</if>
-		order by city, newadd))
-		where rn between to_number(#{currentShowPageNo})*10-9 and to_number(#{currentShowPageNo})*10
-	</select>
-	
-	
-	<select id="getfacTotalPage" resultType="int">
-		select ceil(count(*)/10)
-		from (select distinct newadd, name, type, status, city from tbl_opendata_gym)
-		where 1=1
-		<if test="searchType == 'name' and searchWord != ''">and name like '%'||#{searchWord}||'%'</if>
-		<if test="searchType == 'type' and searchWord != ''">and type like '%'||#{searchWord}||'%'</if>
-		<if test="searchType == 'newadd' and searchWord != ''">and newadd like '%'||#{searchWord}||'%'</if>
-	</select>
-	
-	
-	<select id="getTotalFacCount" resultType="int">
-		select count(*)
-		from (select distinct newadd, name, type, status, city from tbl_opendata_gym)
-		where 1=1
-		<if test="searchType == 'name' and searchWord != ''">and name like '%'||#{searchWord}||'%'</if>
-		<if test="searchType == 'type' and searchWord != ''">and type like '%'||#{searchWord}||'%'</if>
-		<if test="searchType == 'newadd' and searchWord != ''">and newadd like '%'||#{searchWord}||'%'</if>
-	</select>
-	
-	<resultMap type="HashMap" id="MatchResultMap">
-		<result column="matchingseq" property="matchingseq" javaType="String"/>
-		<result column="myteam" property="myteam" javaType="String"/>
-		<result column="clubname" property="clubname" javaType="String"/>
-		<result column="matchdate" property="matchdate" javaType="String"/>
-		<result column="area" property="area" javaType="String"/>
-	</resultMap>
-	<select id="getMatchResult" parameterType="String" resultMap="MatchResultMap">
-		select matchingseq, C.clubname myteam, D.clubname, to_char(B.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, area
-		from tbl_matching A join tbl_matchingreg B
-		on A.matchingregseq = B.matchingregseq
-		join tbl_club C
-		on B.clubseq = C.clubseq
-		join tbl_club D
-		on A.clubseq2 = D.clubseq
-		join tbl_member E
-		on C.fk_userid = E.userid
-		<![CDATA[ where E.userid = #{userid} and A.result1 = 0 and B.matchdate < sysdate ]]>
-	</select>
-	
-	<update id="updateMatchResult">
-		update tbl_matching set result1 = #{result1}, result2 = #{result2}, score1 = #{score1}, score2 = #{score2}
-		where matchingseq = #{matchingseq}
-	</update>
-	
-	<update id="updateMemberInfo_noAttach">
-		update tbl_member set email = #{email}, postcode = #{postcode}, address = #{address}, detailaddress = #{detailaddress},
-		extraaddress = #{extraaddress}, mobile = #{mobile}, speed = #{speed}, quick = #{quick}, power = #{power}, earth = #{earth}, stretch = #{stretch}, memberimg = null
-		where userid = #{userid}
-	</update>
-	
-	<update id="updateMemberInfo_attach">
-		update tbl_member set email = #{email}, postcode = #{postcode}, address = #{address}, detailaddress = #{detailaddress},
-		extraaddress = #{extraaddress}, mobile = #{mobile}, speed = #{speed}, quick = #{quick}, power = #{power}, earth = #{earth}, stretch = #{stretch}, memberimg = #{memberimg}
-		where userid = #{userid}
-	</update>
-	
-	<select id="checkPw" parameterType="HashMap" resultType="int">
-		select count(*) from tbl_member where userid = #{userid} and password = #{password}
-	</select>
-	
-	<update id="changePw">
-		update tbl_member set password = #{newPw} where userid = #{userid}
-	</update>
-	
-	<update id="memberQuit">
-		update tbl_member set status = 0 where userid = #{userid}
-	</update>
-	
-	<resultMap type="HashMap" id="clubMap">
-		<result column="sportseq" property="sportseq" javaType="String"/>
-		<result column="clubseq" property="clubseq" javaType="String"/>
-		<result column="clubname" property="clubname" javaType="String"/>
-		<result column="clubimg" property="clubimg" javaType="String"/>
-		<result column="clubtel" property="clubtel" javaType="String"/>
-		<result column="city" property="city" javaType="String"/>
-		<result column="local" property="local" javaType="String"/>
-		<result column="clubgym" property="clubgym" javaType="String"/>
-		<result column="clubgym" property="clubgym" javaType="String"/>
-		<result column="clubtime" property="clubtime" javaType="String"/>
-		<result column="wasfilename" property="wasfilename" javaType="String"/>
-	</resultMap>
-	<select id="getClubMap" parameterType="String" resultMap="clubMap">
-		select sportseq, A.clubseq, clubname, clubimg, clubtel, city, local, clubgym, clubgym, clubtime, wasfilename
-		from tbl_clubmember A join tbl_club B
-		on A.clubseq = B.clubseq
-		where A.fk_userid = #{userid} and sportseq = #{sportseq}
-	</select>
-	
-	
-	<delete id="quitClub" parameterType="HashMap">
-		delete from tbl_clubmember where fk_userid = #{userid} and clubseq = #{clubseq}
-	</delete>
-	
-	<select id="getMyClub" parameterType="String" resultType="ClubVO">
-		select clubseq, clubname, clubimg, sportname, fk_userid, clubtel, city, local, clubgym, clubtime,
-			   membercount, clubpay, clubstatus, clubscore, wasfilename, viewcount
-		from tbl_club A join tbl_sport B
-		on A.fk_sportseq = B.sportseq
-		where clubstatus = 1 and fk_userid = #{userid}
-	</select>
-	
-	<select id="checkClubMaster" parameterType="HashMap" resultType="int">
-		select count(*) from tbl_club where clubseq = #{clubseq} and fk_userid = #{userid}
-	</select>
-	
-	<update id="updateClubInfo" parameterType="ClubVO">
-		update tbl_club set city = #{city}, local = #{local}, clubgym = #{clubgym}, clubtel = #{clubtel}, clubpay = #{clubpay}, membercount = #{membercount}
-		where clubseq = #{clubseq}
-	</update>
-	
-	<delete id="deleteClub" parameterType="String">
-		delete from tbl_club where clubseq = #{clubseq}
-	</delete>
-	
-	<delete id="deleteClubMember" parameterType="String">
-		delete from tbl_clubmember where clubseq = #{clubseq}
-	</delete>
-	
-	
-	<resultMap type="HashMap" id="clubmemberMap">
-		<result column="rn" property="rn" javaType="String"/>
-		<result column="userid" property="userid" javaType="String"/>
-		<result column="name" property="name" javaType="String"/>
-		<result column="email" property="email" javaType="String"/>
-		<result column="mobile" property="mobile" javaType="String"/>
-		<result column="gender" property="gender" javaType="String"/>
-		<result column="clubseq" property="clubseq" javaType="String"/>
-	</resultMap>
-	<select id="getClubMember" parameterType="HashMap" resultMap="clubmemberMap">
-		select rn, userid, name, email, mobile, gender, clubseq
-		from
-		(select rownum rn, userid, name, email, mobile, gender, clubseq
-		from
-		(select userid, name, email, mobile, gender, clubseq
-		from tbl_clubmember A join tbl_member B
-		on A.fk_userid = B.userid
-		where A.clubseq = #{clubseq}))
-		where rn between to_number(#{currentShowPageNo})*7-6 and to_number(#{currentShowPageNo})*7
-	</select>
-	
-	<select id="getClubMemberTotalPage" parameterType="HashMap" resultType="int">
-		select ceil(count(*)/#{sizePerPage})
-		from tbl_clubmember A join tbl_member B
-		on A.fk_userid = B.userid
-		where A.clubseq = #{clubseq}
-	</select>
-	
-	<select id="getTotalClubMemberCount" parameterType="HashMap" resultType="int">
-		select count(*)
-		from tbl_clubmember A join tbl_member B
-		on A.fk_userid = B.userid
-		where A.clubseq = #{clubseq}
-	</select>
-	
-	<delete id="quitClubMember" parameterType="HashMap">
-		delete from tbl_clubmember where fk_userid = #{userid} and clubseq = #{clubseq}
-	</delete>
-	
-	
-	<resultMap type="HashMap" id="clubboardMap">
-		<result column="clubboardseq" property="clubboardseq" javaType="String"/>	
-		<result column="clubseq" property="clubseq" javaType="String"/>
-		<result column="title" property="title" javaType="String"/>
-		<result column="fk_userid" property="fk_userid" javaType="String"/>
-		<result column="registerdate" property="registerdate" javaType="String"/>
-		<result column="commentcount" property="commentcount" javaType="String"/>
-		<result column="viewcount" property="viewcount" javaType="String"/>
-	</resultMap>
-	<select id="getClubBoard" parameterType="String" resultMap="clubboardMap">
-		select clubboardseq, clubseq, title, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, commentcount, viewcount
-		<![CDATA[ from TBL_CLUBBOARD where clubseq = #{clubseq} and registerdate > sysdate-7 ]]>
-		order by 5 desc
-	</select>
-	
-	<select id="wordSearch" parameterType="HashMap" resultType="String">
-		<choose>
-			<when test="searchType == 'title'">
-				select distinct case when length(title) > 10 then substr(title, 0, 10)||'...' else title end title
-			</when>
-			<otherwise>
-				select distinct to_char(case when length(content) > 10 then substr(content, 0, 10)||'...' else content end) content
-			</otherwise>
-		</choose>
-		from tbl_notice
-		where status = 0
-		<choose>
-			<when test="searchType == 'title' and searchWord != ''">
-				and lower(title) like '%'||lower(#{searchWord})||'%'
-			</when>
-			<otherwise>
-				and lower(content) like '%'||lower(#{searchWord})||'%'
-			</otherwise>
-		</choose>
-	</select>
-	
-	<resultMap type="HashMap" id="clubJoinMap">
-		<result column="fk_userid" property="userid" javaType="String"/>
-		<result column="clubseq" property="clubseq" javaType="String"/>
-		<result column="clubname" property="clubname" javaType="String"/>
-		<result column="name" property="name" javaType="String"/>
-	</resultMap>
-	<select id="getClubJoinList" parameterType="String" resultMap="clubJoinMap">
-		select A.clubseq, A.clubname, B.fk_userid, C.name from tbl_club A join tbl_clubmember B 
-		on A.clubseq = B.clubseq
+   </update>
+   
+   <update id="updateNoticeViewcount" parameterType="String">
+      update tbl_notice set viewcount = viewcount + 1
+      where noticeseq = #{nocticeseq}
+   </update>
+   
+   <insert id="insertNoticeComment" parameterType="HashMap">
+      insert into tbl_noticecomment(noticecommentseq, parentseq, comment_text, registerdate, fk_userid, status)
+      values (seq_noticecomment.nextval, #{parentseq}, #{comment_text}, sysdate, #{fk_userid}, 1)
+   </insert>
+   
+   <update id="updateNoticeCommentcount" parameterType="String">
+      update tbl_notice set commentcount = commentcount+1
+      where noticeseq = #{parentseq}
+   </update>
+   
+   <delete id="delNoticeComment" parameterType="String">
+      delete from tbl_noticecomment where noticecommentseq = #{noticecommentseq}
+   </delete>
+   
+   <update id="updateNoticeCommentcount_del" parameterType="String">
+      update tbl_notice set commentcount = commentcount-1
+      where noticeseq = #{parentseq}
+   </update>
+   
+   <update id="editNoticeComment" parameterType="HashMap">
+      update tbl_noticecomment set comment_text = #{comment_text}, registerdate = sysdate
+      where noticecommentseq = #{noticecommentseq}
+   </update>
+   
+   <select id="getSportseq" parameterType="String" resultType="String">
+      select sportseq from tbl_matchingreg where matchingregseq = #{matchingregseq}
+   </select>
+   
+   
+   <resultMap type="HashMap" id="resultmap">
+      <result property="clubname" column="clubname" javaType="String"/>
+      <result property="clubseq" column="clubseq" javaType="String"/>
+   </resultMap>
+   <select id="getUserClubname" parameterType="HashMap" resultMap="resultmap">
+      select clubname, A.clubseq
+      from tbl_clubmember A join tbl_club B
+      on A.clubseq = B.clubseq
+      where A.sportseq = #{sportseq} and A.fk_userid = #{fk_userid}
+   </select>
+   
+   <insert id="applyMatch" parameterType="HashMap">
+      <if test="message != ''">
+      insert into tbl_matchingapply(matchingapplyseq, matchingregseq, clubseq, membercount, message, status)
+      values (SEQ_MATCHINGAPPLY.nextval, #{matchingregseq}, #{appclubseq}, #{membercount}, #{message}, 0)
+      </if>
+      <if test="message == ''">
+      insert into tbl_matchingapply(matchingapplyseq, matchingregseq, clubseq, membercount, status)
+      values (SEQ_MATCHINGAPPLY.nextval, #{matchingregseq}, #{appclubseq}, #{membercount}, 0)
+      </if>
+   </insert>
+   
+   <select id="searchApply" parameterType="HashMap" resultType="int">
+      select count(*)
+      from tbl_matchingapply
+      where matchingregseq = #{matchingregseq} and clubseq = #{clubseq}
+   </select>   
+   
+   <select id="findId" parameterType="HashMap" resultType="MemberVO">
+      select userid from tbl_member
+      where name = #{name} and email = #{email}
+   </select>
+   
+   <select id="findpw" parameterType="HashMap" resultType="MemberVO">
+      select userid from tbl_member
+      where name = #{name} and userid = #{userid} and email = #{email}
+   </select>
+   
+   <select id="checkBeforePw" parameterType="HashMap" resultType="int">
+      select count(*) from tbl_member where userid = #{userid} and password = #{newpw}
+   </select>
+   
+   <update id="findPwUpdatePw" parameterType="HashMap">
+      update tbl_member set password = #{newpw}
+      where userid = #{userid}
+   </update>
+   
+   <select id="getGymStatus" resultType="GymVO">
+      select gymseq, gymname, fk_userid, postcode, address, detailaddress, status, info, cost, caution, membercount, likecount, insidestatus, orgfilename, filename, filesize
+      from tbl_gym
+      where status = 0
+   </select>
+   
+   <select id="getGymInfo" parameterType="String" resultType="GymVO">
+      select gymseq, gymname, fk_userid, postcode, address, detailaddress, status, info, cost, caution, membercount, likecount, insidestatus, orgfilename, filename, filesize
+      from tbl_gym
+      where gymseq = #{gymseq}
+   </select>
+   
+   <update id="gymPermit" parameterType="String">
+      update tbl_gym set status = 1 where gymseq = #{gymseq}
+   </update>
+   
+   
+   
+   <resultMap type="HashMap" id="alarmMap">
+      <result property="matchingapplyseq" column="matchingapplyseq" javaType="String"/>
+      <result property="matchingregseq" column="matchingregseq" javaType="String"/>
+      <result property="sportname" column="sportname" javaType="String"/>
+      <result property="Aseq" column="Aseq" javaType="String"/>
+      <result property="A_name" column="A-name" javaType="String"/>
+      <result property="fk_userid" column="fk_userid" javaType="String"/>
+      <result property="Bseq" column="Bseq" javaType="String"/>
+      <result property="B_name" column="B-name" javaType="String"/>
+      <result property="message" column="message" javaType="String"/>
+      <result property="membercount" column="membercount" javaType="String"/>
+      <result property="matchdate" column="matchdate" javaType="String"/>
+      <result property="city" column="city" javaType="String"/>
+      <result property="local" column="local" javaType="String"/>
+      <result property="area" column="area" javaType="String"/>
+      <result property="status" column="status" javaType="String"/>
+   </resultMap>
+   <select id="getClubAlarm" parameterType="String" resultMap="alarmMap">
+      select matchingapplyseq, B.matchingregseq, E.sportname, B.clubseq Aseq, D.clubname "A-name", D.fk_userid, A.clubseq Bseq,
+            C.clubname "B-name", A.message, A.membercount, to_char(B.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, B.city, B.local, B.area, B.status
+      from tbl_matchingapply A join tbl_matchingreg B
+      on A.matchingregseq = B.matchingregseq
+      join tbl_club C
+      on A.clubseq = C.clubseq
+      join tbl_club D
+      on B.clubseq = D.clubseq
+      join tbl_sport E
+      on B.sportseq = E.sportseq
+      <![CDATA[ where D.fk_userid = #{userid} and A.status = 0 and B.matchdate >= sysdate ]]>
+   </select>
+   
+   
+   <update id="updateMatchingApply1" parameterType="HashMap">
+      update tbl_matchingapply set status = 1 where matchingapplyseq = #{matchingapplyseq}
+   </update>
+   
+   <update id="updateMatchingApply2">
+      update tbl_matchingapply set status = 2 where matchingregseq = #{matchingregseq} and matchingapplyseq != #{matchingapplyseq}
+   </update>
+   
+   <update id="updateMatchingReg">
+      update tbl_matchingreg set status = 1 where matchingregseq = #{matchingregseq}
+   </update>
+   
+   <insert id="insertMatching">
+      insert into tbl_matching(matchingseq, matchingregseq, clubseq1, clubseq2, result1, result2, score1, score2)
+      values(SEQ_MATCHING.nextval, #{matchingregseq}, #{Aseq}, #{Bseq}, 0, 0, 0, 0)
+   </insert>
+   
+   <resultMap type="HashMap" id="matchMap2">
+      <result property="regteam" column="regteam" javaType="String"/>
+      <result property="appteam" column="appteam" javaType="String"/>
+      <result property="matchdate" column="matchdate" javaType="String"/>
+      <result property="area" column="area" javaType="String"/>
+   </resultMap>
+   <select id="getMatchList" parameterType="String" resultMap="matchMap2">
+      select C.clubname regteam, D.clubname appteam, to_char(A.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, A.area
+      from tbl_matchingreg A join tbl_matchingapply B
+      on A.matchingregseq = B.matchingregseq
+      join tbl_club C
+      on A.clubseq = C.clubseq
+      join tbl_club D
+      on B.clubseq =  D.clubseq
+      join tbl_member E
+      on C.fk_userid = E.userid
+      join tbl_member F
+      on D.fk_userid = F.userid
+      <![CDATA[ where B.status = 1 and (C.clubseq=#{clubseq} or D.clubseq=#{clubseq}) and A.matchdate >= sysdate ]]>
+      order by 3
+   </select>
+   
+   <select id="getGymseq" resultType="String">
+      select SEQ_GYM.nextval from dual
+   </select>
+   
+   <insert id="adminGymreg" parameterType="GymVO">
+   insert into tbl_gym(gymseq, gymname, fk_userid, postcode, address, detailaddress, status, info, cost, caution,
+                  membercount, likecount, insidestatus, orgfilename, filename, filesize, lat, lng)
+   values(#{gymseq}, #{gymname}, 'admin', #{postcode}, #{address}, #{detailaddress}, 1, #{info}, #{cost}, #{caution},
+           #{membercount}, 0, #{insidestatus}, #{orgfilename}, #{filename}, #{filesize}, #{lat}, #{lng})
+   </insert>
+   
+   <insert id="insertGymImg" parameterType="HashMap">
+      insert into tbl_gymimg(gymimgseq, gymseq, filename, orgfilename, filesize)
+      values(SEQ_GYMIMG.nextval, #{gymseq}, #{filename}, #{orgfilename}, #{filesize})
+   </insert>
+   
+   <insert id="insertOpendata">
+      insert into tbl_opendata_gym(opendata_gymseq, name, type, status, postcode, oldAdd, newAdd, city)
+      values (opendata_gymseq.nextval, #{name}, #{type}, #{status}, #{postcode}, #{oldAdd}, #{newAdd}, #{city})
+   </insert>
+   
+   <resultMap type="HashMap" id="searchFacByCityMap">
+      <result column="city" property="city" javaType="String"/>
+      <result column="cnt" property="cnt" javaType="String"/>
+   </resultMap>
+   <select id="searchFacByCity" resultMap="searchFacByCityMap">
+      select city, count(*) cnt
+      from tbl_opendata_gym
+      group by city
+      order by 1
+   </select>
+   
+   
+   <resultMap type="HashMap" id="searchFacByLocalMap">
+      <result column="local" property="local" javaType="String"/>
+      <result column="cnt" property="cnt" javaType="String"/>
+   </resultMap>
+   <select id="searchFacByLocal" parameterType="String" resultMap="searchFacByLocalMap">
+      select substr(oldadd,instr(oldadd, ' ', 1, 1)+1,instr(oldadd, ' ', 1, 2)-1-instr(oldadd, ' ', 1, 1)) local, count(*) cnt
+      from tbl_opendata_gym
+      where city = #{city}
+      group by city, substr(oldadd,instr(oldadd, ' ', 1, 1)+1,instr(oldadd, ' ', 1, 2)-1-instr(oldadd, ' ', 1, 1))
+      order by 1, 2
+   </select>
+   
+   <resultMap type="HashMap" id="facMap">
+      <result column="opendata_gymseq" property="opendata_gymseq" javaType="String"/>
+      <result column="name" property="name" javaType="String"/>
+      <result column="type" property="type" javaType="String"/>
+      <result column="status" property="status" javaType="String"/>
+      <result column="newadd" property="newadd" javaType="String"/>
+      <result column="city" property="city" javaType="String"/>
+   </resultMap>
+   <select id="getFacList" resultMap="facMap" parameterType="HashMap">
+      select rn, name, type, status, newadd, city
+      from
+      (select rownum rn, name, type, status, newadd, city
+      from     
+      (select distinct name, type, status, newadd, city
+      from tbl_opendata_gym
+      where 1=1
+      <if test="searchType == 'name' and searchWord != ''">and name like '%'||#{searchWord}||'%'</if>
+      <if test="searchType == 'type' and searchWord != ''">and type like '%'||#{searchWord}||'%'</if>
+      <if test="searchType == 'newadd' and searchWord != ''">and newadd like '%'||#{searchWord}||'%'</if>
+      order by city, newadd))
+      where rn between to_number(#{currentShowPageNo})*10-9 and to_number(#{currentShowPageNo})*10
+   </select>
+   
+   
+   <select id="getfacTotalPage" resultType="int">
+      select ceil(count(*)/10)
+      from (select distinct newadd, name, type, status, city from tbl_opendata_gym)
+      where 1=1
+      <if test="searchType == 'name' and searchWord != ''">and name like '%'||#{searchWord}||'%'</if>
+      <if test="searchType == 'type' and searchWord != ''">and type like '%'||#{searchWord}||'%'</if>
+      <if test="searchType == 'newadd' and searchWord != ''">and newadd like '%'||#{searchWord}||'%'</if>
+   </select>
+   
+   
+   <select id="getTotalFacCount" resultType="int">
+      select count(*)
+      from (select distinct newadd, name, type, status, city from tbl_opendata_gym)
+      where 1=1
+      <if test="searchType == 'name' and searchWord != ''">and name like '%'||#{searchWord}||'%'</if>
+      <if test="searchType == 'type' and searchWord != ''">and type like '%'||#{searchWord}||'%'</if>
+      <if test="searchType == 'newadd' and searchWord != ''">and newadd like '%'||#{searchWord}||'%'</if>
+   </select>
+   
+   <resultMap type="HashMap" id="MatchResultMap">
+      <result column="matchingseq" property="matchingseq" javaType="String"/>
+      <result column="myteam" property="myteam" javaType="String"/>
+      <result column="clubname" property="clubname" javaType="String"/>
+      <result column="matchdate" property="matchdate" javaType="String"/>
+      <result column="area" property="area" javaType="String"/>
+   </resultMap>
+   <select id="getMatchResult" parameterType="String" resultMap="MatchResultMap">
+      select matchingseq, C.clubname myteam, D.clubname, to_char(B.matchdate, 'yyyy-mm-dd hh24:mi') matchdate, area
+      from tbl_matching A join tbl_matchingreg B
+      on A.matchingregseq = B.matchingregseq
+      join tbl_club C
+      on B.clubseq = C.clubseq
+      join tbl_club D
+      on A.clubseq2 = D.clubseq
+      join tbl_member E
+      on C.fk_userid = E.userid
+      <![CDATA[ where E.userid = #{userid} and A.result1 = 0 and B.matchdate < sysdate ]]>
+   </select>
+   
+   <update id="updateMatchResult">
+      update tbl_matching set result1 = #{result1}, result2 = #{result2}, score1 = #{score1}, score2 = #{score2}
+      where matchingseq = #{matchingseq}
+   </update>
+   
+   <update id="updateMemberInfo_noAttach">
+      update tbl_member set email = #{email}, postcode = #{postcode}, address = #{address}, detailaddress = #{detailaddress},
+      extraaddress = #{extraaddress}, mobile = #{mobile}, speed = #{speed}, quick = #{quick}, power = #{power}, earth = #{earth}, stretch = #{stretch}, memberimg = null
+      where userid = #{userid}
+   </update>
+   
+   <update id="updateMemberInfo_attach">
+      update tbl_member set email = #{email}, postcode = #{postcode}, address = #{address}, detailaddress = #{detailaddress},
+      extraaddress = #{extraaddress}, mobile = #{mobile}, speed = #{speed}, quick = #{quick}, power = #{power}, earth = #{earth}, stretch = #{stretch}, memberimg = #{memberimg}
+      where userid = #{userid}
+   </update>
+   
+   <select id="checkPw" parameterType="HashMap" resultType="int">
+      select count(*) from tbl_member where userid = #{userid} and password = #{password}
+   </select>
+   
+   <update id="changePw">
+      update tbl_member set password = #{newPw} where userid = #{userid}
+   </update>
+   
+   <update id="memberQuit">
+      update tbl_member set status = 0 where userid = #{userid}
+   </update>
+   
+   <resultMap type="HashMap" id="clubMap">
+      <result column="sportseq" property="sportseq" javaType="String"/>
+      <result column="clubseq" property="clubseq" javaType="String"/>
+      <result column="clubname" property="clubname" javaType="String"/>
+      <result column="clubimg" property="clubimg" javaType="String"/>
+      <result column="clubtel" property="clubtel" javaType="String"/>
+      <result column="city" property="city" javaType="String"/>
+      <result column="local" property="local" javaType="String"/>
+      <result column="clubgym" property="clubgym" javaType="String"/>
+      <result column="clubgym" property="clubgym" javaType="String"/>
+      <result column="clubtime" property="clubtime" javaType="String"/>
+      <result column="wasfilename" property="wasfilename" javaType="String"/>
+   </resultMap>
+   <select id="getClubMap" parameterType="String" resultMap="clubMap">
+      select sportseq, A.clubseq, clubname, clubimg, clubtel, city, local, clubgym, clubgym, clubtime, wasfilename
+      from tbl_clubmember A join tbl_club B
+      on A.clubseq = B.clubseq
+      where A.fk_userid = #{userid} and sportseq = #{sportseq}
+   </select>
+   
+   
+   <delete id="quitClub" parameterType="HashMap">
+      delete from tbl_clubmember where fk_userid = #{userid} and clubseq = #{clubseq}
+   </delete>
+   
+   <select id="getMyClub" parameterType="String" resultType="ClubVO">
+      select clubseq, clubname, clubimg, sportname, fk_userid, clubtel, city, local, clubgym, clubtime,
+            membercount, clubpay, clubstatus, clubscore, wasfilename, viewcount
+      from tbl_club A join tbl_sport B
+      on A.fk_sportseq = B.sportseq
+      where clubstatus = 1 and fk_userid = #{userid}
+   </select>
+   
+   <select id="checkClubMaster" parameterType="HashMap" resultType="int">
+      select count(*) from tbl_club where clubseq = #{clubseq} and fk_userid = #{userid}
+   </select>
+   
+   <update id="updateClubInfo" parameterType="ClubVO">
+      update tbl_club set city = #{city}, local = #{local}, clubgym = #{clubgym}, clubtel = #{clubtel}, clubpay = #{clubpay}, membercount = #{membercount}
+      where clubseq = #{clubseq}
+   </update>
+   
+   <delete id="deleteClub" parameterType="String">
+      delete from tbl_club where clubseq = #{clubseq}
+   </delete>
+   
+   <delete id="deleteClubMember" parameterType="String">
+      delete from tbl_clubmember where clubseq = #{clubseq}
+   </delete>
+   
+   
+   <resultMap type="HashMap" id="clubmemberMap">
+      <result column="rn" property="rn" javaType="String"/>
+      <result column="userid" property="userid" javaType="String"/>
+      <result column="name" property="name" javaType="String"/>
+      <result column="email" property="email" javaType="String"/>
+      <result column="mobile" property="mobile" javaType="String"/>
+      <result column="gender" property="gender" javaType="String"/>
+      <result column="clubseq" property="clubseq" javaType="String"/>
+   </resultMap>
+   <select id="getClubMember" parameterType="HashMap" resultMap="clubmemberMap">
+      select rn, userid, name, email, mobile, gender, clubseq
+      from
+      (select rownum rn, userid, name, email, mobile, gender, clubseq
+      from
+      (select userid, name, email, mobile, gender, clubseq
+      from tbl_clubmember A join tbl_member B
+      on A.fk_userid = B.userid
+      where A.clubseq = #{clubseq}))
+      where rn between to_number(#{currentShowPageNo})*7-6 and to_number(#{currentShowPageNo})*7
+   </select>
+   
+   <select id="getClubMemberTotalPage" parameterType="HashMap" resultType="int">
+      select ceil(count(*)/#{sizePerPage})
+      from tbl_clubmember A join tbl_member B
+      on A.fk_userid = B.userid
+      where A.clubseq = #{clubseq}
+   </select>
+   
+   <select id="getTotalClubMemberCount" parameterType="HashMap" resultType="int">
+      select count(*)
+      from tbl_clubmember A join tbl_member B
+      on A.fk_userid = B.userid
+      where A.clubseq = #{clubseq}
+   </select>
+   
+   <delete id="quitClubMember" parameterType="HashMap">
+      delete from tbl_clubmember where fk_userid = #{userid} and clubseq = #{clubseq}
+   </delete>
+   
+   
+   <resultMap type="HashMap" id="clubboardMap">
+      <result column="clubboardseq" property="clubboardseq" javaType="String"/>   
+      <result column="clubseq" property="clubseq" javaType="String"/>
+      <result column="title" property="title" javaType="String"/>
+      <result column="fk_userid" property="fk_userid" javaType="String"/>
+      <result column="registerdate" property="registerdate" javaType="String"/>
+      <result column="commentcount" property="commentcount" javaType="String"/>
+      <result column="viewcount" property="viewcount" javaType="String"/>
+   </resultMap>
+   <select id="getClubBoard" parameterType="String" resultMap="clubboardMap">
+      select clubboardseq, clubseq, title, fk_userid, to_char(registerdate, 'yyyy-mm-dd hh24:mi:ss') registerdate, commentcount, viewcount
+      <![CDATA[ from TBL_CLUBBOARD where clubseq = #{clubseq} and registerdate > sysdate-7 ]]>
+      order by 5 desc
+   </select>
+   
+   <select id="wordSearch" parameterType="HashMap" resultType="String">
+      <choose>
+         <when test="searchType == 'title'">
+            select distinct case when length(title) > 10 then substr(title, 0, 10)||'...' else title end title
+         </when>
+         <otherwise>
+            select distinct to_char(case when length(content) > 10 then substr(content, 0, 10)||'...' else content end) content
+         </otherwise>
+      </choose>
+      from tbl_notice
+      where status = 0
+      <choose>
+         <when test="searchType == 'title' and searchWord != ''">
+            and lower(title) like '%'||lower(#{searchWord})||'%'
+         </when>
+         <otherwise>
+            and lower(content) like '%'||lower(#{searchWord})||'%'
+         </otherwise>
+      </choose>
+   </select>
+   
+   <resultMap type="HashMap" id="clubJoinMap">
+      <result column="fk_userid" property="userid" javaType="String"/>
+      <result column="clubseq" property="clubseq" javaType="String"/>
+      <result column="clubname" property="clubname" javaType="String"/>
+      <result column="name" property="name" javaType="String"/>
+   </resultMap>
+   <select id="getClubJoinList" parameterType="String" resultMap="clubJoinMap">
+      select A.clubseq, A.clubname, B.fk_userid, C.name from tbl_club A join tbl_clubmember B 
+      on A.clubseq = B.clubseq
         join tbl_member C
         on B.fk_userid = C.userid
-		where A.fk_userid = #{userid} and B.status = 0
-		order by 1
-	</select>
-	
-	<update id="permitJoinClub" parameterType="HashMap">
-		update tbl_clubmember set status = 1
-		where fk_userid = #{userid} and clubseq = #{clubseq}
-	</update>
-	
-	<delete id="refuseJoinClub" parameterType="HashMap">
-		delete from tbl_clubmember
-		where fk_userid = #{userid} and clubseq = #{clubseq}
-	</delete>
-	
-	
-	<resultMap type="HashMap" id="clubseqMap">
-		<result column="team1" property="team1" javaType="String"/>
-		<result column="team2" property="team2" javaType="String"/>
-	</resultMap>
-	<select id="getMatchClubseq" parameterType="String" resultMap="clubseqMap">
-		select clubseq1 team1, clubseq2 team2 from tbl_matching where matchingseq = #{matchingseq}
-	</select>
-	
-	
-	<update id="addClubPoint">
-		update tbl_club set clubscore = clubscore + to_number(#{team1Point})
-		where clubseq = #{team1}
-	</update>
-	
-	<update id="addClubPoint2">
-		update tbl_club set clubscore = clubscore + to_number(#{team2Point})
-		where clubseq = #{team2}
-	</update>
-	
-	<select id="getClubname" parameterType="String" resultType="String">
-		select clubname from tbl_club where clubseq = #{clubseq}
-	</select>
-	
-	<insert id="insertCalcat" parameterType="HashMap">
-		insert into tbl_calendar_small_category(fk_lgcatgono, smcatgono, smcatgoname, fk_clubseq ,fk_userid)
-		values(2, seq_smcatgono.nextval, #{clubname}, #{clubseq}, #{userid})
-	</insert>
+      where A.fk_userid = #{userid} and B.status = 0
+      order by 1
+   </select>
+   
+   <update id="permitJoinClub" parameterType="HashMap">
+      update tbl_clubmember set status = 1
+      where fk_userid = #{userid} and clubseq = #{clubseq}
+   </update>
+   
+   <delete id="refuseJoinClub" parameterType="HashMap">
+      delete from tbl_clubmember
+      where fk_userid = #{userid} and clubseq = #{clubseq}
+   </delete>
+   
+   
+   <resultMap type="HashMap" id="clubseqMap">
+      <result column="team1" property="team1" javaType="String"/>
+      <result column="team2" property="team2" javaType="String"/>
+   </resultMap>
+   <select id="getMatchClubseq" parameterType="String" resultMap="clubseqMap">
+      select clubseq1 team1, clubseq2 team2 from tbl_matching where matchingseq = #{matchingseq}
+   </select>
+   
+   
+   <update id="addClubPoint">
+      update tbl_club set clubscore = clubscore + to_number(#{team1Point})
+      where clubseq = #{team1}
+   </update>
+   
+   <update id="addClubPoint2">
+      update tbl_club set clubscore = clubscore + to_number(#{team2Point})
+      where clubseq = #{team2}
+   </update>
+   
+   <select id="getClubname" parameterType="String" resultType="String">
+      select clubname from tbl_club where clubseq = #{clubseq}
+   </select>
+   
+   <insert id="insertCalcat" parameterType="HashMap">
+      insert into tbl_calendar_small_category(fk_lgcatgono, smcatgono, smcatgoname, fk_clubseq ,fk_userid)
+      values(2, seq_smcatgono.nextval, #{clubname}, #{clubseq}, #{userid})
+   </insert>
 </mapper>

@@ -232,7 +232,7 @@ public class ControllerHS {
 
 		HttpSession session = mrequest.getSession(); 
         String root = session.getServletContext().getRealPath("/");
-        String path = root+"resources"+File.separator+"files";
+        String path =root+"resources" +File.separator+"images"+File.separator+"uploadImg";
 		
 
 		String newFileName = "";
@@ -792,7 +792,7 @@ public class ControllerHS {
 
 				HttpSession session = mrequest.getSession(); 
 		        String root = session.getServletContext().getRealPath("/");
-		        String path = root+"resources"+File.separator+"files";
+		        String path =root+"resources" +File.separator+"images"+File.separator+"uploadImg";
 
 				String newFileName = "";
 				byte[] bytes = null;

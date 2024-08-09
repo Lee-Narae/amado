@@ -938,7 +938,7 @@ public class ControllerNR {
 	            // WAS 의 webapp 의 절대경로를 알아와야 한다.
 	            HttpSession session = mrequest.getSession();
 	            String root = session.getServletContext().getRealPath("/");
-	            String path = root + "resources" + File.separator + "files";
+	            String path =root+"resources" +File.separator+"images"+File.separator+"uploadImg";
 	            File excel_file = new File(path + File.separator + mtpExcelFile.getOriginalFilename());
 				mtpExcelFile.transferTo(excel_file);
 				
@@ -1175,7 +1175,7 @@ public class ControllerNR {
 			
 			HttpSession session = mrequest.getSession(); 
 	        String root = session.getServletContext().getRealPath("/");
-	        String path = root+"resources"+File.separator+"files";
+	        String path =root+"resources" +File.separator+"images"+File.separator+"uploadImg";
 			
 	        String newFileName = "";
 	        
@@ -1451,7 +1451,7 @@ public class ControllerNR {
 		
 		HttpSession session = request.getSession(); 
         String root = session.getServletContext().getRealPath("/");
-        String path = root+"resources"+File.separator+"files";
+        String path =root+"resources" +File.separator+"images"+File.separator+"uploadImg";
 		
         fileManager.doFileDownload(filename, orgfilename, path, response);
 		
@@ -1502,7 +1502,7 @@ public class ControllerNR {
 			
 			HttpSession session = mrequest.getSession(); 
 	        String root = session.getServletContext().getRealPath("/");
-	        String path = root+"resources"+File.separator+"files";
+	        String path =root+"resources" +File.separator+"images"+File.separator+"uploadImg";
 			
 	        String newFileName = "";
 	        
@@ -1863,7 +1863,7 @@ public class ControllerNR {
 		
 		HttpSession session = mrequest.getSession(); 
         String root = session.getServletContext().getRealPath("/");
-        String path = root+"resources"+File.separator+"files";
+        String path =root+"resources" +File.separator+"images"+File.separator+"uploadImg";
         
         String newFileName = "";
         byte[] bytes = null;
@@ -2238,7 +2238,7 @@ public class ControllerNR {
 		if(attach != null) {
 			
 	        String root = session.getServletContext().getRealPath("/");
-	        String path = root+"resources"+File.separator+"files";
+	        String path =root+"resources" +File.separator+"images"+File.separator+"uploadImg";
 			
 	        String newFileName = "";
 	        
@@ -2658,7 +2658,7 @@ public class ControllerNR {
 		
 		HttpSession session = mrequest.getSession();
 	    String root = session.getServletContext().getRealPath("/");
-	    String path = root + "resources"+File.separator+"email_attach_file";
+	    String path =root+"resources" +File.separator+"images"+File.separator+"uploadImg";
 		
 	    File dir = new File(path);
 	    if(!dir.exists()) {

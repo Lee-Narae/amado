@@ -28,10 +28,10 @@
         }
         .table thead th {
             background-color: #01579b;
-		    color: #ffffff;
-		    font-weight: 100;
-		    text-align: center;
-		    border-bottom: 2px solid #01579b;
+          color: #ffffff;
+          font-weight: 100;
+          text-align: center;
+          border-bottom: 2px solid #01579b;
         }
         .table tbody tr {
             transition: background-color 0.3s;
@@ -133,13 +133,13 @@
                         </c:if>     
                             <td style="text-align: center;" data-content="<c:out value='${reservation.gymname}'/>"><c:out value="${reservation.gymname}"/></td>
                             <td style="text-align: center;" data-content="<c:out value='${reservation.reservation_date.substring(0, 10)}'/>">
-							  <c:out value="${reservation.reservation_date.substring(0, 10)}"/>
-							</td>
+                       <c:out value="${reservation.reservation_date.substring(0, 10)}"/>
+                     </td>
                             <td style="text-align: center;" data-content="<c:out value='${reservation.time_range}'/>"><c:out value="${reservation.time_range}"/></td>
                             <td style="text-align: center;" data-content="<fmt:formatNumber value='${reservation.coinmoney}' pattern='#,###'/>">
-							  <fmt:formatNumber value="${reservation.coinmoney}" pattern="#,###"/>원
-							  <input id="fk_gymseq" type="hidden" value="${reservation.fk_gymseq}" />
-							</td>
+                       <fmt:formatNumber value="${reservation.coinmoney}" pattern="#,###"/>원
+                       <input id="fk_gymseq" type="hidden" value="${reservation.fk_gymseq}" />
+                     </td>
                             <td style="text-align: center;"><button class="btn-cancel" onclick="res_cancel('${reservation.fk_gymseq}','${reservation.fk_userid}','${reservation.reservation_date.substring(0, 10)}','${reservation.time_range}')">예약취소</button></td>
                         </tr>
                     </c:forEach>
@@ -149,10 +149,10 @@
         </div>
     </div>
 
-	<div align="center" style="border: solid 0px gray; width: 80%; margin: 30px auto;">  
-	     ${requestScope.pageBar}
-	</div>
-	
+   <div align="center" style="border: solid 0px gray; width: 80%; margin: 30px auto;">  
+        ${requestScope.pageBar}
+   </div>
+   
     <!-- 모달 HTML -->
     <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -172,21 +172,21 @@
                     <input type="hidden" id="modalGymSeq" value="" />
                     <div style="border-left: solid 3px #01579b; padding-left:2%;" id="gymmap">찾아가는 길</div>
                     <div align="center">
-						 <div id="map" style="margin-top:2%; width:600px; height:400px;"></div>
-					</div>
+                   <div id="map" style="margin-top:2%; width:600px; height:400px;"></div>
+               </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
                 </div>
             </div>
-	        </div>
-	    </div>
+           </div>
+       </div>
 
     <!-- 사용자 정의 JS -->
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3e40c6a4e83259bd26e2771ad2db4e63"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d509314e98607ec5568d0be7bbc72d27"></script>
     <script>
     $(document).ready(function(){
-		 
+       
     });
     
     
@@ -212,131 +212,131 @@
 
                     
                     $.ajax({
-            			url:"<%= ctxPath%>/gym/latlng.do",
-            			type:"get",
-            			data:{"gymseq":fk_gymseq},
-            			dataType:"json",
-            			success:function(json){
-            				//console.log(JSON.stringify(json));
-            				let lat = json.lat; // 위도
-            				let lng = json.lng; // 경도
-            				
-            				
-            				
-            				// 지도를 담을 영역의 DOM 레퍼런스
-                			var mapContainer = document.getElementById("map");
+                     url:"<%= ctxPath%>/gym/latlng.do",
+                     type:"get",
+                     data:{"gymseq":fk_gymseq},
+                     dataType:"json",
+                     success:function(json){
+                        //console.log(JSON.stringify(json));
+                        let lat = json.lat; // 위도
+                        let lng = json.lng; // 경도
+                        
+                        
+                        
+                        // 지도를 담을 영역의 DOM 레퍼런스
+                         var mapContainer = document.getElementById("map");
 
-            				// 지도를 생성할때 필요한 기본 옵션
-                			var options = {
-                		    	 	center: new kakao.maps.LatLng(lat, lng), // 지도의 중심좌표. 반드시 존재해야함.
-                		    	 	<%--
-                		    		  	center 에 할당할 값은 kakao.maps.LatLng 클래스를 사용하여 생성한다.
-                		    		  	kakao.maps.LatLng 클래스의 2개 인자값은 첫번째 파라미터는 위도(latitude)이고, 두번째 파라미터는 경도(longitude)이다.
-                		    		 --%>
-                		    	 	level: 3  // 지도의 레벨(확대, 축소 정도). 숫자가 클수록 축소된다. 4가 적당함.
-                		     };
-                			
-                			// 지도 생성 및 생성된 지도객체 리턴
-                			var mapobj = new kakao.maps.Map(mapContainer, options);
-                			
-                			// 일반 지도와 스카이뷰로 지도 타입을 전환할 수 있는 지도타입 컨트롤을 생성함. 	
-                			var mapTypeControl = new kakao.maps.MapTypeControl();
-                			
-                			// 지도 타입 컨트롤을 지도에 표시함.
-                			// kakao.maps.ControlPosition은 컨트롤이 표시될 위치를 정의하는데 TOPRIGHT는 오른쪽 위를 의미함.	
-                			mapobj.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT); 
-                			
-                			// 지도 확대 축소를 제어할 수 있는 줌 컨트롤을 생성함.	
-                			var zoomControl = new kakao.maps.ZoomControl();
-                			
-                			// 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 지도에 표시함.
-                			// kakao.maps.ControlPosition은 컨트롤이 표시될 위치를 정의하는데 RIGHT는 오른쪽을 의미함.	 
-                			mapobj.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-                			
-                			
-                			// ============ 지도에 따릉이위치 마커 보여주기 시작 ============ //
-                			// 따릉이 마커를 표시할 위치와 내용을 가지고 있는 객체 배열
-                			var gymseq = $("input#modalGymSeq").val();
-                			var position = {};
-                			$.ajax({
-                				url:"<%= ctxPath%>/gym/viewres_JSON.do",
-                				async:false, // !!!!! 지도는 비동기 통신이 아닌 동기 통신으로 해야 한다.!!!!!!
-                				data:{"gymseq":gymseq},
-                				dataType:"json",
-                				success:function(json){
-                					
-                				    console.log(JSON.stringify(json));
-                					// JSON.stringify(json) 은 자바스크립트의 객체(배열)인 json 을 string 타입으로 변경시켜주는 것이다.
-                					
-                					position.content = json.gymseq;
-                					                   
-                					position.latlng = new kakao.maps.LatLng(json.lat, json.lng);
-                						
-                					
-                				},
-                				error: function(request, status, error){
-                					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-                			    }
-                			});// end of $.ajax({})----------------------
-                			
-                			
-                			// infowindowArr 은 인포윈도우를 가지고 있는 객체 배열의 용도이다. 
-                			var infowindowArr = new Array();
-                			
-                			
-                		    
-                			// === 객체 배열 만큼 마커 및 인포윈도우를 생성하여 지도위에 표시한다. === //
-                				
-               				var imageSrc = '<%=ctxPath%>/resources/images/marker.png';
-               				
-               		    	// 마커이미지의 크기 
-               			    var imageSize = new kakao.maps.Size(34, 39);
+                        // 지도를 생성할때 필요한 기본 옵션
+                         var options = {
+                                 center: new kakao.maps.LatLng(lat, lng), // 지도의 중심좌표. 반드시 존재해야함.
+                                 <%--
+                                     center 에 할당할 값은 kakao.maps.LatLng 클래스를 사용하여 생성한다.
+                                     kakao.maps.LatLng 클래스의 2개 인자값은 첫번째 파라미터는 위도(latitude)이고, 두번째 파라미터는 경도(longitude)이다.
+                                 --%>
+                                 level: 3  // 지도의 레벨(확대, 축소 정도). 숫자가 클수록 축소된다. 4가 적당함.
+                           };
+                         
+                         // 지도 생성 및 생성된 지도객체 리턴
+                         var mapobj = new kakao.maps.Map(mapContainer, options);
+                         
+                         // 일반 지도와 스카이뷰로 지도 타입을 전환할 수 있는 지도타입 컨트롤을 생성함.    
+                         var mapTypeControl = new kakao.maps.MapTypeControl();
+                         
+                         // 지도 타입 컨트롤을 지도에 표시함.
+                         // kakao.maps.ControlPosition은 컨트롤이 표시될 위치를 정의하는데 TOPRIGHT는 오른쪽 위를 의미함.   
+                         mapobj.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT); 
+                         
+                         // 지도 확대 축소를 제어할 수 있는 줌 컨트롤을 생성함.   
+                         var zoomControl = new kakao.maps.ZoomControl();
+                         
+                         // 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 지도에 표시함.
+                         // kakao.maps.ControlPosition은 컨트롤이 표시될 위치를 정의하는데 RIGHT는 오른쪽을 의미함.    
+                         mapobj.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+                         
+                         
+                         // ============ 지도에 따릉이위치 마커 보여주기 시작 ============ //
+                         // 따릉이 마커를 표시할 위치와 내용을 가지고 있는 객체 배열
+                         var gymseq = $("input#modalGymSeq").val();
+                         var position = {};
+                         $.ajax({
+                            url:"<%= ctxPath%>/gym/viewres_JSON.do",
+                            async:false, // !!!!! 지도는 비동기 통신이 아닌 동기 통신으로 해야 한다.!!!!!!
+                            data:{"gymseq":gymseq},
+                            dataType:"json",
+                            success:function(json){
+                               
+                                console.log(JSON.stringify(json));
+                               // JSON.stringify(json) 은 자바스크립트의 객체(배열)인 json 을 string 타입으로 변경시켜주는 것이다.
+                               
+                               position.content = json.gymseq;
+                                                  
+                               position.latlng = new kakao.maps.LatLng(json.lat, json.lng);
+                                  
+                               
+                            },
+                            error: function(request, status, error){
+                               alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+                             }
+                         });// end of $.ajax({})----------------------
+                         
+                         
+                         // infowindowArr 은 인포윈도우를 가지고 있는 객체 배열의 용도이다. 
+                         var infowindowArr = new Array();
+                         
+                         
+                          
+                         // === 객체 배열 만큼 마커 및 인포윈도우를 생성하여 지도위에 표시한다. === //
+                            
+                           var imageSrc = '<%=ctxPath%>/resources/images/marker.png';
+                           
+                            // 마커이미지의 크기 
+                            var imageSize = new kakao.maps.Size(34, 39);
 
-               		    	// 마커이미지의 옵션. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정한다. 
-               			    var imageOption = {offset: new kakao.maps.Point(15, 39)};
-               				
-               				// 마커의 이미지정보를 가지고 있는 마커이미지를 생성한다. 
-               			    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
-               		
-               			    // == 마커 생성하기 == //
-               				var marker = new kakao.maps.Marker({ 
-               					map: mapobj, 
-               			        position: position.latlng, // locPosition 좌표에 마커를 생성 
-               			        image: markerImage     // 마커이미지 설정
-               				}); 
-               			    
-               				marker.setMap(mapobj); // 지도에 마커를 표시한다
-               				
-               				// == 인포윈도우를 생성하기 == 
-               				var infowindow = new kakao.maps.InfoWindow({
-               					content: position.content,
-               					removable: true,
-               					zIndex : 1
-               				});
-               				
-               				// 인포윈도우를 가지고 있는 객체배열에 넣기 
-               				infowindowArr.push(infowindow);
-                			
-               				setTimeout(function(){
-               					mapobj.relayout();
-               					
-               				// 이동할 위도 경도 위치를 생성합니다 
-                   			    var moveLatLon = new kakao.maps.LatLng(lat, lng);
-                   			    
-                   			    // 지도 중심을 이동 시킵니다
-                   			    mapobj.setCenter(moveLatLon);
-               					
-               				}, 100);
-                		
-               			
-               			
-                			// ============ 지도에 매장위치 마커 보여주기 끝 ============ //
-            			},// end of success: function(xml){ }------------------
-            			
-            			error: function(request, status, error){
-            				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-            			}
-            		});
+                            // 마커이미지의 옵션. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정한다. 
+                            var imageOption = {offset: new kakao.maps.Point(15, 39)};
+                           
+                           // 마커의 이미지정보를 가지고 있는 마커이미지를 생성한다. 
+                            var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+                     
+                            // == 마커 생성하기 == //
+                           var marker = new kakao.maps.Marker({ 
+                              map: mapobj, 
+                                position: position.latlng, // locPosition 좌표에 마커를 생성 
+                                image: markerImage     // 마커이미지 설정
+                           }); 
+                            
+                           marker.setMap(mapobj); // 지도에 마커를 표시한다
+                           
+                           // == 인포윈도우를 생성하기 == 
+                           var infowindow = new kakao.maps.InfoWindow({
+                              content: position.content,
+                              removable: true,
+                              zIndex : 1
+                           });
+                           
+                           // 인포윈도우를 가지고 있는 객체배열에 넣기 
+                           infowindowArr.push(infowindow);
+                         
+                           setTimeout(function(){
+                              mapobj.relayout();
+                              
+                           // 이동할 위도 경도 위치를 생성합니다 
+                                var moveLatLon = new kakao.maps.LatLng(lat, lng);
+                                
+                                // 지도 중심을 이동 시킵니다
+                                mapobj.setCenter(moveLatLon);
+                              
+                           }, 100);
+                      
+                        
+                        
+                         // ============ 지도에 매장위치 마커 보여주기 끝 ============ //
+                     },// end of success: function(xml){ }------------------
+                     
+                     error: function(request, status, error){
+                        alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+                     }
+                  });
                     
                     
                     

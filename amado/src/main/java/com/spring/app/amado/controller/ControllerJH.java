@@ -800,6 +800,10 @@ public class ControllerJH {
 	    
 	    pageBar.append("</ul>");
 	    
+	    System.out.println("1"+totalCount);
+	    System.out.println("2"+currentShowPageNo);
+	    System.out.println("3"+sizePerPage);
+	    
 	    mav.addObject("pageBar", pageBar.toString());
 	    
 	    String goBackURL = MyUtil.getCurrentURL(request);

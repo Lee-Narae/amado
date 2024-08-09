@@ -130,7 +130,7 @@
 }
 
 </style>
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3e40c6a4e83259bd26e2771ad2db4e63"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d509314e98607ec5568d0be7bbc72d27"></script>
     <script>
     
     let totalPrice = 0;
@@ -636,7 +636,7 @@
 	    			
 	    			if(json.n == 1){
 	    				alert("예약 완료");
-	    				window.location.href = 'http://localhost:9099/amado/index.do';
+	    				window.location.href = 'http://43.200.7.123:9099/amado/index.do';
 	    			}
 	    			else{
 	    				
