@@ -226,7 +226,7 @@
 	<select id="getMemberStatic" parameterType="String" resultType="String">
 		select count(*)
 		from tbl_loginhistory
-		where logindate = to_date(#{str_twoWeekBefore})
+		where to_char(logindate) = #{str_twoWeekBefore}
 	</select>
 	
 	<insert id="addNotice" parameterType="NoticeVO">
